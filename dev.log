@@ -1,0 +1,24 @@
+[2019-11-14T15:28:19.942] [INFO] default - Starting cluster master for server [33mApplicationServer[39m
+[2019-11-14T15:28:19.947] [INFO] default - function cpus() {
+  return getCPUs(addCPUInfo, cpuValues, []);
+} current available CPUs but using 4
+[2019-11-14T15:28:20.109] [INFO] default - Starting cluster master for server [33mAuthServer[39m
+[2019-11-14T15:28:20.110] [INFO] default - function cpus() {
+  return getCPUs(addCPUInfo, cpuValues, []);
+} current available CPUs but using 1
+[2019-11-14T15:31:41.294] [INFO] default - Starting cluster master for server [33mApplicationServer[39m
+[2019-11-14T15:31:41.299] [INFO] default - [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object] current available CPUs but using 4
+[2019-11-14T15:31:41.455] [INFO] default - Starting cluster master for server [33mAuthServer[39m
+[2019-11-14T15:31:41.460] [INFO] default - [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object] current available CPUs but using 1
+[2019-11-14T15:41:06.739] [INFO] default - Starting cluster master for server [33mApplicationServer[39m
+[2019-11-14T15:41:06.745] [INFO] default - 8 current available CPUs but using 2
+[2019-11-14T15:41:06.839] [INFO] default - Starting cluster master for server [33mAuthServer[39m
+[2019-11-14T15:41:06.840] [INFO] default - 8 current available CPUs but using 1
+[2019-11-14T15:43:12.417] [INFO] default - Starting cluster master for server [33mApplicationServer[39m
+[2019-11-14T15:43:12.422] [INFO] default - 8 current available CPUs but using 2
+[2019-11-14T15:43:12.517] [INFO] default - Starting cluster master for server [33mAuthServer[39m
+[2019-11-14T15:43:12.518] [INFO] default - 8 current available CPUs but using 1
+[2019-11-14T15:44:00.470] [INFO] default - Starting cluster master for server [33mApplicationServer[39m
+[2019-11-14T15:44:00.475] [INFO] default - 8 current available CPUs but using 2
+[2019-11-14T15:44:00.534] [INFO] default - Starting cluster master for server [33mAuthServer[39m
+[2019-11-14T15:44:00.536] [INFO] default - 8 current available CPUs but using 1
