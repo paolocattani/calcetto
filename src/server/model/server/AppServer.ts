@@ -1,11 +1,14 @@
 import { AbstractServer } from "./AbstractServer";
 import { resolve } from 'path';
 import express, { Application as ExpressApplication, Request, Response } from 'express';
+import { logger } from "../../core/logger";
+import * as util from 'util';
 
-export class AuthServer extends AbstractServer {
+
+export class AppServer extends AbstractServer {
 
     constructor() {
-        super('AuthServer', 8090, 1);
+        super('ApplicationServer', 8080, 2);
         this.start();
     }
 
@@ -15,6 +18,7 @@ export class AuthServer extends AbstractServer {
         );
 
         application.get('*', (req: Request, res: Response) => {
+            logger.info(`AppServer.routes : ${util.inspect(req.session)}`)
             res.sendFile(resolve(__dirname, '../../build', 'index.html'));
         });
     }

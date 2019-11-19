@@ -1,7 +1,7 @@
 import util from 'util';
 
-export function getEnv(): String {
-	return process.env.NODE_ENV;
+export function getEnv(): string {
+	return process.env.NODE_ENV!;
 }
 /**
  * Detect production environment

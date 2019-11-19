@@ -1,6 +1,6 @@
 {
     "watch": [
-        "../../src"
+        "../server/"
     ],
     "ext": "ts",
     "exec": "ts-node ./src/server/server.ts dev"

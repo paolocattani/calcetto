@@ -47,11 +47,13 @@ function getAdditionalModulePaths(options = {}) {
     return null;
   }
 
+  return null;
+
   // Otherwise, throw an error.
   throw new Error(
     chalk.red.bold(
       "Your project's `baseUrl` can only be set to `src` or `node_modules`." +
-        ' Create React App does not support other values at this time.'
+      ' Create React App does not support other values at this time.'
     )
   );
 }
