@@ -1,6 +1,6 @@
-import { AuthServer } from './model/AuthServer';
-import { AppServer } from './model/AppServer';
+import { AppServer } from './model/server/AppServer';
 
 const applicationServer = new AppServer();
-const authServer = new AuthServer();
+
+
 
