@@ -1,14 +1,14 @@
-import cluster from 'cluster';
+// Core
+import '../../core/env'
 import { logger } from '../../core/logger';
 import { isDevMode, isProductionMode } from '../../core/debug'
+// Express
 import helmet from 'helmet';
+import morgan from 'morgan';
 import compression from 'compression';
-import chalk from 'chalk'
 import { json, urlencoded } from 'body-parser';
-import { cpus as osCpus } from 'os';
-
-require('dotenv').config();
-
+import cookieParser from 'cookie-parser';
+import express, { Application as ExpressApplication, Request, Response, NextFunction } from 'express';
 // Auth
 import cors from 'cors';
 import jwt from 'express-jwt';
@@ -18,8 +18,11 @@ import expressSession from "express-session";
 import passport from "passport";
 import * as AuthManager from '../../controller/authManager';
 const Auth0Strategy = require('passport-auth0');
-
-import express, { Application as ExpressApplication, Request, Response, NextFunction } from 'express';
+// Other
+import chalk from 'chalk';
+import path from 'path';
+import cluster from 'cluster';
+import { cpus as osCpus } from 'os';
 
 /* Interface */
 export interface IServer {
@@ -64,55 +67,42 @@ export abstract class AbstractServer implements IServer {
     constructor(name: string, port: number, maxCPUs?: number, corsOptions?: cors.CorsOptions) {
         this.serverName = name;
         this.serverPort = port;
-        this.maxCPUs = maxCPUs ? maxCPUs : Number.parseInt('2');
+        this.maxCPUs = maxCPUs ? maxCPUs : Number.parseInt('4');
         this.application = express();
-        this.corsOptions = corsOptions ? corsOptions : { origin: 'http://localhost:8080' };
+        this.corsOptions = corsOptions ? corsOptions : { origin: 'http://localhost:5000' };
     }
 
     public start(): void {
+        logger.info(`Starting server ${chalk.yellow(this.serverName)}...`);
         if (cluster.isMaster) {
             if (!process.env.AUTH0_DOMAIN || !process.env.AUTH0_AUDIENCE) {
                 throw 'Make sure you have AUTH0_DOMAIN, and AUTH0_AUDIENCE in your .env file';
             }
-            logger.info(`Starting cluster master for server ${chalk.yellow(this.serverName)}`);
+            logger.info(`Starting ${chalk.yellow(this.serverName)} as Cluster Mode`);
             logger.info(`${osCpus().length} current available CPUs but using ${this.maxCPUs}`);
-            /* TODO : fix fork numbers */
-            for (let i = 0; i < this.maxCPUs! - 1; i++) {
+            for (let i = 0; i < this.maxCPUs! - 1; i++)
                 cluster.fork();
-            }
-            cluster.on('exit', (worker, code, signal) => {
-                logger.error(`Node cluster worker ${chalk.blue(process.pid.toString())} for server
-                                ${chalk.yellow(this.serverName)} exited: code ${chalk.red(code.toString())}, signal ${chalk.red(signal)}`);
-            });
+            cluster.on('exit', (worker, code, signal) =>
+                logger.error(`Node cluster worker ${chalk.blue(process.pid.toString())} for server ${chalk.yellow(this.serverName)} died. code ${chalk.red.bold(code.toString())}, signal ${chalk.red.bold(signal)}`)
+            );
         } else {
             //this.application.get('env') !== 'production';
+            this.application.use(morgan('dev'));
             this.application.disable('x-powered-by');
             this.application.use(compression());
             this.application.use(helmet({ dnsPrefetchControl: { allow: true } }));
             //this.application.set('trust proxy', 1);
             this.application.use(json());
             this.application.use(urlencoded({ extended: false }));
+            this.application.use(cookieParser());
         }
 
         const strategy = new Auth0Strategy({
             domain: process.env.AUTH0_DOMAIN,
             clientID: process.env.AUTH0_CLIENT_ID,
             clientSecret: process.env.AUTH0_CLIENT_SECRET,
-            callbackURL:
-                process.env.AUTH0_CALLBACK_URL || `${this.corsOptions.origin}/callback`
-        },
-            function (accessToken: any, refreshToken: any, extraParams: any, profile: any, done: any) {
-                /**
-                 * Access tokens are used to authorize users to an API
-                 * (resource server)
-                 * accessToken is the token to call the Auth0 API
-                 * or a secured third-party API
-                 * extraParams.id_token has the JSON Web Token
-                 * profile has all the information from the user
-                 */
-                return done(null, profile);
-            }
-        );
+            callbackURL: process.env.AUTH0_CALLBACK_URL || `${this.corsOptions.origin}/callback`
+        }, (accessToken: any, refreshToken: any, extraParams: any, profile: any, done: any) => done(null, profile));
 
         const secured = (req: Request, res: Response, next: NextFunction) => {
             if (req.user)
@@ -121,7 +111,7 @@ export abstract class AbstractServer implements IServer {
             res.redirect("/login");
         };
 
-        if (this.application.get("env") === "production") {
+        if (this.application.get("env") === "production" || isProductionMode) {
             // Serve secure cookies, requires HTTPS
             session.cookie!.secure = true;
         }
@@ -141,6 +131,17 @@ export abstract class AbstractServer implements IServer {
         this.application.use('/', AuthManager.default);
         this.routes(this.application);
 
+        // public folder path
+        this.application.use(express.static(path.join(__dirname, '..', '..', '..', 'build', 'index.html'), {
+            maxAge: process.env.STATIC_CONTENTS_CACHE ? process.env.STATIC_CONTENTS_CACHE : '0',
+            lastModified: true,
+            redirect: true
+        }));
+
+        //this.application.get('*', (req: Request, res: Response) => {
+        //   res.sendFile(path.resolve(__dirname, '../../../build', 'index.html'));
+        //});
+
         this.application.listen(this.serverPort, () => {
             logger.info(`Node cluster worker ${chalk.blue(process.pid.toString())} for server ${chalk.yellow(this.serverName)} : listening on port ${chalk.green(this.serverPort.toString())}`);
         });
@@ -150,6 +151,9 @@ export abstract class AbstractServer implements IServer {
     public abstract routes(application: ExpressApplication): void;
 
 }
+
+process.on('uncaughtException', (err) => logger.fatal(err));
+process.on('unhandledRejection', (err) => logger.fatal(err));
 
 
 
