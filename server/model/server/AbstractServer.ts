@@ -1,7 +1,12 @@
+/**
+ * 
+ * https://auth0.com/blog/create-a-simple-and-secure-node-express-app/
+ */
+
 // Core
 import '../../core/env'
 import { logger } from '../../core/logger';
-import { isDevMode, isProductionMode } from '../../core/debug'
+import { isProductionMode } from '../../core/debug'
 // Express
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -12,7 +17,7 @@ import express, { Application as ExpressApplication, Request, Response, NextFunc
 // Auth
 import cors from 'cors';
 import jwt from 'express-jwt';
-require('express-jwt-authz');
+//require('express-jwt-authz');
 import jwksRsa from 'jwks-rsa';
 import expressSession from "express-session";
 import passport from "passport";
@@ -57,7 +62,6 @@ const session: expressSession.SessionOptions = {
 //export const checkScopes = jwtAuthz(['read:messages']);
 /* Class */
 export abstract class AbstractServer implements IServer {
-
     serverName: string;
     serverPort: number;
     maxCPUs?: number;
@@ -69,7 +73,7 @@ export abstract class AbstractServer implements IServer {
         this.serverPort = port;
         this.maxCPUs = maxCPUs ? maxCPUs : Number.parseInt('4');
         this.application = express();
-        this.corsOptions = corsOptions ? corsOptions : { origin: 'http://localhost:5000' };
+        this.corsOptions = corsOptions ? corsOptions : { origin: 'http://localhost:3000' };
     }
 
     public start(): void {
@@ -104,13 +108,6 @@ export abstract class AbstractServer implements IServer {
             callbackURL: process.env.AUTH0_CALLBACK_URL || `${this.corsOptions.origin}/callback`
         }, (accessToken: any, refreshToken: any, extraParams: any, profile: any, done: any) => done(null, profile));
 
-        const secured = (req: Request, res: Response, next: NextFunction) => {
-            if (req.user)
-                return next();
-            req.session!.returnTo = req.originalUrl;
-            res.redirect("/login");
-        };
-
         if (this.application.get("env") === "production" || isProductionMode) {
             // Serve secure cookies, requires HTTPS
             session.cookie!.secure = true;
@@ -118,29 +115,29 @@ export abstract class AbstractServer implements IServer {
 
         this.application.use(expressSession(session));
         this.application.use(cors(this.corsOptions));
+
+        // Auth
         passport.use(strategy);
         this.application.use(passport.initialize());
         this.application.use(passport.session());
-
         passport.serializeUser((user, done) => done(null, user));
         passport.deserializeUser((user, done) => done(null, user));
+
         this.application.use((req, res, next) => {
             res.locals.isAuthenticated = req.isAuthenticated();
             next();
         });
+
         this.application.use('/', AuthManager.default);
         this.routes(this.application);
 
         // public folder path
-        this.application.use(express.static(path.join(__dirname, '..', '..', '..', 'build', 'index.html'), {
+        logger.info(`Serving build forlder from ${chalk.green(path.join(__dirname, '..', '..', '..', 'build'))}`)
+        this.application.use(express.static(path.join(__dirname, '..', '..', '..', 'build'), {
             maxAge: process.env.STATIC_CONTENTS_CACHE ? process.env.STATIC_CONTENTS_CACHE : '0',
             lastModified: true,
             redirect: true
         }));
-
-        //this.application.get('*', (req: Request, res: Response) => {
-        //   res.sendFile(path.resolve(__dirname, '../../../build', 'index.html'));
-        //});
 
         this.application.listen(this.serverPort, () => {
             logger.info(`Node cluster worker ${chalk.blue(process.pid.toString())} for server ${chalk.yellow(this.serverName)} : listening on port ${chalk.green(this.serverPort.toString())}`);
