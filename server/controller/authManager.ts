@@ -1,12 +1,17 @@
 
-import express, { Request, Response, NextFunction, Router } from 'express';
+import '../core/env'
+import { routeLogger } from '../core/middleware'
+import { logger } from '../core/logger';
+import * as util from 'util';
+
+
+import express, { Request, Response, NextFunction } from 'express';
+
+
 const router = express.Router();
 const passport = require("passport");
 const url = require("url");
 const querystring = require("querystring");
-import { logger } from '../core/logger';
-import * as util from 'util';
-require("dotenv").config();
 
 
 // LOGIN FUNCTION

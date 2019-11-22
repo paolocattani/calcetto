@@ -1,38 +1,37 @@
-import React, { Component } from 'react';
+// https://www.carlrippon.com/building-super-simple-react-form-component-typescript-basics/
+// https://medium.com/@jrwebdev/react-hooks-in-typescript-88fce7001d0d
+
+import React, { Component, ChangeEvent, FormEvent } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+type appProps = { name: string, greeting: string }
+type appState = { name: string, greeting: string }
 
-class App extends Component {
-  constructor(props) {
+export default class App extends Component<appProps, appState> {
+
+  constructor(props: appProps) {
     super(props);
-    this.state = {
-      name: '',
-      greeting: ''
-    };
+    this.state = { name: '', greeting: '' };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(event) {
+  handleChange(event: ChangeEvent<HTMLInputElement>) {
     this.setState({ name: event.target.value });
   }
 
-  handleSubmit(event) {
+  handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     fetch(`/api/greeting?name=${encodeURIComponent(this.state.name)}`)
       .then(response => response.json())
       .then(state => this.setState(state));
   }
 
-  render() {
+  public render() {
     return (
-      <div className="App">
+      <div className="App" >
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-        </p>
           <form onSubmit={this.handleSubmit}>
             <label htmlFor="name">Enter your name: </label>
             <input
@@ -44,17 +43,8 @@ class App extends Component {
             <button type="submit">Submit</button>
           </form>
           <p>{this.state.greeting}</p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-        </a>
         </header>
       </div>
     );
   }
 }
-export default App;

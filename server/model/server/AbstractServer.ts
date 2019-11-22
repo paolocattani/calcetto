@@ -1,12 +1,13 @@
 /**
- * 
+ *
  * https://auth0.com/blog/create-a-simple-and-secure-node-express-app/
  */
 
 // Core
 import '../../core/env'
 import { logger } from '../../core/logger';
-import { isProductionMode } from '../../core/debug'
+import { isProductionMode } from '../../core/debug';
+import { routeLogger, secured } from '../../core/middleware';
 // Express
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -77,12 +78,11 @@ export abstract class AbstractServer implements IServer {
     }
 
     public start(): void {
-        logger.info(`Starting server ${chalk.yellow(this.serverName)}...`);
         if (cluster.isMaster) {
             if (!process.env.AUTH0_DOMAIN || !process.env.AUTH0_AUDIENCE) {
                 throw 'Make sure you have AUTH0_DOMAIN, and AUTH0_AUDIENCE in your .env file';
             }
-            logger.info(`Starting ${chalk.yellow(this.serverName)} as Cluster Mode`);
+            logger.info(`Starting server ${chalk.yellow(this.serverName)} as Cluster Mode..`);
             logger.info(`${osCpus().length} current available CPUs but using ${this.maxCPUs}`);
             for (let i = 0; i < this.maxCPUs! - 1; i++)
                 cluster.fork();
@@ -91,6 +91,7 @@ export abstract class AbstractServer implements IServer {
             );
         } else {
             //this.application.get('env') !== 'production';
+            this.application.options('*', cors()) // Preflight Request
             this.application.use(morgan('dev'));
             this.application.disable('x-powered-by');
             this.application.use(compression());
@@ -101,6 +102,9 @@ export abstract class AbstractServer implements IServer {
             this.application.use(cookieParser());
         }
 
+
+        // FIXME: also need to fix this
+        // if process.env.AUTH0_CALLBACK_URL = 'http://localhost:300 -> loooop !!
         const strategy = new Auth0Strategy({
             domain: process.env.AUTH0_DOMAIN,
             clientID: process.env.AUTH0_CLIENT_ID,
@@ -113,8 +117,8 @@ export abstract class AbstractServer implements IServer {
             session.cookie!.secure = true;
         }
 
-        this.application.use(expressSession(session));
         this.application.use(cors(this.corsOptions));
+        this.application.use(expressSession(session));
 
         // Auth
         passport.use(strategy);
@@ -123,10 +127,11 @@ export abstract class AbstractServer implements IServer {
         passport.serializeUser((user, done) => done(null, user));
         passport.deserializeUser((user, done) => done(null, user));
 
-        this.application.use((req, res, next) => {
-            res.locals.isAuthenticated = req.isAuthenticated();
-            next();
-        });
+
+        // Log all routes
+        // FIXME:fix athentication function due to CORS
+        //this.application.all('*', routeLogger, secured);
+        this.application.all('*', routeLogger);
 
         this.application.use('/', AuthManager.default);
         this.routes(this.application);

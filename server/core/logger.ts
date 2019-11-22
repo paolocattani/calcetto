@@ -10,7 +10,7 @@ log4js.configure({
 		'dev-logger': {
 			type: 'datefile',
 			filename: 'dev.log',
-			pattern: '.yyyy-MM-dd-hh',
+			pattern: '.yyyy-MM-dd',
 			maxLogSize: 10485760,
 			backups: 3,
 			compress: true

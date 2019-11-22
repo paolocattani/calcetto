@@ -1,6 +1,7 @@
 import '../../core/env'
 import { logger } from '../../core/logger';
-import { secured } from '../../core/middleware'
+import cors, { CorsOptions } from 'cors';
+import { secured, routeLogger } from '../../core/middleware'
 import { isProductionMode } from '../../core/debug'
 import glob from 'glob';
 import path from 'path';
@@ -10,22 +11,31 @@ import { Application as ExpressApplication, Request, Response } from 'express';
 
 //import * as util from 'util';
 
-const applicationName = 'ApplicationServer';
-const applicationPort = 8080;
-const applicationCPUs = 2;
-const applicationCorsOption = { origin: `http://localhost:3000` };
+// white list for CORS
+const applicationName: string = 'ApplicationServer';
+const applicationPort: number = 8080;
+const applicationCPUs: number = 2;
+const whiteList: string[] = [
+    `http://${process.env.CLIENT_HOST}:${process.env.CLIENT_PORT}`,
+    `https://${process.env.CLIENT_HOST}:${process.env.CLIENT_PORT}`,
+    `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`,
+    `https://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`,
+    `https://${process.env.AUTH0_DOMAIN}`
 
+]
+const applicationCorsOption: CorsOptions = {
+    origin: (origin, callback) => (whiteList.indexOf(origin!) !== -1 || !origin) ? callback(null, true) : callback(new Error(`Not allowed by CORS : ${origin}`)),
+    credentials: true,
+}
 export class AppServer extends AbstractServer {
-
     constructor() {
-        super(applicationName, applicationPort, applicationCPUs, applicationCorsOption);
+        super(applicationName, applicationPort, applicationCPUs);
         this.start();
     }
 
     routes(application: ExpressApplication): void {
 
-        application.get('/api/greeting', secured, (req: Request, res: Response) => {
-            logger.info(`${this.serverName} : handling route /api/greeting`);
+        application.get('/api/greeting', (req: Request, res: Response) => {
             const name = req.query.name || 'World';
             res.setHeader('Content-Type', 'application/json');
             res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
