@@ -8,6 +8,7 @@ import path from 'path';
 import { AbstractServer } from "./AbstractServer";
 //import path from 'path';
 import { Application as ExpressApplication, Request, Response } from 'express';
+import Db from 'model/sequelize';
 
 //import * as util from 'util';
 

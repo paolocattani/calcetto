@@ -1,13 +1,17 @@
+
 import { AutoIncrement, Column, CreatedAt, DeletedAt, Model, PrimaryKey, Table, UpdatedAt, ForeignKey, HasMany, HasOne } from 'sequelize-typescript';
 import { IntegerDataType} from 'sequelize/types';
 import Pair from './pair.model'
+import Tournament from './tournament.model';
 
 /**
- * Rapprenta un Coppia all'interno del Girone :
+ * https://stackoverflow.com/questions/2142566/storing-matrices-in-a-relational-database
+ * 
+ * Rapprenta un Elemento(Coppia) all'interno del Girone :
  *  - questa struttare dovrebbe permettermi di aggiungere coppie dinamicamente senza problemi.
  */
 @Table
-export default class Stage1 extends Model<Stage1> {
+export default class s1Element extends Model<s1Element> {
  
     @Column
     @AutoIncrement
@@ -15,13 +19,16 @@ export default class Stage1 extends Model<Stage1> {
     id!: IntegerDataType;
     
     @Column
-    name!: string;
+    @ForeignKey(()=> Tournament)
+    tournamentId!:IntegerDataType
 
+    // Coppia
     @Column
     @ForeignKey(()=> Pair)
     pairId!: IntegerDataType;
     
     // Punteggio totale per la coppia
+    // Potrebbe essere calcolato tramite trigger
     @Column
     score!:IntegerDataType
 
