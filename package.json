@@ -58,6 +58,7 @@
     "react-scripts": "3.2.0",
     "sequelize": "^5.21.2",
     "sequelize-cli": "^5.5.1",
+    "sequelize-typescript": "^1.0.0",
     "ts-node": "^8.5.2",
     "typescript": "^3.7.2"
   },
@@ -71,7 +72,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -87,5 +89,15 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.8.0",
+    "@typescript-eslint/parser": "^2.8.0",
+    "eslint": "^6.6.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.16.0",
+    "prettier": "^1.19.1"
   }
 }

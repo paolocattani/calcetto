@@ -1,5 +1,4 @@
 /**
- *
  * https://auth0.com/blog/create-a-simple-and-secure-node-express-app/
  */
 
@@ -52,7 +51,7 @@ export const checkJwt = jwt({
     issuer: `https://${process.env.AUTH0_DOMAIN}/`,
     algorithms: ['RS256']
 });
-
+ 
 const session: expressSession.SessionOptions = {
     secret: "LoxodontaElephasMammuthusPalaeoloxodonPrimelephas",
     cookie: {},
