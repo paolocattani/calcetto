@@ -1,33 +1,34 @@
-import { AutoIncrement, Column, CreatedAt, DeletedAt, Model, PrimaryKey, Table, UpdatedAt } from 'sequelize-typescript';
-import { IntegerDataType, DataTypes, BigIntDataType, FloatDataType, ENUM } from 'sequelize';
+import { Column, CreatedAt, DeletedAt, Model, PrimaryKey, Table, UpdatedAt, DataType } from 'sequelize-typescript';
+import { IntegerDataType, BigIntDataType, FloatDataType, ENUM } from 'sequelize';
 
 @Table
 export default class Player extends Model<Player> {
 
-    @Column
-    @AutoIncrement
     @PrimaryKey
+    @Column(DataType.INTEGER)
     id!: IntegerDataType;
 
-    @Column
+    @Column(DataType.STRING)
     name?: string;
 
-    @Column
+    @Column(DataType.STRING)
     surname?: string;
 
-    @Column
+    @Column(DataType.STRING)
     alias?: string;
 
-    @Column({ type: ENUM })
-    role!: ["striker", "goalkeeper", "both"];
+    //@Column(DataType.ENUM)
+    //role!: ["striker", "goalkeeper", "both"];
+    @Column(DataType.STRING)
+    role!: string;
 
-    @Column
+    @Column(DataType.BIGINT)
     match_played!: BigIntDataType;
 
-    @Column
+    @Column(DataType.BIGINT)
     match_won!: BigIntDataType;
 
-    @Column
+    @Column(DataType.FLOAT)
     total_score!: FloatDataType;
 
     @CreatedAt

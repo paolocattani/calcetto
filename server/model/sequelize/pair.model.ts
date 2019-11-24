@@ -1,4 +1,4 @@
-import { AutoIncrement, Column, CreatedAt, DeletedAt, Model, PrimaryKey, Table, UpdatedAt, ForeignKey, BelongsTo, HasMany, HasOne } from 'sequelize-typescript';
+import { AutoIncrement, Column, CreatedAt, DeletedAt, Model, PrimaryKey, Table, UpdatedAt, ForeignKey, BelongsTo, HasMany, HasOne, DataType } from 'sequelize-typescript';
 import { IntegerDataType } from 'sequelize';
 import Tournament from './tournament.model'
 import Player from './player.model'
@@ -6,23 +6,22 @@ import Player from './player.model'
 @Table
 export default class Pair extends Model<Pair> {
 
-    @Column
-    @AutoIncrement
     @PrimaryKey
+    @Column(DataType.INTEGER)
     id!: IntegerDataType;
 
     // Tournament id
-    @Column
+    @Column(DataType.INTEGER)
     @ForeignKey(() => Tournament)
     tournamentId?: IntegerDataType;
 
     // First Player id
-    @Column
+    @Column(DataType.INTEGER)
     @ForeignKey(() => Player)
     first_playerId?: IntegerDataType;
 
     // Secondo Player id
-    @Column
+    @Column(DataType.INTEGER)
     @ForeignKey(() => Player)
     second_playerId?: IntegerDataType;
 

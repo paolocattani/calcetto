@@ -1,4 +1,4 @@
-import { AutoIncrement, Column, CreatedAt, DeletedAt, Model, PrimaryKey, Table, UpdatedAt, ForeignKey, HasMany, HasOne } from 'sequelize-typescript';
+import { AutoIncrement, Column, CreatedAt, DeletedAt, Model, PrimaryKey, Table, UpdatedAt, ForeignKey, HasMany, HasOne, DataType } from 'sequelize-typescript';
 import { IntegerDataType } from 'sequelize';
 import Pair from './pair.model'
 import Tournament from './tournament.model';
@@ -21,29 +21,28 @@ import Tournament from './tournament.model';
 @Table
 export default class s1Matrix extends Model<s1Matrix> {
 
-    @Column
-    @AutoIncrement
     @PrimaryKey
+    @Column(DataType.INTEGER)
     id!: IntegerDataType;
 
-    @Column
+    @Column(DataType.STRING)
     name!: string;
 
-    @Column
+    @Column(DataType.INTEGER)
     @ForeignKey(() => Tournament)
     tournamentId!: IntegerDataType
 
-    @Column
+    @Column(DataType.INTEGER)
     @ForeignKey(() => Pair)
     pairId!: IntegerDataType;
 
     // Punteggio totale per la coppia
-    @Column
+    @Column(DataType.INTEGER)
     score!: IntegerDataType
 
     // Posizionamento della coppia all'interno del girone.
     // Potrebbe essere calcolato progressivamente con un trigger. Da valutare
-    @Column
+    @Column(DataType.INTEGER)
     placement!: IntegerDataType
 
     @CreatedAt
@@ -55,6 +54,6 @@ export default class s1Matrix extends Model<s1Matrix> {
     @DeletedAt
     deletedAt?: Date;
 
-    @HasOne(() => Pair)
+    @HasOne(() => Pair, 'pairId')
     pair!: Pair;
 }

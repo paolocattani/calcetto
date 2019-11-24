@@ -22,9 +22,10 @@ export default class Tournament extends Model<Tournament> {
     //@ForeignKey(() => User)
     public ownerId!: IntegerDataTypeConstructor;
 
-    @Column(DataType.ENUM)
-    public progress!: ["stage1", "stage2"];
-
+    //@Column(DataType.ENUM)
+    //public progress!: ["stage1", "stage2"];
+    @Column(DataType.STRING)
+    public progress!: string;
     @Column(DataType.BOOLEAN)
     public public!: boolean
 
