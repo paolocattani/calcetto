@@ -1,8 +1,6 @@
-import { AutoIncrement, Column, CreatedAt, DeletedAt, Model, PrimaryKey, Table, UpdatedAt, ForeignKey, HasMany, HasOne } from 'sequelize-typescript';
-import { IntegerDataType, DataTypes, BigIntDataType, FloatDataType, ENUM } from 'sequelize/types';
+import { Column, CreatedAt, DeletedAt, Model, PrimaryKey, Table, UpdatedAt, HasMany, DataType } from 'sequelize-typescript';
 import Pair from './pair.model'
-import User from './User.model';
-
+import { IntegerDataTypeConstructor } from 'sequelize/types';
 
 /**
  * Rapprenta un Torneo :
@@ -10,39 +8,38 @@ import User from './User.model';
  *  - Stessa cosa per ordinamento automatico
  *  - Le coppie vengono definite qui. Prevedere possibilità di aggiungere coppie
  */
-@Table
+@Table({ tableName: 'tournament' })
 export default class Tournament extends Model<Tournament> {
- 
-    @Column
-    @AutoIncrement
+
     @PrimaryKey
-    id!: IntegerDataType;
-    
-    @Column
-    name!: string;
+    @Column(DataType.INTEGER)
+    public id!: IntegerDataTypeConstructor;
 
-    @Column
-    @ForeignKey(()=>User)
-    ownerId!: IntegerDataType;
-    
-    @Column({type : ENUM})
-    progress!: ["stage1" , "stage2" ];
+    @Column(DataType.STRING)
+    public name!: string;
 
-    @Column
-    public!:boolean
+    @Column(DataType.INTEGER)
+    //@ForeignKey(() => User)
+    public ownerId!: IntegerDataTypeConstructor;
+
+    @Column(DataType.ENUM)
+    public progress!: ["stage1", "stage2"];
+
+    @Column(DataType.BOOLEAN)
+    public public!: boolean
 
     @CreatedAt
-    createdAt?: Date;
+    public createdAt?: Date;
 
-    @UpdatedAt  
-    updatedAt?: Date;
-    
-    @DeletedAt  
-    deletedAt?: Date;
+    @UpdatedAt
+    public updatedAt?: Date;
+
+    @DeletedAt
+    public deletedAt?: Date;
 
     @HasMany(() => Pair)
-    pairs!: Pair[];
+    public pairs!: Pair[];
 
-    @HasOne(()=> User)
-    owner!:User;
+    //@HasOne(() => User)
+    //owner!: User;
 }

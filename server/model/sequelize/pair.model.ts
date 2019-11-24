@@ -1,16 +1,16 @@
 import { AutoIncrement, Column, CreatedAt, DeletedAt, Model, PrimaryKey, Table, UpdatedAt, ForeignKey, BelongsTo, HasMany, HasOne } from 'sequelize-typescript';
-import { IntegerDataType, DataTypes, BigIntDataType, FloatDataType, ENUM } from 'sequelize/types';
+import { IntegerDataType } from 'sequelize';
 import Tournament from './tournament.model'
 import Player from './player.model'
 
 @Table
 export default class Pair extends Model<Pair> {
- 
+
     @Column
     @AutoIncrement
     @PrimaryKey
     id!: IntegerDataType;
-    
+
     // Tournament id
     @Column
     @ForeignKey(() => Tournament)
@@ -29,20 +29,20 @@ export default class Pair extends Model<Pair> {
     @CreatedAt
     createdAt?: Date;
 
-    @UpdatedAt  
+    @UpdatedAt
     updatedAt?: Date;
-    
-    @DeletedAt  
+
+    @DeletedAt
     deletedAt?: Date;
 
     // Model association
     @BelongsTo(() => Tournament)
     tournament!: Tournament;
 
-    @HasOne(()=> Player , 'first_playerId')
-    first_player!:Player
+    @HasOne(() => Player, 'first_playerId')
+    first_player!: Player
 
-    @HasOne(()=> Player , 'second_playerId')
-    second_player!:Player
+    @HasOne(() => Player, 'second_playerId')
+    second_player!: Player
 
 }

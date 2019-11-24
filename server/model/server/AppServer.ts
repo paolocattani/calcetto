@@ -1,15 +1,14 @@
 import '../../core/env'
 import { logger } from '../../core/logger';
-import cors, { CorsOptions } from 'cors';
-import { secured, routeLogger } from '../../core/middleware'
+import { CorsOptions } from 'cors';
 import { isProductionMode } from '../../core/debug'
 import glob from 'glob';
 import path from 'path';
+import chalk from 'chalk';
 import { AbstractServer } from "./AbstractServer";
 //import path from 'path';
 import { Application as ExpressApplication, Request, Response } from 'express';
-import Db from 'model/sequelize';
-
+import syncModel from '../sequelize';
 //import * as util from 'util';
 
 // white list for CORS
@@ -36,18 +35,23 @@ export class AppServer extends AbstractServer {
 
     routes(application: ExpressApplication): void {
 
+        // Sync database model ( async )
+        logger.info(chalk.cyan.bold(`Database synchronization`));
+        syncModel();
+
+        // handle routes
+        //application.use(playerManager);
         application.get('/api/greeting', (req: Request, res: Response) => {
             const name = req.query.name || 'World';
             res.setHeader('Content-Type', 'application/json');
             res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
         });
         // Setup express routes
-        //glob.sync(`${path.resolve('./routes/**/')}*.+(js|jsx|ts|tsx)`).forEach(route => {
-        //    if (!isProductionMode()) {
-        //        logger.info('Loading route : ' + route);
-        //    }
-        //    require(route)(application);
-        //});
+        glob.sync(`${path.resolve('../../controller/**/')}*.+(js|jsx|ts|tsx)`).forEach(route => {
+            if (!isProductionMode()) logger.info('Loading route : ' + route);
+            if (route.indexOf('.manager') !== 0)
+                require(route)(application);
+        });
 
         application.get('/api', (req: Request, res: Response) => {
             logger.info(`${this.serverName} route /api`);

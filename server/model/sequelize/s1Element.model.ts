@@ -1,6 +1,6 @@
 
 import { AutoIncrement, Column, CreatedAt, DeletedAt, Model, PrimaryKey, Table, UpdatedAt, ForeignKey, HasMany, HasOne } from 'sequelize-typescript';
-import { IntegerDataType} from 'sequelize/types';
+import { IntegerDataType } from 'sequelize';
 import Pair from './pair.model'
 import Tournament from './tournament.model';
 
@@ -12,40 +12,40 @@ import Tournament from './tournament.model';
  */
 @Table
 export default class s1Element extends Model<s1Element> {
- 
+
     @Column
     @AutoIncrement
     @PrimaryKey
     id!: IntegerDataType;
-    
+
     @Column
-    @ForeignKey(()=> Tournament)
-    tournamentId!:IntegerDataType
+    @ForeignKey(() => Tournament)
+    tournamentId!: IntegerDataType
 
     // Coppia
     @Column
-    @ForeignKey(()=> Pair)
+    @ForeignKey(() => Pair)
     pairId!: IntegerDataType;
-    
+
     // Punteggio totale per la coppia
     // Potrebbe essere calcolato tramite trigger
     @Column
-    score!:IntegerDataType
+    score!: IntegerDataType
 
     // Posizionamento della coppia all'interno del girone.
     // Potrebbe essere calcolato progressivamente con un trigger. Da valutare
     @Column
-    placement!:IntegerDataType
+    placement!: IntegerDataType
 
     @CreatedAt
     createdAt?: Date;
 
-    @UpdatedAt  
+    @UpdatedAt
     updatedAt?: Date;
-    
-    @DeletedAt  
+
+    @DeletedAt
     deletedAt?: Date;
 
-    @HasOne(()=> Pair)
-    pair!:Pair;
+    @HasOne(() => Pair)
+    pair!: Pair;
 }
