@@ -4,9 +4,7 @@ import { routeLogger } from '../core/middleware'
 import { logger } from '../core/logger';
 import * as util from 'util';
 
-
-import express, { Request, Response, NextFunction } from 'express';
-
+import  express, { Request, Response, NextFunction } from 'express';
 
 const router = express.Router();
 const passport = require("passport");
