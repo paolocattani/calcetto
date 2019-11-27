@@ -5,28 +5,36 @@
 // https://github.com/RobinBuschmann/sequelize-typescript
 //
 
-import { isProductionMode } from '../../core/debug'
-import config from '../../config/config.js';
-import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
-import { Options } from 'sequelize';
+// Core
+import '../../core/env'
 import { logger } from '../../core/logger';
+import { isProductionMode } from '../../core/debug'
+// Sequelize
+import { Options } from 'sequelize';
+import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
+import config from '../../config/config.js';
+// Other
+import util from 'util'
 
-export default async function syncModel(): Promise<Sequelize> {
-    const envConfig: any | string | SequelizeOptions | Options = isProductionMode ? config.production : config.development;
+
+
+export default async function syncDb(): Promise<Sequelize> {
+    const envConfig: any | string | SequelizeOptions | Options = isProductionMode() ? config.production : config.development;
     const uri: string = process.env[envConfig.use_env_variable]!;
-    const models: SequelizeOptions = {
+    logger.info(`sequelize.index : uri ${util.inspect(uri)}`)
+    const connectionOptions: SequelizeOptions = {
+        logging: envConfig.logging,
         dialect: "postgres",
         models: [__dirname + '/*.model.ts'],
-        modelMatch: (filename: string, member: string) => {
-            return filename.substring(0, filename.indexOf('.model')) === member.toLowerCase();
-        },
+        modelMatch: (filename: string, member: string) => filename.substring(0, filename.indexOf('.model')) === member.toLowerCase(),
+        pool: { max: 5, min: 0, acquire: 30000, idle: 10000 }
     };
     const sequelizeconnection = uri ?
-        new Sequelize(uri, models) :
-        new Sequelize(envConfig.database, envConfig.username, envConfig.password, models);
+        new Sequelize(uri, connectionOptions) :
+        new Sequelize(envConfig.database, envConfig.username, envConfig.password, connectionOptions);
 
     const syncDb = await sequelizeconnection.sync();
-    logger.info("Database creation complete!");
+    logger.info("Database synchronization complete!");
     return syncDb;
 
 }

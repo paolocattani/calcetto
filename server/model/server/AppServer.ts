@@ -8,7 +8,7 @@ import chalk from 'chalk';
 import { AbstractServer } from "./AbstractServer";
 //import path from 'path';
 import { Application as ExpressApplication, Request, Response } from 'express';
-import syncModel from '../sequelize';
+import syncDb from '../sequelize';
 //import * as util from 'util';
 
 // white list for CORS
@@ -37,7 +37,7 @@ export class AppServer extends AbstractServer {
 
         // Sync database model ( async )
         logger.info(chalk.cyan.bold(`Database synchronization`));
-        syncModel();
+        syncDb();
 
         // handle routes
         //application.use(playerManager);

@@ -10,7 +10,7 @@ import Tournament from './tournament.model';
  * Rapprenta un Elemento(Coppia) all'interno del Girone :
  *  - questa struttare dovrebbe permettermi di aggiungere coppie dinamicamente senza problemi.
  */
-@Table
+@Table({ tableName: 's1element' })
 export default class s1Element extends Model<s1Element> {
 
     @PrimaryKey

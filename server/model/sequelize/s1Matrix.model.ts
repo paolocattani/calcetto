@@ -18,7 +18,7 @@ import Tournament from './tournament.model';
  *      where idTorneo=? order by idTorneo, score desc
  *
  */
-@Table
+@Table({ tableName: 's1matrix' })
 export default class s1Matrix extends Model<s1Matrix> {
 
     @PrimaryKey

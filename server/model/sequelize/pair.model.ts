@@ -3,7 +3,7 @@ import { IntegerDataType } from 'sequelize';
 import Tournament from './tournament.model'
 import Player from './player.model'
 
-@Table
+@Table({ tableName: 'pairs' })
 export default class Pair extends Model<Pair> {
 
     @PrimaryKey

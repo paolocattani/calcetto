@@ -1,4 +1,6 @@
+import './env'
 import util from 'util';
+import { logger } from './logger';
 
 export function getEnv(): string {
 	return process.env.NODE_ENV!;
@@ -9,7 +11,7 @@ export function getEnv(): string {
  * @returns boolean (if env is 'production' then returns true or not)
  */
 export function isProductionMode() {
-	return process.env.NODE_ENV == 'production' ? true : false;
+	return process.env.NODE_ENV === 'production';
 }
 
 /**

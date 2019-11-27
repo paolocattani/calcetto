@@ -1,7 +1,7 @@
 import { Column, CreatedAt, DeletedAt, Model, PrimaryKey, Table, UpdatedAt, DataType } from 'sequelize-typescript';
 import { IntegerDataType, BigIntDataType, FloatDataType, ENUM } from 'sequelize';
 
-@Table
+@Table({ tableName: 'player' })
 export default class Player extends Model<Player> {
 
     @PrimaryKey

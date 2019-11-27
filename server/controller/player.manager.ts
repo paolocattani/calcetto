@@ -5,7 +5,7 @@ import { logger } from 'core/logger';
 
 export const playerManager = () => Router()
 
-    .get('/users', async (_req, res, next) => {
+    .get('/player', async (_req, res, next) => {
         try {
             const users = await Player.findAll({ include: [Player] });
             return res.json(users);
@@ -16,7 +16,7 @@ export const playerManager = () => Router()
     }
     )
 
-    .post('/users', async (req, res, next) => {
+    .post('/player', async (req, res, next) => {
         logger.info(`player controller : req.body => ${util.inspect(req.body)}`);
         try {
             const player = await Player.create(req.body);
