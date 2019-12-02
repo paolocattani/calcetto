@@ -1,10 +1,11 @@
-import { Column, CreatedAt, DeletedAt, Model, PrimaryKey, Table, UpdatedAt, DataType } from 'sequelize-typescript';
+import { Column, CreatedAt, DeletedAt, Model, PrimaryKey, Table, UpdatedAt, DataType, AutoIncrement } from 'sequelize-typescript';
 import { IntegerDataType, BigIntDataType, FloatDataType, ENUM } from 'sequelize';
 
 @Table({ tableName: 'player' })
 export default class Player extends Model<Player> {
 
     @PrimaryKey
+    @AutoIncrement
     @Column(DataType.INTEGER)
     id!: IntegerDataType;
 

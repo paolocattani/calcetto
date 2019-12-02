@@ -9,91 +9,43 @@ import logo from './logo.svg';
 import './App.css';
 import { inspect } from 'util';
 import GenericForm from 'components/core/GenericForm';
+import { IInputOptions } from 'components/core/InputOptions';
 
 type appProps = { name: string, greeting: string }
-type appState = {
-  name: string,
-  surname: string,
-  alias: string,
-  role: string
-}
 
-export default class App extends Component<appProps, appState> {
+export default class App extends Component<appProps, {}> {
 
   constructor(props: Readonly<appProps>) {
     super(props);
-    this.state = {
-      name: '',
-      surname: '',
-      alias: '',
-      role: ''
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSubmit.bind(this);
   }
 
-  handleChange(event: ChangeEvent<HTMLInputElement>) {
-    this.setState({ name: event.target.value });
-  }
-
-  handleChange2: React.FormEventHandler<HTMLInputElement> = (event) => {
-    console.log(`handleChange2 : ${inspect({ [event.currentTarget.name]: event.currentTarget.value })}`);
-    this.setState({ [event.currentTarget.name]: event.currentTarget.value } as appState);
-  };
-
-  handleChange3 = (event: React.FormEvent<HTMLInputElement>) => {
-    this.setState({ [event.currentTarget.name]: event.currentTarget.value } as appState);
-  };
-
-  handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async handleSubmit(event: FormEvent<HTMLFormElement>, state: any) {
+    console.log(inspect(state));
     event.preventDefault();
-    fetch(`/ api / greeting ? name = ${encodeURIComponent(this.state.name)} `)
-      .then(response => response.json())
-      .then(state => this.setState(state));
-  }
-
-  async handleAnotherSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const response = await fetch(`/ player`, {
+    const response = await fetch(`/api/player`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(this.state),
-    })
-    console.log(await response.json())
+      body: JSON.stringify(state),
+    });
+    console.log(await response.json());
   }
 
   public render() {
-    // TODO: Convert to map
-    const names = ['i1', 'i2', 'i3', 'i4', 'i5']
+    let fields = new Map<string, IInputOptions>();
+    fields.set('name', { label: 'Nome', inputType: 'text' } as IInputOptions);
+    fields.set('surname', { label: 'Cognome', inputType: 'text' } as IInputOptions);
+    fields.set('alias', { label: 'Alias', inputType: 'text' } as IInputOptions);
+    fields.set('role', { label: 'Ruolo', inputType: 'text' } as IInputOptions);
+
     return (
       <div className="App" >
         <header className="App-header">
-          <form onSubmit={this.handleAnotherSubmit}>
-            <label htmlFor="name">Enter your name: </label>
-            <input
-              id="name"
-              type="text"
-              value={this.state.name}
-              onChange={this.handleChange}
-            />
-            <input type="text" name="firstName"
-              onChange={e => this.setState({ ...this.state, [e.currentTarget.name]: e.currentTarget.value })} />
-            <label htmlFor="name">Enter your name: </label>
-            <input id="name" type="text" value={this.state.name} onChange={e => this.setState({ ...this.state, [e.currentTarget.name]: e.currentTarget.value })} placeholder="name" />
-            <br />
-            <label htmlFor="surname">surname: </label>
-            <input id="surname" type="text" value={this.state.surname} onChange={this.handleChange2} placeholder="surname" />
-            <br />
-            <label htmlFor="alias">alias: </label>
-            <input id="alias" type="text" value={this.state.alias} onChange={this.handleChange} placeholder="alias" />
-            <br />
-            <label htmlFor="role">role: </label>
-            <input id="role" type="text" value={this.state.role} onChange={this.handleChange} placeholder="role" />
-            <br />
-            <button type="submit">Submit Another Form</button>
-          </form>
-
-          <GenericForm inputFieldsNames={names} onSubmit={this.handleAnotherSubmit}></GenericForm>
+          <GenericForm
+            inputFields={fields}
+            submitMessage={'Conferma'}
+            onSubmit={this.handleSubmit}>
+          </GenericForm>
         </header>
       </div>
     );

@@ -1,20 +1,21 @@
 import '../../core/env'
 import { logger } from '../../core/logger';
 import { CorsOptions } from 'cors';
-import { isProductionMode } from '../../core/debug'
-import glob from 'glob';
 import path from 'path';
 import chalk from 'chalk';
 import { AbstractServer } from "./AbstractServer";
 //import path from 'path';
-import { Application as ExpressApplication, Request, Response } from 'express';
+import { Application as ExpressApplication, Request, Response, Router } from 'express';
 import syncDb from '../sequelize';
 //import * as util from 'util';
+import routes from './../../controller';
+import { isAlphaLocales } from 'validator';
+import { SyncOptions } from 'sequelize/types';
 
 // white list for CORS
 const applicationName: string = 'ApplicationServer';
-const applicationPort: number = 8080;
-const applicationCPUs: number = 2;
+const applicationPort: number = Number(process.env.SERVER_PORT);
+const applicationCPUs: number = Number(process.env.SERVER_CPU);
 const whiteList: string[] = [
     `http://${process.env.CLIENT_HOST}:${process.env.CLIENT_PORT}`,
     `https://${process.env.CLIENT_HOST}:${process.env.CLIENT_PORT}`,
@@ -33,26 +34,14 @@ export class AppServer extends AbstractServer {
         this.start();
     }
 
-    routes(application: ExpressApplication): void {
-
+    public routes(application: ExpressApplication): void {
+        const options: SyncOptions = {
+            alter: true
+        };
         // Sync database model ( async )
-        logger.info(chalk.cyan.bold(`Database synchronization`));
-        syncDb();
-
-        // handle routes
-        //application.use(playerManager);
-        application.get('/api/greeting', (req: Request, res: Response) => {
-            const name = req.query.name || 'World';
-            res.setHeader('Content-Type', 'application/json');
-            res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
-        });
-        // Setup express routes
-        glob.sync(`${path.resolve('../../controller/**/')}*.+(js|jsx|ts|tsx)`).forEach(route => {
-            if (!isProductionMode()) logger.info('Loading route : ' + route);
-            if (route.indexOf('.manager') !== 0)
-                require(route)(application);
-        });
-
+        logger.info(chalk.cyan.bold(`Database synchronization ( async )`));
+        syncDb(options);
+        application.use(routes(Router()));
         application.get('/api', (req: Request, res: Response) => {
             logger.info(`${this.serverName} route /api`);
             return res.status(200).send({ message: `Welcome to ${this.serverName} endpoint API!` })

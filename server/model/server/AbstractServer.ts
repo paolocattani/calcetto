@@ -51,7 +51,7 @@ export const checkJwt = jwt({
     issuer: `https://${process.env.AUTH0_DOMAIN}/`,
     algorithms: ['RS256']
 });
- 
+
 const session: expressSession.SessionOptions = {
     secret: "LoxodontaElephasMammuthusPalaeoloxodonPrimelephas",
     cookie: {},
@@ -99,7 +99,7 @@ export abstract class AbstractServer implements IServer {
             this.application.use(json());
             this.application.use(urlencoded({ extended: false }));
             this.application.use(cookieParser());
-        
+
             // FIXME: also need to fix this
             // if process.env.AUTH0_CALLBACK_URL = 'http://localhost:300 -> loooop !!
             const strategy = new Auth0Strategy({
@@ -116,7 +116,7 @@ export abstract class AbstractServer implements IServer {
 
             this.application.use(cors(this.corsOptions));
             this.application.use(expressSession(session));
-
+            this.application.disable('x-powered-by');
             // Auth
             passport.use(strategy);
             this.application.use(passport.initialize());
@@ -127,9 +127,9 @@ export abstract class AbstractServer implements IServer {
             // Log all routes
             // FIXME:fix athentication function due to CORS
             //this.application.all('*', routeLogger, secured);
-            this.application.all('*', routeLogger);
+            //this.application.use('/', AuthManager.default);
 
-            this.application.use('/', AuthManager.default);
+            this.application.all('*', routeLogger);
             this.routes(this.application);
 
             // public folder path

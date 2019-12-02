@@ -14,5 +14,5 @@ export const secured = (req: Request, res: Response, next: NextFunction) => {
 export const routeLogger = (req: Request, res: Response, next: NextFunction) => {
     if (isDevMode())
         logger.info(`Serving route : ${req.originalUrl}`);
-    return next();
+    next();
 };
