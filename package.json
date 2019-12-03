@@ -31,6 +31,7 @@
     "@types/express-session": "^1.15.15",
     "@types/glob": "^7.1.1",
     "@types/helmet": "0.0.45",
+    "@types/jest": "^24.0.23",
     "@types/morgan": "^1.7.37",
     "@types/node": "^12.12.14",
     "@types/passport": "^1.0.2",

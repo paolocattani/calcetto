@@ -1,32 +1,25 @@
-import React from 'react'
-import ReactDOMServer from 'react-dom/server'
+import { playerManager } from './player';
+import { testManager } from './test.manager';
+import { Request, Response, Router } from 'express';
 
-// import our main App component
-import App from '../../src/App';
+export default (router: Router): Router => {
 
-const path = require("path");
-const fs = require("fs");
-
-export default (req, res, next) => {
-
-    // point to the html file created by CRA's build tool
-    const filePath = path.resolve(__dirname, '..', '..', 'build', 'index.html');
-
-    fs.readFile(filePath, 'utf8', (err, htmlData) => {
-        if (err) {
-            console.error('err', err);
-            return res.status(404).end()
-        }
-
-        // render the app as a string
-        const html = ReactDOMServer.renderToString(<App />);
-
-        // inject the rendered app into our html and send it
-        return res.send(
-            htmlData.replace(
-                '<div id="root"></div>',
-                `<div id="root">${html}</div>`
-            )
-        );
+    // API Test
+    router.get('/api', (req: Request, res: Response) => res.status(200).send({
+        message: 'Welcome to endpoint API!',
+    }));
+    router.get('/api/greeting', (req: Request, res: Response) => {
+        const name = req.query.name || 'World';
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).send(JSON.stringify({ greeting: `Hello ${name}!` }));
     });
+    // API Test
+
+    router.post('/api/player', playerManager(router));
+
+
+    router.post('/api/player', playerManager(router));
+
+    return router;
+
 }
