@@ -1,7 +1,7 @@
 import { Column, CreatedAt, DeletedAt, Model, PrimaryKey, Table, UpdatedAt, DataType, AutoIncrement } from 'sequelize-typescript';
 import { IntegerDataType, BigIntDataType, FloatDataType, ENUM } from 'sequelize';
 
-@Table({ tableName: 'player' })
+@Table({ tableName: 'player', version: true })
 export default class Player extends Model<Player> {
 
     @PrimaryKey
@@ -41,4 +41,7 @@ export default class Player extends Model<Player> {
     @DeletedAt
     deletedAt?: Date;
 
+    public toString() {
+        return `[ ${this.id} , ${this.name} , ${this.surname} , ${this.alias} ]`
+    }
 }

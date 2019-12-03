@@ -6,11 +6,11 @@ import Tournament from './tournament.model';
 
 /**
  * https://stackoverflow.com/questions/2142566/storing-matrices-in-a-relational-database
- * 
+ *
  * Rapprenta un Elemento(Coppia) all'interno del Girone :
  *  - questa struttare dovrebbe permettermi di aggiungere coppie dinamicamente senza problemi.
  */
-@Table({ tableName: 's1element' })
+@Table({ tableName: 's1element', version: true })
 export default class s1Element extends Model<s1Element> {
 
     @PrimaryKey

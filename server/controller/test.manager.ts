@@ -1,18 +1,19 @@
-import { Router } from 'express'
+import { Router, Application as ExpressApplication } from 'express';
 import util from 'util'
-import { logger } from '../core/logger';
 import Player from '../model/sequelize/player.model';
+import { logger } from '../core/logger';
 
-module.exports = Router({ mergeParams: true })
 
-    .post('/player', async (req, res, next) => {
-        logger.info(`player controller : req.body => ${util.inspect(req.body)}`);
+export const testManager = (router: Router): Router => router
+
+    .get('/api/testSSR', async (_req, res, next) => {
         try {
-            const player = await Player.create(req.body);
-            logger.info(`player controller : created Player => ${util.inspect(player)}`);
-            return res.json(player);
+            const users = await Player.findAll({ include: [Player] });
+            return res.json(users);
         }
         catch (err) {
             return next(err);
         }
-    })
+    }
+    )
+    ;

@@ -8,7 +8,7 @@ import { IntegerDataTypeConstructor } from 'sequelize/types';
  *  - Stessa cosa per ordinamento automatico
  *  - Le coppie vengono definite qui. Prevedere possibilità di aggiungere coppie
  */
-@Table({ tableName: 'tournament' })
+@Table({ tableName: 'tournament', version: true })
 export default class Tournament extends Model<Tournament> {
 
     @PrimaryKey

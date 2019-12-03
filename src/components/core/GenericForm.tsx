@@ -1,6 +1,7 @@
 import { Component, FormEvent } from 'react';
 import React from 'react';
 import { IInputOptions } from "./InputOptions";
+import { Form, Button } from 'react-bootstrap';
 
 type formProps = {
     inputFields: Map<string, IInputOptions>,
@@ -33,34 +34,48 @@ export default class GenericForm extends Component<formProps, formState> {
     };
 
     public render() {
-
         // Render input fields
         const inputFields: React.ReactNode[] = [];
         let i: number = 0;
         this.props.inputFields.forEach((value: IInputOptions, key: string, ) => {
             i++;
             // Labels
-            if (value.label) inputFields.push(<label key={`label${i}`} htmlFor={key}>{value.label} : </label>);
-            // Input fields
-            inputFields.push(
-                <input
-                    key={`input${i}`}
-                    name={key}
-                    type={value.inputType ? value.inputType : "text"}
-                    value={this.state[key]}
-                    onChange={value.onChange ? value.onChange : this.handleChange}
-                >
-                </input>
-            )
+            if (value.label) {
+                inputFields.push(
+                    <Form.Group controlId={`formGroup_${i}`}>
+                        <Form.Label>{value.label}</Form.Label>
+                        <Form.Control
+                            key={`input${i}`}
+                            name={key}
+                            type={value.inputType ? value.inputType : "text"}
+                            value={this.state[key]}
+                            placeholder={value.placeholder ? value.placeholder : undefined}
+                            onChange={value.onChange ? value.onChange : this.handleChange}
+                        />
+                    </Form.Group>
+                )
+            } else {
+                inputFields.push(
+                    <Form.Group>
+                        <Form.Control
+                            key={`input${i}`}
+                            name={key}
+                            type={value.inputType ? value.inputType : "text"}
+                            value={this.state[key]}
+                            onChange={value.onChange ? value.onChange : this.handleChange}
+                        />
+                    </Form.Group>
+                )
+            }
             // BreakLine
-            inputFields.push(<br></br>);
+            //inputFields.push(<br></br>);
         }
         );
 
         (this.props.submitMessage) ?
-            inputFields.push(<button type="submit">{this.props.submitMessage}</button>) :
-            inputFields.push(<button type="submit">Submit</button>);
+            inputFields.push(<Button type="submit">{this.props.submitMessage}</Button>) :
+            inputFields.push(<Button type="submit">Submit</Button>);
 
-        return <form onSubmit={this.handleSubmit}>{inputFields}</form>
+        return <Form onSubmit={this.handleSubmit}>{inputFields}</Form>
     }
 }

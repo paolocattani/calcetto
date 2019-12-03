@@ -21,7 +21,7 @@ export const playerManager = (router: Router): Router => router
         logger.info(`player controller : req.body => ${util.inspect(req.body)}`);
         try {
             const player = await Player.create(req.body);
-            logger.info(`player controller : created Player => ${util.inspect(player)}`);
+            logger.info(`player controller : created Player => ${player.toString()}`);
             return res.json(player);
         }
         catch (err) {

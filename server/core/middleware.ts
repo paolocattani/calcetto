@@ -16,3 +16,4 @@ export const routeLogger = (req: Request, res: Response, next: NextFunction) => 
         logger.info(`Serving route : ${req.originalUrl}`);
     next();
 };
+
