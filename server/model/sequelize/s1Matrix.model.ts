@@ -18,10 +18,11 @@ import Tournament from './tournament.model';
  *      where idTorneo=? order by idTorneo, score desc
  *
  */
-@Table({ tableName: 's1matrix' })
+@Table({ tableName: 's1matrix', version: true })
 export default class s1Matrix extends Model<s1Matrix> {
 
     @PrimaryKey
+    @AutoIncrement
     @Column(DataType.INTEGER)
     id!: IntegerDataType;
 

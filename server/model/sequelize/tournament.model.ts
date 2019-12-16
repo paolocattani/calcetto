@@ -1,4 +1,4 @@
-import { Column, CreatedAt, DeletedAt, Model, PrimaryKey, Table, UpdatedAt, HasMany, DataType } from 'sequelize-typescript';
+import { Column, CreatedAt, DeletedAt, Model, PrimaryKey, Table, UpdatedAt, HasMany, DataType, AutoIncrement } from 'sequelize-typescript';
 import Pair from './pair.model'
 import { IntegerDataTypeConstructor } from 'sequelize/types';
 
@@ -8,10 +8,11 @@ import { IntegerDataTypeConstructor } from 'sequelize/types';
  *  - Stessa cosa per ordinamento automatico
  *  - Le coppie vengono definite qui. Prevedere possibilità di aggiungere coppie
  */
-@Table({ tableName: 'tournament' })
+@Table({ tableName: 'tournament', version: true })
 export default class Tournament extends Model<Tournament> {
 
     @PrimaryKey
+    @AutoIncrement
     @Column(DataType.INTEGER)
     public id!: IntegerDataTypeConstructor;
 
