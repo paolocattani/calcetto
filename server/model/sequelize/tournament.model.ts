@@ -1,4 +1,4 @@
-import { Column, CreatedAt, DeletedAt, Model, PrimaryKey, Table, UpdatedAt, HasMany, DataType } from 'sequelize-typescript';
+import { Column, CreatedAt, DeletedAt, Model, PrimaryKey, Table, UpdatedAt, HasMany, DataType, AutoIncrement } from 'sequelize-typescript';
 import Pair from './pair.model'
 import { IntegerDataTypeConstructor } from 'sequelize/types';
 
@@ -12,6 +12,7 @@ import { IntegerDataTypeConstructor } from 'sequelize/types';
 export default class Tournament extends Model<Tournament> {
 
     @PrimaryKey
+    @AutoIncrement
     @Column(DataType.INTEGER)
     public id!: IntegerDataTypeConstructor;
 

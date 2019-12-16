@@ -14,6 +14,7 @@ import Tournament from './tournament.model';
 export default class s1Element extends Model<s1Element> {
 
     @PrimaryKey
+    @AutoIncrement
     @Column(DataType.INTEGER)
     id!: IntegerDataType;
 

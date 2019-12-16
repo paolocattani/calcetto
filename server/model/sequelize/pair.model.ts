@@ -7,6 +7,7 @@ import Player from './player.model'
 export default class Pair extends Model<Pair> {
 
     @PrimaryKey
+    @AutoIncrement
     @Column(DataType.INTEGER)
     id!: IntegerDataType;
 

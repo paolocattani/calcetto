@@ -1,6 +1,8 @@
-import { playerManager } from './player';
-import { testManager } from './test.manager';
 import { Request, Response, Router } from 'express';
+
+// controllers
+import { playerManager } from './player';
+import { tournamentManager } from './tournament';
 
 export default (router: Router): Router => {
 
@@ -15,10 +17,11 @@ export default (router: Router): Router => {
     });
     // API Test
 
+    // player API
     router.post('/api/player', playerManager(router));
 
-
-    router.post('/api/player', playerManager(router));
+    // tournament API
+    router.use('/api/tournament', tournamentManager(router));
 
     return router;
 

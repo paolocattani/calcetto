@@ -90,7 +90,9 @@ export abstract class AbstractServer implements IServer {
             );
         } else {
             //this.application.get('env') !== 'production';
-            this.application.options('*', cors()) // Preflight Request
+            //this.application.options('*', cors()) // Preflight Request
+            this.application.options('*', cors(this.corsOptions)) // Preflight Request
+
             this.application.use(morgan('dev'));
             this.application.disable('x-powered-by');
             this.application.use(compression());

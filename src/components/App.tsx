@@ -6,12 +6,13 @@
 
 import React, { Component, FormEvent } from 'react';
 import './App.css';
-import { inspect } from 'util';
-import GenericForm from 'components/core/GenericForm';
 import TournamentForm from 'components/tournament';
-import { IInputOptions } from 'components/core/InputOptions';
+import Dropdown from './DropdownWrapper';
+
 
 type appProps = { name: string, greeting: string }
+
+const applicationName = `webapp`; //`calcetto C.S.M`;
 
 export default class App extends Component<appProps, {}> {
 
@@ -23,8 +24,11 @@ export default class App extends Component<appProps, {}> {
     return (
       <div className="App" >
         <header className="App-header">
-          <TournamentForm />
+          <p>{applicationName}</p>
         </header>
+        <br></br>
+        <Dropdown />
+        <br></br>
       </div>
     );
   }

@@ -2,7 +2,7 @@
   "name": "calcetto",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8080",
+  "proxy": "http://localhost:5001",
   "repository": {
     "type": "git",
     "url": "https://github.com/paolocattani/calcetto.git/"
@@ -60,6 +60,7 @@
     "react-bootstrap": "^1.0.0-beta.16",
     "react-dom": "^16.12.0",
     "react-scripts": "3.2.0",
+    "react-select": "^3.0.8",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^5.21.2",
     "sequelize-cli": "^5.5.1",
@@ -69,10 +70,10 @@
   },
   "scripts": {
     "dev": "concurrently --kill-others-on-fail \"npm run dev:server\" \"npm run dev:client\"",
-    "dev:server": "cd server && nodemon --config \"./nodemon.json\"/",
+    "dev:server": "cd server && nodemon --config \"./nodemon.json\"",
     "dev:client": "react-scripts start ",
     "prod": "concurrently --kill-others-on-fail \"npm run prod:server\" \"npm run prod:client\"",
-    "prod:server": "cd server && nodemon --config \"./nodemon.json\"/",
+    "prod:server": "cd server && nodemon --config \"./nodemon.json\"",
     "prod:client": "react-scripts build && serve -s build",
     "start": "react-scripts start",
     "build": "react-scripts build",

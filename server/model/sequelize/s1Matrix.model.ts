@@ -22,6 +22,7 @@ import Tournament from './tournament.model';
 export default class s1Matrix extends Model<s1Matrix> {
 
     @PrimaryKey
+    @AutoIncrement
     @Column(DataType.INTEGER)
     id!: IntegerDataType;
 

@@ -9,7 +9,6 @@ import { Application as ExpressApplication, Request, Response, Router } from 'ex
 import syncDb from '../sequelize';
 //import * as util from 'util';
 import routes from './../../controller';
-import { isAlphaLocales } from 'validator';
 import { SyncOptions } from 'sequelize/types';
 
 // white list for CORS
@@ -36,7 +35,8 @@ export class AppServer extends AbstractServer {
 
     public routes(application: ExpressApplication): void {
         const options: SyncOptions = {
-            //alter: true
+            //force: true,
+            //alter: true  : this option doesn't work. Need to look deeper
         };
         // Sync database model ( async )
         logger.info(chalk.cyan.bold(`Database synchronization ( async )`));
