@@ -7,8 +7,8 @@
 import React, { Component, FormEvent } from 'react';
 import './App.css';
 import TournamentForm from 'components/tournament';
-import Dropdown from './DropdownWrapper';
-
+import TournamentSelection from './TournamentSelection';
+import { Route, Link, Switch } from 'react-router-dom'
 
 type appProps = { name: string, greeting: string }
 
@@ -23,12 +23,20 @@ export default class App extends Component<appProps, {}> {
   public render() {
     return (
       <div className="App" >
+        {/** Header */}
         <header className="App-header">
           <p>{applicationName}</p>
         </header>
         <br></br>
-        <Dropdown />
-        <br></br>
+
+        {/** Body */}
+        <Switch>
+          <Route exact path="/" component={TournamentSelection} />
+
+          <br></br>
+        </Switch>
+
+
       </div>
     );
   }

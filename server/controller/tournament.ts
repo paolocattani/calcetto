@@ -11,8 +11,8 @@ export const tournamentManager = (router: Router): Router => router
         try {
             //const t: string[] = await Tournament.aggregate('name', 'DISTINCT', { plain: false });
             const t: Tournament[] = await Tournament.findAll({
-                attributes: ["name"],
-                group: ["name"]
+                attributes: ["id", "name"],
+                group: ["id", "name"]
             });
             logger.info(t);
             res.json(t)
