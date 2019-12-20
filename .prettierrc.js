@@ -1,12 +1,12 @@
 module.exports = {
-    "parser": "typescript",
-    "useTabs": true,
-    "printWidth": 120,
-    "tabWidth": 4,
-    "singleQuote": true,
-    "trailingComma": "all",
-    "semi": true,
-    "newline-before-return": true,
-    "no-duplicate-variable": [true, "check-parameters"],
-    "no-var-keyword": true
-}
+   parser: 'typescript',
+   semi: true,
+   'newline-before-return': true,
+   'no-duplicate-variable': [true, 'check-parameters'],
+   'no-var-keyword': true,
+   printWidth: 120,
+   eslintIntegration: true,
+   stylelintIntegration: true,
+   tabWidth: 2,
+   singleQuote: true
+};
