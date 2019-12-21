@@ -6,7 +6,7 @@
 import '../../core/env';
 import { logger } from '../../core/logger';
 import { isProductionMode } from '../../core/debug';
-import { routeLogger, secured } from '../../core/middleware';
+import { routeLogger, routeNotFound } from '../../core/middleware';
 // Express
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -21,7 +21,6 @@ import jwt from 'express-jwt';
 import jwksRsa from 'jwks-rsa';
 import expressSession from 'express-session';
 import passport from 'passport';
-import * as AuthManager from '../../controller/authManager';
 const Auth0Strategy = require('passport-auth0');
 // Other
 import chalk from 'chalk';
@@ -139,7 +138,7 @@ export abstract class AbstractServer implements IServer {
 
       this.application.all('*', routeLogger);
       this.routes(this.application);
-
+      this.application.all('*', routeNotFound);
       // public folder path
       logger.info(`Serving build forlder from ${chalk.green(path.join(__dirname, '..', '..', '..', 'build'))}`);
       this.application.use(

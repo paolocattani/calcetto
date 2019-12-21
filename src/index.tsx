@@ -3,12 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
+import { SessionContextProvider } from './components/core/SessionContext';
 
 ReactDOM.render(
-  <Router>
-    <App name="" greeting="" />
-  </Router>,
+  <BrowserRouter>
+    <SessionContextProvider>
+      <App />
+    </SessionContextProvider>
+  </BrowserRouter>,
   document.getElementById('root')
 );
 
