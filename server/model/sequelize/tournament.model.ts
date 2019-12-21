@@ -1,5 +1,16 @@
-import { Column, CreatedAt, DeletedAt, Model, PrimaryKey, Table, UpdatedAt, HasMany, DataType, AutoIncrement } from 'sequelize-typescript';
-import Pair from './pair.model'
+import {
+  Column,
+  CreatedAt,
+  DeletedAt,
+  Model,
+  PrimaryKey,
+  Table,
+  UpdatedAt,
+  HasMany,
+  DataType,
+  AutoIncrement
+} from 'sequelize-typescript';
+import Pair from './pair.model';
 import { IntegerDataTypeConstructor } from 'sequelize/types';
 
 /**
@@ -10,38 +21,37 @@ import { IntegerDataTypeConstructor } from 'sequelize/types';
  */
 @Table({ tableName: 'tournament', version: true })
 export default class Tournament extends Model<Tournament> {
+  @PrimaryKey
+  @AutoIncrement
+  @Column(DataType.INTEGER)
+  public id!: IntegerDataTypeConstructor;
 
-    @PrimaryKey
-    @AutoIncrement
-    @Column(DataType.INTEGER)
-    public id!: IntegerDataTypeConstructor;
+  @Column(DataType.STRING)
+  public name!: string;
 
-    @Column(DataType.STRING)
-    public name!: string;
+  @Column(DataType.INTEGER)
+  //@ForeignKey(() => User)
+  public ownerId!: IntegerDataTypeConstructor;
 
-    @Column(DataType.INTEGER)
-    //@ForeignKey(() => User)
-    public ownerId!: IntegerDataTypeConstructor;
+  //@Column(DataType.ENUM)
+  //public progress!: ["stage1", "stage2"];
+  @Column(DataType.STRING)
+  public progress!: string;
+  @Column(DataType.BOOLEAN)
+  public public!: boolean;
 
-    //@Column(DataType.ENUM)
-    //public progress!: ["stage1", "stage2"];
-    @Column(DataType.STRING)
-    public progress!: string;
-    @Column(DataType.BOOLEAN)
-    public public!: boolean
+  @CreatedAt
+  public createdAt?: Date;
 
-    @CreatedAt
-    public createdAt?: Date;
+  @UpdatedAt
+  public updatedAt?: Date;
 
-    @UpdatedAt
-    public updatedAt?: Date;
+  @DeletedAt
+  public deletedAt?: Date;
 
-    @DeletedAt
-    public deletedAt?: Date;
+  @HasMany(() => Pair)
+  public pairs!: Pair[];
 
-    @HasMany(() => Pair)
-    public pairs!: Pair[];
-
-    //@HasOne(() => User)
-    //owner!: User;
+  //@HasOne(() => User)
+  //owner!: User;
 }

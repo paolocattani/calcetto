@@ -15,33 +15,33 @@ const applicationName = 'webapp'; //`calcetto C.S.M`;
 
 // Mappatura route
 const routes = [
-   { path: '/', label: 'Home', exact: true, component: TournamentSelection, visible: true, index: 0 },
-   // TODO: creare pagina per route not found
-   { path: '*', label: 'Not Found', exact: false, component: Todo.NoMatch, visible: false, index: 100 }
+  { path: '/', label: 'Home', exact: true, component: TournamentSelection, visible: true, index: 0 },
+  // TODO: creare pagina per route not found
+  { path: '*', label: 'Not Found', exact: false, component: Todo.NoMatch, visible: false, index: 100 }
 ];
 
 export default class App extends Component<appProps, {}> {
-   constructor(props: Readonly<appProps>) {
-      super(props);
-   }
+  constructor(props: Readonly<appProps>) {
+    super(props);
+  }
 
-   public render(): JSX.Element {
-      return (
-         <div className="App">
-            {/** Header */}
-            <header className="App-header">
-               <p>{applicationName}</p>
-            </header>
-            <br></br>
-            {/** Body */}
-            <Switch>
-               {/* Carica dinamicamente le route a partire dall'oggetto routes ( vedi sopra ) */
-               routes.map(route => (
-                  <Route key={route.index} path={route.path} exact={route.exact} component={route.component}></Route>
-               ))}
-               <br></br>
-            </Switch>
-         </div>
-      );
-   }
+  public render(): JSX.Element {
+    return (
+      <div className="App">
+        {/** Header */}
+        <header className="App-header">
+          <p>{applicationName}</p>
+        </header>
+        <br></br>
+        {/** Body */}
+        <Switch>
+          {/* Carica dinamicamente le route a partire dall'oggetto routes ( vedi sopra ) */
+          routes.map(route => (
+            <Route key={route.index} path={route.path} exact={route.exact} component={route.component}></Route>
+          ))}
+          <br></br>
+        </Switch>
+      </div>
+    );
+  }
 }
