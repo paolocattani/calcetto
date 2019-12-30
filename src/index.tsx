@@ -1,15 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import 'typeface-roboto';
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
+import { SessionContextProvider } from './components/core/SessionContext';
 
 ReactDOM.render(
-   <Router>
-      <App name="" greeting="" />
-   </Router>,
-   document.getElementById('root')
+  <BrowserRouter>
+    <SessionContextProvider>
+      <App />
+    </SessionContextProvider>
+  </BrowserRouter>,
+  document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change

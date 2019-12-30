@@ -21,6 +21,7 @@
     ]
   },
   "dependencies": {
+    "@material-ui/core": "^4.8.2",
     "@types/bluebird": "^3.5.29",
     "@types/body-parser": "^1.17.1",
     "@types/compression": "^1.0.1",
@@ -69,6 +70,7 @@
     "sequelize-cli": "^5.5.1",
     "sequelize-typescript": "^1.0.0",
     "ts-node": "^8.5.4",
+    "typeface-roboto": "0.0.75",
     "typescript": "^3.7.2"
   },
   "scripts": {
