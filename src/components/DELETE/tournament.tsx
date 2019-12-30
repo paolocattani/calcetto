@@ -1,7 +1,7 @@
 import { Component, FormEvent, ReactNode, ReactElement, MouseEvent, Ref } from 'react';
 import React from 'react';
 import { inspect } from 'util';
-import { getTodayDate } from './core/utils';
+import { getTodayDate } from '../core/utils';
 import { Form, Button, Dropdown } from 'react-bootstrap';
 
 type formState = {

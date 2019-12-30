@@ -14,10 +14,10 @@ import React from 'react';
 import { Switch, Route } from 'react-router';
 import { useSessionContext } from '../components/core/SessionContext';
 import { ProtectedRoute, ProtectedRouteProps } from '../components/core/PrivateRoute';
-import './App.css';
+import './style/App.css';
 import TournamentSelection from './TournamentSelection';
-import * as Todo from './Todo';
-import Login from './Login';
+import * as Todo from './DELETE/Todo';
+import { Login } from './Login';
 const applicationName = 'webapp'; //`calcetto C.S.M`;
 
 // Mappatura route

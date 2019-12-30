@@ -47,6 +47,7 @@ export default class TournamentSelection extends React.Component {
     const result = await response.json();
     //const tmp: Array<{ id: string; value: string; label: string }> = [];
     //result.forEach((e: { id: string; name: string }) =>
+    //let tmp = [{ id: null, value: getTodayDate(), label: getTodayDate() }];
     const tmp = [];
     result.forEach(e =>
       tmp.push({
@@ -55,7 +56,10 @@ export default class TournamentSelection extends React.Component {
         label: e.name
       })
     );
-    this.setState({ tournamentList: tmp });
+    this.setState({
+      tournamentList: tmp
+      //, selectedOption: getTodayDate()
+    });
   }
 
   async handleSubmit(event) {
@@ -80,8 +84,6 @@ export default class TournamentSelection extends React.Component {
 
   render() {
     const { selectedOption } = this.state;
-
-    if (this.state.redirectTo !== '') return <Redirect to="/home" />;
 
     return (
       <Card style={cardStyle}>
