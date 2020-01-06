@@ -1,39 +1,44 @@
-import { Router, Application as ExpressApplication } from 'express';
+import { Router } from 'express';
 import util from 'util';
 import { logger } from '../core/logger';
 import Tournament from '../model/sequelize/tournament.model';
-import { AggregateOptions } from 'sequelize';
+import { isDevMode } from '../core/debug';
 
-export const tournamentManager = (router: Router): Router =>
-  router
+// all API path must be relative to /api/tournament
+const router = Router();
+router.use('/', (req, res, next) => {
+  if (isDevMode()) logger.info(`Tournament Manager : ${req.method} ${req.originalUrl.replace('/api/tournament', '')} `);
+  next();
+});
 
-    .get('/api/tournament/list', async (req, res, next) => {
-      logger.info(`tournament controller`);
-      try {
-        //const t: string[] = await Tournament.aggregate('name', 'DISTINCT', { plain: false });
-        const t: Tournament[] = await Tournament.findAll({
-          attributes: ['id', 'name'],
-          group: ['id', 'name']
-        });
-        logger.info(t);
-        res.json(t);
-      } catch (err) {
-        return next(err);
-      }
-    })
-
-    .post('/api/tournament', async (req, res, next) => {
-      logger.info(`tournament controller : req.body => ${util.inspect(req.body)}`);
-      try {
-        let t = await Tournament.findOne({ where: { name: req.body.name } });
-        if (t) {
-          logger.info(`tournament ${req.body.name} already exists!`);
-          return res.json(t);
-        }
-        t = await Tournament.create(req.body);
-        logger.info(`tournament controller : created Tournament => ${t.toString()}`);
-        return res.json(t);
-      } catch (err) {
-        return next(err);
-      }
+router.get('/list', async (req, res, next) => {
+  try {
+    const t: Tournament[] = await Tournament.findAll({
+      attributes: ['id', 'name'],
+      group: ['id', 'name'],
+      order: [['name', 'DESC']]
     });
+    logger.info(t);
+    res.json(t);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+router.post('/', async (req, res, next) => {
+  const model = req.body;
+  try {
+    let t = await Tournament.findOne({ where: { name: model.name } });
+    if (t) {
+      logger.info(`tournament ${model.name} already exists!`);
+      return res.json(t);
+    }
+    t = await Tournament.create(model);
+    logger.info(`tournament controller : created Tournament => ${t}`);
+    return res.json(t);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+export default router;

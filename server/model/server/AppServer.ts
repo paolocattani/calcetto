@@ -41,12 +41,9 @@ export class AppServer extends AbstractServer {
       //alter: true  : this option doesn't work. Need to look deeper
     };
     // Sync database model ( async )
-    logger.info(chalk.cyan.bold(`Database synchronization ( async )`));
+    logger.info(chalk.cyan.bold('Database synchronization ( async )'));
     syncDb(options);
-    application.use(routes(Router()));
-    application.get('/api', (req: Request, res: Response) => {
-      logger.info(`${this.serverName} route /api`);
-      return res.status(200).send({ message: `Welcome to ${this.serverName} endpoint API!` });
-    });
+    //application.use(routes(Router()));
+    application.use(routes(application));
   }
 }

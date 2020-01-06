@@ -14,7 +14,15 @@ export function NoMatch(): JSX.Element {
   );
 }
 
-export function Home(): JSX.Element {
+export function RedirectionControl(props: any): JSX.Element {
+  return (
+    <div>
+      <h1> Current Ruote : {props.route} </h1>
+    </div>
+  );
+}
+
+export function Home(props: any): JSX.Element {
   return (
     <div>
       <h1> HOME PAGE </h1>

@@ -4,23 +4,15 @@ import { components } from 'react-select';
 import { Form, Button, Card } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 import { useHistory } from 'react-router';
-/*
-type propsType = {};
-type stateType = {
-  selectedOption: string;
-  tournamentList: Array<{ id: string; value: string; label: string }>;
-  redirectTo: string;
-};
-*/
+
 export default class TournamentSelection extends React.Component {
   //export default class TournamentSelection extends React.Component<propsType, stateType> {
   //constructor(props: propsType) {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOption: undefined,
-      tournamentList: [],
-      redirectTo: ''
+      selectedOption: getTodayDate(),
+      tournamentList: []
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -61,21 +53,23 @@ export default class TournamentSelection extends React.Component {
     const result = await response.json();
     //const tmp: Array<{ id: string; value: string; label: string }> = [];
     //result.forEach((e: { id: string; name: string }) =>
-    //let tmp = [{ id: null, value: getTodayDate(), label: getTodayDate() }];
-    const tmp = [];
+    let tmp = [{ id: null, value: getTodayDate(), label: getTodayDate() }];
+    //const tmp = [];
     result.forEach(e => tmp.push({ id: e.id, value: e.name, label: e.name }));
     this.setState({
-      tournamentList: tmp
-      //, selectedOption: getTodayDate()
+      tournamentList: tmp,
+      selectedOption: tmp[0]
     });
+    //console.log('componentDidMount.state : ', this.state);
   }
 
   async handleSubmit(event) {
-    //event.preventDefault();
+    event.preventDefault();
     console.log("Application's state :", this.state);
     const currentHistory = useHistory();
+    const { selectedOption } = this.state;
     const model = {
-      name: this.state.selectedOption,
+      name: selectedOption,
       ownerId: 1,
       progress: 'WIP',
       public: true
@@ -89,12 +83,11 @@ export default class TournamentSelection extends React.Component {
     const res = await response.json();
     console.log('handleSubmit : fetch result -> ', res);
     if (res.message) console.log(res.message);
-    currentHistory.push(`/tournament/${res.id}`);
+    //currentHistory.push(`/tournament/${res.id}`);
   }
 
   render() {
-    const { selectedOption } = this.state;
-
+    const { selectedOption, tournamentList } = this.state;
     return (
       <Card style={cardStyle}>
         <Card.Body>
@@ -103,7 +96,7 @@ export default class TournamentSelection extends React.Component {
             <CreatableSelect
               components={{ IndicatorSeparator, IndicatorsContainer }}
               value={selectedOption}
-              options={this.state.tournamentList}
+              options={tournamentList}
               placeholder="Scrivi qualcosa"
               isSearchable={true}
               isClearable

@@ -15,14 +15,26 @@ import { Switch, Route } from 'react-router';
 import { useSessionContext } from '../components/core/SessionContext';
 import { ProtectedRoute, ProtectedRouteProps } from '../components/core/PrivateRoute';
 import './style/App.css';
-import TournamentSelection from './TournamentSelection';
+//import TournamentSelection from './TournamentSelection';
+import FTournament from './FTournament';
 import * as Todo from './DELETE/Todo';
 import { Login } from './Login';
+import { useHistory } from 'react-router-dom';
+
 const applicationName = 'webapp'; //`calcetto C.S.M`;
 
 // Mappatura route
 const routes = [
-  { path: '/', label: 'Home', exact: true, component: TournamentSelection, visible: true, index: 0 },
+  //{ path: '/', label: 'Home', exact: true, component: TournamentSelection, visible: true, index: 0 },
+  { path: '/', label: 'Home', exact: true, component: FTournament, visible: true, index: 0 },
+  {
+    path: '/tournament/:id',
+    label: 'Controller',
+    exact: true,
+    component: Todo.RedirectionControl,
+    visible: true,
+    index: 10
+  },
   // TODO: creare pagina per route not found
   { path: '*', label: 'Not Found', exact: false, component: Todo.NoMatch, visible: false, index: 100 }
 ];
@@ -41,24 +53,21 @@ const App: React.FC = () => {
     setRedirectPathOnAuthentication
   };
 
+  let currentHistory = useHistory();
+  // eslint-disable-next-line react/destructuring-assignment
   return (
     <div className="App">
       {/** Header */}
       <header className="App-header">
         <p>{applicationName}</p>
+        {/* eslint-disable-next-line react/destructuring-assignment */}
       </header>
       <br></br>
       <Switch>
         <Route path="/login" component={Login} />
         {/* Carica dinamicamente le route a partire dall'oggetto routes ( vedi sopra ) */
         routes.map(route => (
-          <ProtectedRoute
-            {...defaultProtectedRouteProps}
-            key={route.index}
-            path={route.path}
-            exact={route.exact}
-            component={route.component}
-          />
+          <ProtectedRoute {...route} {...defaultProtectedRouteProps} key={route.index} />
         ))}
       </Switch>
     </div>
