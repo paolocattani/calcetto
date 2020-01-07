@@ -6,3 +6,14 @@ export function getTodayDate(): string {
 
   return `${yyyy}-${mm}-${dd}`;
 }
+
+export const productsGenerator = (quantity = 5) => {
+  // if (callback) return Array.from({ length: quantity }, callback);
+
+  // if no given callback, retrun default product format.
+  return Array.from({ length: quantity }, (value, index) => ({
+    id: index,
+    name: `Item name ${index}`,
+    price: 2100 + index
+  }));
+};

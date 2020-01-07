@@ -33,13 +33,6 @@ export default function FTournament() {
     })();
   }, []);
 
-  const handleInputChange = (inputValue, actionMeta) => {
-    console.group('Input Changed');
-    console.log(inputValue);
-    console.log(`action: ${actionMeta.action}`);
-    console.groupEnd();
-  };
-
   const handleChange = selectedOption => setSelectedOption(selectedOption);
   const handleCreate = selectedOption => {
     console.log('handleCreate : ', selectedOption);
@@ -81,7 +74,6 @@ export default function FTournament() {
             isClearable
             onChange={handleChange}
             onCreateOption={handleCreate}
-            onInputChange={handleInputChange}
           />
           <br></br>
           <Button type="submit">Continua</Button>

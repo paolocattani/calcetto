@@ -2,39 +2,33 @@ import { Router, Application as ExpressApplication } from 'express';
 import util from 'util';
 import Player from '../model/sequelize/player.model';
 import { logger } from '../core/logger';
+import { isDevMode } from '../core/debug';
 
-export const playerManager = (router: Router): Router =>
-  router
+const router = Router();
+router.use('/', (req, res, next) => {
+  if (isDevMode()) logger.info(`Player Manager : ${req.method} ${req.originalUrl.replace('/api/player', '')} `);
+  next();
+});
 
-    .get('/api/player', async (_req, res, next) => {
-      try {
-        const users = await Player.findAll({ include: [Player] });
-        return res.json(users);
-      } catch (err) {
-        return next(err);
-      }
-    })
+router.get('/list', async (req, res, next) => {
+  try {
+    const users = await Player.findAll();
+    return res.json(users);
+  } catch (err) {
+    return next(err);
+  }
+});
 
-    .post('/api/player', async (req, res, next) => {
-      logger.info(`player controller : req.body => ${util.inspect(req.body)}`);
-      try {
-        const player = await Player.create(req.body);
-        logger.info(`player controller : created Player => ${player.toString()}`);
-        return res.json(player);
-      } catch (err) {
-        return next(err);
-      }
-    });
-/*
-export async function create(req: Request, res: Response) {
-    logger.info(`player controller : req.body => ${util.inspect(req.body)}`);
-    try {
-        const player = await Player.create(req.body as Object);
-        logger.info(`player controller : created Player => ${util.inspect(player)}`);
-        return res.json(player);
-    }
-    catch (err) {
-        return next(err);
-    }
-}
-*/
+router.post('/', async (req, res, next) => {
+  const model = req.body;
+
+  try {
+    const player = await Player.create(model);
+    logger.info(`created => ${player.toString()}`);
+    return res.send(200).json(player);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+export default router;

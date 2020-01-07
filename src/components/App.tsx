@@ -20,6 +20,7 @@ import FTournament from './FTournament';
 import * as Todo from './DELETE/Todo';
 import { Login } from './Login';
 import { useHistory } from 'react-router-dom';
+import PlayerSelection from './Players';
 
 const applicationName = 'webapp'; //`calcetto C.S.M`;
 
@@ -31,7 +32,7 @@ const routes = [
     path: '/tournament/:id',
     label: 'Controller',
     exact: true,
-    component: Todo.RedirectionControl,
+    component: PlayerSelection,
     visible: true,
     index: 10
   },

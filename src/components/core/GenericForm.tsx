@@ -17,9 +17,8 @@ export default class GenericForm extends Component<formProps, formState> {
     this.handleChange = this.handleChange.bind(this);
     // Dinamically create state with input fields name so later i can handleChange
     const fakeState: any = {};
-    this.props.inputFields.forEach((value, key) => {
-      fakeState[key] = '';
-    });
+    const { inputFields } = this.props;
+    inputFields.forEach((value, key) => (fakeState[key] = ''));
     this.state = fakeState;
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -36,13 +35,15 @@ export default class GenericForm extends Component<formProps, formState> {
 
   public render() {
     // Render input fields
-    const inputFields: React.ReactNode[] = [];
+    const fieldsList: React.ReactNode[] = [];
+    const { inputFields, submitMessage } = this.props;
+
     let i = 0;
-    this.props.inputFields.forEach((value: IInputOptions, key: string) => {
+    inputFields.forEach((value: IInputOptions, key: string) => {
       i++;
       // Labels
       if (value.label) {
-        inputFields.push(
+        fieldsList.push(
           <Form.Group controlId={`formGroup_${i}`}>
             <Form.Label>{value.label}</Form.Label>
             <Form.Control
@@ -56,7 +57,7 @@ export default class GenericForm extends Component<formProps, formState> {
           </Form.Group>
         );
       } else {
-        inputFields.push(
+        fieldsList.push(
           <Form.Group>
             <Form.Control
               key={`input${i}`}
@@ -72,10 +73,10 @@ export default class GenericForm extends Component<formProps, formState> {
       //inputFields.push(<br></br>);
     });
 
-    this.props.submitMessage
-      ? inputFields.push(<Button type="submit">{this.props.submitMessage}</Button>)
-      : inputFields.push(<Button type="submit">Submit</Button>);
+    submitMessage
+      ? fieldsList.push(<Button type="submit">{submitMessage}</Button>)
+      : fieldsList.push(<Button type="submit">Submit</Button>);
 
-    return <Form onSubmit={this.handleSubmit}>{inputFields}</Form>;
+    return <Form onSubmit={this.handleSubmit}>{fieldsList}</Form>;
   }
 }
