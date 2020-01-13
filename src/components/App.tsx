@@ -18,6 +18,7 @@ import './style/App.css';
 import { Login } from './Login';
 // import { useHistory } from 'react-router-dom';
 import routes from '../components/core/Routes';
+import { Link } from 'react-router-dom';
 
 const applicationName = 'webapp'; //`calcetto C.S.M`;
 
@@ -43,7 +44,18 @@ const App: React.FC = () => {
       <header className="App-header">
         <p>{applicationName}</p>
         {/* eslint-disable-next-line react/destructuring-assignment */}
+
+        {routes.map(route =>
+          route.visible ? (
+            <li key={`li-${route.index}`}>
+              <Link key={`link-${route.index}`} to={route.path}>
+                {route.label}
+              </Link>
+            </li>
+          ) : null
+        )}
       </header>
+
       <br></br>
       <Switch>
         <Route path="/login" component={Login} />
