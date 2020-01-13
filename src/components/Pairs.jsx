@@ -23,6 +23,7 @@ export default class PlayerSelection extends React.Component {
     };
     this.onSubmit = this.onSubmit.bind(this);
   }
+
   /*
   async componentDidMount() {
     const response = await fetch('/api/player/list', {
@@ -41,6 +42,9 @@ export default class PlayerSelection extends React.Component {
   rowEvents = {
     // Add 1 row
     onDoubleClick: (e, row, rowIndex) => {
+      const { rows } = this.state;
+      // console.log(rows);
+      const emptyRow = { id: rows.length, 'pair1.alias': '', 'pair2.alias': '' };
       this.setState(state => {
         return { rows: [emptyRow, ...state.rows] };
       });
@@ -68,9 +72,12 @@ export default class PlayerSelection extends React.Component {
     };
 
     const { rows } = this.state;
+
     return (
       <>
         <Button onClick={this.rowEvents.onDoubleClick}> Aggiungi Coppia </Button>
+        <Button onClick={this.rowEvents.onDoubleClick}> Conferma Coppie </Button>
+
         <BootstrapTable
           bootstrap4
           keyField="id"
@@ -86,5 +93,3 @@ export default class PlayerSelection extends React.Component {
     );
   }
 }
-
-const emptyRow = { id: null, 'pair1.alias': '', 'pair2.alias': '' };

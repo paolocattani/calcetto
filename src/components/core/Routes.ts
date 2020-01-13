@@ -27,7 +27,7 @@ export const routes: routeType[] = [
 
   {
     path: '/player',
-    label: 'Creazione Giocatore',
+    label: 'Gestione Giocatori',
     exact: true,
     component: PlayerSelection,
     visible: true,
