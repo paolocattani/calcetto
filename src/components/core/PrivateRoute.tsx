@@ -12,20 +12,24 @@ export interface ProtectedRouteProps extends RouteProps {
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = props => {
   const currentLocation = useLocation();
-  console.log('Current Location ', currentLocation);
+  // console.log('Current Location ', currentLocation);
   let redirectPath = props.redirectPathOnAuthentication;
+
+  // FIXME:
+  if (process.env.NODE_ENV === 'development') return <Route {...props} />;
+
   if (!props.isAuthenticated) {
-    console.log('Not Authenticated');
+    // console.log('Not Authenticated');
     props.setRedirectPathOnAuthentication(currentLocation.pathname);
     redirectPath = props.authenticationPath;
   }
 
   if (redirectPath !== currentLocation.pathname && !props.isAuthenticated) {
-    console.log('Redirecting to : ' + redirectPath);
+    // console.log('Redirecting to : ' + redirectPath);
     const renderComponent = () => <Redirect to={{ pathname: redirectPath }} />;
     return <Route {...props} component={renderComponent} render={undefined} />;
   } else {
-    console.log('Render component', props);
+    // console.log('Render component', props);
     return <Route {...props} />;
   }
 };
