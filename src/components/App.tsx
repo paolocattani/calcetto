@@ -15,30 +15,11 @@ import { Switch, Route } from 'react-router';
 import { useSessionContext } from '../components/core/SessionContext';
 import { ProtectedRoute, ProtectedRouteProps } from '../components/core/PrivateRoute';
 import './style/App.css';
-//import TournamentSelection from './TournamentSelection';
-import FTournament from './FTournament';
-import * as Todo from './DELETE/Todo';
 import { Login } from './Login';
 import { useHistory } from 'react-router-dom';
-import PlayerSelection from './Players';
+import routes from '../components/core/Routes';
 
 const applicationName = 'webapp'; //`calcetto C.S.M`;
-
-// Mappatura route
-const routes = [
-  //{ path: '/', label: 'Home', exact: true, component: TournamentSelection, visible: true, index: 0 },
-  { path: '/', label: 'Home', exact: true, component: FTournament, visible: true, index: 0 },
-  {
-    path: '/tournament/:id',
-    label: 'Controller',
-    exact: true,
-    component: PlayerSelection,
-    visible: true,
-    index: 10
-  },
-  // TODO: creare pagina per route not found
-  { path: '*', label: 'Not Found', exact: false, component: Todo.NoMatch, visible: false, index: 100 }
-];
 
 const App: React.FC = () => {
   const [sessionContext, updateSessionContext] = useSessionContext();
