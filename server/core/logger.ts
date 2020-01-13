@@ -5,33 +5,51 @@ import log4js from 'log4js';
 import { isTestMode, isDevMode, isProductionMode } from './debug';
 
 log4js.configure({
-	appenders: {
-		'console': { type: 'stdout' },
-		'dev-logger': {
-			type: 'datefile',
-			filename: 'dev.log',
-			pattern: '.yyyy-MM-dd',
-			maxLogSize: 10485760,
-			backups: 3,
-			compress: true
-		}
-	},
-	categories: {
-		default: {
-			appenders: ['console', 'dev-logger'],
-			level: 'info'
-		}
-	}
+  appenders: {
+    console: { type: 'stdout' },
+    'dev-logger': {
+      type: 'datefile',
+      filename: 'server.log',
+      pattern: '.yyyy-MM-dd',
+      maxLogSize: 10485760,
+      backups: 2,
+      compress: true
+    },
+    'db-logger': {
+      type: 'datefile',
+      filename: 'db.log',
+      pattern: '.yyyy-MM-dd',
+      maxLogSize: 10485760,
+      backups: 1,
+      compress: true
+    }
+  },
+  categories: {
+    default: {
+      appenders: ['console', 'dev-logger'],
+      level: 'info'
+    },
+    server: {
+      appenders: ['console', 'dev-logger'],
+      level: 'info'
+    },
+    database: {
+      appenders: ['console', 'db-logger'],
+      level: 'info'
+    }
+  }
 });
 
-export const logger = log4js.getLogger();
+export const logger = log4js.getLogger('server');
+export const dbLogger = log4js.getLogger('database');
+
 if (isProductionMode()) {
-	logger.level = 'info';
+  logger.level = 'info';
+  dbLogger.level = 'info';
 } else if (isDevMode()) {
-	logger.level = 'debug';
-
+  logger.level = 'debug';
+  dbLogger.level = 'debug';
 } else if (isTestMode()) {
-	logger.level = 'warn';
+  logger.level = 'warn';
+  dbLogger.level = 'warn';
 }
-
-
