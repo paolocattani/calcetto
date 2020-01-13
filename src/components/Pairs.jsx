@@ -9,24 +9,21 @@
 
 import React from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
-import { productsGenerator } from './core/utils';
-import GenericForm from './core/GenericForm';
-import { IInputOptions } from './types/InputOptions';
+import { PairsGenerator } from './core/utils';
 // react-bootstrap-table
 import { Button } from 'react-bootstrap';
-import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
+import cellEditFactory from 'react-bootstrap-table2-editor';
 
 export default class PlayerSelection extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       playersList: [],
-      rows: productsGenerator(),
-      selectedRows: []
+      rows: PairsGenerator()
     };
     this.onSubmit = this.onSubmit.bind(this);
   }
-
+  /*
   async componentDidMount() {
     const response = await fetch('/api/player/list', {
       method: 'GET',
@@ -36,18 +33,10 @@ export default class PlayerSelection extends React.Component {
     console.table(result);
     this.setState({ playersList: result });
   }
-
+*/
   onSubmit(event, formState) {
     console.log('formSubmit : ', formState);
   }
-
-  handleOnSelect = (row, isSelect) => {
-    console.log('handleOnSelect.selectedRows : ', this.state.selectedRows);
-    this.setState(state => {
-      return { selectedRows: [...this.state.selectedRows, row] };
-    });
-    return true; // return true or dont return to approve current select action
-  };
 
   rowEvents = {
     // Add 1 row
@@ -61,21 +50,8 @@ export default class PlayerSelection extends React.Component {
   render() {
     const columns = [
       { dataField: 'id', text: 'ID', editable: false },
-      { dataField: 'name', text: 'Nome' },
-      { dataField: 'surname', text: 'Cognome' },
-      { dataField: 'alias', text: 'Vero Nome' },
-      {
-        dataField: 'role',
-        text: 'Roulo',
-        editor: {
-          type: Type.SELECT,
-          options: [
-            { value: 'goalkeeper', label: 'Portiere' },
-            { value: 'striker', label: 'Attaccante' },
-            { value: 'both', label: 'Master' }
-          ]
-        }
-      }
+      { dataField: 'pair1.alias', text: 'Nome1' },
+      { dataField: 'pair2.alias', text: 'Nome2' }
     ];
 
     const cellEditProps = cellEditFactory({
@@ -94,14 +70,14 @@ export default class PlayerSelection extends React.Component {
     const { rows } = this.state;
     return (
       <>
-        <Button onClick={this.rowEvents.onDoubleClick}> Aggiungi giocatore </Button>
+        <Button onClick={this.rowEvents.onDoubleClick}> Aggiungi Coppia </Button>
         <BootstrapTable
+          bootstrap4
           keyField="id"
           data={rows}
           columns={columns}
           rowEvents={this.rowEvents}
           cellEdit={cellEditProps}
-          selectRow={selectRow}
           noDataIndication="Nessun dato reperito"
           striped
           hover
@@ -111,13 +87,4 @@ export default class PlayerSelection extends React.Component {
   }
 }
 
-const emptyRow = { id: 0, name: '', surname: '', alias: '', role: '' };
-
-/*
-{
-  name: { label: 'Nome', placeholder: 'Nome' },
-  surname: { label: 'Cognome', placeholder: 'Cognome' },
-  alias: { label: 'Soprannome', placeholder: 'Soprannome' },
-  ruolo: { label: 'Ruolo', placeholder: 'Ruolo' }
-};
-*/
+const emptyRow = { id: null, 'pair1.alias': '', 'pair2.alias': '' };
