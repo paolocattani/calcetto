@@ -16,7 +16,7 @@ import { useSessionContext } from '../components/core/SessionContext';
 import { ProtectedRoute, ProtectedRouteProps } from '../components/core/PrivateRoute';
 import './style/App.css';
 import { Login } from './Login';
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
 import routes from '../components/core/Routes';
 
 const applicationName = 'webapp'; //`calcetto C.S.M`;
@@ -35,7 +35,7 @@ const App: React.FC = () => {
     setRedirectPathOnAuthentication
   };
 
-  let currentHistory = useHistory();
+  // let currentHistory = useHistory();
   // eslint-disable-next-line react/destructuring-assignment
   return (
     <div className="App">

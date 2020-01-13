@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import CreatableSelect from 'react-select/creatable';
 import { components } from 'react-select';
 import { Form, Button, Card } from 'react-bootstrap';
-import { Redirect } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { getTodayDate } from './core/utils';
 
