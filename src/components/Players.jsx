@@ -10,18 +10,35 @@
 import React from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { productsGenerator } from './core/utils';
-import GenericForm from './core/GenericForm';
-import { IInputOptions } from './types/InputOptions';
 // react-bootstrap-table
 import { Button } from 'react-bootstrap';
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
+
+const columns = [
+  { dataField: 'id', text: 'ID', editable: false },
+  { dataField: 'name', text: 'Nome' },
+  { dataField: 'surname', text: 'Cognome' },
+  { dataField: 'alias', text: 'Vero Nome' },
+  {
+    dataField: 'role',
+    text: 'Roulo',
+    editor: {
+      type: Type.SELECT,
+      options: [
+        { value: 'goalkeeper', label: 'Portiere' },
+        { value: 'striker', label: 'Attaccante' },
+        { value: 'both', label: 'Master' }
+      ]
+    }
+  }
+];
 
 export default class PlayerSelection extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       playersList: [],
-      rows: productsGenerator(),
+      rows: [], //productsGenerator(),
       selectedRows: []
     };
     this.onSubmit = this.onSubmit.bind(this);
@@ -41,11 +58,17 @@ export default class PlayerSelection extends React.Component {
     console.log('formSubmit : ', formState);
   }
 
-  handleOnSelect = (row, isSelect) => {
-    console.log('handleOnSelect.selectedRows : ', this.state.selectedRows);
+  handleOnSelect = (row, isSelected) => {
     this.setState(state => {
-      return { selectedRows: [...this.state.selectedRows, row] };
+      const { selectedRows } = state;
+      const found = selectedRows.find(e => e.id === row.id) ? true : false;
+      if (isSelected) {
+        return found ? { selectedRows: selectedRows } : { selectedRows: [row, ...selectedRows] };
+      } else {
+        return found ? { selectedRows: selectedRows.filter(e => e.id !== row.id) } : { selectedRows: selectedRows };
+      }
     });
+    console.log('handleOnSelect.selectedRows : ', this.state.selectedRows, isSelected);
     return true; // return true or dont return to approve current select action
   };
 
@@ -53,41 +76,25 @@ export default class PlayerSelection extends React.Component {
     // Add 1 row
     onDoubleClick: (e, row, rowIndex) => {
       this.setState(state => {
+        const emptyRow = { id: state.rows.length, name: '', surname: '', alias: '', role: '' };
         return { rows: [emptyRow, ...state.rows] };
       });
     }
   };
 
   render() {
-    const columns = [
-      { dataField: 'id', text: 'ID', editable: false },
-      { dataField: 'name', text: 'Nome' },
-      { dataField: 'surname', text: 'Cognome' },
-      { dataField: 'alias', text: 'Vero Nome' },
-      {
-        dataField: 'role',
-        text: 'Roulo',
-        editor: {
-          type: Type.SELECT,
-          options: [
-            { value: 'goalkeeper', label: 'Portiere' },
-            { value: 'striker', label: 'Attaccante' },
-            { value: 'both', label: 'Master' }
-          ]
-        }
-      }
-    ];
-
     const cellEditProps = cellEditFactory({
       mode: 'click',
-      blurToSave: true
-      // afterSave : save data to Db
+      blurToSave: true,
+      afterSaveCell: (oldValue, newValue, row, column) => {
+        console.log('after save cell :', this.state);
+      }
     });
 
     const selectRow = {
       mode: 'checkbox',
       clickToSelect: true,
-      hideSelectAll: true,
+      // hideSelectAll: true,
       onSelect: this.handleOnSelect
     };
 
@@ -95,6 +102,7 @@ export default class PlayerSelection extends React.Component {
     return (
       <>
         <Button onClick={this.rowEvents.onDoubleClick}> Aggiungi giocatore </Button>
+        <br></br>
         <BootstrapTable
           keyField="id"
           data={rows}
@@ -105,19 +113,9 @@ export default class PlayerSelection extends React.Component {
           noDataIndication="Nessun dato reperito"
           striped
           hover
+          bootstrap4
         />
       </>
     );
   }
 }
-
-const emptyRow = { id: 0, name: '', surname: '', alias: '', role: '' };
-
-/*
-{
-  name: { label: 'Nome', placeholder: 'Nome' },
-  surname: { label: 'Cognome', placeholder: 'Cognome' },
-  alias: { label: 'Soprannome', placeholder: 'Soprannome' },
-  ruolo: { label: 'Ruolo', placeholder: 'Ruolo' }
-};
-*/
