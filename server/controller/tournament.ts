@@ -3,7 +3,7 @@ import util from 'util';
 import { logger } from '../core/logger';
 import Tournament from '../model/sequelize/tournament.model';
 import { isDevMode } from '../core/debug';
-import * as Validator from 'core/validator';
+import * as Validator from '../core/validator';
 
 // all API path must be relative to /api/tournament
 const router = Router();
@@ -28,10 +28,12 @@ router.get('/list', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   const model = req.body;
-  const message = Validator.stringValidator(model, true);
+  const message = Validator.stringValidator(model.name, true);
   if (message !== '') {
-    if (isDevMode()) res.send(401).json({ message });
-    else res.send(401);
+    if (isDevMode()) {
+      logger.info(message);
+      res.send(401).json({ message });
+    } else res.send(401);
     return;
   }
 

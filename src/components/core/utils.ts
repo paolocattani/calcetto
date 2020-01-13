@@ -17,3 +17,21 @@ export const productsGenerator = (quantity = 5) => {
     price: 2100 + index
   }));
 };
+
+export const PairsGenerator = (quantity = 5) => {
+  return Array.from({ length: quantity }, (value, index) => ({
+    id: index,
+    pair1: {
+      id: `1!${index}`,
+      alias: `Alias1 ${index}`,
+      name: `Name1 ${index}`,
+      surname: `Surname1 ${index}`
+    },
+    pair2: {
+      id: `2!${index}`,
+      alias: `Alias2 ${index}`,
+      name: `Name2 ${index}`,
+      surname: `Surname2 ${index}`
+    }
+  }));
+};
