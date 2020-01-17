@@ -35,6 +35,7 @@ export default async function syncDb(Options?: SyncOptions): Promise<Sequelize> 
     : new Sequelize(envConfig.database, envConfig.username, envConfig.password, connectionOptions);
 
   const syncDb = Options ? await sequelizeconnection.sync(Options) : await sequelizeconnection.sync();
-  logger.info(chalk.cyan.bold(`Database synchronization complete!`));
+  // const syncDb = Options ? await sequelizeconnection.authenticate(Options) : await sequelizeconnection.authenticate();
+  logger.info(chalk.cyan.bold('Database synchronization complete!'));
   return syncDb;
 }
