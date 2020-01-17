@@ -19,6 +19,7 @@ import { Login } from './Login';
 // import { useHistory } from 'react-router-dom';
 import routes from '../components/core/Routes';
 import { Link } from 'react-router-dom';
+import { FNavbar } from './Navbar/Navbar';
 
 const applicationName = 'webapp'; //`calcetto C.S.M`;
 
@@ -41,19 +42,9 @@ const App: React.FC = () => {
   return (
     <div className="App">
       {/** Header */}
-      <header className="App-header">
+      <header className="app-header">
         <p>{applicationName}</p>
-        {/* eslint-disable-next-line react/destructuring-assignment */}
-
-        {routes.map(route =>
-          route.visible ? (
-            <li key={`li-${route.index}`}>
-              <Link key={`link-${route.index}`} to={route.path}>
-                {route.label}
-              </Link>
-            </li>
-          ) : null
-        )}
+        <FNavbar />
       </header>
 
       <br></br>
