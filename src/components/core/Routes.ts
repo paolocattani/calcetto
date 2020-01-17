@@ -1,5 +1,5 @@
 import FTournament from '../FTournament';
-import PlayerSelection from '../Players';
+import PlayerSelection from '../Player/Players';
 import Pairs from '../Pairs';
 // TODO:
 import * as Todo from '../DELETE/Todo';

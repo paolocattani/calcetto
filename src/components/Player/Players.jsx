@@ -9,9 +9,9 @@
 
 import React from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
-import { productsGenerator } from './core/utils';
+import { productsGenerator } from '../core/utils';
 // react-bootstrap-table
-import { Button } from 'react-bootstrap';
+import { Button, Row } from 'react-bootstrap';
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 
 const columns = [
@@ -40,7 +40,7 @@ export default class PlayerSelection extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      rows: [], //productsGenerator(),
+      rows: [],
       selectedRows: []
     };
     this.onSubmit = this.onSubmit.bind(this);
@@ -144,21 +144,28 @@ export default class PlayerSelection extends React.Component {
     const { rows } = this.state;
     return (
       <>
-        <Button onClick={this.rowEvents.onDoubleClick}> Aggiungi giocatore </Button>
-        <Button onClick={this.deleteRow}> Calcella giocatore </Button>
-        <br></br>
-        <BootstrapTable
-          keyField="id"
-          data={rows}
-          columns={columns}
-          rowEvents={this.rowEvents}
-          cellEdit={cellEditProps}
-          selectRow={selectRow}
-          noDataIndication="Nessun dato reperito"
-          striped
-          hover
-          bootstrap4
-        />
+        <Row>
+          <Button onClick={this.rowEvents.onDoubleClick}> Aggiungi giocatore </Button>
+          <Button variant="danger" onClick={this.deleteRow}>
+            {' '}
+            Calcella giocatore{' '}
+          </Button>
+        </Row>
+        <Row>
+          <br></br>
+          <BootstrapTable
+            keyField="id"
+            data={rows}
+            columns={columns}
+            rowEvents={this.rowEvents}
+            cellEdit={cellEditProps}
+            selectRow={selectRow}
+            noDataIndication="Nessun dato reperito"
+            striped
+            hover
+            bootstrap4
+          />
+        </Row>
       </>
     );
   }
