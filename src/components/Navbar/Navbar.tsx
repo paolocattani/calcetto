@@ -12,7 +12,7 @@ export const FNavbar: React.FC = () => {
   const [sessionContext, updateSessionContext] = useSessionContext();
   console.log('FNavbar : ', sessionContext.isAuthenticated);
   return (
-    <Navbar bg="ligth" variant="light">
+    <Navbar bg="ligth" variant="light" className="navbar-container">
       {/*
           <Navbar.Brand href="#home">
         <img src={logo} alt="Calcetto C.S.M." />

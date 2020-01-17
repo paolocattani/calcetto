@@ -1,8 +1,12 @@
+.navbar-container {
+  display: flex;
+  width: 100%;
+}
 .navbar-list {
+  width: 100%;
   display: flex;
   align-items: stretch; /* Default */
-  justify-content: space-between;
-  width: 100%;
+  justify-content: flex-end;
   margin: 0;
 }
 
@@ -11,11 +15,11 @@
   flex: 0 1 auto; /* Default */
   list-style-type: none;
   /**/
-  padding: .25rem .5rem;
-
+  padding: .25rem .75rem;
+  margin: 5px;
   /* border */
-  border: solid red;
-  border-radius: 4px;
+  border: solid #fafafa;
+  border-radius: 50px;
   /* color */
   color: #fafafa;
   background-color: none;
