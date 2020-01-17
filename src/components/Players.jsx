@@ -30,18 +30,21 @@ const columns = [
         { value: 'both', label: 'Master' }
       ]
     }
-  }
+  },
+  { dataField: 'match_played', text: 'Partite Giocate', hidden: true },
+  { dataField: 'match_won', text: 'Vittorie', hidden: true },
+  { dataField: 'total_score', text: 'Punteggio', hidden: true }
 ];
 
 export default class PlayerSelection extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      playersList: [],
       rows: [], //productsGenerator(),
       selectedRows: []
     };
     this.onSubmit = this.onSubmit.bind(this);
+    this.deleteRow = this.deleteRow.bind(this);
   }
 
   async componentDidMount() {
@@ -51,7 +54,7 @@ export default class PlayerSelection extends React.Component {
     });
     const result = await response.json();
     console.table(result);
-    this.setState({ playersList: result });
+    this.setState({ rows: result });
   }
 
   onSubmit(event, formState) {
@@ -68,32 +71,72 @@ export default class PlayerSelection extends React.Component {
         return found ? { selectedRows: selectedRows.filter(e => e.id !== row.id) } : { selectedRows: selectedRows };
       }
     });
-    console.log('handleOnSelect.selectedRows : ', this.state.selectedRows, isSelected);
-    return true; // return true or dont return to approve current select action
+    // return true or dont return to approve current select action
+    return true;
   };
 
   rowEvents = {
     // Add 1 row
-    onDoubleClick: (e, row, rowIndex) => {
+    onDoubleClick: (/*e, row, rowIndex*/) =>
       this.setState(state => {
-        const emptyRow = { id: state.rows.length, name: '', surname: '', alias: '', role: '' };
+        const emptyRow = {
+          id: null,
+          name: '',
+          surname: '',
+          alias: '',
+          role: '',
+          match_played: 0,
+          match_won: 0,
+          total_score: 0
+        };
         return { rows: [emptyRow, ...state.rows] };
-      });
-    }
+      })
   };
+
+  deleteRow() {
+    const { selectedRows } = this.state;
+    (async () => {
+      const response = await fetch('/api/player', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(selectedRows)
+      });
+      const result = await response.json();
+      console.table(result);
+    })();
+    const tmp = [];
+    this.setState(state => {
+      return {
+        // Se la riga che sto analizzando è contenuta in quelle selezionata allora non la voglio
+        rows: state.rows.filter(row => !selectedRows.find(selectedRow => selectedRow.id == row.id)),
+        selectedRows: []
+      };
+    });
+  }
 
   render() {
     const cellEditProps = cellEditFactory({
       mode: 'click',
       blurToSave: true,
       afterSaveCell: (oldValue, newValue, row, column) => {
-        console.log('after save cell :', this.state);
+        console.log('after save cell :', newValue, oldValue);
+        console.log('after save cell :', row);
+        // [Using an IIFE](https://medium.com/javascript-in-plain-english/https-medium-com-javascript-in-plain-english-stop-feeling-iffy-about-using-an-iife-7b0292aba174)
+        (async () => {
+          const response = await fetch('/api/player', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(row)
+          });
+          const result = await response.json();
+          console.table(result);
+        })();
       }
     });
 
     const selectRow = {
       mode: 'checkbox',
-      clickToSelect: true,
+      // clickToSelect: true,
       // hideSelectAll: true,
       onSelect: this.handleOnSelect
     };
@@ -102,6 +145,7 @@ export default class PlayerSelection extends React.Component {
     return (
       <>
         <Button onClick={this.rowEvents.onDoubleClick}> Aggiungi giocatore </Button>
+        <Button onClick={this.deleteRow}> Calcella giocatore </Button>
         <br></br>
         <BootstrapTable
           keyField="id"
