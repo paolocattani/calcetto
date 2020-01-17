@@ -36,27 +36,27 @@ export default class s1Matrix extends Model<s1Matrix> {
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)
-  id!: IntegerDataType;
+  id!: number;
 
   @Column(DataType.STRING)
   name!: string;
 
   @Column(DataType.INTEGER)
   @ForeignKey(() => Tournament)
-  tournamentId!: IntegerDataType;
+  tournamentId!: number;
 
   @Column(DataType.INTEGER)
   @ForeignKey(() => Pair)
-  pairId!: IntegerDataType;
+  pairId!: number;
 
   // Punteggio totale per la coppia
   @Column(DataType.INTEGER)
-  score!: IntegerDataType;
+  score!: number;
 
   // Posizionamento della coppia all'interno del girone.
   // Potrebbe essere calcolato progressivamente con un trigger. Da valutare
   @Column(DataType.INTEGER)
-  placement!: IntegerDataType;
+  placement!: number;
 
   @CreatedAt
   createdAt?: Date;

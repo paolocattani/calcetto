@@ -21,22 +21,22 @@ export default class Pair extends Model<Pair> {
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)
-  id!: IntegerDataType;
+  id!: number;
 
   // Tournament id
   @Column(DataType.INTEGER)
   @ForeignKey(() => Tournament)
-  tournamentId?: IntegerDataType;
+  tournamentId?: number;
 
   // First Player id
   @Column(DataType.INTEGER)
   @ForeignKey(() => Player)
-  first_playerId?: IntegerDataType;
+  first_playerId?: number;
 
   // Secondo Player id
   @Column(DataType.INTEGER)
   @ForeignKey(() => Player)
-  second_playerId?: IntegerDataType;
+  second_playerId?: number;
 
   @CreatedAt
   createdAt?: Date;

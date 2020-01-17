@@ -27,28 +27,28 @@ export default class s1Element extends Model<s1Element> {
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)
-  id!: IntegerDataType;
+  id!: number;
 
   @Column(DataType.INTEGER)
   @ForeignKey(() => Tournament)
-  tournamentId!: IntegerDataType;
+  tournamentId!: number;
 
   // Coppia
   @Column(DataType.INTEGER)
   @ForeignKey(() => Pair)
-  pairId!: IntegerDataType;
+  pairId!: number;
 
   // Punteggio totale per la coppia
   // Potrebbe essere calcolato tramite trigger
   //@Column(DataType.ENUM)
   //score!: [0, 1, 2, 3];
   @Column(DataType.INTEGER)
-  score!: IntegerDataType;
+  score!: number;
 
   // Posizionamento della coppia all'interno del girone.
   // Potrebbe essere calcolato progressivamente con un trigger. Da valutare
   @Column(DataType.INTEGER)
-  placement!: IntegerDataType;
+  placement!: number;
 
   @CreatedAt
   createdAt?: Date;

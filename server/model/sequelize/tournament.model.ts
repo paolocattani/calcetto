@@ -24,14 +24,14 @@ export default class Tournament extends Model<Tournament> {
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)
-  public id!: IntegerDataTypeConstructor;
+  public id!: number;
 
   @Column(DataType.STRING)
   public name!: string;
 
   @Column(DataType.INTEGER)
   //@ForeignKey(() => User)
-  public ownerId!: IntegerDataTypeConstructor;
+  public ownerId!: number;
 
   //@Column(DataType.ENUM)
   //public progress!: ["stage1", "stage2"];

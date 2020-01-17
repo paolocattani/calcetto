@@ -16,7 +16,7 @@ export default class Player extends Model<Player> {
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)
-  id!: IntegerDataType;
+  id!: number;
 
   @Column(DataType.STRING)
   name?: string;
@@ -33,13 +33,13 @@ export default class Player extends Model<Player> {
   role!: string;
 
   @Column(DataType.BIGINT)
-  match_played!: BigIntDataType;
+  match_played!: number;
 
   @Column(DataType.BIGINT)
-  match_won!: BigIntDataType;
+  match_won!: number;
 
   @Column(DataType.FLOAT)
-  total_score!: FloatDataType;
+  total_score!: number;
 
   @CreatedAt
   createdAt?: Date;
@@ -51,6 +51,6 @@ export default class Player extends Model<Player> {
   deletedAt?: Date;
 
   public toString() {
-    return `[ ${this.id} , ${this.name} , ${this.surname} , ${this.alias} ]`;
+    return `[ ${this.id} , ${this.name} , ${this.surname} , ${this.alias} , ${this.role} , ${this.match_played} , , ${this.match_won} , ${this.total_score}]`;
   }
 }
