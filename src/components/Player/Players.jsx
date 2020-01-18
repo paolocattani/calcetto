@@ -1,40 +1,13 @@
-// https://devexpress.github.io/devextreme-reactive/react/grid/docs/guides/editing/
-
-// TODO: add Hamoni to sync client
-// https://github.com/pmbanugo/realtime-react-datatable
-
-// TODO: bootstrap table
-// https://react-bootstrap-table.github.io/react-bootstrap-table2/storybook/index.html?selectedKind=Cell%20Editing&selectedStory=Click%20to%20Edit&full=0&addons=1&stories=1&panelRight=0&addonPanel=storybook%2Factions%2Factions-panel
-// https://github.com/react-bootstrap-table/react-bootstrap-table2
-
 import React from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
-import { productsGenerator } from '../core/utils';
 // react-bootstrap-table
 import { Button, Row } from 'react-bootstrap';
-import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
+import cellEditFactory from 'react-bootstrap-table2-editor';
+import filterFactory from 'react-bootstrap-table2-filter';
+import ToolkitProvider from 'react-bootstrap-table2-toolkit';
+import './Player.css';
 
-const columns = [
-  { dataField: 'id', text: 'ID', editable: false },
-  { dataField: 'name', text: 'Nome' },
-  { dataField: 'surname', text: 'Cognome' },
-  { dataField: 'alias', text: 'Vero Nome' },
-  {
-    dataField: 'role',
-    text: 'Roulo',
-    editor: {
-      type: Type.SELECT,
-      options: [
-        { value: 'goalkeeper', label: 'Portiere' },
-        { value: 'striker', label: 'Attaccante' },
-        { value: 'both', label: 'Master' }
-      ]
-    }
-  },
-  { dataField: 'match_played', text: 'Partite Giocate', hidden: true },
-  { dataField: 'match_won', text: 'Vittorie', hidden: true },
-  { dataField: 'total_score', text: 'Punteggio', hidden: true }
-];
+import columns, { clearAllFilter, ExportCSVButton } from './helper';
 
 export default class PlayerSelection extends React.Component {
   constructor(props) {
@@ -53,8 +26,19 @@ export default class PlayerSelection extends React.Component {
       headers: { 'Content-Type': 'application/json' }
     });
     const result = await response.json();
-    console.table(result);
-    this.setState({ rows: result });
+    //console.table(result);
+    // console.log(({ id, name, surname, role, match_played, match_won, total_score } = e));
+    this.setState({
+      rows: result.map(e => ({
+        id: e.id,
+        name: e.name,
+        surname: e.surname,
+        role: e.role,
+        match_played: e.match_played,
+        match_won: e.match_won,
+        total_score: e.total_score
+      }))
+    });
   }
 
   onSubmit(event, formState) {
@@ -104,23 +88,22 @@ export default class PlayerSelection extends React.Component {
       const result = await response.json();
       console.table(result);
     })();
-    const tmp = [];
     this.setState(state => {
       return {
         // Se la riga che sto analizzando è contenuta in quelle selezionata allora non la voglio
-        rows: state.rows.filter(row => !selectedRows.find(selectedRow => selectedRow.id == row.id)),
+        rows: state.rows.filter(row => !selectedRows.find(selectedRow => selectedRow.id === row.id)),
         selectedRows: []
       };
     });
   }
 
   render() {
+    console.table(this.state.rows);
     const cellEditProps = cellEditFactory({
       mode: 'click',
       blurToSave: true,
       afterSaveCell: (oldValue, newValue, row, column) => {
-        console.log('after save cell :', newValue, oldValue);
-        console.log('after save cell :', row);
+        console.log('after save cell :', row, newValue, oldValue);
         // [Using an IIFE](https://medium.com/javascript-in-plain-english/https-medium-com-javascript-in-plain-english-stop-feeling-iffy-about-using-an-iife-7b0292aba174)
         (async () => {
           const response = await fetch('/api/player', {
@@ -140,31 +123,46 @@ export default class PlayerSelection extends React.Component {
       // hideSelectAll: true,
       onSelect: this.handleOnSelect
     };
-
-    const { rows } = this.state;
+    const { state, rowEvents, deleteRow, clearFilter } = this;
+    const { rows } = state;
     return (
       <>
+        <Row></Row>
         <Row>
-          <Button onClick={this.rowEvents.onDoubleClick}> Aggiungi giocatore </Button>
-          <Button variant="danger" onClick={this.deleteRow}>
-            {' '}
-            Calcella giocatore{' '}
-          </Button>
-        </Row>
-        <Row>
-          <br></br>
-          <BootstrapTable
-            keyField="id"
-            data={rows}
-            columns={columns}
-            rowEvents={this.rowEvents}
-            cellEdit={cellEditProps}
-            selectRow={selectRow}
-            noDataIndication="Nessun dato reperito"
-            striped
-            hover
-            bootstrap4
-          />
+          <ToolkitProvider keyField="id" data={rows} columns={columns} exportCSV>
+            {props => (
+              <>
+                <Button variant="success" onClick={rowEvents.onDoubleClick}>
+                  Aggiungi giocatore
+                </Button>
+                <Button variant="danger" onClick={deleteRow}>
+                  Calcella giocatore
+                </Button>
+                <Button variant="dark" onClick={clearAllFilter.bind(this)}>
+                  Pulisci Filtri
+                </Button>
+                <ExportCSVButton {...props.csvProps} />
+                <BootstrapTable
+                  wrapperClasses="player-table"
+                  keyField="id"
+                  data={rows}
+                  columns={columns}
+                  rowEvents={this.rowEvents}
+                  cellEdit={cellEditProps}
+                  selectRow={selectRow}
+                  filter={filterFactory()}
+                  // defaultSorted={defaultSorted}
+                  headerClasses="player-table-header"
+                  // rowClasses="player-table-rows"
+                  noDataIndication="Nessun dato reperito"
+                  striped
+                  hover
+                  //bootstrap4
+                  //condensed
+                />
+              </>
+            )}
+          </ToolkitProvider>
         </Row>
       </>
     );

@@ -2,16 +2,21 @@ import React from 'react';
 import Player from './Players';
 import { Modal } from 'react-bootstrap';
 
-const PlayerModal: React.FC = () => {
+type propsType = {
+  show: boolean;
+  onHide: () => void;
+};
+const PlayerModal: React.FC<propsType> = (props: propsType) => {
+  const { show, onHide } = props;
   return (
-    <Modal.Dialog>
+    <Modal show={show} onHide={onHide} size="lg" centered>
       <Modal.Header closeButton>
         <Modal.Title>Gestione Giocatori</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Player />
+        <Player editable={false} />
       </Modal.Body>
-    </Modal.Dialog>
+    </Modal>
   );
 };
 
