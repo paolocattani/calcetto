@@ -1,15 +1,3 @@
-// https://www.carlrippon.com/building-super-simple-react-form-component-typescript-basics/
-// https://medium.com/@jrwebdev/react-hooks-in-typescript-88fce7001d0d
-
-// https://github.com/palantir/blueprint/issues/3372
-
-/**
- *
- * https://stackoverflow.com/questions/47747754/how-to-rewrite-the-protected-router-using-typescript-and-react-router-4-and-5
- * https://stackoverflow.com/questions/59422159/redirecting-a-user-to-the-page-they-requested-after-successful-authentication-wi/59423442#59423442
- *
- *
- */
 import React, { useState } from 'react';
 import { Switch, Route } from 'react-router';
 import { useSessionContext } from '../components/core/SessionContext';
@@ -51,7 +39,7 @@ const App: React.FC = () => {
 
       <br></br>
       <Button onClick={() => setShowModal(true)}> apri modale</Button>
-      {showModal ? <PlayerModal /> : null}
+      {showModal ? <PlayerModal show={showModal} onHide={() => setShowModal(false)} /> : null}
       <Container>
         <Switch>
           <Route path="/login" component={Login} />
