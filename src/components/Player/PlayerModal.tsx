@@ -6,6 +6,7 @@ type propsType = {
   show: boolean;
   onHide: () => void;
 };
+
 const PlayerModal: React.FC<propsType> = (props: propsType) => {
   const { show, onHide } = props;
   return (

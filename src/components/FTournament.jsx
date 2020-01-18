@@ -14,23 +14,25 @@ export default function FTournament() {
 
   useEffect(() => {
     // [Using an IIFE](https://medium.com/javascript-in-plain-english/https-medium-com-javascript-in-plain-english-stop-feeling-iffy-about-using-an-iife-7b0292aba174)
-    (async function fetchTournament() {
-      const response = await fetch('/api/tournament/list', {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-      });
-      const result = await response.json();
-      let found = false;
-      let tmp = [];
-      result.forEach(e => {
-        if (e.name === getTodayDate()) found = true;
-        tmp.push({ id: e.id, value: e.name, label: e.name });
-      });
-      if (!found) tmp.unshift({ id: null, value: getTodayDate(), label: getTodayDate() });
-      setTournamentList(tmp);
-      setSelectedOption(tmp[0]);
-    })();
+    fetchTournaments();
   }, []);
+
+  const fetchTournaments = async function fetchTournament() {
+    const response = await fetch('/api/tournament/list', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const result = await response.json();
+    let found = false;
+    let tmp = [];
+    result.forEach(e => {
+      if (e.name === getTodayDate()) found = true;
+      tmp.push({ id: e.id, value: e.name, label: e.name });
+    });
+    if (!found) tmp.unshift({ id: null, value: getTodayDate(), label: getTodayDate() });
+    setTournamentList(tmp);
+    setSelectedOption(tmp[0]);
+  };
 
   const handleChange = selectedOption => setSelectedOption(selectedOption);
   const handleCreate = selectedOption => {

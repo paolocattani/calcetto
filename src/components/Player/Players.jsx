@@ -63,17 +63,21 @@ export default class PlayerSelection extends React.Component {
     // Add 1 row
     onDoubleClick: (/*e, row, rowIndex*/) =>
       this.setState(state => {
-        const emptyRow = {
-          id: null,
-          name: '',
-          surname: '',
-          alias: '',
-          role: '',
-          match_played: 0,
-          match_won: 0,
-          total_score: 0
+        return {
+          rows: [
+            {
+              id: null,
+              name: '',
+              surname: '',
+              alias: '',
+              role: '',
+              match_played: 0,
+              match_won: 0,
+              total_score: 0
+            },
+            ...state.rows
+          ]
         };
-        return { rows: [emptyRow, ...state.rows] };
       })
   };
 
@@ -87,18 +91,17 @@ export default class PlayerSelection extends React.Component {
       });
       const result = await response.json();
       console.table(result);
+      this.setState(state => {
+        return {
+          // Se la riga che sto analizzando è contenuta in quelle selezionata allora non la voglio
+          rows: state.rows.filter(row => !selectedRows.find(selectedRow => selectedRow.id === row.id)),
+          selectedRows: []
+        };
+      });
     })();
-    this.setState(state => {
-      return {
-        // Se la riga che sto analizzando è contenuta in quelle selezionata allora non la voglio
-        rows: state.rows.filter(row => !selectedRows.find(selectedRow => selectedRow.id === row.id)),
-        selectedRows: []
-      };
-    });
   }
 
   render() {
-    console.table(this.state.rows);
     const cellEditProps = cellEditFactory({
       mode: 'click',
       blurToSave: true,
@@ -140,6 +143,7 @@ export default class PlayerSelection extends React.Component {
                 <Button variant="dark" onClick={clearAllFilter.bind(this)}>
                   Pulisci Filtri
                 </Button>
+                {/* FIXME: */}
                 <ExportCSVButton {...props.csvProps} />
                 <BootstrapTable
                   wrapperClasses="player-table"

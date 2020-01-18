@@ -3,12 +3,14 @@ import { Button } from 'react-bootstrap';
 import { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
 import { Type } from 'react-bootstrap-table2-editor';
 
-export const selectOptions = {
+// options for role column
+const selectOptions = {
   0: 'Portiere',
   1: 'Attaccante',
   2: 'Master'
 };
 
+// Filter
 let nameFilter;
 let surnameFilter;
 let aliasFilter;
@@ -21,6 +23,7 @@ export function clearAllFilter() {
   roleFilter('');
 }
 
+// Columns definition
 export default [
   { dataField: 'id', text: 'ID', editable: false },
   {
@@ -69,6 +72,7 @@ export default [
     }),
     editor: {
       type: Type.SELECT,
+      // FIXME:
       getOptions: (setOptions, { row, column }) => {
         return [
           { value: 0, label: 'Portiere' },
@@ -83,6 +87,7 @@ export default [
   { dataField: 'total_score', text: 'Punteggio', hidden: true }
 ];
 
+// Custom export button
 export const ExportCSVButton = props => {
   return (
     <Button disabled className="btn btn-success" onClick={() => props.onExport()}>
