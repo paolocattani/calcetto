@@ -41,7 +41,6 @@ const App: React.FC = () => {
       <br></br>
       {/*<Button onClick={() => setShowModal(true)}> apri modale</Button>*/}
       {showModal ? <PlayerModal show={showModal} onHide={() => setShowModal(false)} /> : null}
-      <PlayerSelection onSelect={value => console.log(value)} />
       <Container>
         <Switch>
           <Route path="/login" component={Login} />

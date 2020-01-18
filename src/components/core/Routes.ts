@@ -1,6 +1,6 @@
 import FTournament from '../FTournament';
 import PlayerTable from '../Player/table';
-import Pairs from '../Pair/Pairs';
+import Pairs from '../Pair/table';
 // TODO:
 import * as Todo from '../DELETE/Todo';
 

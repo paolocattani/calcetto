@@ -2,12 +2,11 @@ import React from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 // react-bootstrap-table
 import { Button, Row } from 'react-bootstrap';
-import cellEditFactory from 'react-bootstrap-table2-editor';
 import filterFactory from 'react-bootstrap-table2-filter';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import './style.css';
 
-import columns, { clearAllFilter, ExportCSVButton } from './helper';
+import columns, { clearAllFilter, ExportCSVButton, cellEditProps } from './helper';
 
 export default class Player extends React.Component {
   constructor(props) {
@@ -102,30 +101,13 @@ export default class Player extends React.Component {
   }
 
   render() {
-    const cellEditProps = cellEditFactory({
-      mode: 'click',
-      blurToSave: true,
-      afterSaveCell: (oldValue, newValue, row, column) => {
-        console.log('after save cell :', row, newValue, oldValue);
-        // [Using an IIFE](https://medium.com/javascript-in-plain-english/https-medium-com-javascript-in-plain-english-stop-feeling-iffy-about-using-an-iife-7b0292aba174)
-        (async () => {
-          const response = await fetch('/api/player', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(row)
-          });
-          const result = await response.json();
-          console.table(result);
-        })();
-      }
-    });
-
     const selectRow = {
       mode: 'checkbox',
       // clickToSelect: true,
       // hideSelectAll: true,
       onSelect: this.handleOnSelect
     };
+
     const { state, rowEvents, deleteRow } = this;
     const { rows } = state;
     return (

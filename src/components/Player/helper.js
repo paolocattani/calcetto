@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
+import cellEditFactory from 'react-bootstrap-table2-editor';
+
 import { Type } from 'react-bootstrap-table2-editor';
 
 // options for role column
@@ -23,6 +25,22 @@ export function clearAllFilter() {
   roleFilter('');
 }
 
+// cellEditProps
+export const cellEditProps = cellEditFactory({
+  mode: 'click',
+  blurToSave: true,
+  afterSaveCell: (oldValue, newValue, row, column) => {
+    (async () => {
+      const response = await fetch('/api/player', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(row)
+      });
+      const result = await response.json();
+      console.table(result);
+    })();
+  }
+});
 // Columns de
 export default [
   { dataField: 'id', text: 'ID', editable: false },
@@ -106,7 +124,6 @@ export const fetchPlayers = setterFunction => {
       headers: { 'Content-Type': 'application/json' }
     });
     const result = await response.json();
-    console.log('inside');
     setterFunction(
       result.map(e => {
         return {

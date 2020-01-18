@@ -3,21 +3,20 @@ import Select, { ActionMeta, ValueType } from 'react-select';
 import { playerType } from './type';
 import { fetchPlayers } from './helper';
 
-type propsType = {
-  onSelect: (value: ValueType<playerType>) => void;
-};
+// Probabilmente il componente Select usa Ref.... Lascio cosi..
+const PlayerSelection = React.forwardRef((props, ref) => {
+  const [playerList, setPlayerList] = useState([]);
+  const [selectedOption, setSelectedOption] = useState();
 
-const PlayerSelection: React.FC<propsType> = (props: propsType) => {
-  const [playerList, setPlayerList] = useState<playerType[]>([]);
-  const [selectedOption, setSelectedOption] = useState<playerType | ValueType<playerType> | null>();
-
-  const handleChange = (selectedOption: ValueType<playerType>, actionMeta: ActionMeta) => {
+  const handleChange = (selectedOption, actionMeta) => {
     setSelectedOption(selectedOption);
     props.onSelect(selectedOption);
+    if (props.onUpdate) props.onUpdate(selectedOption.alias || selectedOption.name);
   };
 
   useEffect(() => fetchPlayers(setPlayerList), []);
 
+  console.log('select ', props);
   return (
     <Select
       options={playerList}
@@ -28,6 +27,6 @@ const PlayerSelection: React.FC<propsType> = (props: propsType) => {
       isClearable
     />
   );
-};
+});
 
 export default PlayerSelection;
