@@ -8,15 +8,16 @@ const PlayerSelection = React.forwardRef((props, ref) => {
   const [playerList, setPlayerList] = useState([]);
   const [selectedOption, setSelectedOption] = useState();
 
+  const { row, column, rowIndex, columnIndex } = props;
   const handleChange = (selectedOption, actionMeta) => {
     setSelectedOption(selectedOption);
-    props.onSelect(selectedOption);
-    if (props.onUpdate) props.onUpdate(selectedOption.alias || selectedOption.name);
+    selectedOption.pairId = props.id;
+    props.onSelect(selectedOption, row, column);
+    props.onUpdate(selectedOption.alias || selectedOption.name);
   };
 
   useEffect(() => fetchPlayers(setPlayerList), []);
 
-  console.log('select ', props);
   return (
     <Select
       options={playerList}

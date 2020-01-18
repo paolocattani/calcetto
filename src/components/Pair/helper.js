@@ -6,33 +6,41 @@ export const columns = onSelect => [
   { dataField: 'id', text: 'ID', editable: false },
   {
     dataField: 'pair1.alias',
-    text: 'Nome1',
+    text: 'Giocatore 1',
     editorRenderer: (editorProps, value, row, column, rowIndex, columnIndex) => (
-      <PlayerSelect {...editorProps} value={value} onSelect={onSelect} />
+      <PlayerSelect
+        {...editorProps}
+        id={columnIndex}
+        row={row}
+        rowIndex={rowIndex}
+        columnIndex={columnIndex}
+        value={value}
+        onSelect={onSelect}
+      />
     )
   },
   {
     dataField: 'pair2.alias',
-    text: 'Nome2',
+    text: 'Giocatore 2',
     editorRenderer: (editorProps, value, row, column, rowIndex, columnIndex) => (
-      <PlayerSelect {...editorProps} value={value} onSelect={onSelect} />
+      <PlayerSelect
+        {...editorProps}
+        id={columnIndex}
+        row={row}
+        rowIndex={rowIndex}
+        columnIndex={columnIndex}
+        value={value}
+        onSelect={onSelect}
+      />
     )
   }
 ];
-
-export const selectRow = onSelect => {
-  return {
-    mode: 'checkbox',
-    clickToSelect: true,
-    hideSelectAll: true,
-    onSelect
-  };
-};
 
 export const cellEditProps = cellEditFactory({
   mode: 'click',
   blurToSave: true,
   afterSaveCell: (oldValue, newValue, row, column) => {
+    console.log('AfterSaveCell', oldValue, newValue, row, column);
     /*
         (async () => {
           const response = await fetch('/api/player', {

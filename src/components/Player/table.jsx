@@ -1,48 +1,56 @@
 import React from 'react';
-import BootstrapTable from 'react-bootstrap-table-next';
+// bootstrap
+import { Button, Row, Modal } from 'react-bootstrap';
 // react-bootstrap-table
-import { Button, Row } from 'react-bootstrap';
+import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory from 'react-bootstrap-table2-filter';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
+import cellEditFactory from 'react-bootstrap-table2-editor';
+// helper/ style
 import './style.css';
-
-import columns, { clearAllFilter, ExportCSVButton, cellEditProps } from './helper';
+import columns, { clearAllFilter, ExportCSVButton } from './helper';
 
 export default class Player extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       rows: [],
-      selectedRows: []
+      selectedRows: [],
+      isLoading: false
     };
-    this.onSubmit = this.onSubmit.bind(this);
     this.deleteRow = this.deleteRow.bind(this);
+    this.addRow = this.addRow.bind(this);
   }
 
   async componentDidMount() {
-    const response = await fetch('/api/player/list', {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
-    });
-    const result = await response.json();
-    //console.table(result);
-    // console.log(({ id, name, surname, role, match_played, match_won, total_score } = e));
-    this.setState({
-      rows: result.map(e => ({
-        id: e.id,
-        name: e.name,
-        surname: e.surname,
-        role: e.role,
-        match_played: e.match_played,
-        match_won: e.match_won,
-        total_score: e.total_score
-      }))
-    });
+    this.setState({ isLoading: true }, () =>
+      (async () => {
+        console.log('Player.ComponentDidMount', this.state);
+        const response = await fetch('/api/player/list', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const result = await response.json();
+        this.setState({
+          isLoading: false,
+          rows: result.map(e => ({
+            id: e.id,
+            name: e.name,
+            surname: e.surname,
+            alias: e.alias,
+            role: e.role,
+            match_played: e.match_played,
+            match_won: e.match_won,
+            total_score: e.total_score
+          }))
+        });
+      })()
+    );
   }
 
-  onSubmit(event, formState) {
-    console.log('formSubmit : ', formState);
-  }
+  handleOnSelectAll = (isSelected, rows) => {
+    rows.forEach(row => this.handleOnSelect(row, isSelected));
+  };
 
   handleOnSelect = (row, isSelected) => {
     this.setState(state => {
@@ -58,65 +66,102 @@ export default class Player extends React.Component {
     return true;
   };
 
-  rowEvents = {
-    // Add 1 row
-    onDoubleClick: (/*e, row, rowIndex*/) =>
-      this.setState(state => {
-        return {
-          rows: [
-            {
-              id: null,
-              name: '',
-              surname: '',
-              alias: '',
-              role: '',
-              match_played: 0,
-              match_won: 0,
-              total_score: 0
-            },
-            ...state.rows
-          ]
+  addRow() {
+    this.setState({ isLoading: true }, () =>
+      (async () => {
+        const emptyRow = {
+          id: null,
+          name: '',
+          surname: '',
+          alias: '',
+          role: '',
+          match_played: 0,
+          match_won: 0,
+          total_score: 0
         };
-      })
-  };
+        const response = await fetch('/api/player', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(emptyRow)
+        });
+        const result = await response.json();
+        emptyRow.id = result.id;
+        this.setState(state => {
+          return {
+            rows: [emptyRow, ...state.rows],
+            isLoading: false
+          };
+        });
+      })()
+    );
+  }
 
   deleteRow() {
     const { selectedRows } = this.state;
-    (async () => {
-      const response = await fetch('/api/player', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(selectedRows)
-      });
-      const result = await response.json();
-      console.table(result);
-      this.setState(state => {
-        return {
-          // Se la riga che sto analizzando è contenuta in quelle selezionata allora non la voglio
-          rows: state.rows.filter(row => !selectedRows.find(selectedRow => selectedRow.id === row.id)),
-          selectedRows: []
-        };
-      });
-    })();
+    if (!selectedRows) return;
+    this.setState({ isLoading: true }, () =>
+      (async () => {
+        const response = await fetch('/api/player', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(selectedRows)
+        });
+        const result = await response.json();
+        console.table(result);
+        this.setState(state => {
+          return {
+            // Se la riga che sto analizzando è contenuta in quelle selezionata allora non la voglio
+            rows: state.rows.filter(row => !selectedRows.find(selectedRow => selectedRow.id === row.id)),
+            selectedRows: [],
+            isLoading: false
+          };
+        });
+      })()
+    );
   }
+
+  cellEditProps = cellEditFactory({
+    mode: 'click',
+    blurToSave: true,
+    autoSelectText: true,
+    afterSaveCell: (oldValue, newValue, row, column) => {
+      (async () => {
+        console.log('AfterSave Row : ', row, column);
+        const response = await fetch('/api/player', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(row)
+        });
+        const result = await response.json();
+        console.table(result);
+      })();
+    }
+  });
 
   render() {
     const selectRow = {
       mode: 'checkbox',
       // clickToSelect: true,
       // hideSelectAll: true,
-      onSelect: this.handleOnSelect
+      onSelect: this.handleOnSelect,
+      onSelectAll: this.handleOnSelectAll,
+      style: { backgroundColor: '#c8e6c9' }
     };
 
-    const { state, rowEvents, deleteRow } = this;
-    const { rows } = state;
+    const { state, deleteRow, addRow } = this;
+    const { rows, isLoading } = state;
     return (
       <>
+        {isLoading ? (
+          <Modal show={isLoading} onHide={() => this.setState({ isLoading: false })}>
+            <Modal.Body>Caricamento....</Modal.Body>
+          </Modal>
+        ) : null}
         <Row>
           <ToolkitProvider keyField="id" data={rows} columns={columns} exportCSV>
             {props => (
               <>
-                <Button variant="success" onClick={rowEvents.onDoubleClick}>
+                <Button variant="success" onClick={addRow}>
                   Aggiungi giocatore
                 </Button>
                 <Button variant="danger" onClick={deleteRow}>
@@ -132,8 +177,7 @@ export default class Player extends React.Component {
                   keyField="id"
                   data={rows}
                   columns={columns}
-                  rowEvents={this.rowEvents}
-                  cellEdit={cellEditProps}
+                  cellEdit={this.cellEditProps}
                   selectRow={selectRow}
                   filter={filterFactory()}
                   // defaultSorted={defaultSorted}
@@ -142,7 +186,7 @@ export default class Player extends React.Component {
                   noDataIndication="Nessun dato reperito"
                   striped
                   hover
-                  //bootstrap4
+                  bootstrap4
                   //condensed
                 />
               </>

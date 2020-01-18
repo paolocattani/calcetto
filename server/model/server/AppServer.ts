@@ -37,8 +37,7 @@ export class AppServer extends AbstractServer {
 
   public routes(application: ExpressApplication): void {
     const options: SyncOptions = {
-      //force: true,
-      //alter: true  : this option doesn't work. Need to look deeper
+      // force: true
     };
     // Sync database model ( async )
     logger.info(chalk.cyan.bold('Database synchronization ( async )'));

@@ -13,8 +13,8 @@ const PairsTable = props => {
       setRows(rows => [{ id: rows.length, 'pair1.alias': '', 'pair2.alias': '' }, ...rows])
   };
 
-  const onSelect = e => {
-    console.log('Pairs table ', e);
+  const onSelect = (element, row, column) => {
+    console.log('Pairs table ', element, row, column);
   };
 
   return (

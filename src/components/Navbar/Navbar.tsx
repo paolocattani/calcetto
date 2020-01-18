@@ -10,7 +10,7 @@ import routes from '../core/Routes';
 
 export const FNavbar: React.FC = () => {
   const [sessionContext, updateSessionContext] = useSessionContext();
-  console.log('FNavbar : ', sessionContext.isAuthenticated);
+  console.log('FNavbar, sessionContext.isAuthenticated : ', sessionContext.isAuthenticated);
   return (
     <Navbar bg="ligth" variant="light" className="navbar-container">
       {/*
