@@ -69,11 +69,13 @@ export default [
     }),
     editor: {
       type: Type.SELECT,
-      options: [
-        { value: 0, label: 'Portiere' },
-        { value: 1, label: 'Attaccante' },
-        { value: 2, label: 'Master' }
-      ]
+      getOptions: (setOptions, { row, column }) => {
+        return [
+          { value: 0, label: 'Portiere' },
+          { value: 1, label: 'Attaccante' },
+          { value: 2, label: 'Master' }
+        ];
+      }
     }
   },
   { dataField: 'match_played', text: 'Partite Giocate', hidden: true },

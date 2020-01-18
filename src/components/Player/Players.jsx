@@ -123,11 +123,10 @@ export default class PlayerSelection extends React.Component {
       // hideSelectAll: true,
       onSelect: this.handleOnSelect
     };
-    const { state, rowEvents, deleteRow, clearFilter } = this;
+    const { state, rowEvents, deleteRow } = this;
     const { rows } = state;
     return (
       <>
-        <Row></Row>
         <Row>
           <ToolkitProvider keyField="id" data={rows} columns={columns} exportCSV>
             {props => (
