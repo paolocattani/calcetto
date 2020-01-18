@@ -1,6 +1,6 @@
 import FTournament from '../FTournament';
-import PlayerSelection from '../Player/Players';
-import Pairs from '../Pairs';
+import PlayerTable from '../Player/table';
+import Pairs from '../Pair/Pairs';
 // TODO:
 import * as Todo from '../DELETE/Todo';
 
@@ -29,7 +29,7 @@ export const routes: routeType[] = [
     path: '/player',
     label: 'Gestione Giocatori',
     exact: true,
-    component: PlayerSelection,
+    component: PlayerTable,
     visible: true,
     index: 90
   },

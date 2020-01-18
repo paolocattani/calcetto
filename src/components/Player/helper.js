@@ -23,13 +23,14 @@ export function clearAllFilter() {
   roleFilter('');
 }
 
-// Columns definition
+// Columns de
 export default [
   { dataField: 'id', text: 'ID', editable: false },
   {
     dataField: 'name',
     text: 'Nome',
     headerClasses: 'player-table-header-element',
+    autoSelectText: true,
     filter: textFilter({
       placeholder: 'Filtra...',
       getFilter: filter => {
@@ -41,6 +42,7 @@ export default [
     dataField: 'surname',
     text: 'Cognome',
     headerClasses: 'player-table-header-element',
+    autoSelectText: true,
     filter: textFilter({
       placeholder: 'Filtra...',
       getFilter: filter => {
@@ -52,6 +54,7 @@ export default [
     dataField: 'alias',
     text: 'Vero Nome',
     headerClasses: 'player-table-header-element',
+    autoSelectText: true,
     filter: textFilter({
       placeholder: 'Filtra...',
       getFilter: filter => {
@@ -94,4 +97,29 @@ export const ExportCSVButton = props => {
       Esporta in CSV
     </Button>
   );
+};
+
+export const fetchPlayers = setterFunction => {
+  (async () => {
+    const response = await fetch('/api/player/list', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const result = await response.json();
+    console.log('inside');
+    setterFunction(
+      result.map(e => {
+        return {
+          id: e.id,
+          name: e.name,
+          surname: e.surname,
+          label: e.alias,
+          role: e.role,
+          match_played: e.match_played,
+          match_won: e.match_won,
+          total_score: e.total_score
+        };
+      })
+    );
+  })();
 };

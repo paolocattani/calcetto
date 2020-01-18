@@ -5,11 +5,11 @@ import { Button, Row } from 'react-bootstrap';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 import filterFactory from 'react-bootstrap-table2-filter';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
-import './Player.css';
+import './style.css';
 
 import columns, { clearAllFilter, ExportCSVButton } from './helper';
 
-export default class PlayerSelection extends React.Component {
+export default class Player extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

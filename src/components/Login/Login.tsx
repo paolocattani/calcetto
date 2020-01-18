@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSessionContext } from './core/SessionContext';
+import { useSessionContext } from '../core/SessionContext';
 import { useHistory } from 'react-router';
 
 // TODO:

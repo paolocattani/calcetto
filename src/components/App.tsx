@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { Switch, Route } from 'react-router';
 import { useSessionContext } from '../components/core/SessionContext';
-import { ProtectedRoute, ProtectedRouteProps } from '../components/core/PrivateRoute';
+import { ProtectedRoute, ProtectedRouteProps } from '../components/core/ProtectedRoute';
 import './style/App.css';
-import { Login } from './Login';
+import { Login } from './Login/Login';
 // import { useHistory } from 'react-router-dom';
 import routes from '../components/core/Routes';
 import { FNavbar } from './Navbar/Navbar';
 import { Container, Button } from 'react-bootstrap';
-import PlayerModal from './Player/PlayerModal';
+import PlayerModal from './Player/modal';
+import PlayerSelection from './Player/select';
 
 const applicationName = 'calcetto C.S.M';
 
@@ -38,8 +39,9 @@ const App: React.FC = () => {
       </header>
 
       <br></br>
-      <Button onClick={() => setShowModal(true)}> apri modale</Button>
+      {/*<Button onClick={() => setShowModal(true)}> apri modale</Button>*/}
       {showModal ? <PlayerModal show={showModal} onHide={() => setShowModal(false)} /> : null}
+      <PlayerSelection onSelect={value => console.log(value)} />
       <Container>
         <Switch>
           <Route path="/login" component={Login} />

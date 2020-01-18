@@ -6,18 +6,13 @@ import { useHistory } from 'react-router';
 import { getTodayDate } from './core/utils';
 
 //export default const FTournament: React.FC = () => {
-export default function FTournament() {
+const FTournament = () => {
   // State definition
   const [selectedOption, setSelectedOption] = useState(getTodayDate());
   const [tournamentList, setTournamentList] = useState([]);
   let currentHistory = useHistory();
 
-  useEffect(() => {
-    // [Using an IIFE](https://medium.com/javascript-in-plain-english/https-medium-com-javascript-in-plain-english-stop-feeling-iffy-about-using-an-iife-7b0292aba174)
-    fetchTournaments();
-  }, []);
-
-  const fetchTournaments = async function fetchTournament() {
+  const fetchTournaments = async () => {
     const response = await fetch('/api/tournament/list', {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
@@ -33,6 +28,7 @@ export default function FTournament() {
     setTournamentList(tmp);
     setSelectedOption(tmp[0]);
   };
+  useEffect(() => fetchTournaments(), []);
 
   const handleChange = selectedOption => setSelectedOption(selectedOption);
   const handleCreate = selectedOption => {
@@ -82,7 +78,7 @@ export default function FTournament() {
       </Card.Body>
     </Card>
   );
-}
+};
 
 // TODO:
 // https://react-select.com/components#components
@@ -111,3 +107,5 @@ const cardStyle = {
   width: '50%',
   margin: 'auto'
 };
+
+export default FTournament;

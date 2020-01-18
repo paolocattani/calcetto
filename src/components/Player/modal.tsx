@@ -1,5 +1,5 @@
 import React from 'react';
-import Player from './Players';
+import PlayerTable from './table';
 import { Modal } from 'react-bootstrap';
 
 type propsType = {
@@ -15,7 +15,7 @@ const PlayerModal: React.FC<propsType> = (props: propsType) => {
         <Modal.Title>Gestione Giocatori</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Player />
+        <PlayerTable />
       </Modal.Body>
     </Modal>
   );
