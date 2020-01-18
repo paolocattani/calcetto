@@ -10,7 +10,7 @@ import { FNavbar } from './Navbar/Navbar';
 import { Container, Button } from 'react-bootstrap';
 import PlayerModal from './Player/PlayerModal';
 
-const applicationName = 'webapp'; //`calcetto C.S.M`;
+const applicationName = 'calcetto C.S.M';
 
 const App: React.FC = () => {
   const [sessionContext, updateSessionContext] = useSessionContext();
