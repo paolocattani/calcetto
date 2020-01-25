@@ -40,7 +40,8 @@ export const cellEditProps = cellEditFactory({
   mode: 'click',
   blurToSave: true,
   afterSaveCell: (oldValue, newValue, row, column) => {
-    console.log('AfterSaveCell', oldValue, newValue, row, column);
+    console.log('AfterSaveCell', oldValue, newValue);
+    console.log('AfterSaveCell', row, column);
     /*
         (async () => {
           const response = await fetch('/api/player', {

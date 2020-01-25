@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Select, { ActionMeta, ValueType } from 'react-select';
-import { playerType } from './type';
+import Select from 'react-select';
 import { fetchPlayers } from './helper';
 
 // Probabilmente il componente Select usa Ref.... Lascio cosi..
@@ -9,11 +8,13 @@ const PlayerSelection = React.forwardRef((props, ref) => {
   const [selectedOption, setSelectedOption] = useState();
 
   const { row, column, rowIndex, columnIndex } = props;
+
   const handleChange = (selectedOption, actionMeta) => {
-    setSelectedOption(selectedOption);
     selectedOption.pairId = props.id;
-    props.onSelect(selectedOption, row, column);
-    props.onUpdate(selectedOption.alias || selectedOption.name);
+    setSelectedOption(selectedOption);
+    console.log('Player select : ', selectedOption);
+    props.onUpdate(selectedOption.alias ? selectedOption.alias : selectedOption.name);
+    props.onSelect(selectedOption, rowIndex, columnIndex);
   };
 
   useEffect(() => fetchPlayers(setPlayerList), []);

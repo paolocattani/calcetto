@@ -113,6 +113,7 @@ export const fetchPlayers = setterFunction => {
           id: e.id,
           name: e.name,
           surname: e.surname,
+          alias: e.alias,
           label: e.alias,
           role: e.role,
           match_played: e.match_played,
