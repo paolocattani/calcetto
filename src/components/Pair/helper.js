@@ -42,7 +42,7 @@ export const cellEditProps = cellEditFactory({
   afterSaveCell: (oldValue, newValue, row, column) => {
     console.log('AfterSaveCell', oldValue, newValue);
     console.log('AfterSaveCell', row, column);
-    /*
+    /* TODO: gestire aggiornaemento DB
         (async () => {
           const response = await fetch('/api/player', {
             method: 'POST',
@@ -55,3 +55,12 @@ export const cellEditProps = cellEditFactory({
         */
   }
 });
+
+export const emptyRow = id => {
+  return {
+    id: null,
+    tid: id,
+    pair1: { id: null, alias: '', name: '', surname: '' },
+    pair2: { id: null, alias: '', name: '', surname: '' }
+  };
+};

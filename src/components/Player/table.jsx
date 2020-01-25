@@ -18,6 +18,7 @@ export default class Player extends React.Component {
       selectedRows: [],
       isLoading: false
     };
+    this.handleOnSelect = this.handleOnSelect.bind(this);
     this.deleteRow = this.deleteRow.bind(this);
     this.addRow = this.addRow.bind(this);
   }
@@ -47,10 +48,6 @@ export default class Player extends React.Component {
       })()
     );
   }
-
-  handleOnSelectAll = (isSelected, rows) => {
-    rows.forEach(row => this.handleOnSelect(row, isSelected));
-  };
 
   handleOnSelect = (row, isSelected) => {
     this.setState(state => {
@@ -141,10 +138,8 @@ export default class Player extends React.Component {
   render() {
     const selectRow = {
       mode: 'checkbox',
-      // clickToSelect: true,
-      // hideSelectAll: true,
       onSelect: this.handleOnSelect,
-      onSelectAll: this.handleOnSelectAll,
+      onSelectAll: (isSelected, rows) => rows.forEach(row => this.handleOnSelect(row, isSelected)),
       style: { backgroundColor: '#c8e6c9' }
     };
 
