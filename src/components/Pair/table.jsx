@@ -3,6 +3,7 @@ import { Button } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { PairsGenerator } from '../core/utils';
 import { columns, cellEditProps, emptyRow } from './helper';
+import './style.css';
 
 const PairsTable = props => {
   const [pairsList, setPaisList] = useState([]);
@@ -105,6 +106,8 @@ const PairsTable = props => {
         cellEdit={cellEditProps}
         selectRow={selectRow}
         noDataIndication="Nessun dato reperito"
+        wrapperClasses="player-table"
+        headerClasses="player-table-header"
         striped
         hover
       />

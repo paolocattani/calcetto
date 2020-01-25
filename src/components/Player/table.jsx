@@ -175,14 +175,11 @@ export default class Player extends React.Component {
                   cellEdit={this.cellEditProps}
                   selectRow={selectRow}
                   filter={filterFactory()}
-                  // defaultSorted={defaultSorted}
                   headerClasses="player-table-header"
-                  // rowClasses="player-table-rows"
                   noDataIndication="Nessun dato reperito"
                   striped
                   hover
                   bootstrap4
-                  //condensed
                 />
               </>
             )}
