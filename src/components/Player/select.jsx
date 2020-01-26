@@ -6,7 +6,7 @@ import { fetchPlayers } from './helper';
 const PlayerSelection = React.forwardRef((props, ref) => {
   const [playerList, setPlayerList] = useState([]);
   const [selectedOption, setSelectedOption] = useState();
-  const { row, rowIndex, columnIndex, id, onUpdate, onSelect } = props;
+  const { row, columnIndex, id, onUpdate, onSelect } = props;
 
   function getValue() {
     let value = '';

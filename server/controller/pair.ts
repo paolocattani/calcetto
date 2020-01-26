@@ -12,8 +12,9 @@ router.use('/', (req, res, next) => {
 
 router.get('/list', async (req, res, next) => {
   try {
-    const users = await Pair.findAll({ order: [['id', 'DESC']] });
-    return res.json(users);
+    const { tId } = req.body;
+    const pairsList = await Pair.findAll({ where: { tId }, order: [['id', 'DESC']] });
+    return res.json(pairsList);
   } catch (err) {
     return next(err);
   }

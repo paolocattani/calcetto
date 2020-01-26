@@ -71,7 +71,6 @@ const PairsTable = props => {
             columnIndex === 1
               ? { id: rowElement.id, pair1: selectedElement, pair2: rowElement.pair2 }
               : { id: rowElement.id, pair1: rowElement.pair1, pair2: selectedElement };
-          console.log('onSelect : ', row);
           // update db
           (async () => {
             const response = await fetch('/api/pair', {
@@ -80,7 +79,6 @@ const PairsTable = props => {
               body: JSON.stringify(row)
             });
             const result = await response.json();
-            console.table(result);
           })();
           return row;
         } else return rowElement;
