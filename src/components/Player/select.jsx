@@ -6,15 +6,30 @@ import { fetchPlayers } from './helper';
 const PlayerSelection = React.forwardRef((props, ref) => {
   const [playerList, setPlayerList] = useState([]);
   const [selectedOption, setSelectedOption] = useState();
+  const { row, rowIndex, columnIndex, id, onUpdate, onSelect } = props;
 
-  const { row, column, rowIndex, columnIndex } = props;
+  function getValue() {
+    let value = '';
+    if (selectedOption.alias) {
+      value = selectedOption.alias;
+    } else {
+      value = selectedOption.surname ? `${selectedOption.name} - ${selectedOption.surname}` : selectedOption.name;
+    }
+    return value;
+  }
 
-  const handleChange = (selectedOption, actionMeta) => {
-    selectedOption.pairId = props.id;
+  const handleChange = selectedOption => {
+    selectedOption.pairId = id;
     setSelectedOption(selectedOption);
-    console.log('Player select : ', selectedOption);
-    props.onUpdate(selectedOption.alias ? selectedOption.alias : selectedOption.name);
-    props.onSelect(selectedOption, rowIndex, columnIndex);
+    let value = '';
+    if (selectedOption.alias) {
+      value = selectedOption.alias;
+    } else {
+      value = selectedOption.surname ? `${selectedOption.name} - ${selectedOption.surname}` : selectedOption.name;
+    }
+
+    onUpdate(value);
+    onSelect(selectedOption, row.id, columnIndex);
   };
 
   useEffect(() => fetchPlayers(setPlayerList), []);

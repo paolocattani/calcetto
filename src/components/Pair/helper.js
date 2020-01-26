@@ -38,29 +38,14 @@ export const columns = onSelect => [
 
 export const cellEditProps = cellEditFactory({
   mode: 'click',
-  blurToSave: true,
-  afterSaveCell: (oldValue, newValue, row, column) => {
-    console.log('AfterSaveCell', oldValue, newValue);
-    console.log('AfterSaveCell', row, column);
-    /* TODO: gestire aggiornaemento DB
-        (async () => {
-          const response = await fetch('/api/player', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(row)
-          });
-          const result = await response.json();
-          console.table(result);
-        })();
-        */
-  }
+  blurToSave: true
 });
 
-export const emptyRow = id => {
+export function getEmptyRowModel() {
   return {
     id: null,
-    tid: id,
+    tId: null,
     pair1: { id: null, alias: '', name: '', surname: '' },
     pair2: { id: null, alias: '', name: '', surname: '' }
   };
-};
+}

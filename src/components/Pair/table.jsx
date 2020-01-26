@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { PairsGenerator } from '../core/utils';
-import { columns, cellEditProps, emptyRow } from './helper';
+import { columns, cellEditProps, getEmptyRowModel } from './helper';
 import './style.css';
 
 const PairsTable = props => {
-  const [pairsList, setPaisList] = useState([]);
   const [rows, setRows] = useState(PairsGenerator());
   const [selectedRows, setSelectedRows] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -23,13 +22,17 @@ const PairsTable = props => {
   function addRow() {
     setIsLoading(() =>
       (async () => {
+        const emptyRow = getEmptyRowModel();
+        emptyRow.tId = tId ? tId : 1;
         const response = await fetch('/api/pair', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(emptyRow(tId ? tId : 1))
+          body: JSON.stringify(emptyRow)
         });
         const result = await response.json();
+        console.log('Pair.table.addRow.result : ', result);
         emptyRow.id = result.id;
+        console.log('Pair.table.addRow.emptyRow : ', emptyRow);
         setRows(rows => [emptyRow, ...rows]);
         return false;
       })()
@@ -39,6 +42,7 @@ const PairsTable = props => {
   function deleteRow() {
     setIsLoading(() =>
       (async () => {
+        const emptyRow = getEmptyRowModel();
         const response = await fetch('/api/pair', {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
@@ -59,14 +63,28 @@ const PairsTable = props => {
 
   // Aggiorno la colonna con il giocatore selezionato
   const onSelect = (selectedElement, rowIndex, columnIndex) => {
+    console.log('onSelect : ', rowIndex, columnIndex);
     setRows(rows =>
-      rows.map(rowElement =>
-        rowElement.id === rowIndex
-          ? columnIndex === 1
-            ? { id: rowElement.id, pair1: selectedElement, pair2: rowElement.pair2 }
-            : { id: rowElement.id, pair1: rowElement.pair1, pair2: selectedElement }
-          : rowElement
-      )
+      rows.map(rowElement => {
+        if (rowElement.id === rowIndex) {
+          const row =
+            columnIndex === 1
+              ? { id: rowElement.id, pair1: selectedElement, pair2: rowElement.pair2 }
+              : { id: rowElement.id, pair1: rowElement.pair1, pair2: selectedElement };
+          console.log('onSelect : ', row);
+          // update db
+          (async () => {
+            const response = await fetch('/api/pair', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(row)
+            });
+            const result = await response.json();
+            console.table(result);
+          })();
+          return row;
+        } else return rowElement;
+      })
     );
   };
 
@@ -88,7 +106,7 @@ const PairsTable = props => {
     style: { backgroundColor: '#c8e6c9' }
   };
 
-  console.log('selectedRows : ', selectedRows);
+  //console.log('selectedRows : ', selectedRows);
   return (
     <>
       <Button variant="success" onClick={addRow}>

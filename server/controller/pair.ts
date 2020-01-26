@@ -1,5 +1,5 @@
-import { Router, Application as ExpressApplication } from 'express';
-import Pair from '../model/sequelize/player.model';
+import { Router } from 'express';
+import Pair from '../model/sequelize/pair.model';
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 
@@ -20,20 +20,23 @@ router.get('/list', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  const model = req.body;
+  const { body } = req;
+  const model = {
+    id: body.id ? body.id : null,
+    tournamentId: body.tId ? body.tId : 1,
+    first_playerId: body.pair1.id ? body.pair1.id : null,
+    second_playerId: body.pair2.id ? body.pair1.id : null
+  };
   logger.info('Model : ', model);
-  if (model.id === 0) model.id = null;
-
   try {
     let pair: Pair | null = null;
     if (model.id) pair = await Pair.findOne({ where: { id: model.id } });
     if (pair) {
-      // pair.update(model);
+      pair.update(model);
       logger.info(`updated => ${pair.toString()}`);
     } else {
-      // pair = await Pair.create(model);
-      logger.info('created => ');
-      // logger.info(`created => ${pair.toString()}`);
+      pair = await Pair.create(model);
+      logger.info(`created => ${pair.toString()}`);
     }
     return res.status(200).json(pair);
   } catch (err) {

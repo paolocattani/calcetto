@@ -4,6 +4,7 @@ import {
   CreatedAt,
   DeletedAt,
   Model,
+  AllowNull,
   PrimaryKey,
   Table,
   UpdatedAt,
@@ -12,7 +13,6 @@ import {
   HasOne,
   DataType
 } from 'sequelize-typescript';
-import { IntegerDataType } from 'sequelize';
 import Tournament from './tournament.model';
 import Player from './player.model';
 
@@ -56,4 +56,8 @@ export default class Pair extends Model<Pair> {
 
   @HasOne(() => Player, 'second_playerId')
   second_player!: Player;
+
+  public toString() {
+    return `[ ${this.id} , ${this.tournamentId} , ${this.first_playerId} , ${this.second_playerId} ]`;
+  }
 }
