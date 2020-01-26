@@ -25,7 +25,7 @@ router.post('/', async (req, res, next) => {
     id: body.id ? body.id : null,
     tournamentId: body.tId ? body.tId : 1,
     first_playerId: body.pair1.id ? body.pair1.id : null,
-    second_playerId: body.pair2.id ? body.pair1.id : null
+    second_playerId: body.pair2.id ? body.pair2.id : null
   };
   logger.info('Model : ', model);
   try {
