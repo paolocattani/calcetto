@@ -12,22 +12,26 @@ const FTournament = () => {
   const [tournamentList, setTournamentList] = useState([]);
   let currentHistory = useHistory();
 
-  const fetchTournaments = async () => {
-    const response = await fetch('/api/tournament/list', {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
-    });
-    const result = await response.json();
-    let found = false;
-    let tmp = [];
-    result.forEach(e => {
-      if (e.name === getTodayDate()) found = true;
-      tmp.push({ id: e.id, value: e.name, label: e.name });
-    });
-    if (!found) tmp.unshift({ id: null, value: getTodayDate(), label: getTodayDate() });
-    setTournamentList(tmp);
-    setSelectedOption(tmp[0]);
-  };
+  // console.log('FTournament.currentLocation : ', currentLocation);
+  function fetchTournaments() {
+    (async () => {
+      const response = await fetch('/api/tournament/list', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const result = await response.json();
+      let found = false;
+      let tmp = [];
+      result.forEach(e => {
+        if (e.name === getTodayDate()) found = true;
+        tmp.push({ id: e.id, value: e.name, label: e.name });
+      });
+      if (!found) tmp.unshift({ id: null, value: getTodayDate(), label: getTodayDate() });
+      setTournamentList(tmp);
+      setSelectedOption(tmp[0]);
+    })();
+  }
+
   useEffect(() => fetchTournaments(), []);
 
   const handleChange = selectedOption => setSelectedOption(selectedOption);

@@ -3,6 +3,7 @@ import { Button } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { PairsGenerator } from '../core/utils';
 import { columns, cellEditProps, getEmptyRowModel } from './helper';
+import { useParams } from 'react-router';
 import './style.css';
 
 const PairsTable = props => {
@@ -10,13 +11,9 @@ const PairsTable = props => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // TODO: gestire ID torneo
-  const { tId } = props;
-
+  const { tId } = useParams();
   /*
     TODO: gestire caricamento dati da DB
-
-
   */
 
   function addRow() {

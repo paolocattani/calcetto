@@ -17,7 +17,7 @@ type routeType = {
 export const routes: routeType[] = [
   { path: '/', label: 'Home', exact: true, component: FTournament, visible: true, index: 0 },
   {
-    path: '/tournament/:id',
+    path: '/tournament/:tId',
     label: 'Selezione Coppie',
     exact: true,
     component: Pairs,
