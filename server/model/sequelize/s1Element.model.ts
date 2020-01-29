@@ -12,7 +12,6 @@ import {
   HasOne,
   DataType
 } from 'sequelize-typescript';
-import { IntegerDataType } from 'sequelize';
 import Pair from './pair.model';
 import Tournament from './tournament.model';
 

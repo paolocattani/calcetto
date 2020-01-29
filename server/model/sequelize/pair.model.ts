@@ -4,7 +4,6 @@ import {
   CreatedAt,
   DeletedAt,
   Model,
-  AllowNull,
   PrimaryKey,
   Table,
   UpdatedAt,

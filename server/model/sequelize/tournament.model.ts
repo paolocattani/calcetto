@@ -11,7 +11,6 @@ import {
   AutoIncrement
 } from 'sequelize-typescript';
 import Pair from './pair.model';
-import { IntegerDataTypeConstructor } from 'sequelize/types';
 
 /**
  * Rapprenta un Torneo :
