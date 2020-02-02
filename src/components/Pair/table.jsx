@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { PairsGenerator } from '../core/utils';
@@ -7,14 +7,26 @@ import { useParams } from 'react-router';
 import './style.css';
 
 const PairsTable = props => {
-  const [rows, setRows] = useState(PairsGenerator());
+  const [rows, setRows] = useState([] /*PairsGenerator()*/);
   const [selectedRows, setSelectedRows] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const { tId } = useParams();
-  /*
-    TODO: gestire caricamento dati da DB
-  */
+
+  function fetchPairs() {
+    (async () => {
+      const response = await fetch(`/api/pair/list?tId=${tId}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const result = await response.json();
+      console.log('FetchPairs : ', result);
+      setRows(result);
+    })();
+  }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => fetchPairs(), [tId]);
 
   function addRow() {
     setIsLoading(() =>
