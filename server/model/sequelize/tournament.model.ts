@@ -1,15 +1,4 @@
-import {
-  Column,
-  CreatedAt,
-  DeletedAt,
-  Model,
-  PrimaryKey,
-  Table,
-  UpdatedAt,
-  HasMany,
-  DataType,
-  AutoIncrement
-} from 'sequelize-typescript';
+import { Column, CreatedAt, DeletedAt, Model, Table, UpdatedAt, HasMany, DataType } from 'sequelize-typescript';
 import Pair from './pair.model';
 
 /**
@@ -18,13 +7,8 @@ import Pair from './pair.model';
  *  - Stessa cosa per ordinamento automatico
  *  - Le coppie vengono definite qui. Prevedere possibilità di aggiungere coppie
  */
-@Table({ tableName: 'tournament', version: true })
+@Table({ tableName: 'tournament', version: false })
 export default class Tournament extends Model<Tournament> {
-  @PrimaryKey
-  @AutoIncrement
-  @Column(DataType.INTEGER)
-  public id!: number;
-
   @Column(DataType.STRING)
   public name!: string;
 
@@ -36,17 +20,9 @@ export default class Tournament extends Model<Tournament> {
   //public progress!: ["stage1", "stage2"];
   @Column(DataType.STRING)
   public progress!: string;
+
   @Column(DataType.BOOLEAN)
   public public!: boolean;
-
-  @CreatedAt
-  public createdAt?: Date;
-
-  @UpdatedAt
-  public updatedAt?: Date;
-
-  @DeletedAt
-  public deletedAt?: Date;
 
   @HasMany(() => Pair)
   public pairs!: Pair[];

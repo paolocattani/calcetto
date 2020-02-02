@@ -1,22 +1,8 @@
-import {
-  Column,
-  CreatedAt,
-  DeletedAt,
-  Model,
-  PrimaryKey,
-  Table,
-  UpdatedAt,
-  DataType,
-  AutoIncrement
-} from 'sequelize-typescript';
+import { Column, Model, Table, DataType, HasMany } from 'sequelize-typescript';
+import Pair from './pair.model';
 
-@Table({ tableName: 'player', version: true })
+@Table({ tableName: 'player', version: false })
 export default class Player extends Model<Player> {
-  @PrimaryKey
-  @AutoIncrement
-  @Column(DataType.INTEGER)
-  id!: number;
-
   @Column(DataType.STRING)
   name?: string;
 
@@ -40,16 +26,15 @@ export default class Player extends Model<Player> {
   @Column(DataType.FLOAT)
   total_score!: number;
 
-  @CreatedAt
-  createdAt?: Date;
+  @HasMany(() => Pair, 'player1Id')
+  pair1!: Pair[];
 
-  @UpdatedAt
-  updatedAt?: Date;
+  @HasMany(() => Pair, 'player2Id')
+  pair2!: Pair[];
 
-  @DeletedAt
-  deletedAt?: Date;
-
+  /*
   public toString() {
     return `[ ${this.id} , ${this.name} , ${this.surname} , ${this.alias} , ${this.role} , ${this.match_played} , , ${this.match_won} , ${this.total_score}]`;
   }
+  */
 }
