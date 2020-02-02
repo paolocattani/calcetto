@@ -10,6 +10,7 @@ import syncDb from '../sequelize';
 //import * as util from 'util';
 import routes from './../../controller';
 import { SyncOptions } from 'sequelize/types';
+import generator from '../../dummy_data/generator';
 
 // white list for CORS
 const applicationName: string = 'ApplicationServer';
@@ -35,14 +36,15 @@ export class AppServer extends AbstractServer {
     this.start();
   }
 
-  public routes(application: ExpressApplication): void {
+  public async routes(application: ExpressApplication): Promise<void> {
     const options: SyncOptions = {
       // force: true
+      force: true
     };
     // Sync database model ( async )
     logger.info(chalk.cyan.bold('Database synchronization ( async )'));
-    syncDb(options);
-    //application.use(routes(Router()));
+    await syncDb(options);
+    await generator(true);
     application.use(routes(application));
   }
 }
