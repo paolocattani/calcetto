@@ -1,9 +1,10 @@
-import { Router } from 'express';
+import { Router, response } from 'express';
 import util from 'util';
 import { logger } from '../core/logger';
 import Tournament from '../model/sequelize/tournament.model';
 import { isDevMode } from '../core/debug';
 import * as Validator from '../core/validator';
+import chalk from 'chalk';
 
 // all API path must be relative to /api/tournament
 const router = Router();
@@ -19,9 +20,10 @@ router.get('/list', async (req, res, next) => {
       group: ['id', 'name'],
       order: [['name', 'DESC']]
     });
-    logger.info(t);
+    if (t) logger.info(chalk.greenBright('Tournment Fetched !'));
     res.json(t);
   } catch (err) {
+    logger.error(chalk.redBright('Error while fetching tournament ! : ', err));
     return next(err);
   }
 });
