@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
-import { PairsGenerator } from '../core/utils';
-import { columns, cellEditProps, getEmptyRowModel } from './helper';
+import { columns, cellEditProps, getEmptyRowModel, fetchPairs } from './helper';
 import { useParams } from 'react-router';
 import './style.css';
 
@@ -13,20 +12,8 @@ const PairsTable = props => {
 
   const { tId } = useParams();
 
-  function fetchPairs() {
-    (async () => {
-      const response = await fetch(`/api/pair/list?tId=${tId}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-      });
-      const result = await response.json();
-      console.log('FetchPairs : ', result);
-      setRows(result);
-    })();
-  }
-
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => fetchPairs(), [tId]);
+  useEffect(() => fetchPairs(setRows, tId), [tId]);
 
   function addRow() {
     setIsLoading(() =>
@@ -39,9 +26,7 @@ const PairsTable = props => {
           body: JSON.stringify(emptyRow)
         });
         const result = await response.json();
-        console.log('Pair.table.addRow.result : ', result);
         emptyRow.id = result.id;
-        console.log('Pair.table.addRow.emptyRow : ', emptyRow);
         setRows(rows => [emptyRow, ...rows]);
         return false;
       })()
@@ -65,11 +50,6 @@ const PairsTable = props => {
     );
   }
 
-  const rowEvents = {
-    onDoubleClick: (e, row, rowIndex) =>
-      setRows(rows => [{ id: rows.length, 'pair1.alias': '', 'pair2.alias': '' }, ...rows])
-  };
-
   // Aggiorno la colonna con il giocatore selezionato
   const onSelect = (selectedElement, rowIndex, columnIndex) => {
     console.log('onSelect : ', rowIndex, columnIndex);
@@ -87,7 +67,7 @@ const PairsTable = props => {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(row)
             });
-            const result = await response.json();
+            await response.json();
           })();
           return row;
         } else return rowElement;
@@ -127,7 +107,6 @@ const PairsTable = props => {
         keyField="id"
         data={rows}
         columns={columns(onSelect)}
-        rowEvents={rowEvents}
         cellEdit={cellEditProps}
         selectRow={selectRow}
         noDataIndication="Nessun dato reperito"

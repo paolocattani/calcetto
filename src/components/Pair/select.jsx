@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
-import { fetchPlayers, valueFormatter } from './helper';
+import { fetchPairs, valueFormatter } from './helper';
 
 // Probabilmente il componente Select usa Ref.... Lascio cosi..
-const PlayerSelection = React.forwardRef((props, ref) => {
-  const [playerList, setPlayerList] = useState([]);
+const PairsSelection = React.forwardRef((props, ref) => {
+  const [pairsList, setPairsList] = useState([]);
   const [selectedOption, setSelectedOption] = useState();
-  const { row, columnIndex, id, onUpdate, onSelect } = props;
+  const { row, columnIndex, id, onUpdate, onSelect, tournamentId } = props;
 
   function getValue() {
     return valueFormatter(selectedOption);
@@ -15,16 +15,16 @@ const PlayerSelection = React.forwardRef((props, ref) => {
   const handleChange = selectedOption => {
     selectedOption.pairId = id;
     setSelectedOption(selectedOption);
-    const value = valueFormatter(selectedOption);
+    valueFormatter(selectedOption);
     onUpdate(value);
     onSelect(selectedOption, row.id, columnIndex);
   };
 
-  useEffect(() => fetchPlayers(setPlayerList), []);
+  useEffect(() => fetchPairs(setPairsList, (tournamentId = 1)), []);
 
   return (
     <Select
-      options={playerList}
+      options={pairsList}
       onChange={handleChange}
       value={selectedOption}
       placeholder="Cerca..."
@@ -34,4 +34,4 @@ const PlayerSelection = React.forwardRef((props, ref) => {
   );
 });
 
-export default PlayerSelection;
+export default PairsSelection;

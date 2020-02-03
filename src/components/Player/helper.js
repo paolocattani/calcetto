@@ -124,3 +124,13 @@ export const fetchPlayers = setterFunction => {
     );
   })();
 };
+
+export function valueFormatter(selectedOption) {
+  let value = '';
+  if (selectedOption.alias) {
+    value = selectedOption.alias;
+  } else {
+    value = selectedOption.surname ? `${selectedOption.name} - ${selectedOption.surname}` : selectedOption.name;
+  }
+  return value;
+}
