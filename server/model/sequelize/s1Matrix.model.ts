@@ -4,12 +4,14 @@ import {
   CreatedAt,
   DeletedAt,
   Model,
+  Comment,
   PrimaryKey,
   Table,
   UpdatedAt,
   ForeignKey,
   HasOne,
-  DataType
+  DataType,
+  BelongsTo
 } from 'sequelize-typescript';
 import Pair from './pair.model';
 import Tournament from './tournament.model';
@@ -34,32 +36,36 @@ export default class s1Matrix extends Model<s1Matrix> {
   @Column(DataType.STRING)
   name!: string;
 
-  @Column(DataType.INTEGER)
+  // Models association
+  // Tournament
   @ForeignKey(() => Tournament)
-  tournamentId!: number;
-
   @Column(DataType.INTEGER)
+  public tournamentId?: number;
+  @BelongsTo(() => Tournament)
+  public tournament!: Tournament;
+
+  @Comment('Pair 1')
   @ForeignKey(() => Pair)
-  pairId!: number;
+  @Column(DataType.INTEGER)
+  public pair1Id!: number;
+  @BelongsTo(() => Pair, 'pair1Id')
+  public pair1!: Pair;
+
+  @Comment('Pair 2')
+  @ForeignKey(() => Pair)
+  @Column(DataType.INTEGER)
+  public pair2Id!: number;
+  @BelongsTo(() => Pair, 'pair2Id')
+  public pair2!: Pair;
 
   // Punteggio totale per la coppia
+  @Comment('Score of pair1 vs pair2')
   @Column(DataType.INTEGER)
-  score!: number;
+  public score!: number;
 
   // Posizionamento della coppia all'interno del girone.
   // Potrebbe essere calcolato progressivamente con un trigger. Da valutare
   @Column(DataType.INTEGER)
-  placement!: number;
+  public placement!: number;
 
-  @CreatedAt
-  createdAt?: Date;
-
-  @UpdatedAt
-  updatedAt?: Date;
-
-  @DeletedAt
-  deletedAt?: Date;
-
-  @HasOne(() => Pair, 'pairId')
-  pair!: Pair;
 }

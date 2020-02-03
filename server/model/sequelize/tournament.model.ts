@@ -1,9 +1,10 @@
 import { Column, CreatedAt, DeletedAt, Model, Table, UpdatedAt, HasMany, DataType } from 'sequelize-typescript';
 import Pair from './pair.model';
+import s1Matrix from './s1Matrix.model';
 
 /**
  * Rapprenta un Torneo :
- *  - Il numero di gironi da creare verrà solo chiesto in fase di creazione , non server salvarlo
+ *  - I gironi vengono assegnati dinamicamente in base a quelli assegnati in fase di formazione delle coppuie
  *  - Stessa cosa per ordinamento automatico
  *  - Le coppie vengono definite qui. Prevedere possibilità di aggiungere coppie
  */
@@ -27,6 +28,10 @@ export default class Tournament extends Model<Tournament> {
   @HasMany(() => Pair)
   public pairs!: Pair[];
 
+  @HasMany(() => s1Matrix)
+  public s1Matrix!: s1Matrix[];
+
+  // TODO:
   //@HasOne(() => User)
   //owner!: User;
 }
