@@ -6,7 +6,7 @@ export const columns = onSelect => [
   { dataField: 'id', text: 'ID', editable: false, hidden: true },
   { dataField: 'rowNumber', text: 'ID', editable: false },
   {
-    dataField: 'pair1.alias',
+    dataField: 'player1.alias',
     text: 'Giocatore 1',
     editorRenderer: (editorProps, value, row, column, rowIndex, columnIndex) => (
       <PlayerSelect
@@ -21,7 +21,7 @@ export const columns = onSelect => [
     )
   },
   {
-    dataField: 'pair2.alias',
+    dataField: 'player2.alias',
     text: 'Giocatore 2',
     editorRenderer: (editorProps, value, row, column, rowIndex, columnIndex) => (
       <PlayerSelect
@@ -49,17 +49,16 @@ export function getEmptyRowModel() {
     id: null,
     rowNumber: null,
     tId: null,
-    pair1: { id: null, alias: '', name: '', surname: '' },
-    pair2: { id: null, alias: '', name: '', surname: '' },
+    player1: { id: null, alias: '', name: '', surname: '' },
+    player2: { id: null, alias: '', name: '', surname: '' },
     pairAlias: '',
     stage1Name: ''
   };
 }
 
-export const fetchPairs = (setterFunction, tournamentId) => {
-  console.log('fetchPairs : ', tournamentId);
+export const fetchPairs = (setterFunction, tId) => {
   (async () => {
-    const response = await fetch(`/api/pair/list/${tournamentId}`, {
+    const response = await fetch(`/api/pair/list/${tId}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     });
@@ -70,7 +69,8 @@ export const fetchPairs = (setterFunction, tournamentId) => {
 
 export function valueFormatter(selectedOption) {
   // ' 1 : Pool - Gilbe '
-  if (selectedOption.pairAlias) return selectedOption.pairAlias;
+  console.log('valueFormatter : ', selectedOption);
+  if (selectedOption.pairAlias && selectedOption.pairAlias !== '') return selectedOption.pairAlias;
   return createAlias(selectedOption);
 }
 
@@ -79,6 +79,6 @@ export function createAlias(selectedOption) {
   const { player1, player2 } = selectedOption;
   value += player1.alias ? player1.alias : player1.name;
   value += ' - ' + player2.alias ? player2.alias : player2.name;
-  console.log('valueFormatter : ', value);
+  console.log('valueFormatter.createAlias : ', value);
   return value;
 }

@@ -55,7 +55,7 @@ async function pairGenerator(): Promise<void> {
       tournamentId: 1,
       player1Id: getRandomIntInclusive(1, PLAYER_RECORDS),
       player2Id: getRandomIntInclusive(1, PLAYER_RECORDS),
-      pairAlias: `PAlias${ii}`,
+      pairAlias: ii % 2 === 0 ? `PAlias${ii}` : '',
       stage1Name: getRandomIntInclusive(1, 3)
     };
     await Pair.create(model);

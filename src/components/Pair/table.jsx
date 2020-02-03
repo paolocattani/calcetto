@@ -61,8 +61,8 @@ const PairsTable = props => {
       rows.map(rowElement => {
         if (rowElement.id === rowIndex) {
           let row = rowElement;
-          if (columnIndex) row.pair1 = selectedElement;
-          else row.pair2 = selectedElement;
+          if (columnIndex) row.player1 = selectedElement;
+          else row.player2 = selectedElement;
           // update db
           (async () => {
             const response = await fetch('/api/pair', {

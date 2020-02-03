@@ -83,19 +83,27 @@ function rowToModel(row: Pair, index: number) {
     id: row.id,
     rowNumber: index + 1,
     tId: row.tournamentId,
-    pair1: {
+    player1: {
       id: row.player1?.id ?? null,
       alias: row.player1?.alias ?? '',
       name: row.player1?.name ?? '',
       surname: row.player1?.surname ?? ''
     },
-    pair2: {
+    player2: {
       id: row.player2?.id ?? null,
       alias: row.player2?.alias ?? '',
       name: row.player2?.name ?? '',
       surname: row.player2?.surname ?? ''
     },
     pairAlias: row.pairAlias,
-    stage1Name: row.stage1Name
+    stage1Name: row.stage1Name,
+    label: valueFormatter(row)
   };
+}
+
+function valueFormatter(row: any) {
+  if (row.pairAlias && row.pairAlias !== '') return row.pairAlias;
+  const { player1, player2 } = row;
+  const value = `${player1.alias ? player1.alias : player1.name} - ${player2.alias ? player2.alias : player2.name}`;
+  return value;
 }

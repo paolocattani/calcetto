@@ -6,9 +6,10 @@ import { fetchPairs, valueFormatter } from './helper';
 const PairsSelection = React.forwardRef((props, ref) => {
   const [pairsList, setPairsList] = useState([]);
   const [selectedOption, setSelectedOption] = useState();
-  const { row, columnIndex, id, onUpdate, onSelect, tournamentId } = props;
+  const { row, columnIndex, id, onUpdate, onSelect, tId } = props;
 
   function getValue() {
+    console.log('getValue : ', selectedOption);
     return valueFormatter(selectedOption);
   }
 
@@ -16,12 +17,14 @@ const PairsSelection = React.forwardRef((props, ref) => {
     selectedOption.pairId = id;
     setSelectedOption(selectedOption);
     const value = valueFormatter(selectedOption);
+    console.log('handleSelect : ', value);
     onUpdate(value);
     onSelect(selectedOption, row.id, columnIndex);
   };
 
-  useEffect(() => fetchPairs(setPairsList, (tournamentId = 1)), []);
+  useEffect(() => fetchPairs(setPairsList, tId), [tId]);
 
+  console.log('render : ', pairsList);
   return (
     <Select
       options={pairsList}

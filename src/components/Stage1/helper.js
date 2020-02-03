@@ -31,7 +31,7 @@ export function rowsGenerator(columnsNumber, rowNumber) {
   return rows;
 }
 
-export const columns = (onSelect, rowNumber) => {
+export const columns = (onSelect, tId, rowNumber) => {
   let baseColumns = [
     {
       dataField: 'pair',
@@ -45,6 +45,7 @@ export const columns = (onSelect, rowNumber) => {
           columnIndex={columnIndex}
           value={value}
           onSelect={onSelect}
+          tId={tId}
         />
       )
     },
