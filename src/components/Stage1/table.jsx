@@ -3,7 +3,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import { columns, rowsGenerator, cellEditProps } from './helper';
 import TableHeader from './header';
 
-const TABLE_LENGTH = 10;
+const TABLE_LENGTH = 8;
 const Stage1Table = props => {
   const { tId, pairsList } = props;
   const [rows, setRows] = useState(rowsGenerator(TABLE_LENGTH, TABLE_LENGTH));

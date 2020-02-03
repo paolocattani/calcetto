@@ -27,6 +27,8 @@ export function rowsGenerator(columnsNumber, rowNumber) {
     for (let jj = 1; jj <= columnsNumber; jj++) {
       rows[ii][`col.${jj}`] = '';
     }
+    rows[ii]['total'] = 0;
+    rows[ii]['place'] = 0;
   }
   return rows;
 }
@@ -56,9 +58,23 @@ export const columns = (onSelect, tId, rowNumber) => {
     }
   ];
 
+  // generazione dinamica colonne intermedie
   for (let ii = 0; ii < rowNumber; ii++) {
     baseColumns.push(newColumn(ii + 1));
   }
+
+  baseColumns.push(
+    {
+      dataField: 'total',
+      text: 'Totale',
+      editable: false
+    },
+    {
+      dataField: 'place',
+      text: 'Posizione',
+      editable: false
+    }
+  );
   return baseColumns;
 };
 
