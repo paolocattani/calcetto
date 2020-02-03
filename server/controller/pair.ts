@@ -17,32 +17,12 @@ router.get('/list/:tId', async (req, res, next) => {
   try {
     const tId = req.query.tId ?? 1;
     const pairsList = await Pair.findAll({
-      where: { tournamentId: tId },
+      where: { tournamentId: tId, '$tournament.public$': true },
       order: [['id', 'ASC']],
       include: [Pair.associations.tournament, Pair.associations.player1, Pair.associations.player2]
     });
 
-    const modelList = pairsList.map((row, index) => {
-      return {
-        id: row.id,
-        rowNumber: index + 1,
-        tId: row.tournamentId,
-        pair1: {
-          id: row.player1?.id ?? null,
-          alias: row.player1?.alias ?? '',
-          name: row.player1?.name ?? '',
-          surname: row.player1?.surname ?? ''
-        },
-        pair2: {
-          id: row.player2?.id ?? null,
-          alias: row.player2?.alias ?? '',
-          name: row.player2?.name ?? '',
-          surname: row.player2?.surname ?? ''
-        },
-        pairAlias: row.pairAlias,
-        stage1Name: row.stage1Name
-      };
-    });
+    const modelList = pairsList.map((row, index) => rowToModel(row, index));
     return res.json(modelList);
   } catch (err) {
     logger.error('/list -> error: ', err);
@@ -97,3 +77,25 @@ router.delete('/', async (req, res, next) => {
 });
 
 export default router;
+
+function rowToModel(row: Pair, index: number) {
+  return {
+    id: row.id,
+    rowNumber: index + 1,
+    tId: row.tournamentId,
+    pair1: {
+      id: row.player1?.id ?? null,
+      alias: row.player1?.alias ?? '',
+      name: row.player1?.name ?? '',
+      surname: row.player1?.surname ?? ''
+    },
+    pair2: {
+      id: row.player2?.id ?? null,
+      alias: row.player2?.alias ?? '',
+      name: row.player2?.name ?? '',
+      surname: row.player2?.surname ?? ''
+    },
+    pairAlias: row.pairAlias,
+    stage1Name: row.stage1Name
+  };
+}

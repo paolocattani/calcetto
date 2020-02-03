@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
-import { columns, cellEditProps, getEmptyRowModel, fetchPairs } from './helper';
+import { columns, cellEditProps, getEmptyRowModel, fetchPairs /* checkEditable */ } from './helper';
 import { useParams } from 'react-router';
 import './style.css';
 
@@ -9,10 +9,13 @@ const PairsTable = props => {
   const [rows, setRows] = useState([] /*PairsGenerator()*/);
   const [selectedRows, setSelectedRows] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  // TODO:
+  const [isEditable, setIsEditable] = useState(false);
 
   const { tId } = useParams();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // useEffect(() => checkEditable(setIsEditable, tId), []);
   useEffect(() => fetchPairs(setRows, tId), [tId]);
 
   function addRow() {
@@ -85,6 +88,9 @@ const PairsTable = props => {
       }
     });
   };
+  const confirmPairs = () => {
+    console.log('pairs confired');
+  };
 
   const selectRow = {
     mode: 'checkbox',
@@ -101,6 +107,9 @@ const PairsTable = props => {
       </Button>
       <Button variant="danger" onClick={deleteRow}>
         Elimina Coppia
+      </Button>
+      <Button variant="primary" onClick={confirmPairs}>
+        Conferma coppie
       </Button>
       <BootstrapTable
         bootstrap4
