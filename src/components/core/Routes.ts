@@ -1,7 +1,7 @@
 import FTournament from '../FTournament';
 import PlayerTable from '../Player/table';
 import Pairs from '../Pair/table';
-import Stage1Table from '../Stage1/table';
+import Stage1Wrapper from '../Stage1/wrapper';
 
 // TODO:
 import * as Todo from '../DELETE/Todo';
@@ -30,7 +30,7 @@ export const routes: routeType[] = [
     path: '/stage1/:tId',
     label: 'Torneo fase 1',
     exact: true,
-    component: Stage1Table,
+    component: Stage1Wrapper,
     visible: false,
     index: 20
   },

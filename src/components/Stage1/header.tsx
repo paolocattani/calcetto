@@ -5,7 +5,13 @@ type propsType = {
 };
 
 const tableHeader: React.FC<propsType> = ({ title }: propsType) => {
-  return <h2>{title}</h2>;
+  return (
+    <h2>
+      <b>
+        <strong>{`Girone - ${title}`}</strong>
+      </b>
+    </h2>
+  );
 };
 
 export default tableHeader;
