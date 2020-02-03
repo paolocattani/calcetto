@@ -4,13 +4,11 @@ import './Navbar.css';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Navbar } from 'react-bootstrap';
-import { useSessionContext } from '../core/SessionContext';
-import logo from '../../logo.svg';
+// import { useSessionContext } from '../core/SessionContext';
 import routes from '../core/Routes';
 
 export const FNavbar: React.FC = () => {
-  const [sessionContext, updateSessionContext] = useSessionContext();
-  console.log('FNavbar, sessionContext.isAuthenticated : ', sessionContext.isAuthenticated);
+  // const [sessionContext, updateSessionContext] = useSessionContext();
   return (
     <Navbar bg="ligth" variant="light" className="navbar-container">
       {/*

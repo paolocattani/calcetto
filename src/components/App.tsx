@@ -7,10 +7,8 @@ import { Login } from './Login/Login';
 // import { useHistory } from 'react-router-dom';
 import routes from '../components/core/Routes';
 import { FNavbar } from './Navbar/Navbar';
-import { Container, Button } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import PlayerModal from './Player/modal';
-import PlayerSelection from './Player/select';
-import Stage1Table from './Stage1/table';
 
 const applicationName = 'calcetto C.S.M';
 

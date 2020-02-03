@@ -59,7 +59,6 @@ export const columns = (onSelect, tId, rowNumber) => {
   for (let ii = 0; ii < rowNumber; ii++) {
     baseColumns.push(newColumn(ii + 1));
   }
-  console.log(columns);
   return baseColumns;
 };
 

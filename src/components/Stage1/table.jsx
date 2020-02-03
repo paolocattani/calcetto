@@ -13,9 +13,6 @@ const Stage1Table = props => {
     console.log('onSelect ');
   };
 
-  console.log('tId : ', tId);
-  console.log('Stage1Table render : rows -> ', rows);
-  console.log('Stage1Table render : rows -> ', columns(onSelect, TABLE_LENGTH));
   return (
     <>
       <BootstrapTable
