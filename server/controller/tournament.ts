@@ -20,7 +20,7 @@ router.get('/list', async (req, res, next) => {
       group: ['id', 'name'],
       order: [['name', 'DESC']]
     });
-    if (t) logger.info(chalk.greenBright('Tournment Fetched !'));
+    if (t) logger.info(chalk.greenBright('Tournament fetched !'));
     res.json(t);
   } catch (err) {
     logger.error(chalk.redBright('Error while fetching tournament ! : ', err));

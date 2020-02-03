@@ -13,21 +13,19 @@ router.use('/', (req, res, next) => {
   next();
 });
 
-router.get('/list', async (req, res, next) => {
-  // logger.info('Associatrions : ', Pair.associations);
+router.get('/list/:tId', async (req, res, next) => {
   try {
     const tId = req.query.tId ?? 1;
-    // logger.info('/list.tId : ', tId);
     const pairsList = await Pair.findAll({
       where: { tournamentId: tId },
-      order: [['id', 'DESC']],
-      // include: [{ model: Player }]
+      order: [['id', 'ASC']],
       include: [Pair.associations.tournament, Pair.associations.player1, Pair.associations.player2]
     });
 
-    const modelList = pairsList.map(row => {
+    const modelList = pairsList.map((row, index) => {
       return {
         id: row.id,
+        rowNumber: index + 1,
         tId: row.tournamentId,
         pair1: {
           id: row.player1?.id ?? null,
@@ -40,12 +38,14 @@ router.get('/list', async (req, res, next) => {
           alias: row.player2?.alias ?? '',
           name: row.player2?.name ?? '',
           surname: row.player2?.surname ?? ''
-        }
+        },
+        pairAlias: row.pairAlias,
+        stage1Name: row.stage1Name
       };
     });
-    // logger.info('/list -> pairsList : ', pairsList);
     return res.json(modelList);
   } catch (err) {
+    logger.error('/list -> error: ', err);
     return next(err);
   }
 });
@@ -53,15 +53,15 @@ router.get('/list', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   const { body } = req;
   const { pair1, pair2 } = body;
-  const model = {
-    id: body.id ? body.id : null,
-    tournamentId: body.tId ? parseInt(body.tId) : 1
-  };
   const t = await dbConnection.transaction();
   try {
     let pair: Pair | null = null;
     const player1 = await Player.findOne({ where: { id: pair1.id } });
     const player2 = await Player.findOne({ where: { id: pair2.id } });
+    const model = {
+      id: body.id ? body.id : null,
+      tournamentId: body.tId && body.tId !== '' ? parseInt(body.tId) : 1
+    };
     if (model.id) pair = await Pair.findOne({ where: { id: model.id } });
     if (pair) {
       await pair.update(model), { transaction: t };
@@ -70,8 +70,8 @@ router.post('/', async (req, res, next) => {
       pair = await Pair.create(model, { transaction: t });
       logger.info(`created => ${pair.toString()}`);
     }
-    await pair.$set('player1', player1 as any, { transaction: t });
-    await pair.$set('player2', player2 as any, { transaction: t });
+    if (player1) await pair.$set('player1', player1 as any, { transaction: t });
+    if (player2) await pair.$set('player2', player2 as any, { transaction: t });
     t.commit();
     return res.status(200).json(pair);
   } catch (err) {

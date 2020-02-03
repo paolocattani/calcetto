@@ -4,6 +4,12 @@ import Player from './player.model';
 
 @Table({ tableName: 'pairs', version: false })
 export default class Pair extends Model<Pair> {
+  @Column
+  pairAlias?: string;
+
+  @Column
+  stage1Name?: string;
+
   @ForeignKey(() => Tournament)
   @Column
   tournamentId?: number;
@@ -26,9 +32,10 @@ export default class Pair extends Model<Pair> {
   @BelongsTo(() => Player, 'player2Id')
   player2?: Player;
 
-  /*
   public toString() {
-    return `[ ${this.id} , ${this.tournamentId} , ${this.first_playerId} , ${this.second_playerId} ]`;
+    return `[ id=${this.id} , tId=${this.tournamentId} , player1=${this.player1?.name ??
+      'Non impostato'} , player2=${this.player2?.name ?? 'Non impostato'} , alias=${this.pairAlias} , stage1Name=${
+      this.stage1Name
+    }]`;
   }
-  */
 }

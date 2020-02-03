@@ -27,6 +27,7 @@ const PairsTable = props => {
         });
         const result = await response.json();
         emptyRow.id = result.id;
+        emptyRow.rowNumber = rows.length + 1;
         setRows(rows => [emptyRow, ...rows]);
         return false;
       })()
@@ -56,10 +57,9 @@ const PairsTable = props => {
     setRows(rows =>
       rows.map(rowElement => {
         if (rowElement.id === rowIndex) {
-          const row =
-            columnIndex === 1
-              ? { id: rowElement.id, pair1: selectedElement, pair2: rowElement.pair2 }
-              : { id: rowElement.id, pair1: rowElement.pair1, pair2: selectedElement };
+          let row = rowElement;
+          if (columnIndex) row.pair1 = selectedElement;
+          else row.pair2 = selectedElement;
           // update db
           (async () => {
             const response = await fetch('/api/pair', {
