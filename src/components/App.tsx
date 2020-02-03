@@ -10,6 +10,7 @@ import { FNavbar } from './Navbar/Navbar';
 import { Container, Button } from 'react-bootstrap';
 import PlayerModal from './Player/modal';
 import PlayerSelection from './Player/select';
+import Stage1Table from './Stage1/table';
 
 const applicationName = 'calcetto C.S.M';
 
@@ -28,8 +29,6 @@ const App: React.FC = () => {
     setRedirectPathOnAuthentication
   };
 
-  // let currentHistory = useHistory();
-  // eslint-disable-next-line react/destructuring-assignment
   return (
     <div className="App">
       {/** Header */}

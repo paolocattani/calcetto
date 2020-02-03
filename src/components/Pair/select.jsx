@@ -15,7 +15,7 @@ const PairsSelection = React.forwardRef((props, ref) => {
   const handleChange = selectedOption => {
     selectedOption.pairId = id;
     setSelectedOption(selectedOption);
-    valueFormatter(selectedOption);
+    const value = valueFormatter(selectedOption);
     onUpdate(value);
     onSelect(selectedOption, row.id, columnIndex);
   };

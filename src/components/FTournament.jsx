@@ -36,7 +36,6 @@ const FTournament = () => {
 
   const handleChange = selectedOption => setSelectedOption(selectedOption);
   const handleCreate = selectedOption => {
-    console.log('handleCreate : ', selectedOption);
     setSelectedOption(selectedOption);
     setTournamentList(prevList => [...prevList, { value: selectedOption, label: selectedOption }]);
   };
@@ -49,14 +48,12 @@ const FTournament = () => {
       progress: 'WIP',
       public: true
     };
-    console.log('handleSubmit : Model -> ', model);
     const response = await fetch('/api/tournament', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(model)
     });
     const res = await response.json();
-    console.log('handleSubmit : fetch result -> ', res);
     if (res.message) console.log(res.message);
     currentHistory.push(`/tournament/${res.id}`);
   };

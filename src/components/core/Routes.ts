@@ -1,6 +1,8 @@
 import FTournament from '../FTournament';
 import PlayerTable from '../Player/table';
 import Pairs from '../Pair/table';
+import Stage1Table from '../Stage1/table';
+
 // TODO:
 import * as Todo from '../DELETE/Todo';
 
@@ -21,8 +23,16 @@ export const routes: routeType[] = [
     label: 'Selezione Coppie',
     exact: true,
     component: Pairs,
-    visible: true,
+    visible: false,
     index: 10
+  },
+  {
+    path: '/stage1/:tId',
+    label: 'Torneo fase 1',
+    exact: true,
+    component: Stage1Table,
+    visible: false,
+    index: 20
   },
 
   {
