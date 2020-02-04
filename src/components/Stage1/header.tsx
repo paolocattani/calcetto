@@ -1,10 +1,7 @@
 import React from 'react';
+import { headerPropsType } from './type';
 
-type propsType = {
-  title: string;
-};
-
-const tableHeader: React.FC<propsType> = ({ title }: propsType) => {
+const tableHeader: React.FC<headerPropsType> = ({ title }: headerPropsType) => {
   return (
     <h2>
       <b>

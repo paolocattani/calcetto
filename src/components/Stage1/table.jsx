@@ -13,7 +13,6 @@ const Stage1Table = props => {
     console.log('onSelect ');
   };
 
-  console.log('render table : ', tableName, pairsList);
   return pairsList ? (
     <>
       <BootstrapTable

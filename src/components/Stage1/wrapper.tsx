@@ -27,7 +27,7 @@ function renderTables(pairsList: Pair[], tId: string | undefined): JSX.Element {
     if (stageName === '') stageName = element.stage1Name;
     if (stageName !== element.stage1Name) {
       stageList.push(
-        <ListGroup.Item disabled key={`stage-${stageName}`}>
+        <ListGroup.Item key={`stage-${stageName}`}>
           <Stage1Table pairsList={stage} tId={tId} />
         </ListGroup.Item>
       );
@@ -38,7 +38,7 @@ function renderTables(pairsList: Pair[], tId: string | undefined): JSX.Element {
     stage.push(element);
   });
   stageList.push(
-    <ListGroup.Item disabled key={`stage-${stageName}`}>
+    <ListGroup.Item key={`stage-${stageName}`}>
       <Stage1Table pairsList={stage} tId={tId} />
     </ListGroup.Item>
   );

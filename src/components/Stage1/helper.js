@@ -1,10 +1,11 @@
 import React from 'react';
 import PairSelect from '../Pair/select';
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
+import Emoji from '../core/Emoji';
 
 export const newColumn = (index, onChange) => {
   return {
-    dataField: `col.${index}`,
+    dataField: `col${index}`,
     text: index,
     editable: (content, row, rowIndex, columnIndex) => rowIndex !== columnIndex - 2,
     style: (cell, row, rowIndex, columnIndex) => (rowIndex === columnIndex - 2 ? { backgroundColor: '#6d706e' } : null),
@@ -24,8 +25,8 @@ export function rowsGenerator(columnsNumber, pairsList) {
   let rows = [];
   for (let ii = 0; ii < pairsList.length; ii++) {
     rows.push({ pair: pairsList[ii], rowNumber: ii + 1 });
-    for (let jj = 1; jj <= columnsNumber; jj++) {
-      rows[ii][`col.${jj}`] = '';
+    for (let jj = 1; jj <= pairsList.length; jj++) {
+      rows[ii][`col${jj}`] = '';
     }
     rows[ii]['total'] = 0;
     rows[ii]['place'] = 0;
@@ -81,6 +82,6 @@ export const columns = (onSelect, tId, pairsList) => {
 };
 
 export const cellEditProps = cellEditFactory({
-  mode: 'dbclick',
+  mode: 'click',
   blurToSave: true
 });

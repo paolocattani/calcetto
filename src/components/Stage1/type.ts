@@ -9,3 +9,7 @@ export type Pair = {
 };
 
 export type wapperPropsType = {};
+
+export type headerPropsType = {
+  title: string;
+};
