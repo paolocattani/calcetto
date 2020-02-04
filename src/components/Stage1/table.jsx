@@ -6,7 +6,7 @@ import TableHeader from './header';
 const TABLE_LENGTH = 8;
 const Stage1Table = props => {
   const { tId, pairsList } = props;
-  const [rows, setRows] = useState(rowsGenerator(TABLE_LENGTH, TABLE_LENGTH));
+  const [rows, setRows] = useState(rowsGenerator(TABLE_LENGTH, pairsList));
   const tableName = pairsList[0]?.stage1Name ?? 'Not found';
 
   const onSelect = () => {
@@ -14,13 +14,13 @@ const Stage1Table = props => {
   };
 
   console.log('render table : ', tableName, pairsList);
-  return (
+  return pairsList ? (
     <>
       <BootstrapTable
         bootstrap4
         keyField="id"
         data={rows}
-        columns={columns(onSelect, tId, TABLE_LENGTH)}
+        columns={columns(onSelect, tId, pairsList)}
         cellEdit={cellEditProps}
         noDataIndication="Nessun dato reperito"
         wrapperClasses="player-table"
@@ -30,7 +30,7 @@ const Stage1Table = props => {
         hover
       />
     </>
-  );
+  ) : null;
 };
 
 export default Stage1Table;

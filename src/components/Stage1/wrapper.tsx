@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 import { fetchPairs } from '../Pair/helper';
 import { Pair, wapperPropsType } from './type';
 import Stage1Table from './table';
+import { ListGroup, Card } from 'react-bootstrap';
 /**
  * Wraps multiple table components
  */
@@ -17,7 +18,7 @@ const Wrapper: React.FC<wapperPropsType> = (props: wapperPropsType): JSX.Element
 
 export default Wrapper;
 
-function renderTables(pairsList: Pair[], tId: string | undefined): JSX.Element[] {
+function renderTables(pairsList: Pair[], tId: string | undefined): JSX.Element {
   let stageName = '';
   let stage: Pair[] = [];
   let stageList: JSX.Element[] = [];
@@ -25,12 +26,22 @@ function renderTables(pairsList: Pair[], tId: string | undefined): JSX.Element[]
     // A rottura di stage1Name
     if (stageName === '') stageName = element.stage1Name;
     if (stageName !== element.stage1Name) {
-      stageList.push(<Stage1Table pairsList={stage} tId={tId ? tId : 1} />);
-      stageName = '';
+      stageList.push(
+        <ListGroup.Item disabled key={`stage-${stageName}`}>
+          <Stage1Table pairsList={stage} tId={tId} />
+        </ListGroup.Item>
+      );
+      console.log(`stages ${stageName} :`, stage);
+      stageName = element.stage1Name;
       stage = [];
     }
     stage.push(element);
   });
-  stageList.push(<Stage1Table pairsList={stage} tId={tId} />);
-  return stageList;
+  stageList.push(
+    <ListGroup.Item disabled key={`stage-${stageName}`}>
+      <Stage1Table pairsList={stage} tId={tId} />
+    </ListGroup.Item>
+  );
+  console.log(`stages ${stageName} :`, stage);
+  return <ListGroup variant="flush">{stageList}</ListGroup>;
 }

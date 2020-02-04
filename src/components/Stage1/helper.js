@@ -20,24 +20,26 @@ export const newColumn = (index, onChange) => {
   };
 };
 
-export function rowsGenerator(columnsNumber, rowNumber) {
+export function rowsGenerator(columnsNumber, pairsList) {
   let rows = [];
-  for (let ii = 0; ii < rowNumber; ii++) {
-    rows.push({ pair: 5, rowNumber: ii });
+  for (let ii = 0; ii < pairsList.length; ii++) {
+    rows.push({ pair: pairsList[ii], rowNumber: ii + 1 });
     for (let jj = 1; jj <= columnsNumber; jj++) {
       rows[ii][`col.${jj}`] = '';
     }
     rows[ii]['total'] = 0;
     rows[ii]['place'] = 0;
   }
+  //console.log(rows);
   return rows;
 }
 
-export const columns = (onSelect, tId, rowNumber) => {
+export const columns = (onSelect, tId, pairsList) => {
   let baseColumns = [
     {
-      dataField: 'pair',
+      dataField: 'pair.label',
       text: 'Nome Coppia',
+      editable: false,
       editorRenderer: (editorProps, value, row, column, rowIndex, columnIndex) => (
         <PairSelect
           {...editorProps}
@@ -59,7 +61,7 @@ export const columns = (onSelect, tId, rowNumber) => {
   ];
 
   // generazione dinamica colonne intermedie
-  for (let ii = 0; ii < rowNumber; ii++) {
+  for (let ii = 0; ii < pairsList.length; ii++) {
     baseColumns.push(newColumn(ii + 1));
   }
 

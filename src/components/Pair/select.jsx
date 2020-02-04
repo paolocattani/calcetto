@@ -24,7 +24,6 @@ const PairsSelection = React.forwardRef((props, ref) => {
 
   useEffect(() => fetchPairs(setPairsList, tId), [tId]);
 
-  console.log('render : ', pairsList);
   return (
     <Select
       options={pairsList}
