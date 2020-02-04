@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { columns, rowsGenerator, cellEditProps } from './helper';
 import TableHeader from './header';
+import './style.css';
 
 const TABLE_LENGTH = 8;
 const Stage1Table = props => {
@@ -13,6 +14,12 @@ const Stage1Table = props => {
     console.log('onSelect ');
   };
 
+  console.log('render table : ', rows);
+  if (rows.length > 0) {
+    let rowIndex = 3;
+    let colIndex = 1;
+    rows[rowIndex][`col${colIndex}`] = 3;
+  }
   return pairsList ? (
     <>
       <BootstrapTable

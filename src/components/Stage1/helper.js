@@ -6,8 +6,15 @@ export const newColumn = (index, onChange) => {
   return {
     dataField: `col${index}`,
     text: index,
+    headerAlign: (column, colIndex) => 'center',
     editable: (content, row, rowIndex, columnIndex) => rowIndex !== columnIndex - 2,
-    style: (cell, row, rowIndex, columnIndex) => (rowIndex === columnIndex - 2 ? { backgroundColor: '#6d706e' } : null),
+    align: (cell, row, rowIndex, colIndex) => 'center',
+    style: (content, row, rowIndex, columnIndex) => {
+      if (rowIndex === columnIndex - 2) return { backgroundColor: '#6d706e' };
+      if (parseInt(content, 10) === 3 || parseInt(content, 10) === 2) return { backgroundColor: 'rgb(196, 247, 160)' };
+      if (parseInt(content, 10) === 1 || parseInt(content, 10) === 0) return { backgroundColor: 'rgb(255, 147, 147)' };
+      return null;
+    },
     editor: {
       type: Type.SELECT,
       options: [
@@ -35,12 +42,23 @@ export function rowsGenerator(columnsNumber, pairsList) {
 }
 
 export const columns = (onSelect, pairsList) => {
+  /**
+   * TODO: aggiungere id su tutte le colonne
+   *
+   *     id: 'punteggio',
+   *     dataField: 'punteggio',
+   *     text: 'Punteggio',
+   *
+   *
+   */
   let baseColumns = [
     {
       // Nome Coppia ( In realta contiene un oggetto di tipo Pair)
       dataField: 'pair.label',
       text: 'Nome Coppia',
       editable: false,
+      align: (cell, row, rowIndex, colIndex) => 'center',
+      headerAlign: (column, colIndex) => 'center',
       editorRenderer: (editorProps, value, row, column, rowIndex, columnIndex) => (
         <PairSelect
           {...editorProps}
@@ -58,7 +76,11 @@ export const columns = (onSelect, pairsList) => {
       // Numbero riga per riferimento visivo
       dataField: 'rowNumber',
       text: 'ID',
-      editable: false
+      editable: false,
+      headerAlign: (column, colIndex) => 'center',
+      style: (content, row, rowIndex, columnIndex) => {
+        return { backgroundColor: '#f9ffdb' };
+      }
     }
   ];
 
@@ -72,13 +94,15 @@ export const columns = (onSelect, pairsList) => {
       // Totale coppia
       dataField: 'total',
       text: 'Totale',
-      editable: false
+      editable: false,
+      headerAlign: (column, colIndex) => 'center'
     },
     {
       // Posizionamento coppia
       dataField: 'place',
       text: 'Posizione',
-      editable: false
+      editable: false,
+      headerAlign: (column, colIndex) => 'center'
     }
   );
   return baseColumns;

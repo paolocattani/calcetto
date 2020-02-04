@@ -22,6 +22,7 @@ function renderTables(pairsList: Pair[], tId: string | undefined): JSX.Element {
   let stageName = '';
   let stage: Pair[] = [];
   let stageList: JSX.Element[] = [];
+
   pairsList.forEach((element, index) => {
     // A rottura di stage1Name
     if (stageName === '') stageName = element.stage1Name;
@@ -31,17 +32,20 @@ function renderTables(pairsList: Pair[], tId: string | undefined): JSX.Element {
           <Stage1Table pairsList={stage} tId={tId} />
         </ListGroup.Item>
       );
-      console.log(`stages ${stageName} :`, stage);
+      console.log(`stages ${stageName} :`, stage, stage.length);
       stageName = element.stage1Name;
       stage = [];
     }
     stage.push(element);
   });
-  stageList.push(
-    <ListGroup.Item key={`stage-${stageName}`}>
-      <Stage1Table pairsList={stage} tId={tId} />
-    </ListGroup.Item>
-  );
-  console.log(`stages ${stageName} :`, stage);
+  if (stage.length > 0) {
+    stageList.push(
+      <ListGroup.Item key={`stage-${stageName}`}>
+        <Stage1Table pairsList={stage} tId={tId} />
+      </ListGroup.Item>
+    );
+    console.log(`stages ${stageName} :`, stage);
+  }
+
   return <ListGroup variant="flush">{stageList}</ListGroup>;
 }
