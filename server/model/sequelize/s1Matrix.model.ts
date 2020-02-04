@@ -31,7 +31,7 @@ import Tournament from './tournament.model';
  *      where idTorneo=? order by idTorneo, score desc
  *
  */
-@Table({ tableName: 's1matrix', version: true })
+@Table({ tableName: 's1matrix', freezeTableName: true, version: true })
 export default class s1Matrix extends Model<s1Matrix> {
   @Column(DataType.STRING)
   name!: string;
@@ -67,5 +67,4 @@ export default class s1Matrix extends Model<s1Matrix> {
   // Potrebbe essere calcolato progressivamente con un trigger. Da valutare
   @Column(DataType.INTEGER)
   public placement!: number;
-
 }

@@ -8,7 +8,7 @@ import s1Matrix from './s1Matrix.model';
  *  - Stessa cosa per ordinamento automatico
  *  - Le coppie vengono definite qui. Prevedere possibilità di aggiungere coppie
  */
-@Table({ tableName: 'tournament', version: false })
+@Table({ tableName: 'tournament', freezeTableName: true, version: false })
 export default class Tournament extends Model<Tournament> {
   @Column(DataType.STRING)
   public name!: string;

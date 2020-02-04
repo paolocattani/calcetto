@@ -1,7 +1,7 @@
 import { Column, Model, Table, DataType, HasMany } from 'sequelize-typescript';
 import Pair from './pair.model';
 
-@Table({ tableName: 'player', version: false })
+@Table({ tableName: 'player', freezeTableName: true, version: false })
 export default class Player extends Model<Player> {
   @Column(DataType.STRING)
   public name?: string;

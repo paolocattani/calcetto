@@ -1,8 +1,18 @@
-import { Column, Comment, Model,DataType, Table, ForeignKey, BelongsTo, BelongsToMany, HasOne } from 'sequelize-typescript';
+import {
+  Column,
+  Comment,
+  Model,
+  DataType,
+  Table,
+  ForeignKey,
+  BelongsTo,
+  BelongsToMany,
+  HasOne
+} from 'sequelize-typescript';
 import Tournament from './tournament.model';
 import Player from './player.model';
 
-@Table({ tableName: 'pairs', version: false })
+@Table({ tableName: 'pairs', freezeTableName: true, version: false })
 export default class Pair extends Model<Pair> {
   @Comment('Pair alias')
   @Column(DataType.STRING)
