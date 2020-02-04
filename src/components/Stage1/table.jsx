@@ -19,7 +19,7 @@ const Stage1Table = props => {
         bootstrap4
         keyField="id"
         data={rows}
-        columns={columns(onSelect, tId, pairsList)}
+        columns={columns(onSelect, pairsList)}
         cellEdit={cellEditProps}
         noDataIndication="Nessun dato reperito"
         wrapperClasses="player-table"

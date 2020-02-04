@@ -1,7 +1,6 @@
 import React from 'react';
 import PairSelect from '../Pair/select';
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
-import Emoji from '../core/Emoji';
 
 export const newColumn = (index, onChange) => {
   return {
@@ -35,9 +34,10 @@ export function rowsGenerator(columnsNumber, pairsList) {
   return rows;
 }
 
-export const columns = (onSelect, tId, pairsList) => {
+export const columns = (onSelect, pairsList) => {
   let baseColumns = [
     {
+      // Nome Coppia ( In realta contiene un oggetto di tipo Pair)
       dataField: 'pair.label',
       text: 'Nome Coppia',
       editable: false,
@@ -50,11 +50,12 @@ export const columns = (onSelect, tId, pairsList) => {
           columnIndex={columnIndex}
           value={value}
           onSelect={onSelect}
-          tId={tId}
+          tId={pairsList[0].tId}
         />
       )
     },
     {
+      // Numbero riga per riferimento visivo
       dataField: 'rowNumber',
       text: 'ID',
       editable: false
@@ -68,11 +69,13 @@ export const columns = (onSelect, tId, pairsList) => {
 
   baseColumns.push(
     {
+      // Totale coppia
       dataField: 'total',
       text: 'Totale',
       editable: false
     },
     {
+      // Posizionamento coppia
       dataField: 'place',
       text: 'Posizione',
       editable: false
