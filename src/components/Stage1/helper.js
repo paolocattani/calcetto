@@ -4,6 +4,7 @@ import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 
 export const newColumn = (index, onChange) => {
   return {
+    id: `col${index}`,
     dataField: `col${index}`,
     text: index,
     headerAlign: (column, colIndex) => 'center',
@@ -27,7 +28,7 @@ export const newColumn = (index, onChange) => {
   };
 };
 
-export function rowsGenerator(columnsNumber, pairsList) {
+export function rowsGenerator(pairsList) {
   let rows = [];
   for (let ii = 0; ii < pairsList.length; ii++) {
     rows.push({ pair: pairsList[ii], rowNumber: ii + 1 });
@@ -54,6 +55,7 @@ export const columns = (onSelect, pairsList) => {
   let baseColumns = [
     {
       // Nome Coppia ( In realta contiene un oggetto di tipo Pair)
+      id: 'pairLabel',
       dataField: 'pair.label',
       text: 'Nome Coppia',
       editable: false,
@@ -74,6 +76,7 @@ export const columns = (onSelect, pairsList) => {
     },
     {
       // Numbero riga per riferimento visivo
+      id: 'rowNumber',
       dataField: 'rowNumber',
       text: 'ID',
       editable: false,
@@ -92,6 +95,7 @@ export const columns = (onSelect, pairsList) => {
   baseColumns.push(
     {
       // Totale coppia
+      id: 'totale',
       dataField: 'total',
       text: 'Totale',
       editable: false,
@@ -99,6 +103,7 @@ export const columns = (onSelect, pairsList) => {
     },
     {
       // Posizionamento coppia
+      id: 'place',
       dataField: 'place',
       text: 'Posizione',
       editable: false,
@@ -112,3 +117,35 @@ export const cellEditProps = cellEditFactory({
   mode: 'click',
   blurToSave: true
 });
+
+// TODO:
+function useAsyncHook(searchBook) {
+  const [result, setResult] = React.useState([]);
+  const [loading, setLoading] = React.useState('false');
+
+  React.useEffect(() => {
+    async function fetchBookList() {
+      try {
+        setLoading('true');
+        const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${searchBook}`);
+
+        const json = await response.json();
+        // console.log(json);
+        setResult(
+          json.items.map(item => {
+            console.log(item.volumeInfo.title);
+            return item.volumeInfo.title;
+          })
+        );
+      } catch (error) {
+        setLoading('null');
+      }
+    }
+
+    if (searchBook !== '') {
+      fetchBookList();
+    }
+  }, [searchBook]);
+
+  return [result, loading];
+}

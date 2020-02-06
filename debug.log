@@ -1,3 +1,0 @@
-[1205/174424.290:ERROR:filesystem_win.cc(148)] DeleteFile C:\Users\PaoloCattani\AppData\Local\Google\Chrome\User Data\Crashpad\reports\cc677066-4219-4123-bf23-2a2929ca42c2.dmp: Impossibile accedere al file. Il file è utilizzato da un altro processo. (0x20)
-[1205/174424.293:ERROR:filesystem_win.cc(148)] DeleteFile C:\Users\PaoloCattani\AppData\Local\Google\Chrome\User Data\Crashpad\reports\b28a91ea-18d4-4bd7-942a-69656044ca69.dmp: Impossibile accedere al file. Il file è utilizzato da un altro processo. (0x20)
-[1205/174424.464:ERROR:filesystem_win.cc(148)] DeleteFile C:\Users\PaoloCattani\AppData\Local\Google\Chrome\User Data\Crashpad\reports\9855a93e-550a-48fe-92cf-3aeb1d81103a.dmp: Impossibile accedere al file. Il file è utilizzato da un altro processo. (0x20)

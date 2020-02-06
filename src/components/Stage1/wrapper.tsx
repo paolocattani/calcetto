@@ -29,7 +29,7 @@ function renderTables(pairsList: Pair[], tId: string | undefined): JSX.Element {
     if (stageName !== element.stage1Name) {
       stageList.push(
         <ListGroup.Item key={`stage-${stageName}`}>
-          <Stage1Table pairsList={stage} tId={tId} />
+          <Stage1Table pairsList={stage} />
         </ListGroup.Item>
       );
       console.log(`stages ${stageName} :`, stage, stage.length);
@@ -41,7 +41,7 @@ function renderTables(pairsList: Pair[], tId: string | undefined): JSX.Element {
   if (stage.length > 0) {
     stageList.push(
       <ListGroup.Item key={`stage-${stageName}`}>
-        <Stage1Table pairsList={stage} tId={tId} />
+        <Stage1Table pairsList={stage} />
       </ListGroup.Item>
     );
     console.log(`stages ${stageName} :`, stage);

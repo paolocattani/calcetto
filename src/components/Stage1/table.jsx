@@ -1,14 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { columns, rowsGenerator, cellEditProps } from './helper';
 import TableHeader from './header';
 import './style.css';
 
-const TABLE_LENGTH = 8;
-const Stage1Table = props => {
-  const { tId, pairsList } = props;
-  const [rows, setRows] = useState(rowsGenerator(TABLE_LENGTH, pairsList));
+const Stage1Table = ({ pairsList }) => {
+  const [rows, setRows] = useState(rowsGenerator(pairsList));
   const tableName = pairsList[0]?.stage1Name ?? 'Not found';
+
+  /**
+   * L'idea di base è che al primo giro rows sarà vuoto e viene popolato con gli eventuali dati presi da db.
+   * Le esecuzioni successive serviranno a aggiornare i dati sul db.
+   *
+   * useCallback fa in modo che l'effetto nel quale è definat la funzione ( updateRows )
+   * non sia ( erroneamente ) eseguito ad ogni re-render.
+   *
+   */
+  const updateRows = useCallback(() => {
+    (async () => {
+      console.log('Using effect on table : ', pairsList[0]?.stage1Name);
+    })();
+  }, [pairsList]);
+
+  useEffect(() => updateRows(), [updateRows]);
 
   const onSelect = () => {
     console.log('onSelect ');
