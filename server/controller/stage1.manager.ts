@@ -62,7 +62,7 @@ router.post('/', async (req, res, next) => {
               const p1 = e.pair;
               const p2 = rows[colIndex - 1].pair;
               /**
-               * Se non mi è stato passato un valore dal FE non o assegno al modello perchè
+               * Se non mi è stato passato un valore dal FE non lo assegno al modello perchè
                * potrei gia aver un valore assegnato sul db.
                */
               const score = e[key] ? e[key] : undefined;
@@ -103,8 +103,9 @@ router.post('/', async (req, res, next) => {
                 defaults: model
               });
               // logger.info('model : ', created, record);
+
+              // Se è stato creato non server che aggiorno l'oggetto row, altrimenti aggiorno il modello per FE con i dati del Db
               if (!created) {
-                // Se non è stato creato aggiorno il modello per FE con i dati del Db
                 e[key] = record.pair1Id === p1.id ? model.score : getOpposite(model.score);
                 rows[colIndex - 1][`col${rowIndex}`] =
                   record.pair1Id === p1.id ? getOpposite(model.score) : model.score;

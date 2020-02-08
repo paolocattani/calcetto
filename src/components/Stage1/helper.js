@@ -37,6 +37,7 @@ export function rowsGenerator(pairsList) {
     }
     rows[ii]['total'] = 0;
     rows[ii]['place'] = 0;
+    rows[ii]['id'] = `row-${pairsList[0].tId}-${ii}`;
   }
   //console.log(rows);
   return rows;
