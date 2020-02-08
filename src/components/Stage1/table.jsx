@@ -18,9 +18,16 @@ const Stage1Table = ({ pairsList }) => {
    */
   const updateRows = useCallback(() => {
     (async () => {
-      console.log('Using effect on table : ', pairsList[0]?.stage1Name);
+      console.log('executing effects in ', tableName);
+      const response = await fetch('/api/stage1', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rows, stageName: tableName })
+      });
+      const result = await response.json();
+      console.log('updateRows effects : ', result);
     })();
-  }, [pairsList]);
+  }, [rows, tableName]);
 
   useEffect(() => updateRows(), [updateRows]);
 

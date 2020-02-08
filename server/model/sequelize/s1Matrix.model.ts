@@ -1,18 +1,4 @@
-import {
-  AutoIncrement,
-  Column,
-  CreatedAt,
-  DeletedAt,
-  Model,
-  Comment,
-  PrimaryKey,
-  Table,
-  UpdatedAt,
-  ForeignKey,
-  HasOne,
-  DataType,
-  BelongsTo
-} from 'sequelize-typescript';
+import { Column, Model, Comment, Table, ForeignKey, DataType, BelongsTo } from 'sequelize-typescript';
 import Pair from './pair.model';
 import Tournament from './tournament.model';
 

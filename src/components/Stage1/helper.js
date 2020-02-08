@@ -6,7 +6,7 @@ export const newColumn = (index, onChange) => {
   return {
     id: `col${index}`,
     dataField: `col${index}`,
-    text: index,
+    text: index.toString(),
     headerAlign: (column, colIndex) => 'center',
     editable: (content, row, rowIndex, columnIndex) => rowIndex !== columnIndex - 2,
     align: (cell, row, rowIndex, colIndex) => 'center',
@@ -33,7 +33,7 @@ export function rowsGenerator(pairsList) {
   for (let ii = 0; ii < pairsList.length; ii++) {
     rows.push({ pair: pairsList[ii], rowNumber: ii + 1 });
     for (let jj = 1; jj <= pairsList.length; jj++) {
-      rows[ii][`col${jj}`] = '';
+      rows[ii][`col${jj}`] = null;
     }
     rows[ii]['total'] = 0;
     rows[ii]['place'] = 0;

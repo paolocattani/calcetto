@@ -41,12 +41,11 @@ export class AppServer extends AbstractServer {
   public async routes(application: ExpressApplication): Promise<void> {
     const options: SyncOptions = {
       // force: true
-      force: true
     };
     // Sync database model ( async )
     logger.info(chalk.cyan.bold('Starting database synchronization...'));
-    dbConnection = await syncDb(options);
-    await generator(true);
+    dbConnection = await syncDb(/*options*/);
+    // await generator(true);
     application.use(routes(application));
   }
 }
