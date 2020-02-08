@@ -53,21 +53,21 @@ router.post(
     const { rows, stageName } = req.body as any;
     // logger.info('Model : ', rows);
     try {
-      await asyncForEach(rows, async (currentRow: any, i: number) => {
+      await asyncForEach(rows, async (currentRow: any, index: number, rowsRef: any) => {
         for (let currentRowKey in currentRow) {
           if (currentRowKey.startsWith('col')) {
             // Numero riga/colonna corrente
-            const rowIndex = parseInt(currentRow.rowNumber);
+            const rowIndex = parseInt(rowsRef[index].rowNumber);
             const colIndex = parseInt(currentRowKey.substring(3));
             // Valore attuale della cella e della sua opposta
-            let currentCellValue = currentRow[currentRowKey];
-            let oppositeRow = rows[colIndex - 1];
+            let currentCellValue = rowsRef[index][currentRowKey];
+            let oppositeRow = rowsRef[colIndex - 1];
             let oppositeCellValue = oppositeRow[`col${rowIndex}`];
             // totale / posizionamento
-            let currentRowTotal = currentRow['total'];
-            let currentRowPlacement = currentRow['place'];
+            let currentRowTotal = rowsRef[index]['total'];
+            let currentRowPlacement = rowsRef[index]['place'];
             // Coppie e punteggi
-            const pair1 = currentRow.pair;
+            const pair1 = rowsRef[index].pair;
             const pair2 = oppositeRow.pair;
             const currentScore = currentCellValue ? currentCellValue : undefined;
             const opposisteScore = oppositeCellValue ? oppositeCellValue : undefined;
@@ -86,7 +86,7 @@ router.post(
                   pair1Id: pair1.id,
                   pair2Id: pair2.id,
                   // score: currentScore,
-                  place: null
+                  placement: null
                 };
                 /**
                  * Salvo solo una parte della matrice in quanto l'altra posso calcolarla
@@ -120,24 +120,24 @@ router.post(
                 // Se è stato creato non server che aggiorno l'oggetto row, altrimenti aggiorno il modello per FE con i dati del Db
                 if (!created && record.score) {
                   if (record.pair1Id === pair1.id) {
-                    currentRow[currentRowKey] = record.score;
+                    rowsRef[index][currentRowKey] = record.score;
                     oppositeRow[`col${rowIndex}`] = getOpposite(record.score);
                     await record.update({ score: record.score });
                     // model.score = record.score;
                   } else {
-                    currentRow[currentRowKey] = getOpposite(record.score);
+                    rowsRef[index][currentRowKey] = getOpposite(record.score);
                     oppositeRow[`col${rowIndex}`] = record.score;
                     await record.update({ score: getOpposite(record.score) });
                     // model.score = getOpposite(record.score);
                   }
-                  currentRow['total'] = currentRowTotal ? parseInt(currentRowTotal) + record.score : record.score;
+                  rowsRef[index]['total'] = currentRowTotal ? parseInt(currentRowTotal) + record.score : record.score;
                   currentRowPlacement = 0;
                   //if (stageName === '1') logger.info('Sbam1....', currentCellValue, oppositeCellValue, currentRow);
                 }
                 if (stageName === '1' && ((pair1.id === 33 && pair2.id === 6) || (pair1.id === 6 && pair2.id === 33)))
                   logger.info('updating : ', model);
               } catch (error) {
-                logger.error('Error on  : ', currentRow, currentRowKey);
+                logger.error('Error on  : ', rowsRef[index], currentRowKey);
               }
             }
           }
