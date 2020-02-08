@@ -13,6 +13,39 @@ router.use('/', (req, res, next) => {
   next();
 });
 
+/**
+ * Reperimento e aggiornamento tabella Stage1.
+ * Riceva da FE : rows e stageName
+ *  @param stageName : nome della tabella ( girone )
+ *  @param rows : righe del girone nella forma di ( vedi 'dummy_data/tableRows' per l'esempio completo )
+ * [
+ *  {
+ *    "pair": {
+ *      "id": 3, "rowNumber": 3, "tId": 1,
+ *      "player1": { "id": 5, "alias": "Alias5", "name": "Nome5", "surname": "Cognome5" },
+ *      "player2": { "id": 2, "alias": "Alias2", "name": "Nome2", "surname": "Cognome2"},
+ *      "pairAlias": "",
+ *      "stage1Name": "1",
+ *      "label": "Alias5 - Alias2"
+ *    }, "rowNumber": 1,
+ *    "col1": null, "col2": null, "col3": null, .... "col-ennesima": null
+ *    "total": 0, "place": 0
+ *  },
+ *  { ... },{ ... },{ ... }, ... ,
+ *  {
+ *    "pair": {
+ *      "id": 3, "rowNumber": 3, "tId": 1,
+ *      "player1": { "id": 5, "alias": "Alias5", "name": "Nome5", "surname": "Cognome5" },
+ *      "player2": { "id": 2, "alias": "Alias2", "name": "Nome2", "surname": "Cognome2"},
+ *      "pairAlias": "",
+ *      "stage1Name": "1",
+ *      "label": "Alias5 - Alias2"
+ *    }, "rowNumber": 1,
+ *    "col1": null, "col2": null, "col3": null, .... "col-ennesima": null
+ *    "total": 0, "place": 0
+ *  }
+ * ]
+ */
 router.post('/', async (req, res, next) => {
   const { rows, stageName } = req.body;
   // logger.info('Model : ', rows);
@@ -57,7 +90,7 @@ router.post('/', async (req, res, next) => {
                *
                *
                */
-              logger.info('model1 : ', model);
+              // logger.info('model1 : ', model);
               // Salvo solo uno scontro e l'altro lo calcolo.
               const [record, created] = await Stage1Model.findOrCreate({
                 where: {
@@ -69,7 +102,7 @@ router.post('/', async (req, res, next) => {
                 },
                 defaults: model
               });
-              logger.info('model : ', created, record);
+              // logger.info('model : ', created, record);
               if (!created) {
                 // Se non è stato creato aggiorno il modello per FE con i dati del Db
                 e[key] = record.pair1Id === p1.id ? model.score : getOpposite(model.score);
@@ -77,7 +110,7 @@ router.post('/', async (req, res, next) => {
                   record.pair1Id === p1.id ? getOpposite(model.score) : model.score;
               }
             } catch (error) {
-              console.log('Error on  : ', e, key);
+              logger.error('Error on  : ', e, key);
             }
           }
         }
@@ -85,6 +118,7 @@ router.post('/', async (req, res, next) => {
     });
     return res.status(200).json(rows);
   } catch (error) {
+    logger.error('Error while update matrix  : ', error);
     return res.status(500).json(rows);
   }
 });
