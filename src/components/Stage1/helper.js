@@ -1,6 +1,6 @@
 import React from 'react';
 import PairSelect from '../Pair/select';
-import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
+import { Type } from 'react-bootstrap-table2-editor';
 
 export const newColumn = (index, onChange) => {
   return {
@@ -113,40 +113,3 @@ export const columns = (onSelect, pairsList) => {
   );
   return baseColumns;
 };
-
-export const cellEditProps = cellEditFactory({
-  mode: 'click',
-  blurToSave: true
-});
-
-// TODO:
-function useAsyncHook(searchBook) {
-  const [result, setResult] = React.useState([]);
-  const [loading, setLoading] = React.useState('false');
-
-  React.useEffect(() => {
-    async function fetchBookList() {
-      try {
-        setLoading('true');
-        const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${searchBook}`);
-
-        const json = await response.json();
-        // console.log(json);
-        setResult(
-          json.items.map(item => {
-            console.log(item.volumeInfo.title);
-            return item.volumeInfo.title;
-          })
-        );
-      } catch (error) {
-        setLoading('null');
-      }
-    }
-
-    if (searchBook !== '') {
-      fetchBookList();
-    }
-  }, [searchBook]);
-
-  return [result, loading];
-}

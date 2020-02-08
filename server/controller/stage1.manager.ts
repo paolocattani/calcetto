@@ -1,4 +1,4 @@
-import { Router, Application as ExpressApplication } from 'express';
+import { Router, Application as ExpressApplication, NextFunction } from 'express';
 import { Op } from 'sequelize';
 // Model
 import Stage1Model from '../model/sequelize/s1Matrix.model';
@@ -6,7 +6,7 @@ import Stage1Model from '../model/sequelize/s1Matrix.model';
 import { asyncForEach } from '../core/utils';
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
-
+import { asyncMiddleware } from '../core/middleware';
 const router = Router();
 router.use('/', (req, res, next) => {
   if (isDevMode()) logger.info(`Stage 1 Manager : ${req.method} ${req.originalUrl.replace('/api/stage1', '')} `);
@@ -46,83 +46,101 @@ router.use('/', (req, res, next) => {
  *  }
  * ]
  */
-router.post('/', async (req, res, next) => {
-  const { rows, stageName } = req.body;
-  // logger.info('Model : ', rows);
-  try {
-    await asyncForEach(rows, async (e: any, i: number) => {
-      if (i !== 0) return null;
-      for (let key in e) {
-        if (key.startsWith('col')) {
-          const rowIndex = parseInt(e.rowNumber);
-          const colIndex = parseInt(key.substring(3));
-          // console.log(` (row,col) = (${rowIndex} , ${colIndex}) `);
-          if (rowIndex !== colIndex) {
-            try {
-              const p1 = e.pair;
-              const p2 = rows[colIndex - 1].pair;
-              /**
-               * Se non mi è stato passato un valore dal FE non lo assegno al modello perchè
-               * potrei gia aver un valore assegnato sul db.
-               */
-              const score = e[key] ? e[key] : undefined;
-              const opposisteScore = rows[colIndex - 1][`col${rowIndex}`]
-                ? rows[colIndex - 1][`col${rowIndex}`]
-                : undefined;
-              // console.log(`     ( p1,p2,score ) = ( ${p1},${p2}, ${score} )`);
-              const model = {
-                name: stageName,
-                tournamentId: p1.tId,
-                pair1Id: p1.id,
-                pair2Id: p2.id,
-                score
-              };
-              /**
-               * Salvo solo una parte della matrice in quanto l'altra posso calcolarla
-               * Quindi dal record sotto posso ricavare il risultato di :
-               *
-               *    28 vs 17 = 3
-               *    17 vs 28 = 0
-               *
-               * |  ID  | tId | p1Id | p2Id | score |
-               * ------------------------------------
-               * |  1   |  1  |  28  |   17 |   3   |
-               *
-               *
-               */
-              // logger.info('model1 : ', model);
-              // Salvo solo uno scontro e l'altro lo calcolo.
-              const [record, created] = await Stage1Model.findOrCreate({
-                where: {
-                  // where ( p1Id = .. and p2Id = .. ) or ( p2Id = .. and p1Id = .. )
-                  [Op.or]: [
-                    { [Op.and]: { pair1Id: p1.id, pair2Id: p2.id } },
-                    { [Op.and]: { pair1Id: p2.id, pair2Id: p1.id } }
-                  ]
-                },
-                defaults: model
-              });
-              // logger.info('model : ', created, record);
+router.post(
+  '/',
+  asyncMiddleware(async (req: Request, res: any, next: NextFunction) => {
+    // FIXME: type def
+    const { rows, stageName } = req.body as any;
+    // logger.info('Model : ', rows);
+    try {
+      await asyncForEach(rows, async (currentRow: any, i: number) => {
+        for (let currentRowKey in currentRow) {
+          if (currentRowKey.startsWith('col')) {
+            // Numero riga/colonna corrente
+            const rowIndex = parseInt(currentRow.rowNumber);
+            const colIndex = parseInt(currentRowKey.substring(3));
+            // Valore attuale della cella e della sua opposta
+            let currentCellValue = currentRow[currentRowKey];
+            let oppositeRow = rows[colIndex - 1];
+            let oppositeCellValue = oppositeRow[`col${rowIndex}`];
+            // totale / posizionamento
+            let currentRowTotal = currentRow['totale'];
+            let currentRowPlacement = currentRow['place'];
+            // Coppie e punteggi
+            const pair1 = currentRow.pair;
+            const pair2 = oppositeRow.pair;
+            const currentScore = currentCellValue ? currentCellValue : undefined;
+            const opposisteScore = oppositeCellValue ? oppositeCellValue : undefined;
+            const tournamentId = pair1.tId;
+            if (rowIndex !== colIndex) {
+              try {
+                /**
+                 * Se non mi è stato passato un valore dal FE non lo assegno al modello perchè
+                 * potrei gia aver un valore assegnato sul db.
+                 */
 
-              // Se è stato creato non server che aggiorno l'oggetto row, altrimenti aggiorno il modello per FE con i dati del Db
-              if (!created) {
-                e[key] = record.pair1Id === p1.id ? model.score : getOpposite(model.score);
-                rows[colIndex - 1][`col${rowIndex}`] =
-                  record.pair1Id === p1.id ? getOpposite(model.score) : model.score;
+                // console.log(`     ( p1,p2,score ) = ( ${p1},${p2}, ${score} )`);
+                const model = {
+                  name: stageName,
+                  tournamentId,
+                  pair1Id: pair1.id,
+                  pair2Id: pair2.id,
+                  score: currentScore
+                };
+                /**
+                 * Salvo solo una parte della matrice in quanto l'altra posso calcolarla
+                 * Quindi dal record sotto posso ricavare il risultato di :
+                 *
+                 *    28 vs 17 = 3
+                 *    17 vs 28 = 0
+                 *
+                 * |  ID  | tId | p1Id | p2Id | score |
+                 * ------------------------------------
+                 * |  1   |  1  |  28  |   17 |   3   |
+                 *
+                 *
+                 */
+                // logger.info('model1 : ', model);
+                // Salvo solo uno scontro e l'altro lo calcolo.
+                const [record, created] = await Stage1Model.findOrCreate({
+                  where: {
+                    // where ( p1Id = .. and p2Id = .. ) or ( p2Id = .. and p1Id = .. )
+                    [Op.or]: [
+                      { [Op.and]: { pair1Id: pair1.id, pair2Id: pair2.id } },
+                      { [Op.and]: { pair1Id: pair2.id, pair2Id: pair1.id } }
+                    ],
+                    name: stageName,
+                    tournamentId
+                  },
+                  defaults: model
+                });
+                if (stageName === '1') logger.info('model : ', created, record);
+
+                // Se è stato creato non server che aggiorno l'oggetto row, altrimenti aggiorno il modello per FE con i dati del Db
+                if (!created && record.score) {
+                  currentRow[currentRowKey] = record.pair1Id === pair1.id ? record.score : getOpposite(record.score);
+                  oppositeRow[`col${rowIndex}`] =
+                    record.pair1Id === pair1.id ? getOpposite(record.score) : record.score;
+                  currentRow['totale'] = currentRowTotal ? parseInt(currentRowTotal) + record.score : record.score;
+                  currentRowPlacement = 0;
+
+                  //if (stageName === '1') logger.info('Sbam1....', currentCellValue, oppositeCellValue, currentRow);
+                }
+              } catch (error) {
+                logger.error('Error on  : ', currentRow, currentRowKey);
               }
-            } catch (error) {
-              logger.error('Error on  : ', e, key);
             }
           }
         }
-      }
-    });
-    return res.status(200).json(rows);
-  } catch (error) {
-    logger.error('Error while update matrix  : ', error);
-    return res.status(500).json(rows);
-  }
-});
+      });
+      //if (stageName === '1') logger.info('Sbam2....', rows);
+      return res.status(200).json(rows);
+    } catch (error) {
+      logger.error('Error while update matrix  : ', error);
+      return res.status(500).json('Error : ', error);
+    }
+  })
+);
 
 export default router;
 

@@ -21,3 +21,8 @@ export const routeNotFound = (req: Request, res: Response, next: NextFunction) =
   if (isDevMode()) logger.info(`Requested route ${chalk.redBright.bold(req.originalUrl)} could not be found`);
   next();
 };
+
+// Da utilizzare per le funzioni async, altrimenti viene ritornata una Promise
+export const asyncMiddleware = (fn: any) => (req: Request, res: Response, next: NextFunction) => {
+  Promise.resolve(fn(req, res, next)).catch(next);
+};
