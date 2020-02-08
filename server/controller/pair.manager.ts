@@ -102,8 +102,11 @@ function rowToModel(row: Pair, index: number) {
 }
 
 function valueFormatter(row: any) {
-  if (row.pairAlias && row.pairAlias !== '') return row.pairAlias;
-  const { player1, player2 } = row;
-  const value = `${player1.alias ? player1.alias : player1.name} - ${player2.alias ? player2.alias : player2.name}`;
+  const { pairAlias, id, player1, player2 } = row;
+  if (pairAlias && pairAlias !== '') return `${pairAlias} ( ${id} )`;
+  const value = `${player1.alias ? player1.alias : player1.name} - ${
+    player2.alias ? player2.alias : player2.name
+  } ( ${id} )`;
+
   return value;
 }

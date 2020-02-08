@@ -11,6 +11,7 @@ import './style.css';
 const Stage1Table = ({ pairsList }) => {
   const [rows, setRows] = useState(rowsGenerator(pairsList));
   const [isLoading, setIsLoading] = useState(false);
+  const [saved, setIsSaved] = useState(false);
   const tableName = pairsList[0]?.stage1Name ?? 'Not found';
 
   /**
@@ -22,31 +23,43 @@ const Stage1Table = ({ pairsList }) => {
    *
    * https://github.com/facebook/react/issues/15858
    */
-  const updateRows = useCallback(() => {
-    (async () => {
-      setIsLoading(true);
-      console.log('executing effects in ', tableName);
-      const response = await fetch('/api/stage1', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ rows, stageName: tableName })
-      });
-      const result = await response.json();
-      //  https://github.com/facebook/react/issues/15858
-      setRows(result);
-      setIsLoading(false);
-      console.log('updateRows effects : ', result);
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pairsList, tableName]);
-
-  useEffect(() => updateRows(), [updateRows]);
-
-  const onSelect = () => {
-    console.log('onSelect ');
+  const saveRows = async () => {
+    setTimeout(() => {}, 7000);
+    const response = await fetch('/api/stage1', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ rows, stageName: tableName })
+    });
+    await response.json();
+    //  https://github.com/facebook/react/issues/15858
+    setIsSaved(true);
+    setTimeout(() => setIsSaved(false), 3000);
   };
 
-  console.log('render table : ', rows);
+  useEffect(
+    () => {
+      const fetchData = async () => {
+        setIsLoading(true);
+        if (tableName === '1') console.log('executing effects in ', tableName);
+        const response = await fetch('/api/stage1', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ rows, stageName: tableName })
+        });
+        const result = await response.json();
+        setRows(result);
+        setIsLoading(false);
+        if (tableName === '1') console.log('updateRows effects : ', result);
+      };
+      fetchData();
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
+  const onSelect = () => {
+    if (tableName === '1') console.log('onSelect ');
+  };
 
   // dummy data
   /*
@@ -57,17 +70,23 @@ const Stage1Table = ({ pairsList }) => {
   const cellEditProps = cellEditFactory({
     mode: 'click',
     blurToSave: true,
-    beforeSaveCell: () => console.log('Before save'),
-    afterSaveCell: () => console.log('After save')
+    beforeSaveCell: () => {
+      if (tableName === '1') console.log('Before save');
+    },
+    afterSaveCell: () => {
+      if (tableName === '1') console.log('After save : ', rows);
+      saveRows();
+    }
   });
 
-  console.log('Rendering table ', tableName, rows);
+  if (tableName === '1') console.log('Rendering table ', tableName, rows);
   return (
     <>
+      {/*saved ? <h2>Salvato...</h2> : null*/}
       {isLoading ? (
-        <h1>
-          Loading <b>{tableName}</b>....
-        </h1>
+        <h3>
+          Caricamento girone <b>{tableName}</b> in corso....
+        </h3>
       ) : (
         <BootstrapTable
           bootstrap4

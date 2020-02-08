@@ -7,6 +7,7 @@ export const newColumn = (index, onChange) => {
     id: `col${index}`,
     dataField: `col${index}`,
     text: index.toString(),
+    type: 'number',
     headerAlign: (column, colIndex) => 'center',
     editable: (content, row, rowIndex, columnIndex) => rowIndex !== columnIndex - 2,
     align: (cell, row, rowIndex, colIndex) => 'center',
@@ -81,6 +82,7 @@ export const columns = (onSelect, pairsList) => {
       dataField: 'rowNumber',
       text: 'ID',
       editable: false,
+      type: 'number',
       headerAlign: (column, colIndex) => 'center',
       style: (content, row, rowIndex, columnIndex) => {
         return { backgroundColor: '#f9ffdb' };
@@ -100,6 +102,7 @@ export const columns = (onSelect, pairsList) => {
       dataField: 'total',
       text: 'Totale',
       editable: false,
+      type: 'number',
       headerAlign: (column, colIndex) => 'center'
     },
     {
@@ -107,7 +110,8 @@ export const columns = (onSelect, pairsList) => {
       id: 'place',
       dataField: 'place',
       text: 'Posizione',
-      editable: false,
+      editable: true,
+      type: 'number',
       headerAlign: (column, colIndex) => 'center'
     }
   );

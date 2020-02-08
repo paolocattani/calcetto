@@ -70,15 +70,17 @@ export const fetchPairs = (setterFunction, tId) => {
 export function valueFormatter(selectedOption) {
   // ' 1 : Pool - Gilbe '
   console.log('valueFormatter : ', selectedOption);
-  if (selectedOption.pairAlias && selectedOption.pairAlias !== '') return selectedOption.pairAlias;
+  if (selectedOption.pairAlias && selectedOption.pairAlias !== '')
+    return `${selectedOption.pairAlias} ( ${selectedOption.id} )`;
   return createAlias(selectedOption);
 }
 
 export function createAlias(selectedOption) {
   let value = `${selectedOption.rowNumber} : `;
-  const { player1, player2 } = selectedOption;
+  const { player1, player2, id } = selectedOption;
   value += player1.alias ? player1.alias : player1.name;
   value += ' - ' + player2.alias ? player2.alias : player2.name;
+  value += ` ( ${id} )`;
   console.log('valueFormatter.createAlias : ', value);
   return value;
 }

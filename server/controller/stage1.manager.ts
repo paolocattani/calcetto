@@ -64,7 +64,7 @@ router.post(
             let oppositeRow = rows[colIndex - 1];
             let oppositeCellValue = oppositeRow[`col${rowIndex}`];
             // totale / posizionamento
-            let currentRowTotal = currentRow['totale'];
+            let currentRowTotal = currentRow['total'];
             let currentRowPlacement = currentRow['place'];
             // Coppie e punteggi
             const pair1 = currentRow.pair;
@@ -85,7 +85,8 @@ router.post(
                   tournamentId,
                   pair1Id: pair1.id,
                   pair2Id: pair2.id,
-                  score: currentScore
+                  // score: currentScore,
+                  place: null
                 };
                 /**
                  * Salvo solo una parte della matrice in quanto l'altra posso calcolarla
@@ -118,14 +119,23 @@ router.post(
 
                 // Se è stato creato non server che aggiorno l'oggetto row, altrimenti aggiorno il modello per FE con i dati del Db
                 if (!created && record.score) {
-                  currentRow[currentRowKey] = record.pair1Id === pair1.id ? record.score : getOpposite(record.score);
-                  oppositeRow[`col${rowIndex}`] =
-                    record.pair1Id === pair1.id ? getOpposite(record.score) : record.score;
-                  currentRow['totale'] = currentRowTotal ? parseInt(currentRowTotal) + record.score : record.score;
+                  if (record.pair1Id === pair1.id) {
+                    currentRow[currentRowKey] = record.score;
+                    oppositeRow[`col${rowIndex}`] = getOpposite(record.score);
+                    await record.update({ score: record.score });
+                    // model.score = record.score;
+                  } else {
+                    currentRow[currentRowKey] = getOpposite(record.score);
+                    oppositeRow[`col${rowIndex}`] = record.score;
+                    await record.update({ score: getOpposite(record.score) });
+                    // model.score = getOpposite(record.score);
+                  }
+                  currentRow['total'] = currentRowTotal ? parseInt(currentRowTotal) + record.score : record.score;
                   currentRowPlacement = 0;
-
                   //if (stageName === '1') logger.info('Sbam1....', currentCellValue, oppositeCellValue, currentRow);
                 }
+                if (stageName === '1' && ((pair1.id === 33 && pair2.id === 6) || (pair1.id === 6 && pair2.id === 33)))
+                  logger.info('updating : ', model);
               } catch (error) {
                 logger.error('Error on  : ', currentRow, currentRowKey);
               }

@@ -9,15 +9,14 @@ const PairsSelection = React.forwardRef((props, ref) => {
   const { row, columnIndex, id, onUpdate, onSelect, tId } = props;
 
   function getValue() {
-    console.log('getValue : ', selectedOption);
     return valueFormatter(selectedOption);
   }
 
   const handleChange = selectedOption => {
     selectedOption.pairId = id;
     setSelectedOption(selectedOption);
+    // vedi il campo label sul manager
     const value = valueFormatter(selectedOption);
-    console.log('handleSelect : ', value);
     onUpdate(value);
     onSelect(selectedOption, row.id, columnIndex);
   };

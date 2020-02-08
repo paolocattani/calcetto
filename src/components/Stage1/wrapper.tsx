@@ -32,7 +32,7 @@ function renderTables(pairsList: Pair[], tId: string | undefined): JSX.Element {
           <Stage1Table pairsList={stage} />
         </ListGroup.Item>
       );
-      console.log(`stages ${stageName} :`, stage, stage.length);
+      // console.log(`stages ${stageName} :`, stage, stage.length);
       stageName = element.stage1Name;
       stage = [];
     }
@@ -44,7 +44,7 @@ function renderTables(pairsList: Pair[], tId: string | undefined): JSX.Element {
         <Stage1Table pairsList={stage} />
       </ListGroup.Item>
     );
-    console.log(`stages ${stageName} :`, stage);
+    // console.log(`stages ${stageName} :`, stage);
   }
 
   return <ListGroup variant="flush">{stageList}</ListGroup>;
