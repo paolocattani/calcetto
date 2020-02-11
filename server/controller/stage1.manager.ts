@@ -200,7 +200,14 @@ export default router;
  */
 function getOpposite(value: number | null): number | null {
   logger.info('getOpposite of  ', value);
-  if (!value) return null;
+  /*
+   * Attenzione :
+   *  !0 = true
+   *  !''  = true
+   *  !null   = true
+   *  !undefined  = true
+   */
+  if (value === null) return null;
   switch (value) {
     case 3:
       return 0;
