@@ -10,6 +10,7 @@ import routes from './../../controller';
 import { SyncOptions } from 'sequelize/types';
 import generator from '../../dummy_data/generator';
 import { Sequelize } from 'sequelize-typescript';
+import { Logger } from 'log4js';
 
 // white list for CORS
 const applicationName: string = 'ApplicationServer';
@@ -39,13 +40,18 @@ export class AppServer extends AbstractServer {
   }
 
   public async routes(application: ExpressApplication): Promise<void> {
-    const options: SyncOptions = {
-      //force: true
-    };
+    const force = process.env.SERVER_FORCE && process.env.SERVER_FORCE === 'true' ? true : false;
+    const options: SyncOptions = { force };
     // Sync database model ( async )
-    logger.info(chalk.cyan.bold('Starting database synchronization...'));
+    logger.info(
+      `${
+        force
+          ? chalk.redBright.bold(' [ FORCE ] ')
+          : chalk.greenBright.bold(' [ NORMAL ] ') + chalk.cyan.bold('Starting database synchronization...')
+      }`
+    );
     dbConnection = await syncDb(options);
-    if (options.force) await generator(true);
+    if (force) await generator(true);
     application.use(routes(application));
   }
 }

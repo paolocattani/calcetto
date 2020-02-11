@@ -161,14 +161,21 @@ router.post(
                     oppositeRow[`col${rowIndex}`] = getOpposite(record.score);
                     // await record.update({ score: record.score });
                     // model.score = record.score;
+                    rowsRef[index]['total'] = currentRowTotal ? parseInt(currentRowTotal) + record.score : record.score;
+                    currentRowPlacement = 0;
                   } else {
                     rowsRef[index][currentRowKey] = getOpposite(record.score);
                     oppositeRow[`col${rowIndex}`] = record.score;
+                    if (record.score != null && record.score != undefined) {
+                      oppositeRow['total'] = currentRowTotal
+                        ? parseInt(currentRowTotal) + getOpposite(record.score)!
+                        : getOpposite(record.score);
+                      currentRowPlacement = 0;
+                    }
+
                     // await record.update({ score: getOpposite(record.score) });
                     // model.score = getOpposite(record.score);
                   }
-                  rowsRef[index]['total'] = currentRowTotal ? parseInt(currentRowTotal) + record.score : record.score;
-                  currentRowPlacement = 0;
                   //if (stageName === '1') logger.info('Sbam1....', currentCellValue, oppositeCellValue, currentRow);
                 }
                 if (stageName === '1' && ((pair1.id === 10 && pair2.id === 18) || (pair1.id === 28 && pair2.id === 10)))

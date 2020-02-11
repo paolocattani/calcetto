@@ -5,6 +5,7 @@ import cellEditFactory from 'react-bootstrap-table2-editor';
 // helper
 
 import TableHeader from './header';
+import { getOpposite } from './helper';
 
 // style
 import './style.css';
@@ -33,8 +34,13 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue }) => {
       if (tableName === '1') console.log('Before save');
     },
     afterSaveCell: (oldValue, newValue, row, column) => {
-      if (tableName === '1') console.log('After save : ', rows);
+      if (tableName === '1') {
+        console.log('After save rows: ', rows);
+        console.log('After save column: ', column);
+        console.log('After save ROW: ', row);
+      }
       updateCellValue(oldValue, newValue, row, column);
+      rows[parseInt(column.text) - 1][`col${row.rowNumber}`] = getOpposite(newValue);
     }
   });
 

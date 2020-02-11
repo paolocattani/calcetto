@@ -117,3 +117,33 @@ export const columns = (onSelect, pairsList) => {
   );
   return baseColumns;
 };
+
+/**
+ *
+ * @param value il valore di partenza
+ * @returns il valore opposto a quello di partenze
+ *
+ *  3->0 , 2->1 , 1->2 , 0->3
+ */
+export function getOpposite(value) {
+  /*
+   * Attenzione :
+   *  !0 = true
+   *  !''  = true
+   *  !null   = true
+   *  !undefined  = true
+   */
+  if (value === null) return null;
+  switch (value) {
+    case 3:
+      return 0;
+    case 2:
+      return 1;
+    case 1:
+      return 2;
+    case 0:
+      return 3;
+    default:
+      return null;
+  }
+}

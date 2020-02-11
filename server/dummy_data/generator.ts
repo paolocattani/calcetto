@@ -8,7 +8,7 @@ import chalk from 'chalk';
 
 const TOURNAMENT_RECORDS = 10;
 const PLAYER_RECORDS = 20;
-const PAIRS_RECORDS = 10;
+const PAIRS_RECORDS = 20;
 
 export default async function generator(start: boolean): Promise<void> {
   if (start === false || isProductionMode()) {
@@ -56,7 +56,7 @@ async function pairGenerator(): Promise<void> {
       player1Id: getRandomIntInclusive(1, PLAYER_RECORDS),
       player2Id: getRandomIntInclusive(1, PLAYER_RECORDS),
       pairAlias: ii % 2 === 0 ? `PAlias${ii}` : '',
-      stage1Name: getRandomIntInclusive(1, 2)
+      stage1Name: getRandomIntInclusive(1, 3)
     };
     await Pair.create(model);
   }
