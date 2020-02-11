@@ -94,7 +94,8 @@ router.post(
         for (let currentRowKey in currentRow) {
           if (currentRowKey.startsWith('col')) {
             // Numero riga/colonna corrente
-            const rowIndex = parseInt(rowsRef[index].rowNumber);
+            let currentRowRef = rowsRef[index]; // Riga attuale da a rowRef
+            const rowIndex = parseInt(currentRowRef.rowNumber);
             const colIndex = parseInt(currentRowKey.substring(3));
             // Valore attuale della cella e della sua opposta
             let currentCellValue = rowsRef[index][currentRowKey];
@@ -104,7 +105,7 @@ router.post(
             let currentRowTotal = rowsRef[index]['total'];
             let currentRowPlacement = rowsRef[index]['place'];
             // Coppie e punteggi
-            const pair1 = rowsRef[index].pair;
+            const pair1 = currentRowRef.pair;
             const pair2 = oppositeRow.pair;
             const currentScore = currentCellValue ? currentCellValue : undefined;
             const opposisteScore = oppositeCellValue ? oppositeCellValue : undefined;
@@ -157,31 +158,26 @@ router.post(
                 // Se è stato creato non server che aggiorno l'oggetto row, altrimenti aggiorno il modello per FE con i dati del Db
                 if (!created && record.score != null) {
                   if (record.pair1Id === (pair1.id as number)) {
-                    rowsRef[index][currentRowKey] = record.score;
+                    currentRowRef[currentRowKey] = record.score;
                     oppositeRow[`col${rowIndex}`] = getOpposite(record.score);
-                    // await record.update({ score: record.score });
-                    // model.score = record.score;
-                    rowsRef[index]['total'] = currentRowTotal ? parseInt(currentRowTotal) + record.score : record.score;
+                    currentRowRef['total'] = currentRowTotal ? parseInt(currentRowTotal) + record.score : record.score;
                     currentRowPlacement = 0;
                   } else {
-                    rowsRef[index][currentRowKey] = getOpposite(record.score);
+                    currentRowRef[currentRowKey] = getOpposite(record.score);
                     oppositeRow[`col${rowIndex}`] = record.score;
-                    if (record.score != null && record.score != undefined) {
-                      oppositeRow['total'] = currentRowTotal
+                    if (record.score !== null && record.score !== undefined) {
+                      currentRowRef['total'] = currentRowTotal
                         ? parseInt(currentRowTotal) + getOpposite(record.score)!
                         : getOpposite(record.score);
                       currentRowPlacement = 0;
                     }
-
-                    // await record.update({ score: getOpposite(record.score) });
-                    // model.score = getOpposite(record.score);
                   }
                   //if (stageName === '1') logger.info('Sbam1....', currentCellValue, oppositeCellValue, currentRow);
                 }
                 if (stageName === '1' && ((pair1.id === 10 && pair2.id === 18) || (pair1.id === 28 && pair2.id === 10)))
                   logger.info('updating : ', model);
               } catch (error) {
-                logger.error('Error on  : ', rowsRef[index], currentRowKey);
+                logger.error('Error on  : ', currentRowRef, currentRowKey);
               }
             }
           }

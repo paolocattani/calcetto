@@ -41,6 +41,12 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue }) => {
       }
       updateCellValue(oldValue, newValue, row, column);
       rows[parseInt(column.text) - 1][`col${row.rowNumber}`] = getOpposite(newValue);
+      rows[row.rowNumber - 1]['total'] = rows[row.rowNumber - 1]['total']
+        ? rows[row.rowNumber - 1]['total'] + newValue
+        : newValue;
+      rows[parseInt(column.text) - 1]['total'] = rows[parseInt(column.text) - 1]['total']
+        ? rows[parseInt(column.text) - 1]['total'] + getOpposite(newValue)
+        : getOpposite(newValue);
     }
   });
 
