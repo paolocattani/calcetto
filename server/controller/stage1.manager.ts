@@ -35,7 +35,7 @@ router.post(
         }
       });
       if (!record) return res.status(500).json('Error');
-      logger.info(record);
+      // logger.info(record);
       if (record.pair1Id === (pair1Id as number)) {
         logger.info(score);
         await record.update({ score });
@@ -202,7 +202,7 @@ export default router;
  *  3->0 , 2->1 , 1->2 , 0->3
  */
 function getOpposite(value: number | null): number | null {
-  logger.info('getOpposite of  ', value);
+  //logger.info('getOpposite of  ', value);
   /*
    * Attenzione :
    *  !0 = true

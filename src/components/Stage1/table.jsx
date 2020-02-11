@@ -30,12 +30,8 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
   const cellEditProps = cellEditFactory({
     mode: 'click',
     blurToSave: true,
-    beforeSaveCell: () => {
+    beforeSaveCell: (oldValue, newValue, row, column) => {
       if (tableName === '1') console.log('Before save');
-    },
-    afterSaveCell: (oldValue, newValue, row, column) => {
-      // Aggiorno dati sul Db
-      updateCellValue(oldValue, newValue, row, column);
       // Aggiorno cella opposta
       rows[parseInt(column.text) - 1][`col${row.rowNumber}`] = getOpposite(newValue);
       // Aggiorno totali
@@ -49,6 +45,10 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
       [...rows]
         .sort((e1, e2) => comparator(e1, e2))
         .forEach((row, index) => (rows[row.rowNumber - 1]['place'] = index + 1));
+    },
+    afterSaveCell: (oldValue, newValue, row, column) => {
+      // Aggiorno dati sul Db
+      updateCellValue(oldValue, newValue, row, column);
     }
   });
 
