@@ -44,11 +44,8 @@ export class AppServer extends AbstractServer {
     const options: SyncOptions = { force };
     // Sync database model ( async )
     logger.info(
-      `${
-        force
-          ? chalk.redBright.bold(' [ FORCE ] ')
-          : chalk.greenBright.bold(' [ NORMAL ] ') + chalk.cyan.bold('Starting database synchronization...')
-      }`
+      `${(force ? chalk.redBright.bold(' [ FORCE ] ') : chalk.greenBright.bold(' [ NORMAL ] ')) +
+        chalk.cyan.bold('Starting database synchronization...')}`
     );
     dbConnection = await syncDb(options);
     if (force) await generator(true);
