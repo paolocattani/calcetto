@@ -147,3 +147,20 @@ export function getOpposite(value) {
       return null;
   }
 }
+
+/**
+ *
+ * @param {*} obj1
+ * @param {*} obj2
+ */
+export function comparator(obj1, obj2) {
+  // in caso di parità valuto scontro diretto
+  if (obj1.total === obj2.total) {
+    if (obj1[`col${obj2.rowNumber}`] === 3 || obj1[`col${obj2.rowNumber}`] === 2) {
+      return -1;
+    } else {
+      return 1;
+    }
+  }
+  return obj2.total - obj1.total;
+}

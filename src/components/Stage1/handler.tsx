@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Stage1Table from './table';
 import { handlerPropsType } from './type';
-import { columns, rowsGenerator } from './helper';
+import { columns, rowsGenerator, comparator } from './helper';
 
 const Stage1Handler = (props: handlerPropsType): JSX.Element => {
   const { pairsList } = props;
@@ -44,6 +44,10 @@ const Stage1Handler = (props: handlerPropsType): JSX.Element => {
           body: JSON.stringify({ rows, stageName: tableName })
         });
         const result = await response.json();
+        // Ordinamento
+        [...result]
+          .sort((e1, e2) => comparator(e1, e2))
+          .forEach((row, index) => (result[row.rowNumber - 1]['place'] = index + 1));
         setRows(result);
         setIsLoading(false);
         if (tableName === '1') console.log('updateRows effects : ', result);
@@ -59,7 +63,7 @@ const Stage1Handler = (props: handlerPropsType): JSX.Element => {
 
   return (
     <>
-      {saved ? <p>Salvato....</p> : null}
+      {/*saved ? <p>Salvato....</p> : null*/}
       {isLoading ? (
         <h3>
           Caricamento girone <b>{tableName}</b> in corso....
@@ -70,6 +74,7 @@ const Stage1Handler = (props: handlerPropsType): JSX.Element => {
           columns={columns(onSelect, pairsList)}
           tableName={tableName}
           updateCellValue={updateCellValue}
+          saved={saved}
         />
       )}
     </>

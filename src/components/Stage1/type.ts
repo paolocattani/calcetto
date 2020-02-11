@@ -16,4 +16,5 @@ export type handlerPropsType = {
 
 export type headerPropsType = {
   title: string;
+  saved: boolean;
 };

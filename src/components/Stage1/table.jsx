@@ -5,12 +5,12 @@ import cellEditFactory from 'react-bootstrap-table2-editor';
 // helper
 
 import TableHeader from './header';
-import { getOpposite } from './helper';
+import { getOpposite, comparator } from './helper';
 
 // style
 import './style.css';
 
-const Stage1Table = ({ rows, columns, tableName, updateCellValue }) => {
+const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
   /**
    * L'idea di base è che al primo giro rows sarà vuoto e viene popolato con gli eventuali dati presi da db.
    * Le esecuzioni successive serviranno a aggiornare i dati sul db.
@@ -34,19 +34,21 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue }) => {
       if (tableName === '1') console.log('Before save');
     },
     afterSaveCell: (oldValue, newValue, row, column) => {
-      if (tableName === '1') {
-        console.log('After save rows: ', rows);
-        console.log('After save column: ', column);
-        console.log('After save ROW: ', row);
-      }
+      // Aggiorno dati sul Db
       updateCellValue(oldValue, newValue, row, column);
+      // Aggiorno cella opposta
       rows[parseInt(column.text) - 1][`col${row.rowNumber}`] = getOpposite(newValue);
+      // Aggiorno totali
       rows[row.rowNumber - 1]['total'] = rows[row.rowNumber - 1]['total']
         ? rows[row.rowNumber - 1]['total'] + newValue
         : newValue;
       rows[parseInt(column.text) - 1]['total'] = rows[parseInt(column.text) - 1]['total']
         ? rows[parseInt(column.text) - 1]['total'] + getOpposite(newValue)
         : getOpposite(newValue);
+      // Aggiorno posizione relativa
+      [...rows]
+        .sort((e1, e2) => comparator(e1, e2))
+        .forEach((row, index) => (rows[row.rowNumber - 1]['place'] = index + 1));
     }
   });
 
@@ -61,7 +63,7 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue }) => {
       noDataIndication="Nessun dato reperito"
       wrapperClasses="player-table"
       headerClasses="player-table-header"
-      caption={<TableHeader title={tableName} />}
+      caption={<TableHeader title={tableName} saved={saved} />}
       striped
       hover
     />
