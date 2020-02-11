@@ -13,6 +13,43 @@ router.use('/', (req, res, next) => {
   next();
 });
 
+// TODO: aggiungere definizione dati passati su body
+
+/**
+ * Aggiornamento record specifico
+ */
+router.post(
+  '/cell',
+  asyncMiddleware(async (req: Request, res: any, next: NextFunction) => {
+    const { tId, tableName, pair1Id, pair2Id, score } = req.body as any;
+    // logger.info('/cell1', req.body.tableName, req.body.tId, req.body.pair1Id, req.body.pair2Id);
+    try {
+      const record = await Stage1Model.findOne({
+        where: {
+          [Op.or]: [
+            { [Op.and]: { pair1Id: pair1Id, pair2Id: pair2Id } },
+            { [Op.and]: { pair1Id: pair2Id, pair2Id: pair1Id } }
+          ],
+          name: tableName,
+          tournamentId: tId
+        }
+      });
+      if (!record) return res.status(500).json('Error');
+      logger.info(record);
+      if (record.pair1Id === (pair1Id as number)) {
+        logger.info(score);
+        await record.update({ score });
+      } else {
+        await record.update({ score: getOpposite(score) });
+      }
+      return res.status(200).json({ saved: true });
+    } catch (error) {
+      logger.error('/cell error', error);
+      return res.status(500).json({ error, saved: false });
+    }
+  })
+);
+
 /**
  * Reperimento e aggiornamento tabella Stage1.
  * Riceva da FE : rows e stageName
@@ -118,23 +155,23 @@ router.post(
                 if (stageName === '1') logger.info('model : ', created, record);
 
                 // Se è stato creato non server che aggiorno l'oggetto row, altrimenti aggiorno il modello per FE con i dati del Db
-                if (!created && record.score) {
-                  if (record.pair1Id === pair1.id) {
+                if (!created && record.score != null) {
+                  if (record.pair1Id === (pair1.id as number)) {
                     rowsRef[index][currentRowKey] = record.score;
                     oppositeRow[`col${rowIndex}`] = getOpposite(record.score);
-                    await record.update({ score: record.score });
+                    // await record.update({ score: record.score });
                     // model.score = record.score;
                   } else {
                     rowsRef[index][currentRowKey] = getOpposite(record.score);
                     oppositeRow[`col${rowIndex}`] = record.score;
-                    await record.update({ score: getOpposite(record.score) });
+                    // await record.update({ score: getOpposite(record.score) });
                     // model.score = getOpposite(record.score);
                   }
                   rowsRef[index]['total'] = currentRowTotal ? parseInt(currentRowTotal) + record.score : record.score;
                   currentRowPlacement = 0;
                   //if (stageName === '1') logger.info('Sbam1....', currentCellValue, oppositeCellValue, currentRow);
                 }
-                if (stageName === '1' && ((pair1.id === 33 && pair2.id === 6) || (pair1.id === 6 && pair2.id === 33)))
+                if (stageName === '1' && ((pair1.id === 10 && pair2.id === 18) || (pair1.id === 28 && pair2.id === 10)))
                   logger.info('updating : ', model);
               } catch (error) {
                 logger.error('Error on  : ', rowsRef[index], currentRowKey);
@@ -147,7 +184,7 @@ router.post(
       return res.status(200).json(rows);
     } catch (error) {
       logger.error('Error while update matrix  : ', error);
-      return res.status(500).json('Error : ', error);
+      return res.status(500).json({ error });
     }
   })
 );
@@ -162,6 +199,7 @@ export default router;
  *  3->0 , 2->1 , 1->2 , 0->3
  */
 function getOpposite(value: number | null): number | null {
+  logger.info('getOpposite of  ', value);
   if (!value) return null;
   switch (value) {
     case 3:

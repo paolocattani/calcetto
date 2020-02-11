@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import { fetchPairs } from '../Pair/helper';
 import { Pair, wapperPropsType } from './type';
-import Stage1Table from './table';
+import Stage1Handler from './handler';
 import { ListGroup, Card } from 'react-bootstrap';
 /**
  * Wraps multiple table components
@@ -29,7 +29,7 @@ function renderTables(pairsList: Pair[], tId: string | undefined): JSX.Element {
     if (stageName !== element.stage1Name) {
       stageList.push(
         <ListGroup.Item key={`stage-${stageName}`}>
-          <Stage1Table pairsList={stage} />
+          <Stage1Handler pairsList={stage} />
         </ListGroup.Item>
       );
       // console.log(`stages ${stageName} :`, stage, stage.length);
@@ -41,7 +41,7 @@ function renderTables(pairsList: Pair[], tId: string | undefined): JSX.Element {
   if (stage.length > 0) {
     stageList.push(
       <ListGroup.Item key={`stage-${stageName}`}>
-        <Stage1Table pairsList={stage} />
+        <Stage1Handler pairsList={stage} />
       </ListGroup.Item>
     );
     // console.log(`stages ${stageName} :`, stage);

@@ -10,6 +10,10 @@ export type Pair = {
 
 export type wapperPropsType = {};
 
+export type handlerPropsType = {
+  pairsList: Pair[];
+};
+
 export type headerPropsType = {
   title: string;
 };

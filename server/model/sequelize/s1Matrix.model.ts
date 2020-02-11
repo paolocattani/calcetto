@@ -17,7 +17,7 @@ import Tournament from './tournament.model';
  *      where idTorneo=? order by idTorneo, score desc
  *
  */
-@Table({ tableName: 's1matrix', freezeTableName: true, version: true })
+@Table({ tableName: 's1matrix', freezeTableName: true, version: false })
 export default class s1Matrix extends Model<s1Matrix> {
   @Column(DataType.STRING)
   name!: string;
