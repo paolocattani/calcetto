@@ -11,22 +11,8 @@ import { getOpposite, comparator } from './helper';
 import './style.css';
 
 const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
-  /**
-   * L'idea di base è che al primo giro rows sarà vuoto e viene popolato con gli eventuali dati presi da db.
-   * Le esecuzioni successive serviranno a aggiornare i dati sul db.
-   *
-   * useCallback fa in modo che l'effetto nel quale è definat la funzione ( updateRows )
-   * non sia ( erroneamente ) eseguito ad ogni re-render.
-   *
-   * https://github.com/facebook/react/issues/15858
-   */
+  const [selectedRows, setSelectedRows] = useState([]);
 
-  // dummy data
-  /*
-  let rowIndex = 3;
-  let colIndex = 1;
-  rows[rowIndex][`col${colIndex}`] = 3;
-*/
   const cellEditProps = cellEditFactory({
     mode: 'click',
     blurToSave: true,
@@ -52,13 +38,37 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
     }
   });
 
-  if (tableName === '1') console.log('Rendering table ', tableName, rows);
+  const handleOnSelect = (row, isSelected) => {
+    setSelectedRows(() => {
+      const found = selectedRows.find(e => e.rowNumber === row.rowNumber) ? true : false;
+      if (isSelected) {
+        return found ? selectedRows : [row, ...selectedRows];
+      } else {
+        return found ? selectedRows.filter(e => e.rowNumber !== row.rowNumber) : selectedRows;
+      }
+    });
+    // return true or dont return to approve current select action
+    return true;
+  };
+
+  const selectRow = {
+    mode: 'checkbox',
+    onSelect: handleOnSelect,
+    onSelectAll: (isSelected, rows) => rows.forEach(row => handleOnSelect(row, isSelected)),
+    style: { backgroundColor: '#c8e6c9' }
+  };
+
+  if (tableName === '1') {
+    console.log('Rendering table ', tableName, rows);
+    console.log('SelectedRows : ', selectedRows);
+  }
   return (
     <BootstrapTable
       bootstrap4
       keyField="id"
       data={rows}
       columns={columns}
+      selectRow={selectRow}
       cellEdit={cellEditProps}
       noDataIndication="Nessun dato reperito"
       wrapperClasses="player-table"

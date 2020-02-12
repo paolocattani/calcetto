@@ -11,6 +11,7 @@ const Stage1Handler = (props: handlerPropsType): JSX.Element => {
   const [rows, setRows] = useState(rowsGenerator(pairsList));
   const tableName = pairsList[0]?.stage1Name ?? 'Not found';
 
+  // Aggiornamento dati
   const updateCellValue = async (oldValue: any, newValue: any, row: any, column: any) => {
     const model1 = {
       tId: row.pair.tId,
@@ -19,20 +20,19 @@ const Stage1Handler = (props: handlerPropsType): JSX.Element => {
       pair1Id: row.pair.id,
       pair2Id: rows[parseInt(column.text) - 1].pair.id
     };
-    console.log('updateCellValue :', model1);
     const response = await fetch('/api/stage1/cell', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(model1)
     });
     await response.json();
-    //  https://github.com/facebook/react/issues/15858
-    console.log(response);
     if (response.ok) {
       setIsSaved(true);
       setTimeout(() => setIsSaved(false), 3000);
     }
   };
+
+  // Reperimento dati dal db
   useEffect(
     () => {
       const fetchData = async () => {

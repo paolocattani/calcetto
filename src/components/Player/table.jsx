@@ -123,14 +123,13 @@ export default class Player extends React.Component {
     autoSelectText: true,
     afterSaveCell: (oldValue, newValue, row, column) => {
       (async () => {
-        console.log('AfterSave Row : ', row, column);
+        // TODO: gestire try-catch
         const response = await fetch('/api/player', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(row)
         });
-        const result = await response.json();
-        console.table(result);
+        await response.json();
       })();
     }
   });

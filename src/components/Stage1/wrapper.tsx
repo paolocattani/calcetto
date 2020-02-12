@@ -3,7 +3,7 @@ import { useParams } from 'react-router';
 import { fetchPairs } from '../Pair/helper';
 import { Pair, wapperPropsType } from './type';
 import Stage1Handler from './handler';
-import { ListGroup, Card } from 'react-bootstrap';
+import { ListGroup } from 'react-bootstrap';
 /**
  * Wraps multiple table components
  */

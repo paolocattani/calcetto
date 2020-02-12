@@ -6,11 +6,12 @@ const tableHeader: React.FC<headerPropsType> = ({ title, saved }: headerPropsTyp
     color: saved ? '#4feb34' : undefined
   };
   return (
-    <h2 style={divStyle}>
-      <b>
+    <h3>
+      <b style={divStyle}>
         Girone - <strong>{title}</strong>
       </b>
-    </h2>
+      {saved ? <small> - Salvataggio in corso...</small> : null}
+    </h3>
   );
 };
 
