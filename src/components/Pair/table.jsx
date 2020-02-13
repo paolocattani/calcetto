@@ -93,13 +93,12 @@ const PairsTable = props => {
     });
   };
   const confirmPairs = () => {
-    // TODO:
-    console.log('pairs confired');
-    const missingRows = rows.filter(e => !e.stage1Name || e.stage1Name === '').map(e => e.id);
-    console.log(missingRows);
-    setMessage(`Missing row : ${missingRows}`);
-
-    currentHistory.push(`/stage1/${tId}`);
+    const missingRows = rows.filter(e => !e.stage1Name || e.stage1Name === '').map(e => e.id - 1);
+    if (missingRows !== []) {
+      setMessage(
+        `Assegna  ${missingRows.length === 1 ? 'la riga ' : 'le righe '} ${missingRows} ad un girone per procedere `
+      );
+    } else currentHistory.push(`/stage1/${tId}`);
   };
 
   const selectRow = {

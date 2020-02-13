@@ -1,6 +1,7 @@
 import React from 'react';
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import PlayerSelect from '../Player/select';
+import { InputGroup } from 'react-bootstrap';
 
 export const columns = onSelect => [
   { dataField: 'id', text: 'ID', editable: false, hidden: true, align: () => 'center' },
@@ -46,9 +47,23 @@ export const columns = onSelect => [
   {
     dataField: 'paid',
     text: 'Pagato',
+    align: () => 'center',
     editor: {
       type: Type.CHECKBOX,
-      value: 'SI:NO'
+      value: 'Si:No'
+    },
+    /*
+    formatter: (cell, row, rowIndex) => {
+      console.log(cell);
+
+      return (
+        <InputGroup>
+          <InputGroup.Checkbox style={{ margin: 'auto' }} onCancechecked={cell}></InputGroup.Checkbox>
+        </InputGroup>
+      );
+    },*/
+    style: (content, row, rowIndex, columnIndex) => {
+      if (!row.paid) return { backgroundColor: '#ff695c' };
     }
   }
 ];
@@ -79,7 +94,7 @@ export function getEmptyRowModel() {
     player2: { id: null, alias: '', name: '', surname: '' },
     pairAlias: '',
     stage1Name: '',
-    paid: 'NO'
+    paid: false
   };
 }
 
