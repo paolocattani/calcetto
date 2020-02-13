@@ -1,13 +1,14 @@
 import React from 'react';
-import cellEditFactory from 'react-bootstrap-table2-editor';
+import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import PlayerSelect from '../Player/select';
 
 export const columns = onSelect => [
-  { dataField: 'id', text: 'ID', editable: false, hidden: true },
-  { dataField: 'rowNumber', text: 'ID', editable: false },
+  { dataField: 'id', text: 'ID', editable: false, hidden: true, align: () => 'center' },
+  { dataField: 'rowNumber', text: 'ID', editable: false, align: () => 'center' },
   {
     dataField: 'player1.alias',
     text: 'Giocatore 1',
+    align: () => 'center',
     editorRenderer: (editorProps, value, row, column, rowIndex, columnIndex) => (
       <PlayerSelect
         {...editorProps}
@@ -23,6 +24,7 @@ export const columns = onSelect => [
   {
     dataField: 'player2.alias',
     text: 'Giocatore 2',
+    align: () => 'center',
     editorRenderer: (editorProps, value, row, column, rowIndex, columnIndex) => (
       <PlayerSelect
         {...editorProps}
@@ -36,12 +38,36 @@ export const columns = onSelect => [
     )
   },
   { dataField: 'pairAlias', text: 'Alias Coppia' },
-  { dataField: 'stage1Name', text: 'Nome girone' }
+  {
+    dataField: 'stage1Name',
+    text: 'Nome girone',
+    align: () => 'center'
+  },
+  {
+    dataField: 'paid',
+    text: 'Pagato',
+    editor: {
+      type: Type.CHECKBOX,
+      value: 'true:false'
+    }
+  }
 ];
 
 export const cellEditProps = cellEditFactory({
   mode: 'click',
-  blurToSave: true
+  blurToSave: true,
+  afterSaveCell: (oldValue, newValue, row, column) => {
+    // Aggiornamento per queste due colonne viene eseguito dalla funzione onSelect
+    if (column.dataField === 'player1.alias' || column.dataField === 'player2.alias') return;
+    (async () => {
+      const response = await fetch('/api/pair', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(row)
+      });
+      await response.json();
+    })();
+  }
 });
 
 export function getEmptyRowModel() {
@@ -58,7 +84,7 @@ export function getEmptyRowModel() {
 
 export const fetchPairs = (setterFunction, tId) => {
   (async () => {
-    const response = await fetch(`/api/pair/list/${tId}`, {
+    const response = await fetch(`/api/pair/list/?tId=${tId}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     });
@@ -68,8 +94,6 @@ export const fetchPairs = (setterFunction, tId) => {
 };
 
 export function valueFormatter(selectedOption) {
-  // ' 1 : Pool - Gilbe '
-  console.log('valueFormatter : ', selectedOption);
   if (selectedOption.pairAlias && selectedOption.pairAlias !== '')
     return `${selectedOption.pairAlias} ( ${selectedOption.id} )`;
   return createAlias(selectedOption);
@@ -81,6 +105,5 @@ export function createAlias(selectedOption) {
   value += player1.alias ? player1.alias : player1.name;
   value += ' - ' + player2.alias ? player2.alias : player2.name;
   value += ` ( ${id} )`;
-  console.log('valueFormatter.createAlias : ', value);
   return value;
 }

@@ -1,14 +1,4 @@
-import {
-  Column,
-  Comment,
-  Model,
-  DataType,
-  Table,
-  ForeignKey,
-  BelongsTo,
-  BelongsToMany,
-  HasOne
-} from 'sequelize-typescript';
+import { Column, Comment, Model, DataType, Table, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import Tournament from './tournament.model';
 import Player from './player.model';
 

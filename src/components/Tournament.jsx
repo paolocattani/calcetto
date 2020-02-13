@@ -55,6 +55,7 @@ const FTournament = () => {
     });
     const res = await response.json();
     if (res.message) console.log(res.message);
+    console.log('Tournament : ', res);
     currentHistory.push(`/tournament/${res.id}`);
   };
 

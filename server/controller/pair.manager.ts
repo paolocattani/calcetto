@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import chalk from 'chalk';
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 // Models
@@ -13,15 +14,15 @@ router.use('/', (req, res, next) => {
   next();
 });
 
-router.get('/list/:tId', async (req, res, next) => {
+router.get('/list/', async (req, res, next) => {
   try {
     const tId = req.query.tId ?? 1;
+    logger.info(`Looking for pairs in tournament ${chalk.greenBright(tId)}`);
     const pairsList = await Pair.findAll({
       where: { tournamentId: tId, '$tournament.public$': true },
       order: [['id', 'ASC']],
       include: [Pair.associations.tournament, Pair.associations.player1, Pair.associations.player2]
     });
-
     const modelList = pairsList.map((row, index) => rowToModel(row, index));
     return res.json(modelList);
   } catch (err) {
@@ -32,17 +33,22 @@ router.get('/list/:tId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   const { body } = req;
-  const { pair1, pair2 } = body;
+  const { player1, player2, id, tId, pairAlias, stage1Name, paid } = body;
+  logger.info(body);
   const t = await dbConnection.transaction();
   try {
     let pair: Pair | null = null;
-    const player1 = await Player.findOne({ where: { id: pair1.id } });
-    const player2 = await Player.findOne({ where: { id: pair2.id } });
     const model = {
-      id: body.id ? body.id : null,
-      tournamentId: body.tId && body.tId !== '' ? parseInt(body.tId) : 1
+      id: id ? id : null,
+      tournamentId: parseInt(tId),
+      pairAlias,
+      player1Id: player1?.id ?? null,
+      player2Id: player2?.id ?? null,
+      stage1Name,
+      paid
     };
     if (model.id) pair = await Pair.findOne({ where: { id: model.id } });
+    // creazione coppia
     if (pair) {
       await pair.update(model), { transaction: t };
       logger.info(`updated => ${pair.toString()}`);
@@ -50,8 +56,6 @@ router.post('/', async (req, res, next) => {
       pair = await Pair.create(model, { transaction: t });
       logger.info(`created => ${pair.toString()}`);
     }
-    if (player1) await pair.$set('player1', player1 as any, { transaction: t });
-    if (player2) await pair.$set('player2', player2 as any, { transaction: t });
     t.commit();
     return res.status(200).json(pair);
   } catch (err) {
@@ -97,6 +101,7 @@ function rowToModel(row: Pair, index: number) {
     },
     pairAlias: row.pairAlias,
     stage1Name: row.stage1Name,
+    paid: row.paid,
     label: valueFormatter(row)
   };
 }
@@ -104,6 +109,7 @@ function rowToModel(row: Pair, index: number) {
 function valueFormatter(row: any) {
   const { pairAlias, id, player1, player2 } = row;
   if (pairAlias && pairAlias !== '') return `${pairAlias} ( ${id} )`;
+  if (!player1 || !player2) return '';
   const value = `${player1.alias ? player1.alias : player1.name} - ${
     player2.alias ? player2.alias : player2.name
   } ( ${id} )`;

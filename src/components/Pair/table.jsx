@@ -8,6 +8,7 @@ import './style.css';
 const PairsTable = props => {
   const [rows, setRows] = useState([] /*PairsGenerator()*/);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [message, setMessage] = useState('');
 
   const [isEditable, setIsEditable] = useState(false); // TODO:
   const [isLoading, setIsLoading] = useState(false); // FIXME:
@@ -22,7 +23,7 @@ const PairsTable = props => {
     setIsLoading(() =>
       (async () => {
         const emptyRow = getEmptyRowModel();
-        emptyRow.tId = tId ? tId : 1;
+        emptyRow.tId = tId;
         const response = await fetch('/api/pair', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -56,12 +57,12 @@ const PairsTable = props => {
 
   // Aggiorno la colonna con il giocatore selezionato
   const onSelect = (selectedElement, rowIndex, columnIndex) => {
-    console.log('onSelect : ', rowIndex, columnIndex);
     setRows(rows =>
       rows.map(rowElement => {
+        console.log('onSelect : ', rowElement.id, rowIndex, columnIndex);
         if (rowElement.id === rowIndex) {
           let row = rowElement;
-          if (columnIndex) row.player1 = selectedElement;
+          if (columnIndex === 1) row.player1 = selectedElement;
           else row.player2 = selectedElement;
           // update db
           (async () => {
@@ -91,7 +92,11 @@ const PairsTable = props => {
   const confirmPairs = () => {
     // TODO:
     console.log('pairs confired');
-    currentHistory.push(`/stage1/${tId}`);
+    const missingRows = rows.filter(e => !e.stage1Name || e.stage1Name === '').map(e => e.id);
+    console.log(missingRows);
+    setMessage(`Missing row : ${missingRows}`);
+
+    //currentHistory.push(`/stage1/${tId}`);
   };
 
   const selectRow = {
@@ -102,15 +107,24 @@ const PairsTable = props => {
   };
 
   //console.log('selectedRows : ', selectedRows);
+  console.log(
+    ' ',
+    rows.filter(e => !e.stage1Name || e.stage1Name === '')
+  );
   return (
     <>
+      {message !== '' ? <p>{message}</p> : null}
       <Button variant="success" onClick={addRow}>
         Aggiungi Coppia
       </Button>
       <Button variant="danger" onClick={deleteRow}>
         Elimina Coppia
       </Button>
-      <Button variant="primary" onClick={confirmPairs}>
+      <Button
+        variant="primary"
+        onClick={confirmPairs}
+        disabled={rows.filter(e => !e.stage1Name || e.stage1Name === '') != [] ? true : false}
+      >
         Conferma coppie
       </Button>
       <BootstrapTable
