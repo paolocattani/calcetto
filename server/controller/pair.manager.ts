@@ -45,7 +45,7 @@ router.post('/', async (req, res, next) => {
       player1Id: player1?.id ?? null,
       player2Id: player2?.id ?? null,
       stage1Name,
-      paid
+      paid: paid === 'SI' ? true : false
     };
     if (model.id) pair = await Pair.findOne({ where: { id: model.id } });
     // creazione coppia
@@ -101,7 +101,7 @@ function rowToModel(row: Pair, index: number) {
     },
     pairAlias: row.pairAlias,
     stage1Name: row.stage1Name,
-    paid: row.paid,
+    paid: row.paid ? 'SI' : 'NO',
     label: valueFormatter(row)
   };
 }

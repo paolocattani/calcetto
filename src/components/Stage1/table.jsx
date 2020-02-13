@@ -63,20 +63,22 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
     console.log('SelectedRows : ', selectedRows);
   }
   return (
-    <BootstrapTable
-      bootstrap4
-      keyField="id"
-      data={rows}
-      columns={columns}
-      selectRow={selectRow}
-      cellEdit={cellEditProps}
-      noDataIndication="Nessun dato reperito"
-      wrapperClasses="player-table"
-      headerClasses="player-table-header"
-      caption={<TableHeader title={tableName} saved={saved} />}
-      striped
-      hover
-    />
+    <>
+      <BootstrapTable
+        bootstrap4
+        keyField="id"
+        data={rows}
+        columns={columns}
+        selectRow={selectRow}
+        cellEdit={cellEditProps}
+        noDataIndication="Nessun dato reperito"
+        wrapperClasses="player-table"
+        headerClasses="player-table-header"
+        caption={<TableHeader title={tableName} saved={saved} />}
+        striped
+        hover
+      />
+    </>
   );
 };
 

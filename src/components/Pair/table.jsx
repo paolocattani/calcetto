@@ -55,6 +55,9 @@ const PairsTable = props => {
     );
   }
 
+  function goBack() {
+    currentHistory.push('/');
+  }
   // Aggiorno la colonna con il giocatore selezionato
   const onSelect = (selectedElement, rowIndex, columnIndex) => {
     setRows(rows =>
@@ -96,7 +99,7 @@ const PairsTable = props => {
     console.log(missingRows);
     setMessage(`Missing row : ${missingRows}`);
 
-    //currentHistory.push(`/stage1/${tId}`);
+    currentHistory.push(`/stage1/${tId}`);
   };
 
   const selectRow = {
@@ -114,6 +117,9 @@ const PairsTable = props => {
   return (
     <>
       {message !== '' ? <p>{message}</p> : null}
+      <Button variant="secondary" onClick={goBack}>
+        Home
+      </Button>
       <Button variant="success" onClick={addRow}>
         Aggiungi Coppia
       </Button>
@@ -123,7 +129,7 @@ const PairsTable = props => {
       <Button
         variant="primary"
         onClick={confirmPairs}
-        disabled={rows.filter(e => !e.stage1Name || e.stage1Name === '') != [] ? true : false}
+        //disabled={rows.filter(e => !e.stage1Name || e.stage1Name === '') != [] ? true : false}
       >
         Conferma coppie
       </Button>
