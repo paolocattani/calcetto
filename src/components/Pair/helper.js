@@ -1,7 +1,6 @@
 import React from 'react';
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import PlayerSelect from '../Player/select';
-import { InputGroup } from 'react-bootstrap';
 
 export const columns = onSelect => [
   { dataField: 'id', text: 'ID', editable: false, hidden: true, align: () => 'center' },
@@ -94,18 +93,20 @@ export function getEmptyRowModel() {
     player2: { id: null, alias: '', name: '', surname: '' },
     pairAlias: '',
     stage1Name: '',
-    paid: false
+    paid: 'No'
   };
 }
 
-export const fetchPairs = (setterFunction, tId) => {
+export const fetchPairs = (setIsLoading, setterFunction, tId) => {
   (async () => {
+    setIsLoading(true);
     const response = await fetch(`/api/pair/list/?tId=${tId}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     });
     const result = await response.json();
     setterFunction(result);
+    setIsLoading(false);
   })();
 };
 
@@ -122,4 +123,13 @@ export function createAlias(selectedOption) {
   value += ' - ' + player2.alias ? player2.alias : player2.name;
   value += ` ( ${id} )`;
   return value;
+}
+
+export function getEmptyPlayer() {
+  return {
+    id: null,
+    name: '',
+    surname: '',
+    alias: ''
+  };
 }

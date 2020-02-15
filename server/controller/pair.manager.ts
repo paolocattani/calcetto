@@ -3,7 +3,6 @@ import chalk from 'chalk';
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 // Models
-import Player from '../model/sequelize/player.model';
 import Pair from '../model/sequelize/pair.model';
 // dbConnection
 import { dbConnection } from '../model/server/AppServer';
