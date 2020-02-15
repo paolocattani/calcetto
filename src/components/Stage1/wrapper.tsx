@@ -1,19 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router';
+import { useParams, useHistory } from 'react-router';
 import { fetchPairs } from '../Pair/helper';
 import { Pair, wapperPropsType } from './type';
 import Stage1Handler from './handler';
-import { ListGroup } from 'react-bootstrap';
+import { ListGroup, Button } from 'react-bootstrap';
+
 /**
  * Wraps multiple table components
  */
 const Wrapper: React.FC<wapperPropsType> = (props: wapperPropsType): JSX.Element => {
   const { tId } = useParams();
   const [pairsList, setPairsList] = useState<Pair[]>([]);
+
+  let currentHistory = useHistory();
+  function goBack() {
+    currentHistory.push(`/tournament/${tId}`);
+  }
+
   useEffect(() => fetchPairs(setPairsList, tId), [tId]);
   // sort pairs by stage1Name
   pairsList.sort((obj1, obj2) => obj1.stage1Name.localeCompare(obj2.stage1Name));
-  return <>{renderTables(pairsList, tId)}</>;
+  return (
+    <>
+      <ListGroup.Item key={'stage-button'}>
+        <Button variant="secondary" onClick={goBack}>
+          Gestione Coppie
+        </Button>
+      </ListGroup.Item>
+      {renderTables(pairsList, tId)}
+    </>
+  );
 };
 
 export default Wrapper;

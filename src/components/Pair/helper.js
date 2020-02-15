@@ -48,7 +48,19 @@ export const columns = onSelect => [
     text: 'Pagato',
     editor: {
       type: Type.CHECKBOX,
-      value: 'true:false'
+      value: 'Si:No'
+    },
+    /*
+    formatter: (cell, row, rowIndex) => {
+      console.log(cell);
+      return (
+        <InputGroup>
+          <InputGroup.Checkbox style={{ margin: 'auto' }} onCancechecked={cell}></InputGroup.Checkbox>
+        </InputGroup>
+      );
+    },*/
+    style: (content, row, rowIndex, columnIndex) => {
+      if (!row.paid) return { backgroundColor: '#ff695c' };
     }
   }
 ];
@@ -78,7 +90,17 @@ export function getEmptyRowModel() {
     player1: { id: null, alias: '', name: '', surname: '' },
     player2: { id: null, alias: '', name: '', surname: '' },
     pairAlias: '',
-    stage1Name: ''
+    stage1Name: '',
+    paid: 'No'
+  };
+}
+
+export function getEmptyPlayer() {
+  return {
+    id: null,
+    name: '',
+    surname: '',
+    alias: ''
   };
 }
 

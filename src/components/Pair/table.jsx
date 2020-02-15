@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Alert } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
-import { columns, cellEditProps, getEmptyRowModel, fetchPairs /* checkEditable */ } from './helper';
+import { columns, cellEditProps, getEmptyRowModel, fetchPairs, getEmptyPlayer /* checkEditable */ } from './helper';
 import { useParams, useHistory } from 'react-router';
 import './style.css';
 
-const PairsTable = props => {
+const PairsTable = _ => {
   const [rows, setRows] = useState([] /*PairsGenerator()*/);
   const [selectedRows, setSelectedRows] = useState([]);
-  const [message, setMessage] = useState('');
+  const [allertMessage, setAllertMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const [isEditable, setIsEditable] = useState(false); // TODO:
+  // const [isEditable, setIsEditable] = useState(false); // TODO:
   const [isLoading, setIsLoading] = useState(false); // FIXME:
   const { tId } = useParams();
   let currentHistory = useHistory();
@@ -62,8 +63,19 @@ const PairsTable = props => {
         console.log('onSelect : ', rowElement.id, rowIndex, columnIndex);
         if (rowElement.id === rowIndex) {
           let row = rowElement;
-          if (columnIndex === 1) row.player1 = selectedElement;
-          else row.player2 = selectedElement;
+          if (columnIndex === 1) {
+            if (row.player2.id === selectedElement.id) {
+              row.player2 = getEmptyPlayer();
+              setAllertMessage('Attenzione : Non puoi selezionare lo stesso giocare ! ');
+              setTimeout(() => setAllertMessage(''), 5000);
+            } else row.player1 = selectedElement;
+          } else {
+            if (row.player1.id === selectedElement.id) {
+              row.player2 = getEmptyPlayer();
+              setAllertMessage('Attenzione : Non puoi selezionare lo stesso giocare ! ');
+              setTimeout(() => setAllertMessage(''), 5000);
+            } else row.player2 = selectedElement;
+          }
           // update db
           (async () => {
             const response = await fetch('/api/pair', {
@@ -90,14 +102,44 @@ const PairsTable = props => {
     });
   };
   const confirmPairs = () => {
-    // TODO:
-    console.log('pairs confired');
-    const missingRows = rows.filter(e => !e.stage1Name || e.stage1Name === '').map(e => e.id);
-    console.log(missingRows);
-    setMessage(`Missing row : ${missingRows}`);
+    // Controllo gironi non assegnati
+    const missingStage1Name = rows.filter(e => !e.stage1Name || e.stage1Name === '').map(e => e.rowNumber);
+    if (missingStage1Name.length !== 0) {
+      setErrorMessage(
+        `Assegna  ${
+          missingStage1Name.length === 1 ? 'la riga ' : 'le righe '
+        } ${missingStage1Name} ad un girone per procedere `
+      );
+      setTimeout(() => setErrorMessage(''), 5000);
+      return;
+    }
 
-    //currentHistory.push(`/stage1/${tId}`);
+    // Controllo coppie non assegnate
+    const missingPairs = rows.filter(e => e.player1.id === null || e.player2.id === null).map(e => e.rowNumber);
+    if (missingPairs.length !== 0) {
+      setErrorMessage(
+        `Assegna  i giocatori ${
+          missingPairs.length === 1 ? 'alla riga ' : 'alle righe '
+        } ${missingPairs} ad un girone per procedere `
+      );
+      setTimeout(() => setErrorMessage(''), 5000);
+      return;
+    }
+
+    if (!tId) {
+      setErrorMessage('Id torneo mancante. Verrai inviato alla Home tra 5 secondi....');
+      setTimeout(() => {
+        setErrorMessage('');
+        currentHistory.push('/');
+      }, 5000);
+    }
+
+    currentHistory.push(`/stage1/${tId}`);
   };
+
+  function goBack() {
+    currentHistory.push('/');
+  }
 
   const selectRow = {
     mode: 'checkbox',
@@ -106,14 +148,23 @@ const PairsTable = props => {
     style: { backgroundColor: '#c8e6c9' }
   };
 
-  //console.log('selectedRows : ', selectedRows);
-  console.log(
-    ' ',
-    rows.filter(e => !e.stage1Name || e.stage1Name === '')
-  );
-  return (
+  return isLoading ? (
+    <p>Caricamento....</p>
+  ) : (
     <>
-      {message !== '' ? <p>{message}</p> : null}
+      {allertMessage && allertMessage !== '' ? (
+        <Alert key={'pair-allert-message'} variant={'warning'}>
+          {allertMessage}
+        </Alert>
+      ) : null}
+      {errorMessage && errorMessage !== '' ? (
+        <Alert key={'pair-allert-message'} variant={'danger'}>
+          {errorMessage}
+        </Alert>
+      ) : null}
+      <Button variant="secondary" onClick={goBack}>
+        Home
+      </Button>
       <Button variant="success" onClick={addRow}>
         Aggiungi Coppia
       </Button>
@@ -123,7 +174,7 @@ const PairsTable = props => {
       <Button
         variant="primary"
         onClick={confirmPairs}
-        disabled={rows.filter(e => !e.stage1Name || e.stage1Name === '') != [] ? true : false}
+        //disabled={rows.filter(e => !e.stage1Name || e.stage1Name === '') != [] ? true : false}
       >
         Conferma coppie
       </Button>
@@ -134,7 +185,19 @@ const PairsTable = props => {
         columns={columns(onSelect)}
         cellEdit={cellEditProps}
         selectRow={selectRow}
-        noDataIndication="Nessun dato reperito"
+        noDataIndication={
+          <>
+            <p>Aggiungi le coppie per questo torneo...</p>
+            <Button variant="success" onClick={addRow}>
+              Aggiungi Coppia
+            </Button>
+          </>
+        }
+        caption={
+          <h2>
+            Torneo <b>{tId}</b>
+          </h2>
+        }
         wrapperClasses="player-table"
         headerClasses="player-table-header"
         striped
