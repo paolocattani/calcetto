@@ -3,6 +3,8 @@ import { Button, Alert } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { columns, cellEditProps, getEmptyRowModel, fetchPairs, getEmptyPlayer /* checkEditable */ } from './helper';
 import { useParams, useHistory } from 'react-router';
+import TableHeader from './header';
+import NoData from './noData';
 import './style.css';
 
 const PairsTable = _ => {
@@ -10,6 +12,7 @@ const PairsTable = _ => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [allertMessage, setAllertMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [saved, setSaved] = useState(false);
 
   // const [isEditable, setIsEditable] = useState(false); // TODO:
   const [isLoading, setIsLoading] = useState(false); // FIXME:
@@ -188,19 +191,8 @@ const PairsTable = _ => {
         columns={columns(onSelect)}
         cellEdit={cellEditProps}
         selectRow={selectRow}
-        noDataIndication={
-          <>
-            <p>Aggiungi le coppie per questo torneo...</p>
-            <Button variant="success" onClick={addRow}>
-              Aggiungi Coppia
-            </Button>
-          </>
-        }
-        caption={
-          <h2>
-            Torneo <b>{tId}</b>
-          </h2>
-        }
+        noDataIndication={<NoData addRow={addRow} />}
+        caption={<TableHeader tournametId={tId} />}
         wrapperClasses="player-table"
         headerClasses="player-table-header"
         striped
