@@ -58,10 +58,6 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
     style: { backgroundColor: '#c8e6c9' }
   };
 
-  if (tableName === '1') {
-    console.log('Rendering table ', tableName, rows);
-    console.log('SelectedRows : ', selectedRows);
-  }
   return (
     <>
       <BootstrapTable

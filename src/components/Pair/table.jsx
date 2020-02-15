@@ -11,7 +11,7 @@ const PairsTable = _ => {
   const [allertMessage, setAllertMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  //const [isEditable, setIsEditable] = useState(false); // TODO:
+  // const [isEditable, setIsEditable] = useState(false); // TODO:
   const [isLoading, setIsLoading] = useState(false); // FIXME:
   const { tId } = useParams();
   let currentHistory = useHistory();
@@ -129,14 +129,20 @@ const PairsTable = _ => {
       return;
     }
 
-    if (!tId) setErrorMessage('Id torneo mancante. Verrai inviato alla Home tra 5 secondi....');
-    setTimeout(() => {
-      setErrorMessage('');
-      currentHistory.push('/');
-    }, 5000);
+    if (!tId) {
+      setErrorMessage('Id torneo mancante. Verrai inviato alla Home tra 5 secondi....');
+      setTimeout(() => {
+        setErrorMessage('');
+        currentHistory.push('/');
+      }, 5000);
+    }
 
-    return currentHistory.push(`/stage1/${tId}`);
+    currentHistory.push(`/stage1/${tId}`);
   };
+
+  function goBack() {
+    currentHistory.push('/');
+  }
 
   const selectRow = {
     mode: 'checkbox',
@@ -182,11 +188,6 @@ const PairsTable = _ => {
         columns={columns(onSelect)}
         cellEdit={cellEditProps}
         selectRow={selectRow}
-        caption={
-          <h2>
-            Torneo <b>{tId}</b>
-          </h2>
-        }
         noDataIndication={
           <>
             <p>Aggiungi le coppie per questo torneo...</p>
@@ -194,6 +195,11 @@ const PairsTable = _ => {
               Aggiungi Coppia
             </Button>
           </>
+        }
+        caption={
+          <h2>
+            Torneo <b>{tId}</b>
+          </h2>
         }
         wrapperClasses="player-table"
         headerClasses="player-table-header"

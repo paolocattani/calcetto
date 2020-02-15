@@ -37,7 +37,6 @@ const Stage1Handler = (props: handlerPropsType): JSX.Element => {
     () => {
       const fetchData = async () => {
         setIsLoading(true);
-        if (tableName === '1') console.log('executing effects in ', tableName);
         const response = await fetch('/api/stage1', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -50,7 +49,6 @@ const Stage1Handler = (props: handlerPropsType): JSX.Element => {
           .forEach((row, index) => (result[row.rowNumber - 1]['place'] = index + 1));
         setRows(result);
         setIsLoading(false);
-        if (tableName === '1') console.log('updateRows effects : ', result);
       };
       fetchData();
     },

@@ -54,7 +54,6 @@ export const columns = onSelect => [
     /*
     formatter: (cell, row, rowIndex) => {
       console.log(cell);
-
       return (
         <InputGroup>
           <InputGroup.Checkbox style={{ margin: 'auto' }} onCancechecked={cell}></InputGroup.Checkbox>
@@ -105,7 +104,6 @@ export const fetchPairs = (setterFunction, tId) => {
     });
     const result = await response.json();
     setterFunction(result);
-    setIsLoading(false);
   })();
 };
 

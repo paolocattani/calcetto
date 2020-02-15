@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router';
-import { Button } from 'react-bootstrap';
 import { fetchPairs } from '../Pair/helper';
 import { Pair, wapperPropsType } from './type';
 import Stage1Handler from './handler';
-import { ListGroup } from 'react-bootstrap';
+import { ListGroup, Button } from 'react-bootstrap';
+
 /**
  * Wraps multiple table components
  */
