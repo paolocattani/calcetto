@@ -97,9 +97,8 @@ export function getEmptyRowModel() {
   };
 }
 
-export const fetchPairs = (setIsLoading, setterFunction, tId) => {
+export const fetchPairs = (setterFunction, tId) => {
   (async () => {
-    setIsLoading(true);
     const response = await fetch(`/api/pair/list/?tId=${tId}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }

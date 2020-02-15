@@ -36,7 +36,6 @@ const App: React.FC = () => {
       </header>
 
       <br></br>
-      {/*<Button onClick={() => setShowModal(true)}> apri modale</Button>*/}
       {showModal ? <PlayerModal show={showModal} onHide={() => setShowModal(false)} /> : null}
       <Container>
         <Switch>

@@ -18,7 +18,7 @@ const PairsTable = _ => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   // useEffect(() => checkEditable(setIsEditable, tId), []);
-  useEffect(() => fetchPairs(setIsLoading, setRows, tId), [tId]);
+  useEffect(() => fetchPairs(setRows, tId), [tId]);
 
   function addRow() {
     (async () => {
@@ -105,13 +105,37 @@ const PairsTable = _ => {
     });
   };
   const confirmPairs = () => {
-    const missingRows = rows.filter(e => !e.stage1Name || e.stage1Name === '').map(e => e.rowNumber);
-    if (missingRows !== []) {
+    // Controllo gironi non assegnati
+    const missingStage1Name = rows.filter(e => !e.stage1Name || e.stage1Name === '').map(e => e.rowNumber);
+    if (missingStage1Name.length !== 0) {
       setErrorMessage(
-        `Assegna  ${missingRows.length === 1 ? 'la riga ' : 'le righe '} ${missingRows} ad un girone per procedere `
+        `Assegna  ${
+          missingStage1Name.length === 1 ? 'la riga ' : 'le righe '
+        } ${missingStage1Name} ad un girone per procedere `
       );
       setTimeout(() => setErrorMessage(''), 5000);
-    } else currentHistory.push(`/stage1/${tId}`);
+      return;
+    }
+
+    // Controllo coppie non assegnate
+    const missingPairs = rows.filter(e => e.player1.id === null || e.player2.id === null).map(e => e.rowNumber);
+    if (missingPairs.length !== 0) {
+      setErrorMessage(
+        `Assegna  i giocatori ${
+          missingPairs.length === 1 ? 'alla riga ' : 'alle righe '
+        } ${missingPairs} ad un girone per procedere `
+      );
+      setTimeout(() => setErrorMessage(''), 5000);
+      return;
+    }
+
+    if (!tId) setErrorMessage('Id torneo mancante. Verrai inviato alla Home tra 5 secondi....');
+    setTimeout(() => {
+      setErrorMessage('');
+      currentHistory.push('/');
+    }, 5000);
+
+    return currentHistory.push(`/stage1/${tId}`);
   };
 
   const selectRow = {
@@ -121,11 +145,6 @@ const PairsTable = _ => {
     style: { backgroundColor: '#c8e6c9' }
   };
 
-  //console.log('selectedRows : ', selectedRows);
-  console.log(
-    ' ',
-    rows.filter(e => !e.stage1Name || e.stage1Name === '')
-  );
   return isLoading ? (
     <p>Caricamento....</p>
   ) : (
@@ -163,6 +182,11 @@ const PairsTable = _ => {
         columns={columns(onSelect)}
         cellEdit={cellEditProps}
         selectRow={selectRow}
+        caption={
+          <h2>
+            Torneo <b>{tId}</b>
+          </h2>
+        }
         noDataIndication={
           <>
             <p>Aggiungi le coppie per questo torneo...</p>
