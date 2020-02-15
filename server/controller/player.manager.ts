@@ -21,7 +21,7 @@ router.get('/list', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   const model = req.body;
-  logger.info('Player post Model : ', model);
+  // logger.info('Player post Model : ', model);
   if (model.id === 0) model.id = null;
   try {
     let player: Player | null = null;

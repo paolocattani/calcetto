@@ -153,7 +153,7 @@ router.post(
                   },
                   defaults: model
                 });
-                if (stageName === '1') logger.info('model : ', created, record);
+                // if (stageName === '1') logger.info('model : ', created, record);
 
                 // Se è stato creato non server che aggiorno l'oggetto row, altrimenti aggiorno il modello per FE con i dati del Db
                 if (!created && record.score != null) {

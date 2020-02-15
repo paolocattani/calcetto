@@ -17,7 +17,10 @@ export default class Pair extends Model<Pair> {
   public placement!: number;
 
   @Column(DataType.BOOLEAN)
-  public paid!: boolean;
+  public paid1!: boolean;
+
+  @Column(DataType.BOOLEAN)
+  public paid2!: boolean;
 
   // Models association
   // Tournament

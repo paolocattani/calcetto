@@ -44,8 +44,8 @@ export const columns = onSelect => [
     align: () => 'center'
   },
   {
-    dataField: 'paid',
-    text: 'Pagato',
+    dataField: 'paid1',
+    text: 'Pagato 1',
     align: () => 'center',
     editor: {
       type: Type.CHECKBOX,
@@ -61,7 +61,28 @@ export const columns = onSelect => [
       );
     },*/
     style: (content, row, rowIndex, columnIndex) => {
-      if (!row.paid) return { backgroundColor: '#ff695c' };
+      if (content !== 'Si') return { backgroundColor: '#ffbf47' };
+    }
+  },
+  {
+    dataField: 'paid2',
+    text: 'Pagato 2',
+    align: () => 'center',
+    editor: {
+      type: Type.CHECKBOX,
+      value: 'Si:No'
+    },
+    /*
+    formatter: (cell, row, rowIndex) => {
+      console.log(cell);
+      return (
+        <InputGroup>
+          <InputGroup.Checkbox style={{ margin: 'auto' }} onCancechecked={cell}></InputGroup.Checkbox>
+        </InputGroup>
+      );
+    },*/
+    style: (content, row, rowIndex, columnIndex) => {
+      if (content !== 'Si') return { backgroundColor: '#ffbf47' };
     }
   }
 ];
@@ -92,7 +113,8 @@ export function getEmptyRowModel() {
     player2: { id: null, alias: '', name: '', surname: '' },
     pairAlias: '',
     stage1Name: '',
-    paid: 'No'
+    paid1: 'No',
+    paid2: 'No'
   };
 }
 
