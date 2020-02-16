@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Alert } from 'react-bootstrap';
+import { Button, Alert, ListGroup } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { columns, cellEditProps, getEmptyRowModel, fetchPairs, getEmptyPlayer /* checkEditable */ } from './helper';
 import { useParams, useHistory } from 'react-router';
 import TableHeader from './header';
 import NoData from './noData';
+import Loading from '../core/Loading';
 import './style.css';
 
 const PairsTable = _ => {
@@ -12,7 +13,7 @@ const PairsTable = _ => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [allertMessage, setAllertMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [saved, setSaved] = useState(false);
+  // const [saved, setSaved] = useState(false);
 
   // const [isEditable, setIsEditable] = useState(false); // TODO:
   const [isLoading, setIsLoading] = useState(false); // FIXME:
@@ -38,7 +39,6 @@ const PairsTable = _ => {
       emptyRow.rowNumber = rows.length + 1;
       setRows(rows => [emptyRow, ...rows]);
       setIsLoading(false);
-      return false;
     })();
   }
 
@@ -55,13 +55,9 @@ const PairsTable = _ => {
       emptyRow.id = result.id;
       setRows(rows => rows.filter(row => !selectedRows.find(selectedRow => selectedRow.id === row.id)));
       setIsLoading(false);
-      return false;
     })();
   }
 
-  function goBack() {
-    currentHistory.push('/');
-  }
   // Aggiorno la colonna con il giocatore selezionato
   const onSelect = (selectedElement, rowIndex, columnIndex) => {
     setRows(rows =>
@@ -154,10 +150,23 @@ const PairsTable = _ => {
     style: { backgroundColor: '#c8e6c9' }
   };
 
-  return isLoading ? (
-    <p>Caricamento....</p>
-  ) : (
+  function deleteStage1() {
+    (async () => {
+      setIsLoading(true);
+      const emptyRow = getEmptyRowModel();
+      const response = await fetch('/api/stage1', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tId })
+      });
+      const result = await response.json();
+      setIsLoading(false);
+    })();
+  }
+
+  return (
     <>
+      <Loading show={isLoading} message={'Caricamento'} />
       {allertMessage && allertMessage !== '' ? (
         <Alert key={'pair-allert-message'} variant={'warning'}>
           {allertMessage}
@@ -168,22 +177,23 @@ const PairsTable = _ => {
           {errorMessage}
         </Alert>
       ) : null}
-      <Button variant="secondary" onClick={goBack}>
-        Home
-      </Button>
-      <Button variant="success" onClick={addRow}>
-        Aggiungi Coppia
-      </Button>
-      <Button variant="danger" onClick={deleteRow}>
-        Elimina Coppia
-      </Button>
-      <Button
-        variant="primary"
-        onClick={confirmPairs}
-        //disabled={rows.filter(e => !e.stage1Name || e.stage1Name === '') != [] ? true : false}
-      >
-        Conferma coppie
-      </Button>
+      <ListGroup horizontal>
+        <Button variant="secondary" onClick={goBack}>
+          Home
+        </Button>
+        <Button variant="success" onClick={addRow}>
+          Aggiungi Coppia
+        </Button>
+        <Button variant="danger" onClick={deleteRow}>
+          Elimina Coppia
+        </Button>
+        <Button variant="danger" onClick={deleteStage1}>
+          Reset gironi
+        </Button>
+        <Button variant="primary" onClick={confirmPairs}>
+          Conferma coppie
+        </Button>
+      </ListGroup>
       <BootstrapTable
         bootstrap4
         keyField="id"

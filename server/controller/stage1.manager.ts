@@ -13,6 +13,18 @@ router.use('/', (req, res, next) => {
   next();
 });
 
+/**
+ * Aggiornamento record specifico
+ */
+router.delete(
+  '/',
+  asyncMiddleware(async (req: Request, res: any, next: NextFunction) => {
+    const { tId } = req.body as any;
+    await Stage1Model.destroy({ where: { tournamentId: tId } });
+    return res.status(200).json({ saved: true });
+  })
+);
+
 // TODO: aggiungere definizione dati passati su body
 
 /**
@@ -156,7 +168,7 @@ router.post(
                 // if (stageName === '1') logger.info('model : ', created, record);
 
                 // Se è stato creato non server che aggiorno l'oggetto row, altrimenti aggiorno il modello per FE con i dati del Db
-                if (!created && record.score != null) {
+                if (!created) {
                   if (record.pair1Id === (pair1.id as number)) {
                     currentRowRef[currentRowKey] = record.score;
                     oppositeRow[`col${rowIndex}`] = getOpposite(record.score);
@@ -165,7 +177,7 @@ router.post(
                   } else {
                     currentRowRef[currentRowKey] = getOpposite(record.score);
                     oppositeRow[`col${rowIndex}`] = record.score;
-                    if (record.score !== null && record.score !== undefined) {
+                    if (record.score !== undefined) {
                       currentRowRef['total'] = currentRowTotal
                         ? parseInt(currentRowTotal) + getOpposite(record.score)!
                         : getOpposite(record.score);
