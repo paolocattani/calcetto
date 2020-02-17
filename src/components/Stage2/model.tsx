@@ -9,13 +9,15 @@ const Model: React.FC = _ => {
   };
 
   const innerElementStyle: CSSProperties = {
-    flexDirection: 'column'
+    flexDirection: 'column',
+    alignItems: 'stretch'
   };
 
   const innerParentStyle: CSSProperties = {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    alignContent: 'space-around'
   };
 
   let element = [];
