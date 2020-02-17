@@ -136,6 +136,29 @@ const PairsTable = _ => {
       }, 5000);
     }
 
+    // Controllo che non ci siano gironi con meno di 1 coppia ( meglio spostare 3 )
+    const MIN_PAIR_PER_STAGE = 1;
+    let invalidStage = [];
+    const pairsInStage = rows.reduce((allNames, row) => {
+      if (row.stage1Name in allNames) allNames[row.stage1Name]++;
+      else allNames[row.stage1Name] = 1;
+      return allNames;
+    }, {});
+    for (let stageName in pairsInStage) {
+      if (pairsInStage[stageName] <= MIN_PAIR_PER_STAGE) invalidStage.push(stageName);
+    }
+    if (invalidStage.length > 0) {
+      setErrorMessage(
+        invalidStage.length === 1
+          ? `Il torneo ${invalidStage} deve contenere almeno ${MIN_PAIR_PER_STAGE + 1} coppie`
+          : `I torneI ${invalidStage} devono contenere almeno ${MIN_PAIR_PER_STAGE + 1} coppie`
+      );
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 5000);
+      return;
+    }
+
     currentHistory.push(`/stage1/${tId}`);
   };
 

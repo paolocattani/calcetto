@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 // table
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
@@ -20,13 +20,6 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
       if (tableName === '1') console.log('Before save');
       // Aggiorno cella opposta
       rows[parseInt(column.text) - 1][`col${row.rowNumber}`] = getOpposite(newValue);
-      // Aggiorno totali
-      rows[row.rowNumber - 1]['total'] = rows[row.rowNumber - 1]['total']
-        ? rows[row.rowNumber - 1]['total'] + newValue
-        : newValue;
-      rows[parseInt(column.text) - 1]['total'] = rows[parseInt(column.text) - 1]['total']
-        ? rows[parseInt(column.text) - 1]['total'] + getOpposite(newValue)
-        : getOpposite(newValue);
       // Aggiorno posizione relativa
       [...rows]
         .sort((e1, e2) => comparator(e1, e2))

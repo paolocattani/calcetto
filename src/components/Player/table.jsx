@@ -1,6 +1,6 @@
 import React from 'react';
 // bootstrap
-import { Button, Row, Modal } from 'react-bootstrap';
+import { Button, Row, Modal, ListGroup } from 'react-bootstrap';
 // react-bootstrap-table
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory from 'react-bootstrap-table2-filter';
@@ -9,6 +9,8 @@ import cellEditFactory from 'react-bootstrap-table2-editor';
 // helper/ style
 import './style.css';
 import columns, { clearAllFilter, ExportCSVButton } from './helper';
+import TableHeader from './header';
+import Loading from '../core/Loading';
 
 export default class Player extends React.Component {
   constructor(props) {
@@ -146,24 +148,23 @@ export default class Player extends React.Component {
     const { rows, isLoading } = state;
     return (
       <>
-        {isLoading ? (
-          <Modal show={isLoading} onHide={() => this.setState({ isLoading: false })}>
-            <Modal.Body>Caricamento....</Modal.Body>
-          </Modal>
-        ) : null}
+        <Loading show={isLoading} message={'Caricamento'} />
         <Row>
           <ToolkitProvider keyField="id" data={rows} columns={columns} exportCSV>
             {props => (
               <>
-                <Button variant="success" onClick={addRow}>
-                  Aggiungi giocatore
-                </Button>
-                <Button variant="danger" onClick={deleteRow}>
-                  Calcella giocatore
-                </Button>
-                <Button variant="dark" onClick={clearAllFilter.bind(this)}>
-                  Pulisci Filtri
-                </Button>
+                <ListGroup horizontal>
+                  <Button variant="success" onClick={addRow}>
+                    Aggiungi giocatore
+                  </Button>
+                  <Button variant="danger" onClick={deleteRow}>
+                    Calcella giocatore
+                  </Button>
+                  <Button variant="dark" onClick={clearAllFilter.bind(this)}>
+                    Pulisci Filtri
+                  </Button>
+                </ListGroup>
+
                 {/* FIXME: */}
                 <ExportCSVButton {...props.csvProps} />
                 <BootstrapTable
@@ -173,6 +174,7 @@ export default class Player extends React.Component {
                   columns={columns}
                   cellEdit={this.cellEditProps}
                   selectRow={selectRow}
+                  caption={<TableHeader />}
                   filter={filterFactory()}
                   headerClasses="player-table-header"
                   noDataIndication="Nessun dato reperito"

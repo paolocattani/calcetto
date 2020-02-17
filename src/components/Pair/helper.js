@@ -41,7 +41,16 @@ export const columns = onSelect => [
   {
     dataField: 'stage1Name',
     text: 'Nome girone',
-    align: () => 'center'
+    align: () => 'center',
+    editor: {
+      type: Type.SELECT,
+      options: 'abcdefghijklmnopqrstuvwxyz'
+        .toUpperCase()
+        .split('')
+        .map(e => {
+          return { value: e, label: e };
+        })
+    }
   },
   {
     dataField: 'paid1',
