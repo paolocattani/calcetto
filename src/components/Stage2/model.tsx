@@ -13,8 +13,9 @@ const Model: React.FC = _ => {
   };
 
   const innerParentStyle: CSSProperties = {
+    display: 'flex',
     flexDirection: 'column',
-    margin: 'auto'
+    justifyContent: 'center'
   };
 
   let element = [];
@@ -22,7 +23,7 @@ const Model: React.FC = _ => {
     let thisList = [];
     for (let jj = 0; jj < Math.pow(2, ii); jj++) {
       thisList.push(
-        <ListGroup.Item key={`item-${ii}-${jj}`}>
+        <ListGroup.Item key={`item-${ii}-${jj}`} style={innerElementStyle}>
           <InputGroup>
             <FormControl placeholder={`${ii}-${jj}`} />
           </InputGroup>
@@ -31,14 +32,12 @@ const Model: React.FC = _ => {
     }
     element.push(
       <ListGroup.Item key={`col-${ii}`} style={innerParentStyle}>
-        <ListGroup variant="flush" style={innerElementStyle}>
-          {thisList}
-        </ListGroup>
+        <ListGroup variant="flush">{thisList}</ListGroup>
       </ListGroup.Item>
     );
   }
   return (
-    <ListGroup id="outer-container" style={outerStyle}>
+    <ListGroup variant="flush" id="outer-container" style={outerStyle}>
       {element}
     </ListGroup>
   );
