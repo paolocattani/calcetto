@@ -35,6 +35,14 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
     afterSaveCell: (oldValue, newValue, row, column) => {
       // Aggiorno dati sul Db
       updateCellValue(oldValue, newValue, row, column);
+      let acc = 0;
+      for (let key in row) if (key.startsWith('col')) acc += row[key];
+      rows[row.rowNumber - 1]['total'] = acc;
+
+      acc = 0;
+      for (let key in rows[parseInt(column.text) - 1])
+        if (key.startsWith('col')) acc += rows[parseInt(column.text) - 1][key];
+      rows[parseInt(column.text) - 1]['total'] = acc;
     }
   });
 

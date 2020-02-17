@@ -103,6 +103,7 @@ router.post(
     // logger.info('Model : ', rows);
     try {
       await asyncForEach(rows, async (currentRow: any, index: number, rowsRef: any) => {
+        rowsRef[index]['total'] = 0;
         for (let currentRowKey in currentRow) {
           if (currentRowKey.startsWith('col')) {
             // Numero riga/colonna corrente
