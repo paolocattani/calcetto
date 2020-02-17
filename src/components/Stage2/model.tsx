@@ -8,8 +8,13 @@ const Model: React.FC = _ => {
     flexDirection: 'row-reverse'
   };
 
-  const innerStyle: CSSProperties = {
-    flexDirection: 'column-reverse'
+  const innerElementStyle: CSSProperties = {
+    flexDirection: 'column'
+  };
+
+  const innerParentStyle: CSSProperties = {
+    flexDirection: 'column',
+    margin: 'auto'
   };
 
   let element = [];
@@ -17,7 +22,7 @@ const Model: React.FC = _ => {
     let thisList = [];
     for (let jj = 0; jj < Math.pow(2, ii); jj++) {
       thisList.push(
-        <ListGroup.Item>
+        <ListGroup.Item key={`item-${ii}-${jj}`}>
           <InputGroup>
             <FormControl placeholder={`${ii}-${jj}`} />
           </InputGroup>
@@ -25,8 +30,8 @@ const Model: React.FC = _ => {
       );
     }
     element.push(
-      <ListGroup.Item>
-        <ListGroup variant="flush" id="inner-container" style={innerStyle}>
+      <ListGroup.Item key={`col-${ii}`} style={innerParentStyle}>
+        <ListGroup variant="flush" style={innerElementStyle}>
           {thisList}
         </ListGroup>
       </ListGroup.Item>
