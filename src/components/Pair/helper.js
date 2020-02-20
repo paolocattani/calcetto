@@ -2,7 +2,7 @@ import React from 'react';
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import PlayerSelect from '../Player/select';
 
-export const columns = onSelect => [
+export const columns = (onSelect, options) => [
   { dataField: 'id', text: 'ID', editable: false, hidden: true, align: () => 'center' },
   { dataField: 'rowNumber', text: 'ID', editable: false, align: () => 'center' },
   {
@@ -18,6 +18,7 @@ export const columns = onSelect => [
         columnIndex={columnIndex}
         value={value}
         onSelect={onSelect}
+        options={options}
       />
     )
   },
@@ -34,6 +35,7 @@ export const columns = onSelect => [
         columnIndex={columnIndex}
         value={value}
         onSelect={onSelect}
+        options={options}
       />
     )
   },

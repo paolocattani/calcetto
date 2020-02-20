@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Alert, ListGroup } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { columns, cellEditProps, getEmptyRowModel, fetchPairs, getEmptyPlayer /* checkEditable */ } from './helper';
+import { fetchPlayers } from '../Player/helper';
 import { useParams, useHistory } from 'react-router';
 import TableHeader from './header';
 import NoData from './noData';
@@ -10,6 +11,7 @@ import './style.css';
 
 const PairsTable = _ => {
   const [rows, setRows] = useState([] /*PairsGenerator()*/);
+  const [options, setOptions] = useState([] /*PairsGenerator()*/);
   const [selectedRows, setSelectedRows] = useState([]);
   const [allertMessage, setAllertMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -22,7 +24,10 @@ const PairsTable = _ => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   // useEffect(() => checkEditable(setIsEditable, tId), []);
-  useEffect(() => fetchPairs(setRows, tId), [tId]);
+  useEffect(() => {
+    fetchPairs(setRows, tId);
+    fetchPlayers(setOptions);
+  }, [tId]);
 
   function addRow() {
     (async () => {
@@ -58,39 +63,63 @@ const PairsTable = _ => {
     })();
   }
 
+  function updateOptions(player, selected) {
+    console.log('updating options ', player);
+    if (player.id) {
+      const opts = options.find(e => e.id === player.id);
+      console.log('opts : ', opts);
+      if (opts && opts.length === 0) {
+        console.log('found player : ', player);
+        setOptions(current => [...current, player]);
+      }
+    } else {
+      console.log('deleting player : ', selected);
+      setOptions(
+        options.splice(
+          options.findIndex(e => e.id === selected.id),
+          1
+        )
+      );
+    }
+    console.log('option updated : ', options);
+  }
   // Aggiorno la colonna con il giocatore selezionato
   const onSelect = (selectedElement, rowIndex, columnIndex) => {
-    setRows(rows =>
-      rows.map(rowElement => {
-        if (rowElement.id === rowIndex) {
-          let row = rowElement;
-          if (columnIndex === 1) {
-            if (row.player2.id === selectedElement.id) {
-              row.player2 = getEmptyPlayer();
-              setAllertMessage('Attenzione : Non puoi selezionare lo stesso giocare ! ');
-              setTimeout(() => setAllertMessage(''), 5000);
-            } else row.player1 = selectedElement;
+    const newRowsElement = rows.map(rowElement => {
+      if (rowElement.id === rowIndex) {
+        let row = rowElement;
+        if (columnIndex === 1) {
+          if (row.player2.id === selectedElement.id) {
+            // Devo salvare l'elemnto che sto per sostituire
+            row.player1 = getEmptyPlayer();
+            setAllertMessage('Attenzione : Non puoi selezionare lo stesso giocare ! ');
+            setTimeout(() => setAllertMessage(''), 5000);
           } else {
-            if (row.player1.id === selectedElement.id) {
-              row.player2 = getEmptyPlayer();
-              setAllertMessage('Attenzione : Non puoi selezionare lo stesso giocare ! ');
-              setTimeout(() => setAllertMessage(''), 5000);
-            } else row.player2 = selectedElement;
+            // Aggiorno la lista dei giocatori disponibili prima di aggiornare i dati
+            updateOptions(row.player1, selectedElement);
+            row.player1 = selectedElement;
           }
-          // update db
-          (async () => {
-            console.log('updating : ', row);
-            const response = await fetch('/api/pair', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(row)
-            });
-            await response.json();
-          })();
-          return row;
-        } else return rowElement;
-      })
-    );
+        } else {
+          if (row.player1.id === selectedElement.id) {
+            row.player2 = getEmptyPlayer();
+            setAllertMessage('Attenzione : Non puoi selezionare lo stesso giocare ! ');
+            setTimeout(() => setAllertMessage(''), 5000);
+          } else {
+            updateOptions(row.player2, selectedElement);
+            row.player2 = selectedElement;
+          }
+        }
+        // update Db. Non aspetto la risposta...
+        fetch('/api/pair', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(row)
+        });
+        return row;
+      } else return rowElement;
+    });
+
+    setRows(newRowsElement);
   };
 
   const handleSelect = (row, isSelected) => {
@@ -137,7 +166,7 @@ const PairsTable = _ => {
     }
 
     // Controllo che non ci siano gironi con meno di 1 coppia ( meglio spostare 3 )
-    const MIN_PAIR_PER_STAGE = 1;
+    const MIN_PAIR_PER_STAGE = 3;
     let invalidStage = [];
     const pairsInStage = rows.reduce((allNames, row) => {
       if (row.stage1Name in allNames) allNames[row.stage1Name]++;
@@ -159,6 +188,7 @@ const PairsTable = _ => {
       return;
     }
 
+    // Stage1
     currentHistory.push(`/stage1/${tId}`);
   };
 
@@ -187,6 +217,7 @@ const PairsTable = _ => {
     })();
   }
 
+  console.log('render table : ', options);
   return (
     <>
       <Loading show={isLoading} message={'Caricamento'} />
@@ -221,7 +252,7 @@ const PairsTable = _ => {
         bootstrap4
         keyField="id"
         data={rows}
-        columns={columns(onSelect)}
+        columns={columns(onSelect, options)}
         cellEdit={cellEditProps}
         selectRow={selectRow}
         noDataIndication={<NoData addRow={addRow} />}

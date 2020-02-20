@@ -6,7 +6,7 @@ import { fetchPlayers, valueFormatter } from './helper';
 const PlayerSelection = React.forwardRef((props, ref) => {
   const [playerList, setPlayerList] = useState([]);
   const [selectedOption, setSelectedOption] = useState();
-  const { row, columnIndex, id, onUpdate, onSelect } = props;
+  const { row, columnIndex, id, onUpdate, onSelect, options } = props;
 
   function getValue() {
     return valueFormatter(selectedOption);
@@ -22,10 +22,10 @@ const PlayerSelection = React.forwardRef((props, ref) => {
 
   useEffect(() => fetchPlayers(setPlayerList), []);
 
-  console.log('render : ', playerList);
+  console.log('render : ', options);
   return (
     <Select
-      options={playerList}
+      options={options}
       onChange={handleChange}
       value={selectedOption}
       placeholder="Cerca..."
