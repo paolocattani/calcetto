@@ -90,13 +90,23 @@ function rowToModel(row: Pair, index: number) {
       id: row.player1?.id ?? null,
       alias: row.player1?.alias ?? '',
       name: row.player1?.name ?? '',
-      surname: row.player1?.surname ?? ''
+      surname: row.player1?.surname ?? '',
+      label: row.player1?.alias ?? '',
+      role: row.player1?.role ?? null,
+      match_played: row.player1?.match_played ?? 0,
+      match_won: row.player1?.match_won ?? 0,
+      total_score: row.player1?.total_score ?? 0
     },
     player2: {
       id: row.player2?.id ?? null,
       alias: row.player2?.alias ?? '',
       name: row.player2?.name ?? '',
-      surname: row.player2?.surname ?? ''
+      surname: row.player2?.surname ?? '',
+      label: row.player2?.alias ?? '',
+      role: row.player2?.role ?? null,
+      match_played: row.player2?.match_played ?? 0,
+      match_won: row.player2?.match_won ?? 0,
+      total_score: row.player2?.total_score ?? 0
     },
     pairAlias: row.pairAlias,
     stage1Name: row.stage1Name,

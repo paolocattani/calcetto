@@ -50,6 +50,14 @@ const PairsTable = _ => {
   function deleteRow() {
     (async () => {
       setIsLoading(true);
+      // Devo ripristinare i giocatori eliminati
+      let players = [];
+      selectedRows.forEach(e => {
+        if (e.player1.id) players.push(e.player1);
+        if (e.player2.id) players.push(e.player2);
+      });
+      if (players) setOptions(current => [...players, ...current].sort((e1, e2) => e1.alias.localeCompare(e2.alias)));
+
       const emptyRow = getEmptyRowModel();
       const response = await fetch('/api/pair', {
         method: 'DELETE',
@@ -71,8 +79,6 @@ const PairsTable = _ => {
         [...options.filter(e => e.id !== selected.id), player].sort((e1, e2) => e1.alias.localeCompare(e2.alias))
       );
     } else setOptions(options.filter(e => e.id !== selected.id));
-
-    console.log('option updated : ', options);
   }
   // Aggiorno la colonna con il giocatore selezionato
   const onSelect = (selectedElement, rowIndex, columnIndex) => {
@@ -208,7 +214,7 @@ const PairsTable = _ => {
     })();
   }
 
-  console.log('render table : ', options);
+  //console.log('render table : ', options);
   return (
     <>
       <Loading show={isLoading} message={'Caricamento'} />
