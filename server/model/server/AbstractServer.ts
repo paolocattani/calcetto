@@ -77,9 +77,11 @@ export abstract class AbstractServer implements IServer {
 
   public start(): void {
     if (cluster.isMaster) {
+      /*
       if (!process.env.AUTH0_DOMAIN || !process.env.AUTH0_AUDIENCE) {
         throw 'Make sure you have AUTH0_DOMAIN, and AUTH0_AUDIENCE in your .env file';
       }
+      */
       logger.info(`Starting server ${chalk.yellow(this.serverName)} as Cluster Mode..`);
       logger.info(`${osCpus().length} current available CPUs but using ${this.maxCPUs}`);
       for (let i = 0; i < this.maxCPUs! - 1; i++) cluster.fork();

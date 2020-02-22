@@ -21,8 +21,6 @@ const PlayerSelection = React.forwardRef((props, ref) => {
   };
 
   useEffect(() => fetchPlayers(setPlayerList), []);
-
-  console.log('render : ', options);
   return (
     <Select
       options={options}
