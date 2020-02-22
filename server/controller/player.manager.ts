@@ -1,5 +1,4 @@
 import { Router, Application as ExpressApplication } from 'express';
-import util from 'util';
 import Player from '../model/sequelize/player.model';
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';

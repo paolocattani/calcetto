@@ -178,7 +178,7 @@ router.post(
                 if (stageName === '1' && ((pair1.id === 10 && pair2.id === 18) || (pair1.id === 28 && pair2.id === 10)))
                   logger.info('updating : ', model);
               } catch (error) {
-                logger.error('Error on  : ', currentRowRef, currentRowKey);
+                logger.error('Error on  : ', currentRowRef, currentRowKey, error);
               }
             }
           }

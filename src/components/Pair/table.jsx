@@ -223,7 +223,7 @@ const PairsTable = _ => {
         if (current == stage1Number) current = 0;
         row['stage1Name'] = names[current];
         current++;
-
+        // FIXME:
         (async () => {
           const response = await fetch('/api/pair', {
             method: 'POST',

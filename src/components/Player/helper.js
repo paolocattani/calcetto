@@ -107,21 +107,31 @@ export const fetchPlayers = (setterFunction, tId) => {
       headers: { 'Content-Type': 'application/json' }
     });
     const result = await response.json();
-    setterFunction(
-      result.map(e => {
-        return {
-          id: e.id,
-          name: e.name,
-          surname: e.surname,
-          alias: e.alias,
-          label: e.alias,
-          role: e.role,
-          match_played: e.match_played,
-          match_won: e.match_won,
-          total_score: e.total_score
-        };
-      })
-    );
+    setterFunction([
+      ...result.map(e => ({
+        id: e.id,
+        name: e.name,
+        surname: e.surname,
+        alias: e.alias,
+        label: e.alias,
+        role: e.role,
+        match_played: e.match_played,
+        match_won: e.match_won,
+        total_score: e.total_score
+      })),
+      // FIXME:
+      {
+        id: 0,
+        name: '',
+        surname: '',
+        alias: '',
+        label: 'Nessun Giocatore',
+        role: '',
+        match_played: 0,
+        match_won: 0,
+        total_score: 0
+      }
+    ]);
   })();
 };
 
