@@ -17,7 +17,6 @@ router.get('/list/:tId', async (req, res, next) => {
       order: [['id', 'DESC']],
       include: [Player.associations.pair1, Player.associations.pair2]
     });
-    console.log(users);
     return res.json(
       users.filter(player =>
         /*
