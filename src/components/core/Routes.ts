@@ -3,6 +3,7 @@ import PlayerTable from '../Player/table';
 import Pairs from '../Pair/table';
 import Stage1Wrapper from '../Stage1/wrapper';
 import Stage2 from '../Stage2/model';
+import { OrganizationChartDemo } from '../Stage2/table';
 
 // TODO:
 import * as Todo from '../DELETE/Todo';
@@ -48,7 +49,7 @@ export const routes: routeType[] = [
     path: '/stage2/:tId',
     label: 'Torneo fase 2',
     exact: true,
-    component: Stage2,
+    component: OrganizationChartDemo,
     visible: false,
     index: 40
   },

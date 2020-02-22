@@ -17,25 +17,28 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
     mode: 'click',
     blurToSave: true,
     beforeSaveCell: (oldValue, newValue, row, column) => {
-      if (tableName === '1') console.log('Before save');
-      // Aggiorno cella opposta
-      rows[parseInt(column.text) - 1][`col${row.rowNumber}`] = getOpposite(newValue);
-      // Aggiorno posizione relativa
-      [...rows]
-        .sort((e1, e2) => comparator(e1, e2))
-        .forEach((row, index) => (rows[row.rowNumber - 1]['place'] = index + 1));
+      if (row.id.startsWith('col')) {
+        // Aggiorno cella opposta
+        rows[parseInt(column.text) - 1][`col${row.rowNumber}`] = getOpposite(newValue);
+        // Aggiorno posizione relativa
+        [...rows]
+          .sort((e1, e2) => comparator(e1, e2))
+          .forEach((row, index) => (rows[row.rowNumber - 1]['place'] = index + 1));
+      }
     },
     afterSaveCell: (oldValue, newValue, row, column) => {
-      // Aggiorno dati sul Db
-      updateCellValue(oldValue, newValue, row, column);
-      let acc = 0;
-      for (let key in row) if (key.startsWith('col')) acc += row[key];
-      rows[row.rowNumber - 1]['total'] = acc;
+      if (row.id.startsWith('col')) {
+        // Aggiorno dati sul Db
+        updateCellValue(oldValue, newValue, row, column);
+        let acc = 0;
+        for (let key in row) if (key.startsWith('col')) acc += row[key];
+        rows[row.rowNumber - 1]['total'] = acc ? acc : null;
 
-      acc = 0;
-      for (let key in rows[parseInt(column.text) - 1])
-        if (key.startsWith('col')) acc += rows[parseInt(column.text) - 1][key];
-      rows[parseInt(column.text) - 1]['total'] = acc;
+        acc = 0;
+        for (let key in rows[parseInt(column.text) - 1])
+          if (key.startsWith('col')) acc += rows[parseInt(column.text) - 1][key];
+        rows[parseInt(column.text) - 1]['total'] = acc ? acc : null;
+      }
     }
   });
 
