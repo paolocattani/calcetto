@@ -100,9 +100,9 @@ export const ExportCSVButton = props => {
   );
 };
 
-export const fetchPlayers = setterFunction => {
+export const fetchPlayers = (setterFunction, tId) => {
   (async () => {
-    const response = await fetch('/api/player/list', {
+    const response = await fetch(tId ? `/api/player/list/${tId}` : '/api/player/list', {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     });

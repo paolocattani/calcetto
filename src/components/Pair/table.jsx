@@ -26,7 +26,7 @@ const PairsTable = _ => {
   // useEffect(() => checkEditable(setIsEditable, tId), []);
   useEffect(() => {
     fetchPairs(setRows, tId);
-    fetchPlayers(setOptions);
+    fetchPlayers(setOptions, tId);
   }, [tId]);
 
   function addRow() {
@@ -64,23 +64,14 @@ const PairsTable = _ => {
   }
 
   function updateOptions(player, selected) {
-    console.log('updating options ', player);
+    console.log('updating options ', player, selected);
     if (player.id) {
-      const opts = options.find(e => e.id === player.id);
-      console.log('opts : ', opts);
-      if (opts && opts.length === 0) {
-        console.log('found player : ', player);
-        setOptions(current => [...current, player]);
-      }
-    } else {
-      console.log('deleting player : ', selected);
+      console.log('found player : ', player);
       setOptions(
-        options.splice(
-          options.findIndex(e => e.id === selected.id),
-          1
-        )
+        [...options.filter(e => e.id !== selected.id), player].sort((e1, e2) => e1.alias.localeCompare(e2.alias))
       );
-    }
+    } else setOptions(options.filter(e => e.id !== selected.id));
+
     console.log('option updated : ', options);
   }
   // Aggiorno la colonna con il giocatore selezionato

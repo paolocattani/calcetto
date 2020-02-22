@@ -126,20 +126,6 @@ router.post(
             if (rowIndex !== colIndex) {
               try {
                 /**
-                 * Se non mi è stato passato un valore dal FE non lo assegno al modello perchè
-                 * potrei gia aver un valore assegnato sul db.
-                 */
-
-                // console.log(`     ( p1,p2,score ) = ( ${p1},${p2}, ${score} )`);
-                const model = {
-                  name: stageName,
-                  tournamentId,
-                  pair1Id: pair1.id,
-                  pair2Id: pair2.id,
-                  // score: currentScore,
-                  placement: null
-                };
-                /**
                  * Salvo solo una parte della matrice in quanto l'altra posso calcolarla
                  * Quindi dal record sotto posso ricavare il risultato di :
                  *
@@ -153,6 +139,8 @@ router.post(
                  *
                  */
                 // logger.info('model1 : ', model);
+                // console.log(`     ( p1,p2,score ) = ( ${p1},${p2}, ${score} )`);
+                const model = { name: stageName, tournamentId, pair1Id: pair1.id, pair2Id: pair2.id };
                 // Salvo solo uno scontro e l'altro lo calcolo.
                 const [record, created] = await Stage1Model.findOrCreate({
                   where: {
@@ -168,7 +156,7 @@ router.post(
                 });
                 // if (stageName === '1') logger.info('model : ', created, record);
 
-                // Se è stato creato non server che aggiorno l'oggetto row, altrimenti aggiorno il modello per FE con i dati del Db
+                // Se non sono in inserimento aggiorno il modello per FE con i dati del Db
                 if (!created) {
                   if (record.pair1Id === (pair1.id as number)) {
                     currentRowRef[currentRowKey] = record.score;

@@ -10,6 +10,29 @@ router.use('/', (req, res, next) => {
   next();
 });
 
+router.get('/list/:tId', async (req, res, next) => {
+  try {
+    const tId = req.params.tId ? parseInt(req.params.tId) : 0;
+    const users = await Player.findAll({
+      order: [['id', 'DESC']],
+      include: [Player.associations.pair1, Player.associations.pair2]
+    });
+    console.log(users);
+    return res.json(
+      users.filter(player =>
+        /*
+         * Se il giocatore è gia stato assegnato ad una coppia ( in posizione 1 o 2 )
+         * che appartiene al torneo che sto analizzando allora lo devo escludere
+         * perchè non è piu tra quelli selezionabili
+         */
+        player.pair1.find(e => e.tournamentId === tId) || player.pair2.find(e => e.tournamentId === tId) ? false : true
+      )
+    );
+  } catch (err) {
+    return next(err);
+  }
+});
+
 router.get('/list', async (req, res, next) => {
   try {
     const users = await Player.findAll({ order: [['id', 'DESC']] });
