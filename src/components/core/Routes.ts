@@ -50,7 +50,7 @@ export const routes: routeType[] = [
     label: 'Torneo fase 2',
     exact: true,
     component: OrganizationChartDemo,
-    visible: false,
+    visible: true,
     index: 40
   },
   // TODO: creare pagina per route not found

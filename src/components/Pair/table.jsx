@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Alert, ListGroup } from 'react-bootstrap';
+import { Button, Alert, ListGroup, InputGroup, FormControl, Row } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { columns, cellEditProps, getEmptyRowModel, fetchPairs, getEmptyPlayer /* checkEditable */ } from './helper';
 import { fetchPlayers } from '../Player/helper';
@@ -7,6 +7,7 @@ import { useParams, useHistory } from 'react-router';
 import TableHeader from './header';
 import NoData from './noData';
 import Loading from '../core/Loading';
+import { getRandomIntInclusive } from '../core/utils';
 import './style.css';
 
 const PairsTable = _ => {
@@ -15,8 +16,8 @@ const PairsTable = _ => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [allertMessage, setAllertMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [stage1Number, setStage1Number] = useState(0);
   // const [saved, setSaved] = useState(false);
-
   // const [isEditable, setIsEditable] = useState(false); // TODO:
   const [isLoading, setIsLoading] = useState(false); // FIXME:
   const { tId } = useParams();
@@ -72,13 +73,11 @@ const PairsTable = _ => {
   }
 
   function updateOptions(player, selected) {
-    console.log('updating options ', player, selected);
-    if (player.id) {
-      console.log('found player : ', player);
+    if (player.id)
       setOptions(
         [...options.filter(e => e.id !== selected.id), player].sort((e1, e2) => e1.alias.localeCompare(e2.alias))
       );
-    } else setOptions(options.filter(e => e.id !== selected.id));
+    else setOptions(options.filter(e => e.id !== selected.id));
   }
   // Aggiorno la colonna con il giocatore selezionato
   const onSelect = (selectedElement, rowIndex, columnIndex) => {
@@ -214,51 +213,83 @@ const PairsTable = _ => {
     })();
   }
 
+  function setStage1Name() {
+    let current = 0;
+    const names = 'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('');
+    console.log('setStage1Name : ', stage1Number);
+    setRows(element =>
+      element.map(e => {
+        if (current == stage1Number) current = 0;
+        e['stage1Name'] = names[current];
+        current++;
+        return e;
+      })
+    );
+  }
   //console.log('render table : ', options);
   return (
     <>
       <Loading show={isLoading} message={'Caricamento'} />
-      {allertMessage && allertMessage !== '' ? (
-        <Alert key={'pair-allert-message'} variant={'warning'}>
-          {allertMessage}
-        </Alert>
-      ) : null}
-      {errorMessage && errorMessage !== '' ? (
-        <Alert key={'pair-allert-message'} variant={'danger'}>
-          {errorMessage}
-        </Alert>
-      ) : null}
-      <ListGroup horizontal>
-        <Button variant="secondary" onClick={goBack}>
-          Home
-        </Button>
-        <Button variant="success" onClick={addRow}>
-          Aggiungi Coppia
-        </Button>
-        <Button variant="danger" onClick={deleteRow}>
-          Elimina Coppia
-        </Button>
-        <Button variant="danger" onClick={deleteStage1}>
-          Reset gironi
-        </Button>
-        <Button variant="primary" onClick={confirmPairs}>
-          Conferma coppie
-        </Button>
-      </ListGroup>
-      <BootstrapTable
-        bootstrap4
-        keyField="id"
-        data={rows}
-        columns={columns(onSelect, options)}
-        cellEdit={cellEditProps}
-        selectRow={selectRow}
-        noDataIndication={<NoData addRow={addRow} />}
-        caption={<TableHeader tournametId={tId} />}
-        wrapperClasses="player-table"
-        headerClasses="player-table-header"
-        striped
-        hover
-      />
+      <Row>
+        {allertMessage && allertMessage !== '' ? (
+          <Alert key={'pair-allert-message'} variant={'warning'}>
+            {allertMessage}
+          </Alert>
+        ) : null}
+        {errorMessage && errorMessage !== '' ? (
+          <Alert key={'pair-allert-message'} variant={'danger'}>
+            {errorMessage}
+          </Alert>
+        ) : null}
+      </Row>
+      <Row>
+        <ListGroup horizontal>
+          <Button variant="secondary" onClick={goBack}>
+            Home
+          </Button>
+          <Button variant="success" onClick={addRow}>
+            Aggiungi Coppia
+          </Button>
+          <Button variant="danger" onClick={deleteRow}>
+            Elimina Coppia
+          </Button>
+          <Button variant="danger" onClick={deleteStage1}>
+            Reset gironi
+          </Button>
+          <Button variant="primary" onClick={confirmPairs}>
+            Conferma coppie
+          </Button>
+        </ListGroup>
+      </Row>
+      <Row>
+        <InputGroup onChange={e => setStage1Number(e.target.value)}>
+          <InputGroup.Prepend>
+            <InputGroup.Text>Assegna Gironi</InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl placeholder="Numero di gironi" aria-label="Numero di gironi" />
+          <InputGroup.Append>
+            <Button variant="primary" onClick={setStage1Name}>
+              Conferma
+            </Button>
+          </InputGroup.Append>
+        </InputGroup>
+      </Row>
+      <Row>
+        <BootstrapTable
+          bootstrap4
+          keyField="id"
+          data={rows}
+          columns={columns(onSelect, options)}
+          cellEdit={cellEditProps}
+          selectRow={selectRow}
+          noDataIndication={<NoData addRow={addRow} />}
+          caption={<TableHeader tournametId={tId} />}
+          wrapperClasses="player-table"
+          headerClasses="player-table-header"
+          striped
+          hover
+        />
+      </Row>
     </>
   );
 };

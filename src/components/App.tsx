@@ -42,7 +42,6 @@ const App: React.FC = _ => {
 
       <br></br>
       {showModal ? <PlayerModal show={showModal} onHide={() => setShowModal(false)} /> : null}
-      <Button onClick={goToStage2}>stage2</Button>
       <Container>
         <Switch>
           <Route path="/login" component={Login} />
