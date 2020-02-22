@@ -250,7 +250,7 @@ const PairsTable = _ => {
           <Button variant="success" onClick={addRow}>
             Aggiungi Coppia
           </Button>
-          <Button variant="danger" onClick={deleteRow}>
+          <Button variant="danger" onClick={deleteRow} disabled={selectedRows.length > 0 ? false : true}>
             Elimina Coppia
           </Button>
           <Button variant="danger" onClick={deleteStage1}>
