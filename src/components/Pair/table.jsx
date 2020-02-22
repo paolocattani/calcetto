@@ -184,6 +184,8 @@ const PairsTable = _ => {
       return;
     }
 
+    //
+    console.log('current rows : ', rows);
     // Stage1
     currentHistory.push(`/stage1/${tId}`);
   };
@@ -216,16 +218,26 @@ const PairsTable = _ => {
   function setStage1Name() {
     let current = 0;
     const names = 'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('');
-    console.log('setStage1Name : ', stage1Number);
-    setRows(element =>
-      element.map(e => {
+    setRows(
+      rows.map(row => {
         if (current == stage1Number) current = 0;
-        e['stage1Name'] = names[current];
+        row['stage1Name'] = names[current];
         current++;
-        return e;
+
+        (async () => {
+          const response = await fetch('/api/pair', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(row)
+          });
+          await response.json();
+        })();
+
+        return row;
       })
     );
   }
+
   //console.log('render table : ', options);
   return (
     <>

@@ -49,7 +49,8 @@ export const routes: routeType[] = [
     path: '/stage2/:tId',
     label: 'Torneo fase 2',
     exact: true,
-    component: OrganizationChartDemo,
+    component: Stage2,
+    //component: OrganizationChartDemo,
     visible: true,
     index: 40
   },

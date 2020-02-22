@@ -42,7 +42,7 @@ const App: React.FC = _ => {
 
       <br></br>
       {showModal ? <PlayerModal show={showModal} onHide={() => setShowModal(false)} /> : null}
-      <Container>
+      <Container fluid>
         <Switch>
           <Route path="/login" component={Login} />
           {/* Carica dinamicamente le route a partire dall'oggetto routes ( vedi sopra ) */
