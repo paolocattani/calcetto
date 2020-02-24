@@ -33,7 +33,6 @@ router.get('/list/', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   const { body } = req;
   const { player1, player2, id, tId, pairAlias, stage1Name, paid1, paid2 } = body;
-  const t = await dbConnection.transaction();
   try {
     let pair: Pair | null = null;
     const model = {
@@ -49,16 +48,14 @@ router.post('/', async (req, res, next) => {
     if (model.id) pair = await Pair.findOne({ where: { id: model.id } });
     // creazione coppia
     if (pair) {
-      await pair.update(model), { transaction: t };
+      await pair.update(model);
       logger.info(`updated => ${pair.toString()}`);
     } else {
-      pair = await Pair.create(model, { transaction: t });
+      pair = await Pair.create(model);
       logger.info(`created => ${pair.toString()}`);
     }
-    t.commit();
     return res.status(200).json(pair);
   } catch (err) {
-    t.rollback();
     return next(err);
   }
 });

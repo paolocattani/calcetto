@@ -13,15 +13,9 @@ import morgan from 'morgan';
 import compression from 'compression';
 import { json, urlencoded } from 'body-parser';
 import cookieParser from 'cookie-parser';
-import express, { Application as ExpressApplication, Request, Response, NextFunction } from 'express';
+import express, { Application as ExpressApplication } from 'express';
 // Auth
 import cors from 'cors';
-import jwt from 'express-jwt';
-//require('express-jwt-authz');
-import jwksRsa from 'jwks-rsa';
-import expressSession from 'express-session';
-import passport from 'passport';
-const Auth0Strategy = require('passport-auth0');
 // Other
 import chalk from 'chalk';
 import path from 'path';
@@ -36,29 +30,6 @@ export interface IServer {
 }
 
 /* Constants */
-export const checkJwt = jwt({
-  // Dynamically provide a signing key based on the [Key ID](https://tools.ietf.org/html/rfc7515#section-4.1.4) header parameter ("kid") and the signing keys provided by the JWKS endpoint.
-  secret: jwksRsa.expressJwtSecret({
-    cache: true,
-    rateLimit: true,
-    jwksRequestsPerMinute: 5,
-    jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`
-  }),
-
-  // Validate the audience and the issuer.
-  audience: process.env.AUTH0_AUDIENCE,
-  issuer: `https://${process.env.AUTH0_DOMAIN}/`,
-  algorithms: ['RS256']
-});
-
-const session: expressSession.SessionOptions = {
-  secret: 'LoxodontaElephasMammuthusPalaeoloxodonPrimelephas',
-  cookie: {},
-  resave: false,
-  saveUninitialized: false
-};
-
-//export const checkScopes = jwtAuthz(['read:messages']);
 /* Class */
 export abstract class AbstractServer implements IServer {
   serverName: string;
@@ -106,13 +77,7 @@ export abstract class AbstractServer implements IServer {
       this.application.use(urlencoded({ extended: false }));
       this.application.use(cookieParser());
 
-      if (this.application.get('env') === 'production' || isProductionMode) {
-        // Serve secure cookies, requires HTTPS
-        session.cookie!.secure = true;
-      }
-
       this.application.use(cors(this.corsOptions));
-      this.application.use(expressSession(session));
       this.application.disable('x-powered-by');
 
       this.application.all('*', routeLogger);

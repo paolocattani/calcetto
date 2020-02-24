@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Select from 'react-select';
-import { fetchPlayers, valueFormatter } from './helper';
+import { valueFormatter } from './helper';
 
 // Probabilmente il componente Select usa Ref.... Lascio cosi..
 const PlayerSelection = React.forwardRef((props, ref) => {
-  const [playerList, setPlayerList] = useState([]);
   const [selectedOption, setSelectedOption] = useState();
   const { row, columnIndex, id, onUpdate, onSelect, options } = props;
 
+  // eslint-disable-next-line no-unused-vars
   function getValue() {
     return valueFormatter(selectedOption);
   }
@@ -20,7 +20,6 @@ const PlayerSelection = React.forwardRef((props, ref) => {
     onSelect(selectedOption, row.id, columnIndex);
   };
 
-  useEffect(() => fetchPlayers(setPlayerList), []);
   return (
     <Select
       options={options}

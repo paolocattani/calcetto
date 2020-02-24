@@ -1,4 +1,4 @@
-import React, { useState, CSSProperties } from 'react';
+import React, { CSSProperties } from 'react';
 import { ListGroup, InputGroup, FormControl } from 'react-bootstrap';
 
 const Model: React.FC = _ => {

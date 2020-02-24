@@ -1,6 +1,6 @@
 import React from 'react';
 // bootstrap
-import { Button, Row, Modal, ListGroup } from 'react-bootstrap';
+import { Button, Row, ListGroup } from 'react-bootstrap';
 // react-bootstrap-table
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory from 'react-bootstrap-table2-filter';

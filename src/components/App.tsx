@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Switch, Route, useHistory } from 'react-router';
+import React from 'react';
+import { Switch, Route } from 'react-router';
 import { useSessionContext } from '../components/core/SessionContext';
 import { ProtectedRoute, ProtectedRouteProps } from '../components/core/ProtectedRoute';
 import './style/App.css';
@@ -7,15 +7,12 @@ import { Login } from './Login/Login';
 // import { useHistory } from 'react-router-dom';
 import routes from '../components/core/Routes';
 import { FNavbar } from './Navbar/Navbar';
-import { Container, Button } from 'react-bootstrap';
-import PlayerModal from './Player/modal';
+import { Container } from 'react-bootstrap';
 
 const applicationName = 'calcetto C.S.M';
 
 const App: React.FC = _ => {
   const [sessionContext, updateSessionContext] = useSessionContext();
-  const [showModal, setShowModal] = useState(false);
-  let currentHistory = useHistory();
 
   const setRedirectPathOnAuthentication = (path: string) => {
     updateSessionContext({ ...sessionContext, redirectPathOnAuthentication: path });
@@ -28,10 +25,6 @@ const App: React.FC = _ => {
     setRedirectPathOnAuthentication
   };
 
-  function goToStage2() {
-    currentHistory.push('/stage2/1');
-  }
-
   return (
     <div className="App">
       {/** Header */}
@@ -41,7 +34,6 @@ const App: React.FC = _ => {
       </header>
 
       <br></br>
-      {showModal ? <PlayerModal show={showModal} onHide={() => setShowModal(false)} /> : null}
       <Container fluid>
         <Switch>
           <Route path="/login" component={Login} />

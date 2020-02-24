@@ -15,7 +15,7 @@ import { Logger } from 'log4js';
 // white list for CORS
 const applicationName: string = 'ApplicationServer';
 const applicationPort: number = Number(process.env.SERVER_PORT);
-const applicationCPUs: number = Number(process.env.SERVER_CPU);
+const applicationCPUs: number = Number(process.env.SERVER_WORKERS);
 const whiteList: string[] = [
   `http://${process.env.CLIENT_HOST}:${process.env.CLIENT_PORT}`,
   `https://${process.env.CLIENT_HOST}:${process.env.CLIENT_PORT}`,

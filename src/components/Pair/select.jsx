@@ -6,8 +6,9 @@ import { fetchPairs, valueFormatter } from './helper';
 const PairsSelection = React.forwardRef((props, ref) => {
   const [pairsList, setPairsList] = useState([]);
   const [selectedOption, setSelectedOption] = useState();
-  const { row, columnIndex, id, onUpdate, onSelect, tId, options } = props;
+  const { row, columnIndex, id, onUpdate, onSelect, tId } = props;
 
+  // eslint-disable-next-line no-unused-vars
   function getValue() {
     return valueFormatter(selectedOption);
   }
@@ -16,8 +17,6 @@ const PairsSelection = React.forwardRef((props, ref) => {
     selectedOption.pairId = id;
     setSelectedOption(selectedOption);
     // vedi il campo label sul manager
-    console.log('handleChange.row : ', row);
-    console.log('handleChange.selectedOption : ', selectedOption);
     const value = valueFormatter(selectedOption);
     onUpdate(value);
     onSelect(selectedOption, row.id, columnIndex);
