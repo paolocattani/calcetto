@@ -67,7 +67,10 @@ const PairsTable = _ => {
 
   async function deleteRow() {
     try {
-      setIsLoading({ state: true, message: 'Cancellazione riga in corso' });
+      setIsLoading({
+        state: true,
+        message: selectedRows.length > 1 ? 'Cancellazione righe in corso' : 'Cancellazione riga in corso'
+      });
       // Devo ripristinare i giocatori eliminati
       let players = [];
       selectedRows.forEach(e => {
@@ -85,10 +88,11 @@ const PairsTable = _ => {
       const result = await response.json();
       emptyRow.id = result.id;
       setRows(rows => rows.filter(row => !selectedRows.find(selectedRow => selectedRow.id === row.id)));
-      showSuccessMessage('Riga cancellata');
+      showSuccessMessage(selectedRows.length > 1 ? 'Righe cancellate' : 'Riga cancellata');
     } catch (error) {
       showErrorMessage('Errore cancellazione riga');
     }
+    setSelectedRows([]);
   }
 
   function updateOptions(player, selected) {
