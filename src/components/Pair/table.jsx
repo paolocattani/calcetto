@@ -45,54 +45,50 @@ const PairsTable = _ => {
     setTimeout(() => setSuccessMessage(''), 5000);
   }
 
-  function addRow() {
-    (async () => {
-      try {
-        setIsLoading({ state: true, message: 'Aggiunta riga in corso' });
-        const emptyRow = getEmptyRowModel();
-        emptyRow.tId = tId;
-        const response = await fetch('/api/pair', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(emptyRow)
-        });
-        const result = await response.json();
-        emptyRow.id = result.id;
-        emptyRow.rowNumber = rows.length + 1;
-        setRows(rows => [emptyRow, ...rows]);
-        showSuccessMessage('Riga aggiunta');
-      } catch (error) {
-        showErrorMessage('Errore aggiunta riga');
-      }
-    })();
+  async function addRow() {
+    try {
+      setIsLoading({ state: true, message: 'Aggiunta riga in corso' });
+      const emptyRow = getEmptyRowModel();
+      emptyRow.tId = tId;
+      const response = await fetch('/api/pair', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(emptyRow)
+      });
+      const result = await response.json();
+      emptyRow.id = result.id;
+      emptyRow.rowNumber = rows.length + 1;
+      setRows(rows => [emptyRow, ...rows]);
+      showSuccessMessage('Riga aggiunta');
+    } catch (error) {
+      showErrorMessage('Errore aggiunta riga');
+    }
   }
 
-  function deleteRow() {
-    (async () => {
-      try {
-        setIsLoading({ state: true, message: 'Cancellazione riga in corso' });
-        // Devo ripristinare i giocatori eliminati
-        let players = [];
-        selectedRows.forEach(e => {
-          if (e.player1.id) players.push(e.player1);
-          if (e.player2.id) players.push(e.player2);
-        });
-        if (players) setOptions(current => [...players, ...current].sort((e1, e2) => e1.alias.localeCompare(e2.alias)));
+  async function deleteRow() {
+    try {
+      setIsLoading({ state: true, message: 'Cancellazione riga in corso' });
+      // Devo ripristinare i giocatori eliminati
+      let players = [];
+      selectedRows.forEach(e => {
+        if (e.player1.id) players.push(e.player1);
+        if (e.player2.id) players.push(e.player2);
+      });
+      if (players) setOptions(current => [...players, ...current].sort((e1, e2) => e1.alias.localeCompare(e2.alias)));
 
-        const emptyRow = getEmptyRowModel();
-        const response = await fetch('/api/pair', {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(selectedRows)
-        });
-        const result = await response.json();
-        emptyRow.id = result.id;
-        setRows(rows => rows.filter(row => !selectedRows.find(selectedRow => selectedRow.id === row.id)));
-        showSuccessMessage('Riga cancellata');
-      } catch (error) {
-        showErrorMessage('Errore cancellazione riga');
-      }
-    })();
+      const emptyRow = getEmptyRowModel();
+      const response = await fetch('/api/pair', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(selectedRows)
+      });
+      const result = await response.json();
+      emptyRow.id = result.id;
+      setRows(rows => rows.filter(row => !selectedRows.find(selectedRow => selectedRow.id === row.id)));
+      showSuccessMessage('Riga cancellata');
+    } catch (error) {
+      showErrorMessage('Errore cancellazione riga');
+    }
   }
 
   function updateOptions(player, selected) {
@@ -224,21 +220,19 @@ const PairsTable = _ => {
     style: { backgroundColor: '#c8e6c9' }
   };
 
-  function deleteStage1() {
-    (async () => {
-      try {
-        setIsLoading({ state: true, message: 'Cancellazione in corso' });
-        const response = await fetch('/api/stage1', {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ tId })
-        });
-        await response.json();
-        showSuccessMessage('Cancellazione completata');
-      } catch (error) {
-        showErrorMessage('Errore cancellazione Fase 1');
-      }
-    })();
+  async function deleteStage1() {
+    try {
+      setIsLoading({ state: true, message: 'Cancellazione in corso' });
+      const response = await fetch('/api/stage1', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tId })
+      });
+      await response.json();
+      showSuccessMessage('Cancellazione completata');
+    } catch (error) {
+      showErrorMessage('Errore cancellazione Fase 1');
+    }
   }
 
   async function setStage1Name() {
@@ -263,10 +257,8 @@ const PairsTable = _ => {
           body: JSON.stringify(row)
         });
         const result = await response.json();
-        console.log(result);
         newRows.push(row);
       } catch (error) {
-        console.error(error);
         showErrorMessage('Errore');
         newRows.push(row);
       }
