@@ -36,7 +36,7 @@ const FTournament = () => {
 
   const handleChange = selectedOption => setSelectedOption(selectedOption);
   const handleCreate = selectedOption => {
-    setSelectedOption(selectedOption);
+    setSelectedOption({ value: selectedOption, label: selectedOption });
     setTournamentList(prevList => [...prevList, { value: selectedOption, label: selectedOption }]);
   };
 
@@ -55,7 +55,6 @@ const FTournament = () => {
     });
     const res = await response.json();
     if (res.message) console.log(res.message);
-    console.log('Tournament : ', res);
     currentHistory.push(`/tournament/${res.id}`);
   };
 
