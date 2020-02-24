@@ -241,40 +241,38 @@ const PairsTable = _ => {
     })();
   }
 
-  function setStage1Name() {
+  async function setStage1Name() {
     if (!stage1Number) {
       setErrorMessage('Specificare il numero di gironi da assegnare');
       setTimeout(() => setErrorMessage(''), 5000);
       return;
     }
+    setIsLoading({ state: true, message: 'Aggiornamento in corso' });
     let current = 0;
     const names = 'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('');
-    setRows(
-      rows.map(row => {
-        if (current == stage1Number) current = 0;
-        row['stage1Name'] = names[current];
-        current++;
-        // FIXME:
-        (async () => {
-          try {
-            setIsLoading({ state: true, message: 'Aggiornamento in corso' });
-            const response = await fetch('/api/pair', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(row)
-            });
-            await response.json();
-            showSuccessMessage('Gironi assegnati correttamente');
-          } catch (error) {
-            console.error(error);
-            showErrorMessage('Errore');
-            return row;
-          }
-        })();
-
-        return row;
-      })
-    );
+    let newRows = [];
+    for (let index in rows) {
+      let row = rows[index];
+      if (current == stage1Number) current = 0;
+      row['stage1Name'] = names[current];
+      current++;
+      try {
+        const response = await fetch('/api/pair', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(row)
+        });
+        const result = await response.json();
+        console.log(result);
+        newRows.push(row);
+      } catch (error) {
+        console.error(error);
+        showErrorMessage('Errore');
+        newRows.push(row);
+      }
+    }
+    showSuccessMessage('Gironi assegnati correttamente');
+    setRows(newRows);
 
     console.log('setStage1Name finito');
   }
