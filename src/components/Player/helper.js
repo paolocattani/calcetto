@@ -121,7 +121,7 @@ export const fetchPlayers = (setterFunction, tId) => {
       })),
       // FIXME:
       {
-        id: 0,
+        id: null,
         name: '',
         surname: '',
         alias: '',

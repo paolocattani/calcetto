@@ -74,10 +74,12 @@ const PairsTable = _ => {
 
   function updateOptions(player, selected) {
     if (player.id)
-      setOptions(
-        [...options.filter(e => e.id !== selected.id), player].sort((e1, e2) => e1.alias.localeCompare(e2.alias))
-      );
-    else setOptions(options.filter(e => e.id !== selected.id));
+      if (selected.id)
+        setOptions(
+          [...options.filter(e => e.id !== selected.id), player].sort((e1, e2) => e1.alias.localeCompare(e2.alias))
+        );
+      else setOptions([...options, player].sort((e1, e2) => e1.alias.localeCompare(e2.alias)));
+    else if (selected.id) setOptions(options.filter(e => e.id !== selected.id));
   }
   // Aggiorno la colonna con il giocatore selezionato
   const onSelect = (selectedElement, rowIndex, columnIndex) => {
@@ -85,7 +87,7 @@ const PairsTable = _ => {
       if (rowElement.id === rowIndex) {
         let row = rowElement;
         if (columnIndex === 1) {
-          if (row.player2.id === selectedElement.id) {
+          if (selectedElement.id && row.player2.id === selectedElement.id) {
             // Devo salvare l'elemnto che sto per sostituire
             row.player1 = getEmptyPlayer();
             setAllertMessage('Attenzione : Non puoi selezionare lo stesso giocare ! ');
@@ -96,7 +98,7 @@ const PairsTable = _ => {
             row.player1 = selectedElement;
           }
         } else {
-          if (row.player1.id === selectedElement.id) {
+          if (selectedElement.id && row.player1.id === selectedElement.id) {
             row.player2 = getEmptyPlayer();
             setAllertMessage('Attenzione : Non puoi selezionare lo stesso giocare ! ');
             setTimeout(() => setAllertMessage(''), 5000);

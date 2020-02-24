@@ -160,6 +160,11 @@ export function getEmptyPlayer() {
     id: null,
     name: '',
     surname: '',
-    alias: ''
+    alias: '',
+    label: '',
+    role: '',
+    match_played: 0,
+    match_won: 0,
+    total_score: 0
   };
 }
