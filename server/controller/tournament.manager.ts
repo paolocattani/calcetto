@@ -28,6 +28,17 @@ router.get('/list', async (req, res, next) => {
   }
 });
 
+router.get('/:tId', async (req, res, next) => {
+  try {
+    const tId = req.params.tId ? parseInt(req.params.tId) : 0;
+    const t: Tournament | null = await Tournament.findOne({ where: { id: tId } });
+    res.json(t);
+  } catch (err) {
+    logger.error(chalk.redBright('Error while fetching tournament ! : ', err));
+    return next(err);
+  }
+});
+
 router.post('/', async (req, res, next) => {
   const model = req.body;
   const message = Validator.stringValidator(model.name, true);

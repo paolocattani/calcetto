@@ -3,8 +3,8 @@ import CreatableSelect from 'react-select/creatable';
 import { components } from 'react-select';
 import { Form, Button, Card } from 'react-bootstrap';
 import { useHistory } from 'react-router';
-import { getTodayDate } from './core/utils';
-
+import { getTodayDate } from '../core/utils';
+import { fetchTournaments } from './helper';
 //export default const FTournament: React.FC = () => {
 const FTournament = () => {
   // State definition
@@ -12,27 +12,7 @@ const FTournament = () => {
   const [tournamentList, setTournamentList] = useState([]);
   let currentHistory = useHistory();
 
-  // console.log('FTournament.currentLocation : ', currentLocation);
-  function fetchTournaments() {
-    (async () => {
-      const response = await fetch('/api/tournament/list', {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-      });
-      const result = await response.json();
-      let found = false;
-      let tmp = [];
-      result.forEach(e => {
-        if (e.name === getTodayDate()) found = true;
-        tmp.push({ id: e.id, value: e.name, label: e.name });
-      });
-      if (!found) tmp.unshift({ id: null, value: getTodayDate(), label: getTodayDate() });
-      setTournamentList(tmp);
-      setSelectedOption(tmp[0]);
-    })();
-  }
-
-  useEffect(() => fetchTournaments(), []);
+  useEffect(() => fetchTournaments(setTournamentList, setSelectedOption), []);
 
   const handleChange = selectedOption => setSelectedOption(selectedOption);
   const handleCreate = selectedOption => {

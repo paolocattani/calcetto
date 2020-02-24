@@ -1,4 +1,4 @@
-export type playerType = {
+export type PlayerModel = {
   id: number;
   name: string;
   surname: string;

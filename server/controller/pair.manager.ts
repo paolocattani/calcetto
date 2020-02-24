@@ -4,8 +4,7 @@ import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 // Models
 import Pair from '../model/sequelize/pair.model';
-// dbConnection
-import { dbConnection } from '../model/server/AppServer';
+
 const router = Router();
 
 router.use('/', (req, res, next) => {

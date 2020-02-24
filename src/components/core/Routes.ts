@@ -1,4 +1,4 @@
-import FTournament from '../Tournament';
+import FTournament from '../Tournament/Tournament';
 import PlayerTable from '../Player/table';
 import Pairs from '../Pair/table';
 import Stage1Wrapper from '../Stage1/wrapper';

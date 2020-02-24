@@ -119,7 +119,6 @@ export const fetchPlayers = (setterFunction, tId) => {
         match_won: e.match_won,
         total_score: e.total_score
       })),
-      // FIXME:
       {
         id: null,
         name: '',
