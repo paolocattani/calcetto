@@ -1,15 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { headerPropsType } from './type';
+import { getTournament } from '../Tournament/helper';
+
+import { TournamentModel } from 'components/Tournament/type';
 
 // FIXME: change to tounament name
-const tableHeader: React.FC<headerPropsType> = ({ tournametId }: headerPropsType) => {
+const TableHeader: React.FC<headerPropsType> = ({ tournametId }: headerPropsType) => {
+  const [tournament, setTournament] = useState<TournamentModel | null>();
+
+  useEffect(() => {
+    (async () => {
+      const result = await getTournament(tournametId);
+      setTournament(result);
+    })();
+  }, [tournametId]);
+
   return (
     <h3>
-      <b>
-        Torneo - "<strong>{tournametId}</strong>"
-      </b>
+      <p>
+        <b>
+          Torneo "<strong>{tournament?.name.toUpperCase()}</strong>" ( {tournametId} )
+        </b>
+      </p>
     </h3>
   );
 };
 
-export default tableHeader;
+export default TableHeader;
