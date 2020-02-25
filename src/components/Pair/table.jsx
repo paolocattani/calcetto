@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Alert, ListGroup, InputGroup, FormControl, Row } from 'react-bootstrap';
+import { Button, Alert, ListGroup, InputGroup, FormControl, Row, Collapse } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { columns, cellEditProps, getEmptyRowModel, fetchPairs, getEmptyPlayer } from './helper';
 import { fetchPlayers } from '../Player/helper';
@@ -23,8 +23,10 @@ const PairsTable = _ => {
   const [selectedRows, setSelectedRows] = useState([]);
   // Players list
   const [options, setOptions] = useState([]);
-  // Stage 1 numbers
+  // Function params
   const [stage1Number, setStage1Number] = useState(0);
+  const [newRowsNumber, setNewRowsNumber] = useState(0);
+  const [open, setOpen] = useState(false);
 
   const { tId } = useParams();
   let currentHistory = useHistory();
@@ -67,6 +69,12 @@ const PairsTable = _ => {
     }
   }
 
+  async function addMultipleRows() {
+    for (let ii = 0; ii < newRowsNumber; ii++) await addRow();
+    setNewRowsNumber(0);
+    fetchPairs(setRows, tId);
+  }
+
   async function deleteRow() {
     try {
       setIsLoading({
@@ -97,6 +105,7 @@ const PairsTable = _ => {
     setSelectedRows([]);
   }
 
+  // update players list when a player is selected
   function updateOptions(player, selected) {
     if (player.id)
       if (selected.id)
@@ -155,6 +164,7 @@ const PairsTable = _ => {
       }
     });
   };
+
   const confirmPairs = () => {
     // Controllo gironi non assegnati
     const missingStage1Name = rows.filter(e => !e.stage1Name || e.stage1Name === '').map(e => e.rowNumber);
@@ -303,32 +313,77 @@ const PairsTable = _ => {
           <Button variant="secondary" onClick={goBack}>
             Home
           </Button>
-          <Button variant="success" onClick={addRow}>
+          <Button variant="success" onClick={addRow} disabled={rows.length >= (options.length - 1) / 2}>
             Aggiungi Coppia
           </Button>
-          <Button variant="danger" onClick={deleteRow} disabled={selectedRows.length > 0 ? false : true}>
-            Elimina Coppia
-          </Button>
-          <Button variant="danger" onClick={deleteStage1}>
-            Reset gironi
-          </Button>
           <Button variant="primary" onClick={confirmPairs}>
-            Conferma coppie
+            Prosegui
           </Button>
         </ListGroup>
       </Row>
       <Row>
         <InputGroup onChange={e => setStage1Number(e.target.value)}>
           <InputGroup.Prepend>
-            <InputGroup.Text>Assegna Gironi</InputGroup.Text>
+            <InputGroup.Text>Assegna gironi automaticamente</InputGroup.Text>
           </InputGroup.Prepend>
-          <FormControl placeholder="Numero di gironi" aria-label="Numero di gironi" />
+          <FormControl
+            placeholder={`Numero di gironi ( max ${Math.floor(rows.length / 4)})`}
+            aria-label="Numero di gironi"
+          />
           <InputGroup.Append>
-            <Button variant="primary" onClick={setStage1Name}>
-              Conferma
+            <Button
+              variant="primary"
+              onClick={setStage1Name}
+              disabled={!stage1Number || stage1Number > Math.floor(rows.length / 4)}
+            >
+              Esegui
             </Button>
           </InputGroup.Append>
         </InputGroup>
+        <InputGroup onChange={e => setNewRowsNumber(e.target.value)}>
+          <InputGroup.Prepend>
+            <InputGroup.Text>Aggiunti N nuove coppie</InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl
+            disabled={rows.length >= (options.length - 1) / 2}
+            placeholder={
+              rows.length >= (options.length - 1) / 2
+                ? 'Numero massimo di coppie gia creato'
+                : `Numero di coppie da aggiungere ( max ${(options.length - 1) / 2 - rows.length} )`
+            }
+            aria-label="Numero di coppie"
+          />
+          <InputGroup.Append>
+            <Button
+              variant="primary"
+              onClick={addMultipleRows}
+              disabled={newRowsNumber > (options.length - 1) / 2 - rows.length || !newRowsNumber}
+            >
+              Esegui
+            </Button>
+          </InputGroup.Append>
+        </InputGroup>
+      </Row>
+
+      <Row>
+        <Button
+          variant="danger"
+          onClick={() => setOpen(!open)}
+          aria-controls="example-collapse-text"
+          aria-expanded={open}
+        >
+          Opzioni cancellazione
+        </Button>
+        <Collapse in={open}>
+          <div>
+            <Button variant="danger" onClick={deleteRow} disabled={selectedRows.length > 0 ? false : true}>
+              Elimina Coppia
+            </Button>
+            <Button variant="danger" onClick={deleteStage1}>
+              Reset gironi
+            </Button>
+          </div>
+        </Collapse>
       </Row>
       <Row>
         <BootstrapTable
