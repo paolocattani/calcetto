@@ -34,7 +34,7 @@ const App: React.FC = _ => {
       </header>
 
       <br></br>
-      <Container fluid>
+      <Container /*fluid*/>
         <Switch>
           <Route path="/login" component={Login} />
           {/* Carica dinamicamente le route a partire dall'oggetto routes ( vedi sopra ) */

@@ -7,31 +7,33 @@ import { useParams, useHistory } from 'react-router';
 import TableHeader from './header';
 import NoData from './noData';
 import Loading from '../core/Loading';
+import { fetchTournament } from '../Tournament/helper';
 import './style.css';
 
 const PairsTable = _ => {
-  // Gestione messaggi utente
+  // User messages
   const [isLoading, setIsLoading] = useState({ state: false, message: 'Caricamento' });
   const [successMessage, setSuccessMessage] = useState('');
   const [allertMessage, setAllertMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-
-  const [rows, setRows] = useState([] /*PairsGenerator()*/);
-  const [options, setOptions] = useState([] /*PairsGenerator()*/);
+  // Tournament
+  const [tournament, setTournament] = useState(null);
+  // Table Rows
+  const [rows, setRows] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
-
+  // Players list
+  const [options, setOptions] = useState([]);
+  // Stage 1 numbers
   const [stage1Number, setStage1Number] = useState(0);
-  // const [saved, setSaved] = useState(false);
-  // const [isEditable, setIsEditable] = useState(false); // TODO:
 
   const { tId } = useParams();
   let currentHistory = useHistory();
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  // useEffect(() => checkEditable(setIsEditable, tId), []);
+  // Initial Fetch
   useEffect(() => {
     fetchPairs(setRows, tId);
     fetchPlayers(setOptions, tId);
+    fetchTournament(setTournament, tId);
   }, [tId]);
 
   function showErrorMessage(message) {
@@ -337,7 +339,7 @@ const PairsTable = _ => {
           cellEdit={cellEditProps}
           selectRow={selectRow}
           noDataIndication={<NoData addRow={addRow} />}
-          caption={<TableHeader tournametId={tId} />}
+          caption={<TableHeader tournament={tournament} />}
           wrapperClasses="player-table"
           headerClasses="player-table-header"
           striped

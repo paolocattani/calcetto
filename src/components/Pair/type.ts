@@ -6,7 +6,7 @@ export type propsType = {
 };
 
 export type headerPropsType = {
-  tournametId: number;
+  tournament: TournamentModel;
 };
 export type noDataPropsType = {
   addRow: () => void;
