@@ -10,7 +10,7 @@ import cellEditFactory from 'react-bootstrap-table2-editor';
 import './style.css';
 import columns, { clearAllFilter, ExportCSVButton } from './helper';
 import TableHeader from './header';
-import Loading from '../core/Loading';
+import { LoadingModal } from '../core/Commons';
 
 export default class Player extends React.Component {
   constructor(props) {
@@ -148,7 +148,7 @@ export default class Player extends React.Component {
     const { rows, isLoading } = state;
     return (
       <>
-        <Loading show={isLoading} message={'Caricamento'} />
+        <LoadingModal show={isLoading} message={'Caricamento'} />
         <Row>
           <ToolkitProvider keyField="id" data={rows} columns={columns} exportCSV>
             {props => (

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Alert, ListGroup, InputGroup, FormControl, Row, Collapse } from 'react-bootstrap';
+import { Button, Alert, ListGroup, InputGroup, FormControl, Row, Col, Collapse, Toast } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { columns, cellEditProps, getEmptyRowModel, fetchPairs, getEmptyPlayer } from './helper';
 import { fetchPlayers } from '../Player/helper';
 import { useParams, useHistory } from 'react-router';
 import TableHeader from './header';
 import NoData from './noData';
-import Loading from '../core/Loading';
+import { LoadingModal, SuccessToast, WarningToast, ErrorToast } from '../core/Commons';
 import { fetchTournament } from '../Tournament/helper';
 import './style.css';
 
@@ -285,121 +285,111 @@ const PairsTable = _ => {
     console.log('setStage1Name finito');
   }
 
+  const buttonStyle = {
+    width: '100%',
+    height: 'auto'
+  };
   //console.log('render table : ', options);
   return (
     <>
-      <Loading show={isLoading.state} message={isLoading.message || 'Caricamento'} />
       <Row>
-        <ListGroup>
-          {successMessage && successMessage !== '' ? (
-            <Alert key={'pair-success-message'} variant={'success'}>
-              {successMessage}
-            </Alert>
-          ) : null}
-          {allertMessage && allertMessage !== '' ? (
-            <Alert key={'pair-allert-message'} variant={'warning'}>
-              {allertMessage}
-            </Alert>
-          ) : null}
-          {errorMessage && errorMessage !== '' ? (
-            <Alert key={'pair-allert-message'} variant={'danger'}>
-              {errorMessage}
-            </Alert>
-          ) : null}
-        </ListGroup>
-      </Row>
-      <Row>
-        <ListGroup horizontal>
-          <Button variant="secondary" onClick={goBack}>
-            Home
-          </Button>
-          <Button variant="success" onClick={addRow} disabled={rows.length >= (options.length - 1) / 2}>
-            Aggiungi Coppia
-          </Button>
-          <Button variant="primary" onClick={confirmPairs}>
-            Prosegui
-          </Button>
-        </ListGroup>
-      </Row>
-      <Row>
-        <InputGroup onChange={e => setStage1Number(e.target.value)}>
-          <InputGroup.Prepend>
-            <InputGroup.Text>Assegna gironi automaticamente</InputGroup.Text>
-          </InputGroup.Prepend>
-          <FormControl
-            placeholder={`Numero di gironi ( max ${Math.floor(rows.length / 4)})`}
-            aria-label="Numero di gironi"
-          />
-          <InputGroup.Append>
-            <Button
-              variant="primary"
-              onClick={setStage1Name}
-              disabled={!stage1Number || stage1Number > Math.floor(rows.length / 4)}
-            >
-              Esegui
-            </Button>
-          </InputGroup.Append>
-        </InputGroup>
-        <InputGroup onChange={e => setNewRowsNumber(e.target.value)}>
-          <InputGroup.Prepend>
-            <InputGroup.Text>Aggiunti N nuove coppie</InputGroup.Text>
-          </InputGroup.Prepend>
-          <FormControl
-            disabled={rows.length >= (options.length - 1) / 2}
-            placeholder={
-              rows.length >= (options.length - 1) / 2
-                ? 'Numero massimo di coppie gia creato'
-                : `Numero di coppie da aggiungere ( max ${(options.length - 1) / 2 - rows.length} )`
-            }
-            aria-label="Numero di coppie"
-          />
-          <InputGroup.Append>
-            <Button
-              variant="primary"
-              onClick={addMultipleRows}
-              disabled={newRowsNumber > (options.length - 1) / 2 - rows.length || !newRowsNumber}
-            >
-              Esegui
-            </Button>
-          </InputGroup.Append>
-        </InputGroup>
-      </Row>
-
-      <Row>
-        <Button
-          variant="danger"
-          onClick={() => setOpen(!open)}
-          aria-controls="example-collapse-text"
-          aria-expanded={open}
-        >
-          Opzioni cancellazione
-        </Button>
-        <Collapse in={open}>
-          <div>
-            <Button variant="danger" onClick={deleteRow} disabled={selectedRows.length > 0 ? false : true}>
-              Elimina Coppia
-            </Button>
-            <Button variant="danger" onClick={deleteStage1}>
-              Reset gironi
-            </Button>
-          </div>
-        </Collapse>
-      </Row>
-      <Row>
-        <BootstrapTable
-          bootstrap4
-          keyField="id"
-          data={rows}
-          columns={columns(onSelect, options)}
-          cellEdit={cellEditProps}
-          selectRow={selectRow}
-          noDataIndication={<NoData addRow={addRow} />}
-          caption={<TableHeader tournament={tournament} />}
-          wrapperClasses="player-table"
-          headerClasses="player-table-header"
-          striped
-          hover
-        />
+        <Col style={{ margin: '10px' }} md={{ span: 1 }}>
+          <Row>
+            <ListGroup>
+              <ListGroup.Item action variant="secondary" onClick={goBack}>
+                Home
+              </ListGroup.Item>
+              <ListGroup.Item
+                action
+                variant="success"
+                onClick={addRow}
+                disabled={rows.length >= (options.length - 1) / 2}
+              >
+                Aggiungi Coppia
+              </ListGroup.Item>
+              <ListGroup.Item action variant="primary" onClick={confirmPairs}>
+                Prosegui
+              </ListGroup.Item>
+              <ListGroup.Item action variant="danger" onClick={deleteRow} disabled={!(selectedRows.length > 0)}>
+                Elimina Coppia
+              </ListGroup.Item>
+              <ListGroup.Item action variant="danger" onClick={deleteStage1}>
+                Reset gironi
+              </ListGroup.Item>
+            </ListGroup>
+          </Row>
+        </Col>
+        <Col style={{ margin: '10px' }}>
+          <Row>
+            <InputGroup onChange={e => setStage1Number(e.target.value)}>
+              <InputGroup.Prepend>
+                <InputGroup.Text>Assegna gironi automaticamente</InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl
+                placeholder={
+                  rows.length < 4
+                    ? 'Inserisci almeno 4 coppie'
+                    : `Numero di gironi ( max ${Math.floor(rows.length / 4)} )`
+                }
+                aria-label="Numero di gironi"
+                disabled={rows.length < 4}
+              />
+              <InputGroup.Append>
+                <Button
+                  variant="primary"
+                  onClick={setStage1Name}
+                  disabled={!stage1Number || stage1Number > Math.floor(rows.length / 4) || rows.length < 4}
+                >
+                  Esegui
+                </Button>
+              </InputGroup.Append>
+            </InputGroup>
+            <InputGroup onChange={e => setNewRowsNumber(e.target.value)}>
+              <InputGroup.Prepend>
+                <InputGroup.Text>Aggiunti N nuove coppie</InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl
+                disabled={rows.length >= (options.length - 1) / 2}
+                placeholder={
+                  rows.length >= (options.length - 1) / 2
+                    ? 'Numero massimo di coppie gia creato'
+                    : `Numero di coppie da aggiungere ( max ${(options.length - 1) / 2 - rows.length} )`
+                }
+                aria-label="Numero di coppie"
+              />
+              <InputGroup.Append>
+                <Button
+                  variant="primary"
+                  onClick={addMultipleRows}
+                  disabled={newRowsNumber > (options.length - 1) / 2 - rows.length || !newRowsNumber}
+                >
+                  Esegui
+                </Button>
+              </InputGroup.Append>
+            </InputGroup>
+          </Row>
+          <Row>
+            <BootstrapTable
+              bootstrap4
+              keyField="id"
+              data={rows}
+              columns={columns(onSelect, options)}
+              cellEdit={cellEditProps}
+              selectRow={selectRow}
+              noDataIndication={<NoData addRow={addRow} />}
+              caption={<TableHeader tournament={tournament} />}
+              wrapperClasses="player-table"
+              headerClasses="player-table-header"
+              striped
+              hover
+            />
+          </Row>
+        </Col>
+        <Col style={{ margin: '10px' }} md={2}>
+          <SuccessToast message={successMessage} />
+          <WarningToast message={allertMessage} />
+          <ErrorToast message={errorMessage} />
+        </Col>
       </Row>
     </>
   );
