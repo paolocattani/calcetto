@@ -296,6 +296,9 @@ const PairsTable = _ => {
         <Col style={{ margin: '10px' }} md={{ span: 1 }}>
           <Row>
             <ListGroup>
+              <ListGroup.Item action variant="primary" onClick={confirmPairs}>
+                Prosegui
+              </ListGroup.Item>
               <ListGroup.Item action variant="secondary" onClick={goBack}>
                 Home
               </ListGroup.Item>
@@ -307,9 +310,7 @@ const PairsTable = _ => {
               >
                 Aggiungi Coppia
               </ListGroup.Item>
-              <ListGroup.Item action variant="primary" onClick={confirmPairs}>
-                Prosegui
-              </ListGroup.Item>
+
               <ListGroup.Item action variant="danger" onClick={deleteRow} disabled={!(selectedRows.length > 0)}>
                 Elimina Coppia
               </ListGroup.Item>
@@ -356,8 +357,16 @@ const PairsTable = _ => {
                     : `Numero di coppie da aggiungere ( max ${(options.length - 1) / 2 - rows.length} )`
                 }
                 aria-label="Numero di coppie"
+                value={newRowsNumber || null}
               />
               <InputGroup.Append>
+                <Button
+                  variant="primary"
+                  onClick={e => setNewRowsNumber((options.length - 1) / 2 - rows.length)}
+                  disabled={newRowsNumber > (options.length - 1) / 2 - rows.length}
+                >
+                  Max
+                </Button>
                 <Button
                   variant="primary"
                   onClick={addMultipleRows}
