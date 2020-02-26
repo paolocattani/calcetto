@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { headerPropsType } from './type';
 
 const TableHeader: React.FC<headerPropsType> = ({ tournament }: headerPropsType) => {

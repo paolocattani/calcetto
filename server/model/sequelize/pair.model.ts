@@ -46,9 +46,10 @@ export default class Pair extends Model<Pair> {
 
   // Model toString
   public toString() {
-    return `[ id=${this.id} , tId=${this.tournamentId} , player1=${this.player1?.name ??
-      'Non impostato'} , player2=${this.player2?.name ?? 'Non impostato'} , alias=${this.pairAlias} , stage1Name=${
-      this.stage1Name
-    }]`;
+    return `[ id=${this.id} , tId=${
+      this.tournamentId
+    } , player1=${this.player1?.toString()} , player2=${this.player2?.toString()} , alias=${
+      this.pairAlias
+    } , stage1Name=${this.stage1Name}]`;
   }
 }
