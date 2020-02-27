@@ -8,8 +8,8 @@ import { Login } from './Login/Login';
 import routes from '../components/core/Routes';
 import { FNavbar } from './Navbar/Navbar';
 import { Container } from 'react-bootstrap';
-
-const applicationName = 'calcetto C.S.M';
+import headerImage from './assets/header-background.jpeg';
+const applicationName = 'Calcetto C.S.M';
 
 const App: React.FC = _ => {
   const [sessionContext, updateSessionContext] = useSessionContext();
