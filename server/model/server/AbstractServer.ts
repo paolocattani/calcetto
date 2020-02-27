@@ -87,14 +87,11 @@ export abstract class AbstractServer implements IServer {
       logger.info(`Serving build forlder from ${chalk.green(path.join(__dirname, '..', '..', '..', 'build'))}`);
       this.application.use(
         //
-        express.static(
-          isProductionMode() ? path.join(__dirname, '..', 'build') : path.join(__dirname, '..', '..', '..', 'build'),
-          {
-            maxAge: process.env.STATIC_CONTENTS_CACHE ? process.env.STATIC_CONTENTS_CACHE : '0',
-            lastModified: true,
-            redirect: true
-          }
-        )
+        express.static(path.join(__dirname, '..', '..', '..', 'build'), {
+          maxAge: process.env.STATIC_CONTENTS_CACHE ? process.env.STATIC_CONTENTS_CACHE : '0',
+          lastModified: true,
+          redirect: true
+        })
       );
 
       this.application.listen(this.serverPort, () => {
