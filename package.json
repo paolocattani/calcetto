@@ -74,7 +74,7 @@
     "dev": "concurrently --kill-others-on-fail \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "cd server && nodemon --config \"./nodemon.json\"",
     "dev:client": "react-scripts start ",
-    "prod": "NODE_ENV=production && npm run CRA:build && cd server && nodemon --config \"./nodemon.json\"",
+    "prod": "cd server && nodemon --config \"./nodemon.json\"",
     "start":"npm run prod",
     "CRA:start": "react-scripts start",
     "CRA:build": "react-scripts build",
