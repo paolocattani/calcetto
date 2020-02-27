@@ -54,7 +54,9 @@ const FTournament = () => {
             onCreateOption={handleCreate}
           />
           <br></br>
-          <Button type="submit">Continua</Button>
+          <Button type="submit" size="lg" variant="outline-warning" disabled={!selectedOption}>
+            Continua
+          </Button>
         </Form>
       </Card.Body>
     </Card>
@@ -65,7 +67,7 @@ const FTournament = () => {
 // https://react-select.com/components#components
 const IndicatorsContainer = props => {
   return (
-    <div style={{ background: 'red' }}>
+    <div>
       {/* eslint-disable-next-line */}
       <components.IndicatorsContainer {...props} />
     </div>
