@@ -8,7 +8,7 @@ export default {
     logging: sqlString => logger.warn(sqlString)
   },
   production: {
-    use_env_variable: 'PROD_URL',
+    use_env_variable: 'DATABASE_URL',
     logging: false
   }
 };
