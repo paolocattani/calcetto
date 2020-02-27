@@ -184,7 +184,7 @@ const PairsTable = _ => {
       setErrorMessage(
         `Assegna  i giocatori ${
           missingPairs.length === 1 ? 'alla riga ' : 'alle righe '
-        } ${missingPairs} ad un girone per procedere `
+        } ${missingPairs} per procedere `
       );
       setTimeout(() => setErrorMessage(''), 5000);
       return;
@@ -285,10 +285,6 @@ const PairsTable = _ => {
     console.log('setStage1Name finito');
   }
 
-  const buttonStyle = {
-    width: '100%',
-    height: 'auto'
-  };
   //console.log('render table : ', options);
   return (
     <>
@@ -350,11 +346,11 @@ const PairsTable = _ => {
                 <InputGroup.Text>Aggiunti N nuove coppie</InputGroup.Text>
               </InputGroup.Prepend>
               <FormControl
-                disabled={rows.length >= (options.length - 1) / 2}
+                disabled={rows.length >= Math.floor((options.length - 1) / 2)}
                 placeholder={
-                  rows.length >= (options.length - 1) / 2
+                  rows.length >= Math.floor((options.length - 1) / 2)
                     ? 'Numero massimo di coppie gia creato'
-                    : `Numero di coppie da aggiungere ( max ${(options.length - 1) / 2 - rows.length} )`
+                    : `Numero di coppie da aggiungere ( max ${Math.floor((options.length - 1) / 2) - rows.length} )`
                 }
                 aria-label="Numero di coppie"
                 value={newRowsNumber || null}
@@ -362,7 +358,7 @@ const PairsTable = _ => {
               <InputGroup.Append>
                 <Button
                   variant="primary"
-                  onClick={e => setNewRowsNumber((options.length - 1) / 2 - rows.length)}
+                  onClick={e => setNewRowsNumber(Math.floor((options.length - 1) / 2) - rows.length)}
                   disabled={newRowsNumber > (options.length - 1) / 2 - rows.length}
                 >
                   Max
