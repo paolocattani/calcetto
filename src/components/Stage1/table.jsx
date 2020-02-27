@@ -17,7 +17,7 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
     mode: 'click',
     blurToSave: true,
     beforeSaveCell: (oldValue, newValue, row, column) => {
-      if (row.id.startsWith('col')) {
+      if (column.id.startsWith('col')) {
         // Aggiorno cella opposta
         rows[parseInt(column.text) - 1][`col${row.rowNumber}`] = getOpposite(newValue);
         // Aggiorno posizione relativa
@@ -27,7 +27,7 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
       }
     },
     afterSaveCell: (oldValue, newValue, row, column) => {
-      if (row.id.startsWith('col')) {
+      if (column.id.startsWith('col')) {
         // Aggiorno dati sul Db
         updateCellValue(oldValue, newValue, row, column);
         let acc = 0;
