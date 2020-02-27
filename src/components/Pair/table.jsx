@@ -353,7 +353,7 @@ const PairsTable = _ => {
                     : `Numero di coppie da aggiungere ( max ${Math.floor((options.length - 1) / 2) - rows.length} )`
                 }
                 aria-label="Numero di coppie"
-                value={newRowsNumber || null}
+                value={newRowsNumber || ''}
               />
               <InputGroup.Append>
                 <Button
