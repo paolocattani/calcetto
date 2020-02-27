@@ -17,6 +17,11 @@ export const newColumn = (index, onChange) => {
       if (parseInt(content, 10) === 1 || parseInt(content, 10) === 0) return { backgroundColor: 'rgb(255, 147, 147)' };
       return null;
     },
+    /* TODO:
+    editorStyle: (cell, row, rowIndex, colIndex) => {
+      console.log('editorStyle : ', cell, row, rowIndex, colIndex);
+      return { width: '100%', height: 'auto' };
+    }, */
     editor: {
       type: Type.SELECT,
       options: [
