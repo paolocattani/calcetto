@@ -7,6 +7,8 @@ import { asyncForEach } from '../core/utils';
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 import { asyncMiddleware } from '../core/middleware';
+import { dbConnection } from '../model/server/AppServer';
+
 const router = Router();
 router.use('/', (req, res, next) => {
   if (isDevMode()) logger.info(`Stage 1 Manager : ${req.method} ${req.originalUrl.replace('/api/stage1', '')} `);
@@ -100,6 +102,7 @@ router.post(
   asyncMiddleware(async (req: Request, res: any, next: NextFunction) => {
     // FIXME: type def
     const { rows, stageName } = req.body as any;
+    const t = await dbConnection.transaction();
     // logger.info('Model : ', rows);
     try {
       await asyncForEach(rows, async (currentRow: any, index: number, rowsRef: any) => {
@@ -152,7 +155,8 @@ router.post(
                     name: stageName,
                     tournamentId
                   },
-                  defaults: model
+                  defaults: model,
+                  transaction: t
                 });
                 // if (stageName === '1') logger.info('model : ', created, record);
 
@@ -185,8 +189,10 @@ router.post(
         }
       });
       //if (stageName === '1') logger.info('Sbam2....', rows);
+      t.commit();
       return res.status(200).json(rows);
     } catch (error) {
+      t.rollback();
       logger.error('Error while update matrix  : ', error);
       return res.status(500).json({ error });
     }
