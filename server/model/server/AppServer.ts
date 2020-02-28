@@ -10,11 +10,10 @@ import routes from './../../controller';
 import { SyncOptions } from 'sequelize/types';
 import generator from '../../dummy_data/generator';
 import { Sequelize } from 'sequelize-typescript';
-import { Logger } from 'log4js';
-
+import { isProductionMode } from '../../core/debug';
 // white list for CORS
 const applicationName: string = 'ApplicationServer';
-const applicationPort: number = Number(process.env.SERVER_PORT);
+const applicationPort: number = isProductionMode() ? Number(process.env.PORT) : Number(process.env.SERVER_PORT);
 const applicationCPUs: number = Number(process.env.SERVER_WORKERS);
 const whiteList: string[] = [
   `http://${process.env.CLIENT_HOST}:${process.env.CLIENT_PORT}`,
