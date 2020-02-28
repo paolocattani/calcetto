@@ -8,7 +8,7 @@ log4js.configure({
   appenders: {
     console: { type: 'stdout' },
     'dev-logger': {
-      type: 'datefile',
+      type: 'dateFile',
       filename: 'server.log',
       pattern: '.yyyy-MM-dd',
       maxLogSize: 10485760,
@@ -16,7 +16,7 @@ log4js.configure({
       compress: true
     },
     'db-logger': {
-      type: 'datefile',
+      type: 'dateFile',
       filename: 'db.log',
       pattern: '.yyyy-MM-dd',
       maxLogSize: 10485760,
