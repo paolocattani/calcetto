@@ -1,0 +1,1 @@
+web: ./node_modules/.bin/ts-node --project ./server/tsconfig.json ./server/server.ts  server.js --optimize_for_size --max_old_space_size=460 --gc_interval=100
