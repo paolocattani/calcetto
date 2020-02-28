@@ -166,6 +166,14 @@ const PairsTable = _ => {
   };
 
   const confirmPairs = () => {
+    
+    // Controllo che sia presente almeno una coppia
+    if (rows.length < 4) {
+      setErrorMessage('Numero di coppie insufficente');
+      setTimeout(() => setErrorMessage(''), 5000);
+      return;
+    }
+    
     // Controllo gironi non assegnati
     const missingStage1Name = rows.filter(e => !e.stage1Name || e.stage1Name === '').map(e => e.rowNumber);
     if (missingStage1Name.length !== 0) {
@@ -346,7 +354,9 @@ const PairsTable = _ => {
                 disabled={availableRows <= 0}
                 placeholder={
                   availableRows <= 0
-                    ? 'Numero massimo di coppie gia creato '
+
+                    ? 'Numero massimo di coppie gia creato sulla base del numero di giocatori disponibili'
+
                     : `Numero di coppie da aggiungere ( max ${availableRows} )`
                 }
                 aria-label="Numero di coppie"
