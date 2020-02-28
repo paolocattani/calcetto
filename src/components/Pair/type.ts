@@ -9,6 +9,7 @@ export type headerPropsType = {
   tournament: TournamentModel;
 };
 export type noDataPropsType = {
+  optionsLength: number;
   addRow: () => void;
 };
 

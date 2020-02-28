@@ -285,10 +285,13 @@ const PairsTable = _ => {
     console.log('setStage1Name finito');
   }
 
-  //console.log('render table : ', options);
+  const maxRows = Math.floor((options.length - 1) / 2);
+  const availableRows = maxRows - rows.length;
+  console.log('render table : ', availableRows, options);
   return (
     <>
       <Row>
+        <LoadingModal show={isLoading.state} message={isLoading.message} />
         <Col style={{ margin: '10px' }} md={{ span: 1 }}>
           <Row>
             <ListGroup>
@@ -298,15 +301,9 @@ const PairsTable = _ => {
               <ListGroup.Item action variant="secondary" onClick={goBack}>
                 Home
               </ListGroup.Item>
-              <ListGroup.Item
-                action
-                variant="success"
-                onClick={addRow}
-                disabled={rows.length >= (options.length - 1) / 2}
-              >
+              <ListGroup.Item action variant="success" onClick={addRow} disabled={availableRows <= 0}>
                 Aggiungi Coppia
               </ListGroup.Item>
-
               <ListGroup.Item action variant="danger" onClick={deleteRow} disabled={!(selectedRows.length > 0)}>
                 Elimina Coppia
               </ListGroup.Item>
@@ -346,11 +343,11 @@ const PairsTable = _ => {
                 <InputGroup.Text>Aggiunti N nuove coppie</InputGroup.Text>
               </InputGroup.Prepend>
               <FormControl
-                disabled={rows.length >= Math.floor((options.length - 1) / 2)}
+                disabled={availableRows <= 0}
                 placeholder={
-                  rows.length >= Math.floor((options.length - 1) / 2)
-                    ? 'Numero massimo di coppie gia creato'
-                    : `Numero di coppie da aggiungere ( max ${Math.floor((options.length - 1) / 2) - rows.length} )`
+                  availableRows <= 0
+                    ? 'Numero massimo di coppie gia creato '
+                    : `Numero di coppie da aggiungere ( max ${availableRows} )`
                 }
                 aria-label="Numero di coppie"
                 value={newRowsNumber || ''}
@@ -358,15 +355,15 @@ const PairsTable = _ => {
               <InputGroup.Append>
                 <Button
                   variant="primary"
-                  onClick={e => setNewRowsNumber(Math.floor((options.length - 1) / 2) - rows.length)}
-                  disabled={newRowsNumber > (options.length - 1) / 2 - rows.length}
+                  onClick={e => setNewRowsNumber(availableRows)}
+                  disabled={newRowsNumber > availableRows}
                 >
                   Max
                 </Button>
                 <Button
                   variant="primary"
                   onClick={addMultipleRows}
-                  disabled={newRowsNumber > (options.length - 1) / 2 - rows.length || !newRowsNumber}
+                  disabled={!newRowsNumber || newRowsNumber > availableRows}
                 >
                   Esegui
                 </Button>
@@ -381,7 +378,7 @@ const PairsTable = _ => {
               columns={columns(onSelect, options)}
               cellEdit={cellEditProps}
               selectRow={selectRow}
-              noDataIndication={<NoData addRow={addRow} />}
+              noDataIndication={<NoData addRow={addRow} optionsLength={options.length} />}
               caption={<TableHeader tournament={tournament} />}
               wrapperClasses="player-table"
               headerClasses="player-table-header"
