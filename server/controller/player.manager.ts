@@ -18,13 +18,20 @@ router.get('/list/:tId', async (req, res, next) => {
       include: [Player.associations.pair1, Player.associations.pair2]
     });
     const result = users
-      .filter(player =>
-        /*
-         * Se il giocatore è gia stato assegnato ad una coppia ( in posizione 1 o 2 )
-         * che appartiene al torneo che sto analizzando allora lo devo escludere
-         * perchè non è piu tra quelli selezionabili
-         */
-        player.pair1.find(e => e.tournamentId === tId) || player.pair2.find(e => e.tournamentId === tId) ? false : true
+      .filter(
+        player =>
+          /*
+           * Se il giocatore è gia stato assegnato ad una coppia ( in posizione 1 o 2 )
+           * che appartiene al torneo che sto analizzando allora lo devo escludere
+           * perchè non è piu tra quelli selezionabili
+           *
+           * Inoltre escludo i giocatori che non hanno alias o un nome
+           *
+           */
+          (player.pair1.find(e => e.tournamentId === tId) || player.pair2.find(e => e.tournamentId === tId)
+            ? false
+            : true) &&
+          (player.alias !== '' || player.name !== '')
       )
       .map(player => ({
         id: player.id,

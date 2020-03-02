@@ -66,7 +66,8 @@ export default class Player extends React.Component {
           role: '',
           match_played: 0,
           match_won: 0,
-          total_score: 0
+          total_score: 0,
+          editable: true
         };
         const response = await fetch('/api/player', {
           method: 'POST',
@@ -74,10 +75,9 @@ export default class Player extends React.Component {
           body: JSON.stringify(emptyRow)
         });
         const result = await response.json();
-        emptyRow.id = result.id;
         this.setState(state => {
           return {
-            rows: [emptyRow, ...state.rows],
+            rows: [result, ...state.rows],
             isLoading: false
           };
         });

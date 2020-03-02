@@ -36,7 +36,9 @@ export default class Player extends Model<Player> {
   @Column({
     type: DataType.VIRTUAL,
     get(this: Player): boolean {
-      return this.pair1 && this.pair2 ? this.pair1.length === 0 && this.pair2.length === 0 : true;
+      if (this.pair1 && this.pair1.length > 0) return false;
+      if (this.pair2 && this.pair2.length > 0) return false;
+      else return true;
     }
   })
   public editable!: boolean;
