@@ -33,7 +33,11 @@ router.get('/list/:tId', async (req, res, next) => {
 
 router.get('/list', async (req, res, next) => {
   try {
-    const users = await Player.findAll({ order: [['id', 'DESC']] });
+    const users = await Player.findAll({
+      order: [['id', 'DESC']],
+      include: [Player.associations.pair1, Player.associations.pair2]
+    });
+    //logger.info(users);
     return res.json(users);
   } catch (err) {
     return next(err);

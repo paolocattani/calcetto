@@ -1,6 +1,6 @@
 import React from 'react';
 // bootstrap
-import { Button, Row, ListGroup } from 'react-bootstrap';
+import { Button, Row, Col, ListGroup } from 'react-bootstrap';
 // react-bootstrap-table
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory from 'react-bootstrap-table2-filter';
@@ -36,16 +36,7 @@ export default class Player extends React.Component {
         const result = await response.json();
         this.setState({
           isLoading: false,
-          rows: result.map(e => ({
-            id: e.id,
-            name: e.name,
-            surname: e.surname,
-            alias: e.alias,
-            role: e.role,
-            match_played: e.match_played,
-            match_won: e.match_won,
-            total_score: e.total_score
-          }))
+          rows: result
         });
       })()
     );
@@ -137,54 +128,61 @@ export default class Player extends React.Component {
   });
 
   render() {
-    const selectRow = {
-      mode: 'checkbox',
-      onSelect: this.handleOnSelect,
-      onSelectAll: (isSelected, rows) => rows.forEach(row => this.handleOnSelect(row, isSelected)),
-      style: { backgroundColor: '#c8e6c9' }
-    };
-
     const { state, deleteRow, addRow } = this;
     const { rows, isLoading } = state;
+
+    const selectRow = {
+      mode: 'checkbox',
+      nonSelectable: rows.filter(e => (e.editable ? false : true)).map(e => e.id),
+      onSelect: this.handleOnSelect,
+      onSelectAll: (isSelected, rows) => rows.forEach(row => this.handleOnSelect(row, isSelected)),
+      style: { backgroundColor: '#c8e6c9' },
+      selectColumnStyle: ({ checked, disabled, rowIndex, rowKey }) =>
+        rows[rowIndex].editable ? { backgroundColor: '#28a745' } : { backgroundColor: '#dc3545' }
+    };
+
     return (
       <>
         <LoadingModal show={isLoading} message={'Caricamento'} />
         <Row>
-          <ToolkitProvider keyField="id" data={rows} columns={columns} exportCSV>
-            {props => (
-              <>
-                <ListGroup horizontal>
-                  <Button variant="success" onClick={addRow}>
-                    Aggiungi giocatore
-                  </Button>
-                  <Button variant="danger" onClick={deleteRow}>
-                    Calcella giocatore
-                  </Button>
-                  <Button variant="dark" onClick={clearAllFilter.bind(this)}>
-                    Pulisci Filtri
-                  </Button>
-                </ListGroup>
+          <Col>
+            <ToolkitProvider keyField="id" data={rows} columns={columns} exportCSV>
+              {props => (
+                <>
+                  <ListGroup horizontal>
+                    <Button variant="success" onClick={addRow}>
+                      Aggiungi giocatore
+                    </Button>
+                    <Button variant="danger" onClick={deleteRow}>
+                      Calcella giocatore
+                    </Button>
+                    <Button variant="dark" onClick={clearAllFilter.bind(this)}>
+                      Pulisci Filtri
+                    </Button>
+                  </ListGroup>
 
-                {/* FIXME: */}
-                <ExportCSVButton {...props.csvProps} />
-                <BootstrapTable
-                  wrapperClasses="player-table"
-                  keyField="id"
-                  data={rows}
-                  columns={columns}
-                  cellEdit={this.cellEditProps}
-                  selectRow={selectRow}
-                  caption={<TableHeader />}
-                  filter={filterFactory()}
-                  headerClasses="player-table-header"
-                  noDataIndication="Nessun dato reperito"
-                  striped
-                  hover
-                  bootstrap4
-                />
-              </>
-            )}
-          </ToolkitProvider>
+                  {/* FIXME:
+                  <ExportCSVButton {...props.csvProps} />
+                  */}
+                  <BootstrapTable
+                    wrapperClasses="player-table"
+                    keyField="id"
+                    data={rows}
+                    columns={columns}
+                    cellEdit={this.cellEditProps}
+                    selectRow={selectRow}
+                    caption={<TableHeader />}
+                    filter={filterFactory()}
+                    headerClasses="player-table-header"
+                    noDataIndication="Nessun dato reperito"
+                    striped
+                    hover
+                    bootstrap4
+                  />
+                </>
+              )}
+            </ToolkitProvider>
+          </Col>
         </Row>
       </>
     );

@@ -34,9 +34,7 @@ export default [
     autoSelectText: true,
     filter: textFilter({
       placeholder: 'Filtra...',
-      getFilter: filter => {
-        nameFilter = filter;
-      }
+      getFilter: filter => (nameFilter = filter)
     })
   },
   {
@@ -46,9 +44,7 @@ export default [
     autoSelectText: true,
     filter: textFilter({
       placeholder: 'Filtra...',
-      getFilter: filter => {
-        surnameFilter = filter;
-      }
+      getFilter: filter => (surnameFilter = filter)
     })
   },
   {
@@ -58,9 +54,7 @@ export default [
     autoSelectText: true,
     filter: textFilter({
       placeholder: 'Filtra...',
-      getFilter: filter => {
-        aliasFilter = filter;
-      }
+      getFilter: filter => (aliasFilter = filter)
     })
   },
   {
@@ -70,9 +64,7 @@ export default [
     filter: selectFilter({
       placeholder: 'Filtra...',
       options: selectOptions,
-      getFilter: filter => {
-        roleFilter = filter;
-      }
+      getFilter: filter => (roleFilter = filter)
     }),
     editor: {
       type: Type.SELECT,

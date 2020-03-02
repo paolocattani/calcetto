@@ -33,6 +33,14 @@ export default class Player extends Model<Player> {
   @HasMany(() => Pair, 'player2Id')
   public pair2!: Pair[];
 
+  @Column({
+    type: DataType.VIRTUAL,
+    get(this: Player): boolean {
+      return this.pair1 && this.pair2 ? this.pair1.length === 0 && this.pair2.length === 0 : true;
+    }
+  })
+  public editable!: boolean;
+
   public toString() {
     return `[ id=${this.id} , name=${this.name} , surname=${this.surname} , alias=${this.alias} , role=${this.role} , match_played=${this.match_played} ,  match_won=${this.match_won} , total_score=${this.total_score}]`;
   }
