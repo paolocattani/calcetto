@@ -9,3 +9,7 @@ export async function asyncForEach(array, callback) {
     await callback(array[index], index, array);
   }
 }
+
+export function logEntity(entity) {
+  return JSON.stringify(entity, null, 2);
+}

@@ -99,18 +99,8 @@ export const fetchPlayers = (setterFunction, tId) => {
       headers: { 'Content-Type': 'application/json' }
     });
     const result = await response.json();
-    setterFunction([
-      ...result.map(e => ({
-        id: e.id,
-        name: e.name,
-        surname: e.surname,
-        alias: e.alias,
-        label: e.alias,
-        role: e.role,
-        match_played: e.match_played,
-        match_won: e.match_won,
-        total_score: e.total_score
-      })),
+    const model = [
+      ...result,
       {
         id: null,
         name: '',
@@ -120,14 +110,18 @@ export const fetchPlayers = (setterFunction, tId) => {
         role: '',
         match_played: 0,
         match_won: 0,
-        total_score: 0
+        total_score: 0,
+        editable: false
       }
-    ]);
+    ];
+    console.log('fetchPlayers.result : ', model);
+    setterFunction(model);
   })();
 };
 
 export function valueFormatter(selectedOption) {
   let value = '';
+  if (!selectedOption) return '';
   if (selectedOption.alias) {
     value = selectedOption.alias;
   } else {

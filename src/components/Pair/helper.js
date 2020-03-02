@@ -141,12 +141,14 @@ export const fetchPairs = (setterFunction, tId) => {
 };
 
 export function valueFormatter(selectedOption) {
+  console.log('valueFormatter : ', selectedOption);
   if (selectedOption.pairAlias && selectedOption.pairAlias !== '')
     return `${selectedOption.pairAlias} ( ${selectedOption.id} )`;
   return createAlias(selectedOption);
 }
 
 export function createAlias(selectedOption) {
+  console.log('createAlias : ', selectedOption);
   let value = `${selectedOption.rowNumber} : `;
   const { player1, player2, id } = selectedOption;
   value += player1.alias ? player1.alias : player1.name;
@@ -165,6 +167,7 @@ export function getEmptyPlayer() {
     role: '',
     match_played: 0,
     match_won: 0,
-    total_score: 0
+    total_score: 0,
+    editable: false
   };
 }

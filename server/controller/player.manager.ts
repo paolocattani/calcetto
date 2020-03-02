@@ -11,13 +11,14 @@ router.use('/', (req, res, next) => {
 
 router.get('/list/:tId', async (req, res, next) => {
   try {
+    logger.info('/list/:tId ......');
     const tId = req.params.tId ? parseInt(req.params.tId) : 0;
     const users = await Player.findAll({
       order: [['id', 'DESC']],
       include: [Player.associations.pair1, Player.associations.pair2]
     });
-    return res.json(
-      users.filter(player =>
+    const result = users
+      .filter(player =>
         /*
          * Se il giocatore è gia stato assegnato ad una coppia ( in posizione 1 o 2 )
          * che appartiene al torneo che sto analizzando allora lo devo escludere
@@ -25,7 +26,20 @@ router.get('/list/:tId', async (req, res, next) => {
          */
         player.pair1.find(e => e.tournamentId === tId) || player.pair2.find(e => e.tournamentId === tId) ? false : true
       )
-    );
+      .map(player => ({
+        id: player.id,
+        name: player.name,
+        surname: player.surname,
+        alias: player.alias,
+        label: player.label,
+        role: player.role,
+        match_played: player.match_played,
+        match_won: player.match_won,
+        total_score: player.total_score,
+        editable: player.editable
+      }));
+    // logger.info(JSON.stringify(result, null, 2));
+    return res.json(result);
   } catch (err) {
     return next(err);
   }

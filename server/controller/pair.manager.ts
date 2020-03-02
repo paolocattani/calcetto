@@ -91,7 +91,8 @@ function rowToModel(row: Pair, index: number) {
       role: row.player1?.role ?? null,
       match_played: row.player1?.match_played ?? 0,
       match_won: row.player1?.match_won ?? 0,
-      total_score: row.player1?.total_score ?? 0
+      total_score: row.player1?.total_score ?? 0,
+      editable: row.player1.editable
     },
     player2: {
       id: row.player2?.id ?? null,
@@ -102,7 +103,8 @@ function rowToModel(row: Pair, index: number) {
       role: row.player2?.role ?? null,
       match_played: row.player2?.match_played ?? 0,
       match_won: row.player2?.match_won ?? 0,
-      total_score: row.player2?.total_score ?? 0
+      total_score: row.player2?.total_score ?? 0,
+      editable: row.player2.editable
     },
     pairAlias: row.pairAlias,
     stage1Name: row.stage1Name,

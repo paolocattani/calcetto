@@ -41,6 +41,14 @@ export default class Player extends Model<Player> {
   })
   public editable!: boolean;
 
+  @Column({
+    type: DataType.VIRTUAL,
+    get(this: Player): string {
+      return this.alias ? this.alias : `${this.name} ${this.surname}`;
+    }
+  })
+  public label!: string;
+
   public toString() {
     return `[ id=${this.id} , name=${this.name} , surname=${this.surname} , alias=${this.alias} , role=${this.role} , match_played=${this.match_played} ,  match_won=${this.match_won} , total_score=${this.total_score}]`;
   }

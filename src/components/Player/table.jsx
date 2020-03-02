@@ -28,7 +28,6 @@ export default class Player extends React.Component {
   async componentDidMount() {
     this.setState({ isLoading: true }, () =>
       (async () => {
-        console.log('Player.ComponentDidMount', this.state);
         const response = await fetch('/api/player/list', {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' }
@@ -97,7 +96,6 @@ export default class Player extends React.Component {
           body: JSON.stringify(selectedRows)
         });
         const result = await response.json();
-        console.table(result);
         this.setState(state => {
           return {
             // Se la riga che sto analizzando è contenuta in quelle selezionata allora non la voglio

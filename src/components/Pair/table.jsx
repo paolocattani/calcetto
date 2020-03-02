@@ -107,7 +107,7 @@ const PairsTable = _ => {
 
   // update players list when a player is selected
   function updateOptions(player, selected) {
-    if (player.id)
+    if (player && player.id)
       if (selected.id)
         setOptions(
           [...options.filter(e => e.id !== selected.id), player].sort((e1, e2) => e1.alias.localeCompare(e2.alias))
@@ -117,11 +117,13 @@ const PairsTable = _ => {
   }
   // Aggiorno la colonna con il giocatore selezionato
   const onSelect = (selectedElement, rowIndex, columnIndex) => {
+    console.log('pair.table.onSelect : ', selectedElement, rowIndex, columnIndex);
+    console.log('pair.table.rows : ', rows);
     const newRowsElement = rows.map(rowElement => {
       if (rowElement.id === rowIndex) {
         let row = rowElement;
         if (columnIndex === 1) {
-          if (selectedElement.id && row.player2.id === selectedElement.id) {
+          if (selectedElement.id && row.player2 && row.player2.id === selectedElement.id) {
             // Devo salvare l'elemnto che sto per sostituire
             row.player1 = getEmptyPlayer();
             setAllertMessage('Attenzione : Non puoi selezionare lo stesso giocare ! ');
@@ -132,7 +134,7 @@ const PairsTable = _ => {
             row.player1 = selectedElement;
           }
         } else {
-          if (selectedElement.id && row.player1.id === selectedElement.id) {
+          if (selectedElement.id && row.player1 && row.player1.id === selectedElement.id) {
             row.player2 = getEmptyPlayer();
             setAllertMessage('Attenzione : Non puoi selezionare lo stesso giocare ! ');
             setTimeout(() => setAllertMessage(''), 5000);
@@ -290,9 +292,20 @@ const PairsTable = _ => {
     setRows(newRows);
   }
 
-  const maxRows = Math.floor((options.length - 1) / 2);
-  const availableRows = maxRows - rows.length;
+  const availableRows =
+    Math.floor(
+      options.length -
+        1 -
+        rows.reduce((accumulator, e) => {
+          if (!e.player1 && !e.player2) return accumulator + 2;
+          if (!e.player1 || !e.player2) return accumulator + 1;
+          if (!e.player1.id && !e.player2.id) return accumulator + 2;
+          if (!e.player1.id || !e.player2.id) return accumulator + 1;
+          return accumulator;
+        }, 0)
+    ) / 2;
 
+  //  console.log('render table : ', availableRows);
   return (
     <>
       <Row>
@@ -351,7 +364,7 @@ const PairsTable = _ => {
                 disabled={availableRows <= 0}
                 placeholder={
                   availableRows <= 0
-                    ? 'Numero massimo di coppie gia creato sulla base del numero di giocatori disponibili'
+                    ? 'Numero massimo di coppie gia creato'
                     : `Numero di coppie da aggiungere ( max ${availableRows} )`
                 }
                 aria-label="Numero di coppie"
