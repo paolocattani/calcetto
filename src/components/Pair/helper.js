@@ -129,6 +129,45 @@ export function getEmptyRowModel() {
   };
 }
 
+export const fetchData = async tId => {
+  // Fetch Pairs
+  let response = await fetch(`/api/pair/list/?tId=${tId}`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
+  });
+  const rows = await response.json();
+
+  response = await fetch(tId ? `/api/player/list/${tId}` : '/api/player/list', {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
+  });
+  const result = await response.json();
+  const players = [
+    ...result,
+    {
+      id: null,
+      name: '',
+      surname: '',
+      alias: '',
+      label: 'Nessun Giocatore',
+      role: '',
+      match_played: 0,
+      match_won: 0,
+      total_score: 0,
+      editable: false
+    }
+  ];
+
+  // Fetch Tournament
+  response = await fetch(`/api/tournament/${tId}`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
+  });
+  const tournament = await response.json();
+
+  return { rows, players, tournament };
+};
+
 export const fetchPairs = (setterFunction, tId) => {
   (async () => {
     const response = await fetch(`/api/pair/list/?tId=${tId}`, {
