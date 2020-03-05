@@ -9,12 +9,8 @@ export function fetchTournaments(setterFunction: typeof useState, setterFunction
       headers: { 'Content-Type': 'application/json' }
     });
     const result: TournamentModel[] = await response.json();
-    let found = false;
-    let tmp = result.map(e => {
-      if (e.name === getTodayDate()) found = true;
-      return { id: e.id, value: e.name, label: e.name };
-    });
-    if (!found) tmp.unshift({ id: null, value: getTodayDate(), label: getTodayDate() });
+    let found = result.find(e => e.name === getTodayDate());
+    let tmp = found ? [found, ...result] : result;
     tmp.sort();
     setterFunction(tmp);
     if (setterFunction2) setterFunction2(tmp[0]);

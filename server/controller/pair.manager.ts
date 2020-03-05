@@ -60,18 +60,10 @@ router.post('/', async (req, res, next) => {
 });
 
 router.delete('/', async (req, res, next) => {
-  const models: Pair[] | [] = req.body || [];
+  let models: Array<Pair> = req.body || [];
   let rowsAffected = 0;
-  for (const model of models) {
-    const pair = await Pair.findByPk(model.id);
-    if (pair) {
-      // soft delete ( paranoid! )
-      await pair?.destroy();
-      // delete
-      // await player?.destroy({ force:true });
-      rowsAffected++;
-    }
-  }
+  const result = await Pair.destroy({ where: { id: models.map(e => e.id) } });
+  logger.info(result);
   return res.status(200).json({ message: `Rows deleted : ${rowsAffected}` });
 });
 

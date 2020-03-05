@@ -28,7 +28,7 @@ async function tournamentGenerator(): Promise<void> {
       id: null,
       name: ii,
       ownerId: 1,
-      progress: '1',
+      progress: 'Non assegnato',
       public: true
     };
     await Tournament.create(model);

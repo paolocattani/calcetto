@@ -2,6 +2,7 @@ import React from 'react';
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import PlayerSelect from '../Player/select';
 import { getEmptyPlayer } from '../Player/helper';
+import { TournamentProgress } from '../Tournament/type';
 
 export const columns = (onSelect, options) => [
   { dataField: 'id', text: 'ID', editable: false, hidden: true, align: () => 'center' },
@@ -151,6 +152,14 @@ export const fetchData = async tId => {
     headers: { 'Content-Type': 'application/json' }
   });
   const tournament = await response.json();
+
+  // Aggiorno stato torneo
+  tournament.progress = TournamentProgress.PairsSelection;
+  response = await fetch('/api/tournament', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(tournament)
+  });
 
   return { rows, players, tournament };
 };

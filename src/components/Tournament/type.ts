@@ -8,3 +8,7 @@ export type TournamentModel = {
   public: boolean;
   pairs: PairModel[];
 };
+
+export type TournamentProgressType = 'New' | 'PairsSelection' | 'Stage1' | 'Stage2';
+
+export const TournamentProgress = { New: 'new', PairsSelection: 'PairsSelection', Stage1: 'Stage1', Stage2: 'Stage2' };

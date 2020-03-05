@@ -8,6 +8,7 @@ import TableHeader from './header';
 import NoData from './noData';
 import { LoadingModal, SuccessToast, WarningToast, ErrorToast } from '../core/Commons';
 import './style.css';
+import { TournamentProgress } from '../Tournament/type';
 
 const PairsTable = _ => {
   // Navigation
@@ -96,23 +97,24 @@ const PairsTable = _ => {
           players: [...players, ...current.players].sort((e1, e2) => e1.alias.localeCompare(e2.alias))
         }));
 
-      const emptyRow = getEmptyRowModel();
       const response = await fetch('/api/pair', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(selectedRows)
       });
-      const result = await response.json();
-      emptyRow.id = result.id;
+      await response.json();
+
       setData(current => ({
         tournament: current.tournament,
         rows: current.rows.filter(row => !selectedRows.find(selectedRow => selectedRow.id === row.id)),
         players: current.players
       }));
+
       showSuccessMessage(selectedRows.length > 1 ? 'Righe cancellate' : 'Riga cancellata');
     } catch (error) {
       showErrorMessage('Errore cancellazione riga');
     }
+
     setSelectedRows([]);
   }
 
@@ -196,7 +198,7 @@ const PairsTable = _ => {
   const confirmPairs = () => {
     // Controllo che sia presente almeno una coppia
     if (data.rows.length < 4) {
-      setErrorMessage('Numero di coppie insufficente');
+      setErrorMessage('Numero di coppie insufficente. Devi formare almeno 4 coppie');
       setTimeout(() => setErrorMessage(''), 5000);
       return;
     }
@@ -256,6 +258,13 @@ const PairsTable = _ => {
       return;
     }
 
+    // Update tournament progress
+    data.tournament.progress = TournamentProgress.Stage1;
+    fetch('/api/tournament', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data.tournament)
+    });
     // Go to Stage1
     currentHistory.push(`/stage1/${tId}`);
   };
@@ -280,6 +289,13 @@ const PairsTable = _ => {
         body: JSON.stringify({ tId })
       });
       await response.json();
+      // Update tournament progress
+      data.tournament.progress = TournamentProgress.PairsSelection;
+      fetch('/api/tournament', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data.tournament)
+      });
       showSuccessMessage('Cancellazione completata');
     } catch (error) {
       showErrorMessage('Errore cancellazione Fase 1');

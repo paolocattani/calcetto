@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import CreatableSelect from 'react-select/creatable';
 import { components } from 'react-select';
-import { Form, Button, Card } from 'react-bootstrap';
+import { Form, Button, Card, Tooltip } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 import { getTodayDate } from '../core/utils';
 import { fetchTournaments } from './helper';
+import { TournamentProgress } from './type';
+
 //export default const FTournament: React.FC = () => {
 const FTournament = () => {
   // State definition
@@ -25,7 +27,7 @@ const FTournament = () => {
     const model = {
       name: selectedOption.value,
       ownerId: 1,
-      progress: 'WIP',
+      progress: TournamentProgress.New,
       public: true
     };
     const response = await fetch('/api/tournament', {
@@ -45,9 +47,10 @@ const FTournament = () => {
         <Form onSubmit={handleSubmit}>
           <CreatableSelect
             components={{ IndicatorSeparator, IndicatorsContainer }}
+            //formatOptionLabel={formatOptionLabel}
             value={selectedOption}
             options={tournamentList}
-            placeholder="Scrivi qualcosa"
+            placeholder="Crea/Cerca un torneo"
             isSearchable={true}
             isClearable
             onChange={handleChange}
@@ -68,11 +71,12 @@ const FTournament = () => {
 const IndicatorsContainer = props => {
   return (
     <div>
-      {/* eslint-disable-next-line */}
       <components.IndicatorsContainer {...props} />
     </div>
   );
 };
+
+// Indicator Separator
 const indicatorSeparatorStyle = {
   alignSelf: 'stretch',
   backgroundColor: 'green',
@@ -89,6 +93,17 @@ const IndicatorSeparator = ({ innerProps }) => {
 const cardStyle = {
   width: '50%',
   margin: 'auto'
+};
+
+const formatOptionLabel = props => {
+  console.log('format : ', props);
+
+  return (
+    <strong>
+      {props.name}
+      <small style={{ color: '#ccc' }}>@{props.progress}</small>
+    </strong>
+  );
 };
 
 export default FTournament;

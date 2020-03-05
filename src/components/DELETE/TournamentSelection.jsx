@@ -71,7 +71,7 @@ export default class TournamentSelection extends React.Component {
     const model = {
       name: selectedOption,
       ownerId: 1,
-      progress: 'WIP',
+      progress: 'Non assegnato',
       public: true
     };
     console.log('handleSubmit : Model -> ', model);
