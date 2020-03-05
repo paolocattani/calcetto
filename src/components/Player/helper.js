@@ -6,9 +6,9 @@ import { Type } from 'react-bootstrap-table2-editor';
 
 // options for role column
 const selectOptions = {
-  0: 'Portiere',
-  1: 'Attaccante',
-  2: 'Master'
+  Portiere: 'Portiere',
+  Attaccante: 'Attaccante',
+  Master: 'Master'
 };
 
 // Filter
@@ -68,15 +68,26 @@ export default [
     }),
     editor: {
       type: Type.SELECT,
-      // FIXME:
-      getOptions: (setOptions, { row, column }) => {
+      getOptions: _ => {
         return [
-          { value: 0, label: 'Portiere' },
-          { value: 1, label: 'Attaccante' },
-          { value: 2, label: 'Master' }
+          { value: 'Portiere', label: 'Portiere' },
+          { value: 'Attaccante', label: 'Attaccante' },
+          { value: 'Master', label: 'Master' }
         ];
       }
     }
+  },
+  {
+    dataField: 'email',
+    text: 'Email',
+    headerClasses: 'player-table-header-element',
+    autoSelectText: true
+  },
+  {
+    dataField: 'phone',
+    text: 'Telefono',
+    headerClasses: 'player-table-header-element',
+    autoSelectText: true
   },
   { dataField: 'match_played', text: 'Partite Giocate', hidden: true },
   { dataField: 'match_won', text: 'Vittorie', hidden: true },

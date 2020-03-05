@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Button, ListGroup, InputGroup, FormControl, Row, Col } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { fetchData, columns, cellEditProps, getEmptyRowModel, fetchPairs, getEmptyPlayer } from './helper';
-import { fetchPlayers } from '../Player/helper';
 import { useParams, useHistory } from 'react-router';
 import TableHeader from './header';
 import NoData from './noData';
@@ -301,7 +300,7 @@ const PairsTable = _ => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(row)
         });
-        const result = await response.json();
+        await response.json();
         newRows.push(row);
       } catch (error) {
         showErrorMessage('Errore');

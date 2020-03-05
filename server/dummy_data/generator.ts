@@ -37,26 +37,26 @@ async function tournamentGenerator(): Promise<void> {
 
 async function playerGenerator(): Promise<void> {
   const players = [
-    { name: 'Andrea', surname: 'Messi', alias: 'Messi', role: 2 },
-    { name: 'Paolo', surname: 'Cattani', alias: 'Pool', role: 2 },
-    { name: 'Gilberto', surname: 'Turato', alias: 'Gilbe', role: 2 },
-    { name: 'Enrico', surname: 'Bevilacqua', alias: 'Tocio', role: 2 },
-    { name: 'Dante', surname: 'Riello', alias: 'Dante - The Wall ', role: 2 },
-    { name: 'Michele', surname: 'Maschio', alias: 'Tope', role: 2 },
-    { name: 'Fede', surname: 'Beggiato', alias: 'Fede', role: 1 },
-    { name: 'Salvatore', surname: 'Bonanno', alias: 'Salvo', role: 0 },
-    { name: 'Gianni', surname: 'Guion', alias: 'Gianni', role: 0 },
-    { name: 'Lorenzo', surname: '', alias: 'Lorenzo', role: 0 },
-    { name: 'Niero', surname: '', alias: 'Niero', role: 1 },
-    { name: 'Renzo', surname: 'Pinton', alias: 'Renzo', role: 0 },
-    { name: 'Fabio', surname: 'Zambello', alias: 'Fabio', role: 1 },
-    { name: 'Amante', surname: '', alias: 'Amante', role: 1 },
-    { name: 'Vanni', surname: '', alias: 'Vanni', role: 0 },
-    { name: 'Mirco', surname: 'Dalan', alias: 'Mirco', role: 2 },
-    { name: 'Jacopo', surname: '', alias: 'Jacopo', role: 1 },
-    { name: 'Melanie', surname: '', alias: 'Melanie', role: 1 },
-    { name: 'Luca', surname: '', alias: 'Luca', role: 0 },
-    { name: 'Daniel', surname: '', alias: 'Daniel', role: 1 }
+    { name: 'Andrea', surname: 'Messi', alias: 'Messi', email: '', phone: '', role: 'Master' },
+    { name: 'Paolo', surname: 'Cattani', alias: 'Pool', email: '', phone: '', role: 'Master' },
+    { name: 'Gilberto', surname: 'Turato', alias: 'Gilbe', email: '', phone: '', role: 'Master' },
+    { name: 'Enrico', surname: 'Bevilacqua', alias: 'Tocio', email: '', phone: '', role: 'Master' },
+    { name: 'Dante', surname: 'Riello', alias: 'The Wall ', email: '', phone: '', role: 'Master' },
+    { name: 'Michele', surname: 'Maschio', alias: 'Tope', email: '', phone: '', role: 'Master' },
+    { name: 'Fede', surname: 'Beggiato', alias: 'Fede', email: '', phone: '', role: 'Attaccante' },
+    { name: 'Salvatore', surname: 'Bonanno', alias: 'Salvo', email: '', phone: '', role: 'Attaccante' },
+    { name: 'Gianni', surname: 'Guion', alias: 'Gianni', email: '', phone: '', role: 'Portiere' },
+    { name: 'Lorenzo', surname: '', alias: 'Lorenzo', email: '', phone: '', role: 'Portiere' },
+    { name: 'Niero', surname: '', alias: 'Niero', email: '', phone: '', role: 'Attaccante' },
+    { name: 'Renzo', surname: 'Pinton', alias: 'Renzo', email: '', phone: '', role: 'Portiere' },
+    { name: 'Fabio', surname: 'Zambello', alias: 'Fabio', email: '', phone: '', role: 'Attaccante' },
+    { name: 'Amante', surname: '', alias: 'Amante', email: '', phone: '', role: 'Attaccante' },
+    { name: 'Vanni', surname: '', alias: 'Vanni', email: '', phone: '', role: 'Portiere' },
+    { name: 'Mirco', surname: 'Dalan', alias: 'Mirco', email: '', phone: '', role: 'Portiere' },
+    { name: 'Jacopo', surname: '', alias: 'Jacopo', email: '', phone: '', role: 'Attaccante' },
+    { name: 'Melanie', surname: '', alias: 'Melanie', email: '', phone: '', role: 'Attaccante' },
+    { name: 'Luca', surname: '', alias: 'Luca', email: '', phone: '', role: 'Portiere' },
+    { name: 'Daniel', surname: '', alias: 'Daniel', email: '', phone: '', role: 'Attaccante' }
   ];
 
   for (let ii = 0; ii < players.length; ii++)

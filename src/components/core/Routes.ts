@@ -51,7 +51,7 @@ export const routes: routeType[] = [
     exact: true,
     component: Stage2,
     //component: OrganizationChartDemo,
-    visible: true,
+    visible: !(process.env.NODE_ENV === 'production'),
     index: 40
   },
   // TODO: creare pagina per route not found
