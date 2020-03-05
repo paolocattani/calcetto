@@ -11,6 +11,7 @@ import './style.css';
 import columns, { clearAllFilter, ExportCSVButton } from './helper';
 import TableHeader from './header';
 import { LoadingModal } from '../core/Commons';
+import { getEmptyPlayer } from '../Player/helper';
 
 export default class Player extends React.Component {
   constructor(props) {
@@ -58,21 +59,10 @@ export default class Player extends React.Component {
   addRow() {
     this.setState({ isLoading: true }, () =>
       (async () => {
-        const emptyRow = {
-          id: null,
-          name: '',
-          surname: '',
-          alias: '',
-          role: '',
-          match_played: 0,
-          match_won: 0,
-          total_score: 0,
-          editable: true
-        };
         const response = await fetch('/api/player', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(emptyRow)
+          body: JSON.stringify(getEmptyPlayer())
         });
         const result = await response.json();
         this.setState(state => {

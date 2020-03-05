@@ -110,21 +110,7 @@ export const fetchPlayers = (setterFunction, tId) => {
       headers: { 'Content-Type': 'application/json' }
     });
     const result = await response.json();
-    const model = [
-      ...result,
-      {
-        id: null,
-        name: '',
-        surname: '',
-        alias: '',
-        label: 'Nessun Giocatore',
-        role: '',
-        match_played: 0,
-        match_won: 0,
-        total_score: 0,
-        editable: false
-      }
-    ];
+    const model = [...result, getEmptyPlayer('Nessun Giocatore')];
     console.log('fetchPlayers.result : ', model);
     setterFunction(model);
   })();
@@ -139,4 +125,21 @@ export function valueFormatter(selectedOption) {
     value = selectedOption.surname ? `${selectedOption.name} - ${selectedOption.surname}` : selectedOption.name;
   }
   return value;
+}
+
+export function getEmptyPlayer(label) {
+  return {
+    id: null,
+    name: '',
+    surname: '',
+    alias: '',
+    label: label || '',
+    role: '',
+    email: '',
+    phone: '',
+    match_played: 0,
+    match_won: 0,
+    total_score: 0,
+    editable: false
+  };
 }

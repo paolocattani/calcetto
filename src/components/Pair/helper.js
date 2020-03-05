@@ -1,6 +1,7 @@
 import React from 'react';
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import PlayerSelect from '../Player/select';
+import { getEmptyPlayer } from '../Player/helper';
 
 export const columns = (onSelect, options) => [
   { dataField: 'id', text: 'ID', editable: false, hidden: true, align: () => 'center' },
@@ -120,8 +121,8 @@ export function getEmptyRowModel() {
     id: null,
     rowNumber: null,
     tId: null,
-    player1: { id: null, alias: '', name: '', surname: '' },
-    player2: { id: null, alias: '', name: '', surname: '' },
+    player1: getEmptyPlayer(),
+    player2: getEmptyPlayer(),
     pairAlias: '',
     stage1Name: '',
     paid1: 'No',
@@ -142,21 +143,7 @@ export const fetchData = async tId => {
     headers: { 'Content-Type': 'application/json' }
   });
   const result = await response.json();
-  const players = [
-    ...result,
-    {
-      id: null,
-      name: '',
-      surname: '',
-      alias: '',
-      label: 'Nessun Giocatore',
-      role: '',
-      match_played: 0,
-      match_won: 0,
-      total_score: 0,
-      editable: false
-    }
-  ];
+  const players = [...result, getEmptyPlayer('Nessun Giocatore')];
 
   // Fetch Tournament
   response = await fetch(`/api/tournament/${tId}`, {
@@ -194,19 +181,4 @@ export function createAlias(selectedOption) {
   value += ' - ' + player2.alias ? player2.alias : player2.name;
   value += ` ( ${id} )`;
   return value;
-}
-
-export function getEmptyPlayer() {
-  return {
-    id: null,
-    name: '',
-    surname: '',
-    alias: '',
-    label: '',
-    role: '',
-    match_played: 0,
-    match_won: 0,
-    total_score: 0,
-    editable: false
-  };
 }

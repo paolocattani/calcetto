@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Button, ListGroup, InputGroup, FormControl, Row, Col } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
-import { fetchData, columns, cellEditProps, getEmptyRowModel, fetchPairs, getEmptyPlayer } from './helper';
+import { fetchData, columns, cellEditProps, getEmptyRowModel } from './helper';
+import { getEmptyPlayer } from '../Player/helper';
 import { useParams, useHistory } from 'react-router';
 import TableHeader from './header';
 import NoData from './noData';
@@ -9,6 +10,11 @@ import { LoadingModal, SuccessToast, WarningToast, ErrorToast } from '../core/Co
 import './style.css';
 
 const PairsTable = _ => {
+  // Navigation
+  const { tId } = useParams();
+  let currentHistory = useHistory();
+
+  // States
   // User messages
   const [isLoading, setIsLoading] = useState({ state: false, message: 'Caricamento' });
   const [successMessage, setSuccessMessage] = useState('');
@@ -21,14 +27,12 @@ const PairsTable = _ => {
   const [stage1Number, setStage1Number] = useState(0);
   const [newRowsNumber, setNewRowsNumber] = useState(0);
 
-  const { tId } = useParams();
-  let currentHistory = useHistory();
-
   // Initial Fetch
   useEffect(() => {
     (async () => setData(await fetchData(tId)))();
   }, [tId]);
 
+  // User messages
   function showErrorMessage(message) {
     setIsLoading({ state: false, message });
     setErrorMessage(message);
@@ -40,7 +44,7 @@ const PairsTable = _ => {
     setTimeout(() => setSuccessMessage(''), 5000);
   }
 
-  async function addRow() {
+  async function addRow(index) {
     try {
       setIsLoading({ state: true, message: 'Aggiunta riga in corso' });
       const emptyRow = getEmptyRowModel();
@@ -52,7 +56,7 @@ const PairsTable = _ => {
       });
       const result = await response.json();
       emptyRow.id = result.id;
-      emptyRow.rowNumber = data.rows.length + 1;
+      emptyRow.rowNumber = index || data.rows.length + 1;
       setData(current => ({
         tournament: current.tournament,
         rows: [emptyRow, ...current.rows],
@@ -65,9 +69,12 @@ const PairsTable = _ => {
   }
 
   async function addMultipleRows() {
-    for (let ii = 0; ii < newRowsNumber; ii++) await addRow();
+    let index = data.rows.length + 1;
+    for (let ii = 0; ii < newRowsNumber; ii++) {
+      await addRow(index);
+      index++;
+    }
     setNewRowsNumber(0);
-    // fetchPairs(setRows, tId);
   }
 
   async function deleteRow() {

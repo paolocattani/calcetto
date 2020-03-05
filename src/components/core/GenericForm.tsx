@@ -1,6 +1,6 @@
 import { Component, FormEvent } from 'react';
 import React from 'react';
-import { IInputOptions } from '../types/InputOptions';
+import { IInputOptions } from '../DELETE/types/InputOptions';
 import { Form, Button } from 'react-bootstrap';
 
 type formProps = {
