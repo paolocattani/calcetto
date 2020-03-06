@@ -1,4 +1,4 @@
-import { Router, Application as ExpressApplication } from 'express';
+import { Router } from 'express';
 import Player from '../model/sequelize/player.model';
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
@@ -11,21 +11,51 @@ router.use('/', (req, res, next) => {
 
 router.get('/list/:tId', async (req, res, next) => {
   try {
+    logger.info('/list/:tId ......');
     const tId = req.params.tId ? parseInt(req.params.tId) : 0;
     const users = await Player.findAll({
-      order: [['id', 'DESC']],
+      order: [
+        ['alias', 'DESC'],
+        ['name', 'DESC'],
+        ['surname', 'DESC']
+      ],
       include: [Player.associations.pair1, Player.associations.pair2]
     });
-    return res.json(
-      users.filter(player =>
+    const result = users
+      .filter(player => {
+        // Se il giocatore non ha alias o nome lo escludo in quanto non sarebbe identificabile nella selezione delle coppie
+        if (player.alias === '' && player.name === '') return false;
+        // Se non è ancora stato assegnato a nessuno coppia allora è disponibile
+        if (!player.pair1 && !player.pair2) return true;
         /*
          * Se il giocatore è gia stato assegnato ad una coppia ( in posizione 1 o 2 )
          * che appartiene al torneo che sto analizzando allora lo devo escludere
          * perchè non è piu tra quelli selezionabili
          */
-        player.pair1.find(e => e.tournamentId === tId) || player.pair2.find(e => e.tournamentId === tId) ? false : true
-      )
-    );
+        if (
+          (player.pair1 && player.pair1.find(e => e.tournamentId === tId)) ||
+          (player.pair2 && player.pair2.find(e => e.tournamentId === tId))
+        )
+          return false;
+        else return true;
+      })
+      // Rimappo per escludere le associazioni
+      .map(player => ({
+        id: player.id,
+        name: player.name,
+        surname: player.surname,
+        alias: player.alias,
+        label: player.label,
+        email: player.email,
+        phone: player.phone,
+        role: player.role,
+        match_played: player.match_played,
+        match_won: player.match_won,
+        total_score: player.total_score,
+        editable: player.editable
+      }));
+    // logger.info(JSON.stringify(result, null, 2));
+    return res.json(result);
   } catch (err) {
     return next(err);
   }
@@ -33,8 +63,29 @@ router.get('/list/:tId', async (req, res, next) => {
 
 router.get('/list', async (req, res, next) => {
   try {
-    const users = await Player.findAll({ order: [['id', 'DESC']] });
-    return res.json(users);
+    const users = await Player.findAll({
+      order: [['id', 'DESC']],
+      include: [Player.associations.pair1, Player.associations.pair2]
+    });
+
+    //logger.info(users);
+    return res.json(
+      users // Rimappo per escludere le associazioni
+        .map(player => ({
+          id: player.id,
+          name: player.name,
+          surname: player.surname,
+          alias: player.alias,
+          label: player.label,
+          email: player.email,
+          phone: player.phone,
+          role: player.role,
+          match_played: player.match_played,
+          match_won: player.match_won,
+          total_score: player.total_score,
+          editable: player.editable
+        }))
+    );
   } catch (err) {
     return next(err);
   }
@@ -66,10 +117,7 @@ router.delete('/', async (req, res, next) => {
   for (const model of models) {
     const player = await Player.findByPk(model.id);
     if (player) {
-      // soft delete ( paranoid! )
       await player?.destroy();
-      // delete
-      // await player?.destroy({ force:true });
       rowsAffected++;
     }
   }

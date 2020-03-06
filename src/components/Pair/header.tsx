@@ -7,6 +7,7 @@ const TableHeader: React.FC<headerPropsType> = ({ tournament }: headerPropsType)
       <p>
         <b>
           Torneo "<strong>{tournament?.name.toUpperCase()}</strong>" ( {tournament?.id} )
+          <small> - {tournament?.progress}</small>
         </b>
       </p>
     </h3>

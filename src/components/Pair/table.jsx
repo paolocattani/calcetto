@@ -1,43 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Alert, ListGroup, InputGroup, FormControl, Row, Col, Collapse, Toast } from 'react-bootstrap';
+import { Button, ListGroup, InputGroup, FormControl, Row, Col, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
-import { columns, cellEditProps, getEmptyRowModel, fetchPairs, getEmptyPlayer } from './helper';
-import { fetchPlayers } from '../Player/helper';
+import { fetchData, columns, cellEditProps, getEmptyRowModel } from './helper';
+import { getEmptyPlayer } from '../Player/helper';
 import { useParams, useHistory } from 'react-router';
 import TableHeader from './header';
 import NoData from './noData';
 import { LoadingModal, SuccessToast, WarningToast, ErrorToast } from '../core/Commons';
-import { fetchTournament } from '../Tournament/helper';
 import './style.css';
+import { TournamentProgress } from '../Tournament/type';
 
 const PairsTable = _ => {
+  // Navigation
+  const { tId } = useParams();
+  let currentHistory = useHistory();
+
+  // States
   // User messages
   const [isLoading, setIsLoading] = useState({ state: false, message: 'Caricamento' });
   const [successMessage, setSuccessMessage] = useState('');
   const [allertMessage, setAllertMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  // Tournament
-  const [tournament, setTournament] = useState(null);
-  // Table Rows
-  const [rows, setRows] = useState([]);
+  // Data
+  const [data, setData] = useState({ tournament: null, rows: [], players: [] });
   const [selectedRows, setSelectedRows] = useState([]);
-  // Players list
-  const [options, setOptions] = useState([]);
   // Function params
   const [stage1Number, setStage1Number] = useState(0);
   const [newRowsNumber, setNewRowsNumber] = useState(0);
-  const [open, setOpen] = useState(false);
-
-  const { tId } = useParams();
-  let currentHistory = useHistory();
 
   // Initial Fetch
   useEffect(() => {
-    fetchPairs(setRows, tId);
-    fetchPlayers(setOptions, tId);
-    fetchTournament(setTournament, tId);
+    (async () => setData(await fetchData(tId)))();
   }, [tId]);
 
+  // User messages
   function showErrorMessage(message) {
     setIsLoading({ state: false, message });
     setErrorMessage(message);
@@ -49,7 +45,7 @@ const PairsTable = _ => {
     setTimeout(() => setSuccessMessage(''), 5000);
   }
 
-  async function addRow() {
+  async function addRow(index) {
     try {
       setIsLoading({ state: true, message: 'Aggiunta riga in corso' });
       const emptyRow = getEmptyRowModel();
@@ -61,8 +57,12 @@ const PairsTable = _ => {
       });
       const result = await response.json();
       emptyRow.id = result.id;
-      emptyRow.rowNumber = rows.length + 1;
-      setRows(rows => [emptyRow, ...rows]);
+      emptyRow.rowNumber = index || data.rows.length + 1;
+      setData(current => ({
+        tournament: current.tournament,
+        rows: [emptyRow, ...current.rows],
+        players: current.players
+      }));
       showSuccessMessage('Riga aggiunta');
     } catch (error) {
       showErrorMessage('Errore aggiunta riga');
@@ -70,9 +70,12 @@ const PairsTable = _ => {
   }
 
   async function addMultipleRows() {
-    for (let ii = 0; ii < newRowsNumber; ii++) await addRow();
+    let index = data.rows.length + 1;
+    for (let ii = 0; ii < newRowsNumber; ii++) {
+      await addRow(index);
+      index++;
+    }
     setNewRowsNumber(0);
-    fetchPairs(setRows, tId);
   }
 
   async function deleteRow() {
@@ -87,41 +90,65 @@ const PairsTable = _ => {
         if (e.player1.id) players.push(e.player1);
         if (e.player2.id) players.push(e.player2);
       });
-      if (players) setOptions(current => [...players, ...current].sort((e1, e2) => e1.alias.localeCompare(e2.alias)));
+      if (players)
+        setData(current => ({
+          tournament: current.tournament,
+          rows: current.rows,
+          players: [...players, ...current.players].sort((e1, e2) => e1.alias.localeCompare(e2.alias))
+        }));
 
-      const emptyRow = getEmptyRowModel();
       const response = await fetch('/api/pair', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(selectedRows)
       });
-      const result = await response.json();
-      emptyRow.id = result.id;
-      setRows(rows => rows.filter(row => !selectedRows.find(selectedRow => selectedRow.id === row.id)));
+      await response.json();
+
+      setData(current => ({
+        tournament: current.tournament,
+        rows: current.rows.filter(row => !selectedRows.find(selectedRow => selectedRow.id === row.id)),
+        players: current.players
+      }));
+
       showSuccessMessage(selectedRows.length > 1 ? 'Righe cancellate' : 'Riga cancellata');
     } catch (error) {
       showErrorMessage('Errore cancellazione riga');
     }
+
     setSelectedRows([]);
   }
 
   // update players list when a player is selected
   function updateOptions(player, selected) {
-    if (player.id)
+    if (player && player.id)
       if (selected.id)
-        setOptions(
-          [...options.filter(e => e.id !== selected.id), player].sort((e1, e2) => e1.alias.localeCompare(e2.alias))
-        );
-      else setOptions([...options, player].sort((e1, e2) => e1.alias.localeCompare(e2.alias)));
-    else if (selected.id) setOptions(options.filter(e => e.id !== selected.id));
+        setData(current => ({
+          tournament: current.tournament,
+          rows: current.rows,
+          players: [...current.players.filter(e => e.id !== selected.id), player].sort((e1, e2) =>
+            e1.alias.localeCompare(e2.alias)
+          )
+        }));
+      else
+        setData(current => ({
+          tournament: current.tournament,
+          rows: current.rows,
+          players: [...current.players, player].sort((e1, e2) => e1.alias.localeCompare(e2.alias))
+        }));
+    else if (selected.id)
+      setData(current => ({
+        tournament: current.tournament,
+        rows: current.rows,
+        players: current.players.filter(e => e.id !== selected.id)
+      }));
   }
   // Aggiorno la colonna con il giocatore selezionato
   const onSelect = (selectedElement, rowIndex, columnIndex) => {
-    const newRowsElement = rows.map(rowElement => {
+    const newRowsElement = data.rows.map(rowElement => {
       if (rowElement.id === rowIndex) {
         let row = rowElement;
         if (columnIndex === 1) {
-          if (selectedElement.id && row.player2.id === selectedElement.id) {
+          if (selectedElement.id && row.player2 && row.player2.id === selectedElement.id) {
             // Devo salvare l'elemnto che sto per sostituire
             row.player1 = getEmptyPlayer();
             setAllertMessage('Attenzione : Non puoi selezionare lo stesso giocare ! ');
@@ -132,7 +159,7 @@ const PairsTable = _ => {
             row.player1 = selectedElement;
           }
         } else {
-          if (selectedElement.id && row.player1.id === selectedElement.id) {
+          if (selectedElement.id && row.player1 && row.player1.id === selectedElement.id) {
             row.player2 = getEmptyPlayer();
             setAllertMessage('Attenzione : Non puoi selezionare lo stesso giocare ! ');
             setTimeout(() => setAllertMessage(''), 5000);
@@ -150,8 +177,11 @@ const PairsTable = _ => {
         return row;
       } else return rowElement;
     });
-
-    setRows(newRowsElement);
+    setData(current => ({
+      tournament: current.tournament,
+      rows: newRowsElement,
+      players: current.players
+    }));
   };
 
   const handleSelect = (row, isSelected) => {
@@ -166,16 +196,15 @@ const PairsTable = _ => {
   };
 
   const confirmPairs = () => {
-    
+
     // Controllo che sia presente almeno una coppia
-    if (rows.length < 4) {
-      setErrorMessage('Numero di coppie insufficente');
+    if (data.rows.length < 4) {
+      setErrorMessage('Numero di coppie insufficente. Devi formare almeno 4 coppie');
       setTimeout(() => setErrorMessage(''), 5000);
       return;
     }
-    
     // Controllo gironi non assegnati
-    const missingStage1Name = rows.filter(e => !e.stage1Name || e.stage1Name === '').map(e => e.rowNumber);
+    const missingStage1Name = data.rows.filter(e => !e.stage1Name || e.stage1Name === '').map(e => e.rowNumber);
     if (missingStage1Name.length !== 0) {
       setErrorMessage(
         `Assegna  ${
@@ -187,7 +216,7 @@ const PairsTable = _ => {
     }
 
     // Controllo coppie non assegnate
-    const missingPairs = rows.filter(e => e.player1.id === null || e.player2.id === null).map(e => e.rowNumber);
+    const missingPairs = data.rows.filter(e => e.player1.id === null || e.player2.id === null).map(e => e.rowNumber);
     if (missingPairs.length !== 0) {
       setErrorMessage(
         `Assegna  i giocatori ${
@@ -209,7 +238,7 @@ const PairsTable = _ => {
     // Controllo che non ci siano gironi con meno di 1 coppia ( meglio spostare 3 )
     const MIN_PAIR_PER_STAGE = 3;
     let invalidStage = [];
-    const pairsInStage = rows.reduce((allNames, row) => {
+    const pairsInStage = data.rows.reduce((allNames, row) => {
       if (row.stage1Name in allNames) allNames[row.stage1Name]++;
       else allNames[row.stage1Name] = 1;
       return allNames;
@@ -228,6 +257,14 @@ const PairsTable = _ => {
       }, 5000);
       return;
     }
+
+    // Update tournament progress
+    data.tournament.progress = TournamentProgress.Stage1;
+    fetch('/api/tournament', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data.tournament)
+    });
 
     // Go to Stage1
     currentHistory.push(`/stage1/${tId}`);
@@ -253,6 +290,13 @@ const PairsTable = _ => {
         body: JSON.stringify({ tId })
       });
       await response.json();
+      // Update tournament progress
+      data.tournament.progress = TournamentProgress.PairsSelection;
+      fetch('/api/tournament', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data.tournament)
+      });
       showSuccessMessage('Cancellazione completata');
     } catch (error) {
       showErrorMessage('Errore cancellazione Fase 1');
@@ -269,8 +313,8 @@ const PairsTable = _ => {
     let current = 0;
     const names = 'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('');
     let newRows = [];
-    for (let index in rows) {
-      let row = rows[index];
+    for (let index in data.rows) {
+      let row = data.rows[index];
       if (current == stage1Number) current = 0;
       row['stage1Name'] = names[current];
       current++;
@@ -280,7 +324,7 @@ const PairsTable = _ => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(row)
         });
-        const result = await response.json();
+        await response.json();
         newRows.push(row);
       } catch (error) {
         showErrorMessage('Errore');
@@ -288,14 +332,26 @@ const PairsTable = _ => {
       }
     }
     showSuccessMessage('Gironi assegnati correttamente');
-    setRows(newRows);
-
-    console.log('setStage1Name finito');
+    setData(current => ({ tournament: current.tournament, rows: newRows, players: current.players }));
   }
 
-  const maxRows = Math.floor((options.length - 1) / 2);
-  const availableRows = maxRows - rows.length;
-  console.log('render table : ', availableRows, options);
+  const availableRows =
+    Math.floor(
+      data.players.length -
+        1 -
+        data.rows.reduce((accumulator, e) => {
+          if (!e.player1 && !e.player2) return accumulator + 2;
+          if (!e.player1 || !e.player2) return accumulator + 1;
+          if (!e.player1.id && !e.player2.id) return accumulator + 2;
+          if (!e.player1.id || !e.player2.id) return accumulator + 1;
+          return accumulator;
+        }, 0)
+    ) / 2;
+
+  const deleteDisabled =
+    !(selectedRows.length > 0) || data.tournament.progress === 'Stage1' || data.tournament.progress === 'Stage2';
+
+  console.log('render table : ', data);
   return (
     <>
       <Row>
@@ -309,12 +365,32 @@ const PairsTable = _ => {
               <ListGroup.Item action variant="secondary" onClick={goBack}>
                 Home
               </ListGroup.Item>
-              <ListGroup.Item action variant="success" onClick={addRow} disabled={availableRows <= 0}>
+              <ListGroup.Item action variant="success" onClick={() => addRow()} disabled={availableRows <= 0}>
                 Aggiungi Coppia
               </ListGroup.Item>
-              <ListGroup.Item action variant="danger" onClick={deleteRow} disabled={!(selectedRows.length > 0)}>
-                Elimina Coppia
-              </ListGroup.Item>
+
+              <OverlayTrigger
+                placement="right"
+                key="rigth"
+                overlay={
+                  <Tooltip>
+                    {deleteDisabled ? 'Prima devi resettare i gironi' : 'Elimina le coppie selezionate'}
+                  </Tooltip>
+                }
+              >
+                <span className="d-inline-block">
+                  <ListGroup.Item
+                    action
+                    variant="danger"
+                    onClick={deleteRow}
+                    style={{ pointerEvents: 'none' }}
+                    disabled={deleteDisabled}
+                  >
+                    Elimina Coppia
+                  </ListGroup.Item>
+                </span>
+              </OverlayTrigger>
+
               <ListGroup.Item action variant="danger" onClick={deleteStage1}>
                 Reset gironi
               </ListGroup.Item>
@@ -329,18 +405,18 @@ const PairsTable = _ => {
               </InputGroup.Prepend>
               <FormControl
                 placeholder={
-                  rows.length < 4
+                  data.rows.length < 4
                     ? 'Inserisci almeno 4 coppie'
-                    : `Numero di gironi ( max ${Math.floor(rows.length / 4)} )`
+                    : `Numero di gironi ( max ${Math.floor(data.rows.length / 4)} )`
                 }
                 aria-label="Numero di gironi"
-                disabled={rows.length < 4}
+                disabled={data.rows.length < 4}
               />
               <InputGroup.Append>
                 <Button
                   variant="primary"
                   onClick={setStage1Name}
-                  disabled={!stage1Number || stage1Number > Math.floor(rows.length / 4) || rows.length < 4}
+                  disabled={!stage1Number || stage1Number > Math.floor(data.rows.length / 4) || data.rows.length < 4}
                 >
                   Esegui
                 </Button>
@@ -354,9 +430,7 @@ const PairsTable = _ => {
                 disabled={availableRows <= 0}
                 placeholder={
                   availableRows <= 0
-
                     ? 'Numero massimo di coppie gia creato sulla base del numero di giocatori disponibili'
-
                     : `Numero di coppie da aggiungere ( max ${availableRows} )`
                 }
                 aria-label="Numero di coppie"
@@ -384,12 +458,12 @@ const PairsTable = _ => {
             <BootstrapTable
               bootstrap4
               keyField="id"
-              data={rows}
-              columns={columns(onSelect, options)}
+              data={data.rows}
+              columns={columns(onSelect, data.players)}
               cellEdit={cellEditProps}
               selectRow={selectRow}
-              noDataIndication={<NoData addRow={addRow} optionsLength={options.length} />}
-              caption={<TableHeader tournament={tournament} />}
+              noDataIndication={<NoData addRow={() => addRow()} optionsLength={data.players.length} />}
+              caption={<TableHeader tournament={data.tournament} />}
               wrapperClasses="player-table"
               headerClasses="player-table-header"
               striped

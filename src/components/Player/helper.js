@@ -6,9 +6,9 @@ import { Type } from 'react-bootstrap-table2-editor';
 
 // options for role column
 const selectOptions = {
-  0: 'Portiere',
-  1: 'Attaccante',
-  2: 'Master'
+  Portiere: 'Portiere',
+  Attaccante: 'Attaccante',
+  Master: 'Master'
 };
 
 // Filter
@@ -34,9 +34,7 @@ export default [
     autoSelectText: true,
     filter: textFilter({
       placeholder: 'Filtra...',
-      getFilter: filter => {
-        nameFilter = filter;
-      }
+      getFilter: filter => (nameFilter = filter)
     })
   },
   {
@@ -46,9 +44,7 @@ export default [
     autoSelectText: true,
     filter: textFilter({
       placeholder: 'Filtra...',
-      getFilter: filter => {
-        surnameFilter = filter;
-      }
+      getFilter: filter => (surnameFilter = filter)
     })
   },
   {
@@ -58,9 +54,7 @@ export default [
     autoSelectText: true,
     filter: textFilter({
       placeholder: 'Filtra...',
-      getFilter: filter => {
-        aliasFilter = filter;
-      }
+      getFilter: filter => (aliasFilter = filter)
     })
   },
   {
@@ -70,21 +64,30 @@ export default [
     filter: selectFilter({
       placeholder: 'Filtra...',
       options: selectOptions,
-      getFilter: filter => {
-        roleFilter = filter;
-      }
+      getFilter: filter => (roleFilter = filter)
     }),
     editor: {
       type: Type.SELECT,
-      // FIXME:
-      getOptions: (setOptions, { row, column }) => {
+      getOptions: _ => {
         return [
-          { value: 0, label: 'Portiere' },
-          { value: 1, label: 'Attaccante' },
-          { value: 2, label: 'Master' }
+          { value: 'Portiere', label: 'Portiere' },
+          { value: 'Attaccante', label: 'Attaccante' },
+          { value: 'Master', label: 'Master' }
         ];
       }
     }
+  },
+  {
+    dataField: 'email',
+    text: 'Email',
+    headerClasses: 'player-table-header-element',
+    autoSelectText: true
+  },
+  {
+    dataField: 'phone',
+    text: 'Telefono',
+    headerClasses: 'player-table-header-element',
+    autoSelectText: true
   },
   { dataField: 'match_played', text: 'Partite Giocate', hidden: true },
   { dataField: 'match_won', text: 'Vittorie', hidden: true },
@@ -107,39 +110,36 @@ export const fetchPlayers = (setterFunction, tId) => {
       headers: { 'Content-Type': 'application/json' }
     });
     const result = await response.json();
-    setterFunction([
-      ...result.map(e => ({
-        id: e.id,
-        name: e.name,
-        surname: e.surname,
-        alias: e.alias,
-        label: e.alias,
-        role: e.role,
-        match_played: e.match_played,
-        match_won: e.match_won,
-        total_score: e.total_score
-      })),
-      {
-        id: null,
-        name: '',
-        surname: '',
-        alias: '',
-        label: 'Nessun Giocatore',
-        role: '',
-        match_played: 0,
-        match_won: 0,
-        total_score: 0
-      }
-    ]);
+    const model = [...result, getEmptyPlayer('Nessun Giocatore')];
+    console.log('fetchPlayers.result : ', model);
+    setterFunction(model);
   })();
 };
 
 export function valueFormatter(selectedOption) {
   let value = '';
+  if (!selectedOption) return '';
   if (selectedOption.alias) {
     value = selectedOption.alias;
   } else {
     value = selectedOption.surname ? `${selectedOption.name} - ${selectedOption.surname}` : selectedOption.name;
   }
   return value;
+}
+
+export function getEmptyPlayer(label) {
+  return {
+    id: null,
+    name: '',
+    surname: '',
+    alias: '',
+    label: label || '',
+    role: '',
+    email: '',
+    phone: '',
+    match_played: 0,
+    match_won: 0,
+    total_score: 0,
+    editable: false
+  };
 }
