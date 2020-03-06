@@ -3,10 +3,8 @@ import PlayerTable from '../Player/table';
 import Pairs from '../Pair/table';
 import Stage1Wrapper from '../Stage1/wrapper';
 import Stage2 from '../Stage2/model';
+import { RedirectionControl } from './RedirectionControls';
 import { OrganizationChartDemo } from '../Stage2/table';
-
-// TODO:
-import * as Todo from '../DELETE/Todo';
 
 type routeType = {
   path: string;
@@ -55,7 +53,7 @@ export const routes: routeType[] = [
     index: 40
   },
   // TODO: creare pagina per route not found
-  { path: '*', label: 'Not Found', exact: false, component: Todo.RedirectionControl, visible: false, index: 1000 }
+  { path: '*', label: 'Not Found', exact: false, component: RedirectionControl, visible: false, index: 1000 }
 ];
 export default routes;
 

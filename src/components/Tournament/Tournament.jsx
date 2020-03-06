@@ -4,7 +4,7 @@ import { components } from 'react-select';
 import { Form, Button, Card, Tooltip } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 import { getTodayDate } from '../core/utils';
-import { fetchTournaments } from './helper';
+import { fetchTournaments, getEmptyTournament, customFilter } from './helper';
 import { TournamentProgress } from './type';
 
 //export default const FTournament: React.FC = () => {
@@ -18,25 +18,19 @@ const FTournament = () => {
 
   const handleChange = selectedOption => setSelectedOption(selectedOption);
   const handleCreate = selectedOption => {
-    setSelectedOption({ value: selectedOption, label: selectedOption });
-    setTournamentList(prevList => [...prevList, { value: selectedOption, label: selectedOption }]);
+    let newT = getEmptyTournament(selectedOption);
+    setSelectedOption(newT);
+    setTournamentList(prevList => [...prevList, newT]);
   };
 
   const handleSubmit = async event => {
     event.preventDefault();
-    const model = {
-      name: selectedOption.value,
-      ownerId: 1,
-      progress: TournamentProgress.New,
-      public: true
-    };
     const response = await fetch('/api/tournament', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(model)
+      body: JSON.stringify(getEmptyTournament(selectedOption.name, TournamentProgress.PairsSelection))
     });
     const res = await response.json();
-    if (res.message) console.log(res.message);
     currentHistory.push(`/tournament/${res.id}`);
   };
 
@@ -46,8 +40,14 @@ const FTournament = () => {
         <Card.Title>Scegli un torneo</Card.Title>
         <Form onSubmit={handleSubmit}>
           <CreatableSelect
-            components={{ IndicatorSeparator, IndicatorsContainer }}
+            // TODO:
+            //filterOption={customFilter}
+            // getOptionValue={option => `${option.label}`}
+            //formatCreateLabel={formatNewLabel}
             //formatOptionLabel={formatOptionLabel}
+            //getOptionLabel={option => `${option.name} @ ${option.progress}`}
+            //
+            components={{ IndicatorSeparator }}
             value={selectedOption}
             options={tournamentList}
             placeholder="Crea/Cerca un torneo"
@@ -68,13 +68,6 @@ const FTournament = () => {
 
 // TODO:
 // https://react-select.com/components#components
-const IndicatorsContainer = props => {
-  return (
-    <div>
-      <components.IndicatorsContainer {...props} />
-    </div>
-  );
-};
 
 // Indicator Separator
 const indicatorSeparatorStyle = {
@@ -86,24 +79,24 @@ const indicatorSeparatorStyle = {
   width: 1
 };
 
-const IndicatorSeparator = ({ innerProps }) => {
-  return <span style={indicatorSeparatorStyle} {...innerProps} />;
-};
+const IndicatorSeparator = ({ innerProps }) => <span style={indicatorSeparatorStyle} {...innerProps} />;
 
 const cardStyle = {
   width: '50%',
   margin: 'auto'
 };
 
-const formatOptionLabel = props => {
-  console.log('format : ', props);
+const formatNewLabel = inputString => (
+  <strong>
+    {inputString}
+    <small style={{ color: '#ccc' }}>@ New</small>
+  </strong>
+);
 
-  return (
-    <strong>
-      {props.name}
-      <small style={{ color: '#ccc' }}>@{props.progress}</small>
-    </strong>
-  );
-};
-
+const formatOptionLabel = ({ name, progress, innerProps }) => (
+  <strong>
+    {name}
+    <small style={{ color: '#ccc' }}>@{progress}</small>
+  </strong>
+);
 export default FTournament;

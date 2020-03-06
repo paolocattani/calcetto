@@ -1,5 +1,5 @@
 import { getTodayDate } from '../core/utils';
-import { TournamentModel } from './type';
+import { TournamentModel, TournamentProgressType, selectOptions } from './type';
 import { useState } from 'react';
 
 export function fetchTournaments(setterFunction: typeof useState, setterFunction2: typeof useState): void {
@@ -35,4 +35,21 @@ export async function getTournament(tId: number): Promise<TournamentModel | null
   });
   const result: TournamentModel = await response.json();
   return response.ok ? result : null;
+}
+
+export function getEmptyTournament(name: string, progress: TournamentProgressType) {
+  return {
+    id: null,
+    name: name || '',
+    ownerId: 0,
+    progress: progress || 'New',
+    public: true,
+    label: name || ''
+  };
+}
+
+// select helper
+export function customFilter(option: selectOptions, searchText: string): boolean {
+  console.log('customFilter : ', option, typeof option.data);
+  return option.data.name ? option.data.name.toLowerCase().includes(searchText.toLowerCase()) : false;
 }

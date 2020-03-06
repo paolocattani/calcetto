@@ -153,14 +153,6 @@ export const fetchData = async tId => {
   });
   const tournament = await response.json();
 
-  // Aggiorno stato torneo
-  tournament.progress = TournamentProgress.PairsSelection;
-  response = await fetch('/api/tournament', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(tournament)
-  });
-
   return { rows, players, tournament };
 };
 

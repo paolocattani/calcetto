@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, ListGroup, InputGroup, FormControl, Row, Col } from 'react-bootstrap';
+import { Button, ListGroup, InputGroup, FormControl, Row, Col, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { fetchData, columns, cellEditProps, getEmptyRowModel } from './helper';
 import { getEmptyPlayer } from '../Player/helper';
@@ -265,6 +265,7 @@ const PairsTable = _ => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data.tournament)
     });
+
     // Go to Stage1
     currentHistory.push(`/stage1/${tId}`);
   };
@@ -347,6 +348,9 @@ const PairsTable = _ => {
         }, 0)
     ) / 2;
 
+  const deleteDisabled =
+    !(selectedRows.length > 0) || data.tournament.progress === 'Stage1' || data.tournament.progress === 'Stage2';
+
   console.log('render table : ', data);
   return (
     <>
@@ -361,12 +365,32 @@ const PairsTable = _ => {
               <ListGroup.Item action variant="secondary" onClick={goBack}>
                 Home
               </ListGroup.Item>
-              <ListGroup.Item action variant="success" onClick={addRow} disabled={availableRows <= 0}>
+              <ListGroup.Item action variant="success" onClick={() => addRow()} disabled={availableRows <= 0}>
                 Aggiungi Coppia
               </ListGroup.Item>
-              <ListGroup.Item action variant="danger" onClick={deleteRow} disabled={!(selectedRows.length > 0)}>
-                Elimina Coppia
-              </ListGroup.Item>
+
+              <OverlayTrigger
+                placement="right"
+                key="rigth"
+                overlay={
+                  <Tooltip>
+                    {deleteDisabled ? 'Prima devi resettare i gironi' : 'Elimina le coppie selezionate'}
+                  </Tooltip>
+                }
+              >
+                <span className="d-inline-block">
+                  <ListGroup.Item
+                    action
+                    variant="danger"
+                    onClick={deleteRow}
+                    style={{ pointerEvents: 'none' }}
+                    disabled={deleteDisabled}
+                  >
+                    Elimina Coppia
+                  </ListGroup.Item>
+                </span>
+              </OverlayTrigger>
+
               <ListGroup.Item action variant="danger" onClick={deleteStage1}>
                 Reset gironi
               </ListGroup.Item>
@@ -438,7 +462,7 @@ const PairsTable = _ => {
               columns={columns(onSelect, data.players)}
               cellEdit={cellEditProps}
               selectRow={selectRow}
-              noDataIndication={<NoData addRow={addRow} optionsLength={data.players.length} />}
+              noDataIndication={<NoData addRow={() => addRow()} optionsLength={data.players.length} />}
               caption={<TableHeader tournament={data.tournament} />}
               wrapperClasses="player-table"
               headerClasses="player-table-header"

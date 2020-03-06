@@ -7,8 +7,29 @@ import { isProductionMode } from '../core/debug';
 import chalk from 'chalk';
 
 const TOURNAMENT_RECORDS = 10;
-const PLAYER_RECORDS = 20;
-const PAIRS_RECORDS = 20;
+
+const players = [
+  { name: 'Andrea', surname: 'Messi', alias: 'Messi', email: '', phone: '', role: 'Master' },
+  { name: 'Paolo', surname: 'Cattani', alias: 'Pool', email: '', phone: '', role: 'Master' },
+  { name: 'Gilberto', surname: 'Turato', alias: 'Gilbe', email: '', phone: '', role: 'Master' },
+  { name: 'Enrico', surname: 'Bevilacqua', alias: 'Tocio', email: '', phone: '', role: 'Master' },
+  { name: 'Dante', surname: 'Riello', alias: 'The Wall ', email: '', phone: '', role: 'Master' },
+  { name: 'Michele', surname: 'Maschio', alias: 'Tope', email: '', phone: '', role: 'Master' },
+  { name: 'Fede', surname: 'Beggiato', alias: 'Fede', email: '', phone: '', role: 'Attaccante' },
+  { name: 'Salvatore', surname: 'Bonanno', alias: 'Salvo', email: '', phone: '', role: 'Attaccante' },
+  { name: 'Gianni', surname: 'Guion', alias: 'Gianni', email: '', phone: '', role: 'Portiere' },
+  { name: 'Lorenzo', surname: '', alias: 'Lorenzo', email: '', phone: '', role: 'Portiere' },
+  { name: 'Niero', surname: '', alias: 'Niero', email: '', phone: '', role: 'Attaccante' },
+  { name: 'Renzo', surname: 'Pinton', alias: 'Renzo', email: '', phone: '', role: 'Portiere' },
+  { name: 'Fabio', surname: 'Zambello', alias: 'Fabio', email: '', phone: '', role: 'Attaccante' },
+  { name: 'Amante', surname: '', alias: 'Amante', email: '', phone: '', role: 'Attaccante' },
+  { name: 'Vanni', surname: '', alias: 'Vanni', email: '', phone: '', role: 'Portiere' },
+  { name: 'Mirco', surname: 'Dalan', alias: 'Mirco', email: '', phone: '', role: 'Portiere' },
+  { name: 'Jacopo', surname: '', alias: 'Jacopo', email: '', phone: '', role: 'Attaccante' },
+  { name: 'Melanie', surname: '', alias: 'Melanie', email: '', phone: '', role: 'Attaccante' },
+  { name: 'Luca', surname: '', alias: 'Luca', email: '', phone: '', role: 'Portiere' },
+  { name: 'Daniel', surname: '', alias: 'Daniel', email: '', phone: '', role: 'Attaccante' }
+];
 
 export default async function generator(start: boolean): Promise<void> {
   if (start === false || isProductionMode()) {
@@ -27,8 +48,8 @@ async function tournamentGenerator(): Promise<void> {
     const model = {
       id: null,
       name: ii,
-      ownerId: 1,
-      progress: 'Non assegnato',
+      ownerId: 0,
+      progress: 'New',
       public: true
     };
     await Tournament.create(model);
@@ -36,29 +57,6 @@ async function tournamentGenerator(): Promise<void> {
 }
 
 async function playerGenerator(): Promise<void> {
-  const players = [
-    { name: 'Andrea', surname: 'Messi', alias: 'Messi', email: '', phone: '', role: 'Master' },
-    { name: 'Paolo', surname: 'Cattani', alias: 'Pool', email: '', phone: '', role: 'Master' },
-    { name: 'Gilberto', surname: 'Turato', alias: 'Gilbe', email: '', phone: '', role: 'Master' },
-    { name: 'Enrico', surname: 'Bevilacqua', alias: 'Tocio', email: '', phone: '', role: 'Master' },
-    { name: 'Dante', surname: 'Riello', alias: 'The Wall ', email: '', phone: '', role: 'Master' },
-    { name: 'Michele', surname: 'Maschio', alias: 'Tope', email: '', phone: '', role: 'Master' },
-    { name: 'Fede', surname: 'Beggiato', alias: 'Fede', email: '', phone: '', role: 'Attaccante' },
-    { name: 'Salvatore', surname: 'Bonanno', alias: 'Salvo', email: '', phone: '', role: 'Attaccante' },
-    { name: 'Gianni', surname: 'Guion', alias: 'Gianni', email: '', phone: '', role: 'Portiere' },
-    { name: 'Lorenzo', surname: '', alias: 'Lorenzo', email: '', phone: '', role: 'Portiere' },
-    { name: 'Niero', surname: '', alias: 'Niero', email: '', phone: '', role: 'Attaccante' },
-    { name: 'Renzo', surname: 'Pinton', alias: 'Renzo', email: '', phone: '', role: 'Portiere' },
-    { name: 'Fabio', surname: 'Zambello', alias: 'Fabio', email: '', phone: '', role: 'Attaccante' },
-    { name: 'Amante', surname: '', alias: 'Amante', email: '', phone: '', role: 'Attaccante' },
-    { name: 'Vanni', surname: '', alias: 'Vanni', email: '', phone: '', role: 'Portiere' },
-    { name: 'Mirco', surname: 'Dalan', alias: 'Mirco', email: '', phone: '', role: 'Portiere' },
-    { name: 'Jacopo', surname: '', alias: 'Jacopo', email: '', phone: '', role: 'Attaccante' },
-    { name: 'Melanie', surname: '', alias: 'Melanie', email: '', phone: '', role: 'Attaccante' },
-    { name: 'Luca', surname: '', alias: 'Luca', email: '', phone: '', role: 'Portiere' },
-    { name: 'Daniel', surname: '', alias: 'Daniel', email: '', phone: '', role: 'Attaccante' }
-  ];
-
   for (let ii = 0; ii < players.length; ii++)
     await Player.create({
       name: players[ii].name,
@@ -69,12 +67,12 @@ async function playerGenerator(): Promise<void> {
 }
 
 async function pairGenerator(): Promise<void> {
-  for (let ii = 1; ii <= PAIRS_RECORDS; ii++) {
+  for (let ii = 1; ii <= players.length / 2; ii++) {
     const model = {
       id: null,
       tournamentId: 1,
-      player1Id: getRandomIntInclusive(1, PLAYER_RECORDS),
-      player2Id: getRandomIntInclusive(1, PLAYER_RECORDS),
+      player1Id: getRandomIntInclusive(1, players.length),
+      player2Id: getRandomIntInclusive(1, players.length),
       pairAlias: ii % 2 === 0 ? `PAlias${ii}` : '',
       stage1Name: getRandomIntInclusive(1, 3)
     };

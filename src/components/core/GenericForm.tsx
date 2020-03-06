@@ -1,7 +1,13 @@
 import { Component, FormEvent } from 'react';
 import React from 'react';
-import { IInputOptions } from '../DELETE/types/InputOptions';
 import { Form, Button } from 'react-bootstrap';
+
+type IInputOptions = {
+  label?: string;
+  inputType?: string;
+  placeholder?: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+};
 
 type formProps = {
   inputFields: Map<string, IInputOptions>;
