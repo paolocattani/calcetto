@@ -134,7 +134,7 @@ export function getEmptyPlayer(label) {
     surname: '',
     alias: '',
     label: label || '',
-    role: '',
+    role: 'Portiere',
     email: '',
     phone: '',
     match_played: 0,
