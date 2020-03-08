@@ -17,7 +17,6 @@ export default class Player extends Model<Player> {
   @Column(DataType.ENUM('Portiere', 'Attaccante', 'Master'))
   public role!: PlayerRole;
 
-  @IsEmail
   @Column(DataType.STRING)
   public email?: string;
 
