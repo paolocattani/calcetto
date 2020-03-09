@@ -3,7 +3,7 @@ import { useSessionContext } from '../core/SessionContext';
 import { useHistory } from 'react-router';
 
 // TODO:
-export const Login: React.FC = () => {
+export const Login: React.FC = _ => {
   const [sessionContext, updateSessionContext] = useSessionContext();
   const currentHistory = useHistory();
 

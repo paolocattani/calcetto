@@ -8,7 +8,7 @@ import { Navbar } from 'react-bootstrap';
 import routes from '../core/Routes';
 // import { useSessionContext } from '../core/SessionContext';
 
-export const FNavbar: React.FC = () => {
+export const FNavbar: React.FC = _ => {
   // const [sessionContext, updateSessionContext] = useSessionContext();
 
   return (

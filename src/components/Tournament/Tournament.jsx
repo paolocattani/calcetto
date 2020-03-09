@@ -7,8 +7,7 @@ import { getTodayDate } from '../core/utils';
 import { fetchTournaments, getEmptyTournament, customFilter } from './helper';
 import { TournamentProgress } from './type';
 
-//export default const FTournament: React.FC = () => {
-const FTournament = () => {
+const FTournament = _ => {
   // State definition
   const [selectedOption, setSelectedOption] = useState(getTodayDate());
   const [tournamentList, setTournamentList] = useState([]);

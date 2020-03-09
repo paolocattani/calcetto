@@ -2,12 +2,13 @@ import React from 'react';
 import PairSelect from '../Pair/select';
 import { Type } from 'react-bootstrap-table2-editor';
 
-export const newColumn = (index, onChange) => {
+const newColumn = (index, rowNumber) => {
   return {
     id: `col${index}`,
     dataField: `col${index}`,
     text: index.toString(),
     type: 'number',
+    headerStyle: (column, colIndex) => ({ width: `${75 / rowNumber}%` }),
     headerAlign: (column, colIndex) => 'center',
     editable: (content, row, rowIndex, columnIndex) => rowIndex !== columnIndex - 2,
     align: (cell, row, rowIndex, colIndex) => 'center',
@@ -67,6 +68,7 @@ export const columns = (onSelect, pairsList) => {
       dataField: 'pair.label',
       text: 'Nome Coppia',
       editable: false,
+      headerStyle: (column, colIndex) => ({ width: '15%' }),
       align: (cell, row, rowIndex, colIndex) => 'center',
       headerAlign: (column, colIndex) => 'center',
       editorRenderer: (editorProps, value, row, column, rowIndex, columnIndex) => (
@@ -89,6 +91,7 @@ export const columns = (onSelect, pairsList) => {
       text: 'ID',
       editable: false,
       type: 'number',
+      headerStyle: (column, colIndex) => ({ width: '5%' }),
       headerAlign: (column, colIndex) => 'center',
       style: (content, row, rowIndex, columnIndex) => {
         return { backgroundColor: '#f9ffdb' };
@@ -98,7 +101,7 @@ export const columns = (onSelect, pairsList) => {
 
   // generazione dinamica colonne intermedie
   for (let ii = 0; ii < pairsList.length; ii++) {
-    baseColumns.push(newColumn(ii + 1));
+    baseColumns.push(newColumn(ii + 1, pairsList.length));
   }
 
   baseColumns.push(
@@ -109,6 +112,7 @@ export const columns = (onSelect, pairsList) => {
       text: 'Totale',
       editable: false,
       type: 'number',
+      headerStyle: (column, colIndex) => ({ width: '5%' }),
       headerAlign: (column, colIndex) => 'center'
     },
     {
@@ -118,6 +122,7 @@ export const columns = (onSelect, pairsList) => {
       text: 'Posizione',
       editable: true,
       type: 'number',
+      headerStyle: (column, colIndex) => ({ width: '5%' }),
       headerAlign: (column, colIndex) => 'center'
     }
   );

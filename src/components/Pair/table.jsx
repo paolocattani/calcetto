@@ -195,7 +195,7 @@ const PairsTable = _ => {
     });
   };
 
-  const confirmPairs = () => {
+  const confirmPairs = _ => {
     // Controllo che sia presente almeno una coppia
     if (data.rows.length < 4) {
       setErrorMessage('Numero di coppie insufficente. Devi formare almeno 4 coppie');
@@ -356,7 +356,7 @@ const PairsTable = _ => {
     deleteTooltipMessage = 'Devi prima resettare i gironi per poter cancellare delle coppie';
   else deleteTooltipMessage = 'Cancella le coppie selezionate';
 
-  console.log('render table : ', data);
+  // console.log('render table : ', data);
   return (
     <>
       <Row>
@@ -375,15 +375,9 @@ const PairsTable = _ => {
               </ListGroup.Item>
 
               <OverlayTrigger placement="right" key="rigth" overlay={<Tooltip>{deleteTooltipMessage}</Tooltip>}>
-                <span className="d-inline-block">
-                  <ListGroup.Item
-                    action
-                    variant="danger"
-                    onClick={deleteRow}
-                    style={{ pointerEvents: 'none' }}
-                    disabled={deleteDisabled}
-                  >
-                    Elimina Coppia
+                <span className="d-inline-block" onClick={deleteRow}>
+                  <ListGroup.Item action variant="danger" style={{ pointerEvents: 'none' }} disabled={deleteDisabled}>
+                    Elimina Coppia {deleteDisabled}
                   </ListGroup.Item>
                 </span>
               </OverlayTrigger>
