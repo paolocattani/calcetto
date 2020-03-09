@@ -16,7 +16,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = props => {
   let redirectPath = props.redirectPathOnAuthentication;
 
   // FIXME:
-  console.log('ProtectedRoute....');
+  // console.log('ProtectedRoute....');
   if (process.env.NODE_ENV === 'development') return <Route {...props} />;
 
   if (!props.isAuthenticated) {

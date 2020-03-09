@@ -6,9 +6,11 @@ import { Link } from 'react-router-dom';
 import { Navbar } from 'react-bootstrap';
 // import { useSessionContext } from '../core/SessionContext';
 import routes from '../core/Routes';
+// import { useSessionContext } from '../core/SessionContext';
 
 export const FNavbar: React.FC = () => {
   // const [sessionContext, updateSessionContext] = useSessionContext();
+
   return (
     <Navbar bg="ligth" variant="light" className="navbar-container">
       {/*

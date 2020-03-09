@@ -2,7 +2,6 @@ import React from 'react';
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import PlayerSelect from '../Player/select';
 import { getEmptyPlayer } from '../Player/helper';
-import { TournamentProgress } from '../Tournament/type';
 
 export const columns = (onSelect, options) => [
   { dataField: 'id', text: 'ID', editable: false, hidden: true, align: () => 'center' },
@@ -22,7 +21,8 @@ export const columns = (onSelect, options) => [
         onSelect={onSelect}
         options={options}
       />
-    )
+    ),
+    headerStyle: (column, colIndex) => ({ width: '20%' })
   },
   {
     dataField: 'player2.alias',
@@ -39,13 +39,15 @@ export const columns = (onSelect, options) => [
         onSelect={onSelect}
         options={options}
       />
-    )
+    ),
+    headerStyle: (column, colIndex) => ({ width: '20%' })
   },
-  { dataField: 'pairAlias', text: 'Alias Coppia' },
+  { dataField: 'pairAlias', text: 'Alias Coppia', headerStyle: (column, colIndex) => ({ width: '25%' }) },
   {
     dataField: 'stage1Name',
     text: 'Nome girone',
     align: () => 'center',
+    headerStyle: (column, colIndex) => ({ width: '10%' }),
     editor: {
       type: Type.SELECT,
       options: 'abcdefghijklmnopqrstuvwxyz'
@@ -60,6 +62,7 @@ export const columns = (onSelect, options) => [
     dataField: 'paid1',
     text: 'Pagato 1',
     align: () => 'center',
+    headerStyle: (column, colIndex) => ({ width: '7,5%' }),
     editor: {
       type: Type.CHECKBOX,
       value: 'Si:No'
@@ -81,6 +84,7 @@ export const columns = (onSelect, options) => [
     dataField: 'paid2',
     text: 'Pagato 2',
     align: () => 'center',
+    headerStyle: (column, colIndex) => ({ width: '7,5%' }),
     editor: {
       type: Type.CHECKBOX,
       value: 'Si:No'

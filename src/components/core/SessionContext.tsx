@@ -11,9 +11,9 @@ export const initialSession: Session = {};
 export const SessionContext = createContext<[Session, (session: Session) => void]>([initialSession, () => {}]);
 export const useSessionContext = () => useContext(SessionContext);
 
-export const SessionContextProvider: React.FC = props => {
+export const SessionContextProvider: React.FC = ({ children }) => {
   const [sessionState, setSessionState] = useState(initialSession);
   const defaultSessionContext: [Session, typeof setSessionState] = [sessionState, setSessionState];
 
-  return <SessionContext.Provider value={defaultSessionContext}>{props.children}</SessionContext.Provider>;
+  return <SessionContext.Provider value={defaultSessionContext}>{children}</SessionContext.Provider>;
 };

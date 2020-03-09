@@ -196,7 +196,6 @@ const PairsTable = _ => {
   };
 
   const confirmPairs = () => {
-
     // Controllo che sia presente almeno una coppia
     if (data.rows.length < 4) {
       setErrorMessage('Numero di coppie insufficente. Devi formare almeno 4 coppie');
@@ -351,6 +350,12 @@ const PairsTable = _ => {
   const deleteDisabled =
     !(selectedRows.length > 0) || data.tournament.progress === 'Stage1' || data.tournament.progress === 'Stage2';
 
+  let deleteTooltipMessage = '';
+  if (!(selectedRows.length > 0)) deleteTooltipMessage = 'Seleziona almeno una riga';
+  else if (data.tournament.progress === 'Stage1' || data.tournament.progress === 'Stage2')
+    deleteTooltipMessage = 'Devi prima resettare i gironi per poter cancellare delle coppie';
+  else deleteTooltipMessage = 'Cancella le coppie selezionate';
+
   console.log('render table : ', data);
   return (
     <>
@@ -369,15 +374,7 @@ const PairsTable = _ => {
                 Aggiungi Coppia
               </ListGroup.Item>
 
-              <OverlayTrigger
-                placement="right"
-                key="rigth"
-                overlay={
-                  <Tooltip>
-                    {deleteDisabled ? 'Prima devi resettare i gironi' : 'Elimina le coppie selezionate'}
-                  </Tooltip>
-                }
-              >
+              <OverlayTrigger placement="right" key="rigth" overlay={<Tooltip>{deleteTooltipMessage}</Tooltip>}>
                 <span className="d-inline-block">
                   <ListGroup.Item
                     action

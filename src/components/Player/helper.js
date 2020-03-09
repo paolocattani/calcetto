@@ -32,6 +32,7 @@ export default [
     text: 'Nome',
     headerClasses: 'player-table-header-element',
     autoSelectText: true,
+    headerStyle: (column, colIndex) => ({ width: '20%' }),
     filter: textFilter({
       placeholder: 'Filtra...',
       getFilter: filter => (nameFilter = filter)
@@ -42,6 +43,7 @@ export default [
     text: 'Cognome',
     headerClasses: 'player-table-header-element',
     autoSelectText: true,
+    headerStyle: (column, colIndex) => ({ width: '20%' }),
     filter: textFilter({
       placeholder: 'Filtra...',
       getFilter: filter => (surnameFilter = filter)
@@ -51,6 +53,7 @@ export default [
     dataField: 'alias',
     text: 'Alias',
     headerClasses: 'player-table-header-element',
+    headerStyle: (column, colIndex) => ({ width: '15%' }),
     autoSelectText: true,
     filter: textFilter({
       placeholder: 'Filtra...',
@@ -61,6 +64,7 @@ export default [
     dataField: 'role',
     text: 'Roulo',
     headerClasses: 'player-table-header-element',
+    headerStyle: (column, colIndex) => ({ width: '15%' }),
     filter: selectFilter({
       placeholder: 'Filtra...',
       options: selectOptions,
@@ -80,11 +84,13 @@ export default [
   {
     dataField: 'email',
     text: 'Email',
+    headerStyle: (column, colIndex) => ({ width: '15%' }),
     headerClasses: 'player-table-header-element',
     autoSelectText: true
   },
   {
     dataField: 'phone',
+    headerStyle: (column, colIndex) => ({ width: '15%' }),
     text: 'Telefono',
     headerClasses: 'player-table-header-element',
     autoSelectText: true

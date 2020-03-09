@@ -19,7 +19,7 @@ const App: React.FC = _ => {
   };
 
   const defaultProtectedRouteProps: ProtectedRouteProps = {
-    isAuthenticated: !!sessionContext.isAuthenticated,
+    isAuthenticated: process.env.NODE_ENV === 'development' /*!!sessionContext.isAuthenticated*/,
     authenticationPath: '/login',
     redirectPathOnAuthentication: sessionContext.redirectPathOnAuthentication || '',
     setRedirectPathOnAuthentication
