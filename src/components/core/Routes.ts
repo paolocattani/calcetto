@@ -13,17 +13,19 @@ type routeType = {
   component: any;
   visible: boolean;
   index: number;
+  private: boolean;
 };
 
 // Mappatura route
 export const routes: routeType[] = [
-  { path: '/', label: 'Home', exact: true, component: FTournament, visible: true, index: 0 },
+  { path: '/', label: 'Home', exact: true, component: FTournament, visible: true, private: true, index: 0 },
   {
     path: '/tournament/:tId',
     label: 'Selezione Coppie',
     exact: true,
     component: Pairs,
     visible: false,
+    private: true,
     index: 10
   },
   {
@@ -32,6 +34,7 @@ export const routes: routeType[] = [
     exact: true,
     component: Stage1Wrapper,
     visible: false,
+    private: true,
     index: 20
   },
 
@@ -41,6 +44,7 @@ export const routes: routeType[] = [
     exact: true,
     component: PlayerTable,
     visible: true,
+    private: true,
     index: 30
   },
   {
@@ -50,10 +54,19 @@ export const routes: routeType[] = [
     component: Stage2,
     //component: OrganizationChartDemo,
     visible: !(process.env.NODE_ENV === 'production'),
+    private: true,
     index: 40
   },
   // TODO: creare pagina per route not found
-  { path: '*', label: 'Not Found', exact: false, component: RedirectionControl, visible: false, index: 1000 }
+  {
+    path: '*',
+    label: 'Not Found',
+    exact: false,
+    component: RedirectionControl,
+    visible: false,
+    private: true,
+    index: 1000
+  }
 ];
 export default routes;
 

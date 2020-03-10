@@ -9,6 +9,7 @@ import routes from '../components/core/Routes';
 import { FNavbar } from './Navbar/Navbar';
 import { Container } from 'react-bootstrap';
 import headerImage from './assets/header-background.jpeg';
+import { useAuth0 } from './core/Auth0';
 const applicationName = 'Calcetto C.S.M';
 
 const App: React.FC = _ => {
@@ -25,6 +26,12 @@ const App: React.FC = _ => {
     setRedirectPathOnAuthentication
   };
 
+  const { loading, user } = useAuth0();
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="App">
       {/** Header */}
@@ -35,6 +42,15 @@ const App: React.FC = _ => {
 
       <br></br>
       <Container fluid>
+        {user ? (
+          <>
+            <img src={user.picture} alt="Profile" />
+
+            <h2>{user.name}</h2>
+            <p>{user.email}</p>
+            <code>{JSON.stringify(user, null, 2)}</code>
+          </>
+        ) : null}
         <Switch>
           <Route path="/login" component={Login} />
           {/* Carica dinamicamente le route a partire dall'oggetto routes ( vedi sopra ) */
