@@ -35,6 +35,7 @@ const FTournament = _ => {
 
   return (
     <Card style={cardStyle}>
+      <Card.Header as="h2">Torneo</Card.Header>
       <Card.Body>
         <Card.Title>Scegli un torneo</Card.Title>
         <Form onSubmit={handleSubmit}>
@@ -82,7 +83,10 @@ const IndicatorSeparator = ({ innerProps }) => <span style={indicatorSeparatorSt
 
 const cardStyle = {
   width: '50%',
-  margin: 'auto'
+  margin: 'auto',
+  backgroundColor: 'inherit',
+  borderColor: '#ffc107',
+  borderWidth: '3px'
 };
 
 const formatNewLabel = inputString => (
