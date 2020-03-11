@@ -26,21 +26,29 @@ const App: React.FC = _ => {
 
   const { loading, user } = useAuth0();
 
+  /* FIXME:
   if (loading) {
     return <div>Loading...</div>;
   }
 
+  */
   return (
     <div className="App">
       {/** Header */}
       <Header />
 
-      <br></br>
+      {user ? (
+        <>
+          <h2>{user.name}</h2>
+          <p>{user.email}</p>
+          <code>{JSON.stringify(user, null, 2)}</code>
+        </>
+      ) : null}
+
       <Container fluid>
         <Switch>
           <Route path="/login" component={Login} />
-          {/* Carica dinamicamente le route a partire dall'oggetto routes ( vedi sopra ) */
-          routes.map(route => (
+          {routes.map(route => (
             <ProtectedRoute {...route} {...defaultProtectedRouteProps} key={route.index} />
           ))}
         </Switch>

@@ -18,7 +18,7 @@ type routeType = {
 
 // Mappatura route
 export const routes: routeType[] = [
-  { path: '/', label: 'Home', exact: true, component: FTournament, visible: true, private: true, index: 0 },
+  { path: '/', label: 'Home', exact: true, component: FTournament, visible: false, private: true, index: 0 },
   {
     path: '/tournament/:tId',
     label: 'Selezione Coppie',

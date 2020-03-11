@@ -19,7 +19,7 @@ const PlayerSelection = React.forwardRef((props, ref) => {
     selectedOption.pairId = id;
     setSelectedOption(selectedOption);
     const value = valueFormatter(selectedOption);
-    // onUpdate(value);
+    onUpdate(value);
     onSelect(selectedOption, row.id, columnIndex);
   };
 
