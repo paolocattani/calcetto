@@ -48,7 +48,7 @@ async function tournamentGenerator(): Promise<void> {
     const model = {
       id: null,
       name: ii,
-      ownerId: 0,
+      ownerId: null,
       progress: 'New',
       public: true
     };

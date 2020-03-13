@@ -1,6 +1,18 @@
-import { Column, Model, Table, DataType, HasMany, Default, IsEmail } from 'sequelize-typescript';
+import {
+  Column,
+  Model,
+  Table,
+  DataType,
+  HasMany,
+  Default,
+  AllowNull,
+  Comment,
+  ForeignKey,
+  BelongsTo
+} from 'sequelize-typescript';
 import Pair from './pair.model';
 import { PlayerRole } from './types';
+import User from './user.model';
 
 @Table({ tableName: 'player', freezeTableName: true, version: false })
 export default class Player extends Model<Player> {
@@ -34,6 +46,15 @@ export default class Player extends Model<Player> {
   @Default(0)
   @Column(DataType.FLOAT)
   public total_score!: number;
+
+  // Associazione utente
+  @AllowNull
+  @Comment('User')
+  @ForeignKey(() => User)
+  @Column(DataType.INTEGER)
+  public userId?: number;
+  @BelongsTo(() => User, 'userId')
+  public user?: User;
 
   // Virtual Columns
   @Column({

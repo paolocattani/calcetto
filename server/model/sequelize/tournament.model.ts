@@ -1,17 +1,19 @@
 import {
   Column,
-  CreatedAt,
-  DeletedAt,
   Model,
   Table,
-  UpdatedAt,
+  Comment,
   HasMany,
   DataType,
-  Default
+  Default,
+  AllowNull,
+  ForeignKey,
+  BelongsTo
 } from 'sequelize-typescript';
 import Pair from './pair.model';
 import s1Matrix from './s1Matrix.model';
 import { TournamentProgress } from './types';
+import User from './user.model';
 
 /**
  * Rapprenta un Torneo :
@@ -25,22 +27,21 @@ import { TournamentProgress } from './types';
  */
 @Table({ tableName: 'tournament', freezeTableName: true, version: false })
 export default class Tournament extends Model<Tournament> {
+  @Comment('Nome torneo')
   @Column(DataType.STRING)
   public name!: string;
 
-  @Column(DataType.INTEGER)
-  //@ForeignKey(() => User)
-  public ownerId!: number;
-
+  @Comment('Stato Torneo')
   @Default('New')
   @Column(DataType.ENUM('New', 'PairsSelection', 'Stage1', 'Stage2'))
-  @Column(DataType.STRING)
   public progress!: TournamentProgress;
 
+  @Comment('Visibile ad utenti non loggati')
   @Column(DataType.BOOLEAN)
   public public!: boolean;
 
   // Virtual columns
+  @Comment('Label')
   @Column({
     type: DataType.VIRTUAL,
     get(this: Tournament): string {
@@ -56,7 +57,12 @@ export default class Tournament extends Model<Tournament> {
   @HasMany(() => s1Matrix)
   public s1Matrix!: s1Matrix[];
 
-  // TODO:
-  //@HasOne(() => User)
-  //owner!: User;
+  // Associazione utente
+  @AllowNull
+  @Comment('Id Owner')
+  @ForeignKey(() => User)
+  @Column(DataType.INTEGER)
+  public ownerId?: number;
+  @BelongsTo(() => User, 'ownerId')
+  public owner?: User;
 }
