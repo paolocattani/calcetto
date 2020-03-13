@@ -1,28 +1,8 @@
-import {
-  Column,
-  Model,
-  Table,
-  Comment,
-  DataType,
-  Default,
-  ForeignKey,
-  BelongsTo,
-  HasOne,
-  IsNull,
-  AllowNull
-} from 'sequelize-typescript';
+import { Column, Model, Table, Comment, DataType, Default, ForeignKey, HasOne, AllowNull } from 'sequelize-typescript';
 import { UserRole } from './types';
 import Player from './player.model';
-import Pair from './pair.model';
 
 /**
- * Rapprensenta un Utente :
- * @name string nome del torneo
- * @surname string nome del torneo
- * @email string nome del torneo
- * @birthday string nome del torneo
- * @password string
- * @name string nome del torneo
  *
  */
 @Table({ tableName: 'user', freezeTableName: true, version: false })
