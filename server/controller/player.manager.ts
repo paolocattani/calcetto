@@ -5,7 +5,7 @@ import { isDevMode } from '../core/debug';
 
 const router = Router();
 router.use('/', (req, res, next) => {
-  if (isDevMode()) logger.info(`Player Manager : ${req.method} ${req.originalUrl.replace('/api/player', '')} `);
+  if (isDevMode()) logger.info(`Player Manager : ${req.method} ${req.originalUrl.replace('/api/v1/player', '')} `);
   next();
 });
 

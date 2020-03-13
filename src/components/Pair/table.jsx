@@ -50,7 +50,7 @@ const PairsTable = _ => {
       setIsLoading({ state: true, message: 'Aggiunta riga in corso' });
       const emptyRow = getEmptyRowModel();
       emptyRow.tId = tId;
-      const response = await fetch('/api/pair', {
+      const response = await fetch('/api/v1/pair', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(emptyRow)
@@ -97,7 +97,7 @@ const PairsTable = _ => {
           players: [...players, ...current.players].sort((e1, e2) => e1.alias.localeCompare(e2.alias))
         }));
 
-      const response = await fetch('/api/pair', {
+      const response = await fetch('/api/v1/pair', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(selectedRows)
@@ -169,7 +169,7 @@ const PairsTable = _ => {
           }
         }
         // update Db. Non aspetto la risposta...
-        fetch('/api/pair', {
+        fetch('/api/v1/pair', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(row)
@@ -318,7 +318,7 @@ const PairsTable = _ => {
       row['stage1Name'] = names[current];
       current++;
       try {
-        const response = await fetch('/api/pair', {
+        const response = await fetch('/api/v1/pair', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(row)

@@ -8,7 +8,7 @@ import Pair from '../model/sequelize/pair.model';
 const router = Router();
 
 router.use('/', (req, res, next) => {
-  if (isDevMode()) logger.info(`Pair Manager : ${req.method} ${req.originalUrl.replace('/api/pair', '')} `);
+  if (isDevMode()) logger.info(`Pair Manager : ${req.method} ${req.originalUrl.replace('/api/v1/pair', '')} `);
   next();
 });
 

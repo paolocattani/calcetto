@@ -4,10 +4,11 @@ import Tournament from '../model/sequelize/tournament.model';
 import { isDevMode } from '../core/debug';
 import chalk from 'chalk';
 
-// all API path must be relative to /api/tournament
+// all API path must be relative to /api/v1/tournament
 const router = Router();
 router.use('/', (req, res, next) => {
-  if (isDevMode()) logger.info(`Tournament Manager : ${req.method} ${req.originalUrl.replace('/api/tournament', '')} `);
+  if (isDevMode())
+    logger.info(`Tournament Manager : ${req.method} ${req.originalUrl.replace('/api/v1/tournament', '')} `);
   next();
 });
 

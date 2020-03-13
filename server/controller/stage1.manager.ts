@@ -11,7 +11,7 @@ import { dbConnection } from '../model/server/AppServer';
 
 const router = Router();
 router.use('/', (req, res, next) => {
-  if (isDevMode()) logger.info(`Stage 1 Manager : ${req.method} ${req.originalUrl.replace('/api/stage1', '')} `);
+  if (isDevMode()) logger.info(`Stage 1 Manager : ${req.method} ${req.originalUrl.replace('/api/v1/stage1', '')} `);
   next();
 });
 

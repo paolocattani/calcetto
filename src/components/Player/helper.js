@@ -111,7 +111,7 @@ export const ExportCSVButton = props => {
 
 export const fetchPlayers = (setterFunction, tId) => {
   (async () => {
-    const response = await fetch(tId ? `/api/player/list/${tId}` : '/api/player/list', {
+    const response = await fetch(tId ? `/api/v1/player/list/${tId}` : '/api/v1/player/list', {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     });

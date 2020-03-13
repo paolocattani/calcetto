@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 export function fetchTournaments(setterFunction: typeof useState, setterFunction2: typeof useState): void {
   (async () => {
-    const response = await fetch('/api/tournament/list', {
+    const response = await fetch('/api/v1/tournament/list', {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     });
@@ -19,7 +19,7 @@ export function fetchTournaments(setterFunction: typeof useState, setterFunction
 
 export function fetchTournament(setterFunction: typeof useState, tId: number): void {
   (async () => {
-    const response = await fetch(`/api/tournament/${tId}`, {
+    const response = await fetch(`/api/v1/tournament/${tId}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     });
@@ -29,7 +29,7 @@ export function fetchTournament(setterFunction: typeof useState, tId: number): v
 }
 
 export async function getTournament(tId: number): Promise<TournamentModel | null> {
-  const response = await fetch(`/api/tournament/${tId}`, {
+  const response = await fetch(`/api/v1/tournament/${tId}`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' }
   });
@@ -41,7 +41,7 @@ export function getEmptyTournament(name: string, progress: TournamentProgressTyp
   return {
     id: null,
     name: name || '',
-    ownerId: 0,
+    ownerId: null,
     progress: progress || 'New',
     public: true,
     label: name || ''

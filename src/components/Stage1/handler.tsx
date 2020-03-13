@@ -20,7 +20,7 @@ const Stage1Handler = (props: handlerPropsType): JSX.Element => {
       pair1Id: row.pair.id,
       pair2Id: rows[parseInt(column.text) - 1].pair.id
     };
-    const response = await fetch('/api/stage1/cell', {
+    const response = await fetch('/api/v1/stage1/cell', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(model1)
@@ -37,7 +37,7 @@ const Stage1Handler = (props: handlerPropsType): JSX.Element => {
     () => {
       const fetchData = async () => {
         setIsLoading(true);
-        const response = await fetch('/api/stage1', {
+        const response = await fetch('/api/v1/stage1', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ rows, stageName: tableName })

@@ -10,10 +10,10 @@ export default (application: ExpressApplication): Router => {
   const router = Router();
   // API Test
   router.get('/api', (req: Request, res: Response) => res.status(200).send({ message: 'Welcome to endpoint API!' }));
-  application.use('/api/player', playerManager);
-  application.use('/api/pair', pairManager);
-  application.use('/api/tournament', tournamentManager);
-  application.use('/api/stage1', stage1Manager);
+  application.use('/api/v1/player', playerManager);
+  application.use('/api/v1/pair', pairManager);
+  application.use('/api/v1/tournament', tournamentManager);
+  application.use('/api/v1/stage1', stage1Manager);
 
   return router;
 };

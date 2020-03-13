@@ -111,7 +111,7 @@ export const cellEditProps = cellEditFactory({
     // Aggiornamento per queste due colonne viene eseguito dalla funzione onSelect
     if (column.dataField === 'player1.alias' || column.dataField === 'player2.alias') return;
     (async () => {
-      const response = await fetch('/api/pair', {
+      const response = await fetch('/api/v1/pair', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(row)
@@ -137,13 +137,13 @@ export function getEmptyRowModel() {
 
 export const fetchData = async tId => {
   // Fetch Pairs
-  let response = await fetch(`/api/pair/list/?tId=${tId}`, {
+  let response = await fetch(`/api/v1/pair/list/?tId=${tId}`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' }
   });
   const rows = await response.json();
 
-  response = await fetch(tId ? `/api/player/list/${tId}` : '/api/player/list', {
+  response = await fetch(tId ? `/api/v1/player/list/${tId}` : '/api/v1/player/list', {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' }
   });
@@ -151,7 +151,7 @@ export const fetchData = async tId => {
   const players = [...result, getEmptyPlayer('Nessun Giocatore')];
 
   // Fetch Tournament
-  response = await fetch(`/api/tournament/${tId}`, {
+  response = await fetch(`/api/v1/tournament/${tId}`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' }
   });
@@ -162,7 +162,7 @@ export const fetchData = async tId => {
 
 export const fetchPairs = (setterFunction, tId) => {
   (async () => {
-    const response = await fetch(`/api/pair/list/?tId=${tId}`, {
+    const response = await fetch(`/api/v1/pair/list/?tId=${tId}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     });

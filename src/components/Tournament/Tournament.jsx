@@ -24,7 +24,7 @@ const FTournament = _ => {
 
   const handleSubmit = async event => {
     event.preventDefault();
-    const response = await fetch('/api/tournament', {
+    const response = await fetch('/api/v1/tournament', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(getEmptyTournament(selectedOption.name, TournamentProgress.PairsSelection))
