@@ -5,6 +5,7 @@ import { isDevMode } from '../core/debug';
 import { Router } from 'express';
 import User from '../model/sequelize/user.model';
 import { generatePassword, comparePasswords, generateToken } from '../core/utils';
+import { withAuth } from '../core/middleware';
 
 const router = Router();
 
@@ -12,7 +13,7 @@ router.use('/', (req, res, next) => {
   if (isDevMode()) logger.info(`Auth Manager : ${req.method} ${req.originalUrl.replace('/api/v1/auth', '')} `);
   next();
 });
-
+// FTODO: add asyncMiddleware
 router.post('/register', async (req, res, next) => {
   const model: User = req.body;
   logger.info('model :', model);
@@ -50,5 +51,7 @@ router.post('/authenticate', async (req, res, next) => {
     });
   }
 });
+
+router.get('/checkToken', withAuth, (req, res) => res.sendStatus(200));
 
 export default router;
