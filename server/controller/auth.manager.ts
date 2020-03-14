@@ -1,53 +1,54 @@
 import '../core/env';
-import { routeLogger } from '../core/middleware';
 import { logger } from '../core/logger';
-import * as util from 'util';
+import { isDevMode } from '../core/debug';
 
-import express, { Request, Response, NextFunction } from 'express';
+import { Router } from 'express';
+import User from '../model/sequelize/user.model';
+import { generatePassword, comparePasswords, generateToken } from '../core/utils';
 
-const router = express.Router();
-const passport = require('passport');
-const url = require('url');
-const querystring = require('querystring');
+const router = Router();
 
-// LOGIN FUNCTION
-router.get('/login', passport.authenticate('auth0', { scope: 'openid email profile' }), (req, res) =>
-  res.redirect('/')
-);
-
-// CALLBACK FUNCTION
-router.get('/callback', (req: Request, res: Response, next: NextFunction) => {
-  passport.authenticate('auth0', (err: any, user: Express.User, info: any) => {
-    logger.info(`authManager.CALLBACK : user => ${util.inspect(user)}`);
-    if (err) return next(err);
-    if (!user) return res.redirect('/login');
-    req.logIn(user, err => {
-      if (err) {
-        return next(err);
-      }
-      const returnTo = req.session!.returnTo;
-      delete req.session!.returnTo;
-      res.redirect(returnTo || '/');
-    });
-  })(req, res, next);
+router.use('/', (req, res, next) => {
+  if (isDevMode()) logger.info(`Auth Manager : ${req.method} ${req.originalUrl.replace('/api/v1/auth', '')} `);
+  next();
 });
 
-// LOGOUT FUNCTION
-router.get('/logout', (req, res) => {
-  req.logOut();
-
-  let returnTo = req.protocol + '://' + req.hostname;
-  const port = req.connection.localPort;
-
-  if (port !== undefined && port !== 80 && port !== 443) {
-    returnTo = process.env.NODE_ENV === 'production' ? `${returnTo}/` : `${returnTo}:${port}/`;
+router.post('/register', async (req, res, next) => {
+  const model: User = req.body;
+  logger.info('model :', model);
+  try {
+    const password = await generatePassword(model.name, model.password);
+    const [record, created] = await User.findOrCreate({
+      where: {
+        email: model.email,
+        password
+      },
+      defaults: model
+    });
+    logger.info('record :', record);
+    return res.status(200).json(record);
+  } catch (error) {
+    logger.info('error :', error);
+    return res.status(500).json(error);
   }
+});
 
-  const logoutURL = new URL(util.format('https://%s/logout', process.env.AUTH0_DOMAIN));
-  const searchString = querystring.stringify({ client_id: process.env.AUTH0_CLIENT_ID, returnTo: returnTo });
-  logoutURL.search = searchString;
+router.post('/authenticate', async (req, res, next) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ where: { email } });
+    // utente non trovato
+    if (!user) return res.status(401).json({ error: 'Incorrect email or password' });
 
-  res.redirect(logoutURL.href);
+    if (!comparePasswords(email, password, user.password))
+      return res.status(401).json({ error: 'Incorrect email or password' });
+
+    return res.cookie('token', generateToken(email), { httpOnly: true }).sendStatus(200);
+  } catch (error) {
+    res.status(500).json({
+      error: 'Internal error please try again'
+    });
+  }
 });
 
 export default router;

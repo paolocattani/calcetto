@@ -1,4 +1,15 @@
-import { Column, Model, Table, Comment, DataType, Default, ForeignKey, HasOne, AllowNull } from 'sequelize-typescript';
+import {
+  Column,
+  Model,
+  Table,
+  Comment,
+  DataType,
+  Default,
+  ForeignKey,
+  HasOne,
+  AllowNull,
+  Unique
+} from 'sequelize-typescript';
 import { UserRole } from './types';
 import Player from './player.model';
 
@@ -18,6 +29,7 @@ export default class User extends Model<User> {
   @Column(DataType.STRING)
   public password!: string;
 
+  @Unique
   @Column(DataType.STRING)
   public email!: string;
 

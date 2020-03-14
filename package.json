@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.6.4",
+    "@types/bcrypt": "^3.0.0",
     "@types/bluebird": "^3.5.30",
     "@types/body-parser": "^1.19.0",
     "@types/compression": "^1.7.0",
@@ -32,6 +33,7 @@
     "@types/glob": "^7.1.1",
     "@types/helmet": "0.0.45",
     "@types/jest": "^24.9.1",
+    "@types/jsonwebtoken": "^8.3.8",
     "@types/morgan": "^1.9.0",
     "@types/node": "^12.12.29",
     "@types/passport": "^1.0.2",

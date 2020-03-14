@@ -1,10 +1,8 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
-export function getRandomIntInclusive(min: number, max: number): number {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
-}
+export const getRandomIntInclusive = (min: number, max: number): number =>
+  Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1)) + Math.ceil(min);
 
 export async function asyncForEach<T>(
   array: Array<T>,
@@ -15,23 +13,17 @@ export async function asyncForEach<T>(
   }
 }
 
-export function logEntity(entity: any) {
-  return JSON.stringify(entity, null, 2);
-}
+export const logEntity = (entity: any) => JSON.stringify(entity, null, 2);
 
 // Password utils
-export function generatePassword(email: string, password: string) {
-  const saltRounds = 10;
-  const hashPassword = async () => await bcrypt.hash(generateSecret(email, password), saltRounds);
+export const generatePassword = async (email: string, password: string) =>
+  await bcrypt.hash(generateHashSecret(email, password), 10);
 
-  return hashPassword();
-}
+export const comparePasswords = async (email: string, password: string, hash: string) =>
+  await bcrypt.compare(generateHashSecret(email, password), hash);
 
-export function comparePasswords(email: string, password: string, hash: string) {
-  const compare = async () => await bcrypt.compare(generateSecret(email, password), hash);
-  return compare();
-}
+export const getSecret = () => (process.env.SERVER_HASH ? process.env.SERVER_HASH : 'dummy$Hash');
 
-function generateSecret(email: string, password: string) {
-  return email + process.env.SERVER_HASH ? process.env.SERVER_HASH : 'dummy$Hash' + password;
-}
+export const generateHashSecret = (email: string, password: string) => email + getSecret() + password;
+
+export const generateToken = (email: string) => jwt.sign(email, getSecret(), { expiresIn: '6h' });
