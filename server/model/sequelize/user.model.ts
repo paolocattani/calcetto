@@ -34,6 +34,10 @@ export default class User extends Model<User> {
   public email!: string;
 
   @AllowNull
+  @Column(DataType.STRING)
+  public phone?: string;
+
+  @AllowNull
   @Column(DataType.DATE)
   public birthday?: Date;
 

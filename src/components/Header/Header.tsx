@@ -29,14 +29,13 @@ export const Header: React.FC = _ => {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="mr-auto">
-              {routes.map(route => {
-                console.log(route);
-                return route.visible ? (
+              {routes.map(route =>
+                route.visible ? (
                   route.private && !isAuthenticated ? null : (
                     <Nav.Link href={route.path}>{route.label}</Nav.Link>
                   )
-                ) : null;
-              })}
+                ) : null
+              )}
             </Nav>
             {isAuthenticated && user ? (
               <>

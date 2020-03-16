@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Switch, Route } from 'react-router';
 import { useSessionContext } from '../components/core/SessionContext';
 import { ProtectedRoute, ProtectedRouteProps } from '../components/core/ProtectedRoute';
 import './style/App.css';
-import { Login } from './Login/Login';
+import TLogin from './Auth/Register';
 // import { useHistory } from 'react-router-dom';
 import routes from '../components/core/Routes';
 import { Header } from './Header/Header';
-import { Container } from 'react-bootstrap';
+import { Container, Button } from 'react-bootstrap';
 import { useAuth0 } from './core/Auth0';
+import GenericModal from './core/GenericModal';
 
 const App: React.FC = _ => {
   const [sessionContext, updateSessionContext] = useSessionContext();
+  const [showModal, setShowModal] = useState(true);
 
   const setRedirectPathOnAuthentication = (path: string) => {
     updateSessionContext({ ...sessionContext, redirectPathOnAuthentication: path });
@@ -46,8 +48,16 @@ const App: React.FC = _ => {
       ) : null}
 
       <Container fluid>
+        <Button onClick={() => setShowModal(true)}>Login</Button>
+        <GenericModal
+          title={'Login'}
+          component={<TLogin />}
+          show={showModal}
+          size={'xl'}
+          onHide={() => setShowModal(false)}
+        />
         <Switch>
-          <Route path="/login" component={Login} />
+          {/*<Route path="/login" component={FLogin} />*/}
           {routes.map(route => (
             <ProtectedRoute {...route} {...defaultProtectedRouteProps} key={route.index} />
           ))}
