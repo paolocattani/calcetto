@@ -3,6 +3,10 @@ import React from 'react';
 
 export interface Session {
   isAuthenticated?: boolean;
+  name?: string;
+  surname?: string;
+  email?: string;
+  role?: string;
   redirectPathOnAuthentication?: string;
 }
 

@@ -17,7 +17,7 @@ const RegisterForm: React.FC = () => (
       </Col>
     </Row>
     <Row>
-      <Col>
+      <Col md={6}>
         <label htmlFor="password">Password</label>
         <Field as={FormControl} id="password" name="password" placeholder="Password" type="password" />
         <ErrorMessage name="password" />
@@ -33,21 +33,16 @@ const RegisterForm: React.FC = () => (
         <ErrorMessage name="passwordConfirm" />
       </Col>
       <Col
+        md={6}
         style={{
           display: 'flex',
           alignItems: 'center'
         }}
       >
         <Row>
-          <ul
-            style={{
-              margin: 'auto',
-              height: 'auto'
-            }}
-          >
-            <li style={{ listStyleType: 'none' }}>
-              <strong>La password deve rispettara i sequenti criteri :</strong>
-            </li>
+          <strong>La password deve rispettara i sequenti criteri :</strong>
+
+          <ul>
             <li>Almeno 1 carattere minuscolo</li>
             <li>Almeno 1 carattere maiuscolo</li>
             <li>Almeno 1 carattere numerico</li>
@@ -82,9 +77,9 @@ const RegisterForm: React.FC = () => (
           <ErrorMessage name="birthday" />
             */}
     <Row>
-      <Button type="submit">Registrati</Button>
-      <span>oppure</span>
-      <Button type="submit">Login</Button>
+      <Col>
+        <Button type="submit">Conferma</Button>
+      </Col>
     </Row>
   </Form>
 );

@@ -15,7 +15,14 @@ router.use('/', (req, res, next) => {
 });
 // FTODO: add asyncMiddleware
 router.post('/register', async (req, res, next) => {
-  const model: User = req.body;
+  const password = await generatePassword(req.body.email, req.body.password);
+  const model = {
+    name: req.body.name,
+    surname: req.body.surname,
+    password,
+    email: req.body.email,
+    phone: req.body.phone
+  };
   logger.info('model :', model);
   try {
     const password = await generatePassword(model.name, model.password);

@@ -1,13 +1,14 @@
-import React, { CSSProperties } from 'react';
-import { FNavbar } from './Navbar';
-import { useAuth0 } from 'components/core/Auth0';
+import React, { CSSProperties, useState } from 'react';
 import backgroundImage from '../assets/header.jpg';
-import { Jumbotron, Navbar, NavDropdown, Nav, Button } from 'react-bootstrap';
+import { Jumbotron, Navbar, Nav, Button } from 'react-bootstrap';
 import routes from '../core/Routes';
+import AuthWrapper from '../Auth/Wrapper';
+import { useSessionContext } from '../core/SessionContext';
 
 const applicationName = 'Calcetto C.S.M';
 export const Header: React.FC = _ => {
-  const { loading, user, isAuthenticated, logout, loginWithRedirect } = useAuth0();
+  const [sessionContext] = useSessionContext();
+  const [showModal, setShowModal] = useState(true);
 
   const yellow = '##ffc107';
   const jumnboStyle: CSSProperties = {
@@ -31,27 +32,26 @@ export const Header: React.FC = _ => {
             <Nav className="mr-auto">
               {routes.map(route =>
                 route.visible ? (
-                  route.private && !isAuthenticated ? null : (
+                  route.private && !sessionContext.isAuthenticated ? null : (
                     <Nav.Link href={route.path}>{route.label}</Nav.Link>
                   )
                 ) : null
               )}
             </Nav>
-            {isAuthenticated && user ? (
+            {sessionContext.isAuthenticated && sessionContext.name ? (
               <>
                 <Navbar.Text style={nameStyle}>
-                  <strong>{user.name}</strong>
+                  <strong>{sessionContext.name}</strong>
                 </Navbar.Text>
-                <Button variant="outline-warning" onClick={() => logout({})}>
-                  Log out
-                </Button>
+                <Button variant="outline-warning">Log out</Button>
               </>
             ) : (
-              <Button variant="outline-warning" onClick={() => loginWithRedirect({})}>
+              <Button variant="outline-warning" onClick={() => setShowModal(true)}>
                 Log in
               </Button>
             )}
           </Navbar.Collapse>
+          <AuthWrapper show={showModal} onHide={() => setShowModal(false)} />
         </Navbar>
       </Jumbotron>
     </header>

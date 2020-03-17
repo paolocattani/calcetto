@@ -7,55 +7,35 @@ import TLogin from './Auth/Register';
 // import { useHistory } from 'react-router-dom';
 import routes from '../components/core/Routes';
 import { Header } from './Header/Header';
-import { Container, Button } from 'react-bootstrap';
-import { useAuth0 } from './core/Auth0';
-import GenericModal from './core/GenericModal';
+import { Container } from 'react-bootstrap';
+
+// FontAwesome 5
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { far } from '@fortawesome/free-regular-svg-icons';
+
+library.add(fas, far);
 
 const App: React.FC = _ => {
   const [sessionContext, updateSessionContext] = useSessionContext();
-  const [showModal, setShowModal] = useState(true);
 
   const setRedirectPathOnAuthentication = (path: string) => {
     updateSessionContext({ ...sessionContext, redirectPathOnAuthentication: path });
   };
 
   const defaultProtectedRouteProps: ProtectedRouteProps = {
-    isAuthenticated: process.env.NODE_ENV === 'development' /*!!sessionContext.isAuthenticated*/,
+    isAuthenticated: sessionContext.isAuthenticated || false,
     authenticationPath: '/login',
     redirectPathOnAuthentication: sessionContext.redirectPathOnAuthentication || '',
     setRedirectPathOnAuthentication
   };
 
-  const { loading, user } = useAuth0();
-
-  /* FIXME:
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  */
   return (
     <div className="App">
       {/** Header */}
       <Header />
 
-      {user ? (
-        <>
-          <h2>{user.name}</h2>
-          <p>{user.email}</p>
-          <code>{JSON.stringify(user, null, 2)}</code>
-        </>
-      ) : null}
-
       <Container fluid>
-        <Button onClick={() => setShowModal(true)}>Login</Button>
-        <GenericModal
-          title={'Login'}
-          component={<TLogin />}
-          show={showModal}
-          size={'xl'}
-          onHide={() => setShowModal(false)}
-        />
         <Switch>
           {/*<Route path="/login" component={FLogin} />*/}
           {routes.map(route => (
