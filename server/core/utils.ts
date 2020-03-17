@@ -26,4 +26,5 @@ export const getSecret = () => (process.env.SERVER_HASH ? process.env.SERVER_HAS
 
 export const generateHashSecret = (email: string, password: string) => email + getSecret() + password;
 
-export const generateToken = (email: string) => jwt.sign(email, getSecret(), { expiresIn: '6h' });
+export const generateToken = (email: string) =>
+  jwt.sign({ email }, getSecret(), { expiresIn: '8h', algorithm: 'HS256' });

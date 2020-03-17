@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useSessionContext } from 'components/core/SessionContext';
 import { useHistory } from 'react-router-dom';
-import { IRegisterForm, IRegisterFormValue, ILoginFormValue } from './types';
+import { IRegisterFormValue, ILoginFormValue } from './types';
 import { FormikHelpers } from 'formik';
-import { Modal, Button, Container, Row, Alert } from 'react-bootstrap';
+import { Modal, Button, Container, Alert } from 'react-bootstrap';
 import Register from './Register';
 import Login from './Login';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -29,15 +29,38 @@ const AuthWrapper = ({ show, onHide }: authType): JSX.Element => {
 
   const onSubmitLogin = async (values: ILoginFormValue, { setSubmitting }: FormikHelpers<ILoginFormValue>) => {
     setSubmitting(true);
-    const response = await fetch('/api/v1/auth/authenticate', {
-      method: 'POST',
-      body: JSON.stringify(values),
-      headers: { 'Content-Type': 'application/json' }
-    });
-    const result = await response.json();
+    try {
+      if (!isValidLogin(values)) return;
+      const response = await fetch('/api/v1/auth/authenticate', {
+        method: 'POST',
+        body: JSON.stringify(values),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const result = await response.json();
+      console.log('onSubmitLogin : ', response, result);
+      if (response.ok && result) {
+        updateSessionContext({
+          ...sessionContext,
+          name: result.name,
+          surname: result.surname,
+          email: result.email,
+          role: result.role,
+          isAuthenticated: true
+        });
+        onHide();
+        currentHistory.push('/');
+      } else {
+        if (response.status === 401) setErrorMessage('Utente o Password errata');
+
+        setErrorMessage('Errore durante il processo di registrazione. Riprovare piu tardi');
+        setTimeout(() => setErrorMessage(''), 3000);
+      }
+    } catch (error) {
+      console.log('onSubmitLogin : ', error);
+      setErrorMessage('Errore durante il processo di registrazione. Riprovare piu tardi');
+      setTimeout(() => setErrorMessage(''), 3000);
+    }
     setSubmitting(false);
-    updateSessionContext({ ...sessionContext, isAuthenticated: true });
-    currentHistory.push('/');
   };
 
   const passwordRegExp = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})');
@@ -46,6 +69,22 @@ const AuthWrapper = ({ show, onHide }: authType): JSX.Element => {
     // eslint-disable-next-line quotes
     "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
   );
+
+  const isValidLogin = (formValues: ILoginFormValue): boolean => {
+    setErrorMessage('');
+    if (!formValues.email || !emailRegExp.test(formValues.email)) {
+      setErrorMessage('Email non valida');
+      setTimeout(() => setErrorMessage(''), 3000);
+      return false;
+    }
+    if (!formValues.password) {
+      setErrorMessage('Inserisci la password');
+      setTimeout(() => setErrorMessage(''), 3000);
+      return false;
+    }
+
+    return true;
+  };
 
   const isValidRegister = (formValues: IRegisterFormValue): boolean => {
     setErrorMessage('');
@@ -111,7 +150,6 @@ const AuthWrapper = ({ show, onHide }: authType): JSX.Element => {
   const onSubmitRegister = async (values: IRegisterFormValue, { setSubmitting }: FormikHelpers<IRegisterFormValue>) => {
     setSubmitting(true);
     try {
-      console.log('onSubmitRegister : ', values);
       if (!isValidRegister(values)) return;
       const response = await fetch('/api/v1/auth/register', {
         method: 'POST',

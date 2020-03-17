@@ -7,8 +7,19 @@ import { useSessionContext } from '../core/SessionContext';
 
 const applicationName = 'Calcetto C.S.M';
 export const Header: React.FC = _ => {
-  const [sessionContext] = useSessionContext();
+  const [sessionContext, updateSessionContext] = useSessionContext();
   const [showModal, setShowModal] = useState(true);
+
+  const logout = () => {
+    updateSessionContext({
+      ...sessionContext,
+      name: '',
+      surname: '',
+      email: '',
+      role: '',
+      isAuthenticated: false
+    });
+  };
 
   const yellow = '##ffc107';
   const jumnboStyle: CSSProperties = {
@@ -43,7 +54,9 @@ export const Header: React.FC = _ => {
                 <Navbar.Text style={nameStyle}>
                   <strong>{sessionContext.name}</strong>
                 </Navbar.Text>
-                <Button variant="outline-warning">Log out</Button>
+                <Button variant="outline-warning" onClick={logout}>
+                  Log out
+                </Button>
               </>
             ) : (
               <Button variant="outline-warning" onClick={() => setShowModal(true)}>

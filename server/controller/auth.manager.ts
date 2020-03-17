@@ -36,8 +36,8 @@ router.post('/register', async (req, res, next) => {
     logger.info('record :', record);
     return res.status(200).json(record);
   } catch (error) {
-    logger.info('error :', error);
-    return res.status(500).json(error);
+    logger.error('/register error : ', error);
+    return res.status(500).json({ error: 'Internal error please try again' });
   }
 });
 
@@ -51,11 +51,11 @@ router.post('/authenticate', async (req, res, next) => {
     if (!comparePasswords(email, password, user.password))
       return res.status(401).json({ error: 'Incorrect email or password' });
 
-    return res.cookie('token', generateToken(email), { httpOnly: true }).sendStatus(200);
+    res.cookie('token', generateToken(email), { httpOnly: true });
+    return res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({
-      error: 'Internal error please try again'
-    });
+    logger.error('/authenticate error : ', error);
+    return res.status(500).json({ error: 'Internal error please try again' });
   }
 });
 

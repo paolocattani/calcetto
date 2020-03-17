@@ -10,17 +10,7 @@ const initialValues: ILoginFormValue = {
   password: ''
 };
 
-const validationSchema = yup.object().shape({
-  password: yup
-    .string()
-    .min(8)
-    .max(16)
-    .required('Inserisci una password'),
-  email: yup
-    .string()
-    .email('Inserisci una email valida')
-    .required('Inserisci una email valida')
-});
+const validationSchema = yup.object().shape({ password: yup.string(), email: yup.string() });
 
 const Login: React.FC<ILoginForm> = ({ onSubmit }: ILoginForm) => (
   <Formik validationSchema={validationSchema} initialValues={initialValues} onSubmit={onSubmit}>

@@ -64,30 +64,28 @@ export abstract class AbstractServer implements IServer {
         )
       );
     } else {
-      //this.application.get('env') !== 'production';
-      //this.application.options('*', cors()) // Preflight Request
-      this.application.options('*', cors(this.corsOptions)); // Preflight Request
+      this.application
+        .options('*', cors(this.corsOptions)) // Preflight Request
+        .use(morgan(isProductionMode() ? 'combined' : 'common'))
+        .disable('x-powered-by')
+        .use(compression())
+        .use(helmet({ dnsPrefetchControl: { allow: true } }))
+        //this.application.set('trust proxy', 1);
+        .use(json())
+        .use(urlencoded({ extended: false }))
+        .use(cookieParser())
+        .use(cors(this.corsOptions))
+        .disable('x-powered-by')
+        .all('*', routeLogger);
 
-      this.application.use(morgan('dev'));
-      this.application.disable('x-powered-by');
-      this.application.use(compression());
-      this.application.use(helmet({ dnsPrefetchControl: { allow: true } }));
-      //this.application.set('trust proxy', 1);
-      this.application.use(json());
-      this.application.use(urlencoded({ extended: false }));
-      this.application.use(cookieParser());
-
-      this.application.use(cors(this.corsOptions));
-      this.application.disable('x-powered-by');
-
-      this.application.all('*', routeLogger);
       this.routes(this.application);
-      this.application.all('*', routeNotFound);
+
       // public folder path
-      logger.info(`Serving build forlder from ${chalk.green(path.join(__dirname, '..', '..', '..', 'build'))}`);
+      const buildPath = path.join(__dirname, '..', '..', '..', 'build');
+      logger.info(`Serving build forlder from ${chalk.green(buildPath)}`);
       this.application.use(
         //
-        express.static(path.join(__dirname, '..', '..', '..', 'build'), {
+        express.static(buildPath, {
           maxAge: process.env.STATIC_CONTENTS_CACHE ? process.env.STATIC_CONTENTS_CACHE : '0',
           lastModified: true,
           redirect: true
