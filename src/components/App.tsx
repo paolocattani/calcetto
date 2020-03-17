@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-import { Switch, Route } from 'react-router';
+import React from 'react';
+import { Switch } from 'react-router';
 import { useSessionContext } from '../components/core/SessionContext';
 import { ProtectedRoute, ProtectedRouteProps } from '../components/core/ProtectedRoute';
 import './style/App.css';
-import TLogin from './Auth/Register';
-// import { useHistory } from 'react-router-dom';
 import routes from '../components/core/Routes';
 import { Header } from './Header/Header';
 import { Container } from 'react-bootstrap';

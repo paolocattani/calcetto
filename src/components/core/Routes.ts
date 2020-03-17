@@ -6,7 +6,7 @@ import Stage2 from '../Stage2/model';
 import { RedirectionControl } from './RedirectionControls';
 import { OrganizationChartDemo } from '../Stage2/table';
 
-type routeType = {
+export type routeType = {
   path: string;
   label: string;
   exact: boolean;
@@ -25,7 +25,7 @@ export const routes: routeType[] = [
     exact: true,
     component: Pairs,
     visible: false,
-    private: true,
+    private: false,
     index: 10
   },
   {

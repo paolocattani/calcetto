@@ -24,7 +24,7 @@ export function clearAllFilter() {
   roleFilter('');
 }
 
-// Columns de
+// Columns default
 export default [
   { dataField: 'id', text: 'ID', editable: false },
   {

@@ -9,8 +9,6 @@ export type Pair = {
   player2Id: number;
 };
 
-export type wapperPropsType = {};
-
 export type handlerPropsType = {
   pairsList: Pair[];
 };

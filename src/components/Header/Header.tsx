@@ -8,7 +8,7 @@ import { useSessionContext } from '../core/SessionContext';
 const applicationName = 'Calcetto C.S.M';
 export const Header: React.FC = _ => {
   const [sessionContext, updateSessionContext] = useSessionContext();
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
   const logout = () => {
     updateSessionContext({
@@ -44,7 +44,9 @@ export const Header: React.FC = _ => {
               {routes.map(route =>
                 route.visible ? (
                   route.private && !sessionContext.isAuthenticated ? null : (
-                    <Nav.Link href={route.path}>{route.label}</Nav.Link>
+                    <Nav.Link href={route.path} {...sessionContext}>
+                      {route.label}
+                    </Nav.Link>
                   )
                 ) : null
               )}

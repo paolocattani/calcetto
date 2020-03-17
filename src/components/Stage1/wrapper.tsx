@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router';
 import { fetchPairs } from '../Pair/helper';
-import { Pair, wapperPropsType } from './type';
+import { Pair } from './type';
 import Stage1Handler from './handler';
 import { ListGroup, Button } from 'react-bootstrap';
 
 /**
  * Wraps multiple table components
  */
-const Wrapper: React.FC<wapperPropsType> = (props: wapperPropsType): JSX.Element => {
+const Wrapper: React.FC = (): JSX.Element => {
   const { tId } = useParams();
   const [pairsList, setPairsList] = useState<Pair[]>([]);
 

@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import CreatableSelect from 'react-select/creatable';
-import { components } from 'react-select';
-import { Form, Button, Card, Tooltip } from 'react-bootstrap';
+import { Form, Button, Card } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 import { getTodayDate } from '../core/utils';
 import { fetchTournaments, getEmptyTournament, customFilter } from './helper';
 import { TournamentProgress } from './type';
 
-const FTournament = _ => {
+const FTournament = props => {
   // State definition
   const [selectedOption, setSelectedOption] = useState(getTodayDate());
   const [tournamentList, setTournamentList] = useState([]);
@@ -33,29 +32,32 @@ const FTournament = _ => {
     currentHistory.push(`/tournament/${res.id}`);
   };
 
+  console.log('Rendere tournament : ', { ...props });
   return (
     <Card style={cardStyle}>
       <Card.Header as="h2">Torneo</Card.Header>
       <Card.Body>
         <Card.Title>Scegli un torneo</Card.Title>
         <Form onSubmit={handleSubmit}>
-          <CreatableSelect
-            // TODO:
-            //filterOption={customFilter}
-            // getOptionValue={option => `${option.label}`}
-            //formatCreateLabel={formatNewLabel}
-            //formatOptionLabel={formatOptionLabel}
-            //getOptionLabel={option => `${option.name} @ ${option.progress}`}
-            //
-            components={{ IndicatorSeparator }}
-            value={selectedOption}
-            options={tournamentList}
-            placeholder="Crea/Cerca un torneo"
-            isSearchable={true}
-            isClearable
-            onChange={handleChange}
-            onCreateOption={handleCreate}
-          />
+          {
+            <CreatableSelect
+              // TODO:
+              //filterOption={customFilter}
+              // getOptionValue={option => `${option.label}`}
+              //formatCreateLabel={formatNewLabel}
+              //formatOptionLabel={formatOptionLabel}
+              //getOptionLabel={option => `${option.name} @ ${option.progress}`}
+              //
+              components={{ IndicatorSeparator }}
+              value={selectedOption}
+              options={tournamentList}
+              placeholder="Crea/Cerca un torneo"
+              isSearchable={true}
+              isClearable
+              onChange={handleChange}
+              onCreateOption={handleCreate}
+            />
+          }
           <br></br>
           <Button type="submit" size="lg" variant="outline-warning" disabled={!selectedOption}>
             Continua

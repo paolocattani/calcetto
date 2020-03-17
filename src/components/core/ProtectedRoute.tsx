@@ -1,7 +1,8 @@
 // https://github.com/openscript/react-example-authentication-redirection
 
 import * as React from 'react';
-import { Redirect, Route, RouteProps, useLocation } from 'react-router';
+import { Route, RouteProps } from 'react-router';
+import { routeType } from './Routes';
 
 export interface ProtectedRouteProps extends RouteProps {
   isAuthenticated: boolean;
@@ -10,10 +11,21 @@ export interface ProtectedRouteProps extends RouteProps {
   setRedirectPathOnAuthentication: (path: string) => void;
 }
 
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = props => {
+export const ProtectedRoute: React.FC<ProtectedRouteProps | routeType> = props => {
+  /**
+   * Per ora non voglio obbligare l'utente a fare la login.
+   * Gestisco nelle singole pagine che se l'utente non è autenticato non può modificare
+   */
+
+  return <Route render={innerProps => <props.component {...props} />} />;
+
+  /*
   const currentLocation = useLocation();
   // console.log('Current Location ', currentLocation);
   let redirectPath = props.redirectPathOnAuthentication;
+
+
+
 
   // FIXME:
   // console.log('ProtectedRoute....');
@@ -33,6 +45,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = props => {
     // console.log('Render component', props);
     return <Route {...props} />;
   }
+  */
 };
 
 export default ProtectedRoute;

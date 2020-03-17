@@ -10,6 +10,8 @@ export interface Session {
   redirectPathOnAuthentication?: string;
 }
 
+// https://stackoverflow.com/questions/59422159/redirecting-a-user-to-the-page-they-requested-after-successful-authentication-wi
+// https://github.com/openscript/react-example-authentication-redirection
 export const initialSession: Session = {};
 
 export const SessionContext = createContext<[Session, (session: Session) => void]>([initialSession, () => {}]);
@@ -18,6 +20,7 @@ export const useSessionContext = () => useContext(SessionContext);
 export const SessionContextProvider: React.FC = ({ children }) => {
   const [sessionState, setSessionState] = useState(initialSession);
   const defaultSessionContext: [Session, typeof setSessionState] = [sessionState, setSessionState];
+  console.log('SessionContext : ', sessionState);
 
   return <SessionContext.Provider value={defaultSessionContext}>{children}</SessionContext.Provider>;
 };
