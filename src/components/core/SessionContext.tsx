@@ -12,6 +12,8 @@ export interface Session {
 
 // https://stackoverflow.com/questions/59422159/redirecting-a-user-to-the-page-they-requested-after-successful-authentication-wi
 // https://github.com/openscript/react-example-authentication-redirection
+
+// https://www.freecodecamp.org/news/react-context-in-5-minutes/
 export const initialSession: Session = {};
 
 export const SessionContext = createContext<[Session, (session: Session) => void]>([initialSession, () => {}]);
@@ -31,3 +33,8 @@ export const SessionContextProvider: React.FC = ({ children }) => {
 
   return <SessionContext.Provider value={defaultSessionContext}>{children}</SessionContext.Provider>;
 };
+
+export const isEditable = (sessionContext: Session): boolean =>
+  !sessionContext || !sessionContext.isAuthenticated || !sessionContext.role
+    ? false
+    : sessionContext.isAuthenticated && sessionContext.role === 'Admin';

@@ -5,12 +5,16 @@ import { useHistory } from 'react-router';
 import { getTodayDate } from '../core/utils';
 import { fetchTournaments, getEmptyTournament, customFilter } from './helper';
 import { TournamentProgress } from './type';
+import { useSessionContext } from '../core/SessionContext';
 
-const FTournament = props => {
+const FTournament = () => {
   // State definition
   const [selectedOption, setSelectedOption] = useState(getTodayDate());
   const [tournamentList, setTournamentList] = useState([]);
   let currentHistory = useHistory();
+  // Context
+  const [sessionContext] = useSessionContext();
+  const editable = sessionContext.isAuthenticated && sessionContext.role === 'Admin';
 
   useEffect(() => fetchTournaments(setTournamentList, setSelectedOption), []);
 
@@ -32,7 +36,6 @@ const FTournament = props => {
     currentHistory.push(`/tournament/${res.id}`);
   };
 
-  console.log('Rendere tournament : ', { ...props });
   return (
     <Card style={cardStyle}>
       <Card.Header as="h2">Torneo</Card.Header>

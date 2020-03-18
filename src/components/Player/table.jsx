@@ -11,15 +11,9 @@ import columns, { clearAllFilter } from './helper';
 import TableHeader from './header';
 import { LoadingModal } from '../core/Commons';
 import { getEmptyPlayer } from '../Player/helper';
-import { useSessionContext } from '../core/SessionContext';
+import { SessionContext, isEditable } from '../core/SessionContext';
 
-// Barbatrucco per utilizzare gli hooks
-const PlayerWrapper = _ => {
-  const [sessionContext] = useSessionContext();
-  return <Player {...sessionContext} />;
-};
-
-class Player extends React.Component {
+export default class Player extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -105,7 +99,7 @@ class Player extends React.Component {
   }
 
   cellEditProps = cellEditFactory({
-    mode: this.props.isAuthenticated ? 'click' : 'none',
+    mode: this.props.isAuthenticated && this.props.role === 'Admin' ? 'click' : 'none',
     blurToSave: true,
     autoSelectText: true,
     afterSaveCell: (oldValue, newValue, row, column) => {
@@ -124,7 +118,6 @@ class Player extends React.Component {
   render() {
     const { state, props, propsdeleteRow, deleteRow, addRow } = this;
     const { rows, isLoading } = state;
-    const { isAuthenticated } = props;
     const selectRow = {
       mode: 'checkbox',
       nonSelectable: rows.filter(e => (e.editable ? false : true)).map(e => e.id),
@@ -135,46 +128,48 @@ class Player extends React.Component {
         rows[rowIndex].editable ? { backgroundColor: '#28a745' } : { backgroundColor: '#dc3545' }
     };
 
-    console.log('Render player : ', { ...this.props });
+    // console.log('Render player : ', { ...this.props });
 
     return (
-      <>
-        <LoadingModal show={isLoading} message={'Caricamento'} />
-        <Row>
-          <Col>
-            <>
-              <ListGroup horizontal>
-                <Button variant="success" onClick={addRow} disabled={!isAuthenticated}>
-                  Aggiungi giocatore
-                </Button>
-                <Button variant="danger" onClick={deleteRow} disabled={!isAuthenticated}>
-                  Calcella giocatore
-                </Button>
-                <Button variant="dark" onClick={clearAllFilter.bind(this)} disabled={!isAuthenticated}>
-                  Pulisci Filtri
-                </Button>
-              </ListGroup>
-              <BootstrapTable
-                wrapperClasses="player-table"
-                keyField="id"
-                data={rows}
-                columns={columns}
-                cellEdit={this.cellEditProps}
-                selectRow={selectRow}
-                caption={<TableHeader />}
-                filter={filterFactory()}
-                headerClasses="player-table-header"
-                noDataIndication="Nessun dato reperito"
-                striped
-                hover
-                bootstrap4
-              />
-            </>
-          </Col>
-        </Row>
-      </>
+      <SessionContext.Consumer>
+        {sessionContext => (
+          <>
+            <LoadingModal show={isLoading} message={'Caricamento'} />
+            <Row>
+              <Col>
+                <>
+                  <ListGroup horizontal>
+                    <Button variant="success" onClick={addRow} disabled={!isEditable(sessionContext[0])}>
+                      Aggiungi giocatore
+                    </Button>
+                    <Button variant="danger" onClick={deleteRow} disabled={!isEditable(sessionContext[0])}>
+                      Calcella giocatore
+                    </Button>
+                    <Button variant="dark" onClick={clearAllFilter.bind(this)}>
+                      Pulisci Filtri
+                    </Button>
+                  </ListGroup>
+                  <BootstrapTable
+                    wrapperClasses="player-table"
+                    keyField="id"
+                    data={rows}
+                    columns={columns}
+                    cellEdit={this.cellEditProps}
+                    selectRow={selectRow}
+                    caption={<TableHeader />}
+                    filter={filterFactory()}
+                    headerClasses="player-table-header"
+                    noDataIndication="Nessun dato reperito"
+                    striped
+                    hover
+                    bootstrap4
+                  />
+                </>
+              </Col>
+            </Row>
+          </>
+        )}
+      </SessionContext.Consumer>
     );
   }
 }
-
-export default PlayerWrapper;

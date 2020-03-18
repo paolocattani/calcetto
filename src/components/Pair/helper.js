@@ -104,22 +104,23 @@ export const columns = (onSelect, options) => [
   }
 ];
 
-export const cellEditProps = cellEditFactory({
-  mode: 'click',
-  blurToSave: true,
-  afterSaveCell: (oldValue, newValue, row, column) => {
-    // Aggiornamento per queste due colonne viene eseguito dalla funzione onSelect
-    if (column.dataField === 'player1.alias' || column.dataField === 'player2.alias') return;
-    (async () => {
-      const response = await fetch('/api/v1/pair', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(row)
-      });
-      await response.json();
-    })();
-  }
-});
+export const cellEditProps = editable =>
+  cellEditFactory({
+    mode: editable ? 'click' : 'none',
+    blurToSave: true,
+    afterSaveCell: (oldValue, newValue, row, column) => {
+      // Aggiornamento per queste due colonne viene eseguito dalla funzione onSelect
+      if (column.dataField === 'player1.alias' || column.dataField === 'player2.alias') return;
+      (async () => {
+        const response = await fetch('/api/v1/pair', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(row)
+        });
+        await response.json();
+      })();
+    }
+  });
 
 export function getEmptyRowModel() {
   return {

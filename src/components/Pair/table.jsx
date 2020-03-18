@@ -9,7 +9,7 @@ import NoData from './noData';
 import { LoadingModal, GenericToast } from '../core/Commons';
 import './style.css';
 import { TournamentProgress } from '../Tournament/type';
-
+import { SessionContext, isEditable } from '../core/SessionContext';
 const PairsTable = () => {
   // Navigation
   const { tId } = useParams();
@@ -45,11 +45,7 @@ const PairsTable = () => {
     setMessage({ message, type: 'success' });
     setTimeout(() => setMessage(messageInitialState), 5000);
   }
-  function showAlertMessage(message) {
-    setIsLoading({ state: false, message });
-    setMessage({ message, type: 'warning' });
-    setTimeout(() => setMessage(messageInitialState), 5000);
-  }
+
   async function addRow(index) {
     try {
       setIsLoading({ state: true, message: 'Aggiunta riga in corso' });
@@ -351,115 +347,132 @@ const PairsTable = () => {
 
   // console.log('render table : ', data);
   return (
-    <>
-      <Row>
-        <LoadingModal show={isLoading.state} message={isLoading.message} />
-        <Col style={{ margin: '10px' }} md={{ span: 1 }}>
-          <Row>
-            <ListGroup>
-              <ListGroup.Item action variant="primary" onClick={confirmPairs}>
-                Prosegui
-              </ListGroup.Item>
-              <ListGroup.Item action variant="secondary" onClick={goBack}>
-                Home
-              </ListGroup.Item>
-              <ListGroup.Item action variant="success" onClick={() => addRow()} disabled={availableRows <= 0}>
-                Aggiungi Coppia
-              </ListGroup.Item>
+    <SessionContext.Consumer>
+      {sessionContext => (
+        <Row>
+          <LoadingModal show={isLoading.state} message={isLoading.message} />
+          <Col style={{ margin: '10px' }} md={{ span: 1 }}>
+            <Row>
+              <ListGroup>
+                <ListGroup.Item action variant="primary" onClick={confirmPairs}>
+                  Prosegui
+                </ListGroup.Item>
+                <ListGroup.Item action variant="secondary" onClick={goBack}>
+                  Home
+                </ListGroup.Item>
+                <ListGroup.Item
+                  action
+                  variant="success"
+                  onClick={() => addRow()}
+                  disabled={availableRows <= 0 || !isEditable(sessionContext[0])}
+                >
+                  Aggiungi Coppia
+                </ListGroup.Item>
 
-              <OverlayTrigger placement="right" key="rigth" overlay={<Tooltip>{deleteTooltipMessage}</Tooltip>}>
-                <span className="d-inline-block" onClick={deleteRow}>
-                  <ListGroup.Item action variant="danger" style={{ pointerEvents: 'none' }} disabled={deleteDisabled}>
-                    Elimina Coppia {deleteDisabled}
-                  </ListGroup.Item>
-                </span>
-              </OverlayTrigger>
+                <OverlayTrigger placement="right" key="rigth" overlay={<Tooltip>{deleteTooltipMessage}</Tooltip>}>
+                  <span className="d-inline-block" onClick={deleteRow}>
+                    <ListGroup.Item
+                      action
+                      variant="danger"
+                      style={{ pointerEvents: 'none' }}
+                      disabled={deleteDisabled || !isEditable(sessionContext[0])}
+                    >
+                      Elimina Coppia {deleteDisabled}
+                    </ListGroup.Item>
+                  </span>
+                </OverlayTrigger>
 
-              <ListGroup.Item action variant="danger" onClick={deleteStage1}>
-                Reset gironi
-              </ListGroup.Item>
-            </ListGroup>
-          </Row>
-        </Col>
-        <Col style={{ margin: '10px' }}>
-          <Row>
-            <InputGroup onChange={e => setStage1Number(e.target.value)}>
-              <InputGroup.Prepend>
-                <InputGroup.Text>Assegna gironi automaticamente</InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                placeholder={
-                  data.rows.length < 4
-                    ? 'Inserisci almeno 4 coppie'
-                    : `Numero di gironi ( max ${Math.floor(data.rows.length / 4)} )`
-                }
-                aria-label="Numero di gironi"
-                disabled={data.rows.length < 4}
+                <ListGroup.Item
+                  action
+                  variant="danger"
+                  onClick={deleteStage1}
+                  disabled={!isEditable(sessionContext[0])}
+                >
+                  Reset gironi
+                </ListGroup.Item>
+              </ListGroup>
+            </Row>
+          </Col>
+          <Col style={{ margin: '10px' }}>
+            <Row style={{ display: isEditable(sessionContext[0]) ? 'flex' : 'none' }}>
+              <InputGroup onChange={e => setStage1Number(e.target.value)}>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>Assegna gironi automaticamente</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  placeholder={
+                    data.rows.length < 4
+                      ? 'Inserisci almeno 4 coppie'
+                      : `Numero di gironi ( max ${Math.floor(data.rows.length / 4)} )`
+                  }
+                  aria-label="Numero di gironi"
+                  disabled={data.rows.length < 4}
+                />
+                <InputGroup.Append>
+                  <Button
+                    variant="primary"
+                    onClick={setStage1Name}
+                    disabled={!stage1Number || stage1Number > Math.floor(data.rows.length / 4) || data.rows.length < 4}
+                  >
+                    Esegui
+                  </Button>
+                </InputGroup.Append>
+              </InputGroup>
+              <InputGroup onChange={e => setNewRowsNumber(e.target.value)}>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>Aggiunti N nuove coppie</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  disabled={availableRows <= 0}
+                  placeholder={
+                    availableRows <= 0
+                      ? 'Numero massimo di coppie gia creato sulla base del numero di giocatori disponibili'
+                      : `Numero di coppie da aggiungere ( max ${availableRows} )`
+                  }
+                  aria-label="Numero di coppie"
+                  value={newRowsNumber || ''}
+                />
+                <InputGroup.Append>
+                  <Button
+                    variant="primary"
+                    onClick={e => setNewRowsNumber(availableRows)}
+                    disabled={newRowsNumber > availableRows}
+                  >
+                    Max
+                  </Button>
+                  <Button
+                    variant="primary"
+                    onClick={addMultipleRows}
+                    disabled={!newRowsNumber || newRowsNumber > availableRows}
+                  >
+                    Esegui
+                  </Button>
+                </InputGroup.Append>
+              </InputGroup>
+            </Row>
+            <Row>
+              <BootstrapTable
+                bootstrap4
+                keyField="id"
+                data={data.rows}
+                columns={columns(onSelect, data.players)}
+                cellEdit={cellEditProps(isEditable(sessionContext[0]))}
+                selectRow={selectRow}
+                noDataIndication={<NoData addRow={() => addRow()} optionsLength={data.players.length} />}
+                caption={<TableHeader tournament={data.tournament} />}
+                wrapperClasses="player-table"
+                headerClasses="player-table-header"
+                striped
+                hover
               />
-              <InputGroup.Append>
-                <Button
-                  variant="primary"
-                  onClick={setStage1Name}
-                  disabled={!stage1Number || stage1Number > Math.floor(data.rows.length / 4) || data.rows.length < 4}
-                >
-                  Esegui
-                </Button>
-              </InputGroup.Append>
-            </InputGroup>
-            <InputGroup onChange={e => setNewRowsNumber(e.target.value)}>
-              <InputGroup.Prepend>
-                <InputGroup.Text>Aggiunti N nuove coppie</InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                disabled={availableRows <= 0}
-                placeholder={
-                  availableRows <= 0
-                    ? 'Numero massimo di coppie gia creato sulla base del numero di giocatori disponibili'
-                    : `Numero di coppie da aggiungere ( max ${availableRows} )`
-                }
-                aria-label="Numero di coppie"
-                value={newRowsNumber || ''}
-              />
-              <InputGroup.Append>
-                <Button
-                  variant="primary"
-                  onClick={e => setNewRowsNumber(availableRows)}
-                  disabled={newRowsNumber > availableRows}
-                >
-                  Max
-                </Button>
-                <Button
-                  variant="primary"
-                  onClick={addMultipleRows}
-                  disabled={!newRowsNumber || newRowsNumber > availableRows}
-                >
-                  Esegui
-                </Button>
-              </InputGroup.Append>
-            </InputGroup>
-          </Row>
-          <Row>
-            <BootstrapTable
-              bootstrap4
-              keyField="id"
-              data={data.rows}
-              columns={columns(onSelect, data.players)}
-              cellEdit={cellEditProps}
-              selectRow={selectRow}
-              noDataIndication={<NoData addRow={() => addRow()} optionsLength={data.players.length} />}
-              caption={<TableHeader tournament={data.tournament} />}
-              wrapperClasses="player-table"
-              headerClasses="player-table-header"
-              striped
-              hover
-            />
-          </Row>
-        </Col>
-        <Col style={{ margin: '10px' }} md={2}>
-          <GenericToast message={message.message} type={message.type} />
-        </Col>
-      </Row>
-    </>
+            </Row>
+          </Col>
+          <Col style={{ margin: '10px' }} md={2}>
+            <GenericToast message={message.message} type={message.type} />
+          </Col>
+        </Row>
+      )}
+    </SessionContext.Consumer>
   );
 };
 

@@ -6,6 +6,7 @@ import cellEditFactory from 'react-bootstrap-table2-editor';
 
 import TableHeader from './header';
 import { getOpposite, comparator } from './helper';
+import { SessionContext, isEditable } from '../core/SessionContext';
 
 // style
 import './style.css';
@@ -13,34 +14,35 @@ import './style.css';
 const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
   const [selectedRows, setSelectedRows] = useState([]);
 
-  const cellEditProps = cellEditFactory({
-    mode: 'click',
-    blurToSave: true,
-    beforeSaveCell: (oldValue, newValue, row, column) => {
-      if (column.id.startsWith('col')) {
-        // Aggiorno cella opposta
-        rows[parseInt(column.text) - 1][`col${row.rowNumber}`] = getOpposite(newValue);
-        // Aggiorno posizione relativa
-        [...rows]
-          .sort((e1, e2) => comparator(e1, e2))
-          .forEach((row, index) => (rows[row.rowNumber - 1]['place'] = index + 1));
-      }
-    },
-    afterSaveCell: (oldValue, newValue, row, column) => {
-      if (column.id.startsWith('col')) {
-        // Aggiorno dati sul Db
-        updateCellValue(oldValue, newValue, row, column);
-        let acc = 0;
-        for (let key in row) if (key.startsWith('col')) acc += row[key];
-        rows[row.rowNumber - 1]['total'] = acc ? acc : null;
+  const cellEditProps = editable =>
+    cellEditFactory({
+      mode: editable ? 'click' : 'none',
+      blurToSave: true,
+      beforeSaveCell: (oldValue, newValue, row, column) => {
+        if (column.id.startsWith('col')) {
+          // Aggiorno cella opposta
+          rows[parseInt(column.text) - 1][`col${row.rowNumber}`] = getOpposite(newValue);
+          // Aggiorno posizione relativa
+          [...rows]
+            .sort((e1, e2) => comparator(e1, e2))
+            .forEach((row, index) => (rows[row.rowNumber - 1]['place'] = index + 1));
+        }
+      },
+      afterSaveCell: (oldValue, newValue, row, column) => {
+        if (column.id.startsWith('col')) {
+          // Aggiorno dati sul Db
+          updateCellValue(oldValue, newValue, row, column);
+          let acc = 0;
+          for (let key in row) if (key.startsWith('col')) acc += row[key];
+          rows[row.rowNumber - 1]['total'] = acc ? acc : null;
 
-        acc = 0;
-        for (let key in rows[parseInt(column.text) - 1])
-          if (key.startsWith('col')) acc += rows[parseInt(column.text) - 1][key];
-        rows[parseInt(column.text) - 1]['total'] = acc ? acc : null;
+          acc = 0;
+          for (let key in rows[parseInt(column.text) - 1])
+            if (key.startsWith('col')) acc += rows[parseInt(column.text) - 1][key];
+          rows[parseInt(column.text) - 1]['total'] = acc ? acc : null;
+        }
       }
-    }
-  });
+    });
 
   const handleOnSelect = (row, isSelected) => {
     setSelectedRows(() => {
@@ -63,22 +65,24 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
   };
 
   return (
-    <>
-      <BootstrapTable
-        bootstrap4
-        keyField="id"
-        data={rows}
-        columns={columns}
-        selectRow={selectRow}
-        cellEdit={cellEditProps}
-        noDataIndication="Nessun dato reperito"
-        wrapperClasses="player-table"
-        headerClasses="player-table-header"
-        caption={<TableHeader title={tableName} saved={saved} />}
-        striped
-        hover
-      />
-    </>
+    <SessionContext.Consumer>
+      {sessionContext => (
+        <BootstrapTable
+          bootstrap4
+          keyField="id"
+          data={rows}
+          columns={columns}
+          selectRow={selectRow}
+          cellEdit={cellEditProps(isEditable(sessionContext[0]))}
+          noDataIndication="Nessun dato reperito"
+          wrapperClasses="player-table"
+          headerClasses="player-table-header"
+          caption={<TableHeader title={tableName} saved={saved} />}
+          striped
+          hover
+        />
+      )}
+    </SessionContext.Consumer>
   );
 };
 
