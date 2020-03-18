@@ -7,7 +7,7 @@ import { asyncMiddleware } from '../core/middleware';
 import { getSecret } from '../core/utils';
 import jwt from 'jsonwebtoken';
 import User from 'model/sequelize/user.model';
-import { isAdmin } from './auth.manager';
+import { isAdmin, getUserFromToken } from './auth.manager';
 
 // all API path must be relative to /api/v1/tournament
 const router = Router();
@@ -52,10 +52,15 @@ router.post(
 
     try {
       const isEditable = isAdmin(req.cookies.token);
+      const user = await getUserFromToken(req.cookies.token);
+      if (isEditable && user) model.ownerId = user.id;
       let t = await Tournament.findOne({ where: { name: model.name } });
       if (t) {
         logger.info(`tournament ${model.name} already exists, updating....`);
-        if (isEditable) await t.update(model);
+        /*
+         * FIXME: perchè dovrei aggiornare un torneo gia esistente ?
+         * if (isEditable) await t.update(model);
+         */
         return res.json(t);
       }
       if (isEditable) {

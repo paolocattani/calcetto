@@ -54,6 +54,7 @@ export default class Tournament extends Model<Tournament> {
   @HasMany(() => Pair)
   public pairs!: Pair[];
 
+  // FIXME: rimuove questa associazione, lasciarla solo lato s1Matrix
   @HasMany(() => s1Matrix)
   public s1Matrix!: s1Matrix[];
 

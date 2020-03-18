@@ -9,7 +9,7 @@ export const ProtectedRoute: React.FC<any> = props => {
    * Per ora non voglio obbligare l'utente a fare la login.
    * Gestisco nelle singole pagine che se l'utente non è autenticato non può modificare
    */
-  const { component: ComponentToRender } = props;
+  const { ComponentToRender } = props;
 
   return <Route {...props} render={() => <ComponentToRender />} />;
 

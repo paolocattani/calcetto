@@ -10,7 +10,7 @@ export type routeType = {
   path: string;
   label: string;
   exact: boolean;
-  component: React.ReactNode;
+  ComponentToRender: React.ReactNode;
   visible: boolean;
   index: number;
   private: boolean;
@@ -18,12 +18,12 @@ export type routeType = {
 
 // Mappatura route
 export const routes: routeType[] = [
-  { path: '/', label: 'Home', exact: true, component: FTournament, visible: false, private: true, index: 0 },
+  { path: '/', label: 'Home', exact: true, ComponentToRender: FTournament, visible: false, private: true, index: 0 },
   {
     path: '/tournament/:tId',
     label: 'Selezione Coppie',
     exact: true,
-    component: Pairs,
+    ComponentToRender: Pairs,
     visible: false,
     private: false,
     index: 10
@@ -32,7 +32,7 @@ export const routes: routeType[] = [
     path: '/stage1/:tId',
     label: 'Torneo fase 1',
     exact: true,
-    component: Stage1Wrapper,
+    ComponentToRender: Stage1Wrapper,
     visible: false,
     private: true,
     index: 20
@@ -42,7 +42,7 @@ export const routes: routeType[] = [
     path: '/player',
     label: 'Gestione Giocatori',
     exact: true,
-    component: PlayerTable,
+    ComponentToRender: PlayerTable,
     visible: true,
     private: true,
     index: 30
@@ -51,8 +51,8 @@ export const routes: routeType[] = [
     path: '/stage2/:tId',
     label: 'Torneo fase 2',
     exact: true,
-    component: Stage2,
-    //component: OrganizationChartDemo,
+    ComponentToRender: Stage2,
+    //ComponentToRender: OrganizationChartDemo,
     visible: !(process.env.NODE_ENV === 'production'),
     private: true,
     index: 40
@@ -62,7 +62,7 @@ export const routes: routeType[] = [
     path: '*',
     label: 'Not Found',
     exact: false,
-    component: RedirectionControl,
+    ComponentToRender: RedirectionControl,
     visible: false,
     private: true,
     index: 1000

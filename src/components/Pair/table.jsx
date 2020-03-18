@@ -297,22 +297,23 @@ const PairsTable = () => {
       showErrorMessage('Specificare il numero di gironi da assegnare');
       return;
     }
-    setIsLoading({ state: true, message: 'Aggiornamento in corso' });
+    setIsLoading({ state: true, message: 'Aggiornamento in corso ' });
     let current = 0;
     const names = 'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('');
     let newRows = [];
     for (let index in data.rows) {
       let row = data.rows[index];
-      if (current === stage1Number) current = 0;
+      // FIXME: if (current === stage1Number) QUESTO NON FUNZIONA ===
+      // eslint-disable-next-line eqeqeq
+      if (current == stage1Number) current = 0;
       row['stage1Name'] = names[current];
       current++;
       try {
-        const response = await fetch('/api/v1/pair', {
+        fetch('/api/v1/pair', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(row)
         });
-        await response.json();
         newRows.push(row);
       } catch (error) {
         showErrorMessage('Errore');
@@ -369,7 +370,7 @@ const PairsTable = () => {
                   Aggiungi Coppia
                 </ListGroup.Item>
 
-                <OverlayTrigger placement="right" key="rigth" overlay={<Tooltip>{deleteTooltipMessage}</Tooltip>}>
+                <OverlayTrigger placement="right" key="right" overlay={<Tooltip>{deleteTooltipMessage}</Tooltip>}>
                   <span className="d-inline-block" onClick={deleteRow}>
                     <ListGroup.Item
                       action

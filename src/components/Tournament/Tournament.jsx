@@ -1,37 +1,28 @@
 import React, { useState, useEffect } from 'react';
+// React-Select
 import CreatableSelect from 'react-select/creatable';
+import Select from 'react-select';
+// Bootstrap
 import { Form, Button, Card, Row, Col } from 'react-bootstrap';
 import { useHistory } from 'react-router';
+// Core
 import { getTodayDate } from '../core/utils';
+import { SessionContext, isEditable } from '../core/SessionContext';
+// Helper
 import { fetchTournaments, getEmptyTournament } from './helper';
+// Types
 import { TournamentProgress } from './type';
-import { useSessionContext } from '../core/SessionContext';
-import { GenericToast } from '../core/Commons';
 
 const FTournament = () => {
   // State definition
   const [selectedOption, setSelectedOption] = useState(getTodayDate());
   const [tournamentList, setTournamentList] = useState([]);
   let currentHistory = useHistory();
-  // Context
-  const [sessionContext] = useSessionContext();
-  const editable = sessionContext.isAuthenticated && sessionContext.role === 'Admin';
-  // User Message
-  const messageInitialState = { message: '', type: 'success' };
-  const [message, setMessage] = useState(messageInitialState);
 
   useEffect(() => fetchTournaments(setTournamentList, setSelectedOption), []);
 
   const handleChange = selectedOption => setSelectedOption(selectedOption);
   const handleCreate = selectedOption => {
-    if (!editable) {
-      setMessage({
-        message: 'Non sei abilitato a creare nuovi tornei. Rivolgiti al tuo fornitore di Montenegro di fiducia. ',
-        type: 'danger'
-      });
-      setTimeout(() => setMessage(messageInitialState), 5000);
-      return false;
-    }
     let newT = getEmptyTournament(selectedOption);
     setSelectedOption(newT);
     setTournamentList(prevList => [...prevList, newT]);
@@ -51,31 +42,52 @@ const FTournament = () => {
   return (
     <Row>
       <Col>
-        <GenericToast message={message.message} type={message.type} />
         <Card style={cardStyle}>
           <Card.Header as="h2">Torneo</Card.Header>
           <Card.Body>
             <Card.Title>Scegli un torneo</Card.Title>
             <Form onSubmit={handleSubmit}>
-              {
-                <CreatableSelect
-                  // TODO:
-                  //filterOption={customFilter}
-                  // getOptionValue={option => `${option.label}`}
-                  //formatCreateLabel={formatNewLabel}
-                  //formatOptionLabel={formatOptionLabel}
-                  //getOptionLabel={option => `${option.name} @ ${option.progress}`}
-                  //
-                  components={{ IndicatorSeparator }}
-                  value={selectedOption}
-                  options={tournamentList}
-                  placeholder="Crea/Cerca un torneo"
-                  isSearchable={true}
-                  isClearable
-                  onChange={handleChange}
-                  onCreateOption={handleCreate}
-                />
-              }
+              <SessionContext.Consumer>
+                {sessionContext =>
+                  isEditable(sessionContext[0]) ? (
+                    <CreatableSelect
+                      // TODO:
+                      //filterOption={customFilter}
+                      // getOptionValue={option => `${option.label}`}
+                      //formatCreateLabel={formatNewLabel}
+                      //formatOptionLabel={formatOptionLabel}
+                      //getOptionLabel={option => `${option.name} @ ${option.progress}`}
+                      //
+                      components={{ IndicatorSeparator }}
+                      value={selectedOption}
+                      options={tournamentList}
+                      placeholder="Crea/Cerca un torneo"
+                      isSearchable={true}
+                      isClearable
+                      onChange={handleChange}
+                      onCreateOption={handleCreate}
+                      createOptionPosition={'first'}
+                    />
+                  ) : (
+                    <Select
+                      // TODO:
+                      //filterOption={customFilter}
+                      // getOptionValue={option => `${option.label}`}
+                      //formatCreateLabel={formatNewLabel}
+                      //formatOptionLabel={formatOptionLabel}
+                      //getOptionLabel={option => `${option.name} @ ${option.progress}`}
+                      //
+                      components={{ IndicatorSeparator }}
+                      value={selectedOption}
+                      options={tournamentList}
+                      placeholder="Cerca un torneo"
+                      isSearchable={true}
+                      isClearable
+                      onChange={handleChange}
+                    />
+                  )
+                }
+              </SessionContext.Consumer>
               <br></br>
               <Button type="submit" size="lg" variant="outline-warning" disabled={!selectedOption}>
                 Continua
@@ -111,6 +123,7 @@ const cardStyle = {
   borderWidth: '3px'
 };
 
+/*
 const formatNewLabel = inputString => (
   <strong>
     {inputString}
@@ -124,4 +137,6 @@ const formatOptionLabel = ({ name, progress, innerProps }) => (
     <small style={{ color: '#ccc' }}>@{progress}</small>
   </strong>
 );
+
+*/
 export default FTournament;

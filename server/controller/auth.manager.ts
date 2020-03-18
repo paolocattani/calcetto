@@ -24,7 +24,7 @@ router.get(
       next();
       return;
     }
-    const user = await User.findOne({ where: { email: req.email } });
+    const user = await findUserByEmail(req.email);
     if (user) return res.status(200).json(user);
     else return res.status(401).json({ message: 'Utente non trovato' });
   })
@@ -78,7 +78,7 @@ router.post(
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
     try {
-      const user = await User.findOne({ where: { email } });
+      const user = await findUserByEmail(email);
       // utente non trovato
       if (!user) return res.status(401).json({ error: 'Incorrect email or password' });
 
@@ -98,6 +98,7 @@ router.get('/checkToken', withAuth, (req, res) => res.sendStatus(200));
 
 export default router;
 
+// Utils
 export function isAdmin(token: string | object): boolean {
   let isAdmin: boolean = false;
   if (token && typeof token === 'string') {
@@ -105,4 +106,19 @@ export function isAdmin(token: string | object): boolean {
     if (decodedUser.role === 'Admin') isAdmin = true;
   }
   return isAdmin;
+}
+
+export async function getUserFromToken(token: string | object): Promise<User | null> {
+  if (token && typeof token === 'string') {
+    const decodedUser = jwt.verify(token, getSecret()) as User;
+    return decodedUser.email ? await findUserByEmail(decodedUser.email) : decodedUser;
+  } else return null;
+}
+
+export async function findUserByEmail(email: string) {
+  try {
+    return await User.findOne({ where: { email } });
+  } catch (error) {
+    return null;
+  }
 }

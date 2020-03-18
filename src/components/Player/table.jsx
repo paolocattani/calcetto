@@ -80,12 +80,11 @@ export default class Player extends React.Component {
     if (!selectedRows) return;
     this.setState({ isLoading: true }, () =>
       (async () => {
-        const response = await fetch('/api/v1/player', {
+        fetch('/api/v1/player', {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(selectedRows)
         });
-        const result = await response.json();
         this.setState(state => {
           return {
             // Se la riga che sto analizzando è contenuta in quelle selezionata allora non la voglio
@@ -116,7 +115,7 @@ export default class Player extends React.Component {
   });
 
   render() {
-    const { state, props, propsdeleteRow, deleteRow, addRow } = this;
+    const { state, deleteRow, addRow } = this;
     const { rows, isLoading } = state;
     const selectRow = {
       mode: 'checkbox',
