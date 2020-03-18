@@ -2,22 +2,16 @@
 
 import * as React from 'react';
 import { Route, RouteProps } from 'react-router';
-import { routeType } from './Routes';
-
-export interface ProtectedRouteProps extends RouteProps {
-  isAuthenticated: boolean;
-  authenticationPath: string;
-  redirectPathOnAuthentication: string;
-  setRedirectPathOnAuthentication: (path: string) => void;
-}
 
 export const ProtectedRoute: React.FC<any> = props => {
   /**
+   *
    * Per ora non voglio obbligare l'utente a fare la login.
    * Gestisco nelle singole pagine che se l'utente non è autenticato non può modificare
    */
   const { component: ComponentToRender } = props;
-  return <Route {...props} render={() => <ComponentToRender {...props} />} />;
+
+  return <Route {...props} render={() => <ComponentToRender />} />;
 
   /*
   const currentLocation = useLocation();

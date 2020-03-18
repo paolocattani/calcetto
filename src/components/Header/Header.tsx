@@ -10,15 +10,17 @@ export const Header: React.FC = _ => {
   const [sessionContext, updateSessionContext] = useSessionContext();
   const [showModal, setShowModal] = useState(false);
 
-  const logout = () => {
-    updateSessionContext({
-      ...sessionContext,
-      name: '',
-      surname: '',
-      email: '',
-      role: '',
-      isAuthenticated: false
-    });
+  const logout = async () => {
+    const response = await fetch('/api/v1/auth/logout');
+    if (response.ok)
+      updateSessionContext({
+        ...sessionContext,
+        name: '',
+        surname: '',
+        email: '',
+        role: '',
+        isAuthenticated: false
+      });
   };
 
   const yellow = '##ffc107';
@@ -44,7 +46,7 @@ export const Header: React.FC = _ => {
               {routes.map(route =>
                 route.visible ? (
                   route.private && !sessionContext.isAuthenticated ? null : (
-                    <Nav.Link href={route.path} {...sessionContext}>
+                    <Nav.Link key={route.index} href={route.path}>
                       {route.label}
                     </Nav.Link>
                   )

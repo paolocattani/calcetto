@@ -30,6 +30,19 @@ router.get(
   })
 );
 
+router.get(
+  '/logout',
+  withAuth,
+  asyncMiddleware(async (req: any, res: Response, next: NextFunction) => {
+    if (!req.email) {
+      next();
+      return;
+    }
+    res.cookie('token', { expires: new Date(Date.now()), httpOnly: true });
+    return res.status(200).json({ message: 'logout complete' });
+  })
+);
+
 router.post(
   '/register',
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {

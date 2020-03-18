@@ -11,8 +11,15 @@ import columns, { clearAllFilter } from './helper';
 import TableHeader from './header';
 import { LoadingModal } from '../core/Commons';
 import { getEmptyPlayer } from '../Player/helper';
+import { useSessionContext } from '../core/SessionContext';
 
-export default class Player extends React.Component {
+// Barbatrucco per utilizzare gli hooks
+const PlayerWrapper = _ => {
+  const [sessionContext] = useSessionContext();
+  return <Player {...sessionContext} />;
+};
+
+class Player extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -169,3 +176,5 @@ export default class Player extends React.Component {
     );
   }
 }
+
+export default PlayerWrapper;
