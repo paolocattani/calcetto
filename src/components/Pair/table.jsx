@@ -6,7 +6,7 @@ import { getEmptyPlayer } from '../Player/helper';
 import { useParams, useHistory } from 'react-router';
 import TableHeader from './header';
 import NoData from './noData';
-import { LoadingModal, SuccessToast, WarningToast, ErrorToast } from '../core/Commons';
+import { LoadingModal, GenericToast } from '../core/Commons';
 import './style.css';
 import { TournamentProgress } from '../Tournament/type';
 
@@ -20,9 +20,8 @@ const PairsTable = () => {
   // States
   // User messages
   const [isLoading, setIsLoading] = useState({ state: false, message: 'Caricamento' });
-  const [successMessage, setSuccessMessage] = useState('');
-  const [allertMessage, setAllertMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const messageInitialState = { message: '', type: 'success' };
+  const [message, setMessage] = useState(messageInitialState);
   // Data
   const [data, setData] = useState({ tournament: null, rows: [], players: [] });
   const [selectedRows, setSelectedRows] = useState([]);
@@ -38,15 +37,19 @@ const PairsTable = () => {
   // User messages
   function showErrorMessage(message) {
     setIsLoading({ state: false, message });
-    setErrorMessage(message);
-    setTimeout(() => setErrorMessage(''), 5000);
+    setMessage({ message, type: 'danger' });
+    setTimeout(() => setMessage(messageInitialState), 5000);
   }
   function showSuccessMessage(message) {
     setIsLoading({ state: false, message });
-    setSuccessMessage(message);
-    setTimeout(() => setSuccessMessage(''), 5000);
+    setMessage({ message, type: 'success' });
+    setTimeout(() => setMessage(messageInitialState), 5000);
   }
-
+  function showAlertMessage(message) {
+    setIsLoading({ state: false, message });
+    setMessage({ message, type: 'warning' });
+    setTimeout(() => setMessage(messageInitialState), 5000);
+  }
   async function addRow(index) {
     try {
       setIsLoading({ state: true, message: 'Aggiunta riga in corso' });
@@ -153,8 +156,7 @@ const PairsTable = () => {
           if (selectedElement.id && row.player2 && row.player2.id === selectedElement.id) {
             // Devo salvare l'elemnto che sto per sostituire
             row.player1 = getEmptyPlayer();
-            setAllertMessage('Attenzione : Non puoi selezionare lo stesso giocare ! ');
-            setTimeout(() => setAllertMessage(''), 5000);
+            showErrorMessage('Attenzione : Non puoi selezionare lo stesso giocare ! ');
           } else {
             // Aggiorno la lista dei giocatori disponibili prima di aggiornare i dati
             updateOptions(row.player1, selectedElement);
@@ -163,8 +165,7 @@ const PairsTable = () => {
         } else {
           if (selectedElement.id && row.player1 && row.player1.id === selectedElement.id) {
             row.player2 = getEmptyPlayer();
-            setAllertMessage('Attenzione : Non puoi selezionare lo stesso giocare ! ');
-            setTimeout(() => setAllertMessage(''), 5000);
+            showErrorMessage('Attenzione : Non puoi selezionare lo stesso giocare ! ');
           } else {
             updateOptions(row.player2, selectedElement);
             row.player2 = selectedElement;
@@ -198,42 +199,36 @@ const PairsTable = () => {
   };
 
   const confirmPairs = _ => {
+    if (!tId) {
+      showErrorMessage('Id torneo mancante. Verrai inviato alla Home tra 5 secondi....');
+      setTimeout(() => currentHistory.push('/'), 5000);
+    }
+
     // Controllo che sia presente almeno una coppia
     if (data.rows.length < 4) {
-      setErrorMessage('Numero di coppie insufficente. Devi formare almeno 4 coppie');
-      setTimeout(() => setErrorMessage(''), 5000);
+      showErrorMessage('Numero di coppie insufficente. Devi formare almeno 4 coppie');
       return;
     }
     // Controllo gironi non assegnati
     const missingStage1Name = data.rows.filter(e => !e.stage1Name || e.stage1Name === '').map(e => e.rowNumber);
     if (missingStage1Name.length !== 0) {
-      setErrorMessage(
+      showErrorMessage(
         `Assegna  ${
           missingStage1Name.length === 1 ? 'la riga ' : 'le righe '
         } ${missingStage1Name} ad un girone per procedere `
       );
-      setTimeout(() => setErrorMessage(''), 5000);
       return;
     }
 
     // Controllo coppie non assegnate
     const missingPairs = data.rows.filter(e => e.player1.id === null || e.player2.id === null).map(e => e.rowNumber);
     if (missingPairs.length !== 0) {
-      setErrorMessage(
+      showErrorMessage(
         `Assegna  i giocatori ${
           missingPairs.length === 1 ? 'alla riga ' : 'alle righe '
         } ${missingPairs} per procedere `
       );
-      setTimeout(() => setErrorMessage(''), 5000);
       return;
-    }
-
-    if (!tId) {
-      setErrorMessage('Id torneo mancante. Verrai inviato alla Home tra 5 secondi....');
-      setTimeout(() => {
-        setErrorMessage('');
-        currentHistory.push('/');
-      }, 5000);
     }
 
     // Controllo che non ci siano gironi con meno di 1 coppia ( meglio spostare 3 )
@@ -248,14 +243,11 @@ const PairsTable = () => {
       if (pairsInStage[stageName] <= MIN_PAIR_PER_STAGE) invalidStage.push(stageName);
     }
     if (invalidStage.length > 0) {
-      setErrorMessage(
+      showErrorMessage(
         invalidStage.length === 1
           ? `Il torneo ${invalidStage} deve contenere almeno ${MIN_PAIR_PER_STAGE + 1} coppie`
           : `I torneI ${invalidStage} devono contenere almeno ${MIN_PAIR_PER_STAGE + 1} coppie`
       );
-      setTimeout(() => {
-        setErrorMessage('');
-      }, 5000);
       return;
     }
 
@@ -306,8 +298,7 @@ const PairsTable = () => {
 
   async function setStage1Name() {
     if (!stage1Number) {
-      setErrorMessage('Specificare il numero di gironi da assegnare');
-      setTimeout(() => setErrorMessage(''), 5000);
+      showErrorMessage('Specificare il numero di gironi da assegnare');
       return;
     }
     setIsLoading({ state: true, message: 'Aggiornamento in corso' });
@@ -465,9 +456,7 @@ const PairsTable = () => {
           </Row>
         </Col>
         <Col style={{ margin: '10px' }} md={2}>
-          <SuccessToast message={successMessage} />
-          <WarningToast message={allertMessage} />
-          <ErrorToast message={errorMessage} />
+          <GenericToast message={message.message} type={message.type} />
         </Col>
       </Row>
     </>

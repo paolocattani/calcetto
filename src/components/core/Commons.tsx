@@ -1,16 +1,18 @@
 import React from 'react';
 import { Modal, Spinner, Toast, Alert } from 'react-bootstrap';
 
-type propsType = {
+// Loading Modal
+type loadingModalPropsType = {
   show: boolean;
   message: string;
   onHide?: () => void;
 };
 
-type toastType = {
-  message: string;
-};
-export const LoadingModal: React.FC<propsType> = ({ message, show, onHide = () => (show = false) }: propsType) => (
+export const LoadingModal: React.FC<loadingModalPropsType> = ({
+  message,
+  show,
+  onHide = () => (show = false)
+}: loadingModalPropsType) => (
   <Modal show={show} onHide={onHide} size="xl" centered>
     <Modal.Header closeButton>
       <Modal.Title>Caricamento....</Modal.Title>
@@ -29,38 +31,20 @@ export const LoadingModal: React.FC<propsType> = ({ message, show, onHide = () =
   </Modal>
 );
 
-export const SuccessToast: React.FC<toastType> = ({ message }: toastType) =>
-  message && message !== '' ? (
-    <Toast className="rounded mr-2" key={'success-message'} show={message !== ''}>
-      <Toast.Header closeButton={false}>
-        <strong>Operazione completata !</strong>
-      </Toast.Header>
-      <Toast.Body>
-        <Alert variant={'success'}>{message}</Alert>
-      </Toast.Body>
-    </Toast>
-  ) : null;
+// Toasts
+type toastPropsType = {
+  message: string;
+  type?: 'success' | 'warning' | 'danger';
+};
 
-export const WarningToast: React.FC<toastType> = ({ message }: toastType) =>
+export const GenericToast: React.FC<toastPropsType> = ({ message, type }: toastPropsType) =>
   message && message !== '' ? (
-    <Toast className="rounded mr-2" key={'warning-message'} show={message !== ''}>
+    <Toast className="rounded mr-2" key={`${type}-message`} show={message !== ''}>
       <Toast.Header closeButton={false}>
         <strong>Operazione completata !</strong>
       </Toast.Header>
       <Toast.Body>
-        <Alert variant={'warning'}>{message}</Alert>
-      </Toast.Body>
-    </Toast>
-  ) : null;
-
-export const ErrorToast: React.FC<toastType> = ({ message }: toastType) =>
-  message && message !== '' ? (
-    <Toast className="rounded mr-2" key={'error-message'} show={message !== ''}>
-      <Toast.Header closeButton={false}>
-        <strong>Operazione completata !</strong>
-      </Toast.Header>
-      <Toast.Body>
-        <Alert variant={'danger'}>{message}</Alert>
+        <Alert variant={type}>{message}</Alert>
       </Toast.Body>
     </Toast>
   ) : null;
