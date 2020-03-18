@@ -16,7 +16,7 @@ router.use('/', (req, res, next) => {
 });
 
 /**
- * Aggiornamento record specifico
+ * Cancellazione record
  */
 router.delete(
   '/',
@@ -67,45 +67,18 @@ router.post(
 );
 
 /**
+ *
  * Reperimento e aggiornamento tabella Stage1.
  * Riceva da FE : rows e stageName
  *  @param stageName : nome della tabella ( girone )
- *  @param rows : righe del girone nella forma di ( vedi 'dummy_data/tableRows' per l'esempio completo )
- * [
- *  {
- *    "pair": {
- *      "id": 3, "rowNumber": 3, "tId": 1,
- *      "player1": { "id": 5, "alias": "Alias5", "name": "Nome5", "surname": "Cognome5" },
- *      "player2": { "id": 2, "alias": "Alias2", "name": "Nome2", "surname": "Cognome2"},
- *      "pairAlias": "",
- *      "stage1Name": "1",
- *      "label": "Alias5 - Alias2"
- *    }, "rowNumber": 1,
- *    "col1": null, "col2": null, "col3": null, .... "col-ennesima": null
- *    "total": 0, "place": 0
- *  },
- *  { ... },{ ... },{ ... }, ... ,
- *  {
- *    "pair": {
- *      "id": 3, "rowNumber": 3, "tId": 1,
- *      "player1": { "id": 5, "alias": "Alias5", "name": "Nome5", "surname": "Cognome5" },
- *      "player2": { "id": 2, "alias": "Alias2", "name": "Nome2", "surname": "Cognome2"},
- *      "pairAlias": "",
- *      "stage1Name": "1",
- *      "label": "Alias5 - Alias2"
- *    }, "rowNumber": 1,
- *    "col1": null, "col2": null, "col3": null, .... "col-ennesima": null
- *    "total": 0, "place": 0
- *  }
- * ]
+ *  @param rows : righe del girone
+ *
  */
 router.post(
   '/',
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
-    // FIXME: type def
     const { rows, stageName } = req.body;
     const t = await dbConnection.transaction();
-    // logger.info('Model : ', rows);
     try {
       await asyncForEach(rows, async (currentRow: any, index: number, rowsRef: any) => {
         rowsRef[index]['total'] = 0;
@@ -116,17 +89,13 @@ router.post(
             const rowIndex = parseInt(currentRowRef.rowNumber);
             const colIndex = parseInt(currentRowKey.substring(3));
             // Valore attuale della cella e della sua opposta
-            let currentCellValue = rowsRef[index][currentRowKey];
             let oppositeRow = rowsRef[colIndex - 1];
-            let oppositeCellValue = oppositeRow[`col${rowIndex}`];
             // totale / posizionamento
             let currentRowTotal = rowsRef[index]['total'];
             let currentRowPlacement = rowsRef[index]['place'];
             // Coppie e punteggi
             const pair1 = currentRowRef.pair;
             const pair2 = oppositeRow.pair;
-            const currentScore = currentCellValue ? currentCellValue : undefined;
-            const opposisteScore = oppositeCellValue ? oppositeCellValue : undefined;
             const tournamentId = pair1.tId;
             if (rowIndex !== colIndex) {
               try {
@@ -134,13 +103,13 @@ router.post(
                  * Salvo solo una parte della matrice in quanto l'altra posso calcolarla
                  * Quindi dal record sotto posso ricavare il risultato di :
                  *
-                 *    28 vs 17 = 3
-                 *    17 vs 28 = 0
-                 *
                  * |  ID  | tId | p1Id | p2Id | score |
                  * ------------------------------------
                  * |  1   |  1  |  28  |   17 |   3   |
                  *
+                 *
+                 *            28 vs 17 = 3
+                 *            17 vs 28 = 0
                  *
                  */
                 // logger.info('model1 : ', model);
@@ -179,10 +148,7 @@ router.post(
                       currentRowPlacement = 0;
                     }
                   }
-                  //if (stageName === '1') logger.info('Sbam1....', currentCellValue, oppositeCellValue, currentRow);
                 }
-                if (stageName === '1' && ((pair1.id === 10 && pair2.id === 18) || (pair1.id === 28 && pair2.id === 10)))
-                  logger.info('updating : ', model);
               } catch (error) {
                 logger.error('Error on  : ', currentRowRef, currentRowKey, error);
               }
@@ -190,7 +156,6 @@ router.post(
           }
         }
       });
-      //if (stageName === '1') logger.info('Sbam2....', rows);
       t.commit();
       return res.status(200).json(rows);
     } catch (error) {
