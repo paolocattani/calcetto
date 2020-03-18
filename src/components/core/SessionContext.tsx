@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import React from 'react';
 
 export interface Session {
@@ -20,7 +20,14 @@ export const useSessionContext = () => useContext(SessionContext);
 export const SessionContextProvider: React.FC = ({ children }) => {
   const [sessionState, setSessionState] = useState(initialSession);
   const defaultSessionContext: [Session, typeof setSessionState] = [sessionState, setSessionState];
-  console.log('SessionContext : ', sessionState);
+
+  useEffect(() => {
+    (async () => {
+      const response = await fetch('/api/v1/auth/');
+      const user = await response.json();
+      if (user) setSessionState({ isAuthenticated: true, ...user });
+    })();
+  }, []);
 
   return <SessionContext.Provider value={defaultSessionContext}>{children}</SessionContext.Provider>;
 };

@@ -17,7 +17,8 @@ router.get(
   '/list/',
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const tId = req.query.tId ?? 1;
+      const { tId } = req.query;
+      if (!tId) return res.status(500).json({ message: 'Missing tournament' });
       logger.info(`Looking for pairs in tournament ${chalk.greenBright(tId)}`);
       const pairsList = await Pair.findAll({
         where: { tournamentId: tId, '$tournament.public$': true },

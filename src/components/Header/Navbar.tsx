@@ -4,19 +4,16 @@ import './Navbar.css';
 import React, { CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
 import { Navbar, Button, Image, Dropdown } from 'react-bootstrap';
-// import { useSessionContext } from '../core/SessionContext';
 import routes from '../core/Routes';
-import { useAuth0 } from '../core/Auth0';
-// import { useSessionContext } from '../core/SessionContext';
+import { useSessionContext, initialSession } from '../core/SessionContext';
 
 const imageStyle: CSSProperties = {
   width: '3vmax',
   height: 'auto'
 };
 export const FNavbar: React.FC = _ => {
-  // const [sessionContext, updateSessionContext] = useSessionContext();
-  const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
-
+  const [sessionContext, updateSessionContext] = useSessionContext();
+  const { isAuthenticated, name } = sessionContext;
   return (
     <Navbar bg="ligth" variant="light" className="navbar-container">
       <ul className="navbar-list">
@@ -32,16 +29,17 @@ export const FNavbar: React.FC = _ => {
           ) : null
         )}
         <li className="navbar-list-item">
-          {!isAuthenticated && <Button onClick={() => loginWithRedirect({})}>Log in</Button>}
+          {!isAuthenticated && <Button onClick={() => updateSessionContext(initialSession)}>Log in</Button>}
         </li>
-        {isAuthenticated && user && user.picture ? (
+        {isAuthenticated && name ? (
           <Dropdown>
             <Dropdown.Toggle id="dropdown-basic">
-              <Image style={imageStyle} src={user.picture} />
+              <strong>{name.substring(1, 1).toUpperCase()}</strong>
+              {/*<Image style={imageStyle} src={user.picture} />*/}
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Button onClick={() => logout()}>Log out</Button>
+              <Button onClick={() => updateSessionContext(initialSession)}>Log out</Button>
               <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
               <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
               <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>

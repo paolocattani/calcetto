@@ -13,7 +13,23 @@ router.use('/', (req, res, next) => {
   if (isDevMode()) logger.info(`Auth Manager : ${req.method} ${req.originalUrl.replace('/api/v1/auth', '')} `);
   next();
 });
-// FTODO: add asyncMiddleware
+
+// FIXME: fix request type
+router.get(
+  '/',
+  withAuth,
+  asyncMiddleware(async (req: any, res: Response, next: NextFunction) => {
+    if (!req.email) {
+      next();
+      return;
+    }
+
+    const user = await User.findOne({ where: { email: req.email } });
+    if (user) return res.status(200).json(user);
+    else return res.status(401).json({ message: 'Utente non trovato' });
+  })
+);
+
 router.post(
   '/register',
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {

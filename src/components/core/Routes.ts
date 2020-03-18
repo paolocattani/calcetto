@@ -10,7 +10,7 @@ export type routeType = {
   path: string;
   label: string;
   exact: boolean;
-  component: any;
+  component: React.ReactNode;
   visible: boolean;
   index: number;
   private: boolean;

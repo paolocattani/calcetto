@@ -7,7 +7,7 @@ import { getSecret } from './utils';
 
 // dev logger
 export const routeLogger = (req: Request, res: Response, next: NextFunction) => {
-  if (isDevMode()) logger.info(`Serving route : ${req.originalUrl}`);
+  if (isDevMode()) logger.info(`Serving route : ${chalk.greenBright.bold(req.originalUrl)}`);
   next();
 };
 
@@ -22,6 +22,7 @@ export const asyncMiddleware = (fn: any) => (req: Request, res: Response, next: 
   Promise.resolve(fn(req, res, next)).catch(next);
 };
 
+// FIXME: fix request type
 export const withAuth = (req: any, res: Response, next: NextFunction) => {
   const token = req.cookies.token;
   try {

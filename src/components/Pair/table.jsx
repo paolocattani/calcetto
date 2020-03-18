@@ -10,9 +10,11 @@ import { LoadingModal, SuccessToast, WarningToast, ErrorToast } from '../core/Co
 import './style.css';
 import { TournamentProgress } from '../Tournament/type';
 
-const PairsTable = _ => {
+const PairsTable = () => {
   // Navigation
   const { tId } = useParams();
+  console.log('render pairs table : ', tId);
+
   let currentHistory = useHistory();
 
   // States
