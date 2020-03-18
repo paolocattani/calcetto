@@ -9,7 +9,6 @@ import { isDevMode } from '../core/debug';
 import { asyncMiddleware, withAuth } from '../core/middleware';
 import { dbConnection } from '../model/server/AppServer';
 import { isAdmin } from './auth.manager';
-import Pair from 'model/sequelize/pair.model';
 
 const router = Router();
 router.use('/', (req, res, next) => {
@@ -29,8 +28,6 @@ router.delete(
     return res.status(200).json({ saved: true });
   })
 );
-
-// TODO: aggiungere definizione dati passati su body
 
 /**
  * Aggiornamento record specifico
@@ -119,24 +116,29 @@ router.post(
                 const model = { name: stageName, tournamentId, pair1Id: pair1.id, pair2Id: pair2.id };
                 // Salvo solo uno scontro e l'altro lo calcolo.
                 const isEditable = isAdmin(req.cookies.token);
+                const whereCondition = {
+                  // where ( p1Id = .. and p2Id = .. ) or ( p2Id = .. and p1Id = .. )
+                  [Op.or]: [
+                    { [Op.and]: { pair1Id: pair1.id, pair2Id: pair2.id } },
+                    { [Op.and]: { pair1Id: pair2.id, pair2Id: pair1.id } }
+                  ],
+                  name: stageName,
+                  tournamentId
+                };
+                let record = null;
+                let created = false;
+                isEditable
+                  ? ([record, created] = await Stage1Model.findOrCreate({
+                      where: whereCondition,
+                      defaults: model,
+                      transaction: t
+                    }))
+                  : (record = await Stage1Model.findOne({ where: whereCondition, transaction: t }));
 
-                const [record, created] = await Stage1Model.findOrCreate({
-                  where: {
-                    // where ( p1Id = .. and p2Id = .. ) or ( p2Id = .. and p1Id = .. )
-                    [Op.or]: [
-                      { [Op.and]: { pair1Id: pair1.id, pair2Id: pair2.id } },
-                      { [Op.and]: { pair1Id: pair2.id, pair2Id: pair1.id } }
-                    ],
-                    name: stageName,
-                    tournamentId
-                  },
-                  defaults: model,
-                  transaction: t
-                });
                 // if (stageName === '1') logger.info('model : ', created, record);
 
                 // Se non sono in inserimento aggiorno il modello per FE con i dati del Db
-                if (!created) {
+                if (!created && record) {
                   if (record.pair1Id === (pair1.id as number)) {
                     currentRowRef[currentRowKey] = record.score;
                     oppositeRow[`col${rowIndex}`] = getOpposite(record.score);

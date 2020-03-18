@@ -25,7 +25,10 @@ const FTournament = () => {
   const handleChange = selectedOption => setSelectedOption(selectedOption);
   const handleCreate = selectedOption => {
     if (!editable) {
-      setMessage({ message: 'Non sei abilitato a creare nuovi tornei. ', type: 'danger' });
+      setMessage({
+        message: 'Non sei abilitato a creare nuovi tornei. Rivolgiti al tuo fornitore di Montenegro di fiducia. ',
+        type: 'danger'
+      });
       setTimeout(() => setMessage(messageInitialState), 5000);
       return false;
     }

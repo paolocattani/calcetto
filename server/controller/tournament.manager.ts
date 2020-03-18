@@ -49,6 +49,7 @@ router.post(
   '/',
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     const model = req.body;
+
     try {
       const isEditable = isAdmin(req.cookies.token);
       let t = await Tournament.findOne({ where: { name: model.name } });

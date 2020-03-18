@@ -39,7 +39,7 @@ type toastPropsType = {
 
 export const GenericToast: React.FC<toastPropsType> = ({ message, type }: toastPropsType) =>
   message && message !== '' ? (
-    <Toast className="rounded mr-2" key={`${type}-message`} show={message !== ''}>
+    <Toast className="rounded mr-2 mx-auto" key={`${type}-message`} show={message !== ''}>
       <Toast.Header closeButton={false}>
         <strong>Operazione completata !</strong>
       </Toast.Header>
