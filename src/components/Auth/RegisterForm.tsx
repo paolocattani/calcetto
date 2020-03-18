@@ -43,11 +43,11 @@ const RegisterForm: React.FC = () => (
           <strong>La password deve rispettara i sequenti criteri :</strong>
 
           <ul>
-            <li>Almeno 1 carattere minuscolo</li>
-            <li>Almeno 1 carattere maiuscolo</li>
-            <li>Almeno 1 carattere numerico</li>
-            <li>Almeno 1 carattere speciale</li>
-            <li>Tra 8 e 16 caratteri</li>
+            <li key={'pass-1'}>Almeno 1 carattere minuscolo</li>
+            <li key={'pass-2'}>Almeno 1 carattere maiuscolo</li>
+            <li key={'pass-3'}>Almeno 1 carattere numerico</li>
+            <li key={'pass-4'}>Almeno 1 carattere speciale</li>
+            <li key={'pass-5'}>Tra 8 e 16 caratteri</li>
           </ul>
         </Row>
       </Col>

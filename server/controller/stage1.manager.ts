@@ -1,4 +1,4 @@
-import { Router, Application as ExpressApplication, NextFunction } from 'express';
+import { Router, Application as ExpressApplication, Request, Response, NextFunction } from 'express';
 import { Op } from 'sequelize';
 // Model
 import Stage1Model from '../model/sequelize/s1Matrix.model';
@@ -6,7 +6,7 @@ import Stage1Model from '../model/sequelize/s1Matrix.model';
 import { asyncForEach } from '../core/utils';
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
-import { asyncMiddleware } from '../core/middleware';
+import { asyncMiddleware, withAuth } from '../core/middleware';
 import { dbConnection } from '../model/server/AppServer';
 
 const router = Router();
@@ -20,8 +20,9 @@ router.use('/', (req, res, next) => {
  */
 router.delete(
   '/',
-  asyncMiddleware(async (req: Request, res: any, next: NextFunction) => {
-    const { tId } = req.body as any;
+  withAuth,
+  asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
+    const { tId } = req.body;
     await Stage1Model.destroy({ where: { tournamentId: tId } });
     return res.status(200).json({ saved: true });
   })
@@ -34,8 +35,9 @@ router.delete(
  */
 router.post(
   '/cell',
-  asyncMiddleware(async (req: Request, res: any, next: NextFunction) => {
-    const { tId, tableName, pair1Id, pair2Id, score } = req.body as any;
+  withAuth,
+  asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
+    const { tId, tableName, pair1Id, pair2Id, score } = req.body;
     // logger.info('/cell1', req.body.tableName, req.body.tId, req.body.pair1Id, req.body.pair2Id);
     try {
       const record = await Stage1Model.findOne({
@@ -99,9 +101,9 @@ router.post(
  */
 router.post(
   '/',
-  asyncMiddleware(async (req: Request, res: any, next: NextFunction) => {
+  asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     // FIXME: type def
-    const { rows, stageName } = req.body as any;
+    const { rows, stageName } = req.body;
     const t = await dbConnection.transaction();
     // logger.info('Model : ', rows);
     try {

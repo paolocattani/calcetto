@@ -14,6 +14,8 @@ type authType = {
   onHide: () => void;
 };
 
+// https://medium.com/@faizanv/authentication-for-your-react-and-express-application-w-json-web-tokens-923515826e0#6563
+
 const AuthWrapper = ({ show, onHide }: authType): JSX.Element => {
   // State
   const [register, setRegister] = useState(false); // Mostra form registrazione/login
@@ -52,7 +54,6 @@ const AuthWrapper = ({ show, onHide }: authType): JSX.Element => {
       } else {
         if (response.status === 401) setErrorMessage('Utente o Password errata');
 
-        setErrorMessage('Errore durante il processo di registrazione. Riprovare piu tardi');
         setTimeout(() => setErrorMessage(''), 3000);
       }
     } catch (error) {
