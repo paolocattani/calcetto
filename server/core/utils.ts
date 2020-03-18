@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import User from 'model/sequelize/user.model';
 
 export const getRandomIntInclusive = (min: number, max: number): number =>
   Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1)) + Math.ceil(min);
@@ -26,5 +27,7 @@ export const getSecret = () => (process.env.SERVER_HASH ? process.env.SERVER_HAS
 
 export const generateHashSecret = (email: string, password: string) => email + getSecret() + password;
 
-export const generateToken = (email: string) =>
-  jwt.sign({ email }, getSecret(), { expiresIn: '8h', algorithm: 'HS256' });
+export const generateToken = (value: string | User) =>
+  typeof value === 'string'
+    ? jwt.sign({ email: value }, getSecret(), { expiresIn: '8h', algorithm: 'HS256' })
+    : jwt.sign({ ...value }, getSecret(), { expiresIn: '8h', algorithm: 'HS256' });

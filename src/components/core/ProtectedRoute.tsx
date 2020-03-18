@@ -1,7 +1,7 @@
 // https://github.com/openscript/react-example-authentication-redirection
 
 import * as React from 'react';
-import { Route, RouteProps } from 'react-router';
+import { Route } from 'react-router';
 
 export const ProtectedRoute: React.FC<any> = props => {
   /**

@@ -26,7 +26,7 @@ export const asyncMiddleware = (fn: any) => (req: Request, res: Response, next: 
 export const withAuth = (req: any, res: Response, next: NextFunction) => {
   const token = req.cookies.token;
   try {
-    if (!token) return res.status(401).send('Unauthorized: No token provided');
+    if (!token || typeof token != 'string') return res.status(401).send('Unauthorized: No token provided');
     const decoded: any = jwt.verify(token, getSecret());
     req.email = decoded.email;
     next();

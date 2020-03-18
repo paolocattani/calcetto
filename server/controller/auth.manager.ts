@@ -4,8 +4,9 @@ import { isDevMode } from '../core/debug';
 
 import { Router, Request, Response, NextFunction } from 'express';
 import User from '../model/sequelize/user.model';
-import { generatePassword, comparePasswords, generateToken } from '../core/utils';
+import { generatePassword, comparePasswords, generateToken, getSecret } from '../core/utils';
 import { withAuth, asyncMiddleware } from '../core/middleware';
+import jwt from 'jsonwebtoken';
 
 const router = Router();
 
@@ -23,7 +24,6 @@ router.get(
       next();
       return;
     }
-
     const user = await User.findOne({ where: { email: req.email } });
     if (user) return res.status(200).json(user);
     else return res.status(401).json({ message: 'Utente non trovato' });
@@ -85,7 +85,7 @@ router.post(
       if (!comparePasswords(email, password, user.password))
         return res.status(401).json({ error: 'Incorrect email or password' });
 
-      res.cookie('token', generateToken(email), { httpOnly: true });
+      res.cookie('token', generateToken(user), { httpOnly: true });
       return res.status(200).json(user);
     } catch (error) {
       logger.error('/authenticate error : ', error);
@@ -97,3 +97,12 @@ router.post(
 router.get('/checkToken', withAuth, (req, res) => res.sendStatus(200));
 
 export default router;
+
+export function isAdmin(token: string | object): boolean {
+  let isAdmin: boolean = false;
+  if (token && typeof token === 'string') {
+    const decodedUser = jwt.verify(token, getSecret()) as User;
+    if (decodedUser.role === 'Admin') isAdmin = true;
+  }
+  return isAdmin;
+}

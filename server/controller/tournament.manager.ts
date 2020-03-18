@@ -3,7 +3,11 @@ import { logger } from '../core/logger';
 import Tournament from '../model/sequelize/tournament.model';
 import { isDevMode } from '../core/debug';
 import chalk from 'chalk';
-import { asyncMiddleware, withAuth } from '../core/middleware';
+import { asyncMiddleware } from '../core/middleware';
+import { getSecret } from '../core/utils';
+import jwt from 'jsonwebtoken';
+import User from 'model/sequelize/user.model';
+import { isAdmin } from './auth.manager';
 
 // all API path must be relative to /api/v1/tournament
 const router = Router();
@@ -43,18 +47,23 @@ router.get(
 
 router.post(
   '/',
-  withAuth,
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     const model = req.body;
     try {
+      const isEditable = isAdmin(req.cookies.token);
       let t = await Tournament.findOne({ where: { name: model.name } });
       if (t) {
         logger.info(`tournament ${model.name} already exists, updating....`);
-        await t.update(model);
+        if (isEditable) await t.update(model);
         return res.json(t);
       }
-      t = await Tournament.create(model);
-      logger.info(`tournament controller : created Tournament => ${t}`);
+      if (isEditable) {
+        t = await Tournament.create(model);
+        logger.info(`tournament controller : created Tournament => ${t}`);
+      } else {
+        t = null;
+        logger.info('tournament controller : Torneo non creato in quanto utente non possiede i permessi necessari');
+      }
       return res.json(t);
     } catch (err) {
       return next(err);

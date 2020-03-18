@@ -303,7 +303,7 @@ const PairsTable = () => {
     let newRows = [];
     for (let index in data.rows) {
       let row = data.rows[index];
-      if (current == stage1Number) current = 0;
+      if (current === stage1Number) current = 0;
       row['stage1Name'] = names[current];
       current++;
       try {

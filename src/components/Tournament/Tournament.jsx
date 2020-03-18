@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import CreatableSelect from 'react-select/creatable';
-import { Form, Button, Card } from 'react-bootstrap';
+import { Form, Button, Card, Row, Col } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 import { getTodayDate } from '../core/utils';
-import { fetchTournaments, getEmptyTournament, customFilter } from './helper';
+import { fetchTournaments, getEmptyTournament } from './helper';
 import { TournamentProgress } from './type';
 import { useSessionContext } from '../core/SessionContext';
+import { GenericToast } from '../core/Commons';
 
 const FTournament = () => {
   // State definition
@@ -15,11 +16,19 @@ const FTournament = () => {
   // Context
   const [sessionContext] = useSessionContext();
   const editable = sessionContext.isAuthenticated && sessionContext.role === 'Admin';
+  // User Message
+  const messageInitialState = { message: '', type: 'success' };
+  const [message, setMessage] = useState(messageInitialState);
 
   useEffect(() => fetchTournaments(setTournamentList, setSelectedOption), []);
 
   const handleChange = selectedOption => setSelectedOption(selectedOption);
   const handleCreate = selectedOption => {
+    if (!editable) {
+      setMessage({ message: 'Non sei abilitato a creare nuovi tornei. ', type: 'danger' });
+      setTimeout(() => setMessage(messageInitialState), 5000);
+      return false;
+    }
     let newT = getEmptyTournament(selectedOption);
     setSelectedOption(newT);
     setTournamentList(prevList => [...prevList, newT]);
@@ -37,37 +46,42 @@ const FTournament = () => {
   };
 
   return (
-    <Card style={cardStyle}>
-      <Card.Header as="h2">Torneo</Card.Header>
-      <Card.Body>
-        <Card.Title>Scegli un torneo</Card.Title>
-        <Form onSubmit={handleSubmit}>
-          {
-            <CreatableSelect
-              // TODO:
-              //filterOption={customFilter}
-              // getOptionValue={option => `${option.label}`}
-              //formatCreateLabel={formatNewLabel}
-              //formatOptionLabel={formatOptionLabel}
-              //getOptionLabel={option => `${option.name} @ ${option.progress}`}
-              //
-              components={{ IndicatorSeparator }}
-              value={selectedOption}
-              options={tournamentList}
-              placeholder="Crea/Cerca un torneo"
-              isSearchable={true}
-              isClearable
-              onChange={handleChange}
-              onCreateOption={handleCreate}
-            />
-          }
-          <br></br>
-          <Button type="submit" size="lg" variant="outline-warning" disabled={!selectedOption}>
-            Continua
-          </Button>
-        </Form>
-      </Card.Body>
-    </Card>
+    <Row>
+      <Col>
+        <GenericToast message={message.message} type={message.type} />
+        <Card style={cardStyle}>
+          <Card.Header as="h2">Torneo</Card.Header>
+          <Card.Body>
+            <Card.Title>Scegli un torneo</Card.Title>
+            <Form onSubmit={handleSubmit}>
+              {
+                <CreatableSelect
+                  // TODO:
+                  //filterOption={customFilter}
+                  // getOptionValue={option => `${option.label}`}
+                  //formatCreateLabel={formatNewLabel}
+                  //formatOptionLabel={formatOptionLabel}
+                  //getOptionLabel={option => `${option.name} @ ${option.progress}`}
+                  //
+                  components={{ IndicatorSeparator }}
+                  value={selectedOption}
+                  options={tournamentList}
+                  placeholder="Crea/Cerca un torneo"
+                  isSearchable={true}
+                  isClearable
+                  onChange={handleChange}
+                  onCreateOption={handleCreate}
+                />
+              }
+              <br></br>
+              <Button type="submit" size="lg" variant="outline-warning" disabled={!selectedOption}>
+                Continua
+              </Button>
+            </Form>
+          </Card.Body>
+        </Card>
+      </Col>
+    </Row>
   );
 };
 

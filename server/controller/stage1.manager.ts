@@ -8,6 +8,8 @@ import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 import { asyncMiddleware, withAuth } from '../core/middleware';
 import { dbConnection } from '../model/server/AppServer';
+import { isAdmin } from './auth.manager';
+import Pair from 'model/sequelize/pair.model';
 
 const router = Router();
 router.use('/', (req, res, next) => {
@@ -91,12 +93,12 @@ router.post(
             // Valore attuale della cella e della sua opposta
             let oppositeRow = rowsRef[colIndex - 1];
             // totale / posizionamento
-            let currentRowTotal = rowsRef[index]['total'];
-            let currentRowPlacement = rowsRef[index]['place'];
+            let currentRowTotal: number = rowsRef[index]['total'];
+            let currentRowPlacement: number = rowsRef[index]['place'];
             // Coppie e punteggi
             const pair1 = currentRowRef.pair;
             const pair2 = oppositeRow.pair;
-            const tournamentId = pair1.tId;
+            const { tId: tournamentId } = pair1;
             if (rowIndex !== colIndex) {
               try {
                 /**
@@ -116,6 +118,8 @@ router.post(
                 // console.log(`     ( p1,p2,score ) = ( ${p1},${p2}, ${score} )`);
                 const model = { name: stageName, tournamentId, pair1Id: pair1.id, pair2Id: pair2.id };
                 // Salvo solo uno scontro e l'altro lo calcolo.
+                const isEditable = isAdmin(req.cookies.token);
+
                 const [record, created] = await Stage1Model.findOrCreate({
                   where: {
                     // where ( p1Id = .. and p2Id = .. ) or ( p2Id = .. and p1Id = .. )
@@ -136,14 +140,14 @@ router.post(
                   if (record.pair1Id === (pair1.id as number)) {
                     currentRowRef[currentRowKey] = record.score;
                     oppositeRow[`col${rowIndex}`] = getOpposite(record.score);
-                    currentRowRef['total'] = currentRowTotal ? parseInt(currentRowTotal) + record.score : record.score;
+                    currentRowRef['total'] = currentRowTotal ? currentRowTotal + record.score : record.score;
                     currentRowPlacement = 0;
                   } else {
                     currentRowRef[currentRowKey] = getOpposite(record.score);
                     oppositeRow[`col${rowIndex}`] = record.score;
                     if (record.score !== undefined) {
                       currentRowRef['total'] = currentRowTotal
-                        ? parseInt(currentRowTotal) + getOpposite(record.score)!
+                        ? currentRowTotal + getOpposite(record.score)!
                         : getOpposite(record.score);
                       currentRowPlacement = 0;
                     }

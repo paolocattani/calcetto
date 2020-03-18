@@ -4,7 +4,7 @@ import Pairs from '../Pair/table';
 import Stage1Wrapper from '../Stage1/wrapper';
 import Stage2 from '../Stage2/model';
 import { RedirectionControl } from './RedirectionControls';
-import { OrganizationChartDemo } from '../Stage2/table';
+// import { OrganizationChartDemo } from '../Stage2/table';
 
 export type routeType = {
   path: string;
