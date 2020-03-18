@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { Form, Field, ErrorMessage } from 'formik';
 import { Row, Col, FormControl, Button } from 'react-bootstrap';
-import PlayerSelect from '../Player/select';
 
-const RegisterForm: React.FC<any> = (playerList: any) => (
+const RegisterForm: React.FC = _ => (
   <Form>
     <Row>
       <Col>
@@ -66,15 +65,10 @@ const RegisterForm: React.FC<any> = (playerList: any) => (
       </Col>
     </Row>
     <Row>
-      <Col md={6}>
+      <Col md={12}>
         <label htmlFor="phone">Telefono</label>
         <Field as={FormControl} id="phone" name="phone" placeholder="Telefono" type="text" />
         <ErrorMessage name="phone" />
-      </Col>
-      <Col md={6}>
-        <label htmlFor="player">Giocatore</label>
-        <Field as={PlayerSelect} id="player" name="player" placeholder="Seleziona Giocatore" type="text" />
-        <ErrorMessage name="player" />
       </Col>
     </Row>
     {/*

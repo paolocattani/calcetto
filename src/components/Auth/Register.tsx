@@ -26,16 +26,10 @@ const validationSchema = yup.object().shape({
   birthday: yup.date()
 });
 
-const Register: React.FC<IRegisterForm> = ({ onSubmit }: IRegisterForm) => {
-  const [playerList, setPlayerList] = useState([]);
-  useEffect(() => {
-    (async () => fetchPlayers(setPlayerList, null))();
-  });
-  return (
-    <Formik validationSchema={validationSchema} initialValues={initialValues} onSubmit={onSubmit}>
-      <RegisterForm playerList={playerList} />
-    </Formik>
-  );
-};
+const Register: React.FC<IRegisterForm> = ({ onSubmit }: IRegisterForm) => (
+  <Formik validationSchema={validationSchema} initialValues={initialValues} onSubmit={onSubmit}>
+    <RegisterForm />
+  </Formik>
+);
 
 export default Register;
