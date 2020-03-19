@@ -97,22 +97,23 @@ export default class Player extends React.Component {
     );
   }
 
-  cellEditProps = cellEditFactory({
-    mode: this.props.isAuthenticated && this.props.role === 'Admin' ? 'click' : 'none',
-    blurToSave: true,
-    autoSelectText: true,
-    afterSaveCell: (oldValue, newValue, row, column) => {
-      (async () => {
-        // TODO: gestire try-catch
-        const response = await fetch('/api/v1/player', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(row)
-        });
-        await response.json();
-      })();
-    }
-  });
+  cellEditProps = editabile =>
+    cellEditFactory({
+      mode: editabile ? 'click' : 'none',
+      blurToSave: true,
+      autoSelectText: true,
+      afterSaveCell: (oldValue, newValue, row, column) => {
+        (async () => {
+          // TODO: gestire try-catch
+          const response = await fetch('/api/v1/player', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(row)
+          });
+          await response.json();
+        })();
+      }
+    });
 
   render() {
     const { state, deleteRow, addRow } = this;
@@ -153,7 +154,7 @@ export default class Player extends React.Component {
                     keyField="id"
                     data={rows}
                     columns={columns}
-                    cellEdit={this.cellEditProps}
+                    cellEdit={this.cellEditProps(isEditable(sessionContext[0]))}
                     selectRow={selectRow}
                     caption={<TableHeader />}
                     filter={filterFactory()}

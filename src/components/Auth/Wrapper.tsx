@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, CSSProperties } from 'react';
 import { useSessionContext } from 'components/core/SessionContext';
 import { useHistory } from 'react-router-dom';
 import { IRegisterFormValue, ILoginFormValue } from './types';
@@ -42,7 +42,6 @@ const AuthWrapper = ({ show, onHide }: authType): JSX.Element => {
         headers: { 'Content-Type': 'application/json' }
       });
       const result = await response.json();
-      console.log('onSubmitLogin : ', response, result);
       if (response.ok && result) {
         updateSessionContext({
           ...sessionContext,
@@ -189,10 +188,10 @@ const AuthWrapper = ({ show, onHide }: authType): JSX.Element => {
   const Icon = <FontAwesomeIcon icon={RigthArrowDefinition} />;
   return (
     <Modal show={show} onHide={onHide} size={'lg'} centered>
-      <Modal.Header closeButton>
+      <Modal.Header style={modalStyle} closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body style={modalStyle}>
         <Container fluid>
           {errorMessage ? (
             <Alert key={'auth-alert'} variant={'danger'}>
@@ -202,8 +201,8 @@ const AuthWrapper = ({ show, onHide }: authType): JSX.Element => {
           {body}
         </Container>
       </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={() => setRegister(!register)}>
+      <Modal.Footer style={modalStyle}>
+        <Button variant="outline-warning" onClick={() => setRegister(!register)}>
           <div>
             {Icon} <strong>{buttonString}</strong>
           </div>
@@ -214,3 +213,8 @@ const AuthWrapper = ({ show, onHide }: authType): JSX.Element => {
 };
 
 export default AuthWrapper;
+
+const modalStyle: CSSProperties = {
+  backgroundColor: '#212529',
+  color: 'white'
+};

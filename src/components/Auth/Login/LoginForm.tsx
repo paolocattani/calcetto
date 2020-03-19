@@ -24,7 +24,9 @@ const LoginForm: React.FC<ILoginForm> = ({ responseFacebook, responseGoogle }) =
     </Row>
     <Row>
       <Col>
-        <Button type="submit">Login</Button>
+        <Button variant={'warning'} type="submit">
+          Login
+        </Button>
       </Col>
       {/*
       https://developers.facebook.com/docs/graph-api/reference/user/

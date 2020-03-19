@@ -46,7 +46,6 @@ const RegisterForm: React.FC = _ => (
             <li key={'pass-1'}>Almeno 1 carattere minuscolo</li>
             <li key={'pass-2'}>Almeno 1 carattere maiuscolo</li>
             <li key={'pass-3'}>Almeno 1 carattere numerico</li>
-            <li key={'pass-4'}>Almeno 1 carattere speciale</li>
             <li key={'pass-5'}>Tra 8 e 16 caratteri</li>
           </ul>
         </Row>
@@ -78,7 +77,9 @@ const RegisterForm: React.FC = _ => (
             */}
     <Row>
       <Col>
-        <Button type="submit">Conferma</Button>
+        <Button variant={'warning'} type="submit">
+          Conferma
+        </Button>
       </Col>
     </Row>
   </Form>
