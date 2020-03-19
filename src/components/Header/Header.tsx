@@ -1,6 +1,6 @@
 import React, { CSSProperties, useState } from 'react';
 import backgroundImage from '../assets/header.jpg';
-import { Jumbotron, Navbar, Nav, Button, NavDropdown } from 'react-bootstrap';
+import { Jumbotron, Navbar, Nav, Button } from 'react-bootstrap';
 import routes from '../core/Routes';
 import AuthWrapper from '../Auth/Wrapper';
 import DeleteModal from '../Auth/Delete/modal';
@@ -64,10 +64,11 @@ export const Header: React.FC = _ => {
                   <Button variant="outline-warning" onClick={logout}>
                     Log out
                   </Button>
-
+                  {/* FIXME:
                   <Button variant="outline-danger" onClick={() => setShowModalDelete(true)}>
                     Elimina Utente
                   </Button>
+                  */}
                 </>
               </>
             ) : (

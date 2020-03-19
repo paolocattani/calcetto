@@ -22,7 +22,7 @@ const Wrapper: React.FC = (): JSX.Element => {
   pairsList.sort((obj1, obj2) => obj1.stage1Name.localeCompare(obj2.stage1Name));
   return (
     <>
-      <ListGroup.Item key={'stage-button'}>
+      <ListGroup.Item className={'inherit-background'} key={'stage-button'}>
         <Button variant="secondary" onClick={goBack}>
           Gestione Coppie
         </Button>
@@ -44,7 +44,7 @@ function renderTables(pairsList: Pair[], tId: string | undefined): JSX.Element {
     if (stageName === '') stageName = element.stage1Name;
     if (stageName !== element.stage1Name) {
       stageList.push(
-        <ListGroup.Item key={`stage-${stageName}`}>
+        <ListGroup.Item className={'inherit-background'} key={`stage-${stageName}`}>
           <Stage1Handler pairsList={stage} />
         </ListGroup.Item>
       );
@@ -56,7 +56,7 @@ function renderTables(pairsList: Pair[], tId: string | undefined): JSX.Element {
   });
   if (stage.length > 0) {
     stageList.push(
-      <ListGroup.Item key={`stage-${stageName}`}>
+      <ListGroup.Item className={'inherit-background'} key={`stage-${stageName}`}>
         <Stage1Handler pairsList={stage} />
       </ListGroup.Item>
     );

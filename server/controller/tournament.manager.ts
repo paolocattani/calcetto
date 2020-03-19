@@ -66,9 +66,11 @@ router.post(
       if (isEditable) {
         t = await Tournament.create(model);
         logger.info(`tournament controller : created Tournament => ${t}`);
+        res.status(200);
       } else {
         t = null;
         logger.info('tournament controller : Torneo non creato in quanto utente non possiede i permessi necessari');
+        res.status(401);
       }
       return res.json(t);
     } catch (err) {

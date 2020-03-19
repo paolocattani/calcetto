@@ -8,6 +8,7 @@ import { useHistory } from 'react-router';
 // Core
 import { getTodayDate } from '../core/utils';
 import { SessionContext, isEditable } from '../core/SessionContext';
+import { GenericToast } from '../core/Commons';
 // Helper
 import { fetchTournaments, getEmptyTournament } from './helper';
 // Types
@@ -17,6 +18,8 @@ const FTournament = () => {
   // State definition
   const [selectedOption, setSelectedOption] = useState(getTodayDate());
   const [tournamentList, setTournamentList] = useState([]);
+  const messageInitialState = { message: '', type: 'success' };
+  const [message, setMessage] = useState(messageInitialState);
   let currentHistory = useHistory();
 
   useEffect(() => fetchTournaments(setTournamentList, setSelectedOption), []);
@@ -35,13 +38,22 @@ const FTournament = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(getEmptyTournament(selectedOption.name, TournamentProgress.PairsSelection))
     });
-    const res = await response.json();
-    currentHistory.push(`/tournament/${res.id}`);
+    const result = await response.json();
+    if (response.ok) currentHistory.push(`/tournament/${result.id}`);
+    else {
+      if (response.status === 401) setMessage({ message: 'Non sei autorizzato', type: 'danger' });
+      else if (result.message) setMessage({ message: result.message, type: 'danger' });
+      else setMessage({ message: 'Errore interno. Riprovare piu tardi...', type: 'danger' });
+
+      setTimeout(() => setMessage(messageInitialState), 5000);
+    }
   };
 
   return (
     <Row>
       <Col>
+        <GenericToast message={message.message} type={message.type} />
+
         <Card style={cardStyle}>
           <Card.Header as="h2">Torneo</Card.Header>
           <Card.Body>

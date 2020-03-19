@@ -11,7 +11,7 @@ tbody {
   background-color: whitesmoke
 }
 
-.list-group-item {
+.inherit-background.list-group-item {
   background-color: inherit
 }
 

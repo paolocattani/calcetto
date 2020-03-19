@@ -12,9 +12,9 @@ const initialValues: ILoginFormValue = {
 
 const validationSchema = yup.object().shape({ password: yup.string(), email: yup.string() });
 
-const Login: React.FC<ILoginForm> = ({ onSubmit }: ILoginForm) => (
+const Login: React.FC<ILoginForm> = ({ onSubmit, responseFacebook, responseGoogle }) => (
   <Formik validationSchema={validationSchema} initialValues={initialValues} onSubmit={onSubmit}>
-    <LoginForm />
+    <LoginForm responseFacebook={responseFacebook} responseGoogle={responseGoogle} onSubmit={onSubmit} />
   </Formik>
 );
 

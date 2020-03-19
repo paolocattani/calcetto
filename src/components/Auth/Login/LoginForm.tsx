@@ -1,8 +1,11 @@
 import * as React from 'react';
 import { Form, Field, ErrorMessage } from 'formik';
 import { Row, Col, FormControl, Button } from 'react-bootstrap';
+import FacebookLogin from 'react-facebook-login';
+import GoogleLogin, { GoogleLoginResponse } from 'react-google-login';
+import { ILoginForm } from '../types';
 
-const LoginForm: React.FC = () => (
+const LoginForm: React.FC<ILoginForm> = ({ responseFacebook, responseGoogle }) => (
   <Form>
     <Row>
       <Col>
@@ -23,6 +26,27 @@ const LoginForm: React.FC = () => (
       <Col>
         <Button type="submit">Login</Button>
       </Col>
+      {/*
+      https://developers.facebook.com/docs/graph-api/reference/user/
+      https://medium.com/recraftrelic/login-with-facebook-and-google-in-reactjs-990d818d5dab
+
+      <Col>
+
+        <FacebookLogin
+          appId="231770158218948"
+          fields="name, email,picture,birthday,first_name,last_name,middle_name,gender,hometown"
+          callback={responseFacebook}
+        />
+      </Col>
+      <Col>
+        <GoogleLogin
+          clientId="" //CLIENTID NOT CREATED YET
+          buttonText="LOGIN WITH GOOGLE"
+          onSuccess={responseGoogle}
+          onFailure={responseGoogle}
+        />
+      </Col>
+      */}
     </Row>
   </Form>
 );

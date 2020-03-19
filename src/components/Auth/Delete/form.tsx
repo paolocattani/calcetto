@@ -18,7 +18,7 @@ const Delete: React.FC<IDeleteForm> = ({ onSubmit, email }: IDeleteForm) => (
       <Row>
         <Col>
           <label htmlFor="email">Conferma Email</label>
-          <Field as={FormControl} id="email" name="email" placeholder="Email" type="email" disabled value={email} />
+          <Field as={FormControl} id="email" name="email" placeholder="Email" type="email" disabled va value={email} />
         </Col>
       </Row>
 

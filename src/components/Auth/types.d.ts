@@ -1,3 +1,4 @@
+// Register
 export interface IRegisterFormValue {
   name: string;
   surname: string;
@@ -12,6 +13,7 @@ export interface IRegisterForm {
   onSubmit: (values: IRegisterFormValue, { setSubmitting }: FormikHelpers<IRegisterFormValue>) => Promise<void>;
 }
 
+// Login
 export interface ILoginFormValue {
   password: string;
   email: string;
@@ -19,8 +21,11 @@ export interface ILoginFormValue {
 
 export interface ILoginForm {
   onSubmit: (values: ILoginFormValue, { setSubmitting }: FormikHelpers<ILoginFormValue>) => Promise<void>;
+  responseFacebook: (response: ReactFacebookLoginInfo) => void;
+  responseGoogle: (response: GoogleLoginResponse) => void;
 }
 
+// Delete
 export interface IDeleteFormValue {
   password: string;
   email: string;
@@ -31,6 +36,7 @@ export interface IDeleteForm {
   email: readonly string;
 }
 
+// user
 export interface IUser {
   name: string;
   surname: string;

@@ -9,6 +9,8 @@ import Login from './Login/Login';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition, findIconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { emailRegExp, passwordRegExp, phoneRegExp } from '../core/utils';
+import { ReactFacebookLoginInfo } from 'react-facebook-login';
+import { GoogleLoginResponse } from 'react-google-login';
 
 type authType = {
   show: boolean;
@@ -133,6 +135,7 @@ const AuthWrapper = ({ show, onHide }: authType): JSX.Element => {
     }
 
     // Telefono
+
     if (!(formValues.phone && !phoneRegExp.test(formValues.phone))) {
       setErrorMessage('Il numero di telefono inserito non è valido');
       setTimeout(() => setErrorMessage(''), 3000);
@@ -153,18 +156,12 @@ const AuthWrapper = ({ show, onHide }: authType): JSX.Element => {
       });
       const result = await response.json();
       if (response.ok && result) {
-        updateSessionContext({
-          ...sessionContext,
-          name: result.name,
-          surname: result.surname,
-          email: result.email,
-          role: result.role,
-          isAuthenticated: true
-        });
+        updateSessionContext({ ...result, isAuthenticated: true });
         onHide();
         currentHistory.push('/');
       } else {
-        setErrorMessage('Errore durante il processo di registrazione. Riprovare piu tardi');
+        if (result.message) setErrorMessage(result.message);
+        else setErrorMessage('Errore durante il processo di registrazione. Riprovare piu tardi');
         setTimeout(() => setErrorMessage(''), 3000);
       }
     } catch (error) {
@@ -174,8 +171,20 @@ const AuthWrapper = ({ show, onHide }: authType): JSX.Element => {
     setSubmitting(false);
   };
 
+  const responseFacebook = (response: ReactFacebookLoginInfo) => {
+    console.log(response);
+  };
+
+  const responseGoogle = (response: GoogleLoginResponse) => {
+    console.log(response);
+  };
+
   const title = register ? 'Registrati' : 'Login';
-  const body = register ? <Register onSubmit={onSubmitRegister} /> : <Login onSubmit={onSubmitLogin} />;
+  const body = register ? (
+    <Register onSubmit={onSubmitRegister} />
+  ) : (
+    <Login onSubmit={onSubmitLogin} responseFacebook={responseFacebook} responseGoogle={responseGoogle} />
+  );
   const buttonString = register ? 'Login' : 'Registrati';
   const Icon = <FontAwesomeIcon icon={RigthArrowDefinition} />;
   return (

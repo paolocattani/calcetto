@@ -59,8 +59,10 @@ router.post(
   '/register',
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     let model: User = req.body;
-    model.password = await generatePassword(model.email, model.password);
+    const user = await findUserByEmail(model.email);
+    if (user) return res.status(500).json({ message: 'Email gia registrata. ' });
 
+    model.password = await generatePassword(model.email, model.password);
     if (model.name.startsWith('[A]')) {
       model.name = model.name.substring(3);
       model.role = 'Admin';
@@ -77,11 +79,9 @@ router.post(
         },
         defaults: model
       });
-      logger.info('record :', record);
       return res.status(200).json(convertToDTO(record));
     } catch (error) {
-      logger.error('/register error : ', error);
-      return res.status(500).json({ error: 'Internal error please try again' });
+      return res.status(500).json({ message: 'Internal error please try again' });
     }
   })
 );
