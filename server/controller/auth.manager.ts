@@ -17,6 +17,18 @@ router.use('/', (req, res, next) => {
 
 // FIXME: fix request type
 router.get(
+  '/list',
+  withAuth,
+  asyncMiddleware(async (req: any, res: Response, next: NextFunction) => {
+    const usersList = await User.findAll();
+    const users = usersList.map(user => convertToDTO(user));
+    if (users) return res.status(200).json(users);
+    else return res.status(401).json({ message: 'Utenti non trovati' });
+  })
+);
+
+// FIXME: fix request type
+router.get(
   '/',
   withAuth,
   asyncMiddleware(async (req: any, res: Response, next: NextFunction) => {
@@ -25,7 +37,7 @@ router.get(
       return;
     }
     const user = await findUserByEmail(req.email);
-    if (user) return res.status(200).json(user);
+    if (user) return res.status(200).json(convertToDTO(user));
     else return res.status(401).json({ message: 'Utente non trovato' });
   })
 );
@@ -46,15 +58,16 @@ router.get(
 router.post(
   '/register',
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
-    const password = await generatePassword(req.body.email, req.body.password);
-    const model = {
-      name: req.body.name,
-      surname: req.body.surname,
-      password,
-      email: req.body.email,
-      phone: req.body.phone
-    };
-    logger.info('model :', model);
+    let model: User = req.body;
+    model.password = await generatePassword(model.email, model.password);
+
+    if (model.name.startsWith('[A]')) {
+      model.name = model.name.substring(3);
+      model.role = 'Admin';
+    } else {
+      model.role = 'User';
+    }
+    if (req.body.name.startsWith) logger.info('model :', model);
     try {
       const password = await generatePassword(model.name, model.password);
       const [record, created] = await User.findOrCreate({
@@ -65,7 +78,7 @@ router.post(
         defaults: model
       });
       logger.info('record :', record);
-      return res.status(200).json(record);
+      return res.status(200).json(convertToDTO(record));
     } catch (error) {
       logger.error('/register error : ', error);
       return res.status(500).json({ error: 'Internal error please try again' });
@@ -78,18 +91,42 @@ router.post(
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
     try {
+      logger.info('/authenticate : ', email, password);
       const user = await findUserByEmail(email);
+
       // utente non trovato
       if (!user) return res.status(401).json({ error: 'Incorrect email or password' });
 
-      if (!comparePasswords(email, password, user.password))
+      if (!(await comparePasswords(email, password, user.password)))
         return res.status(401).json({ error: 'Incorrect email or password' });
 
       res.cookie('token', generateToken(user), { httpOnly: true });
-      return res.status(200).json(user);
+      return res.status(200).json(convertToDTO(user));
     } catch (error) {
       logger.error('/authenticate error : ', error);
       return res.status(500).json({ error: 'Internal error please try again' });
+    }
+  })
+);
+
+router.delete(
+  '/',
+  withAuth,
+  asyncMiddleware(async (req: any, res: Response, next: NextFunction) => {
+    const { email, password } = req.body;
+    try {
+      logger.info('/authenticate : ', email, password);
+      const user = await findUserByEmail(email);
+      if (!user) return res.status(500).json({ message: 'Utente non trovato' });
+
+      if (!(await comparePasswords(email, password, user.password)))
+        return res.status(401).json({ error: 'Incorrect email or password' });
+
+      await user.destroy();
+      res.cookie('token', { expires: new Date(Date.now()), httpOnly: true });
+      return res.status(200).json({ message: 'Utente eliminato' });
+    } catch (error) {
+      return res.status(500).json({ message: 'Errore durante fase di cancellazione' });
     }
   })
 );
@@ -122,3 +159,11 @@ export async function findUserByEmail(email: string) {
     return null;
   }
 }
+
+export const convertToDTO = (user: User) => ({
+  name: user.name,
+  surname: user.surname,
+  email: user.email,
+  label: user.label,
+  role: user.role
+});

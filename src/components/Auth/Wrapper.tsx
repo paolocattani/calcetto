@@ -4,10 +4,11 @@ import { useHistory } from 'react-router-dom';
 import { IRegisterFormValue, ILoginFormValue } from './types';
 import { FormikHelpers } from 'formik';
 import { Modal, Button, Container, Alert } from 'react-bootstrap';
-import Register from './Register';
-import Login from './Login';
+import Register from './Register/Register';
+import Login from './Login/Login';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition, findIconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { emailRegExp, passwordRegExp, phoneRegExp } from '../core/utils';
 
 type authType = {
   show: boolean;
@@ -63,13 +64,6 @@ const AuthWrapper = ({ show, onHide }: authType): JSX.Element => {
     }
     setSubmitting(false);
   };
-
-  const passwordRegExp = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})');
-  const phoneRegExp = new RegExp('^d{10}$');
-  const emailRegExp = new RegExp(
-    // eslint-disable-next-line quotes
-    "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
-  );
 
   const isValidLogin = (formValues: ILoginFormValue): boolean => {
     setErrorMessage('');

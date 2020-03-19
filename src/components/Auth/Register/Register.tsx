@@ -3,8 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import RegisterForm from './RegisterForm';
-import { IRegisterForm, IRegisterFormValue } from './types';
-import { fetchPlayers } from '../Player/helper';
+import { IRegisterForm, IRegisterFormValue } from '../types';
 
 const initialValues: IRegisterFormValue = {
   name: '',

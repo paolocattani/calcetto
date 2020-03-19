@@ -29,10 +29,12 @@ export const SessionContextProvider: React.FC = ({ children }) => {
         const response = await fetch('/api/v1/auth/');
         const user = await response.json();
         if (user && response.ok) setSessionState({ isAuthenticated: true, ...user });
+        //console.log('session context : ', { isAuthenticated: true, ...user });
       } catch (error) {
         console.error('SessionContext.error :', error);
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <SessionContext.Provider value={defaultSessionContext}>{children}</SessionContext.Provider>;

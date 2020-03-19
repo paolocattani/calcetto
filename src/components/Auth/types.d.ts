@@ -20,3 +20,21 @@ export interface ILoginFormValue {
 export interface ILoginForm {
   onSubmit: (values: ILoginFormValue, { setSubmitting }: FormikHelpers<ILoginFormValue>) => Promise<void>;
 }
+
+export interface IDeleteFormValue {
+  password: string;
+  email: string;
+}
+
+export interface IDeleteForm {
+  onSubmit: (values: ILoginFormValue, { setSubmitting }: FormikHelpers<ILoginFormValue>) => Promise<void>;
+  email: readonly string;
+}
+
+export interface IUser {
+  name: string;
+  surname: string;
+  email: string;
+  role: string;
+  label: string;
+}

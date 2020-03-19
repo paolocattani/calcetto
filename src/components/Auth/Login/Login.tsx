@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import LoginForm from './LoginForm';
-import { ILoginFormValue, ILoginForm } from './types';
+import { ILoginFormValue, ILoginForm } from '../types';
 
 const initialValues: ILoginFormValue = {
   email: '',

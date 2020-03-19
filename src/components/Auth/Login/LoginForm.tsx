@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Form, Field, ErrorMessage } from 'formik';
 import { Row, Col, FormControl, Button } from 'react-bootstrap';
 
-const RegisterForm: React.FC = () => (
+const LoginForm: React.FC = () => (
   <Form>
     <Row>
       <Col>
@@ -27,4 +27,4 @@ const RegisterForm: React.FC = () => (
   </Form>
 );
 
-export default RegisterForm;
+export default LoginForm;

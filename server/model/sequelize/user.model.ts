@@ -45,6 +45,15 @@ export default class User extends Model<User> {
   @Column(DataType.ENUM('User', 'Admin'))
   public role!: UserRole;
 
+  // Virtuale
+  @Column({
+    type: DataType.VIRTUAL,
+    get(this: User): string {
+      return this.name && this.surname ? `${this.name} ${this.surname}` : this.email;
+    }
+  })
+  public label!: string;
+
   // Associazione giocatore
   @AllowNull
   @Comment('Player')

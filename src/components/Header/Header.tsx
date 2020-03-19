@@ -1,14 +1,16 @@
 import React, { CSSProperties, useState } from 'react';
 import backgroundImage from '../assets/header.jpg';
-import { Jumbotron, Navbar, Nav, Button } from 'react-bootstrap';
+import { Jumbotron, Navbar, Nav, Button, NavDropdown } from 'react-bootstrap';
 import routes from '../core/Routes';
 import AuthWrapper from '../Auth/Wrapper';
+import DeleteModal from '../Auth/Delete/modal';
 import { useSessionContext } from '../core/SessionContext';
 
 const applicationName = 'Calcetto C.S.M';
 export const Header: React.FC = _ => {
   const [sessionContext, updateSessionContext] = useSessionContext();
-  const [showModal, setShowModal] = useState(false);
+  const [showModalAuth, setShowModalAuth] = useState(false);
+  const [showModalDelete, setShowModalDelete] = useState(false);
 
   const logout = async () => {
     const response = await fetch('/api/v1/auth/logout');
@@ -58,17 +60,24 @@ export const Header: React.FC = _ => {
                 <Navbar.Text style={nameStyle}>
                   <strong>{sessionContext.name}</strong>
                 </Navbar.Text>
-                <Button variant="outline-warning" onClick={logout}>
-                  Log out
-                </Button>
+                <>
+                  <Button variant="outline-warning" onClick={logout}>
+                    Log out
+                  </Button>
+
+                  <Button variant="outline-danger" onClick={() => setShowModalDelete(true)}>
+                    Elimina Utente
+                  </Button>
+                </>
               </>
             ) : (
-              <Button variant="outline-warning" onClick={() => setShowModal(true)}>
+              <Button variant="outline-warning" onClick={() => setShowModalAuth(true)}>
                 Log in
               </Button>
             )}
           </Navbar.Collapse>
-          <AuthWrapper show={showModal} onHide={() => setShowModal(false)} />
+          <AuthWrapper show={showModalAuth} onHide={() => setShowModalAuth(false)} />
+          <DeleteModal show={showModalDelete} onHide={() => setShowModalDelete(false)} />
         </Navbar>
       </Jumbotron>
     </header>

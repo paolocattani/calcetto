@@ -5,7 +5,7 @@ import './style/App.css';
 import routes from '../components/core/Routes';
 import { Header } from './Header/Header';
 import { Container } from 'react-bootstrap';
-
+import UserSelect from './Auth/select';
 // FontAwesome 5
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -18,6 +18,7 @@ const App: React.FC = _ => (
     <Header />
 
     <Container fluid>
+      {/*<UserSelect />*/}
       <Switch>
         {/*<Route path="/login" component={FLogin} />*/}
         {routes.map(route => (

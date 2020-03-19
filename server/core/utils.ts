@@ -20,7 +20,7 @@ export const logEntity = (entity: any) => JSON.stringify(entity, null, 2);
 export const generatePassword = async (email: string, password: string) =>
   await bcrypt.hash(generateHashSecret(email, password), 10);
 
-export const comparePasswords = async (email: string, password: string, hash: string) =>
+export const comparePasswords = async (email: string, password: string, hash: string): Promise<boolean> =>
   await bcrypt.compare(generateHashSecret(email, password), hash);
 
 export const getSecret = () => (process.env.SERVER_HASH ? process.env.SERVER_HASH : 'dummy$Hash');
