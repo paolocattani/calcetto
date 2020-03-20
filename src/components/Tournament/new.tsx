@@ -1,22 +1,19 @@
 import React from 'react';
-import { Form, InputGroup, Col, Button, Row } from 'react-bootstrap';
+import { Form, InputGroup, Col, Button, Row, FormControl, FormCheck } from 'react-bootstrap';
 
 const newTournament: React.FC = () => {
   return (
     <Form>
-      <Row>
-        <Col>
-          <Form.Control type="text" placeholder="Nome Torneo" />
-        </Col>
-        <Col>
-          <Form.Check type="switch" label="Publico" />
-        </Col>
-      </Row>
-      <Row>
-        <Button variant="primary" type="submit">
-          Crea
-        </Button>
-      </Row>
+      <Form.Group controlId="formBasicEmail">
+        <Form.Label>Email address</Form.Label>
+        <Form.Control type="email" placeholder="Enter email" />
+        <Form.Text className="text-muted">We'll never share your email with anyone else.</Form.Text>
+      </Form.Group>
+
+      <FormCheck>
+        <FormCheck.Input isInvalid type={'radio'} />
+        <FormCheck.Label>Allow us to contact you?</FormCheck.Label>
+      </FormCheck>
     </Form>
   );
 };

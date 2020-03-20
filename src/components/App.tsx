@@ -21,7 +21,7 @@ const App: React.FC = _ => (
   <div className="App">
     <Header />
     <Container fluid>
-      <RedirectionControl />
+      {/*<RedirectionControl />*/}
       <Switch>
         {routes.map(route => (
           <ProtectedRoute {...route} key={route.index} />

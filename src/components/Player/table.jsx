@@ -138,6 +138,7 @@ export default class Player extends React.Component {
             <Row>
               <Col>
                 <>
+                  <code>{isEditable(session)}</code>
                   <ListGroup horizontal>
                     <Button variant="success" onClick={addRow} disabled={!isEditable(session)}>
                       Aggiungi giocatore

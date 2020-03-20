@@ -59,8 +59,9 @@ const FTournament = () => {
           <Card.Header as="h2">Torneo</Card.Header>
           <Card.Body>
             <Card.Title>Scegli un torneo</Card.Title>
-            <NewTournament />
-            {false ? (
+
+            {/* <NewTournament /> */
+            true ? (
               <Form onSubmit={handleSubmit}>
                 <SessionContext.Consumer>
                   {([session]) =>

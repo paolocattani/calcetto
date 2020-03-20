@@ -23,23 +23,31 @@ export const Header: React.FC = _ => {
   };
 
   const yellow = '##ffc107';
-  const jumnboStyle: CSSProperties = {
+  const jumboStyle: CSSProperties = {
     backgroundImage: `url(${backgroundImage})`,
     backgroundSize: 'cover',
     padding: '60px 0px 10px 0px',
     minHeight: '28vh'
   };
 
-  const nameStyle = { color: yellow, padding: '1vw' };
+  const titleStyle: CSSProperties = {
+    color: 'white'
+  };
+
+  const nameStyle: CSSProperties = {
+    color: yellow,
+    fontSize: '4vh',
+    padding: '0vw 2vw'
+  };
 
   return (
     <header>
-      <Jumbotron style={jumnboStyle}>
-        <h1>
-          <strong style={{ color: 'white' }}>{applicationName}</strong>
+      <Jumbotron style={jumboStyle}>
+        <h1 style={{ margin: '5vh' }}>
+          <strong style={titleStyle}>{applicationName}</strong>
         </h1>
         {sessionContext.isAuthenticated ? (
-          <Navbar sticky="top" collapseOnSelect expand="lg" bg="dark" variant="dark">
+          <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Navbar.Brand as={Link} to="/">
               Home
             </Navbar.Brand>
@@ -59,7 +67,7 @@ export const Header: React.FC = _ => {
               {sessionContext.name ? (
                 <>
                   <Navbar.Text style={nameStyle}>
-                    <strong>{sessionContext.name}</strong>
+                    <strong style={{ color: '#64bd9c' }}>{sessionContext.name}</strong>
                   </Navbar.Text>
                   <>
                     <Button variant="outline-warning" onClick={logout}>
