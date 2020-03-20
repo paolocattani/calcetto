@@ -2,19 +2,18 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import React from 'react';
 
 export interface Session {
-  isAuthenticated?: boolean;
-  name?: string;
-  surname?: string;
-  email?: string;
-  role?: string;
-  redirectPathOnAuthentication?: string;
+  isAuthenticated?: boolean | null;
+  name?: string | null;
+  surname?: string | null;
+  email?: string | null;
+  role?: string | null;
 }
 
 // https://stackoverflow.com/questions/59422159/redirecting-a-user-to-the-page-they-requested-after-successful-authentication-wi
 // https://github.com/openscript/react-example-authentication-redirection
 
 // https://www.freecodecamp.org/news/react-context-in-5-minutes/
-export const initialSession: Session = {};
+export const initialSession: Session = { isAuthenticated: false, name: null, surname: null, email: null, role: null };
 
 export const SessionContext = createContext<[Session, (session: Session) => void]>([initialSession, () => {}]);
 export const useSessionContext = () => useContext(SessionContext);
@@ -27,19 +26,19 @@ export const SessionContextProvider: React.FC = ({ children }) => {
     (async () => {
       try {
         const response = await fetch('/api/v1/auth/');
-        console.log('SessionContext.useEffect : ', sessionState);
-
         const user = await response.json();
         if (user && response.ok) setSessionState({ isAuthenticated: true, ...user });
-        console.log('session context : ', { isAuthenticated: true, ...user });
       } catch (error) {
         console.error('SessionContext.error :', error);
       }
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <SessionContext.Provider value={defaultSessionContext}>{children}</SessionContext.Provider>;
+  console.log('sessionContext.session: ', sessionState);
+
+  return (
+    <SessionContext.Provider value={defaultSessionContext}>{sessionState ? children : null}</SessionContext.Provider>
+  );
 };
 
 export const isEditable = (sessionContext: Session): boolean =>

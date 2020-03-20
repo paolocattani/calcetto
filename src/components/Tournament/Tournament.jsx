@@ -63,8 +63,8 @@ const FTournament = () => {
             {false ? (
               <Form onSubmit={handleSubmit}>
                 <SessionContext.Consumer>
-                  {sessionContext =>
-                    isEditable(sessionContext[0]) ? (
+                  {([session]) =>
+                    isEditable(session) ? (
                       <CreatableSelect
                         // TODO:
                         //filterOption={customFilter}

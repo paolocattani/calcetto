@@ -66,14 +66,14 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
 
   return (
     <SessionContext.Consumer>
-      {sessionContext => (
+      {([session]) => (
         <BootstrapTable
           bootstrap4
           keyField="id"
           data={rows}
           columns={columns}
           selectRow={selectRow}
-          cellEdit={cellEditProps(isEditable(sessionContext[0]))}
+          cellEdit={cellEditProps(isEditable(session))}
           noDataIndication="Nessun dato reperito"
           wrapperClasses="player-table"
           headerClasses="player-table-header"

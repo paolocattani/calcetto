@@ -349,7 +349,7 @@ const PairsTable = () => {
   // console.log('render table : ', data);
   return (
     <SessionContext.Consumer>
-      {sessionContext => (
+      {([session]) => (
         <Row>
           <LoadingModal show={isLoading.state} message={isLoading.message} />
           <Col style={{ margin: '10px' }} md={{ span: 1 }}>
@@ -365,7 +365,7 @@ const PairsTable = () => {
                   action
                   variant="success"
                   onClick={() => addRow()}
-                  disabled={availableRows <= 0 || !isEditable(sessionContext[0])}
+                  disabled={availableRows <= 0 || !isEditable(session)}
                 >
                   Aggiungi Coppia
                 </ListGroup.Item>
@@ -376,26 +376,21 @@ const PairsTable = () => {
                       action
                       variant="danger"
                       style={{ pointerEvents: 'none' }}
-                      disabled={deleteDisabled || !isEditable(sessionContext[0])}
+                      disabled={deleteDisabled || !isEditable(session)}
                     >
                       Elimina Coppia {deleteDisabled}
                     </ListGroup.Item>
                   </span>
                 </OverlayTrigger>
 
-                <ListGroup.Item
-                  action
-                  variant="danger"
-                  onClick={deleteStage1}
-                  disabled={!isEditable(sessionContext[0])}
-                >
+                <ListGroup.Item action variant="danger" onClick={deleteStage1} disabled={!isEditable(session)}>
                   Reset gironi
                 </ListGroup.Item>
               </ListGroup>
             </Row>
           </Col>
           <Col style={{ margin: '10px' }}>
-            <Row style={{ display: isEditable(sessionContext[0]) ? 'flex' : 'none' }}>
+            <Row style={{ display: isEditable(session) ? 'flex' : 'none' }}>
               <InputGroup onChange={e => setStage1Number(e.target.value)}>
                 <InputGroup.Prepend>
                   <InputGroup.Text>Assegna gironi automaticamente</InputGroup.Text>
@@ -457,7 +452,7 @@ const PairsTable = () => {
                 keyField="id"
                 data={data.rows}
                 columns={columns(onSelect, data.players)}
-                cellEdit={cellEditProps(isEditable(sessionContext[0]))}
+                cellEdit={cellEditProps(isEditable(session))}
                 selectRow={selectRow}
                 noDataIndication={<NoData addRow={() => addRow()} optionsLength={data.players.length} />}
                 caption={<TableHeader tournament={data.tournament} />}

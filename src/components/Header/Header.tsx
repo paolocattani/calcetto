@@ -1,8 +1,9 @@
-import React, { CSSProperties, useState } from 'react';
+import React, { CSSProperties } from 'react';
 import backgroundImage from '../assets/header.jpg';
 import { Jumbotron, Navbar, Nav, Button } from 'react-bootstrap';
 import routes from '../core/Routes';
 import { useSessionContext } from '../core/SessionContext';
+import { Link } from 'react-router-dom';
 
 const applicationName = 'Calcetto C.S.M';
 export const Header: React.FC = _ => {
@@ -39,14 +40,16 @@ export const Header: React.FC = _ => {
         </h1>
         {sessionContext.isAuthenticated ? (
           <Navbar sticky="top" collapseOnSelect expand="lg" bg="dark" variant="dark">
-            <Navbar.Brand href="/">Home</Navbar.Brand>
+            <Navbar.Brand as={Link} to="/">
+              Home
+            </Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="mr-auto">
                 {routes.map(route =>
                   route.visible ? (
                     route.private && !sessionContext.isAuthenticated ? null : (
-                      <Nav.Link key={route.index} href={route.path}>
+                      <Nav.Link as={Link} key={route.index} to={route.path}>
                         {route.label}
                       </Nav.Link>
                     )

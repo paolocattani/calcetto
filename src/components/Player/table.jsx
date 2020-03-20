@@ -132,17 +132,17 @@ export default class Player extends React.Component {
 
     return (
       <SessionContext.Consumer>
-        {sessionContext => (
+        {([session]) => (
           <>
             <LoadingModal show={isLoading} message={'Caricamento'} />
             <Row>
               <Col>
                 <>
                   <ListGroup horizontal>
-                    <Button variant="success" onClick={addRow} disabled={!isEditable(sessionContext[0])}>
+                    <Button variant="success" onClick={addRow} disabled={!isEditable(session)}>
                       Aggiungi giocatore
                     </Button>
-                    <Button variant="danger" onClick={deleteRow} disabled={!isEditable(sessionContext[0])}>
+                    <Button variant="danger" onClick={deleteRow} disabled={!isEditable(session)}>
                       Calcella giocatore
                     </Button>
                     <Button variant="dark" onClick={clearAllFilter.bind(this)}>
@@ -154,7 +154,7 @@ export default class Player extends React.Component {
                     keyField="id"
                     data={rows}
                     columns={columns}
-                    cellEdit={this.cellEditProps(isEditable(sessionContext[0]))}
+                    cellEdit={this.cellEditProps(isEditable(session))}
                     selectRow={selectRow}
                     caption={<TableHeader />}
                     filter={filterFactory()}
