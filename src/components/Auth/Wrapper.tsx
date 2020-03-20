@@ -3,7 +3,7 @@ import { useSessionContext } from 'components/core/SessionContext';
 import { useHistory } from 'react-router-dom';
 import { IRegisterFormValue, ILoginFormValue } from './types';
 import { FormikHelpers } from 'formik';
-import { Modal, Button, Container, Alert } from 'react-bootstrap';
+import { Modal, Button, Container, Alert, Card } from 'react-bootstrap';
 import Register from './Register/Register';
 import Login from './Login/Login';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,14 +12,9 @@ import { emailRegExp, passwordRegExp, phoneRegExp } from '../core/utils';
 import { ReactFacebookLoginInfo } from 'react-facebook-login';
 import { GoogleLoginResponse } from 'react-google-login';
 
-type authType = {
-  show: boolean;
-  onHide: () => void;
-};
-
 // https://medium.com/@faizanv/authentication-for-your-react-and-express-application-w-json-web-tokens-923515826e0#6563
 
-const AuthWrapper = ({ show, onHide }: authType): JSX.Element => {
+const AuthWrapper: React.FC = (): JSX.Element => {
   // State
   const [register, setRegister] = useState(false); // Mostra form registrazione/login
   const [errorMessage, setErrorMessage] = useState('');
@@ -51,7 +46,6 @@ const AuthWrapper = ({ show, onHide }: authType): JSX.Element => {
           role: result.role,
           isAuthenticated: true
         });
-        onHide();
         currentHistory.push('/');
       } else {
         if (response.status === 401) setErrorMessage('Utente o Password errata');
@@ -156,7 +150,6 @@ const AuthWrapper = ({ show, onHide }: authType): JSX.Element => {
       const result = await response.json();
       if (response.ok && result) {
         updateSessionContext({ ...result, isAuthenticated: true });
-        onHide();
         currentHistory.push('/');
       } else {
         if (result.message) setErrorMessage(result.message);
@@ -186,35 +179,41 @@ const AuthWrapper = ({ show, onHide }: authType): JSX.Element => {
   );
   const buttonString = register ? 'Login' : 'Registrati';
   const Icon = <FontAwesomeIcon icon={RigthArrowDefinition} />;
+  const modalStyle: CSSProperties = {
+    width: register ? '50vw' : '40vw',
+    height: 'auto',
+    margin: 'auto',
+    backgroundColor: '#343A40',
+    color: 'white'
+  };
+
+  console.log('Rendering LoginWrapper : ');
+
   return (
-    <Modal show={show} onHide={onHide} size={'lg'} centered>
-      <Modal.Header style={modalStyle} closeButton>
-        <Modal.Title>{title}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={modalStyle}>
-        <Container fluid>
-          {errorMessage ? (
-            <Alert key={'auth-alert'} variant={'danger'}>
-              {errorMessage}
-            </Alert>
-          ) : null}
-          {body}
-        </Container>
-      </Modal.Body>
-      <Modal.Footer style={modalStyle}>
-        <Button variant="outline-warning" onClick={() => setRegister(!register)}>
-          <div>
-            {Icon} <strong>{buttonString}</strong>
-          </div>
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    <>
+      <Card style={modalStyle}>
+        <Card.Header as="h2">{title}</Card.Header>
+
+        <Card.Body>
+          <Container>
+            {errorMessage ? (
+              <Alert key={'auth-alert'} variant={'danger'}>
+                {errorMessage}
+              </Alert>
+            ) : null}
+            {body}
+          </Container>
+        </Card.Body>
+        <Card.Footer>
+          <Button variant="outline-warning" onClick={() => setRegister(!register)}>
+            <div>
+              {Icon} <strong>{buttonString}</strong>
+            </div>
+          </Button>
+        </Card.Footer>
+      </Card>
+    </>
   );
 };
 
 export default AuthWrapper;
-
-const modalStyle: CSSProperties = {
-  backgroundColor: '#212529',
-  color: 'white'
-};

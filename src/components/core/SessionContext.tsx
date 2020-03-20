@@ -27,9 +27,11 @@ export const SessionContextProvider: React.FC = ({ children }) => {
     (async () => {
       try {
         const response = await fetch('/api/v1/auth/');
+        console.log('SessionContext.useEffect : ', sessionState);
+
         const user = await response.json();
         if (user && response.ok) setSessionState({ isAuthenticated: true, ...user });
-        //console.log('session context : ', { isAuthenticated: true, ...user });
+        console.log('session context : ', { isAuthenticated: true, ...user });
       } catch (error) {
         console.error('SessionContext.error :', error);
       }

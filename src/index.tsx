@@ -8,11 +8,11 @@ import { BrowserRouter } from 'react-router-dom';
 import { SessionContextProvider } from './components/core/SessionContext';
 
 ReactDOM.render(
-  <SessionContextProvider>
-    <BrowserRouter>
+  <BrowserRouter>
+    <SessionContextProvider>
       <App />
-    </BrowserRouter>
-  </SessionContextProvider>,
+    </SessionContextProvider>
+  </BrowserRouter>,
   document.getElementById('root')
 );
 

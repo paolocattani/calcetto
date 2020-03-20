@@ -1,3 +1,4 @@
+import React from 'react';
 import { getTodayDate } from '../core/utils';
 import { TournamentModel, TournamentProgressType, selectOptions } from './type';
 import { useState } from 'react';
@@ -53,3 +54,40 @@ export function customFilter(option: selectOptions, searchText: string): boolean
   console.log('customFilter : ', option, typeof option.data);
   return option.data.name ? option.data.name.toLowerCase().includes(searchText.toLowerCase()) : false;
 }
+
+// -------------------------------------------------
+// https://react-select.com/components#components
+// Indicator Separator
+
+export const IndicatorSeparator = ({ innerProps }: any) => <span style={indicatorSeparatorStyle} {...innerProps} />;
+export const indicatorSeparatorStyle = {
+  alignSelf: 'stretch',
+  backgroundColor: 'green',
+  marginBottom: 8,
+  marginTop: 8,
+  marginRigth: 10,
+  width: 1
+};
+export const cardStyle = {
+  width: '50%',
+  margin: 'auto',
+  backgroundColor: 'inherit',
+  borderColor: '#ffc107',
+  borderWidth: '3px'
+};
+/*
+const formatNewLabel = inputString => (
+  <strong>
+    {inputString}
+    <small style={{ color: '#ccc' }}>@ New</small>
+  </strong>
+);
+
+const formatOptionLabel = ({ name, progress, innerProps }) => (
+  <strong>
+    {name}
+    <small style={{ color: '#ccc' }}>@{progress}</small>
+  </strong>
+);
+
+*/

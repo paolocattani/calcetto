@@ -10,9 +10,10 @@ import { getTodayDate } from '../core/utils';
 import { SessionContext, isEditable } from '../core/SessionContext';
 import { GenericToast } from '../core/Commons';
 // Helper
-import { fetchTournaments, getEmptyTournament } from './helper';
+import { fetchTournaments, getEmptyTournament, cardStyle, IndicatorSeparator } from './helper';
 // Types
 import { TournamentProgress } from './type';
+import NewTournament from './new';
 
 const FTournament = () => {
   // State definition
@@ -58,53 +59,49 @@ const FTournament = () => {
           <Card.Header as="h2">Torneo</Card.Header>
           <Card.Body>
             <Card.Title>Scegli un torneo</Card.Title>
-            <Form onSubmit={handleSubmit}>
-              <SessionContext.Consumer>
-                {sessionContext =>
-                  isEditable(sessionContext[0]) ? (
-                    <CreatableSelect
-                      // TODO:
-                      //filterOption={customFilter}
-                      // getOptionValue={option => `${option.label}`}
-                      //formatCreateLabel={formatNewLabel}
-                      //formatOptionLabel={formatOptionLabel}
-                      //getOptionLabel={option => `${option.name} @ ${option.progress}`}
-                      //
-                      components={{ IndicatorSeparator }}
-                      value={selectedOption}
-                      options={tournamentList}
-                      placeholder="Crea/Cerca un torneo"
-                      isSearchable={true}
-                      isClearable
-                      onChange={handleChange}
-                      onCreateOption={handleCreate}
-                      createOptionPosition={'first'}
-                    />
-                  ) : (
-                    <Select
-                      // TODO:
-                      //filterOption={customFilter}
-                      // getOptionValue={option => `${option.label}`}
-                      //formatCreateLabel={formatNewLabel}
-                      //formatOptionLabel={formatOptionLabel}
-                      //getOptionLabel={option => `${option.name} @ ${option.progress}`}
-                      //
-                      components={{ IndicatorSeparator }}
-                      value={selectedOption}
-                      options={tournamentList}
-                      placeholder="Cerca un torneo"
-                      isSearchable={true}
-                      isClearable
-                      onChange={handleChange}
-                    />
-                  )
-                }
-              </SessionContext.Consumer>
-              <br></br>
-              <Button type="submit" size="lg" variant="outline-warning" disabled={!selectedOption}>
-                Continua
-              </Button>
-            </Form>
+            <NewTournament />
+            {false ? (
+              <Form onSubmit={handleSubmit}>
+                <SessionContext.Consumer>
+                  {sessionContext =>
+                    isEditable(sessionContext[0]) ? (
+                      <CreatableSelect
+                        // TODO:
+                        //filterOption={customFilter}
+                        // getOptionValue={option => `${option.label}`}
+                        //formatCreateLabel={formatNewLabel}
+                        //formatOptionLabel={formatOptionLabel}
+                        //getOptionLabel={option => `${option.name} @ ${option.progress}`}
+                        //
+                        components={{ IndicatorSeparator }}
+                        value={selectedOption}
+                        options={tournamentList}
+                        placeholder="Crea/Cerca un torneo"
+                        isSearchable
+                        isClearable
+                        onChange={handleChange}
+                        onCreateOption={handleCreate}
+                        createOptionPosition={'first'}
+                      />
+                    ) : (
+                      <Select
+                        components={{ IndicatorSeparator }}
+                        value={selectedOption}
+                        options={tournamentList}
+                        placeholder="Cerca un torneo"
+                        isSearchable
+                        isClearable
+                        onChange={handleChange}
+                      />
+                    )
+                  }
+                </SessionContext.Consumer>
+                <br></br>
+                <Button type="submit" size="lg" variant="outline-warning" disabled={!selectedOption}>
+                  Continua
+                </Button>
+              </Form>
+            ) : null}
           </Card.Body>
         </Card>
       </Col>
@@ -112,43 +109,4 @@ const FTournament = () => {
   );
 };
 
-// TODO:
-// https://react-select.com/components#components
-
-// Indicator Separator
-const indicatorSeparatorStyle = {
-  alignSelf: 'stretch',
-  backgroundColor: 'green',
-  marginBottom: 8,
-  marginTop: 8,
-  marginRigth: 10,
-  width: 1
-};
-
-const IndicatorSeparator = ({ innerProps }) => <span style={indicatorSeparatorStyle} {...innerProps} />;
-
-const cardStyle = {
-  width: '50%',
-  margin: 'auto',
-  backgroundColor: 'inherit',
-  borderColor: '#ffc107',
-  borderWidth: '3px'
-};
-
-/*
-const formatNewLabel = inputString => (
-  <strong>
-    {inputString}
-    <small style={{ color: '#ccc' }}>@ New</small>
-  </strong>
-);
-
-const formatOptionLabel = ({ name, progress, innerProps }) => (
-  <strong>
-    {name}
-    <small style={{ color: '#ccc' }}>@{progress}</small>
-  </strong>
-);
-
-*/
 export default FTournament;

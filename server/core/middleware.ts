@@ -2,7 +2,7 @@ import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 import { Request, Response, NextFunction } from 'express';
 import chalk from 'chalk';
-import jwt from 'jsonwebtoken';
+import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import { getSecret } from './utils';
 
 // dev logger
@@ -28,10 +28,14 @@ export const withAuth = (req: any, res: Response, next: NextFunction) => {
   try {
     if (!token || typeof token != 'string') return res.status(401).send('Unauthorized: No token provided');
     const decoded: any = jwt.verify(token, getSecret());
+    logger.info('withAuth : ', decoded);
     req.email = decoded.email;
     next();
   } catch (error) {
-    res.status(401).send('Unauthorized: Invalid token');
-    next(error);
+    if (error instanceof TokenExpiredError) {
+      logger.error('Unauthorized:  Token Expires ');
+      return res.status(401).send('Unauthorized: Invalid token');
+    }
+    return res.status(500).send('Unhandled Authentication Error');
   }
 };
