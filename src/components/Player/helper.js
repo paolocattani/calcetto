@@ -3,6 +3,7 @@ import { Button } from 'react-bootstrap';
 import { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
 
 import { Type } from 'react-bootstrap-table2-editor';
+import { columns } from '../Pair/helper';
 
 // options for role column
 const selectOptions = {
@@ -25,14 +26,14 @@ export function clearAllFilter() {
 }
 
 // Columns default
-export default [
-  { dataField: 'id', text: 'ID', editable: false },
+const playerColumns = isEditable => [
+  { dataField: 'id', text: 'ID', editable: false, headerStyle: (column, colIndex) => ({ width: '3%' }) },
   {
     dataField: 'name',
     text: 'Nome',
     headerClasses: 'player-table-header-element',
     autoSelectText: true,
-    headerStyle: (column, colIndex) => ({ width: '20%' }),
+    headerStyle: (column, colIndex) => ({ width: isEditable ? '16%' : '25%' }),
     filter: textFilter({
       placeholder: 'Filtra...',
       getFilter: filter => (nameFilter = filter)
@@ -43,7 +44,7 @@ export default [
     text: 'Cognome',
     headerClasses: 'player-table-header-element',
     autoSelectText: true,
-    headerStyle: (column, colIndex) => ({ width: '20%' }),
+    headerStyle: (column, colIndex) => ({ width: isEditable ? '16%' : '25%' }),
     filter: textFilter({
       placeholder: 'Filtra...',
       getFilter: filter => (surnameFilter = filter)
@@ -53,7 +54,7 @@ export default [
     dataField: 'alias',
     text: 'Alias',
     headerClasses: 'player-table-header-element',
-    headerStyle: (column, colIndex) => ({ width: '15%' }),
+    headerStyle: (column, colIndex) => ({ width: isEditable ? '17%' : '25%' }),
     autoSelectText: true,
     filter: textFilter({
       placeholder: 'Filtra...',
@@ -64,7 +65,7 @@ export default [
     dataField: 'role',
     text: 'Roulo',
     headerClasses: 'player-table-header-element',
-    headerStyle: (column, colIndex) => ({ width: '15%' }),
+    headerStyle: (column, colIndex) => ({ width: `${isEditable ? '11' : '15'}%` }),
     filter: selectFilter({
       placeholder: 'Filtra...',
       options: selectOptions,
@@ -84,21 +85,25 @@ export default [
   {
     dataField: 'email',
     text: 'Email',
-    headerStyle: (column, colIndex) => ({ width: '15%' }),
+    headerStyle: (column, colIndex) => ({ width: '20%' }),
     headerClasses: 'player-table-header-element',
-    autoSelectText: true
+    autoSelectText: true,
+    hidden: !isEditable
   },
   {
     dataField: 'phone',
-    headerStyle: (column, colIndex) => ({ width: '15%' }),
+    headerStyle: (column, colIndex) => ({ width: '10%' }),
     text: 'Telefono',
     headerClasses: 'player-table-header-element',
-    autoSelectText: true
+    autoSelectText: true,
+    hidden: !isEditable
   },
   { dataField: 'match_played', text: 'Partite Giocate', hidden: true },
   { dataField: 'match_won', text: 'Vittorie', hidden: true },
   { dataField: 'total_score', text: 'Punteggio', hidden: true }
 ];
+
+export default playerColumns;
 
 // Custom export button
 export const ExportCSVButton = props => {

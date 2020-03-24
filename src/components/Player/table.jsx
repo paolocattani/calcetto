@@ -138,14 +138,17 @@ export default class Player extends React.Component {
             <Row>
               <Col>
                 <>
-                  <code>{isEditable(session)}</code>
                   <ListGroup horizontal>
-                    <Button variant="success" onClick={addRow} disabled={!isEditable(session)}>
-                      Aggiungi giocatore
-                    </Button>
-                    <Button variant="danger" onClick={deleteRow} disabled={!isEditable(session)}>
-                      Calcella giocatore
-                    </Button>
+                    {isEditable(session) ? (
+                      <Button variant="success" onClick={addRow}>
+                        Aggiungi giocatore
+                      </Button>
+                    ) : null}
+                    {isEditable(session) ? (
+                      <Button variant="danger" onClick={deleteRow}>
+                        Calcella giocatore
+                      </Button>
+                    ) : null}
                     <Button variant="dark" onClick={clearAllFilter.bind(this)}>
                       Pulisci Filtri
                     </Button>
@@ -154,7 +157,7 @@ export default class Player extends React.Component {
                     wrapperClasses="player-table"
                     keyField="id"
                     data={rows}
-                    columns={columns}
+                    columns={columns(isEditable(session))}
                     cellEdit={this.cellEditProps(isEditable(session))}
                     selectRow={selectRow}
                     caption={<TableHeader />}
@@ -166,6 +169,7 @@ export default class Player extends React.Component {
                     bootstrap4
                   />
                 </>
+                )}
               </Col>
             </Row>
           </>
