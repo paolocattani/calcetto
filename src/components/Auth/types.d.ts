@@ -1,5 +1,6 @@
 // Register
 export interface IRegisterFormValue {
+  username: string;
   name: string;
   surname: string;
   password: string;
@@ -8,6 +9,8 @@ export interface IRegisterFormValue {
   emailConfirm: string;
   phone: string;
   birthday: Date;
+  isPlayer: boolean;
+  playerRole: string;
 }
 export interface IRegisterForm {
   onSubmit: (values: IRegisterFormValue, { setSubmitting }: FormikHelpers<IRegisterFormValue>) => Promise<void>;

@@ -180,6 +180,7 @@ const AuthWrapper: React.FC = (): JSX.Element => {
   const buttonString = register ? 'Login' : 'Registrati';
   const Icon = <FontAwesomeIcon icon={RigthArrowDefinition} />;
   const modalStyle: CSSProperties = {
+    textAlign: 'left',
     width: register ? '50vw' : '40vw',
     height: 'auto',
     margin: 'auto',

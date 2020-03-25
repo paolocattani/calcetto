@@ -6,6 +6,7 @@ import RegisterForm from './RegisterForm';
 import { IRegisterForm, IRegisterFormValue } from '../types';
 
 const initialValues: IRegisterFormValue = {
+  username: '',
   name: '',
   surname: '',
   password: '',
@@ -13,16 +14,30 @@ const initialValues: IRegisterFormValue = {
   email: '',
   emailConfirm: '',
   phone: '',
-  birthday: new Date()
+  birthday: new Date(),
+  isPlayer: false,
+  playerRole: ''
 };
 
+// https://medium.com/@maurice.de.beijer/yup-validation-and-typescript-and-formik-6c342578a20e
 const validationSchema = yup.object().shape({
+  username: yup.string(),
   name: yup.string(),
   surname: yup.string(),
   password: yup.string(),
   email: yup.string(),
   phone: yup.string(),
-  birthday: yup.date()
+  birthday: yup.date().default(() => new Date()),
+  isPlayer: yup.boolean(),
+  playerRole: yup
+    .array()
+    .min(1, 'Seleziona almeno un valore')
+    .of(
+      yup.object().shape({
+        label: yup.string().required(),
+        value: yup.string().required()
+      })
+    )
 });
 
 const Register: React.FC<IRegisterForm> = ({ onSubmit }: IRegisterForm) => (
