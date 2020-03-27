@@ -2,7 +2,7 @@
 ![Node.js CI](https://github.com/paolocattani/calcetto/workflows/Node.js%20CI/badge.svg?branch=develop&event=push)
 
 ## TODO
--
+- TEST
 -
 -
 
