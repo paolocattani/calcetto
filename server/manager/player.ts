@@ -1,10 +1,15 @@
-import Player from '../model/sequelize/player.model';
-import { logger, logProcess } from '../core/logger';
+// Models/Types
 import { PlayerDTO } from '../model/dto/player';
+import Player from '../model/sequelize/player.model';
+// Logger utils
+import { logProcess } from '../core/logger';
+
+// Const
+const className = 'Player Manager : ';
 
 export const listAllInTournament = async (tId: number): Promise<PlayerDTO[]> => {
   try {
-    logProcess('listAllInTournament', 'start');
+    logProcess(className + 'listAllInTournament', 'start');
     const users = await Player.findAll({
       order: [
         ['alias', 'DESC'],
@@ -13,7 +18,7 @@ export const listAllInTournament = async (tId: number): Promise<PlayerDTO[]> => 
       ],
       include: [Player.associations.pair1, Player.associations.pair2]
     });
-    logProcess('listAllInTournament', 'users fetched');
+    logProcess(className + 'listAllInTournament', 'users fetched');
 
     const result = users
       .filter(player => {
@@ -35,22 +40,22 @@ export const listAllInTournament = async (tId: number): Promise<PlayerDTO[]> => 
       })
       // Rimappo per escludere le associazioni
       .map(player => convertEntityToDTO(player));
-    logProcess('listAllInTournament', 'end');
+    logProcess(className + 'listAllInTournament', 'end');
     return result;
   } catch (error) {
-    logProcess('listAllInTournament', ` Error : ${error}`);
+    logProcess(className + 'listAllInTournament', ` Error : ${error}`);
     return [];
   }
 };
 
 export const listAll = async (): Promise<PlayerDTO[]> => {
   try {
-    logProcess('listAll', 'start');
+    logProcess(className + 'listAll', 'start');
     const users = await Player.findAll({ order: [['id', 'DESC']] });
-    logProcess('listAll', 'end');
+    logProcess(className + 'listAll', 'end');
     return users.map(player => convertEntityToDTO(player));
   } catch (error) {
-    logProcess('listAll', ` Error : ${error}`);
+    logProcess(className + 'listAll', ` Error : ${error}`);
     return [];
   }
 };
@@ -58,20 +63,20 @@ export const listAll = async (): Promise<PlayerDTO[]> => {
 export const create = async (model: any): Promise<Player | null> => {
   let player: Player | null = null;
   try {
-    logProcess('create', 'start');
+    logProcess(className + 'create', 'start');
     if (model.id === 0) model.id = null;
     if (model.id) player = await Player.findOne({ where: { id: model.id } });
     if (player) {
       player.update(model);
-      logProcess('create', `updated => ${player.toString()}`);
+      logProcess(className + 'create', `updated => ${player.toString()}`);
     } else {
       player = await Player.create(model);
-      logProcess('create', `created => ${player.toString()}`);
+      logProcess(className + 'create', `created => ${player.toString()}`);
     }
   } catch (error) {
-    logProcess('create', ` Errror : ${error}`);
+    logProcess(className + 'create', ` Errror : ${error}`);
   }
-  logProcess('create', 'end');
+  logProcess(className + 'create', 'end');
   return player;
 };
 

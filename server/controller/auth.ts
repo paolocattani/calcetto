@@ -11,7 +11,6 @@ import {
   convertEntityToDTO,
   parseBody,
   deleteUser,
-  generatePassword,
   comparePasswords,
   generateToken,
   listAll,
@@ -57,7 +56,7 @@ router.post(
     let model: User = parseBody(body);
     const user = await findUserByEmail(model.email);
     if (user) return res.status(500).json({ message: 'Email gia registrata. ' });
-    const record = registerUser(model, body.playerRole);
+    const record = await registerUser(model, body.playerRole);
     return res.status(200).json(record);
   })
 );
@@ -98,7 +97,7 @@ router.delete(
       if (!(await comparePasswords(email, password, user.password)))
         return res.status(401).json({ error: 'Incorrect email or password' });
 
-      deleteUser(user);
+      await deleteUser(user);
       res.cookie('token', { expires: new Date(Date.now()), httpOnly: true });
       return res.status(200).json({ message: 'Utente eliminato' });
     } catch (error) {

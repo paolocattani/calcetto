@@ -1,13 +1,19 @@
-import { UserDTO } from '../model/dto/user';
-import User from '../model/sequelize/user.model';
-import { logProcess } from '../core/logger';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
-
-// managers
-import * as playerManager from './player';
+// Models/Types
 import Player from 'model/sequelize/player.model';
 import { PlayerRole } from 'model/sequelize/types';
+import { UserDTO } from '../model/dto/user';
+import User from '../model/sequelize/user.model';
+// Logger utils
+import { logProcess } from '../core/logger';
+// Password
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+// managers
+import * as playerManager from './player';
+
+// Const
+const className = 'Authentication Manager : ';
+
 // Password utils
 export const generatePassword = async (email: string, password: string) =>
   await bcrypt.hash(generateHashSecret(email, password), 10);
@@ -29,32 +35,32 @@ export const generateToken = (value: string | User) =>
 
 export const listAll = async (): Promise<UserDTO[]> => {
   try {
-    logProcess('listAll', 'start');
+    logProcess(className + 'listAll', 'start');
     const users = await User.findAll({
       order: [['id', 'DESC']],
       include: [User.associations.player]
     });
-    logProcess('listAll', 'end');
+    logProcess(className + 'listAll', 'end');
     return users.map(user => convertEntityToDTO(user));
   } catch (error) {
-    logProcess('listAll', ` Error : ${error}`);
+    logProcess(className + 'listAll', ` Error : ${error}`);
     return [];
   }
 };
 
 export const deleteUser = async (user: User): Promise<void> => {
   try {
-    logProcess('deleteUser', 'start');
+    logProcess(className + 'deleteUser', 'start');
     await user.destroy();
-    logProcess('deleteUser', 'end');
+    logProcess(className + 'deleteUser', 'end');
   } catch (error) {
-    logProcess('deleteUser', ` Error : ${error}`);
+    logProcess(className + 'deleteUser', ` Error : ${error}`);
   }
 };
 
 export const registerUser = async (user: User, playerRole?: string): Promise<UserDTO | null> => {
   try {
-    logProcess('registerUser', 'start');
+    logProcess(className + 'registerUser', 'start');
     let model = user;
     model.password = await generatePassword(model.email, model.password);
     if (model.name.startsWith('[A]')) {
@@ -63,7 +69,7 @@ export const registerUser = async (user: User, playerRole?: string): Promise<Use
     } else {
       model.role = 'User';
     }
-    const record = await User.create({ model });
+    const record = await User.create(model);
     // Se è stato assegnato un ruolo allora creo anche il giocatore
     if (playerRole) {
       const player = {
@@ -77,10 +83,10 @@ export const registerUser = async (user: User, playerRole?: string): Promise<Use
       } as Player;
       await playerManager.create(player);
     }
-    logProcess('registerUser', 'end');
+    logProcess(className + 'registerUser', 'end');
     return convertEntityToDTO(record);
   } catch (error) {
-    logProcess('registerUser', ` Error : ${error}`);
+    logProcess(className + 'registerUser', ` Error : ${error}`);
     return null;
   }
 };
@@ -104,10 +110,10 @@ export async function getUserFromToken(token: string | object): Promise<User | n
 
 export async function findUserByEmail(email: string) {
   try {
-    logProcess('findUserByEmail', '');
+    logProcess(className + 'findUserByEmail', '');
     return await User.findOne({ where: { email } });
   } catch (error) {
-    logProcess('findUserByEmail', ` Error : ${error}`);
+    logProcess(className + 'findUserByEmail', ` Error : ${error}`);
     return null;
   }
 }
