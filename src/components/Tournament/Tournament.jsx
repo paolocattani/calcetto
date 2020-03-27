@@ -59,6 +59,12 @@ const FTournament = () => {
           <Card.Header as="h2">Torneo</Card.Header>
           <Card.Body>
             <Card.Title>Scegli un torneo</Card.Title>
+            <NewTournament />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
 
             {/* <NewTournament /> */
             true ? (

@@ -8,7 +8,7 @@ import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 import { asyncMiddleware, withAuth } from '../core/middleware';
 import { dbConnection } from '../model/server/AppServer';
-import { isAdmin } from './auth.manager';
+import { isAdmin } from '../manager/auth';
 
 const router = Router();
 router.use('/', (req, res, next) => {

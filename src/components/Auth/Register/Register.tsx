@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import { Formik } from 'formik';
 import * as yup from 'yup';
@@ -14,9 +14,7 @@ const initialValues: IRegisterFormValue = {
   email: '',
   emailConfirm: '',
   phone: '',
-  birthday: new Date(),
-  isPlayer: false,
-  playerRole: ''
+  birthday: new Date()
 };
 
 // https://medium.com/@maurice.de.beijer/yup-validation-and-typescript-and-formik-6c342578a20e
@@ -27,17 +25,7 @@ const validationSchema = yup.object().shape({
   password: yup.string(),
   email: yup.string(),
   phone: yup.string(),
-  birthday: yup.date().default(() => new Date()),
-  isPlayer: yup.boolean(),
-  playerRole: yup
-    .array()
-    .min(1, 'Seleziona almeno un valore')
-    .of(
-      yup.object().shape({
-        label: yup.string().required(),
-        value: yup.string().required()
-      })
-    )
+  birthday: yup.date().default(() => new Date())
 });
 
 const Register: React.FC<IRegisterForm> = ({ onSubmit }: IRegisterForm) => (

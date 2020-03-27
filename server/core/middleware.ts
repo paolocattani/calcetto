@@ -3,7 +3,7 @@ import { isDevMode } from '../core/debug';
 import { Request, Response, NextFunction } from 'express';
 import chalk from 'chalk';
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
-import { getSecret } from './utils';
+import { getSecret } from '../manager/auth';
 
 // dev logger
 export const routeLogger = (req: Request, res: Response, next: NextFunction) => {

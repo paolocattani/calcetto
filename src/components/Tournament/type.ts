@@ -11,10 +11,10 @@ export type TournamentModel = {
   pairs?: PairModel[];
 };
 
-export const TournamentProgress = { New: 'new', PairsSelection: 'PairsSelection', Stage1: 'Stage1', Stage2: 'Stage2' };
-
 export type selectOptions = {
   label: string;
   value: string;
   data: TournamentModel;
 };
+
+export const TournamentProgress = { New: 'new', PairsSelection: 'PairsSelection', Stage1: 'Stage1', Stage2: 'Stage2' };

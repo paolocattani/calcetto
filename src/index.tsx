@@ -1,11 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import 'react-datepicker/dist/react-datepicker.css';
 import 'typeface-roboto';
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
 import { SessionContextProvider } from './components/core/SessionContext';
+import it from 'date-fns/locale/it';
+import { setDefaultLocale, registerLocale } from 'react-datepicker';
+
+setDefaultLocale('it');
+registerLocale('it', it);
 
 ReactDOM.render(
   <BrowserRouter>

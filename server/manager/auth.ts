@@ -1,0 +1,148 @@
+import { UserDTO } from '../model/dto/user';
+import User from '../model/sequelize/user.model';
+import { logProcess } from '../core/logger';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+
+// managers
+import * as playerManager from './player';
+import Player from 'model/sequelize/player.model';
+import { PlayerRole } from 'model/sequelize/types';
+// Password utils
+export const generatePassword = async (email: string, password: string) =>
+  await bcrypt.hash(generateHashSecret(email, password), 10);
+
+export const comparePasswords = async (email: string, password: string, hash: string): Promise<boolean> =>
+  await bcrypt.compare(generateHashSecret(email, password), hash);
+
+export const getSecret = () => (process.env.SERVER_HASH ? process.env.SERVER_HASH : 'dummy$Hash');
+
+export const generateHashSecret = (email: string, password: string) => email + getSecret() + password;
+
+export const generateToken = (value: string | User) =>
+  typeof value === 'string'
+    ? jwt.sign({ email: value }, getSecret(), { expiresIn: '8h', algorithm: 'HS256' })
+    : jwt.sign({ name: value.name, surname: value.surname, role: value.role, email: value.email }, getSecret(), {
+        expiresIn: '8h',
+        algorithm: 'HS256'
+      });
+
+export const listAll = async (): Promise<UserDTO[]> => {
+  try {
+    logProcess('listAll', 'start');
+    const users = await User.findAll({
+      order: [['id', 'DESC']],
+      include: [User.associations.player]
+    });
+    logProcess('listAll', 'end');
+    return users.map(user => convertEntityToDTO(user));
+  } catch (error) {
+    logProcess('listAll', ` Error : ${error}`);
+    return [];
+  }
+};
+
+export const deleteUser = async (user: User): Promise<void> => {
+  try {
+    logProcess('deleteUser', 'start');
+    await user.destroy();
+    logProcess('deleteUser', 'end');
+  } catch (error) {
+    logProcess('deleteUser', ` Error : ${error}`);
+  }
+};
+
+export const registerUser = async (user: User, playerRole?: string): Promise<UserDTO | null> => {
+  try {
+    logProcess('registerUser', 'start');
+    let model = user;
+    model.password = await generatePassword(model.email, model.password);
+    if (model.name.startsWith('[A]')) {
+      model.name = model.name.substring(3);
+      model.role = 'Admin';
+    } else {
+      model.role = 'User';
+    }
+    const record = await User.create({ model });
+    // Se è stato assegnato un ruolo allora creo anche il giocatore
+    if (playerRole) {
+      const player = {
+        name: record.name,
+        surname: record.surname,
+        email: record.email,
+        phone: record.phone,
+        userId: record.id,
+        alias: `${record.name} ${record.surname}`,
+        role: playerRole as PlayerRole
+      } as Player;
+      await playerManager.create(player);
+    }
+    logProcess('registerUser', 'end');
+    return convertEntityToDTO(record);
+  } catch (error) {
+    logProcess('registerUser', ` Error : ${error}`);
+    return null;
+  }
+};
+
+// Utils
+export function isAdmin(token: string | object): boolean {
+  let isAdmin: boolean = false;
+  if (token && typeof token === 'string') {
+    const decodedUser = jwt.verify(token, getSecret()) as User;
+    if (decodedUser.role === 'Admin') isAdmin = true;
+  }
+  return isAdmin;
+}
+
+export async function getUserFromToken(token: string | object): Promise<User | null> {
+  if (token && typeof token === 'string') {
+    const decodedUser = jwt.verify(token, getSecret()) as User;
+    return decodedUser.email ? await findUserByEmail(decodedUser.email) : decodedUser;
+  } else return null;
+}
+
+export async function findUserByEmail(email: string) {
+  try {
+    logProcess('findUserByEmail', '');
+    return await User.findOne({ where: { email } });
+  } catch (error) {
+    logProcess('findUserByEmail', ` Error : ${error}`);
+    return null;
+  }
+}
+
+/**
+ * Converte l'entity in un DTO da passare al FE.
+ * @param user  User entity
+ */
+export const convertEntityToDTO = (user: User): UserDTO => ({
+  id: user.id,
+  username: user.username,
+  name: user.name,
+  surname: user.surname,
+  email: user.email,
+  phone: user.phone || '',
+  birthday: user.birthday || null,
+  label: user.label,
+  role: user.role
+});
+
+/**
+ * Si potrebbe usare lo spread {...body} ma essendo dati che arrivano dall'utente
+ * preferisco impostare le proprietà manualmente.
+ *
+ * @param body : Request body
+ */
+export const parseBody = (body: any) =>
+  ({
+    id: body.id || null,
+    username: body.username,
+    name: body.name,
+    surname: body.surname,
+    password: body.password,
+    email: body.email,
+    phone: body.phone,
+    birthday: body.birthday,
+    role: body.role
+  } as User);

@@ -2,6 +2,7 @@
  * @returns default logger configuration
  */
 import log4js from 'log4js';
+import chalk from 'chalk';
 import { isTestMode, isDevMode, isProductionMode } from './debug';
 
 log4js.configure({
@@ -53,3 +54,5 @@ if (isProductionMode()) {
   logger.level = 'warn';
   dbLogger.level = 'warn';
 }
+
+export const logProcess = (method: string, value: string): void => logger.info(`[${chalk.yellow(method)}].${value}`);

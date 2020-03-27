@@ -20,6 +20,10 @@ import Player from './player.model';
 export default class User extends Model<User> {
   @AllowNull
   @Column(DataType.STRING)
+  public username!: string;
+
+  @AllowNull
+  @Column(DataType.STRING)
   public name!: string;
 
   @AllowNull

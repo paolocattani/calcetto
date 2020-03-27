@@ -27,11 +27,15 @@ import User from './user.model';
  */
 @Table({ tableName: 'tournament', freezeTableName: true, version: false })
 export default class Tournament extends Model<Tournament> {
-  @Comment('Nome torneo')
+  @Comment('Nome')
   @Column(DataType.STRING)
   public name!: string;
 
-  @Comment('Stato Torneo')
+  @Comment('Data')
+  @Column(DataType.DATE)
+  public date!: Date;
+
+  @Comment('Stato')
   @Default('New')
   @Column(DataType.ENUM('New', 'PairsSelection', 'Stage1', 'Stage2'))
   public progress!: TournamentProgress;

@@ -141,7 +141,11 @@ const AuthWrapper: React.FC = (): JSX.Element => {
   const onSubmitRegister = async (values: IRegisterFormValue, { setSubmitting }: FormikHelpers<IRegisterFormValue>) => {
     setSubmitting(true);
     try {
-      if (!isValidRegister(values)) return;
+      if (!isValidRegister(values)) {
+        console.log('invalid');
+
+        return;
+      }
       const response = await fetch('/api/v1/auth/register', {
         method: 'POST',
         body: JSON.stringify(values),
