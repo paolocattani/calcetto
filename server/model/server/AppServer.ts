@@ -8,7 +8,7 @@ import { Application as ExpressApplication } from 'express';
 import syncDb from '../sequelize';
 import routes from './../../controller';
 import { SyncOptions } from 'sequelize/types';
-import generator from '../../dummy_data/generator';
+import generator from '../../generator/generator';
 import { Sequelize } from 'sequelize-typescript';
 import { isProductionMode } from '../../core/debug';
 // white list for CORS
