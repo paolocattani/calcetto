@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { Form, Field, ErrorMessage } from 'formik';
 import { Row, Col, FormControl, Button } from 'react-bootstrap';
-import FacebookLogin from 'react-facebook-login';
-import GoogleLogin, { GoogleLoginResponse } from 'react-google-login';
+/* TODO:
+  import FacebookLogin from 'react-facebook-login';
+  import GoogleLogin, { GoogleLoginResponse } from 'react-google-login';
+*/
 import { ILoginForm } from '../types';
 
 const LoginForm: React.FC<ILoginForm> = ({ responseFacebook, responseGoogle }) => (

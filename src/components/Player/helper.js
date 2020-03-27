@@ -1,9 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
-
 import { Type } from 'react-bootstrap-table2-editor';
-import { columns } from '../Pair/helper';
 
 // options for role column
 const selectOptions = {

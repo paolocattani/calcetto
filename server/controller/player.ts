@@ -27,7 +27,7 @@ router.get(
   '/list',
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     try {
-      return res.json(listAll());
+      return res.json(await listAll());
     } catch (err) {
       return next(err);
     }

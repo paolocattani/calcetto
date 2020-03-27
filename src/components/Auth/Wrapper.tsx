@@ -3,7 +3,7 @@ import { useSessionContext } from 'components/core/SessionContext';
 import { useHistory } from 'react-router-dom';
 import { IRegisterFormValue, ILoginFormValue } from './types';
 import { FormikHelpers } from 'formik';
-import { Modal, Button, Container, Alert, Card } from 'react-bootstrap';
+import { Button, Container, Alert, Card } from 'react-bootstrap';
 import Register from './Register/Register';
 import Login from './Login/Login';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

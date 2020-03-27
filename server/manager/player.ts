@@ -51,7 +51,10 @@ export const listAllInTournament = async (tId: number): Promise<PlayerDTO[]> => 
 export const listAll = async (): Promise<PlayerDTO[]> => {
   try {
     logProcess(className + 'listAll', 'start');
-    const users = await Player.findAll({ order: [['id', 'DESC']] });
+    const users = await Player.findAll({
+      order: [['id', 'ASC']],
+      include: [Player.associations.pair1, Player.associations.pair2]
+    });
     logProcess(className + 'listAll', 'end');
     return users.map(player => convertEntityToDTO(player));
   } catch (error) {

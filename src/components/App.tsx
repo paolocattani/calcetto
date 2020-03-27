@@ -1,9 +1,8 @@
 import React from 'react';
 // Components
 import { Header } from './Header/Header';
-import Login from './Auth/Wrapper';
 // Routing
-import { Switch, Route } from 'react-router';
+import { Switch } from 'react-router';
 import routes from '../components/core/Routes';
 import { ProtectedRoute } from '../components/core/ProtectedRoute';
 // Style
@@ -13,7 +12,6 @@ import { Container } from 'react-bootstrap';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
-import { RedirectionControl } from './core/RedirectionControls';
 
 library.add(fas, far);
 
