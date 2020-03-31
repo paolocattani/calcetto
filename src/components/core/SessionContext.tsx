@@ -3,6 +3,7 @@ import React from 'react';
 
 export interface Session {
   isAuthenticated?: boolean | null;
+  username?: string | null;
   name?: string | null;
   surname?: string | null;
   email?: string | null;
@@ -13,7 +14,7 @@ export interface Session {
 // https://github.com/openscript/react-example-authentication-redirection
 
 // https://www.freecodecamp.org/news/react-context-in-5-minutes/
-export const initialSession: Session = { isAuthenticated: false, name: null, surname: null, email: null, role: null };
+export const initialSession: Session = { isAuthenticated: false };
 
 export const SessionContext = createContext<[Session, (session: Session) => void]>([initialSession, () => {}]);
 export const useSessionContext = () => useContext(SessionContext);
@@ -28,8 +29,10 @@ export const SessionContextProvider: React.FC = ({ children }) => {
         const response = await fetch('/api/v1/auth/');
         const user = await response.json();
         if (user && response.ok) setSessionState({ isAuthenticated: true, ...user });
+        else setSessionState(initialSession);
       } catch (error) {
         console.error('SessionContext.error :', error);
+        setSessionState(initialSession);
       }
     })();
   }, []);

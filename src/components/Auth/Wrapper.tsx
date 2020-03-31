@@ -1,18 +1,13 @@
 import React, { useState, CSSProperties } from 'react';
-import { useSessionContext } from 'components/core/SessionContext';
-import { useHistory } from 'react-router-dom';
-import { IRegisterFormValue, ILoginFormValue } from './types';
 import { Button, Container, Alert, Card } from 'react-bootstrap';
-import Register from './Register/Register';
-import Login from './Login/Login';
+import Register from './Register';
+import Login from './Login';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition, findIconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { ReactFacebookLoginInfo } from 'react-facebook-login';
-import { GoogleLoginResponse } from 'react-google-login';
 
 const AuthWrapper: React.FC = (): JSX.Element => {
   // State
-  const [register, setRegister] = useState(true); // Mostra form registrazione/login
+  const [register, setRegister] = useState(false); // Mostra form registrazione/login
   const [errorMessage, setErrorMessage] = useState('');
 
   const RigthArrowDefinition: IconDefinition = findIconDefinition({
@@ -33,13 +28,10 @@ const AuthWrapper: React.FC = (): JSX.Element => {
     color: 'white'
   };
 
-  console.log('Rendering LoginWrapper : ');
-
   return (
     <>
       <Card style={modalStyle}>
         <Card.Header as="h2">{title}</Card.Header>
-
         <Card.Body>
           <Container>
             {errorMessage ? (

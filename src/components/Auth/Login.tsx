@@ -1,7 +1,7 @@
-import { useInput } from '../../core/generic/InputHook';
+import { useInput } from '../core/generic/InputHook';
 import { Form, Button } from 'react-bootstrap';
 import React, { SetStateAction } from 'react';
-import { useSessionContext } from '../../core/SessionContext';
+import { useSessionContext } from '../core/SessionContext';
 import { useHistory } from 'react-router-dom';
 
 type PropsType = {
@@ -10,19 +10,19 @@ type PropsType = {
 
 // https://medium.com/@faizanv/authentication-for-your-react-and-express-application-w-json-web-tokens-923515826e0#6563
 const Login: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
-  const [sessionContext, updateSessionContext] = useSessionContext();
   const currentHistory = useHistory();
+  const [sessionContext, updateSessionContext] = useSessionContext();
 
-  const { value: username, bind: bindUsername, reset: resetUsername } = useInput('');
-  const { value: password, bind: bindPassword, reset: resetPassword } = useInput('');
+  const { value: username, bind: bindUsername /*reset: resetUsername*/ } = useInput('');
+  const { value: password, bind: bindPassword /*reset: resetPassword*/ } = useInput('');
 
   const showError = (message: SetStateAction<string>) => {
     setErrorMessage(message);
     setTimeout(() => setErrorMessage(''), 3000);
   };
 
-  const handleSubmit = async (evt: any) => {
-    // evt.preventDefault();
+  const handleSubmit = async (evt: React.SyntheticEvent) => {
+    evt.preventDefault();
     if (!username || username === '') {
       showError('Inserire username o password');
       return;
@@ -49,9 +49,7 @@ const Login: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
         });
         currentHistory.push('/');
       } else {
-        if (response.status === 401) setErrorMessage('Utente o Password errata');
-
-        setTimeout(() => setErrorMessage(''), 3000);
+        if (response.status === 401) showError('Utente o Password errata');
       }
     } catch (error) {
       console.log('onSubmitLogin : ', error);
@@ -61,13 +59,12 @@ const Login: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Form.Group controlId="formLogin">
+      <Form.Group controlId="username">
         <Form.Label>Username o Email</Form.Label>
-        {/*<Form.Text className="text-muted">We'll never share your email with anyone else.</Form.Text>*/}
         <Form.Control required type="text" placeholder="username o email" {...bindUsername} />
       </Form.Group>
 
-      <Form.Group controlId="formBasicPassword">
+      <Form.Group controlId="password">
         <Form.Label>Password</Form.Label>
         <Form.Control required type="password" placeholder="Password" {...bindPassword} />
       </Form.Group>

@@ -16,7 +16,8 @@ import {
   listAll,
   registerUser,
   findUserByEmailOrUsername,
-  checkIfExist
+  checkIfExist,
+  findUserByEmailAndUsername
 } from '../manager/auth';
 const router = Router();
 
@@ -92,10 +93,10 @@ router.delete(
   '/',
   withAuth,
   asyncMiddleware(async (req: any, res: Response, next: NextFunction) => {
-    const { email, password } = req.body;
+    const { email, password, username } = req.body;
     try {
       logger.info('/authenticate : ', email, password);
-      const user = await findUserByEmail(email);
+      const user = await findUserByEmailAndUsername(email, username);
       if (!user) return res.status(500).json({ message: 'Utente non trovato' });
 
       if (!(await comparePasswords(email, password, user.password)))

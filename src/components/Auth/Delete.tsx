@@ -1,0 +1,106 @@
+import React, { useState, SetStateAction } from 'react';
+import { useSessionContext } from 'components/core/SessionContext';
+import { useHistory } from 'react-router-dom';
+import { Modal, Container, Alert, Form, Col, Row, Button } from 'react-bootstrap';
+import { useInput } from '../core/generic/InputHook';
+
+type authType = {
+  show: boolean;
+  onHide: () => void;
+};
+
+const Delete = ({ show, onHide }: authType): JSX.Element => {
+  const [sessionContext, updateSessionContext] = useSessionContext();
+  const [errorMessage, setErrorMessage] = useState('');
+  const { value: password, bind: bindPassword } = useInput('');
+
+  const currentHistory = useHistory();
+
+  const { email, username } = sessionContext;
+  const showError = (message: SetStateAction<string>) => {
+    setErrorMessage(message);
+    setTimeout(() => setErrorMessage(''), 3000);
+  };
+
+  const handleSubmit = async (evt: React.SyntheticEvent) => {
+    try {
+      const response = await fetch('/api/v1/auth/', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, username, password })
+      });
+      const result = await response.json();
+      console.log('onSubmitLogin : ', response, result);
+      if (response.ok && result) {
+        updateSessionContext({ ...sessionContext, name: '', surname: '', email: '', role: '', isAuthenticated: false });
+        onHide();
+        currentHistory.push('/');
+      } else {
+        if (response.status === 401) showError('Utente o Password errata');
+        else showError('Errore durante il processo di registrazione. Riprovare piu tardi');
+      }
+    } catch (error) {
+      console.log('onSubmitLogin : ', error);
+      showError('Errore durante il processo di registrazione. Riprovare piu tardi');
+    }
+  };
+
+  const error = errorMessage ? (
+    <Alert key={'auth-alert'} variant={'danger'}>
+      {errorMessage}{' '}
+    </Alert>
+  ) : null;
+
+  const body =
+    !email || !username ? (
+      <p>
+        <strong>Eliminazione non possibile</strong>{' '}
+      </p>
+    ) : (
+      <Form onSubmit={handleSubmit}>
+        <Form.Group as={Row} controlId="email">
+          <Form.Label column sm="2">
+            Email
+          </Form.Label>
+          <Col sm="10">
+            <Form.Control plaintext readOnly defaultValue={email} />
+          </Col>
+        </Form.Group>
+        <Form.Group as={Row} controlId="username">
+          <Form.Label column sm="2">
+            Username
+          </Form.Label>
+          <Col sm="10">
+            <Form.Control plaintext readOnly defaultValue={username} />
+          </Col>
+        </Form.Group>
+        <Form.Group as={Row} controlId="password">
+          <Form.Label column sm="2">
+            Password
+          </Form.Label>
+          <Col sm="10">
+            <Form.Control type="password" placeholder="Password" {...bindPassword} />
+          </Col>
+        </Form.Group>
+        <Button size="lg" variant="outline-danger" type="submit">
+          Conferma
+        </Button>
+      </Form>
+    );
+
+  return (
+    <Modal show={show} onHide={onHide} size={'lg'} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>Elimina Utente</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Container fluid>
+          {error}
+          {body}
+        </Container>
+      </Modal.Body>
+    </Modal>
+  );
+};
+
+export default Delete;

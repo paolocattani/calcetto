@@ -1,12 +1,12 @@
-import { useInput } from '../../core/generic/InputHook';
+import { useInput } from '../core/generic/InputHook';
 import { Form, Button, Col } from 'react-bootstrap';
 import React, { SetStateAction } from 'react';
-import { useSessionContext } from '../../core/SessionContext';
+import { useSessionContext } from '../core/SessionContext';
 import { useHistory } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import Select, { StylesConfig } from 'react-select';
 import './style.css';
-import { emailRegExp, passwordRegExp } from '../../core/utils';
+import { emailRegExp, passwordRegExp } from '../core/utils';
 
 type PropsType = {
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
@@ -114,7 +114,7 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
     return true;
   };
 
-  const handleSubmit = async (evt: any) => {
+  const handleSubmit = async (evt: React.SyntheticEvent) => {
     evt.preventDefault();
     if (!isValid()) return;
     const model = {

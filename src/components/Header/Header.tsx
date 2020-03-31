@@ -1,13 +1,15 @@
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, useState } from 'react';
 import backgroundImage from '../assets/header.jpg';
 import { Jumbotron, Navbar, Nav, Button } from 'react-bootstrap';
 import routes from '../core/Routes';
 import { useSessionContext } from '../core/SessionContext';
 import { Link } from 'react-router-dom';
+import Delete from '../Auth/Delete';
 
 const applicationName = 'Calcetto C.S.M';
 export const Header: React.FC = _ => {
   const [sessionContext, updateSessionContext] = useSessionContext();
+  const [showModalDelete, setShowModalDelete] = useState(false);
 
   const logout = async () => {
     const response = await fetch('/api/v1/auth/logout');
@@ -20,6 +22,7 @@ export const Header: React.FC = _ => {
         role: '',
         isAuthenticated: false
       });
+    // TODO: gestire messaggi utente
   };
 
   const yellow = '##ffc107';
@@ -73,11 +76,10 @@ export const Header: React.FC = _ => {
                     <Button variant="outline-warning" onClick={logout}>
                       Log out
                     </Button>
-                    {/* FIXME:
-                  <Button variant="outline-danger" onClick={() => setShowModalDelete(true)}>
-                    Elimina Utente
-                  </Button>
-                  */}
+
+                    <Button variant="outline-danger" onClick={() => setShowModalDelete(true)}>
+                      Elimina Utente
+                    </Button>
                   </>
                 </>
               ) : null}
@@ -85,6 +87,7 @@ export const Header: React.FC = _ => {
           </Navbar>
         ) : null}
       </Jumbotron>
+      <Delete show={showModalDelete} onHide={() => setShowModalDelete(false)} />
     </header>
   );
 };

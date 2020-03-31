@@ -129,6 +129,16 @@ export async function findUserByEmailOrUsername(username: string) {
   }
 }
 
+export async function findUserByEmailAndUsername(email: string, username: string) {
+  try {
+    logProcess(className + 'findUserByEmailAndUsername', '');
+    return await User.findOne({ where: { email, username } });
+  } catch (error) {
+    logProcess(className + 'findUserByEmailAndUsername', ` Error : ${error}`);
+    return null;
+  }
+}
+
 export async function checkIfExist(user: User) {
   try {
     logProcess(className + 'checkIfExist', '');
