@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useSessionContext } from 'components/core/SessionContext';
 import { useHistory } from 'react-router-dom';
 import { IDeleteFormValue } from '../types';
-import { FormikHelpers } from 'formik';
 import { Modal, Container, Alert } from 'react-bootstrap';
 import { emailRegExp } from '../../core/utils';
 import Delete from './form';
@@ -19,7 +18,7 @@ const AuthWrapper = ({ show, onHide }: authType): JSX.Element => {
   const [sessionContext, updateSessionContext] = useSessionContext();
   const currentHistory = useHistory();
 
-  const onSubmitDelete = async (values: IDeleteFormValue, { setSubmitting }: FormikHelpers<IDeleteFormValue>) => {
+  const onSubmitDelete = async (values: IDeleteFormValue, { setSubmitting }: any) => {
     setSubmitting(true);
     try {
       if (!isValid(values)) return;

@@ -53,7 +53,6 @@
     "bootstrap": "^4.4.1",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
-    "formik": "^2.1.4",
     "glob": "^7.1.6",
     "helmet": "^3.21.3",
     "jquery": "^3.4.1",
@@ -83,8 +82,7 @@
     "sequelize-typescript": "^1.1.0",
     "ts-node": "^8.8.1",
     "typeface-roboto": "0.0.75",
-    "typescript": "^3.8.3",
-    "yup": "^0.28.3"
+    "typescript": "^3.8.3"
   },
   "scripts": {
     "dev": "concurrently --kill-others-on-fail \"npm run dev:server\" \"npm run dev:client\"",

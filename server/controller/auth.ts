@@ -14,7 +14,9 @@ import {
   comparePasswords,
   generateToken,
   listAll,
-  registerUser
+  registerUser,
+  findUserByEmailOrUsername,
+  checkIfExist
 } from '../manager/auth';
 const router = Router();
 
@@ -54,8 +56,8 @@ router.post(
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     const { body } = req;
     let model: User = parseBody(body);
-    const user = await findUserByEmail(model.email);
-    if (user) return res.status(500).json({ message: 'Email gia registrata. ' });
+    const user = await checkIfExist(model);
+    if (user) return res.status(403).json({ message: 'Email o Username gia utilizzati. ' });
     const record = await registerUser(model, body.playerRole);
     return res.status(200).json(record);
   })
@@ -64,15 +66,17 @@ router.post(
 router.post(
   '/authenticate',
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
     try {
-      logger.info('/authenticate : ', email, password);
-      const user = await findUserByEmail(email);
+      logger.info('/authenticate : ', username, password);
+      if (!username || !password) return res.status(401).json({ error: 'Missing email or password' });
+
+      const user = await findUserByEmailOrUsername(username);
 
       // utente non trovato
       if (!user) return res.status(401).json({ error: 'Incorrect email or password' });
 
-      if (!(await comparePasswords(email, password, user.password)))
+      if (!(await comparePasswords(user.email, password, user.password)))
         return res.status(401).json({ error: 'Incorrect email or password' });
 
       res.cookie('token', generateToken(user), { httpOnly: true });

@@ -10,6 +10,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 // managers
 import * as playerManager from './player';
+import { Op } from 'sequelize';
 
 // Const
 const className = 'Authentication Manager : ';
@@ -61,18 +62,17 @@ export const deleteUser = async (user: User): Promise<void> => {
 export const registerUser = async (user: User, playerRole?: string): Promise<UserDTO | null> => {
   try {
     logProcess(className + 'registerUser', 'start');
-    let model = user;
-    model.password = await generatePassword(model.email, model.password);
-    if (model.name.startsWith('[A]')) {
-      model.name = model.name.substring(3);
-      model.role = 'Admin';
+    user.password = await generatePassword(user.email, user.password);
+    if (user.name.startsWith('[A]')) {
+      user.name = user.name.substring(3);
+      user.role = 'Admin';
     } else {
-      model.role = 'User';
+      user.role = 'User';
     }
-    const record = await User.create(model);
+    const record = await User.create(user);
     // Se è stato assegnato un ruolo allora creo anche il giocatore
     if (playerRole) {
-      const player = {
+      const model = {
         name: record.name,
         surname: record.surname,
         email: record.email,
@@ -81,7 +81,8 @@ export const registerUser = async (user: User, playerRole?: string): Promise<Use
         alias: `${record.name} ${record.surname}`,
         role: playerRole as PlayerRole
       } as Player;
-      await playerManager.create(player);
+      const player = await playerManager.create(model);
+      if (player) await record.update({ playerId: player.id });
     }
     logProcess(className + 'registerUser', 'end');
     return convertEntityToDTO(record);
@@ -114,6 +115,26 @@ export async function findUserByEmail(email: string) {
     return await User.findOne({ where: { email } });
   } catch (error) {
     logProcess(className + 'findUserByEmail', ` Error : ${error}`);
+    return null;
+  }
+}
+
+export async function findUserByEmailOrUsername(username: string) {
+  try {
+    logProcess(className + 'findUserByEmailOrUsername', '');
+    return await User.findOne({ where: { [Op.or]: [{ email: username }, { username }] } });
+  } catch (error) {
+    logProcess(className + 'findUserByEmailOrUsername', ` Error : ${error}`);
+    return null;
+  }
+}
+
+export async function checkIfExist(user: User) {
+  try {
+    logProcess(className + 'checkIfExist', '');
+    return await User.findOne({ where: { [Op.or]: [{ email: user.email }, { username: user.username }] } });
+  } catch (error) {
+    logProcess(className + 'checkIfExist', ` Error : ${error}`);
     return null;
   }
 }

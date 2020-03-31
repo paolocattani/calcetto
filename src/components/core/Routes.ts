@@ -27,7 +27,7 @@ export const routes: routeType[] = [
     exact: true,
     ComponentToRender: Pairs,
     visible: false,
-    private: false,
+    private: true,
     index: 20
   },
   {

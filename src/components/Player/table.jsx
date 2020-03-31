@@ -34,7 +34,6 @@ export default class Player extends React.Component {
           headers: { 'Content-Type': 'application/json' }
         });
         const result = await response.json();
-        console.log('player.componentDidMount : ',result);
 
         this.setState({
           isLoading: false,
@@ -130,7 +129,7 @@ export default class Player extends React.Component {
         rows[rowIndex].editable ? { backgroundColor: '#28a745' } : { backgroundColor: '#dc3545' }
     };
 
-    console.log('Render player : ', { ...this.props });
+    // console.log('Render player : ', { ...this.props });
 
     return (
       <SessionContext.Consumer>
@@ -171,7 +170,6 @@ export default class Player extends React.Component {
                     bootstrap4
                   />
                 </>
-                )}
               </Col>
             </Row>
           </>

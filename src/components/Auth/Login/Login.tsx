@@ -1,24 +1,81 @@
-import * as React from 'react';
+import { useInput } from '../../core/generic/InputHook';
+import { Form, Button } from 'react-bootstrap';
+import React, { SetStateAction } from 'react';
+import { useSessionContext } from '../../core/SessionContext';
+import { useHistory } from 'react-router-dom';
 
-import { Formik } from 'formik';
-import * as yup from 'yup';
-import LoginForm from './LoginForm';
-import { ILoginFormValue, ILoginForm } from '../types';
-
-const initialValues: ILoginFormValue = {
-  email: '',
-  password: ''
+type PropsType = {
+  setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const validationSchema = yup.object().shape({ password: yup.string(), email: yup.string() });
+// https://medium.com/@faizanv/authentication-for-your-react-and-express-application-w-json-web-tokens-923515826e0#6563
+const Login: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
+  const [sessionContext, updateSessionContext] = useSessionContext();
+  const currentHistory = useHistory();
 
-const Login: React.FC<ILoginForm> = ({ onSubmit, responseFacebook, responseGoogle }) => {
-  console.log('Rendering Login:');
+  const { value: username, bind: bindUsername, reset: resetUsername } = useInput('');
+  const { value: password, bind: bindPassword, reset: resetPassword } = useInput('');
+
+  const showError = (message: SetStateAction<string>) => {
+    setErrorMessage(message);
+    setTimeout(() => setErrorMessage(''), 3000);
+  };
+
+  const handleSubmit = async (evt: any) => {
+    // evt.preventDefault();
+    if (!username || username === '') {
+      showError('Inserire username o password');
+      return;
+    }
+    if (!password || password === '') {
+      showError('Inserire la password');
+      return;
+    }
+    try {
+      const response = await fetch('/api/v1/auth/authenticate', {
+        method: 'POST',
+        body: JSON.stringify({ username, password }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const result = await response.json();
+      if (response.ok && result) {
+        updateSessionContext({
+          ...sessionContext,
+          name: result.name,
+          surname: result.surname,
+          email: result.email,
+          role: result.role,
+          isAuthenticated: true
+        });
+        currentHistory.push('/');
+      } else {
+        if (response.status === 401) setErrorMessage('Utente o Password errata');
+
+        setTimeout(() => setErrorMessage(''), 3000);
+      }
+    } catch (error) {
+      console.log('onSubmitLogin : ', error);
+      showError('Errore durante il processo di registrazione. Riprovare piu tardi');
+    }
+  };
 
   return (
-    <Formik validationSchema={validationSchema} initialValues={initialValues} onSubmit={onSubmit}>
-      <LoginForm responseFacebook={responseFacebook} responseGoogle={responseGoogle} onSubmit={onSubmit} />
-    </Formik>
+    <Form onSubmit={handleSubmit}>
+      <Form.Group controlId="formLogin">
+        <Form.Label>Username o Email</Form.Label>
+        {/*<Form.Text className="text-muted">We'll never share your email with anyone else.</Form.Text>*/}
+        <Form.Control required type="text" placeholder="username o email" {...bindUsername} />
+      </Form.Group>
+
+      <Form.Group controlId="formBasicPassword">
+        <Form.Label>Password</Form.Label>
+        <Form.Control required type="password" placeholder="Password" {...bindPassword} />
+      </Form.Group>
+      <Button size="lg" variant="outline-success" type="submit">
+        Login
+      </Button>
+    </Form>
   );
 };
+
 export default Login;

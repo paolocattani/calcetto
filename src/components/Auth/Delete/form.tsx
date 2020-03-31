@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as yup from 'yup';
 import { IDeleteFormValue, IDeleteForm } from '../types';
 import { Row, Col, FormControl, Button } from 'react-bootstrap';
 
@@ -10,9 +8,9 @@ const initialValues: IDeleteFormValue = {
   password: ''
 };
 
-const validationSchema = yup.object().shape({ password: yup.string(), email: yup.string() });
-
-const Delete: React.FC<IDeleteForm> = ({ onSubmit, email }: IDeleteForm) => (
+const Delete: React.FC<IDeleteForm> = ({ onSubmit, email }: IDeleteForm) => <div></div>;
+{
+  /*
   <Formik validationSchema={validationSchema} initialValues={initialValues} onSubmit={onSubmit}>
     <Form>
       <Row>
@@ -37,6 +35,7 @@ const Delete: React.FC<IDeleteForm> = ({ onSubmit, email }: IDeleteForm) => (
       </Row>
     </Form>
   </Formik>
-);
+  */
+}
 
 export default Delete;

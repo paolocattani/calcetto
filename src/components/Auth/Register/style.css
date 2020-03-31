@@ -1,0 +1,11 @@
+.react-datepicker-wrapper {
+    width: 100% !important;
+}
+
+.datepicker {
+    width: inherit;
+}
+
+.color-green {
+    color: #64bd9c !important;
+}
