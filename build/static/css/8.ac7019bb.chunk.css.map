@@ -1,0 +1,1 @@
+{"version":3,"sources":["style.css"],"names":[],"mappings":"AAAA,0BACI,oBACJ,CAEA,YACI,aACJ,CAEA,aACI,uBACJ","file":"8.ac7019bb.chunk.css","sourcesContent":[".react-datepicker-wrapper {\r\n    width: 100% !important;\r\n}\r\n\r\n.datepicker {\r\n    width: inherit;\r\n}\r\n\r\n.color-green {\r\n    color: #64bd9c !important;\r\n}"]}
