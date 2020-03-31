@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 // Components
 import { Header } from './Header/Header';
+import { LoadingModal } from './core/Commons';
 // Routing
 import { Switch } from 'react-router';
 import routes from '../components/core/Routes';
@@ -20,11 +21,13 @@ const App: React.FC = _ => (
     <Header />
     <Container fluid>
       {/*<RedirectionControl />*/}
-      <Switch>
-        {routes.map(route => (
-          <ProtectedRoute {...route} key={route.index} />
-        ))}
-      </Switch>
+      <Suspense fallback={<LoadingModal show={true} message={'....Caricamento'} />}>
+        <Switch>
+          {routes.map(route => (
+            <ProtectedRoute {...route} key={route.index} />
+          ))}
+        </Switch>
+      </Suspense>
     </Container>
   </div>
 );
