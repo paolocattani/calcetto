@@ -163,7 +163,7 @@ export default class Player extends React.Component {
                     selectRow={selectRow}
                     caption={<TableHeader />}
                     filter={filterFactory()}
-                    headerClasses="player-table-header"
+                    headerClasses="default-background default-color-white"
                     noDataIndication="Nessun dato reperito"
                     striped
                     hover
