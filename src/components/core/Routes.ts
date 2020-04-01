@@ -8,6 +8,7 @@ const lazyStage1 = React.lazy(() => import('../Stage1/wrapper'));
 const lazyStage2 = React.lazy(() => import('../Stage2/model'));
 const lazyRedirectionControl = React.lazy(() => import('./RedirectionControls'));
 const lazyLogin = React.lazy(() => import('../Auth/Wrapper'));
+const lazyUser = React.lazy(() => import('../Auth/Edit'));
 
 export interface routeType {
   path: string;
@@ -57,7 +58,6 @@ export const routes: routeType[] = [
     private: true,
     index: 30
   },
-
   {
     path: '/player',
     label: 'Gestione Giocatori',
@@ -68,6 +68,15 @@ export const routes: routeType[] = [
     index: 40
   },
   {
+    path: '/user',
+    label: 'Gestione Utente',
+    exact: true,
+    ComponentToRender: lazyUser,
+    visible: true,
+    private: true,
+    index: 50
+  },
+  {
     path: '/stage2/:tId',
     label: 'Torneo fase 2',
     exact: true,
@@ -75,7 +84,7 @@ export const routes: routeType[] = [
     //ComponentToRender: OrganizationChartDemo,
     visible: !(process.env.NODE_ENV === 'production'),
     private: true,
-    index: 50
+    index: 100
   },
   // TODO: creare pagina per route not found
   {

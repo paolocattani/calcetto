@@ -16,8 +16,7 @@ import {
   registerUser,
   findUserByEmailOrUsername,
   checkIfExist,
-  findUserByEmailAndUsername,
-  findUserDTOByEmailOrUsername
+  findUserByEmailAndUsername
 } from '../manager/auth';
 const router = Router();
 
@@ -37,9 +36,7 @@ router.get(
   '/',
   withAuth,
   // FIXME: fix request type
-  asyncMiddleware(async (req: any, res: Response, next: NextFunction) =>
-    res.status(200).json(await findUserDTOByEmailOrUsername(req.email))
-  )
+  asyncMiddleware(async (req: any, res: Response, next: NextFunction) => res.status(200).json(req.user))
 );
 
 router.get(
@@ -61,6 +58,24 @@ router.post(
     if (user) return res.status(403).json({ message: 'Email o Username gia utilizzati. ' });
     const record = await registerUser(model, body.playerRole);
     return res.status(200).json(record);
+  })
+);
+router.post(
+  '/update',
+  withAuth,
+  asyncMiddleware(async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const { body } = req;
+      let model = parseBody(body.user);
+      logger.info('/update : ', model);
+      const user = await findUserByEmailAndUsername(model.email, model.username);
+      if (!user) return res.status(500).json({ error: 'Utente non trovato' });
+      await user.update(model);
+      return res.status(200).json(user);
+    } catch (error) {
+      logger.error('/update error : ', error);
+      return res.status(500).json({ error: 'Internal error please try again' });
+    }
   })
 );
 
