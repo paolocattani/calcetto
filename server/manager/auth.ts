@@ -26,13 +26,8 @@ export const getSecret = () => (process.env.SERVER_HASH ? process.env.SERVER_HAS
 
 export const generateHashSecret = (email: string, password: string) => email + getSecret() + password;
 
-export const generateToken = (value: string | User | UserDTO) =>
-  typeof value === 'string'
-    ? jwt.sign({ email: value }, getSecret(), { expiresIn: '8h', algorithm: 'HS256' })
-    : jwt.sign({ name: value.name, surname: value.surname, role: value.role, email: value.email }, getSecret(), {
-        expiresIn: '8h',
-        algorithm: 'HS256'
-      });
+export const generateToken = (value: User | UserDTO) =>
+  jwt.sign({ ...value }, getSecret(), { expiresIn: '8h', algorithm: 'HS256' });
 
 export const listAll = async (): Promise<UserDTO[]> => {
   try {
