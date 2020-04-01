@@ -34,9 +34,8 @@ const Delete = ({ show, onHide }: authType): JSX.Element => {
         body: JSON.stringify({ email, username, password })
       });
       const result = await response.json();
-      console.log('onSubmitLogin : ', response, result);
       if (response.ok && result) {
-        updateSessionContext({ ...sessionContext, name: '', surname: '', email: '', role: '', isAuthenticated: false });
+        updateSessionContext({ isAuthenticated: false });
         onHide();
         currentHistory.push('/');
       } else {

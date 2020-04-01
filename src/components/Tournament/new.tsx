@@ -39,9 +39,9 @@ const NewTournament = () => {
         </Col>
 
         <Col md={2}>
-          <Form.Group controlId="exampleForm.SelectCustom">
-            <Form.Label>Visibilità : {visible}</Form.Label>
-            <Form.Control as="select" custom onChange={onChangeVisible}>
+          <Form.Group controlId="visible">
+            <Form.Label>Visibilità </Form.Label>
+            <Form.Control as="select" onChange={onChangeVisible}>
               <option>Pubblico</option>
               <option>Privato</option>
             </Form.Control>

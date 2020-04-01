@@ -7,6 +7,9 @@ export interface Session {
   name?: string | null;
   surname?: string | null;
   email?: string | null;
+  phone?: string | null;
+  birthday?: string | null;
+  label?: string | null;
   role?: string | null;
 }
 
