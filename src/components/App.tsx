@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 // Components
 import { Header } from './Header/Header';
-import { LoadingModal } from './core/Commons';
+import { LoadingModal /* LogSessionContext */ } from './core/Commons';
 // Routing
 import { Switch } from 'react-router';
 import routes from '../components/core/Routes';
@@ -20,6 +20,7 @@ const App: React.FC = _ => (
   <div className="App">
     <Header />
     <Container fluid>
+      {/*<LogSessionContext /> */}
       {/*<RedirectionControl />*/}
       <Suspense fallback={<LoadingModal show={true} message={'....Caricamento'} />}>
         <Switch>

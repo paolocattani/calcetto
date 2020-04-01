@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, Spinner, Toast, Alert } from 'react-bootstrap';
+import { SessionContext } from './SessionContext';
 
 // Loading Modal
 type loadingModalPropsType = {
@@ -48,3 +49,15 @@ export const GenericToast: React.FC<toastPropsType> = ({ message, type }: toastP
       </Toast.Body>
     </Toast>
   ) : null;
+
+export const LogSessionContext: React.FC<{}> = _ => (
+  <SessionContext.Consumer>
+    {([session]) =>
+      Object.entries(session).map(([key, value]) => (
+        <p>
+          {key} : {value}
+        </p>
+      ))
+    }
+  </SessionContext.Consumer>
+);

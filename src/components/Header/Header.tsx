@@ -13,15 +13,7 @@ export const Header: React.FC = _ => {
 
   const logout = async () => {
     const response = await fetch('/api/v1/auth/logout');
-    if (response.ok)
-      updateSessionContext({
-        ...sessionContext,
-        name: '',
-        surname: '',
-        email: '',
-        role: '',
-        isAuthenticated: false
-      });
+    if (response.ok) updateSessionContext({ isAuthenticated: false });
     // TODO: gestire messaggi utente
   };
 

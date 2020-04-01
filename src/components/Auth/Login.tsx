@@ -39,14 +39,7 @@ const Login: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
       });
       const result = await response.json();
       if (response.ok && result) {
-        updateSessionContext({
-          ...sessionContext,
-          name: result.name,
-          surname: result.surname,
-          email: result.email,
-          role: result.role,
-          isAuthenticated: true
-        });
+        updateSessionContext({ ...sessionContext, ...result, isAuthenticated: true });
         currentHistory.push('/');
       } else {
         if (response.status === 401) showError('Utente o Password errata');

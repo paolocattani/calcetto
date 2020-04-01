@@ -24,13 +24,12 @@ const AuthWrapper: React.FC = (): JSX.Element => {
     width: register ? '50vw' : '40vw',
     height: 'auto',
     margin: 'auto',
-    backgroundColor: '#343A40',
     color: 'white'
   };
 
   return (
     <>
-      <Card style={modalStyle}>
+      <Card style={modalStyle} className="default-background">
         <Card.Header as="h2">{title}</Card.Header>
         <Card.Body>
           <Container>

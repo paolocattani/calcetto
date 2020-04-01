@@ -126,7 +126,7 @@ export default class Player extends React.Component {
       onSelectAll: (isSelected, rows) => rows.forEach(row => this.handleOnSelect(row, isSelected)),
       style: { backgroundColor: '#c8e6c9' },
       selectColumnStyle: ({ checked, disabled, rowIndex, rowKey }) =>
-        rows[rowIndex].editable ? { backgroundColor: '#28a745' } : { backgroundColor: '#dc3545' }
+        rows[rowIndex].editable ? {} : { backgroundColor: '#dc3545' }
     };
 
     // console.log('Render player : ', { ...this.props });

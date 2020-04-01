@@ -1,9 +1,9 @@
-import React, { useState, SetStateAction } from 'react';
+import React, { useState, SetStateAction, CSSProperties } from 'react';
 import { useSessionContext } from 'components/core/SessionContext';
 import { useHistory } from 'react-router-dom';
 import { Modal, Container, Alert, Form, Col, Row, Button } from 'react-bootstrap';
 import { useInput } from '../core/generic/InputHook';
-
+import { SessionContext } from '../core/SessionContext';
 type authType = {
   show: boolean;
   onHide: () => void;
@@ -16,13 +16,17 @@ const Delete = ({ show, onHide }: authType): JSX.Element => {
 
   const currentHistory = useHistory();
 
-  const { email, username } = sessionContext;
   const showError = (message: SetStateAction<string>) => {
     setErrorMessage(message);
     setTimeout(() => setErrorMessage(''), 3000);
   };
 
-  const handleSubmit = async (evt: React.SyntheticEvent) => {
+  const handleSubmit = async (
+    evt: React.SyntheticEvent<Element, Event>,
+    email: string | null | undefined,
+    username: string | null | undefined
+  ) => {
+    evt.preventDefault();
     try {
       const response = await fetch('/api/v1/auth/', {
         method: 'DELETE',
@@ -45,55 +49,80 @@ const Delete = ({ show, onHide }: authType): JSX.Element => {
     }
   };
 
+  const modalStyle: CSSProperties = {
+    textAlign: 'left',
+    width: '40vw',
+    height: 'auto',
+    margin: 'auto',
+    backgroundColor: '#343A40',
+    color: 'white'
+  };
+
   const error = errorMessage ? (
     <Alert key={'auth-alert'} variant={'danger'}>
       {errorMessage}{' '}
     </Alert>
   ) : null;
 
-  const body =
-    !email || !username ? (
-      <p>
-        <strong>Eliminazione non possibile</strong>{' '}
-      </p>
-    ) : (
-      <Form onSubmit={handleSubmit}>
-        <Form.Group as={Row} controlId="email">
-          <Form.Label column sm="2">
-            Email
-          </Form.Label>
-          <Col sm="10">
-            <Form.Control plaintext readOnly defaultValue={email} />
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row} controlId="username">
-          <Form.Label column sm="2">
-            Username
-          </Form.Label>
-          <Col sm="10">
-            <Form.Control plaintext readOnly defaultValue={username} />
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row} controlId="password">
-          <Form.Label column sm="2">
-            Password
-          </Form.Label>
-          <Col sm="10">
-            <Form.Control type="password" placeholder="Password" {...bindPassword} />
-          </Col>
-        </Form.Group>
-        <Button size="lg" variant="outline-danger" type="submit">
-          Conferma
-        </Button>
-      </Form>
-    );
+  const body = (
+    <SessionContext.Consumer>
+      {([{ email, username }]) =>
+        !email || !username ? (
+          <>
+            <strong>Eliminazione non possibile</strong>{' '}
+          </>
+        ) : (
+          <Form onSubmit={(e: React.SyntheticEvent<Element, Event>) => handleSubmit(e, email, username)}>
+            <Form.Group as={Row} controlId="email">
+              <Form.Label column sm="2">
+                Email
+              </Form.Label>
+              <Col sm="10">
+                <Form.Control className="default-color-white" plaintext readOnly defaultValue={email} />
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} controlId="username">
+              <Form.Label column sm="2">
+                Username
+              </Form.Label>
+              <Col sm="10">
+                <Form.Control className="default-color-white" plaintext readOnly defaultValue={username} />
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} controlId="password">
+              <Form.Label column sm="2">
+                Password
+              </Form.Label>
+              <Col sm="10">
+                <Form.Control type="password" placeholder="Password" {...bindPassword} />
+              </Col>
+            </Form.Group>
+            <Button size="lg" variant="outline-danger" type="submit">
+              Conferma
+            </Button>
+          </Form>
+        )
+      }
+    </SessionContext.Consumer>
+  );
 
   return (
     <Modal show={show} onHide={onHide} size={'lg'} centered>
-      <Modal.Header closeButton>
-        <Modal.Title>Elimina Utente</Modal.Title>
+      <Modal.Header
+        style={{
+          backgroundColor: '#343A40',
+          color: 'white'
+        }}
+        closeButton
+      >
+        <Modal.Title className="default-color-red">Elimina Utente</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body
+        style={{
+          backgroundColor: '#343A40',
+          color: 'white'
+        }}
+      >
         <Container fluid>
           {error}
           {body}

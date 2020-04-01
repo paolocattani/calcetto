@@ -7,7 +7,6 @@ import User from '../model/sequelize/user.model';
 import { withAuth, asyncMiddleware } from '../core/middleware';
 
 import {
-  findUserByEmail,
   convertEntityToDTO,
   parseBody,
   deleteUser,
@@ -17,7 +16,8 @@ import {
   registerUser,
   findUserByEmailOrUsername,
   checkIfExist,
-  findUserByEmailAndUsername
+  findUserByEmailAndUsername,
+  findUserDTOByEmailOrUsername
 } from '../manager/auth';
 const router = Router();
 
@@ -38,7 +38,7 @@ router.get(
   withAuth,
   // FIXME: fix request type
   asyncMiddleware(async (req: any, res: Response, next: NextFunction) =>
-    res.status(200).json(await findUserByEmail(req.email))
+    res.status(200).json(await findUserDTOByEmailOrUsername(req.email))
   )
 );
 
@@ -80,8 +80,9 @@ router.post(
       if (!(await comparePasswords(user.email, password, user.password)))
         return res.status(401).json({ error: 'Incorrect email or password' });
 
-      res.cookie('token', generateToken(user), { httpOnly: true });
-      return res.status(200).json(convertEntityToDTO(user));
+      const userDTO = convertEntityToDTO(user);
+      res.cookie('token', generateToken(userDTO), { httpOnly: true });
+      return res.status(200).json(userDTO);
     } catch (error) {
       logger.error('/authenticate error : ', error);
       return res.status(500).json({ error: 'Internal error please try again' });

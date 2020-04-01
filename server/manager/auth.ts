@@ -26,7 +26,7 @@ export const getSecret = () => (process.env.SERVER_HASH ? process.env.SERVER_HAS
 
 export const generateHashSecret = (email: string, password: string) => email + getSecret() + password;
 
-export const generateToken = (value: string | User) =>
+export const generateToken = (value: string | User | UserDTO) =>
   typeof value === 'string'
     ? jwt.sign({ email: value }, getSecret(), { expiresIn: '8h', algorithm: 'HS256' })
     : jwt.sign({ name: value.name, surname: value.surname, role: value.role, email: value.email }, getSecret(), {
@@ -115,6 +115,17 @@ export async function findUserByEmail(email: string) {
     return await User.findOne({ where: { email } });
   } catch (error) {
     logProcess(className + 'findUserByEmail', ` Error : ${error}`);
+    return null;
+  }
+}
+
+export async function findUserDTOByEmailOrUsername(username: string) {
+  try {
+    logProcess(className + 'findUserDTOByEmailOrUsername', '');
+    const user = await User.findOne({ where: { [Op.or]: [{ email: username }, { username }] } });
+    return user ? convertEntityToDTO(user) : null;
+  } catch (error) {
+    logProcess(className + 'findUserDTOByEmailOrUsername', ` Error : ${error}`);
     return null;
   }
 }

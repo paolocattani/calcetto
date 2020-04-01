@@ -253,7 +253,9 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
               options={playerRoles}
               styles={selectStyles}
             />
-            <Form.Text className="text-muted color-green">Sei un giocatore? Assegna qui il tuo ruolo.</Form.Text>
+            <Form.Text className="text-muted default-color-green">
+              Sei un giocatore? Assegna qui il tuo ruolo.
+            </Form.Text>
           </Form.Group>
         </Col>
       </Form.Row>

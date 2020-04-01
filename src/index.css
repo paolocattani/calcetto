@@ -1,3 +1,23 @@
+
+/* Palette */
+.default-color-green {
+  color: #64bd9c !important;
+}
+
+.default-color-white {
+  color: whitesmoke !important;
+}
+
+.default-color-red {
+  color: #dc3545 !important;
+}
+
+.default-background {
+  background-color: #343A40;
+}
+/* Palette-End */
+
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
