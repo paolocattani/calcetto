@@ -17,7 +17,7 @@ import {
   findUserByEmailOrUsername,
   checkIfExist,
   findUserByEmailAndUsername
-} from '../manager/auth';
+} from '../manager/auth.manager';
 const router = Router();
 
 router.use('/', (req, res, next) => {

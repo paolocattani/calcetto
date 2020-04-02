@@ -4,7 +4,7 @@ import Tournament from '../model/sequelize/tournament.model';
 import { isDevMode } from '../core/debug';
 import chalk from 'chalk';
 import { asyncMiddleware } from '../core/middleware';
-import { isAdmin, getUserFromToken } from '../manager/auth';
+import { isAdmin, getUserFromToken } from '../manager/auth.manager';
 
 // all API path must be relative to /api/v1/tournament
 const router = Router();

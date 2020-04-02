@@ -1,26 +1,27 @@
-import '../../core/env';
-import { logger } from '../../core/logger';
+// Server
 import { CorsOptions } from 'cors';
-
-import chalk from 'chalk';
 import { AbstractServer } from './AbstractServer';
 import { Application as ExpressApplication } from 'express';
+// Db
 import syncDb from '../sequelize';
-import routes from './../../controller';
 import { SyncOptions } from 'sequelize/types';
-import generator from '../../generator/generator';
 import { Sequelize } from 'sequelize-typescript';
+import generator from '../../generator/generator';
+// Routes
+import routes from '../../controller/index';
+// Utils
+import '../../core/env';
+import chalk from 'chalk';
+import { logger } from '../../core/logger';
 import { isProductionMode } from '../../core/debug';
+
 // white list for CORS
-const applicationName: string = 'ApplicationServer';
+const applicationName: string = 'ApplicationServer Calcetto';
 const applicationPort: number = isProductionMode() ? Number(process.env.PORT) : Number(process.env.SERVER_PORT);
 const applicationCPUs: number = Number(process.env.SERVER_WORKERS);
 const whiteList: string[] = [
   `http://${process.env.CLIENT_HOST}:${process.env.CLIENT_PORT}`,
-  `https://${process.env.CLIENT_HOST}:${process.env.CLIENT_PORT}`,
-  `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`,
-  `https://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`,
-  `https://${process.env.AUTH0_DOMAIN}`
+  `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`
 ];
 
 export let dbConnection: Sequelize;

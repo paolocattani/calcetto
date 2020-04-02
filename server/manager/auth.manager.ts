@@ -9,7 +9,7 @@ import { logProcess } from '../core/logger';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 // managers
-import * as playerManager from './player';
+import * as playerManager from './player.manager';
 import { Op } from 'sequelize';
 
 // Const

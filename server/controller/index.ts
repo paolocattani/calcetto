@@ -1,11 +1,11 @@
 import { Router, Application as ExpressApplication } from 'express';
 
 // controllers
-import playerRouter from './player';
-import pairRouter from './pair';
-import tournamentRouter from './tournament';
-import stage1Router from './stage1';
-import authRouter from './auth';
+import playerRouter from './player.controller';
+import pairRouter from './pair.controller';
+import tournamentRouter from './tournament.controller';
+import stage1Router from './stage1.controller';
+import authRouter from './auth.controller';
 
 export default (application: ExpressApplication): Router => {
   const router = Router();
