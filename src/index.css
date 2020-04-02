@@ -1,19 +1,37 @@
 
 /* Palette */
+:root {
+  --default-yellow: #ffc107;
+  --default-red: #dc3545;
+  --default-black: #343A40;
+  --default-white: whitesmoke;
+  --default-green: #64bd9c;
+}
 .default-color-green {
-  color: #64bd9c !important;
+  color: var(--default-green) !important;
 }
 
 .default-color-white {
-  color: whitesmoke !important;
+  color: var(--default-white) !important;
 }
 
 .default-color-red {
-  color: #dc3545 !important;
+  color: var(--default-red) !important;
+}
+
+.default-color-yellow {
+  color: var(--default-yellow) !important;
+}
+.default-hover-green:hover {
+  background-color:var(--default-green) !important;
+  color:white !important
 }
 
 .default-background {
-  background-color: #343A40;
+  background-color: var(--default-black);
+}
+.default-border-yellow {
+  border : 1px solid var(--default-yellow);
 }
 /* Palette-End */
 

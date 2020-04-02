@@ -1,5 +1,5 @@
 import React, { FormEvent, SetStateAction, useState, CSSProperties } from 'react';
-import { Card, Container, Alert, Form, Button, Col } from 'react-bootstrap';
+import { Card, Container, Alert, Form, Button, Col, Row } from 'react-bootstrap';
 import { useInput } from '../core/generic/InputHook';
 import { useSessionContext } from '../core/SessionContext';
 import Delete from './Delete';
@@ -67,21 +67,28 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
                 {successMessage}
               </Alert>
             ) : null}
-
-            <Form.Row>
-              <Col>
-                <Form.Group controlId="username">
-                  <Form.Label>Username</Form.Label>
-                  <Form.Control type="text" placeholder="username" disabled value={username} />
-                </Form.Group>
+            <Form.Group as={Row} controlId="username">
+              <Form.Label column>Username</Form.Label>
+              <Col sm="10">
+                <Form.Control
+                  plaintext
+                  value={username}
+                  style={{ fontSize: 'larger', fontWeight: 'bolder' }}
+                  className="default-color-white "
+                />
               </Col>
-              <Col>
-                <Form.Group controlId="email">
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control type="email" placeholder="Email" disabled value={email} />
-                </Form.Group>
+            </Form.Group>
+            <Form.Group as={Row} controlId="email">
+              <Form.Label column>Email</Form.Label>
+              <Col sm="10">
+                <Form.Control
+                  plaintext
+                  value={email}
+                  style={{ fontSize: 'larger', fontWeight: 'bolder' }}
+                  className="default-color-white"
+                />
               </Col>
-            </Form.Row>
+            </Form.Group>
             <Form.Row>
               <Col>
                 <Form.Group controlId="name">

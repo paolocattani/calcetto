@@ -1,6 +1,6 @@
 import React, { CSSProperties, useState } from 'react';
 import backgroundImage from '../assets/header.jpg';
-import { Jumbotron, Navbar, Nav, Button } from 'react-bootstrap';
+import { Jumbotron, Navbar, Nav, Button, SplitButton, Dropdown, ButtonGroup } from 'react-bootstrap';
 import routes from '../core/Routes';
 import { useSessionContext } from '../core/SessionContext';
 import { Link } from 'react-router-dom';
@@ -15,7 +15,7 @@ export const Header: React.FC = _ => {
     // TODO: gestire messaggi utente
   };
 
-  const yellow = '##ffc107';
+  const yellow = '#ffc107';
   const jumboStyle: CSSProperties = {
     backgroundImage: `url(${backgroundImage})`,
     backgroundSize: 'cover',
@@ -59,17 +59,32 @@ export const Header: React.FC = _ => {
               </Nav>
               {sessionContext.name ? (
                 <>
-                  <Navbar.Text style={nameStyle}>
-                    <strong style={{ color: '#64bd9c' }}>{sessionContext.name}</strong>
-                  </Navbar.Text>
-                  <>
-                    <Button variant="outline-warning" onClick={logout}>
-                      Log out
+                  <Dropdown alignRight as={ButtonGroup}>
+                    <Button variant="outline-warning" size="lg">
+                      <strong style={{ color: '#64bd9c' }}>{sessionContext.name}</strong>
                     </Button>
-                    <Button as={Link} to={'/user'} variant="outline-warning">
-                      Gestione Utente
-                    </Button>
-                  </>
+                    <Dropdown.Toggle split variant="outline-warning" id="dropdown-custom-2" />
+                    <Dropdown.Menu className="default-background default-border-yellow">
+                      <Dropdown.Item
+                        className="default-color-yellow default-hover-green"
+                        as="button"
+                        variant="warning"
+                        onClick={logout}
+                        eventKey="1"
+                      >
+                        Log out
+                      </Dropdown.Item>
+                      <Dropdown.Divider style={{ borderTopColor: '#ffc107' }} />
+                      <Dropdown.Item
+                        className="default-color-yellow default-hover-green"
+                        as={Link}
+                        to={'/user'}
+                        eventKey="2"
+                      >
+                        Gestione Utente
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
                 </>
               ) : null}
             </Navbar.Collapse>

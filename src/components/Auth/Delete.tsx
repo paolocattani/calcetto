@@ -77,7 +77,13 @@ const Delete = ({ show, onHide }: authType): JSX.Element => {
                 Email
               </Form.Label>
               <Col sm="10">
-                <Form.Control className="default-color-white" plaintext readOnly defaultValue={email} />
+                <Form.Control
+                  style={{ fontSize: 'larger', fontWeight: 'bolder' }}
+                  className="default-color-white"
+                  plaintext
+                  readOnly
+                  defaultValue={email}
+                />
               </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="username">
@@ -85,7 +91,13 @@ const Delete = ({ show, onHide }: authType): JSX.Element => {
                 Username
               </Form.Label>
               <Col sm="10">
-                <Form.Control className="default-color-white" plaintext readOnly defaultValue={username} />
+                <Form.Control
+                  style={{ fontSize: 'larger', fontWeight: 'bolder' }}
+                  className="default-color-white"
+                  plaintext
+                  readOnly
+                  defaultValue={username}
+                />
               </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="password">
