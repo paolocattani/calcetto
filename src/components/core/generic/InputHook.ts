@@ -11,8 +11,8 @@ export const useInput = (initialValue: any) => {
     reset: () => setValue(''),
     bind: {
       value,
-      onChange: (event: any) => {
-        setValue(event.target.value);
+      onChange: (event: React.FormEvent<HTMLSelectElement>) => {
+        setValue(event.currentTarget.value);
       }
     }
   };

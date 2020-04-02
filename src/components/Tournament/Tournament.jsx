@@ -19,6 +19,8 @@ const FTournament = () => {
   // State definition
   const [selectedOption, setSelectedOption] = useState(getTodayDate());
   const [tournamentList, setTournamentList] = useState([]);
+  const [newTournament, setNewTournament] = useState(false);
+
   const messageInitialState = { message: '', type: 'success' };
   const [message, setMessage] = useState(messageInitialState);
   let currentHistory = useHistory();
@@ -54,63 +56,65 @@ const FTournament = () => {
     <Row>
       <Col>
         <GenericToast message={message.message} type={message.type} />
-
-        <Card style={cardStyle}>
-          <Card.Header as="h2">Torneo</Card.Header>
-          <Card.Body>
-            <Card.Title>Scegli un torneo</Card.Title>
-            <NewTournament />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-
-            {/* <NewTournament /> */
-            true ? (
-              <Form onSubmit={handleSubmit}>
-                <SessionContext.Consumer>
-                  {([session]) =>
-                    isEditable(session) ? (
-                      <CreatableSelect
-                        // TODO:
-                        //filterOption={customFilter}
-                        // getOptionValue={option => `${option.label}`}
-                        //formatCreateLabel={formatNewLabel}
-                        //formatOptionLabel={formatOptionLabel}
-                        //getOptionLabel={option => `${option.name} @ ${option.progress}`}
-                        //
-                        components={{ IndicatorSeparator }}
-                        value={selectedOption}
-                        options={tournamentList}
-                        placeholder="Crea/Cerca un torneo"
-                        isSearchable
-                        isClearable
-                        onChange={handleChange}
-                        onCreateOption={handleCreate}
-                        createOptionPosition={'first'}
-                      />
+        <Form onSubmit={handleSubmit}>
+          <SessionContext.Consumer>
+            {([session]) => (
+              <Card style={cardStyle}>
+                <Card.Header as="h2">Torneo</Card.Header>
+                <Card.Body>
+                  <Card.Title>Scegli un torneo</Card.Title>
+                  {isEditable(session) && newTournament ? (
+                    <NewTournament />
+                  ) : (
+                    <Select
+                      components={{ IndicatorSeparator }}
+                      value={selectedOption}
+                      options={tournamentList}
+                      placeholder="Cerca un torneo"
+                      isSearchable
+                      isClearable
+                      onChange={handleChange}
+                    />
+                  )}
+                </Card.Body>
+                <Card.Footer>
+                  <Button
+                    type="submit"
+                    size="lg"
+                    variant="outline-warning default-color-white"
+                    className="float-left"
+                    disabled={!selectedOption}
+                  >
+                    <span style={{ fontSize: 'larger', fontWeight: 'bolder' }}>Prosegui</span>
+                  </Button>
+                  {isEditable(session) ? (
+                    newTournament ? (
+                      <Button
+                        type="button"
+                        size="lg"
+                        variant="outline-warning"
+                        className="float-right default-color-white"
+                        onClick={() => setNewTournament(false)}
+                      >
+                        Seleziona un torneo
+                      </Button>
                     ) : (
-                      <Select
-                        components={{ IndicatorSeparator }}
-                        value={selectedOption}
-                        options={tournamentList}
-                        placeholder="Cerca un torneo"
-                        isSearchable
-                        isClearable
-                        onChange={handleChange}
-                      />
+                      <Button
+                        type="button"
+                        size="lg"
+                        variant="outline-warning"
+                        className="float-right default-color-white"
+                        onClick={() => setNewTournament(true)}
+                      >
+                        Crea un nuovo torneo
+                      </Button>
                     )
-                  }
-                </SessionContext.Consumer>
-                <br></br>
-                <Button type="submit" size="lg" variant="outline-warning" disabled={!selectedOption}>
-                  Continua
-                </Button>
-              </Form>
-            ) : null}
-          </Card.Body>
-        </Card>
+                  ) : null}
+                </Card.Footer>
+              </Card>
+            )}
+          </SessionContext.Consumer>
+        </Form>
       </Col>
     </Row>
   );

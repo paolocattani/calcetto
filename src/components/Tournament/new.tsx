@@ -5,20 +5,27 @@ import { Form, InputGroup, Col, Button, Row, FormControl } from 'react-bootstrap
 import DatePicker from 'react-datepicker';
 
 const NewTournament = () => {
+  const [name, setName] = useState<string>('');
   const [date, setDate] = useState<Date>(new Date());
-  const [visible, setVisible] = useState<FormEvent<any>>();
+  const [visible, setVisible] = useState<boolean>(true);
 
-  const onChangeVisible = (event: any) => {
-    console.log(event);
+  const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    evt.preventDefault();
   };
 
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <Form.Row>
         <Col md={7}>
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Nome</Form.Label>
-            <Form.Control type="text" placeholder="Nome Torneo" />
+            <Form.Control
+              type="text"
+              placeholder="Nome Torneo"
+              value={name}
+              onChange={(event: React.FormEvent<HTMLSelectElement>) => setName(event.currentTarget.value)}
+            />
+            -{' '}
           </Form.Group>
         </Col>
         <Col md={3}>
@@ -41,7 +48,7 @@ const NewTournament = () => {
         <Col md={2}>
           <Form.Group controlId="visible">
             <Form.Label>Visibilità </Form.Label>
-            <Form.Control as="select" onChange={onChangeVisible}>
+            <Form.Control as="select" onChange={() => setVisible(!visible)}>
               <option>Pubblico</option>
               <option>Privato</option>
             </Form.Control>
