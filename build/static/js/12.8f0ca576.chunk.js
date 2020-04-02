@@ -1,2 +1,0 @@
-(this.webpackJsonpcalcetto=this.webpackJsonpcalcetto||[]).push([[12],{329:function(e,t,n){"use strict";n.r(t),n.d(t,"default",(function(){return u}));var a=n(17),c=n(0),r=n.n(c);function u(e){var t=Object(a.h)();return r.a.createElement("div",null,r.a.createElement("h1",null,"Current Ruote : ",r.a.createElement("code",null,t.pathname)))}}}]);
-//# sourceMappingURL=12.8f0ca576.chunk.js.map
