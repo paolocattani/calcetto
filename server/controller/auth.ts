@@ -52,11 +52,13 @@ router.get(
 router.post(
   '/register',
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
+    logger.info('/register start ');
     const { body } = req;
     let model: User = parseBody(body);
     const user = await checkIfExist(model);
     if (user) return res.status(403).json({ message: 'Email o Username gia utilizzati. ' });
     const record = await registerUser(model, body.playerRole);
+    logger.info('/register end ');
     return res.status(200).json(record);
   })
 );
@@ -65,12 +67,13 @@ router.post(
   withAuth,
   asyncMiddleware(async (req: any, res: Response, next: NextFunction) => {
     try {
-      const { body } = req;
-      let model = parseBody(body.user);
-      logger.info('/update : ', model);
+      logger.info('/update start ');
+      let model = parseBody(req.user);
+      // logger.info('/update : ', model);
       const user = await findUserByEmailAndUsername(model.email, model.username);
       if (!user) return res.status(500).json({ error: 'Utente non trovato' });
       await user.update(model);
+      logger.info('/update end ');
       return res.status(200).json(user);
     } catch (error) {
       logger.error('/update error : ', error);
@@ -84,7 +87,7 @@ router.post(
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     const { username, password } = req.body;
     try {
-      logger.info('/authenticate : ', username, password);
+      logger.info('/authenticate start ');
       if (!username || !password) return res.status(401).json({ error: 'Missing email or password' });
 
       const user = await findUserByEmailOrUsername(username);
@@ -97,6 +100,7 @@ router.post(
 
       const userDTO = convertEntityToDTO(user);
       res.cookie('token', generateToken(userDTO), { httpOnly: true });
+      logger.info('/authenticate end ');
       return res.status(200).json(userDTO);
     } catch (error) {
       logger.error('/authenticate error : ', error);
@@ -111,7 +115,7 @@ router.delete(
   asyncMiddleware(async (req: any, res: Response, next: NextFunction) => {
     const { email, password, username } = req.body;
     try {
-      logger.info('/authenticate : ', email, password);
+      logger.info('/delete start ');
       const user = await findUserByEmailAndUsername(email, username);
       if (!user) return res.status(500).json({ message: 'Utente non trovato' });
 
@@ -119,9 +123,11 @@ router.delete(
         return res.status(401).json({ error: 'Incorrect email or password' });
 
       await deleteUser(user);
+      logger.info('/delete end ');
       res.cookie('token', { expires: new Date(Date.now()), httpOnly: true });
       return res.status(200).json({ message: 'Utente eliminato' });
     } catch (error) {
+      logger.error('/delete error : ', error);
       return res.status(500).json({ message: 'Errore durante fase di cancellazione' });
     }
   })

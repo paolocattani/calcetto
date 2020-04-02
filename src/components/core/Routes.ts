@@ -72,7 +72,7 @@ export const routes: routeType[] = [
     label: 'Gestione Utente',
     exact: true,
     ComponentToRender: lazyUser,
-    visible: true,
+    visible: false,
     private: true,
     index: 50
   },

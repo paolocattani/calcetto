@@ -66,6 +66,9 @@ export const Header: React.FC = _ => {
                     <Button variant="outline-warning" onClick={logout}>
                       Log out
                     </Button>
+                    <Button as={Link} to={'/user'} variant="outline-warning">
+                      Gestione Utente
+                    </Button>
                   </>
                 </>
               ) : null}

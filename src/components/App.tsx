@@ -3,7 +3,7 @@ import React, { Suspense } from 'react';
 import { Header } from './Header/Header';
 import { LoadingModal /* LogSessionContext */ } from './core/Commons';
 // Routing
-import { Switch } from 'react-router';
+import { Switch, useHistory } from 'react-router';
 import routes from '../components/core/Routes';
 import { ProtectedRoute } from '../components/core/ProtectedRoute';
 // Style
@@ -16,21 +16,25 @@ import { far } from '@fortawesome/free-regular-svg-icons';
 
 library.add(fas, far);
 
-const App: React.FC = _ => (
-  <div className="App">
-    <Header />
-    <Container fluid>
-      {/*<LogSessionContext /> */}
-      {/*<RedirectionControl />*/}
-      <Suspense fallback={<LoadingModal show={true} message={'....Caricamento'} />}>
-        <Switch>
-          {routes.map(route => (
-            <ProtectedRoute {...route} key={route.index} />
-          ))}
-        </Switch>
-      </Suspense>
-    </Container>
-  </div>
-);
+const App: React.FC = _ => {
+  const history = useHistory();
+
+  return (
+    <div className="App">
+      <Header />
+      <Container fluid>
+        {/*<LogSessionContext /> */}
+        {/*<RedirectionControl />*/}
+        <Suspense fallback={<LoadingModal show={true} message={'....Caricamento'} />}>
+          <Switch>
+            {routes.map(route => (
+              <ProtectedRoute {...route} key={route.index} />
+            ))}
+          </Switch>
+        </Suspense>
+      </Container>
+    </div>
+  );
+};
 
 export default App;

@@ -28,7 +28,7 @@ export const withAuth = (req: any, res: Response, next: NextFunction) => {
   try {
     if (!token || typeof token != 'string') return res.status(401).send('Unauthorized: No token provided');
     const decoded: any = jwt.verify(token, getSecret());
-    logger.info('withAuth : ', decoded);
+    // logger.info('withAuth : ', decoded);
     req.user = decoded;
     next();
   } catch (error) {
