@@ -1,5 +1,5 @@
 // Models/Types
-import { PlayerDTO } from '../model/dto/player';
+import { PlayerDTO } from '../model/dto/player.dto';
 import Player from '../model/sequelize/player.model';
 // Logger utils
 import { logProcess } from '../core/logger';

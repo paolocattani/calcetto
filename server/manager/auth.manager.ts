@@ -1,7 +1,7 @@
 // Models/Types
 import Player from 'model/sequelize/player.model';
 import { PlayerRole } from 'model/sequelize/types';
-import { UserDTO } from '../model/dto/user';
+import { UserDTO } from '../model/dto/user.dto';
 import User from '../model/sequelize/user.model';
 // Logger utils
 import { logProcess } from '../core/logger';
