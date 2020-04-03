@@ -1,4 +1,4 @@
-import { Router, Application as ExpressApplication } from 'express';
+import { Router, Application as ExpressApplication, Request } from 'express';
 
 // controllers
 import playerRouter from './player.controller';
@@ -6,7 +6,11 @@ import pairRouter from './pair.controller';
 import tournamentRouter from './tournament.controller';
 import stage1Router from './stage1.controller';
 import authRouter from './auth.controller';
+import { UserDTO } from 'model/dto/user.dto';
 
+export interface AppRequest extends Request {
+  user?: UserDTO;
+}
 export default (application: ExpressApplication): Router => {
   const router = Router();
 

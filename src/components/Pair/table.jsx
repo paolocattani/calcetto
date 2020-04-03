@@ -456,7 +456,6 @@ const PairsTable = () => {
                 selectRow={selectRow}
                 noDataIndication={<NoData addRow={() => addRow()} optionsLength={data.players.length} />}
                 caption={<TableHeader tournament={data.tournament} />}
-                wrapperClasses="player-table"
                 headerClasses="default-background default-color-white"
                 striped
                 hover

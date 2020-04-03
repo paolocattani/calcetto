@@ -18,6 +18,7 @@ import {
   checkIfExist,
   findUserByEmailAndUsername
 } from '../manager/auth.manager';
+import { AppRequest } from './index';
 const router = Router();
 
 router.use('/', (req, res, next) => {
@@ -28,15 +29,13 @@ router.use('/', (req, res, next) => {
 router.get(
   '/list',
   withAuth,
-  // FIXME: fix request type
-  asyncMiddleware(async (req: any, res: Response, next: NextFunction) => res.status(200).json(await listAll()))
+  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => res.status(200).json(await listAll()))
 );
 
 router.get(
   '/',
   withAuth,
-  // FIXME: fix request type
-  asyncMiddleware(async (req: any, res: Response, next: NextFunction) => res.status(200).json(req.user))
+  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => res.status(200).json(req.user))
 );
 
 router.get(
@@ -65,7 +64,7 @@ router.post(
 router.post(
   '/update',
   withAuth,
-  asyncMiddleware(async (req: any, res: Response, next: NextFunction) => {
+  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     try {
       logger.info('/update start ');
       let model = parseBody(req.user);
@@ -112,8 +111,9 @@ router.post(
 router.delete(
   '/',
   withAuth,
-  asyncMiddleware(async (req: any, res: Response, next: NextFunction) => {
-    const { email, password, username } = req.body;
+  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
+    const { password } = req.body;
+    const { email, username } = req.user!;
     try {
       logger.info('/delete start ');
       const user = await findUserByEmailAndUsername(email, username);

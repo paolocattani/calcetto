@@ -1,10 +1,16 @@
 import { Router, NextFunction, Response, Request } from 'express';
-import { logger } from '../core/logger';
-import Tournament from '../model/sequelize/tournament.model';
-import { isDevMode } from '../core/debug';
+// Utils
 import chalk from 'chalk';
-import { asyncMiddleware } from '../core/middleware';
-import { isAdmin, getUserFromToken } from '../manager/auth.manager';
+// Core
+import { logger } from '../core/logger';
+import { isDevMode } from '../core/debug';
+import { asyncMiddleware, withAuth } from '../core/middleware';
+// Managers
+import { listAll, findById, findByNameAndDate, parseBody } from '../manager/tournament.manager';
+// Models
+import Tournament from '../model/sequelize/tournament.model';
+import { TournamentDTO } from '../model/dto/tournament.dto';
+import { AppRequest } from './index';
 
 // all API path must be relative to /api/v1/tournament
 const router = Router();
@@ -16,58 +22,54 @@ router.use('/', (req, res, next) => {
 
 router.get(
   '/list',
-  asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
+  withAuth,
+  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     try {
-      const t: Tournament[] = await Tournament.findAll({ order: [['name', 'DESC']] });
-      if (t) logger.info(chalk.greenBright('Tournament fetched !'));
-      res.json(t);
+      return res.status(200).json(await listAll(req.user!.id));
     } catch (err) {
       logger.error(chalk.redBright('Error while fetching tournament ! : ', err));
-      return next(err);
+      return res.status(500).json({ message: 'Internal Error' });
     }
   })
 );
 
 router.get(
   '/:tId',
-  asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
+  withAuth,
+  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     try {
-      const tId = req.params.tId ? parseInt(req.params.tId) : 0;
-      const t: Tournament | null = await Tournament.findOne({ where: { id: tId } });
-      res.json(t);
+      if (!req.params.tId) return res.status(500).json({ message: 'Invalid data' });
+      const t = await findById(req.user!.id, parseInt(req.params.tId));
+      if (!t) return res.status(500).json({ message: 'Not found' });
+      return res.status(200).json(await findById(req.user!.id, parseInt(req.params.tId)));
     } catch (err) {
       logger.error(chalk.redBright('Error while fetching tournament ! : ', err));
-      return next(err);
+      return res.status(500).json({ message: 'Internal Error' });
     }
   })
 );
 
 router.post(
   '/',
-  asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
-    const model = req.body;
-
+  withAuth,
+  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
+    const model = parseBody(req.body);
+    const user = req.user!;
     try {
-      const isEditable = isAdmin(req.cookies.token);
-      const user = await getUserFromToken(req.cookies.token);
-      if (isEditable && user) model.ownerId = user.id;
-      let t = await Tournament.findOne({ where: { name: model.name } });
+      const isEditable = user.role === 'Admin';
+      let t: Tournament | TournamentDTO | null = await findByNameAndDate(user.name, model.date);
       if (t) {
-        logger.info(`tournament ${model.name} already exists, updating....`);
-        /*
-         * FIXME: perchè dovrei aggiornare un torneo gia esistente ?
-         * if (isEditable) await t.update(model);
-         */
+        logger.info(`Tournament ${model.name} already exists....`);
         return res.json(t);
       }
       if (isEditable) {
+        model.ownerId = user.id;
         t = await Tournament.create(model);
         logger.info(`tournament controller : created Tournament => ${t}`);
         res.status(200);
       } else {
-        t = null;
         logger.info('tournament controller : Torneo non creato in quanto utente non possiede i permessi necessari');
-        res.status(401);
+        res.status(401).json({ message: 'Non autorizzato. Permessi insufficienti' });
       }
       return res.json(t);
     } catch (err) {

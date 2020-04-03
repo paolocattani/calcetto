@@ -3,11 +3,13 @@ import { PairModel } from '../Pair/type';
 export type TournamentProgressType = 'New' | 'PairsSelection' | 'Stage1' | 'Stage2';
 
 export type TournamentModel = {
-  id: number | null;
+  id: number;
   name: string;
-  ownerId: number;
+  date: Date;
   progress: TournamentProgressType;
   public: boolean;
+  label: string;
+  ownerId?: number;
   pairs?: PairModel[];
 };
 
@@ -17,4 +19,4 @@ export type selectOptions = {
   data: TournamentModel;
 };
 
-export const TournamentProgress = { New: 'new', PairsSelection: 'PairsSelection', Stage1: 'Stage1', Stage2: 'Stage2' };
+export const TournamentProgress = { New: 'New', PairsSelection: 'PairsSelection', Stage1: 'Stage1', Stage2: 'Stage2' };

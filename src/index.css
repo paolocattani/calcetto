@@ -7,6 +7,11 @@
   --default-white: whitesmoke;
   --default-green: #64bd9c;
 }
+
+.react-bootstrap-table{
+  width: 100%;
+}
+
 .default-color-green {
   color: var(--default-green) !important;
 }

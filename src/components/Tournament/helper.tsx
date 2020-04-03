@@ -38,11 +38,12 @@ export async function getTournament(tId: number): Promise<TournamentModel | null
   return response.ok ? result : null;
 }
 
-export function getEmptyTournament(name: string, progress: TournamentProgressType) {
+export function getEmptyTournament(name: string, progress?: string) {
   return {
     id: null,
     name: name || '',
     ownerId: null,
+    date: new Date(),
     progress: progress || 'New',
     public: true,
     label: name || ''
