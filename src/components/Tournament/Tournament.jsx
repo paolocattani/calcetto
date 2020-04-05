@@ -57,10 +57,12 @@ const FTournament = () => {
                 <Form onSubmit={handleSubmit}>
                   <Select
                     components={{ IndicatorSeparator }}
+                    styles={customStyles}
                     value={selectedOption}
                     options={tournamentList}
                     placeholder="Cerca un torneo"
                     isSearchable
+                    getOptionLabel={option => option.name + ' - ' + formatDate(option.date) + '@' + option.progress}
                     isClearable
                     onChange={handleChange}
                   />
@@ -110,3 +112,23 @@ const FTournament = () => {
 };
 
 export default FTournament;
+
+function formatDate(date) {
+  var d = new Date(date),
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2) month = '0' + month;
+  if (day.length < 2) day = '0' + day;
+
+  return [year, month, day].join('/');
+}
+
+const customStyles = {
+  // menuList: (provided, state) => ({ ...provided, border: '1px solid #ffc107' }),
+  option: (provided, state) => ({ ...provided, backgroundColor: 'white', color: 'black' }),
+  control: provided => ({ ...provided, height: '3vmin', margin: '43px 0px 40px 0px' }),
+  singleValue: (provided, state) => ({ ...provided }),
+  valueContainer: provided => ({ ...provided, height: '100%' })
+};
