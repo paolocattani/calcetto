@@ -10,6 +10,7 @@ export type headerPropsType = {
 };
 export type noDataPropsType = {
   optionsLength: number;
+  isEditable: boolean;
   addRow: () => void;
 };
 

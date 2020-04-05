@@ -4,7 +4,7 @@ import { noDataPropsType } from './type';
 import { Link } from 'react-router-dom';
 
 // FIXME: change to tounament name
-const noData: React.FC<noDataPropsType> = ({ addRow, optionsLength }: noDataPropsType) => {
+const noData: React.FC<noDataPropsType> = ({ addRow, optionsLength, isEditable }: noDataPropsType) => {
   const MIN_PLAYERS = 8;
   const players = optionsLength - 1;
   const diff = players < MIN_PLAYERS ? MIN_PLAYERS - players : 0;
@@ -12,7 +12,7 @@ const noData: React.FC<noDataPropsType> = ({ addRow, optionsLength }: noDataProp
   return players >= MIN_PLAYERS ? (
     <>
       <p> Aggiungi le coppie per questo torneo...</p>
-      <Button variant="success" onClick={addRow}>
+      <Button variant="success" onClick={addRow} disabled={!isEditable}>
         Aggiungi Coppia
       </Button>
     </>

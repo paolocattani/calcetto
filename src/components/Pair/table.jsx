@@ -454,7 +454,13 @@ const PairsTable = () => {
                 columns={columns(onSelect, data.players)}
                 cellEdit={cellEditProps(isEditable(session))}
                 selectRow={selectRow}
-                noDataIndication={<NoData addRow={() => addRow()} optionsLength={data.players.length} />}
+                noDataIndication={
+                  <NoData
+                    isEditable={isEditable(session)}
+                    addRow={() => addRow()}
+                    optionsLength={data.players.length}
+                  />
+                }
                 caption={<TableHeader tournament={data.tournament} />}
                 headerClasses="default-background default-color-white"
                 striped
