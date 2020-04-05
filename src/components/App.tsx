@@ -17,8 +17,6 @@ import { far } from '@fortawesome/free-regular-svg-icons';
 library.add(fas, far);
 
 const App: React.FC = _ => {
-  const history = useHistory();
-
   return (
     <div className="App">
       <Header />

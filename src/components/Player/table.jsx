@@ -130,6 +130,7 @@ export default class Player extends React.Component {
     };
 
     // console.log('Render player : ', { ...this.props });
+    const { state: { selectedRows } = [] } = this;
 
     return (
       <SessionContext.Consumer>
@@ -146,7 +147,7 @@ export default class Player extends React.Component {
                       </Button>
                     ) : null}
                     {isEditable(session) ? (
-                      <Button variant="danger" onClick={deleteRow}>
+                      <Button variant="danger" onClick={deleteRow} disabled={selectedRows.length === 0}>
                         Calcella giocatore
                       </Button>
                     ) : null}

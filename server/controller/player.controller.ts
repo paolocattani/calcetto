@@ -59,7 +59,8 @@ router.delete(
   '/',
   withAuth,
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
-    const rowsAffected = deletePlayer(req.body.map((e: any) => parseBody(e)));
+    const rowsAffected = await deletePlayer(req.body.map((e: any) => parseBody(e)));
+    logger.info('player.delete : ', rowsAffected);
     return res.status(200).json({ message: `Rows deleted : ${rowsAffected}` });
   })
 );

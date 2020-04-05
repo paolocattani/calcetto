@@ -1,10 +1,10 @@
-import React, { useState, FormEvent } from 'react';
-import { Form, InputGroup, Col, Button, Row, FormControl } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Form, Col, Button } from 'react-bootstrap';
 
 // Date picker
 import DatePicker from 'react-datepicker';
 import { getEmptyTournament } from './helper';
-import { TournamentProgress, TournamentProgressType } from './type';
+import { TournamentProgress } from './type';
 import { useHistory } from 'react-router-dom';
 
 type newTProps = {

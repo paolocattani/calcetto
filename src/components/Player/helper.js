@@ -15,12 +15,16 @@ let nameFilter;
 let surnameFilter;
 let aliasFilter;
 let roleFilter;
+let emailFilter;
+let phoneFilter;
 
 export function clearAllFilter() {
   nameFilter('');
   surnameFilter('');
   aliasFilter('');
   roleFilter('');
+  emailFilter('');
+  phoneFilter('');
 }
 
 // Columns default
@@ -86,7 +90,11 @@ const playerColumns = isEditable => [
     headerStyle: (column, colIndex) => ({ width: '20%' }),
     headerClasses: 'player-table-header-element',
     autoSelectText: true,
-    hidden: !isEditable
+    hidden: !isEditable,
+    filter: textFilter({
+      placeholder: 'Filtra...',
+      getFilter: filter => (emailFilter = filter)
+    })
   },
   {
     dataField: 'phone',
@@ -94,7 +102,11 @@ const playerColumns = isEditable => [
     text: 'Telefono',
     headerClasses: 'player-table-header-element',
     autoSelectText: true,
-    hidden: !isEditable
+    hidden: !isEditable,
+    filter: textFilter({
+      placeholder: 'Filtra...',
+      getFilter: filter => (phoneFilter = filter)
+    })
   },
   { dataField: 'match_played', text: 'Partite Giocate', hidden: true },
   { dataField: 'match_won', text: 'Vittorie', hidden: true },

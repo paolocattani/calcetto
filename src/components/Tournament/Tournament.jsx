@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
 // React-Select
-import CreatableSelect from 'react-select/creatable';
 import Select from 'react-select';
 // Bootstrap
-import { Form, Button, Card, Row, Col } from 'react-bootstrap';
+import { Form, Button, Card } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 // Core
 import { getTodayDate } from '../core/utils';
 import { SessionContext, isEditable } from '../core/SessionContext';
 import { GenericToast } from '../core/Commons';
 // Helper
-import { fetchTournaments, getEmptyTournament, cardStyle, IndicatorSeparator } from './helper';
+import { fetchTournaments, cardStyle, IndicatorSeparator } from './helper';
 // Types
-import { TournamentProgress } from './type';
 import NewTournament from './new';
 
 const FTournament = () => {

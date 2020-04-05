@@ -83,21 +83,13 @@ export const create = async (model: any): Promise<Player | null> => {
   return player;
 };
 
-export const deletePlayer = async (models: Player[]): Promise<number> => {
-  let rowsAffected = 0;
-  for (const model of models) {
-    const player = await Player.findByPk(model.id);
-    if (player) {
-      await player.destroy();
-      rowsAffected++;
-    }
-  }
-  return rowsAffected;
-};
+export const deletePlayer = async (models: Player[]): Promise<number> =>
+  await Player.destroy({ where: { id: models.map(e => e.id) } });
 
 // Utils
 export const parseBody = (body: any) =>
   ({
+    id: body.id,
     name: body.name || '',
     surname: body.surname || '',
     alias: body.alias || '',
