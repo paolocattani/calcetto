@@ -1,3 +1,5 @@
+// Session
+import { Response } from 'express';
 // Models/Types
 import Player from 'model/sequelize/player.model';
 import { PlayerRole } from 'model/sequelize/types';
@@ -28,6 +30,12 @@ export const generateHashSecret = (email: string, password: string) => email + g
 
 export const generateToken = (value: User | UserDTO) =>
   jwt.sign({ ...value }, getSecret(), { expiresIn: '8h', algorithm: 'HS256' });
+
+export const addUserCookies = (user: UserDTO, res: Response): void => {
+  logProcess(className + 'addUserCook-ies', 'start');
+  res.cookie('token', generateToken(user), { httpOnly: true });
+  logProcess(className + 'addUserCookies', 'end');
+};
 
 export const listAll = async (): Promise<UserDTO[]> => {
   try {

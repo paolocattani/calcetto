@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import React from 'react';
+import { LoadingModal } from './Commons';
 
 export interface Session {
   isAuthenticated?: boolean | null;
@@ -43,7 +44,9 @@ export const SessionContextProvider: React.FC = ({ children }) => {
   console.log('sessionContext.session: ', sessionState);
 
   return (
-    <SessionContext.Provider value={defaultSessionContext}>{sessionState ? children : null}</SessionContext.Provider>
+    <SessionContext.Provider value={defaultSessionContext}>
+      {sessionState ? children : <LoadingModal show={true} message={'....Caricamento'} />}
+    </SessionContext.Provider>
   );
 };
 

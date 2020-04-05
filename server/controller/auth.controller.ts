@@ -16,7 +16,8 @@ import {
   registerUser,
   findUserByEmailOrUsername,
   checkIfExist,
-  findUserByEmailAndUsername
+  findUserByEmailAndUsername,
+  addUserCookies
 } from '../manager/auth.manager';
 import { AppRequest } from './index';
 const router = Router();
@@ -57,8 +58,14 @@ router.post(
     const user = await checkIfExist(model);
     if (user) return res.status(403).json({ message: 'Email o Username gia utilizzati. ' });
     const record = await registerUser(model, body.playerRole);
+    if (record) {
+      addUserCookies(record, res);
+      res.status(200).json(record);
+    } else {
+      res.status(500).json({ message: 'Internal error' });
+    }
     logger.info('/register end ');
-    return res.status(200).json(record);
+    return;
   })
 );
 router.post(
@@ -98,7 +105,7 @@ router.post(
         return res.status(401).json({ error: 'Incorrect email or password' });
 
       const userDTO = convertEntityToDTO(user);
-      res.cookie('token', generateToken(userDTO), { httpOnly: true });
+      addUserCookies(userDTO, res);
       logger.info('/authenticate end ');
       return res.status(200).json(userDTO);
     } catch (error) {

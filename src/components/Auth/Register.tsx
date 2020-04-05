@@ -137,22 +137,19 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
       });
       const result = await response.json();
       if (response.ok && result) {
-        updateSessionContext({
-          ...sessionContext,
-          name: result.name,
-          surname: result.surname,
-          email: result.email,
-          role: result.role,
-          isAuthenticated: true
-        });
-        currentHistory.push('/');
+        console.log('before register : ', result);
+        console.log('before register : ', { ...sessionContext, ...result, isAuthenticated: true });
+        console.log('before register : ', { ...result, isAuthenticated: true });
+        updateSessionContext({ ...sessionContext, ...result, isAuthenticated: true });
+        console.log('after register : ', sessionContext);
+        // currentHistory.push('/');
       } else {
         switch (response.status) {
           case 401:
             showError('Utente o Password errata');
             break;
           case 403:
-            showError('Utente o Password gia registrati');
+            showError('Utente o Email gia registrati');
             break;
           default:
             break;
