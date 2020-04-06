@@ -56,6 +56,7 @@ const FTournament = () => {
               ) : (
                 <Form onSubmit={handleSubmit}>
                   <Select
+                    className="tournament-select-container"
                     components={{ IndicatorSeparator }}
                     styles={customStyles}
                     value={selectedOption}
