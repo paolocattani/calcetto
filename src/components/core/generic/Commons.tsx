@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, Spinner, Toast, Alert } from 'react-bootstrap';
-import { SessionContext } from './SessionContext';
+import { SessionContext } from '../routing/SessionContext';
+import { useLocation } from 'react-router-dom';
 
 // Loading Modal
 type loadingModalPropsType = {
@@ -61,3 +62,14 @@ export const LogSessionContext: React.FC<{}> = _ => (
     }
   </SessionContext.Consumer>
 );
+
+export function RedirectionControl(props: any): JSX.Element {
+  const location = useLocation();
+  return (
+    <div>
+      <h1>
+        Current Ruote : <code>{location.pathname}</code>
+      </h1>
+    </div>
+  );
+}

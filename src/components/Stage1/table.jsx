@@ -6,7 +6,7 @@ import cellEditFactory from 'react-bootstrap-table2-editor';
 
 import TableHeader from './header';
 import { getOpposite, comparator } from './helper';
-import { SessionContext, isEditable } from '../core/SessionContext';
+import { SessionContext, isEditable } from '../core/routing/SessionContext';
 
 // style
 import './style.css';

@@ -1,9 +1,9 @@
 import React, { useState, SetStateAction, CSSProperties } from 'react';
-import { useSessionContext } from 'components/core/SessionContext';
+import { useSessionContext } from 'components/core/routing/SessionContext';
 import { useHistory } from 'react-router-dom';
 import { Modal, Container, Alert, Form, Col, Row, Button } from 'react-bootstrap';
-import { useInput } from '../core/generic/InputHook';
-import { SessionContext } from '../core/SessionContext';
+import { useInput } from '../core/hooks/InputHook';
+import { SessionContext } from '../core/routing/SessionContext';
 type authType = {
   show: boolean;
   onHide: () => void;

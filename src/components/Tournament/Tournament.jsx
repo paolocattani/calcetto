@@ -6,10 +6,11 @@ import { Form, Button, Card } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 // Core
 import { getTodayDate } from '../core/utils';
-import { SessionContext, isEditable } from '../core/SessionContext';
-import { GenericToast } from '../core/Commons';
+import { SessionContext, isEditable } from '../core/routing/SessionContext';
+import { GenericToast } from '../core/generic/Commons';
 // Helper
 import { fetchTournaments, cardStyle, IndicatorSeparator } from './helper';
+import { formatDate } from '../core/utils';
 // Types
 import NewTournament from './new';
 
@@ -113,18 +114,6 @@ const FTournament = () => {
 };
 
 export default FTournament;
-
-function formatDate(date) {
-  var d = new Date(date),
-    month = '' + (d.getMonth() + 1),
-    day = '' + d.getDate(),
-    year = d.getFullYear();
-
-  if (month.length < 2) month = '0' + month;
-  if (day.length < 2) day = '0' + day;
-
-  return [year, month, day].join('/');
-}
 
 const customStyles = {
   // menuList: (provided, state) => ({ ...provided, border: '1px solid #ffc107' }),

@@ -1,8 +1,8 @@
 import React, { CSSProperties, useState } from 'react';
 import backgroundImage from '../assets/header.jpg';
 import { Jumbotron, Navbar, Nav, Button, SplitButton, Dropdown, ButtonGroup } from 'react-bootstrap';
-import routes from '../core/Routes';
-import { useSessionContext } from '../core/SessionContext';
+import routes from '../core/routing/Routes';
+import { useSessionContext } from '../core/routing/SessionContext';
 import { Link } from 'react-router-dom';
 
 const applicationName = 'Calcetto C.S.M';

@@ -6,10 +6,10 @@ import { getEmptyPlayer } from '../Player/helper';
 import { useParams, useHistory } from 'react-router';
 import TableHeader from './header';
 import NoData from './noData';
-import { LoadingModal, GenericToast } from '../core/Commons';
+import { LoadingModal, GenericToast } from '../core/generic/Commons';
 import './style.css';
 import { TournamentProgress } from '../Tournament/type';
-import { SessionContext, isEditable } from '../core/SessionContext';
+import { SessionContext, isEditable } from '../core/routing/SessionContext';
 const PairsTable = () => {
   // Navigation
   const { tId } = useParams();

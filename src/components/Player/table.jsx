@@ -9,9 +9,9 @@ import cellEditFactory from 'react-bootstrap-table2-editor';
 import './style.css';
 import columns, { clearAllFilter } from './helper';
 import TableHeader from './header';
-import { LoadingModal } from '../core/Commons';
+import { LoadingModal } from '../core/generic/Commons';
 import { getEmptyPlayer } from '../Player/helper';
-import { SessionContext, isEditable } from '../core/SessionContext';
+import { SessionContext, isEditable } from '../core/routing/SessionContext';
 
 export default class Player extends React.Component {
   constructor(props) {

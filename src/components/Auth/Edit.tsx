@@ -1,7 +1,7 @@
 import React, { FormEvent, SetStateAction, useState, CSSProperties } from 'react';
 import { Card, Container, Alert, Form, Button, Col, Row } from 'react-bootstrap';
-import { useInput } from '../core/generic/InputHook';
-import { useSessionContext } from '../core/SessionContext';
+import { useInput } from '../core/hooks/InputHook';
+import { useSessionContext } from '../core/routing/SessionContext';
 import Delete from './Delete';
 
 const EditUser: React.FC<{}> = (): JSX.Element => {

@@ -1,7 +1,7 @@
-import { useInput } from '../core/generic/InputHook';
+import { useInput } from '../core/hooks/InputHook';
 import { Form, Button } from 'react-bootstrap';
 import React, { SetStateAction } from 'react';
-import { useSessionContext } from '../core/SessionContext';
+import { useSessionContext } from '../core/routing/SessionContext';
 import { useHistory } from 'react-router-dom';
 
 type PropsType = {

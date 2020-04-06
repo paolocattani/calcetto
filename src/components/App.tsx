@@ -1,11 +1,11 @@
 import React, { Suspense } from 'react';
 // Components
 import { Header } from './Header/Header';
-import { LoadingModal /* LogSessionContext */ } from './core/Commons';
+import { LoadingModal /* LogSessionContext */ } from './core/generic/Commons';
 // Routing
 import { Switch, useHistory } from 'react-router';
-import routes from '../components/core/Routes';
-import { ProtectedRoute } from '../components/core/ProtectedRoute';
+import routes from './core/routing/Routes';
+import { ProtectedRoute } from './core/routing/ProtectedRoute';
 // Style
 import './style/App.css';
 import { Container } from 'react-bootstrap';

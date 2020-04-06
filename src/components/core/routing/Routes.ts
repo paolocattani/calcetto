@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { lazy } from 'react';
 
 // import { OrganizationChartDemo } from '../Stage2/table';
-const lazyPlayer = React.lazy(() => import('../Player/table'));
-const lazyTournament = React.lazy(() => import('../Tournament/Tournament'));
-const lazyPairs = React.lazy(() => import('../Pair/table'));
-const lazyStage1 = React.lazy(() => import('../Stage1/wrapper'));
-const lazyStage2 = React.lazy(() => import('../Stage2/model'));
-const lazyRedirectionControl = React.lazy(() => import('./RedirectionControls'));
-const lazyLogin = React.lazy(() => import('../Auth/Wrapper'));
-const lazyUser = React.lazy(() => import('../Auth/Edit'));
+const lazyPlayer = lazy(() => import('../../Player/table'));
+const lazyTournament = lazy(() => import('../../Tournament/Tournament'));
+const lazyPairs = lazy(() => import('../../Pair/table'));
+const lazyStage1 = lazy(() => import('../../Stage1/wrapper'));
+const lazyStage2 = lazy(() => import('../../Stage2/model'));
+const lazyLogin = lazy(() => import('../../Auth/Wrapper'));
+const lazyUser = lazy(() => import('../../Auth/Edit'));
+const lazyRedirectionControl = lazy(() =>
+  import('../generic/Commons').then(module => ({ default: module.RedirectionControl }))
+);
 
 export interface routeType {
   path: string;

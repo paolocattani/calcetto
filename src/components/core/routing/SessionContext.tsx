@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import React from 'react';
-import { LoadingModal } from './Commons';
+import { LoadingModal } from '../generic/Commons';
 
 export interface Session {
   isAuthenticated?: boolean | null;
