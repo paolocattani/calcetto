@@ -183,7 +183,6 @@ export default router;
  *  3->0 , 2->1 , 1->2 , 0->3
  */
 function getOpposite(value: number | null): number | null {
-  logger.info('getOpposite of  ', value);
   /*
    * Attenzione :
    *  !0 = true

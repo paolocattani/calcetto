@@ -113,8 +113,6 @@ export const columns = (onSelect, pairsList) => {
  *  3->0 , 2->1 , 1->2 , 0->3
  */
 export function getOpposite(value) {
-  console.log('getOpposite : ', value);
-
   /*
    * Attenzione :
    *  !0 = true
@@ -123,7 +121,7 @@ export function getOpposite(value) {
    *  !undefined  = true
    */
   if (value === null) return null;
-  switch (value) {
+  switch (parseInt(value)) {
     case 3:
       return 0;
     case 2:

@@ -148,7 +148,7 @@ export default class Player extends React.Component {
                     ) : null}
                     {isEditable(session) ? (
                       <Button variant="danger" onClick={deleteRow} disabled={selectedRows.length === 0}>
-                        Calcella giocatore
+                        {selectedRows.length > 1 ? 'Elimina giocatori' : 'Elimina giocatore'}
                       </Button>
                     ) : null}
                     <Button variant="dark" onClick={clearAllFilter.bind(this)}>
