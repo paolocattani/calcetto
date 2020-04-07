@@ -13,8 +13,6 @@ import { SessionContext, isEditable } from '../core/routing/SessionContext';
 const PairsTable = () => {
   // Navigation
   const { tId } = useParams();
-  console.log('render pairs table : ', tId);
-
   let currentHistory = useHistory();
 
   // States
@@ -328,17 +326,14 @@ const PairsTable = () => {
   }
 
   const availableRows =
-    Math.floor(
-      data.players.length -
-        1 -
-        data.rows.reduce((accumulator, e) => {
-          if (!e.player1 && !e.player2) return accumulator + 2;
-          if (!e.player1 || !e.player2) return accumulator + 1;
-          if (!e.player1.id && !e.player2.id) return accumulator + 2;
-          if (!e.player1.id || !e.player2.id) return accumulator + 1;
+    Math.floor((data.players.length - 1) / 2) -
+    (data.rows.length === 0
+      ? 0
+      : data.rows.reduce((accumulator, e) => {
+          if ((!e.player1 && !e.player2) || (!e.player1.id && !e.player2.id)) return accumulator + 1;
+          if (!e.player1 || !e.player1.id || !e.player2 || !e.player2.id) return accumulator + 0, 5;
           return accumulator;
-        }, 0)
-    ) / 2;
+        }, 0));
 
   const deleteDisabled =
     !(selectedRows.length > 0) || data.tournament.progress === 'Stage1' || data.tournament.progress === 'Stage2';
@@ -350,6 +345,7 @@ const PairsTable = () => {
   else deleteTooltipMessage = 'Cancella le coppie selezionate';
 
   // console.log('render table : ', data);
+
   return (
     <SessionContext.Consumer>
       {([session]) => (
@@ -419,7 +415,7 @@ const PairsTable = () => {
               </InputGroup>
               <InputGroup onChange={e => setNewRowsNumber(e.target.value)}>
                 <InputGroup.Prepend>
-                  <InputGroup.Text>Aggiunti N nuove coppie</InputGroup.Text>
+                  <InputGroup.Text>Aggiungi N nuove coppie</InputGroup.Text>
                 </InputGroup.Prepend>
                 <FormControl
                   disabled={availableRows <= 0}

@@ -74,7 +74,8 @@ export const cardStyle = {
   margin: 'auto',
   backgroundColor: 'inherit',
   borderColor: '#ffc107',
-  borderWidth: '3px'
+  borderWidth: '3px',
+  textAlign: 'left'
 };
 /*
 const formatNewLabel = inputString => (

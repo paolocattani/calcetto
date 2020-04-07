@@ -46,13 +46,14 @@ const NewTournament: React.FC<newTProps> = ({ showMessage }) => {
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Row>
-        <Col md={7}>
+        <Col md={6}>
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Nome</Form.Label>
             <Form.Control
               type="text"
               required
               placeholder="Nome Torneo"
+              maxLength={30}
               value={name}
               onChange={(event: React.FormEvent<HTMLSelectElement>) => setName(event.currentTarget.value)}
             />
@@ -75,7 +76,7 @@ const NewTournament: React.FC<newTProps> = ({ showMessage }) => {
           </Form.Group>
         </Col>
 
-        <Col md={2}>
+        <Col md={3}>
           <Form.Group controlId="visible">
             <Form.Label>Visibilità </Form.Label>
             <Form.Control as="select" onChange={() => setVisible(!visible)}>

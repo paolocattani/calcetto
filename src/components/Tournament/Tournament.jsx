@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 // React-Select
 import Select from 'react-select';
 // Bootstrap
-import { Form, Button, Card } from 'react-bootstrap';
+import { Form, Button, Card, Col } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 // Core
 import { getTodayDate } from '../core/utils';
@@ -45,35 +45,36 @@ const FTournament = () => {
           <Card style={cardStyle}>
             <Card.Header as="h2">Torneo</Card.Header>
             <Card.Body>
-              {isEditable(session) && newTournament ? (
-                <NewTournament showMessage={showMessage} />
-              ) : (
-                <Form onSubmit={handleSubmit}>
-                  <label htmlFor="tournamentSelect">Selezione Torneo</label>
-                  <Select
-                    id="tournamentSelect"
-                    components={{ IndicatorSeparator }}
-                    styles={customStyles}
-                    value={selectedOption}
-                    options={tournamentList}
-                    placeholder="Cerca un torneo"
-                    isSearchable
-                    getOptionLabel={getOptionLabel}
-                    isClearable
-                    onChange={selectedOption => setSelectedOption(selectedOption)}
-                  />
-
-                  <Button
-                    type="submit"
-                    size="lg"
-                    variant="outline-warning"
-                    className="float-left default-color-white"
-                    disabled={!selectedOption}
-                  >
-                    <span style={{ fontSize: 'larger', fontWeight: 'bolder' }}>Prosegui</span>
-                  </Button>
-                </Form>
-              )}
+              <Col>
+                {isEditable(session) && newTournament ? (
+                  <NewTournament showMessage={showMessage} />
+                ) : (
+                  <Form onSubmit={handleSubmit}>
+                    <label htmlFor="tournamentSelect">Selezione Torneo</label>
+                    <Select
+                      id="tournamentSelect"
+                      components={{ IndicatorSeparator }}
+                      styles={customStyles}
+                      value={selectedOption}
+                      options={tournamentList}
+                      placeholder="Cerca un torneo"
+                      isSearchable
+                      getOptionLabel={getOptionLabel}
+                      isClearable
+                      onChange={selectedOption => setSelectedOption(selectedOption)}
+                    />
+                    <Button
+                      type="submit"
+                      size="md"
+                      variant="outline-warning"
+                      className="float-left default-color-white"
+                      disabled={!selectedOption}
+                    >
+                      <span style={{ fontSize: 'larger', fontWeight: 'bolder' }}>Prosegui</span>
+                    </Button>
+                  </Form>
+                )}
+              </Col>
             </Card.Body>
             <Card.Footer>
               {isEditable(session) ? (

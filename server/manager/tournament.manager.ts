@@ -11,7 +11,10 @@ export const listAll = async (userId: number): Promise<TournamentDTO[]> => {
 
     const t: Tournament[] = await Tournament.findAll({
       where: { [Op.or]: [{ ownerId: userId }, { public: true }] },
-      order: [['date', 'DESC']]
+      order: [
+        ['date', 'DESC'],
+        ['name', 'DESC']
+      ]
     });
     logProcess(className + 'listAll', `end. Found : (${t.length})`);
     if (!t) return [];
@@ -28,7 +31,7 @@ export const update = async (userId: number, model: TournamentDTO): Promise<bool
       where: { [Op.and]: { id: model.id, [Op.or]: [{ ownerId: userId }, { public: true }] } }
     });
     if (!t) return false;
-    await t.update(model);
+    await t.update({ progress: model.progress });
   } catch (error) {
     logProcess(className + 'update', 'error');
     return false;

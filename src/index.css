@@ -36,8 +36,12 @@
 }
 /* Palette-End */
 
+/* override bootstrap table style*/
 .react-bootstrap-table{
   width: 100%;
+}
+.editor {
+  margin: auto;
 }
 
 body {

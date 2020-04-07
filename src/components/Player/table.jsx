@@ -37,7 +37,7 @@ export default class Player extends React.Component {
 
         this.setState({
           isLoading: false,
-          rows: result
+          rows: result.map((e, i) => ({ ...e, id: i + 1 }))
         });
       })()
     );

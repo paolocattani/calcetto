@@ -20,6 +20,7 @@ export const columns = (onSelect, options) => [
         value={value}
         onSelect={onSelect}
         options={options}
+        styles={customStyles}
       />
     ),
     headerStyle: (column, colIndex) => ({ width: '20%' })
@@ -38,6 +39,7 @@ export const columns = (onSelect, options) => [
         value={value}
         onSelect={onSelect}
         options={options}
+        styles={customStyles}
       />
     ),
     headerStyle: (column, colIndex) => ({ width: '20%' })
@@ -150,6 +152,7 @@ export const fetchData = async tId => {
   });
   const result = await response.json();
   const players = [...result, getEmptyPlayer('Nessun Giocatore')];
+  console.log('playerList : ', result);
 
   // Fetch Tournament
   response = await fetch(`/api/v1/tournament/${tId}`, {
@@ -188,3 +191,19 @@ export function createAlias(selectedOption) {
   value += ` ( ${id} )`;
   return value;
 }
+
+const customStyles = {
+  // menuList: (provided, state) => ({ ...provided, border: '1px solid #ffc107' }),
+  option: (provided, state) => ({
+    ...provided,
+    backgroundColor: 'white',
+    color: 'black',
+    '&:hover': {
+      backgroundColor: '#64bd9c',
+      color: 'white'
+    }
+  }),
+  control: provided => ({ ...provided, height: '3vmin', marginBottom: '40px' }),
+  singleValue: (provided, state) => ({ ...provided }),
+  valueContainer: provided => ({ ...provided, height: '100%', fontSize: 'larger' })
+};
