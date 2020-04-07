@@ -8,10 +8,8 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
   const [session] = useSessionContext();
   const [showModalDelete, setShowModalDelete] = useState(false);
 
-  const { value: username, bind: bindUsername /*reset: resetUsername*/ } = useInput(session.username);
   const { value: name, bind: bindName /*reset: resetUsername*/ } = useInput(session.name);
   const { value: surname, bind: bindSurname /*reset: resetUsername*/ } = useInput(session.surname);
-  const { value: email, bind: bindEmail /*reset: resetUsername*/ } = useInput(session.email);
   const { value: phone, bind: bindPhone /*reset: resetUsername*/ } = useInput(session.phone);
   const { value: birthday, bind: bindBirthday /*reset: resetUsername*/ } = useInput(session.birthday);
 
@@ -33,7 +31,7 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
       const response = await fetch('/api/v1/auth/update', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, name, surname, email, phone, birthday })
+        body: JSON.stringify({ username: session.username, name, surname, email: session.email, phone, birthday })
       });
       await response.json();
       if (response.ok) showSuccess('Aggiornamento effettuato ... ');
@@ -72,7 +70,7 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
               <Col sm="10">
                 <Form.Control
                   plaintext
-                  value={username}
+                  value={session.username!}
                   style={{ fontSize: 'larger', fontWeight: 'bolder' }}
                   className="default-color-white "
                 />
@@ -83,7 +81,7 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
               <Col sm="10">
                 <Form.Control
                   plaintext
-                  value={email}
+                  value={session.email!}
                   style={{ fontSize: 'larger', fontWeight: 'bolder' }}
                   className="default-color-white"
                 />

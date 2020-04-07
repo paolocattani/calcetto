@@ -2,7 +2,6 @@ import { useInput } from '../core/hooks/InputHook';
 import { Form, Button, Col } from 'react-bootstrap';
 import React, { SetStateAction } from 'react';
 import { useSessionContext } from '../core/routing/SessionContext';
-import { useHistory } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import Select, { StylesConfig } from 'react-select';
 import './style.css';
@@ -22,7 +21,6 @@ const playerRoles = [
 // https://medium.com/@faizanv/authentication-for-your-react-and-express-application-w-json-web-tokens-923515826e0#6563
 const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
   const [sessionContext, updateSessionContext] = useSessionContext();
-  const currentHistory = useHistory();
 
   const { value: username, bind: bindUsername, reset: resetUsername } = useInput('');
   const { value: name, bind: bindName, reset: resetName } = useInput('');

@@ -1,5 +1,3 @@
-import React from 'react';
-import PairSelect from '../Pair/select';
 import { Type } from 'react-bootstrap-table2-editor';
 
 const newColumn = (index, rowNumber) => {

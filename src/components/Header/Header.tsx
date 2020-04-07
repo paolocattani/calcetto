@@ -1,6 +1,6 @@
-import React, { CSSProperties, useState } from 'react';
+import React, { CSSProperties } from 'react';
 import backgroundImage from '../assets/header.jpg';
-import { Jumbotron, Navbar, Nav, Button, SplitButton, Dropdown, ButtonGroup } from 'react-bootstrap';
+import { Jumbotron, Navbar, Nav, Button, Dropdown, ButtonGroup } from 'react-bootstrap';
 import routes from '../core/routing/Routes';
 import { useSessionContext } from '../core/routing/SessionContext';
 import { Link } from 'react-router-dom';
@@ -15,7 +15,7 @@ export const Header: React.FC = _ => {
     // TODO: gestire messaggi utente
   };
 
-  const yellow = '#ffc107';
+  // const yellow = '#ffc107';
   const jumboStyle: CSSProperties = {
     backgroundImage: `url(${backgroundImage})`,
     backgroundSize: 'cover',
@@ -25,12 +25,6 @@ export const Header: React.FC = _ => {
 
   const titleStyle: CSSProperties = {
     color: 'white'
-  };
-
-  const nameStyle: CSSProperties = {
-    color: yellow,
-    fontSize: '4vh',
-    padding: '0vw 2vw'
   };
 
   return (

@@ -3,7 +3,7 @@ import React, { Suspense } from 'react';
 import { Header } from './Header/Header';
 import { LoadingModal /* LogSessionContext */ } from './core/generic/Commons';
 // Routing
-import { Switch, useHistory } from 'react-router';
+import { Switch } from 'react-router';
 import routes from './core/routing/Routes';
 import { ProtectedRoute } from './core/routing/ProtectedRoute';
 // Style

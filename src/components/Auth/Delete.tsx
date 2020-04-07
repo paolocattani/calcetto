@@ -1,4 +1,4 @@
-import React, { useState, SetStateAction, CSSProperties } from 'react';
+import React, { useState, SetStateAction } from 'react';
 import { useSessionContext } from 'components/core/routing/SessionContext';
 import { useHistory } from 'react-router-dom';
 import { Modal, Container, Alert, Form, Col, Row, Button } from 'react-bootstrap';
@@ -10,7 +10,7 @@ type authType = {
 };
 
 const Delete = ({ show, onHide }: authType): JSX.Element => {
-  const [sessionContext, updateSessionContext] = useSessionContext();
+  const [, updateSessionContext] = useSessionContext();
   const [errorMessage, setErrorMessage] = useState('');
   const { value: password, bind: bindPassword } = useInput('');
 
@@ -48,6 +48,7 @@ const Delete = ({ show, onHide }: authType): JSX.Element => {
     }
   };
 
+  /*
   const modalStyle: CSSProperties = {
     textAlign: 'left',
     width: '40vw',
@@ -56,6 +57,7 @@ const Delete = ({ show, onHide }: authType): JSX.Element => {
     backgroundColor: '#343A40',
     color: 'white'
   };
+*/
 
   const error = errorMessage ? (
     <Alert key={'auth-alert'} variant={'danger'}>

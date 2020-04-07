@@ -12,8 +12,6 @@ import { GenericToast } from '../core/generic/Commons';
 import { fetchTournaments, cardStyle, IndicatorSeparator } from './helper';
 import { formatDate, translateTournamentProgress } from '../core/utils';
 import NewTournament from './new';
-// Types
-import { TournamentProgress } from './type';
 
 const FTournament = () => {
   // State definition

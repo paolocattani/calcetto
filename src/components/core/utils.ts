@@ -1,13 +1,7 @@
 import { TournamentProgress } from '../Tournament/type';
 
-export function getTodayDate(): string {
-  const today = new Date();
-  const dd = String(today.getDate()).padStart(2, '0');
-  const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-  const yyyy = today.getFullYear();
+export const getTodayDate = () => formatDate(new Date());
 
-  return `${yyyy}-${mm}-${dd}`;
-}
 export function translateTournamentProgress(value: string) {
   switch (value) {
     case TournamentProgress.New:

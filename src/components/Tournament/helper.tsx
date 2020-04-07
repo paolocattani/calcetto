@@ -1,6 +1,6 @@
 import React from 'react';
 import { getTodayDate } from '../core/utils';
-import { TournamentModel, TournamentProgressType, selectOptions } from './type';
+import { TournamentModel, selectOptions } from './type';
 import { useState } from 'react';
 
 export function fetchTournaments(setterFunction: typeof useState, setterFunction2: typeof useState): void {
