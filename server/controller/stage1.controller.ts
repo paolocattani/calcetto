@@ -37,7 +37,7 @@ router.post(
   withAuth,
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     const { tId, tableName, pair1Id, pair2Id, score } = req.body;
-    // logger.info('/cell1', req.body.tableName, req.body.tId, req.body.pair1Id, req.body.pair2Id);
+    logger.info('/cell1', score, tableName, tId, pair1Id, pair2Id);
     try {
       const record = await Stage1Model.findOne({
         where: {
@@ -52,10 +52,11 @@ router.post(
       if (!record) return res.status(500).json('Error');
       // logger.info(record);
       if (record.pair1Id === (pair1Id as number)) {
-        logger.info(score);
-        await record.update({ score });
+        logger.info('update', score);
+        await record.update({ score: score || null });
       } else {
-        await record.update({ score: getOpposite(score) });
+        logger.info('update opposite', getOpposite(score));
+        await record.update({ score: getOpposite(score) || null });
       }
       return res.status(200).json({ saved: true });
     } catch (error) {
@@ -182,7 +183,7 @@ export default router;
  *  3->0 , 2->1 , 1->2 , 0->3
  */
 function getOpposite(value: number | null): number | null {
-  //logger.info('getOpposite of  ', value);
+  logger.info('getOpposite of  ', value);
   /*
    * Attenzione :
    *  !0 = true

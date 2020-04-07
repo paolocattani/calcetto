@@ -21,6 +21,7 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
       beforeSaveCell: (oldValue, newValue, row, column) => {
         if (column.id.startsWith('col')) {
           // Aggiorno cella opposta
+
           rows[parseInt(column.text) - 1][`col${row.rowNumber}`] = getOpposite(newValue);
           // Aggiorno posizione relativa
           [...rows]

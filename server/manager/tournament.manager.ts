@@ -21,18 +21,27 @@ export const listAll = async (userId: number): Promise<TournamentDTO[]> => {
     return [];
   }
 };
+export const update = async (userId: number, model: TournamentDTO): Promise<boolean> => {
+  logProcess(className + 'update', 'start');
+  try {
+    const t = await Tournament.findOne({
+      where: { [Op.and]: { id: model.id, [Op.or]: [{ ownerId: userId }, { public: true }] } }
+    });
+    if (!t) return false;
+    await t.update(model);
+  } catch (error) {
+    logProcess(className + 'update', 'error');
+    return false;
+  }
+  logProcess(className + 'update', 'end');
+  return true;
+};
 
 export const findById = async (userId: number, tId: number): Promise<TournamentDTO | null> => {
   try {
     logProcess(className + 'findById', 'start');
-
-    const t: Tournament | null = await Tournament.findOne({
-      where: {
-        [Op.and]: {
-          id: tId,
-          [Op.or]: [{ ownerId: userId }, { public: true }]
-        }
-      }
+    const t = await Tournament.findOne({
+      where: { [Op.and]: { id: tId, [Op.or]: [{ ownerId: userId }, { public: true }] } }
     });
     logProcess(className + 'findById', 'end');
     if (!t) return null;

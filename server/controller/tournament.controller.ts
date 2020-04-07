@@ -6,7 +6,7 @@ import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 import { asyncMiddleware, withAuth } from '../core/middleware';
 // Managers
-import { listAll, findById, findByNameAndDate, parseBody } from '../manager/tournament.manager';
+import { listAll, findById, findByNameAndDate, parseBody, update } from '../manager/tournament.manager';
 // Models
 import Tournament from '../model/sequelize/tournament.model';
 import { TournamentDTO } from '../model/dto/tournament.dto';
@@ -49,6 +49,15 @@ router.get(
   })
 );
 
+router.put(
+  '/',
+  withAuth,
+  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
+    const result = await update(req.user!.id, parseBody(req.body));
+    return res.sendStatus(result ? 200 : 500);
+  })
+);
+
 router.post(
   '/',
   withAuth,
@@ -57,7 +66,7 @@ router.post(
     const user = req.user!;
     try {
       const isEditable = user.role === 'Admin';
-      let t: Tournament | TournamentDTO | null = await findByNameAndDate(user.name, model.date);
+      let t: Tournament | TournamentDTO | null = await findByNameAndDate(model.name, model.date);
       if (t) {
         logger.info(`Tournament ${model.name} already exists....`);
         return res.json(t);

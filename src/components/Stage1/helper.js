@@ -7,7 +7,7 @@ const newColumn = (index, rowNumber) => {
     id: `col${index}`,
     dataField: `col${index}`,
     text: index.toString(),
-    type: 'number',
+    //type: 'number',
     headerStyle: (column, colIndex) => ({ width: `${75 / rowNumber}%` }),
     headerAlign: (column, colIndex) => 'center',
     editable: (content, row, rowIndex, columnIndex) => rowIndex !== columnIndex - 2,
@@ -47,20 +47,10 @@ export function rowsGenerator(pairsList) {
     rows[ii]['place'] = 0;
     rows[ii]['id'] = `row-${pairsList[0].tId}-${ii}`;
   }
-  //console.log(rows);
   return rows;
 }
 
 export const columns = (onSelect, pairsList) => {
-  /**
-   * TODO: aggiungere id su tutte le colonne
-   *
-   *     id: 'punteggio',
-   *     dataField: 'punteggio',
-   *     text: 'Punteggio',
-   *
-   *
-   */
   let baseColumns = [
     {
       // Nome Coppia ( In realta contiene un oggetto di tipo Pair)
@@ -70,19 +60,7 @@ export const columns = (onSelect, pairsList) => {
       editable: false,
       headerStyle: (column, colIndex) => ({ width: '15%' }),
       align: (cell, row, rowIndex, colIndex) => 'center',
-      headerAlign: (column, colIndex) => 'center',
-      editorRenderer: (editorProps, value, row, column, rowIndex, columnIndex) => (
-        <PairSelect
-          {...editorProps}
-          id={columnIndex}
-          row={row}
-          rowIndex={rowIndex}
-          columnIndex={columnIndex}
-          value={value}
-          onSelect={onSelect}
-          tId={pairsList[0].tId}
-        />
-      )
+      headerAlign: (column, colIndex) => 'center'
     },
     {
       // Numbero riga per riferimento visivo
@@ -137,6 +115,8 @@ export const columns = (onSelect, pairsList) => {
  *  3->0 , 2->1 , 1->2 , 0->3
  */
 export function getOpposite(value) {
+  console.log('getOpposite : ', value);
+
   /*
    * Attenzione :
    *  !0 = true

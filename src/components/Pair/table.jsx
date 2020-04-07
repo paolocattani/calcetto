@@ -194,7 +194,7 @@ const PairsTable = () => {
     });
   };
 
-  const confirmPairs = _ => {
+  const confirmPairs = async () => {
     if (!tId) {
       showErrorMessage('Id torneo mancante. Verrai inviato alla Home tra 5 secondi....');
       setTimeout(() => currentHistory.push('/'), 5000);
@@ -249,12 +249,15 @@ const PairsTable = () => {
 
     // Update tournament progress
     data.tournament.progress = TournamentProgress.Stage1;
-    fetch('/api/tournament', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data.tournament)
-    });
-
+    try {
+      await fetch('/api/v1/tournament/', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data.tournament)
+      });
+    } catch (error) {
+      console.log('errororroror :', error);
+    }
     // Go to Stage1
     currentHistory.push(`/stage1/${tId}`);
   };
@@ -273,7 +276,7 @@ const PairsTable = () => {
   async function deleteStage1() {
     try {
       setIsLoading({ state: true, message: 'Cancellazione in corso' });
-      const response = await fetch('/api/stage1', {
+      const response = await fetch('/api/v1/stage1', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tId })
@@ -281,7 +284,7 @@ const PairsTable = () => {
       await response.json();
       // Update tournament progress
       data.tournament.progress = TournamentProgress.PairsSelection;
-      fetch('/api/tournament', {
+      fetch('/api/v1/tournament', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data.tournament)

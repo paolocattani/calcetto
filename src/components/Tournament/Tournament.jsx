@@ -10,11 +10,10 @@ import { SessionContext, isEditable } from '../core/routing/SessionContext';
 import { GenericToast } from '../core/generic/Commons';
 // Helper
 import { fetchTournaments, cardStyle, IndicatorSeparator } from './helper';
-import { formatDate } from '../core/utils';
-// Types
+import { formatDate, translateTournamentProgress } from '../core/utils';
 import NewTournament from './new';
-
-import style from '../../index.css';
+// Types
+import { TournamentProgress } from './type';
 
 const FTournament = () => {
   // State definition
@@ -32,11 +31,6 @@ const FTournament = () => {
     setMessage({ message, type });
     setTimeout(() => setMessage(messageInitialState), 5000);
   };
-  const handleChange = selectedOption => {
-    console.log('handelChange : ', selectedOption);
-
-    setSelectedOption(selectedOption);
-  };
 
   const handleSubmit = async event => {
     event.preventDefault();
@@ -53,22 +47,22 @@ const FTournament = () => {
           <Card style={cardStyle}>
             <Card.Header as="h2">Torneo</Card.Header>
             <Card.Body>
-              <Card.Title>Scegli un torneo</Card.Title>
               {isEditable(session) && newTournament ? (
                 <NewTournament showMessage={showMessage} />
               ) : (
                 <Form onSubmit={handleSubmit}>
+                  <label htmlFor="tournamentSelect">Selezione Torneo</label>
                   <Select
-                    className="tournament-select-container"
+                    id="tournamentSelect"
                     components={{ IndicatorSeparator }}
                     styles={customStyles}
                     value={selectedOption}
                     options={tournamentList}
                     placeholder="Cerca un torneo"
                     isSearchable
-                    getOptionLabel={option => option.name + ' - ' + formatDate(option.date) + '@' + option.progress}
+                    getOptionLabel={getOptionLabel}
                     isClearable
-                    onChange={handleChange}
+                    onChange={selectedOption => setSelectedOption(selectedOption)}
                   />
 
                   <Button
@@ -117,6 +111,9 @@ const FTournament = () => {
 
 export default FTournament;
 
+const getOptionLabel = ({ name, date, progress }) =>
+  name + ' - ' + formatDate(date) + '@' + translateTournamentProgress(progress);
+
 const customStyles = {
   // menuList: (provided, state) => ({ ...provided, border: '1px solid #ffc107' }),
   option: (provided, state) => ({
@@ -128,7 +125,7 @@ const customStyles = {
       color: 'white'
     }
   }),
-  control: provided => ({ ...provided, height: '3vmin', margin: '43px 0px 40px 0px' }),
+  control: provided => ({ ...provided, height: '3vmin', marginBottom: '40px' }),
   singleValue: (provided, state) => ({ ...provided }),
   valueContainer: provided => ({ ...provided, height: '100%', fontSize: 'larger' })
 };

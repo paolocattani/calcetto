@@ -1,3 +1,5 @@
+import { TournamentProgress } from '../Tournament/type';
+
 export function getTodayDate(): string {
   const today = new Date();
   const dd = String(today.getDate()).padStart(2, '0');
@@ -5,6 +7,20 @@ export function getTodayDate(): string {
   const yyyy = today.getFullYear();
 
   return `${yyyy}-${mm}-${dd}`;
+}
+export function translateTournamentProgress(value: string) {
+  switch (value) {
+    case TournamentProgress.New:
+      return 'Nuovo';
+    case TournamentProgress.PairsSelection:
+      return 'Selezione Coppie';
+    case TournamentProgress.Stage1:
+      return 'Fase 1';
+    case TournamentProgress.Stage2:
+      return 'Fase 2';
+    default:
+      return '';
+  }
 }
 
 export function formatDate(date: Date) {

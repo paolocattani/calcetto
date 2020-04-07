@@ -20,10 +20,14 @@ const NewTournament: React.FC<newTProps> = ({ showMessage }) => {
 
   const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>): Promise<void> => {
     evt.preventDefault();
-    let model = getEmptyTournament(name, TournamentProgress.New);
+    if (!name) {
+      showMessage('Inserire un nome per il torneo', 'danger');
+      return;
+    }
+
+    let model = getEmptyTournament(name, TournamentProgress.PairsSelection);
     model.date = date;
     model.public = visible;
-    console.log('newSubmit : ', model);
 
     const response = await fetch('/api/v1/tournament', {
       method: 'POST',
