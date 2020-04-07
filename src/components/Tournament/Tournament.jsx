@@ -32,7 +32,6 @@ const FTournament = () => {
 
   const handleSubmit = async event => {
     event.preventDefault();
-    console.log('handleSubmit  : ', selectedOption);
     if (selectedOption) currentHistory.push(`/tournament/${selectedOption.id}`);
     else showMessage('Errore, riprovare piu tardi...', 'danger');
   };

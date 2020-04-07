@@ -357,6 +357,7 @@ const PairsTable = () => {
                 <ListGroup.Item action variant="primary" onClick={confirmPairs}>
                   Prosegui
                 </ListGroup.Item>
+                {/*
                 <ListGroup.Item action variant="secondary" onClick={goBack}>
                   Home
                 </ListGroup.Item>
@@ -368,7 +369,7 @@ const PairsTable = () => {
                 >
                   Aggiungi Coppia
                 </ListGroup.Item>
-
+                */}
                 <OverlayTrigger placement="right" key="right" overlay={<Tooltip>{deleteTooltipMessage}</Tooltip>}>
                   <span className="d-inline-block" onClick={deleteRow}>
                     <ListGroup.Item
@@ -390,60 +391,66 @@ const PairsTable = () => {
           </Col>
           <Col style={{ margin: '10px' }}>
             <Row style={{ display: isEditable(session) ? 'flex' : 'none' }}>
-              <InputGroup onChange={e => setStage1Number(e.target.value)}>
-                <InputGroup.Prepend>
-                  <InputGroup.Text>Assegna gironi automaticamente</InputGroup.Text>
-                </InputGroup.Prepend>
-                <FormControl
-                  placeholder={
-                    data.rows.length < 4
-                      ? 'Inserisci almeno 4 coppie'
-                      : `Numero di gironi ( max ${Math.floor(data.rows.length / 4)} )`
-                  }
-                  aria-label="Numero di gironi"
-                  disabled={data.rows.length < 4}
-                />
-                <InputGroup.Append>
-                  <Button
-                    variant="primary"
-                    onClick={setStage1Name}
-                    disabled={!stage1Number || stage1Number > Math.floor(data.rows.length / 4) || data.rows.length < 4}
-                  >
-                    Esegui
-                  </Button>
-                </InputGroup.Append>
-              </InputGroup>
-              <InputGroup onChange={e => setNewRowsNumber(e.target.value)}>
-                <InputGroup.Prepend>
-                  <InputGroup.Text>Aggiungi N nuove coppie</InputGroup.Text>
-                </InputGroup.Prepend>
-                <FormControl
-                  disabled={availableRows <= 0}
-                  placeholder={
-                    availableRows <= 0
-                      ? 'Numero massimo di coppie gia creato sulla base del numero di giocatori disponibili'
-                      : `Numero di coppie da aggiungere ( max ${availableRows} )`
-                  }
-                  aria-label="Numero di coppie"
-                  value={newRowsNumber || ''}
-                />
-                <InputGroup.Append>
-                  <Button
-                    variant="primary"
-                    onClick={e => setNewRowsNumber(availableRows)}
-                    disabled={newRowsNumber > availableRows}
-                  >
-                    Max
-                  </Button>
-                  <Button
-                    variant="primary"
-                    onClick={addMultipleRows}
-                    disabled={!newRowsNumber || newRowsNumber > availableRows}
-                  >
-                    Esegui
-                  </Button>
-                </InputGroup.Append>
-              </InputGroup>
+              <Col>
+                <InputGroup onChange={e => setStage1Number(e.target.value)}>
+                  <InputGroup.Prepend>
+                    <InputGroup.Text>Assegna gironi automaticamente</InputGroup.Text>
+                  </InputGroup.Prepend>
+                  <FormControl
+                    placeholder={
+                      data.rows.length < 4
+                        ? 'Inserisci almeno 4 coppie'
+                        : `Numero di gironi ( max ${Math.floor(data.rows.length / 4)} )`
+                    }
+                    aria-label="Numero di gironi"
+                    disabled={data.rows.length < 4}
+                  />
+                  <InputGroup.Append>
+                    <Button
+                      variant="primary"
+                      onClick={setStage1Name}
+                      disabled={
+                        !stage1Number || stage1Number > Math.floor(data.rows.length / 4) || data.rows.length < 4
+                      }
+                    >
+                      Esegui
+                    </Button>
+                  </InputGroup.Append>
+                </InputGroup>
+              </Col>
+              <Col>
+                <InputGroup onChange={e => setNewRowsNumber(e.target.value)}>
+                  <InputGroup.Prepend>
+                    <InputGroup.Text>Aggiungi coppie</InputGroup.Text>
+                  </InputGroup.Prepend>
+                  <FormControl
+                    disabled={availableRows <= 0}
+                    placeholder={
+                      availableRows <= 0
+                        ? 'Numero massimo di coppie gia creato'
+                        : `Numero di coppie da aggiungere ( max ${availableRows} )`
+                    }
+                    aria-label="Numero di coppie"
+                    value={newRowsNumber || ''}
+                  />
+                  <InputGroup.Append>
+                    <Button
+                      variant="primary"
+                      onClick={e => setNewRowsNumber(availableRows)}
+                      disabled={newRowsNumber > availableRows}
+                    >
+                      Max
+                    </Button>
+                    <Button
+                      variant="primary"
+                      onClick={addMultipleRows}
+                      disabled={!newRowsNumber || newRowsNumber > availableRows}
+                    >
+                      Esegui
+                    </Button>
+                  </InputGroup.Append>
+                </InputGroup>
+              </Col>
             </Row>
             <Row>
               <BootstrapTable
