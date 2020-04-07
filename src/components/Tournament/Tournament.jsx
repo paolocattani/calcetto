@@ -14,6 +14,8 @@ import { formatDate } from '../core/utils';
 // Types
 import NewTournament from './new';
 
+import style from '../../index.css';
+
 const FTournament = () => {
   // State definition
   const [selectedOption, setSelectedOption] = useState(getTodayDate());
@@ -117,8 +119,16 @@ export default FTournament;
 
 const customStyles = {
   // menuList: (provided, state) => ({ ...provided, border: '1px solid #ffc107' }),
-  option: (provided, state) => ({ ...provided, backgroundColor: 'white', color: 'black' }),
+  option: (provided, state) => ({
+    ...provided,
+    backgroundColor: 'white',
+    color: 'black',
+    '&:hover': {
+      backgroundColor: '#64bd9c',
+      color: 'white'
+    }
+  }),
   control: provided => ({ ...provided, height: '3vmin', margin: '43px 0px 40px 0px' }),
   singleValue: (provided, state) => ({ ...provided }),
-  valueContainer: provided => ({ ...provided, height: '100%' })
+  valueContainer: provided => ({ ...provided, height: '100%', fontSize: 'larger' })
 };
