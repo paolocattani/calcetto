@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { OrganizationChart } from 'primereact/organizationchart';
 
+// https://github.com/dabeng/react-orgchart
 export class OrganizationChartDemo extends Component<{}, { data: any }> {
   constructor() {
     super({});

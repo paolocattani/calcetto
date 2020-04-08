@@ -24,7 +24,8 @@ const AuthWrapper: React.FC = (): JSX.Element => {
     width: register ? '50vw' : '40vw',
     height: 'auto',
     margin: 'auto',
-    color: 'white'
+    color: 'white',
+    marginBottom: '20vh'
   };
 
   return (

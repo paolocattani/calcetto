@@ -203,7 +203,8 @@ const customStyles = {
       color: 'white'
     }
   }),
-  control: provided => ({ ...provided, height: '3vmin', marginBottom: '40px' }),
+  input: (provided, state) => ({ ...provided, backgroundColor: '#64bd9c' }),
+  control: provided => ({ ...provided, height: '3vmin', marginBottom: 'auto' }),
   singleValue: (provided, state) => ({ ...provided }),
   valueContainer: provided => ({ ...provided, height: '100%', fontSize: 'larger' })
 };

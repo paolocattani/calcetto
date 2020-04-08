@@ -12,6 +12,7 @@ export interface Session {
   birthday?: string | null;
   label?: string | null;
   role?: string | null;
+  isAdmin?: boolean | null;
 }
 
 // https://stackoverflow.com/questions/59422159/redirecting-a-user-to-the-page-they-requested-after-successful-authentication-wi
@@ -32,7 +33,12 @@ export const SessionContextProvider: React.FC = ({ children }) => {
       try {
         const response = await fetch('/api/v1/auth/');
         const user = await response.json();
-        if (user && response.ok) setSessionState({ isAuthenticated: true, ...user });
+        if (user && response.ok)
+          setSessionState({
+            isAuthenticated: true,
+            isEditable: user.role === 'Admin',
+            ...user
+          });
         else setSessionState(initialSession);
       } catch (error) {
         console.error('SessionContext.error :', error);
@@ -49,8 +55,3 @@ export const SessionContextProvider: React.FC = ({ children }) => {
     </SessionContext.Provider>
   );
 };
-
-export const isEditable = (sessionContext: Session): boolean =>
-  !sessionContext || !sessionContext.isAuthenticated || !sessionContext.role
-    ? false
-    : sessionContext.isAuthenticated && sessionContext.role === 'Admin';

@@ -1,5 +1,5 @@
 import { useInput } from '../core/hooks/InputHook';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Row, Col } from 'react-bootstrap';
 import React, { SetStateAction } from 'react';
 import { useSessionContext } from '../core/routing/SessionContext';
 import { useHistory } from 'react-router-dom';
@@ -61,9 +61,13 @@ const Login: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
         <Form.Label>Password</Form.Label>
         <Form.Control required type="password" placeholder="Password" {...bindPassword} />
       </Form.Group>
-      <Button size="lg" variant="outline-success" type="submit">
-        Login
-      </Button>
+      <Row>
+        <Col>
+          <Button size="lg" variant="outline-success" className="float-right" type="submit">
+            Login
+          </Button>
+        </Col>
+      </Row>
     </Form>
   );
 };

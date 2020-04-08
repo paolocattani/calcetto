@@ -11,7 +11,7 @@ import columns, { clearAllFilter } from './helper';
 import TableHeader from './header';
 import { LoadingModal } from '../core/generic/Commons';
 import { getEmptyPlayer } from '../Player/helper';
-import { SessionContext, isEditable } from '../core/routing/SessionContext';
+import { SessionContext } from '../core/routing/SessionContext';
 
 export default class Player extends React.Component {
   constructor(props) {
@@ -121,17 +121,16 @@ export default class Player extends React.Component {
     const { rows, isLoading } = state;
     const selectRow = {
       mode: 'checkbox',
-      nonSelectable: rows.filter(e => (e.editable ? false : true)).map(e => e.id),
+      nonSelectable: rows.filter(e => !e.editable).map(e => e.id),
       onSelect: this.handleOnSelect,
       onSelectAll: (isSelected, rows) => rows.forEach(row => this.handleOnSelect(row, isSelected)),
       style: { backgroundColor: '#c8e6c9' },
+      hideSelectAll: !rows.find(e => e.editable),
       selectColumnStyle: ({ checked, disabled, rowIndex, rowKey }) =>
         rows[rowIndex].editable ? {} : { backgroundColor: '#dc3545' }
     };
 
-    // console.log('Render player : ', { ...this.props });
     const { state: { selectedRows } = [] } = this;
-
     return (
       <SessionContext.Consumer>
         {([session]) => (
@@ -141,12 +140,12 @@ export default class Player extends React.Component {
               <Col>
                 <>
                   <ListGroup horizontal>
-                    {isEditable(session) ? (
+                    {session.isEditable ? (
                       <Button variant="success" onClick={addRow}>
                         Aggiungi giocatore
                       </Button>
                     ) : null}
-                    {isEditable(session) ? (
+                    {session.isEditable ? (
                       <Button variant="danger" onClick={deleteRow} disabled={selectedRows.length === 0}>
                         {selectedRows.length > 1 ? 'Elimina giocatori' : 'Elimina giocatore'}
                       </Button>
@@ -159,8 +158,8 @@ export default class Player extends React.Component {
                     wrapperClasses="player-table"
                     keyField="id"
                     data={rows}
-                    columns={columns(isEditable(session))}
-                    cellEdit={this.cellEditProps(isEditable(session))}
+                    columns={columns(session.isEditable)}
+                    cellEdit={this.cellEditProps(session.isEditable)}
                     selectRow={selectRow}
                     caption={<TableHeader />}
                     filter={filterFactory()}

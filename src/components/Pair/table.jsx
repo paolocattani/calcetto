@@ -9,7 +9,7 @@ import NoData from './noData';
 import { LoadingModal, GenericToast } from '../core/generic/Commons';
 import './style.css';
 import { TournamentProgress } from '../Tournament/type';
-import { SessionContext, isEditable } from '../core/routing/SessionContext';
+import { SessionContext } from '../core/routing/SessionContext';
 const PairsTable = () => {
   // Navigation
   const { tId } = useParams();
@@ -259,11 +259,11 @@ const PairsTable = () => {
     // Go to Stage1
     currentHistory.push(`/stage1/${tId}`);
   };
-
+  /*
   function goBack() {
     currentHistory.push('/');
   }
-
+*/
   const selectRow = {
     mode: 'checkbox',
     onSelect: handleSelect,
@@ -325,15 +325,16 @@ const PairsTable = () => {
     setData(current => ({ tournament: current.tournament, rows: newRows, players: current.players }));
   }
 
-  const availableRows =
+  const availableRows = Math.floor(
     Math.floor((data.players.length - 1) / 2) -
-    (data.rows.length === 0
-      ? 0
-      : data.rows.reduce((accumulator, e) => {
-          if ((!e.player1 && !e.player2) || (!e.player1.id && !e.player2.id)) return accumulator + 1;
-          if (!e.player1 || !e.player1.id || !e.player2 || !e.player2.id) return accumulator + 0, 5;
-          return accumulator;
-        }, 0));
+      (data.rows.length === 0
+        ? 0
+        : data.rows.reduce((accumulator, e) => {
+            if ((!e.player1 && !e.player2) || (!e.player1.id && !e.player2.id)) return accumulator + 1;
+            if (!e.player1 || !e.player1.id || !e.player2 || !e.player2.id) return accumulator + 0.5;
+            return accumulator;
+          }, 0))
+  );
 
   const deleteDisabled =
     !(selectedRows.length > 0) || data.tournament.progress === 'Stage1' || data.tournament.progress === 'Stage2';
@@ -344,7 +345,7 @@ const PairsTable = () => {
     deleteTooltipMessage = 'Devi prima resettare i gironi per poter cancellare delle coppie';
   else deleteTooltipMessage = 'Cancella le coppie selezionate';
 
-  // console.log('render table : ', data);
+  //console.log('render table : ', availableRows);
 
   return (
     <SessionContext.Consumer>
@@ -354,9 +355,6 @@ const PairsTable = () => {
           <Col style={{ margin: '10px' }} md={{ span: 1 }}>
             <Row>
               <ListGroup>
-                <ListGroup.Item action variant="primary" onClick={confirmPairs}>
-                  Prosegui
-                </ListGroup.Item>
                 {/*
                 <ListGroup.Item action variant="secondary" onClick={goBack}>
                   Home
@@ -366,7 +364,7 @@ const PairsTable = () => {
                   action
                   variant="success"
                   onClick={() => addRow()}
-                  disabled={availableRows <= 0 || !isEditable(session)}
+                  disabled={availableRows <= 0 || !session.isEditable}
                 >
                   Aggiungi Coppia
                 </ListGroup.Item>
@@ -377,21 +375,21 @@ const PairsTable = () => {
                       action
                       variant="danger"
                       style={{ pointerEvents: 'none' }}
-                      disabled={deleteDisabled || !isEditable(session)}
+                      disabled={deleteDisabled || !session.isEditable}
                     >
                       Elimina Coppia {deleteDisabled}
                     </ListGroup.Item>
                   </span>
                 </OverlayTrigger>
 
-                <ListGroup.Item action variant="danger" onClick={deleteStage1} disabled={!isEditable(session)}>
+                <ListGroup.Item action variant="danger" onClick={deleteStage1} disabled={!session.isEditable}>
                   Reset gironi
                 </ListGroup.Item>
               </ListGroup>
             </Row>
           </Col>
           <Col style={{ margin: '10px' }}>
-            <Row style={{ display: isEditable(session) ? 'flex' : 'none' }}>
+            <Row style={{ display: session.isEditable ? 'flex' : 'none' }}>
               <Col>
                 <InputGroup onChange={e => setStage1Number(e.target.value)}>
                   <InputGroup.Prepend>
@@ -459,14 +457,10 @@ const PairsTable = () => {
                 keyField="id"
                 data={data.rows}
                 columns={columns(onSelect, data.players)}
-                cellEdit={cellEditProps(isEditable(session))}
+                cellEdit={cellEditProps(session.isEditable)}
                 selectRow={selectRow}
                 noDataIndication={
-                  <NoData
-                    isEditable={isEditable(session)}
-                    addRow={() => addRow()}
-                    optionsLength={data.players.length}
-                  />
+                  <NoData isEditable={session.isEditable} addRow={() => addRow()} optionsLength={data.players.length} />
                 }
                 caption={<TableHeader tournament={data.tournament} />}
                 headerClasses="default-background default-color-white"
@@ -476,6 +470,10 @@ const PairsTable = () => {
             </Row>
           </Col>
           <Col style={{ margin: '10px' }} md={2}>
+            <ListGroup.Item action variant="primary" onClick={confirmPairs}>
+              Prosegui
+            </ListGroup.Item>
+
             <GenericToast message={message.message} type={message.type} />
           </Col>
         </Row>

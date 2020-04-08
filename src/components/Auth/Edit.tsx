@@ -3,6 +3,7 @@ import { Card, Container, Alert, Form, Button, Col, Row } from 'react-bootstrap'
 import { useInput } from '../core/hooks/InputHook';
 import { useSessionContext } from '../core/routing/SessionContext';
 import Delete from './Delete';
+import DatePicker from 'react-datepicker';
 
 const EditUser: React.FC<{}> = (): JSX.Element => {
   const [session] = useSessionContext();
@@ -11,7 +12,9 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
   const { value: name, bind: bindName /*reset: resetUsername*/ } = useInput(session.name);
   const { value: surname, bind: bindSurname /*reset: resetUsername*/ } = useInput(session.surname);
   const { value: phone, bind: bindPhone /*reset: resetUsername*/ } = useInput(session.phone);
-  const { value: birthday, bind: bindBirthday /*reset: resetUsername*/ } = useInput(session.birthday);
+  const { value: birthday, setValue: setBirthday /* bind: bindBirthday ,reset: resetUsername*/ } = useInput(
+    session.birthday
+  );
 
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -49,6 +52,7 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
     color: 'white'
   };
 
+  console.log('Rendere Edit : ', birthday);
   return (
     <Card style={modalStyle} className="default-background">
       <Form onSubmit={onSubmit}>
@@ -71,6 +75,7 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
                 <Form.Control
                   plaintext
                   value={session.username!}
+                  readOnly
                   style={{ fontSize: 'larger', fontWeight: 'bolder' }}
                   className="default-color-white "
                 />
@@ -82,6 +87,7 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
                 <Form.Control
                   plaintext
                   value={session.email!}
+                  readOnly
                   style={{ fontSize: 'larger', fontWeight: 'bolder' }}
                   className="default-color-white"
                 />
@@ -111,7 +117,16 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
               <Col>
                 <Form.Group controlId="birthday">
                   <Form.Label>Data di Nascita</Form.Label>
-                  <Form.Control type="date" placeholder="Data di nascita" {...bindBirthday} />
+                  <Form.Control
+                    as={() => (
+                      <DatePicker
+                        selected={new Date(birthday)}
+                        locale="it"
+                        dateFormat="dd/MM/yyyy"
+                        onChange={newValue => setBirthday(newValue ? newValue : new Date())}
+                      />
+                    )}
+                  ></Form.Control>
                 </Form.Group>
               </Col>
             </Form.Row>

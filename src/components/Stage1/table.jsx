@@ -6,7 +6,7 @@ import cellEditFactory from 'react-bootstrap-table2-editor';
 
 import TableHeader from './header';
 import { getOpposite, comparator } from './helper';
-import { SessionContext, isEditable } from '../core/routing/SessionContext';
+import { SessionContext } from '../core/routing/SessionContext';
 
 // style
 import './style.css';
@@ -77,7 +77,7 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
           data={rows}
           columns={columns}
           selectRow={selectRow}
-          cellEdit={cellEditProps(isEditable(session))}
+          cellEdit={cellEditProps(session.isEditable)}
           noDataIndication="Nessun dato reperito"
           wrapperClasses="player-table"
           headerClasses="player-table-header"

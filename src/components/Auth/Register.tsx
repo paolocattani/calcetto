@@ -255,11 +255,11 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
         </Col>
       </Form.Row>
 
-      <Button variant="outline-success" type="submit" size="lg">
+      <Button variant="outline-success" className="float-right" type="submit" size="lg">
         Registrati
       </Button>
 
-      <Button variant="outline-danger" className="float-right" onClick={reset} type="submit" size="lg">
+      <Button variant="outline-danger" className="float-left" onClick={reset} type="submit">
         Reset
       </Button>
     </Form>

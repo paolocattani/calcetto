@@ -87,9 +87,11 @@ const NewTournament: React.FC<newTProps> = ({ showMessage }) => {
         </Col>
       </Form.Row>
       <Form.Row>
-        <Button type="submit" size="lg" variant="outline-warning" className="float-left default-color-white">
-          <span style={{ fontSize: 'larger', fontWeight: 'bolder' }}>Prosegui</span>
-        </Button>
+        <Col>
+          <Button type="submit" size="lg" variant="outline-warning" className="float-right default-color-white">
+            <span style={{ fontSize: 'larger', fontWeight: 'bolder' }}>Prosegui</span>
+          </Button>
+        </Col>
       </Form.Row>
     </Form>
   );

@@ -6,7 +6,7 @@ import { Form, Button, Card, Col } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 // Core
 import { getTodayDate } from '../core/utils';
-import { SessionContext, isEditable } from '../core/routing/SessionContext';
+import { SessionContext } from '../core/routing/SessionContext';
 import { GenericToast } from '../core/generic/Commons';
 // Helper
 import { fetchTournaments, cardStyle, IndicatorSeparator } from './helper';
@@ -45,7 +45,7 @@ const FTournament = () => {
             <Card.Header as="h2">Torneo</Card.Header>
             <Card.Body>
               <Col>
-                {isEditable(session) && newTournament ? (
+                {session.isEditable && newTournament ? (
                   <NewTournament showMessage={showMessage} />
                 ) : (
                   <Form onSubmit={handleSubmit}>
@@ -64,9 +64,9 @@ const FTournament = () => {
                     />
                     <Button
                       type="submit"
-                      size="md"
+                      size="lg"
                       variant="outline-warning"
-                      className="float-left default-color-white"
+                      className="float-right default-color-white"
                       disabled={!selectedOption}
                     >
                       <span style={{ fontSize: 'larger', fontWeight: 'bolder' }}>Prosegui</span>
@@ -76,13 +76,13 @@ const FTournament = () => {
               </Col>
             </Card.Body>
             <Card.Footer>
-              {isEditable(session) ? (
+              {session.isEditable ? (
                 newTournament ? (
                   <Button
                     type="button"
                     size="lg"
                     variant="outline-warning"
-                    className="float-right default-color-white"
+                    className="float-left default-color-white"
                     onClick={() => setNewTournament(false)}
                   >
                     Seleziona un torneo
@@ -92,7 +92,7 @@ const FTournament = () => {
                     type="button"
                     size="lg"
                     variant="outline-warning"
-                    className="float-right default-color-white"
+                    className="float-left default-color-white"
                     onClick={() => setNewTournament(true)}
                   >
                     Crea un nuovo torneo

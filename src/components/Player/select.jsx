@@ -25,6 +25,7 @@ const PlayerSelection = React.forwardRef((props, ref) => {
 
   return (
     <Select
+      styles={props.styles || null}
       components={animatedComponents}
       options={options}
       onChange={handleChange}
