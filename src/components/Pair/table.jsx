@@ -361,6 +361,7 @@ const PairsTable = () => {
                 <ListGroup.Item action variant="secondary" onClick={goBack}>
                   Home
                 </ListGroup.Item>
+                */}
                 <ListGroup.Item
                   action
                   variant="success"
@@ -369,7 +370,7 @@ const PairsTable = () => {
                 >
                   Aggiungi Coppia
                 </ListGroup.Item>
-                */}
+
                 <OverlayTrigger placement="right" key="right" overlay={<Tooltip>{deleteTooltipMessage}</Tooltip>}>
                   <span className="d-inline-block" onClick={deleteRow}>
                     <ListGroup.Item

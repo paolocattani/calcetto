@@ -22,26 +22,29 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
         if (column.id.startsWith('col')) {
           // Aggiorno cella opposta
           rows[parseInt(column.text) - 1][`col${row.rowNumber}`] = getOpposite(newValue);
-          // Aggiorno posizione relativa
-          [...rows]
-            .sort((e1, e2) => comparator(e1, e2))
-            .forEach((row, index) => (rows[row.rowNumber - 1]['place'] = index + 1));
         }
       },
       afterSaveCell: (oldValue, newValue, row, column) => {
         if (column.id.startsWith('col')) {
           // Aggiorno dati sul Db
           updateCellValue(oldValue, newValue, row, column);
+
+          // Ricalcolo totali riga
           let acc = 0;
           for (let key in row) if (key.startsWith('col') && row[key]) acc += parseInt(row[key]);
           rows[row.rowNumber - 1]['total'] = acc ? acc : null;
 
+          //... e riga opposta
           acc = 0;
           for (let key in rows[parseInt(column.text) - 1])
             if (key.startsWith('col') && rows[parseInt(column.text) - 1][key])
               acc += parseInt(rows[parseInt(column.text) - 1][key]);
           rows[parseInt(column.text) - 1]['total'] = acc ? acc : null;
         }
+        // Aggiorno posizione relativa
+        [...rows]
+          .sort((e1, e2) => comparator(e1, e2))
+          .forEach((row, index) => (rows[row.rowNumber - 1]['place'] = index + 1));
       }
     });
 

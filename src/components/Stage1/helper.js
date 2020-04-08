@@ -11,7 +11,7 @@ const newColumn = (index, rowNumber) => {
     editable: (content, row, rowIndex, columnIndex) => rowIndex !== columnIndex - 2,
     align: (cell, row, rowIndex, colIndex) => 'center',
     style: (content, row, rowIndex, columnIndex) => {
-      if (rowIndex === columnIndex - 2) return { backgroundColor: '#6d706e' };
+      if (rowIndex === columnIndex - 2) return { backgroundColor: '#343a40' };
       if (parseInt(content, 10) === 3 || parseInt(content, 10) === 2) return { backgroundColor: 'rgb(196, 247, 160)' };
       if (parseInt(content, 10) === 1 || parseInt(content, 10) === 0) return { backgroundColor: 'rgb(255, 147, 147)' };
       return null;

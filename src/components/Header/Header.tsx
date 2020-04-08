@@ -54,13 +54,13 @@ export const Header: React.FC = _ => {
               {sessionContext.name ? (
                 <>
                   <Dropdown alignRight as={ButtonGroup}>
-                    <Button variant="outline-warning" size="lg">
-                      <strong style={{ color: '#64bd9c' }}>{sessionContext.name}</strong>
+                    <Button style={{ opacity: 1 }} variant="outline-warning" size="lg" disabled>
+                      <strong style={{ color: '#64bd9c', fontSize: 'larger' }}>{sessionContext.username}</strong>
                     </Button>
                     <Dropdown.Toggle split variant="outline-warning" id="dropdown-custom-2" />
                     <Dropdown.Menu className="default-background default-border-yellow">
                       <Dropdown.Item
-                        className="default-color-yellow default-hover-green"
+                        className="default-color-white default-hover-green"
                         as="button"
                         variant="warning"
                         onClick={logout}
@@ -70,7 +70,7 @@ export const Header: React.FC = _ => {
                       </Dropdown.Item>
                       <Dropdown.Divider style={{ borderTopColor: '#ffc107' }} />
                       <Dropdown.Item
-                        className="default-color-yellow default-hover-green"
+                        className="default-color-white default-hover-green"
                         as={Link}
                         to={'/user'}
                         eventKey="2"
