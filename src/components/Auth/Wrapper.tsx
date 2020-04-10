@@ -1,8 +1,9 @@
-import React, { useState, CSSProperties } from 'react';
+import React, { useState, CSSProperties, lazy } from 'react';
 import { Button, Container, Alert, Card } from 'react-bootstrap';
-import Register from './Register';
-import Login from './Login';
 import { ToggleOn, ToggleOff } from '../core/Icons';
+
+const Login = lazy(() => import('./Login'));
+const Register = lazy(() => import('./Register'));
 
 const AuthWrapper: React.FC = (): JSX.Element => {
   // State

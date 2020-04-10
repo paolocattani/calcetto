@@ -1,10 +1,10 @@
-import React, { FormEvent, SetStateAction, useState, CSSProperties } from 'react';
+import React, { FormEvent, SetStateAction, useState, CSSProperties, lazy } from 'react';
 import { Card, Container, Alert, Form, Button, Col, Row } from 'react-bootstrap';
 import { useInput } from '../core/hooks/InputHook';
 import { useSessionContext } from '../core/routing/SessionContext';
-import Delete from './Delete';
 import DatePicker from 'react-datepicker';
 import { TrashIcon, SaveIcon } from '../core/Icons';
+const Delete = lazy(() => import('./Delete'));
 
 const EditUser: React.FC<{}> = (): JSX.Element => {
   const [session] = useSessionContext();
