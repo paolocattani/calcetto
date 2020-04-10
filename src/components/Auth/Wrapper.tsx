@@ -2,7 +2,7 @@ import React, { useState, CSSProperties } from 'react';
 import { Button, Container, Alert, Card } from 'react-bootstrap';
 import Register from './Register';
 import Login from './Login';
-import { RightArrowIcon, ToggleOn, ToggleOff } from '../core/Icons';
+import { ToggleOn, ToggleOff } from '../core/Icons';
 
 const AuthWrapper: React.FC = (): JSX.Element => {
   // State
