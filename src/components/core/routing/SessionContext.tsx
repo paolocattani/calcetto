@@ -3,16 +3,17 @@ import React from 'react';
 import { LoadingModal } from '../generic/Commons';
 
 export interface Session {
-  isAuthenticated?: boolean | null;
-  username?: string | null;
-  name?: string | null;
-  surname?: string | null;
-  email?: string | null;
-  phone?: string | null;
-  birthday?: string | null;
-  label?: string | null;
-  role?: string | null;
-  isAdmin?: boolean | null;
+  isAuthenticated?: boolean;
+  username?: string;
+  name?: string;
+  surname?: string;
+  email?: string;
+  phone?: string;
+  birthday?: string;
+  label?: string;
+  role?: string;
+  isAdmin?: boolean;
+  isEditable?: boolean;
 }
 
 // https://stackoverflow.com/questions/59422159/redirecting-a-user-to-the-page-they-requested-after-successful-authentication-wi

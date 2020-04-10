@@ -20,7 +20,7 @@ const App: React.FC = _ => {
   return (
     <div className="App">
       <Header />
-      <Container fluid>
+      <Container fluid style={{ marginBottom: '20vh' }}>
         {/*<LogSessionContext /> */}
         {/*<RedirectionControl />*/}
         <Suspense fallback={<LoadingModal show={true} message={'....Caricamento'} />}>

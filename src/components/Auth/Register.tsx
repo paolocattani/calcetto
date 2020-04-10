@@ -135,12 +135,7 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
       });
       const result = await response.json();
       if (response.ok && result) {
-        console.log('before register : ', result);
-        console.log('before register : ', { ...sessionContext, ...result, isAuthenticated: true });
-        console.log('before register : ', { ...result, isAuthenticated: true });
         updateSessionContext({ ...sessionContext, ...result, isAuthenticated: true });
-        console.log('after register : ', sessionContext);
-        // currentHistory.push('/');
       } else {
         switch (response.status) {
           case 401:
@@ -256,7 +251,7 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
       </Form.Row>
 
       <Button variant="outline-success" className="float-right" type="submit" size="lg">
-        Registrati
+        Conferma
       </Button>
 
       <Button variant="outline-danger" className="float-left" onClick={reset} type="submit">

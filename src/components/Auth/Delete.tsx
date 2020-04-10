@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { Modal, Container, Alert, Form, Col, Row, Button } from 'react-bootstrap';
 import { useInput } from '../core/hooks/InputHook';
 import { SessionContext } from '../core/routing/SessionContext';
+import { TrashIcon } from '../core/Icons';
 type authType = {
   show: boolean;
   onHide: () => void;
@@ -58,7 +59,6 @@ const Delete = ({ show, onHide }: authType): JSX.Element => {
     color: 'white'
   };
 */
-
   const error = errorMessage ? (
     <Alert key={'auth-alert'} variant={'danger'}>
       {errorMessage}{' '}
@@ -110,8 +110,11 @@ const Delete = ({ show, onHide }: authType): JSX.Element => {
                 <Form.Control type="password" placeholder="Password" {...bindPassword} />
               </Col>
             </Form.Group>
-            <Button size="lg" variant="outline-danger" type="submit">
-              Conferma
+            <Button size="lg" className="float-left" onClick={onHide} variant="outline-success" type="button">
+              Annulla
+            </Button>
+            <Button size="lg" className="float-right" variant="outline-danger" type="submit">
+              <TrashIcon /> Conferma
             </Button>
           </Form>
         )

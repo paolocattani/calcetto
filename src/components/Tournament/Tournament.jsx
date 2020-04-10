@@ -8,6 +8,7 @@ import { useHistory } from 'react-router';
 import { getTodayDate } from '../core/utils';
 import { SessionContext } from '../core/routing/SessionContext';
 import { GenericToast } from '../core/generic/Commons';
+import { RightArrowIcon } from '../core/Icons';
 // Helper
 import { fetchTournaments, cardStyle, IndicatorSeparator } from './helper';
 import { formatDate, translateTournamentProgress } from '../core/utils';
@@ -41,66 +42,69 @@ const FTournament = () => {
       <GenericToast message={message.message} type={message.type} />
       <SessionContext.Consumer>
         {([session]) => (
-          <Card style={cardStyle}>
-            <Card.Header as="h2">Torneo</Card.Header>
-            <Card.Body>
-              <Col>
-                {session.isEditable && newTournament ? (
-                  <NewTournament showMessage={showMessage} />
-                ) : (
-                  <Form onSubmit={handleSubmit}>
-                    <label htmlFor="tournamentSelect">Selezione Torneo</label>
-                    <Select
-                      id="tournamentSelect"
-                      components={{ IndicatorSeparator }}
-                      styles={customStyles}
-                      value={selectedOption}
-                      options={tournamentList}
-                      placeholder="Cerca un torneo"
-                      isSearchable
-                      getOptionLabel={getOptionLabel}
-                      isClearable
-                      onChange={selectedOption => setSelectedOption(selectedOption)}
-                    />
+          <Col md={{ span: '6', offset: '3' }} sm="12">
+            <Card style={cardStyle}>
+              <Card.Header as="h2">Torneo</Card.Header>
+              <Card.Body>
+                <Col>
+                  {session.isEditable && newTournament ? (
+                    <NewTournament showMessage={showMessage} />
+                  ) : (
+                    <Form onSubmit={handleSubmit}>
+                      <label htmlFor="tournamentSelect">Selezione Torneo</label>
+                      <Select
+                        id="tournamentSelect"
+                        components={{ IndicatorSeparator }}
+                        styles={customStyles}
+                        value={selectedOption}
+                        options={tournamentList}
+                        placeholder="Cerca un torneo"
+                        isSearchable
+                        getOptionLabel={getOptionLabel}
+                        isClearable
+                        onChange={selectedOption => setSelectedOption(selectedOption)}
+                      />
+                      <Button
+                        type="submit"
+                        size="lg"
+                        variant="outline-warning"
+                        className="float-right default-color-white"
+                        disabled={!selectedOption}
+                      >
+                        <span style={{ fontSize: 'larger', fontWeight: 'bolder', padding: '1vw' }}>Prosegui</span>
+                        <RightArrowIcon size="lg" />
+                      </Button>
+                    </Form>
+                  )}
+                </Col>
+              </Card.Body>
+              <Card.Footer>
+                {session.isEditable ? (
+                  newTournament ? (
                     <Button
-                      type="submit"
+                      type="button"
                       size="lg"
                       variant="outline-warning"
-                      className="float-right default-color-white"
-                      disabled={!selectedOption}
+                      className="float-left default-color-white"
+                      onClick={() => setNewTournament(false)}
                     >
-                      <span style={{ fontSize: 'larger', fontWeight: 'bolder' }}>Prosegui</span>
+                      Seleziona un torneo
                     </Button>
-                  </Form>
-                )}
-              </Col>
-            </Card.Body>
-            <Card.Footer>
-              {session.isEditable ? (
-                newTournament ? (
-                  <Button
-                    type="button"
-                    size="lg"
-                    variant="outline-warning"
-                    className="float-left default-color-white"
-                    onClick={() => setNewTournament(false)}
-                  >
-                    Seleziona un torneo
-                  </Button>
-                ) : (
-                  <Button
-                    type="button"
-                    size="lg"
-                    variant="outline-warning"
-                    className="float-left default-color-white"
-                    onClick={() => setNewTournament(true)}
-                  >
-                    Crea un nuovo torneo
-                  </Button>
-                )
-              ) : null}
-            </Card.Footer>
-          </Card>
+                  ) : (
+                    <Button
+                      type="button"
+                      size="lg"
+                      variant="outline-warning"
+                      className="float-left default-color-white"
+                      onClick={() => setNewTournament(true)}
+                    >
+                      Crea un nuovo torneo
+                    </Button>
+                  )
+                ) : null}
+              </Card.Footer>
+            </Card>
+          </Col>
         )}
       </SessionContext.Consumer>
     </>

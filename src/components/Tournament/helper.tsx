@@ -70,7 +70,7 @@ export const indicatorSeparatorStyle = {
   width: 1
 };
 export const cardStyle = {
-  width: '50%',
+  width: '100%',
   margin: 'auto',
   backgroundColor: 'inherit',
   borderColor: '#ffc107',

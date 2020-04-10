@@ -64,7 +64,7 @@ const Login: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
       <Row>
         <Col>
           <Button size="lg" variant="outline-success" className="float-right" type="submit">
-            Login
+            Conferma
           </Button>
         </Col>
       </Row>

@@ -4,6 +4,7 @@ import { useInput } from '../core/hooks/InputHook';
 import { useSessionContext } from '../core/routing/SessionContext';
 import Delete from './Delete';
 import DatePicker from 'react-datepicker';
+import { TrashIcon, SaveIcon } from '../core/Icons';
 
 const EditUser: React.FC<{}> = (): JSX.Element => {
   const [session] = useSessionContext();
@@ -46,7 +47,7 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
 
   const modalStyle: CSSProperties = {
     textAlign: 'left',
-    width: '40vw',
+    width: '100%',
     height: 'auto',
     margin: 'auto',
     color: 'white'
@@ -54,95 +55,97 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
 
   console.log('Rendere Edit : ', birthday);
   return (
-    <Card style={modalStyle} className="default-background">
-      <Form onSubmit={onSubmit}>
-        <Card.Header as="h2">Gestione dati utente</Card.Header>
-        <Card.Body>
-          <Container>
-            {errorMessage ? (
-              <Alert key={'auth-alert-error'} variant={'danger'}>
-                {errorMessage}
-              </Alert>
-            ) : null}
-            {successMessage ? (
-              <Alert key={'auth-alert-success'} variant={'success'}>
-                {successMessage}
-              </Alert>
-            ) : null}
-            <Form.Group as={Row} controlId="username">
-              <Form.Label column>Username</Form.Label>
-              <Col sm="10">
-                <Form.Control
-                  plaintext
-                  value={session.username!}
-                  readOnly
-                  style={{ fontSize: 'larger', fontWeight: 'bolder' }}
-                  className="default-color-white "
-                />
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} controlId="email">
-              <Form.Label column>Email</Form.Label>
-              <Col sm="10">
-                <Form.Control
-                  plaintext
-                  value={session.email!}
-                  readOnly
-                  style={{ fontSize: 'larger', fontWeight: 'bolder' }}
-                  className="default-color-white"
-                />
-              </Col>
-            </Form.Group>
-            <Form.Row>
-              <Col>
-                <Form.Group controlId="name">
-                  <Form.Label>Nome</Form.Label>
-                  <Form.Control required type="text" placeholder="Nome" {...bindName} />
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group controlId="surname">
-                  <Form.Label>Cognome</Form.Label>
-                  <Form.Control required type="text" placeholder="Cognome" {...bindSurname} />
-                </Form.Group>
-              </Col>
-            </Form.Row>
-            <Form.Row>
-              <Col>
-                <Form.Group controlId="phone">
-                  <Form.Label>Telefono</Form.Label>
-                  <Form.Control required type="text" placeholder="Telefono" {...bindPhone} />
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group controlId="birthday">
-                  <Form.Label>Data di Nascita</Form.Label>
+    <Col md={{ span: '6', offset: '3' }} sm="12">
+      <Card style={modalStyle} className="default-background">
+        <Form onSubmit={onSubmit}>
+          <Card.Header as="h2">Gestione dati utente</Card.Header>
+          <Card.Body>
+            <Container>
+              {errorMessage ? (
+                <Alert key={'auth-alert-error'} variant={'danger'}>
+                  {errorMessage}
+                </Alert>
+              ) : null}
+              {successMessage ? (
+                <Alert key={'auth-alert-success'} variant={'success'}>
+                  {successMessage}
+                </Alert>
+              ) : null}
+              <Form.Group as={Row} controlId="username">
+                <Form.Label column>Username</Form.Label>
+                <Col sm="9">
                   <Form.Control
-                    as={() => (
-                      <DatePicker
-                        selected={new Date(birthday)}
-                        locale="it"
-                        dateFormat="dd/MM/yyyy"
-                        onChange={newValue => setBirthday(newValue ? newValue : new Date())}
-                      />
-                    )}
-                  ></Form.Control>
-                </Form.Group>
-              </Col>
-            </Form.Row>
-          </Container>
-        </Card.Body>
-        <Card.Footer>
-          <Button size="lg" variant="outline-success" type="submit">
-            Salva
-          </Button>
-          <Button variant="outline-danger" className="float-right" onClick={() => setShowModalDelete(true)}>
-            Elimina Utente
-          </Button>
-        </Card.Footer>
-      </Form>
-      <Delete show={showModalDelete} onHide={() => setShowModalDelete(false)} />
-    </Card>
+                    plaintext
+                    value={session.username!}
+                    readOnly
+                    style={{ fontSize: 'larger', fontWeight: 'bolder' }}
+                    className="default-color-white "
+                  />
+                </Col>
+              </Form.Group>
+              <Form.Group as={Row} controlId="email">
+                <Form.Label column>Email</Form.Label>
+                <Col sm="9">
+                  <Form.Control
+                    plaintext
+                    value={session.email!}
+                    readOnly
+                    style={{ fontSize: 'larger', fontWeight: 'bolder' }}
+                    className="default-color-white"
+                  />
+                </Col>
+              </Form.Group>
+              <Form.Row>
+                <Col>
+                  <Form.Group controlId="name">
+                    <Form.Label>Nome</Form.Label>
+                    <Form.Control required type="text" placeholder="Nome" {...bindName} />
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="surname">
+                    <Form.Label>Cognome</Form.Label>
+                    <Form.Control required type="text" placeholder="Cognome" {...bindSurname} />
+                  </Form.Group>
+                </Col>
+              </Form.Row>
+              <Form.Row>
+                <Col>
+                  <Form.Group controlId="phone">
+                    <Form.Label>Telefono</Form.Label>
+                    <Form.Control required type="text" placeholder="Telefono" {...bindPhone} />
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="birthday">
+                    <Form.Label>Data di Nascita</Form.Label>
+                    <Form.Control
+                      as={() => (
+                        <DatePicker
+                          selected={new Date(birthday)}
+                          locale="it"
+                          dateFormat="dd/MM/yyyy"
+                          onChange={newValue => setBirthday(newValue ? newValue : new Date())}
+                        />
+                      )}
+                    ></Form.Control>
+                  </Form.Group>
+                </Col>
+              </Form.Row>
+            </Container>
+          </Card.Body>
+          <Card.Footer style={{ height: '10vh' }}>
+            <Button variant="outline-success" type="submit" className="float-right">
+              <SaveIcon /> Salva
+            </Button>
+            <Button variant="outline-danger" className="float-left" onClick={() => setShowModalDelete(true)}>
+              <TrashIcon /> Elimina Utente
+            </Button>
+          </Card.Footer>
+        </Form>
+        <Delete show={showModalDelete} onHide={() => setShowModalDelete(false)} />
+      </Card>
+    </Col>
   );
 };
 
