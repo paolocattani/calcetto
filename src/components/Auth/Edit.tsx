@@ -95,6 +95,18 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
                   />
                 </Col>
               </Form.Group>
+              <Form.Group as={Row} controlId="role">
+                <Form.Label column>Ruolo</Form.Label>
+                <Col sm="9">
+                  <Form.Control
+                    plaintext
+                    value={session.role!}
+                    readOnly
+                    style={{ fontSize: 'larger', fontWeight: 'bolder' }}
+                    className="default-color-white"
+                  />
+                </Col>
+              </Form.Group>
               <Form.Row>
                 <Col>
                   <Form.Group controlId="name">

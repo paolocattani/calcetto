@@ -34,6 +34,8 @@ export const SessionContextProvider: React.FC = ({ children }) => {
       try {
         const response = await fetch('/api/v1/auth/');
         const user = await response.json();
+        console.log('SessionContext.user : ', user);
+
         if (user && response.ok)
           setSessionState({
             isAuthenticated: true,

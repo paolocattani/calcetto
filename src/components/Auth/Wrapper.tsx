@@ -1,5 +1,5 @@
 import React, { useState, CSSProperties, lazy } from 'react';
-import { Button, Container, Alert, Card } from 'react-bootstrap';
+import { Button, Container, Alert, Card, Col } from 'react-bootstrap';
 import { ToggleOn, ToggleOff } from '../core/Icons';
 
 const Login = lazy(() => import('./Login'));
@@ -24,15 +24,15 @@ const AuthWrapper: React.FC = (): JSX.Element => {
 
   const modalStyle: CSSProperties = {
     textAlign: 'left',
-    width: register ? '50vw' : '40vw',
-    height: 'auto',
-    margin: 'auto',
-    color: 'white',
-    marginBottom: '20vh'
+    //width: register ? '50vw' : '40vw',
+    //height: 'auto',
+    //margin: 'auto',
+    color: 'white'
+    //marginBottom: '20vh'
   };
 
   return (
-    <>
+    <Col md={{ span: '6', offset: '3' }} sm="12">
       <Card style={modalStyle} className="default-background">
         <Card.Header as="h2">{title}</Card.Header>
         <Card.Body>
@@ -51,7 +51,7 @@ const AuthWrapper: React.FC = (): JSX.Element => {
           </Button>
         </Card.Footer>
       </Card>
-    </>
+    </Col>
   );
 };
 

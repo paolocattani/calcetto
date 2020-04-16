@@ -82,7 +82,7 @@ export const routes: routeType[] = [
     path: '/stage2/:tId',
     label: 'Torneo fase 2',
     exact: true,
-    ComponentToRender: lazyStage2,
+    ComponentToRender: lazyStage2 as any,
     //ComponentToRender: OrganizationChartDemo,
     visible: !(process.env.NODE_ENV === 'production'),
     private: true,
