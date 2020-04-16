@@ -19,11 +19,11 @@ router.get(
     try {
       const { tId } = req.query;
       if (!tId) return res.status(500).json({ message: 'Missing tournament' });
-      logger.info(`Looking for pairs in tournament ${chalk.greenBright(tId)}`);
+      logger.info(`Looking for pairs in tournament ${chalk.greenBright(tId.toString())}`);
       const pairsList = await Pair.findAll({
         where: { tournamentId: tId, '$tournament.public$': true },
         order: [['id', 'ASC']],
-        include: [Pair.associations.tournament, Pair.associations.player1, Pair.associations.player2]
+        include: [Pair.associations.tournament, Pair.associations.player1, Pair.associations.player2],
       });
       const modelList = pairsList.map((row, index) => rowToModel(row, index));
       return res.json(modelList);
@@ -50,7 +50,7 @@ router.post(
         player2Id: player2?.id ?? null,
         stage1Name,
         paid1: paid1 === 'Si' ? true : false,
-        paid2: paid2 === 'Si' ? true : false
+        paid2: paid2 === 'Si' ? true : false,
       };
       if (model.id) pair = await Pair.findOne({ where: { id: model.id } });
       // creazione coppia
@@ -74,7 +74,7 @@ router.delete(
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     let models: Array<Pair> = req.body || [];
     let rowsAffected = 0;
-    const result = await Pair.destroy({ where: { id: models.map(e => e.id) } });
+    const result = await Pair.destroy({ where: { id: models.map((e) => e.id) } });
     logger.info(result);
     return res.status(200).json({ message: `Rows deleted : ${rowsAffected}` });
   })
@@ -97,7 +97,7 @@ function rowToModel(row: Pair, index: number) {
       match_played: row.player1?.match_played ?? 0,
       match_won: row.player1?.match_won ?? 0,
       total_score: row.player1?.total_score ?? 0,
-      editable: row.player1?.editable ?? false
+      editable: row.player1?.editable ?? false,
     },
     player2: {
       id: row.player2?.id ?? null,
@@ -109,13 +109,13 @@ function rowToModel(row: Pair, index: number) {
       match_played: row.player2?.match_played ?? 0,
       match_won: row.player2?.match_won ?? 0,
       total_score: row.player2?.total_score ?? 0,
-      editable: row.player2?.editable ?? false
+      editable: row.player2?.editable ?? false,
     },
     pairAlias: row.pairAlias,
     stage1Name: row.stage1Name,
     paid1: row.paid1 ? 'Si' : 'No',
     paid2: row.paid2 ? 'Si' : 'No',
-    label: valueFormatter(row)
+    label: valueFormatter(row),
   };
 }
 

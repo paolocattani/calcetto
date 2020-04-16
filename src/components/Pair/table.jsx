@@ -53,15 +53,15 @@ const PairsTable = () => {
       const response = await fetch('/api/v1/pair', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(emptyRow)
+        body: JSON.stringify(emptyRow),
       });
       const result = await response.json();
       emptyRow.id = result.id;
       emptyRow.rowNumber = index || data.rows.length + 1;
-      setData(current => ({
+      setData((current) => ({
         tournament: current.tournament,
         rows: [emptyRow, ...current.rows],
-        players: current.players
+        players: current.players,
       }));
       showSuccessMessage('Riga aggiunta');
     } catch (error) {
@@ -82,32 +82,32 @@ const PairsTable = () => {
     try {
       setIsLoading({
         state: true,
-        message: selectedRows.length > 1 ? 'Cancellazione righe in corso' : 'Cancellazione riga in corso'
+        message: selectedRows.length > 1 ? 'Cancellazione righe in corso' : 'Cancellazione riga in corso',
       });
       // Devo ripristinare i giocatori eliminati
       let players = [];
-      selectedRows.forEach(e => {
+      selectedRows.forEach((e) => {
         if (e.player1.id) players.push(e.player1);
         if (e.player2.id) players.push(e.player2);
       });
       if (players)
-        setData(current => ({
+        setData((current) => ({
           tournament: current.tournament,
           rows: current.rows,
-          players: [...players, ...current.players].sort((e1, e2) => e1.alias.localeCompare(e2.alias))
+          players: [...players, ...current.players].sort((e1, e2) => e1.alias.localeCompare(e2.alias)),
         }));
 
       const response = await fetch('/api/v1/pair', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(selectedRows)
+        body: JSON.stringify(selectedRows),
       });
       await response.json();
 
-      setData(current => ({
+      setData((current) => ({
         tournament: current.tournament,
-        rows: current.rows.filter(row => !selectedRows.find(selectedRow => selectedRow.id === row.id)),
-        players: current.players
+        rows: current.rows.filter((row) => !selectedRows.find((selectedRow) => selectedRow.id === row.id)),
+        players: current.players,
       }));
 
       showSuccessMessage(selectedRows.length > 1 ? 'Righe cancellate' : 'Riga cancellata');
@@ -122,29 +122,29 @@ const PairsTable = () => {
   function updateOptions(player, selected) {
     if (player && player.id)
       if (selected.id)
-        setData(current => ({
+        setData((current) => ({
           tournament: current.tournament,
           rows: current.rows,
-          players: [...current.players.filter(e => e.id !== selected.id), player].sort((e1, e2) =>
+          players: [...current.players.filter((e) => e.id !== selected.id), player].sort((e1, e2) =>
             e1.alias.localeCompare(e2.alias)
-          )
+          ),
         }));
       else
-        setData(current => ({
+        setData((current) => ({
           tournament: current.tournament,
           rows: current.rows,
-          players: [...current.players, player].sort((e1, e2) => e1.alias.localeCompare(e2.alias))
+          players: [...current.players, player].sort((e1, e2) => e1.alias.localeCompare(e2.alias)),
         }));
     else if (selected.id)
-      setData(current => ({
+      setData((current) => ({
         tournament: current.tournament,
         rows: current.rows,
-        players: current.players.filter(e => e.id !== selected.id)
+        players: current.players.filter((e) => e.id !== selected.id),
       }));
   }
   // Aggiorno la colonna con il giocatore selezionato
   const onSelect = (selectedElement, rowIndex, columnIndex) => {
-    const newRowsElement = data.rows.map(rowElement => {
+    const newRowsElement = data.rows.map((rowElement) => {
       if (rowElement.id === rowIndex) {
         let row = rowElement;
         if (columnIndex === 1) {
@@ -170,25 +170,25 @@ const PairsTable = () => {
         fetch('/api/v1/pair', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(row)
+          body: JSON.stringify(row),
         });
         return row;
       } else return rowElement;
     });
-    setData(current => ({
+    setData((current) => ({
       tournament: current.tournament,
       rows: newRowsElement,
-      players: current.players
+      players: current.players,
     }));
   };
 
   const handleSelect = (row, isSelected) => {
-    setSelectedRows(selectedRows => {
-      const found = selectedRows.find(e => e.id === row.id) ? true : false;
+    setSelectedRows((selectedRows) => {
+      const found = selectedRows.find((e) => e.id === row.id) ? true : false;
       if (isSelected) {
         return found ? selectedRows : [row, ...selectedRows];
       } else {
-        return found ? selectedRows.filter(e => e.id !== row.id) : selectedRows;
+        return found ? selectedRows.filter((e) => e.id !== row.id) : selectedRows;
       }
     });
   };
@@ -205,7 +205,7 @@ const PairsTable = () => {
       return;
     }
     // Controllo gironi non assegnati
-    const missingStage1Name = data.rows.filter(e => !e.stage1Name || e.stage1Name === '').map(e => e.rowNumber);
+    const missingStage1Name = data.rows.filter((e) => !e.stage1Name || e.stage1Name === '').map((e) => e.rowNumber);
     if (missingStage1Name.length !== 0) {
       showErrorMessage(
         `Assegna  ${
@@ -216,7 +216,9 @@ const PairsTable = () => {
     }
 
     // Controllo coppie non assegnate
-    const missingPairs = data.rows.filter(e => e.player1.id === null || e.player2.id === null).map(e => e.rowNumber);
+    const missingPairs = data.rows
+      .filter((e) => e.player1.id === null || e.player2.id === null)
+      .map((e) => e.rowNumber);
     if (missingPairs.length !== 0) {
       showErrorMessage(
         `Assegna  i giocatori ${
@@ -252,7 +254,7 @@ const PairsTable = () => {
       await fetch('/api/v1/tournament/', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data.tournament)
+        body: JSON.stringify(data.tournament),
       });
     } catch (error) {
       console.log('errororroror :', error);
@@ -268,8 +270,8 @@ const PairsTable = () => {
   const selectRow = {
     mode: 'checkbox',
     onSelect: handleSelect,
-    onSelectAll: (isSelected, rows) => rows.forEach(row => handleSelect(row, isSelected)),
-    style: { backgroundColor: '#c8e6c9' }
+    onSelectAll: (isSelected, rows) => rows.forEach((row) => handleSelect(row, isSelected)),
+    style: { backgroundColor: '#c8e6c9' },
   };
 
   async function deleteStage1() {
@@ -278,7 +280,7 @@ const PairsTable = () => {
       const response = await fetch('/api/v1/stage1', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tId })
+        body: JSON.stringify({ tId }),
       });
       await response.json();
       // Update tournament progress
@@ -286,7 +288,7 @@ const PairsTable = () => {
       fetch('/api/v1/tournament', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data.tournament)
+        body: JSON.stringify(data.tournament),
       });
       showSuccessMessage('Cancellazione completata');
     } catch (error) {
@@ -299,6 +301,12 @@ const PairsTable = () => {
       showErrorMessage('Specificare il numero di gironi da assegnare');
       return;
     }
+
+    if (data.tournament.progress === 'Stage1' || data.tournament.progress === 'Stage2') {
+      showErrorMessage('Non riassegnare i gironi in quanto le coppie sono gia state confermate per la fase successiva');
+      return;
+    }
+
     setIsLoading({ state: true, message: 'Aggiornamento in corso ' });
     let current = 0;
     const names = 'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('');
@@ -314,7 +322,7 @@ const PairsTable = () => {
         fetch('/api/v1/pair', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(row)
+          body: JSON.stringify(row),
         });
         newRows.push(row);
       } catch (error) {
@@ -323,7 +331,7 @@ const PairsTable = () => {
       }
     }
     showSuccessMessage('Gironi assegnati correttamente');
-    setData(current => ({ tournament: current.tournament, rows: newRows, players: current.players }));
+    setData((current) => ({ tournament: current.tournament, rows: newRows, players: current.players }));
   }
 
   const availableRows = Math.floor(
@@ -359,12 +367,12 @@ const PairsTable = () => {
     </>
   );
 
-  const leftOuter = isEditable => (
+  const leftOuter = (isEditable) => (
     <>
       {isEditable ? (
         <Row style={{ margin: '0px' }}>
           <Col md="6" sm="12">
-            <InputGroup onChange={e => setStage1Number(e.target.value)}>
+            <InputGroup onChange={(e) => setStage1Number(e.target.value)}>
               <InputGroup.Prepend>
                 <InputGroup.Text>Assegna gironi automaticamente</InputGroup.Text>
               </InputGroup.Prepend>
@@ -375,7 +383,9 @@ const PairsTable = () => {
                     : `Numero di gironi ( max ${Math.floor(data.rows.length / 4)} )`
                 }
                 aria-label="Numero di gironi"
-                disabled={data.rows.length < 4}
+                disabled={
+                  data.rows.length < 4 || data.tournament.progress === 'Stage1' || data.tournament.progress === 'Stage2'
+                }
               />
               <InputGroup.Append>
                 <Button
@@ -389,7 +399,7 @@ const PairsTable = () => {
             </InputGroup>
           </Col>
           <Col md="6" sm="12">
-            <InputGroup onChange={e => setNewRowsNumber(e.target.value)}>
+            <InputGroup onChange={(e) => setNewRowsNumber(e.target.value)}>
               <InputGroup.Prepend>
                 <InputGroup.Text>Aggiungi coppie</InputGroup.Text>
               </InputGroup.Prepend>
@@ -406,7 +416,7 @@ const PairsTable = () => {
               <InputGroup.Append>
                 <Button
                   variant="primary"
-                  onClick={e => setNewRowsNumber(availableRows)}
+                  onClick={(e) => setNewRowsNumber(availableRows)}
                   disabled={newRowsNumber > availableRows}
                 >
                   Max
