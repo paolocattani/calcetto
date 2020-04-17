@@ -5,10 +5,10 @@ interface NodeElement {
   span: number;
 }
 
-const Node: React.FC<NodeElement> = ({ name, span }) => (
+const Cell: React.FC<NodeElement> = ({ name, span }) => (
   <td rowSpan={span} className="node-box">
     <div>{name}</div>
   </td>
 );
 
-export default Node;
+export default Cell;

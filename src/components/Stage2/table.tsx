@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './style.css';
 import { getIndexes } from './helper';
-import Node from './node';
+import Cell from './cell';
 import { number } from 'yup';
 // https://www.kodbiro.com/blog/rorgchart-react-module-for-displaying-and-editing-data-in-org-chart/
 
@@ -49,7 +49,7 @@ const Stage2: React.FC<Stage2> = ({ elements = ddd }) => {
     const row: JSX.Element[] = [];
     for (let jj = 0; jj < tdElements[ii]; jj++) {
       counter[jj] += 1;
-      row.push(<Node span={Math.pow(2, jj)} name={elements[jj][counter[jj] - 1]} />);
+      row.push(<Cell span={Math.pow(2, jj)} name={elements[jj][counter[jj] - 1]} />);
     }
     rows.push(<tr>{row}</tr>);
   }
