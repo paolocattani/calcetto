@@ -41,3 +41,7 @@ export const emailRegExp = new RegExp(
   // eslint-disable-next-line quotes
   "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
 );
+
+export function getBaseLog(x: number, y: number) {
+  return Math.log(y) / Math.log(x);
+}

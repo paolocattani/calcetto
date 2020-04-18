@@ -1,4 +1,5 @@
 import React from 'react';
+import style from './style.module.css';
 
 interface NodeElement {
   name: string;
@@ -6,7 +7,7 @@ interface NodeElement {
 }
 
 const Cell: React.FC<NodeElement> = ({ name, span }) => (
-  <td rowSpan={span} className="node-box">
+  <td rowSpan={span} className={style.cell}>
     <div>{name}</div>
   </td>
 );

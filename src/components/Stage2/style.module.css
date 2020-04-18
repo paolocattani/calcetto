@@ -1,0 +1,18 @@
+.table {
+  border: #ffc107 2px solid;
+  text-align: center;
+  margin: 0 auto;
+  background-color: inherit;
+  width: 100%;
+ }
+
+
+ .cell {
+   border: #ffc107 1px solid;
+   width: auto;
+   height: 10vh;
+   justify-content: center;
+   align-items: center;
+   margin: 0 auto;
+ }
+

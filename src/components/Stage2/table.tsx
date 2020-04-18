@@ -1,44 +1,54 @@
 import React, { Component } from 'react';
-import './style.css';
+import style from './style.module.css';
 import { getIndexes } from './helper';
 import Cell from './cell';
-import { number } from 'yup';
+
 // https://www.kodbiro.com/blog/rorgchart-react-module-for-displaying-and-editing-data-in-org-chart/
 
 interface Stage2 extends Component {
-  elements?: ICell[];
+  elements?: ICell[][];
 }
-interface ICell {
-  level: {
-    name: string;
-  };
+export interface ICell {
+  name: string;
 }
-const ddd: any = [
+const template: ICell[][] = [
   [
-    '0-1',
-    '0-2',
-    '0-3',
-    '0-4',
-    '0-5',
-    '0-6',
-    '0-7',
-    '0-8',
-    '0-9',
-    '0-10',
-    '0-11',
-    '0-12',
-    '0-13',
-    '0-14',
-    '0-15',
-    '0-16',
+    { name: '0-1' },
+    { name: '0-2' },
+    { name: '0-3' },
+    { name: '0-4' },
+    { name: '0-5' },
+    { name: '0-6' },
+    { name: '0-7' },
+    { name: '0-8' },
+    { name: '0-9' },
+    { name: '0-10' },
+    { name: '0-11' },
+    { name: '0-12' },
+    { name: '0-13' },
+    { name: '0-14' },
+    { name: '0-15' },
+    { name: '0-16' },
   ],
-  ['1-1', '1-2', '1-3', '1-4', '1-5', '1-6', '1-7', '1-8'],
-  ['2-1', '2-2', '2-3', '2-4'],
-  ['3-1', '3-2'],
-  ['4-1'],
+  [
+    { name: '1-1' },
+    { name: '1-2' },
+    { name: '1-3' },
+    { name: '1-4' },
+    { name: '1-5' },
+    { name: '1-6' },
+    { name: '1-7' },
+    { name: '1-8' },
+  ],
+  [{ name: '2-1' }, { name: '2-2' }, { name: '2-3' }, { name: '2-4' }],
+  [{ name: '3-1' }, { name: '3-2' }],
+  [{ name: '4-1' }],
 ];
 
-const Stage2: React.FC<Stage2> = ({ elements = ddd }) => {
+const emptyCell: ICell = {
+  name: '',
+};
+const Stage2: React.FC<Stage2> = ({ elements = template }) => {
   const rowNumber = elements[0].length;
   const colNumber = elements.length;
   const counter = new Array(colNumber).fill(0); // Indice di riga progressivo
@@ -49,12 +59,13 @@ const Stage2: React.FC<Stage2> = ({ elements = ddd }) => {
     const row: JSX.Element[] = [];
     for (let jj = 0; jj < tdElements[ii]; jj++) {
       counter[jj] += 1;
-      row.push(<Cell span={Math.pow(2, jj)} name={elements[jj][counter[jj] - 1]} />);
+      const cell = elements[jj] ? elements[jj][counter[jj] - 1] : emptyCell;
+      row.push(<Cell span={Math.pow(2, jj)} {...cell} />);
     }
     rows.push(<tr>{row}</tr>);
   }
   return (
-    <table className="stage2-table">
+    <table className={style.table}>
       <tbody>{rows}</tbody>
     </table>
   );
