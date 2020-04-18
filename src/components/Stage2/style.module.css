@@ -1,18 +1,41 @@
 .table {
-  border: #ffc107 2px solid;
+  border: black 2px solid;
   text-align: center;
   margin: 0 auto;
   background-color: inherit;
   width: 100%;
- }
-
+}
 
  .cell {
-   border: #ffc107 1px solid;
+   border-right: black 0.1px solid;
    width: auto;
-   height: 10vh;
+   height: 6vh;
    justify-content: center;
    align-items: center;
    margin: 0 auto;
  }
 
+ .borderBottom {
+  border-bottom: black 0.1px solid;
+ }
+
+.headerCell {
+  background-color: #343a40;
+  height: 8vh;
+  color: #ffc107;
+  border: black 3px solid;
+  font-size: larger;
+}
+
+.container{
+ margin: 1rem 0rem !important;
+}
+
+.row{
+  background-color: antiquewhite;
+}
+
+.append {
+  background-color: white !important;
+
+}
