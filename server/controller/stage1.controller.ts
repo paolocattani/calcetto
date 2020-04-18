@@ -1,4 +1,4 @@
-import { Router, Application as ExpressApplication, Request, Response, NextFunction } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { Op } from 'sequelize';
 // Model
 import Stage1Model from '../model/sequelize/s1Matrix.model';
@@ -43,11 +43,11 @@ router.post(
         where: {
           [Op.or]: [
             { [Op.and]: { pair1Id: pair1Id, pair2Id: pair2Id } },
-            { [Op.and]: { pair1Id: pair2Id, pair2Id: pair1Id } }
+            { [Op.and]: { pair1Id: pair2Id, pair2Id: pair1Id } },
           ],
           name: tableName,
-          tournamentId: tId
-        }
+          tournamentId: tId,
+        },
       });
       if (!record) return res.status(500).json('Error');
       // logger.info(record);
@@ -55,8 +55,8 @@ router.post(
         logger.info('update', score);
         await record.update({ score: score || null });
       } else {
-        logger.info('update opposite', getOpposite(score));
-        await record.update({ score: getOpposite(score) || null });
+        logger.info('update opposite', getOpposite(parseInt(score)));
+        await record.update({ score: getOpposite(parseInt(score)) });
       }
       return res.status(200).json({ saved: true });
     } catch (error) {
@@ -121,10 +121,10 @@ router.post(
                   // where ( p1Id = .. and p2Id = .. ) or ( p2Id = .. and p1Id = .. )
                   [Op.or]: [
                     { [Op.and]: { pair1Id: pair1.id, pair2Id: pair2.id } },
-                    { [Op.and]: { pair1Id: pair2.id, pair2Id: pair1.id } }
+                    { [Op.and]: { pair1Id: pair2.id, pair2Id: pair1.id } },
                   ],
                   name: stageName,
-                  tournamentId
+                  tournamentId,
                 };
                 let record = null;
                 let created = false;
@@ -132,7 +132,7 @@ router.post(
                   ? ([record, created] = await Stage1Model.findOrCreate({
                       where: whereCondition,
                       defaults: model,
-                      transaction: t
+                      transaction: t,
                     }))
                   : (record = await Stage1Model.findOne({ where: whereCondition, transaction: t }));
 

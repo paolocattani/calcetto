@@ -28,9 +28,9 @@ const newColumn = (index, rowNumber) => {
         { value: '2', label: '2' },
         { value: '1', label: '1' },
         { value: '0', label: '0' },
-        { value: null, label: '' }
-      ]
-    }
+        { value: null, label: '' },
+      ],
+    },
   };
 };
 
@@ -58,7 +58,7 @@ export const columns = (onSelect, pairsList) => {
       editable: false,
       headerStyle: (column, colIndex) => ({ width: '15%' }),
       align: (cell, row, rowIndex, colIndex) => 'center',
-      headerAlign: (column, colIndex) => 'center'
+      headerAlign: (column, colIndex) => 'center',
     },
     {
       // Numbero riga per riferimento visivo
@@ -70,15 +70,13 @@ export const columns = (onSelect, pairsList) => {
       headerStyle: (column, colIndex) => ({ width: '5%' }),
       headerAlign: (column, colIndex) => 'center',
       style: (content, row, rowIndex, columnIndex) => {
-        return { backgroundColor: '#f9ffdb' };
-      }
-    }
+        return { backgroundColor: '#343a40', color: '#ffc107' };
+      },
+    },
   ];
 
   // generazione dinamica colonne intermedie
-  for (let ii = 0; ii < pairsList.length; ii++) {
-    baseColumns.push(newColumn(ii + 1, pairsList.length));
-  }
+  for (let ii = 0; ii < pairsList.length; ii++) baseColumns.push(newColumn(ii + 1, pairsList.length));
 
   baseColumns.push(
     {
@@ -89,7 +87,7 @@ export const columns = (onSelect, pairsList) => {
       editable: false,
       type: 'number',
       headerStyle: (column, colIndex) => ({ width: '5%' }),
-      headerAlign: (column, colIndex) => 'center'
+      headerAlign: (column, colIndex) => 'center',
     },
     {
       // Posizionamento coppia
@@ -99,7 +97,7 @@ export const columns = (onSelect, pairsList) => {
       editable: true,
       type: 'number',
       headerStyle: (column, colIndex) => ({ width: '5%' }),
-      headerAlign: (column, colIndex) => 'center'
+      headerAlign: (column, colIndex) => 'center',
     }
   );
   return baseColumns;

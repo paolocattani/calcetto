@@ -3,9 +3,8 @@
 }
 
 .player-table-header {
-    background-color: #f9ffdb;
+    background-color: #343a40;
+    color: #ffc107;
+
 }
 
-.player-table-header-element {
-    flex-direction: column;
-}

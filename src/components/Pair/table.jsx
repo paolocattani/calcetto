@@ -480,7 +480,7 @@ const PairsTable = () => {
               <NoData isEditable={isEditable} addRow={() => addRow()} optionsLength={data.players.length} />
             }
             caption={<TableHeader tournament={data.tournament} />}
-            headerClasses="default-background default-color-white"
+            headerClasses="default-background default-color-yellow"
             striped
             hover
           />

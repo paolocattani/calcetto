@@ -14,7 +14,7 @@ import './style.css';
 const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
   const [selectedRows, setSelectedRows] = useState([]);
 
-  const cellEditProps = editable =>
+  const cellEditProps = (editable) =>
     cellEditFactory({
       mode: editable ? 'click' : 'none',
       blurToSave: true,
@@ -45,16 +45,18 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
         [...rows]
           .sort((e1, e2) => comparator(e1, e2))
           .forEach((row, index) => (rows[row.rowNumber - 1]['place'] = index + 1));
-      }
+      },
     });
 
   const handleOnSelect = (row, isSelected) => {
+    console.log('handleOnSelect : ', row);
+
     setSelectedRows(() => {
-      const found = selectedRows.find(e => e.rowNumber === row.rowNumber) ? true : false;
+      const found = selectedRows.find((e) => e.rowNumber === row.rowNumber) ? true : false;
       if (isSelected) {
         return found ? selectedRows : [row, ...selectedRows];
       } else {
-        return found ? selectedRows.filter(e => e.rowNumber !== row.rowNumber) : selectedRows;
+        return found ? selectedRows.filter((e) => e.rowNumber !== row.rowNumber) : selectedRows;
       }
     });
     // return true or dont return to approve current select action
@@ -64,8 +66,8 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
   const selectRow = {
     mode: 'checkbox',
     onSelect: handleOnSelect,
-    onSelectAll: (isSelected, rows) => rows.forEach(row => handleOnSelect(row, isSelected)),
-    style: { backgroundColor: '#c8e6c9' }
+    onSelectAll: (isSelected, rows) => rows.forEach((row) => handleOnSelect(row, isSelected)),
+    style: { backgroundColor: '#c8e6c9' },
   };
 
   return (
@@ -80,7 +82,7 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
           cellEdit={cellEditProps(session.isEditable)}
           noDataIndication="Nessun dato reperito"
           wrapperClasses="player-table"
-          headerClasses="player-table-header"
+          headerClasses="default-background default-color-yellow"
           caption={<TableHeader title={tableName} saved={saved} />}
           striped
           hover
