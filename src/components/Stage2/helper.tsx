@@ -1,4 +1,5 @@
 import { getBaseLog } from '../core/utils';
+import { ICell } from './types';
 
 /*
 
@@ -61,4 +62,53 @@ export const getIndexes = (pairsNumber: number): number[] => {
     }
   }
   return indexes;
+};
+
+export const template: ICell[][] = [
+  [
+    { id: 1, parentId: 0, name: '0-1', winner: true },
+    { id: 1, parentId: 0, name: '0-2', winner: false },
+    { id: 2, parentId: 0, name: '0-3', winner: false },
+    { id: 2, parentId: 0, name: '0-4', winner: false },
+    { id: 3, parentId: 0, name: '0-5', winner: true },
+    { id: 3, parentId: 0, name: '0-6', winner: false },
+    { id: 4, parentId: 0, name: '0-7', winner: false },
+    { id: 4, parentId: 0, name: '0-8', winner: false },
+    { id: 5, parentId: 0, name: '0-9', winner: false },
+    { id: 5, parentId: 0, name: '0-10', winner: false },
+    { id: 6, parentId: 0, name: '0-11', winner: false },
+    { id: 6, parentId: 0, name: '0-12', winner: false },
+    { id: 7, parentId: 0, name: '0-13', winner: true },
+    { id: 7, parentId: 0, name: '0-14', winner: false },
+    { id: 8, parentId: 0, name: '0-15', winner: false },
+    { id: 8, parentId: 0, name: '0-16', winner: false },
+  ],
+  [
+    { id: 1, parentId: 1, name: '1-1', winner: false },
+    { id: 1, parentId: 2, name: '1-2', winner: false },
+    { id: 2, parentId: 3, name: '1-3', winner: false },
+    { id: 2, parentId: 4, name: '1-4', winner: false },
+    { id: 3, parentId: 5, name: '1-5', winner: true },
+    { id: 3, parentId: 6, name: '1-6', winner: false },
+    { id: 4, parentId: 7, name: '1-7', winner: false },
+    { id: 4, parentId: 8, name: '1-8', winner: false },
+  ],
+  [
+    { id: 1, parentId: 1, name: '2-1', winner: false },
+    { id: 1, parentId: 2, name: '2-2', winner: true },
+    { id: 2, parentId: 3, name: '2-3', winner: false },
+    { id: 2, parentId: 4, name: '2-4', winner: false },
+  ],
+  [
+    { id: 1, parentId: 1, name: '3-1', winner: false },
+    { id: 1, parentId: 2, name: '3-2', winner: false },
+  ],
+  [{ id: 1, parentId: 1, name: '4-1', winner: false }],
+];
+
+export const emptyCell: ICell = {
+  name: '',
+  winner: false,
+  id: 0,
+  parentId: 0,
 };
