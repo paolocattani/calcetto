@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { Op } from 'sequelize';
 // Model
-import Stage1Model from '../model/sequelize/s1Matrix.model';
+import Stage1Model from '../model/sequelize/stage1.model';
 // Core
 import { asyncForEach } from '../core/utils';
 import { logger } from '../core/logger';
@@ -12,7 +12,7 @@ import { isAdmin } from '../manager/auth.manager';
 
 const router = Router();
 router.use('/', (req, res, next) => {
-  if (isDevMode()) logger.info(`Stage 1 Manager : ${req.method} ${req.originalUrl.replace('/api/v1/stage1', '')} `);
+  if (isDevMode()) logger.info(`Stage1 Manager : ${req.method} ${req.originalUrl.replace('/api/v1/stage1', '')} `);
   next();
 });
 

@@ -48,7 +48,7 @@ export function rowsGenerator(pairsList) {
   return rows;
 }
 
-export const columns = (onSelect, pairsList) => {
+export const columns = (pairsList) => {
   let baseColumns = [
     {
       // Nome Coppia ( In realta contiene un oggetto di tipo Pair)

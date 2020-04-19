@@ -5,6 +5,8 @@ import { isDevMode } from '../core/debug';
 // Models
 import Pair from '../model/sequelize/pair.model';
 import { asyncMiddleware, withAuth } from '../core/middleware';
+import { Op } from 'sequelize';
+import { AppRequest } from 'controller';
 
 const router = Router();
 
@@ -15,17 +17,25 @@ router.use('/', (req, res, next) => {
 
 router.get(
   '/list/',
-  asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
+  withAuth,
+  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     try {
-      const { tId } = req.query;
+      const {
+        user,
+        query: { tId },
+      } = req;
       if (!tId) return res.status(500).json({ message: 'Missing tournament' });
       logger.info(`Looking for pairs in tournament ${chalk.greenBright(tId.toString())}`);
       const pairsList = await Pair.findAll({
-        where: { tournamentId: tId, '$tournament.public$': true },
+        where: {
+          tournamentId: tId,
+          [Op.or]: [{ '$tournament.ownerId$': user!.id }, { '$tournament.public$': true }],
+        },
         order: [['id', 'ASC']],
         include: [Pair.associations.tournament, Pair.associations.player1, Pair.associations.player2],
       });
       const modelList = pairsList.map((row, index) => rowToModel(row, index));
+      logger.info('FETCHED : ', modelList, pairsList);
       return res.json(modelList);
     } catch (err) {
       logger.error('/list -> error: ', err);

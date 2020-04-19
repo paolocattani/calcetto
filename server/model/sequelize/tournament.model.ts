@@ -8,10 +8,11 @@ import {
   Default,
   AllowNull,
   ForeignKey,
-  BelongsTo
+  BelongsTo,
 } from 'sequelize-typescript';
 import Pair from './pair.model';
-import s1Matrix from './s1Matrix.model';
+import Stage1 from './stage1.model';
+import Stage2 from './stage2.model';
 import { TournamentProgress } from './types';
 import User from './user.model';
 
@@ -22,7 +23,7 @@ import User from './user.model';
  * @progress string stato avanzamento
  * @public boolean visibile ad utenti non loggati ( TODO: )
  * @pairs Pairs[] coppie associate a questo torneo
- * @s1Matrix s1Matrix[] stage1
+ * @Stage1 Stage1[] stage1
  *
  */
 @Table({ tableName: 'tournament', freezeTableName: true, version: false })
@@ -50,7 +51,7 @@ export default class Tournament extends Model<Tournament> {
     type: DataType.VIRTUAL,
     get(this: Tournament): string {
       return `${this.name} @ ${this.progress}`;
-    }
+    },
   })
   public label!: string;
 
@@ -58,9 +59,11 @@ export default class Tournament extends Model<Tournament> {
   @HasMany(() => Pair)
   public pairs!: Pair[];
 
-  // FIXME: rimuove questa associazione, lasciarla solo lato s1Matrix
-  @HasMany(() => s1Matrix)
-  public s1Matrix!: s1Matrix[];
+  @HasMany(() => Stage1)
+  public Stage1!: Stage1[];
+
+  @HasMany(() => Stage2)
+  public Stage2!: Stage2[];
 
   // Associazione utente
   @AllowNull

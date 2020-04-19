@@ -23,7 +23,7 @@ export const columns = (onSelect, options) => [
         styles={customStyles}
       />
     ),
-    headerStyle: (column, colIndex) => ({ width: '20%' })
+    headerStyle: (column, colIndex) => ({ width: '20%' }),
   },
   {
     dataField: 'player2.alias',
@@ -42,7 +42,7 @@ export const columns = (onSelect, options) => [
         styles={customStyles}
       />
     ),
-    headerStyle: (column, colIndex) => ({ width: '20%' })
+    headerStyle: (column, colIndex) => ({ width: '20%' }),
   },
   { dataField: 'pairAlias', text: 'Alias Coppia', headerStyle: (column, colIndex) => ({ width: '25%' }) },
   {
@@ -55,10 +55,10 @@ export const columns = (onSelect, options) => [
       options: 'abcdefghijklmnopqrstuvwxyz'
         .toUpperCase()
         .split('')
-        .map(e => {
+        .map((e) => {
           return { value: e, label: e };
-        })
-    }
+        }),
+    },
   },
   {
     dataField: 'paid1',
@@ -67,7 +67,7 @@ export const columns = (onSelect, options) => [
     headerStyle: (column, colIndex) => ({ width: '7,5%' }),
     editor: {
       type: Type.CHECKBOX,
-      value: 'Si:No'
+      value: 'Si:No',
     },
     /*
     formatter: (cell, row, rowIndex) => {
@@ -80,7 +80,7 @@ export const columns = (onSelect, options) => [
     },*/
     style: (content, row, rowIndex, columnIndex) => {
       if (content !== 'Si') return { backgroundColor: '#ffbf47' };
-    }
+    },
   },
   {
     dataField: 'paid2',
@@ -89,7 +89,7 @@ export const columns = (onSelect, options) => [
     headerStyle: (column, colIndex) => ({ width: '7,5%' }),
     editor: {
       type: Type.CHECKBOX,
-      value: 'Si:No'
+      value: 'Si:No',
     },
     /*
     formatter: (cell, row, rowIndex) => {
@@ -102,11 +102,11 @@ export const columns = (onSelect, options) => [
     },*/
     style: (content, row, rowIndex, columnIndex) => {
       if (content !== 'Si') return { backgroundColor: '#ffbf47' };
-    }
-  }
+    },
+  },
 ];
 
-export const cellEditProps = editable =>
+export const cellEditProps = (editable) =>
   cellEditFactory({
     mode: editable ? 'click' : 'none',
     blurToSave: true,
@@ -117,11 +117,11 @@ export const cellEditProps = editable =>
         const response = await fetch('/api/v1/pair', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(row)
+          body: JSON.stringify(row),
         });
         await response.json();
       })();
-    }
+    },
   });
 
 export function getEmptyRowModel() {
@@ -134,21 +134,22 @@ export function getEmptyRowModel() {
     pairAlias: '',
     stage1Name: '',
     paid1: 'No',
-    paid2: 'No'
+    paid2: 'No',
   };
 }
 
-export const fetchData = async tId => {
+export const fetchData = async (tId) => {
   // Fetch Pairs
   let response = await fetch(`/api/v1/pair/list/?tId=${tId}`, {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json' }
+    headers: { 'Content-Type': 'application/json' },
   });
   const rows = await response.json();
+  console.log('rows : ', rows);
 
   response = await fetch(tId ? `/api/v1/player/list/${tId}` : '/api/v1/player/list', {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json' }
+    headers: { 'Content-Type': 'application/json' },
   });
   const result = await response.json();
   const players = [...result, getEmptyPlayer('Nessun Giocatore')];
@@ -157,9 +158,10 @@ export const fetchData = async tId => {
   // Fetch Tournament
   response = await fetch(`/api/v1/tournament/${tId}`, {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json' }
+    headers: { 'Content-Type': 'application/json' },
   });
   const tournament = await response.json();
+  console.log('tournament : ', tournament);
 
   return { rows, players, tournament };
 };
@@ -168,7 +170,7 @@ export const fetchPairs = (setterFunction, tId) => {
   (async () => {
     const response = await fetch(`/api/v1/pair/list/?tId=${tId}`, {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
     });
     const result = await response.json();
     setterFunction(result);
@@ -200,11 +202,11 @@ const customStyles = {
     color: 'black',
     '&:hover': {
       backgroundColor: '#64bd9c',
-      color: 'white'
-    }
+      color: 'white',
+    },
   }),
   input: (provided, state) => ({ ...provided, backgroundColor: '#64bd9c' }),
-  control: provided => ({ ...provided, height: '3vmin', marginBottom: 'auto' }),
+  control: (provided) => ({ ...provided, height: '3vmin', marginBottom: 'auto' }),
   singleValue: (provided, state) => ({ ...provided }),
-  valueContainer: provided => ({ ...provided, height: '100%', fontSize: 'larger' })
+  valueContainer: (provided) => ({ ...provided, height: '100%', fontSize: 'larger' }),
 };

@@ -8,8 +8,8 @@ Alla fine sono riuscito a risalire ad un algoritmo ! ( dopo 2 giorni )
 	| n.   |                      |                   |                   |
 	| Riga |     16 coppie        |     8 Coppie      |   4 Coppie        |
 	|______|______________________|___________________|___________________|
-	|	   |	( rowSpan )		  |		( rowSpan )	  |	   ( rowSpan )    |
-	|      | 	                  |                   |                   |     Escludendo il primo elemento e ossevando le righe da 2 a 32 si
+	|	     |	( rowSpan )		      |		( rowSpan )	    |	   ( rowSpan )    |
+	|      | 	                    |                   |                   |     Escludendo il primo elemento e ossevando le righe da 2 a 32 si
 	|  1   | 1 - 2 - 4 - 8 - 16   | 1 - 2 - 4 - 8     | 1 - 2 - 4         |  	può notare che la seguenza ha la forma di una piramide.
 	|  2   | 1                    | 1                 | 1                 |  	Esempio N= 32 :
 	|  3   | 1 - 2                | 1 - 2             | 1 - 2             |

@@ -18,12 +18,12 @@ const Stage1Handler = (props: handlerPropsType): JSX.Element => {
       tableName,
       score: newValue,
       pair1Id: row.pair.id,
-      pair2Id: rows[parseInt(column.text) - 1].pair.id
+      pair2Id: rows[parseInt(column.text) - 1].pair.id,
     };
     const response = await fetch('/api/v1/stage1/cell', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(model1)
+      body: JSON.stringify(model1),
     });
     await response.json();
     if (response.ok) {
@@ -40,7 +40,7 @@ const Stage1Handler = (props: handlerPropsType): JSX.Element => {
         const response = await fetch('/api/v1/stage1', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ rows, stageName: tableName })
+          body: JSON.stringify({ rows, stageName: tableName }),
         });
         const result = await response.json();
         // Ordinamento
@@ -55,9 +55,6 @@ const Stage1Handler = (props: handlerPropsType): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
-  const onSelect = () => {
-    if (tableName === '1') console.log('onSelect ');
-  };
 
   return (
     <>
@@ -69,7 +66,7 @@ const Stage1Handler = (props: handlerPropsType): JSX.Element => {
       ) : (
         <Stage1Table
           rows={rows}
-          columns={columns(onSelect, pairsList)}
+          columns={columns(pairsList)}
           tableName={tableName}
           updateCellValue={updateCellValue}
           saved={saved}

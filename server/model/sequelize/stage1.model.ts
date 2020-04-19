@@ -17,7 +17,7 @@ import Tournament from './tournament.model';
  *      where idTorneo=? order by idTorneo, score desc
  *
  */
-@Table({ tableName: 's1matrix', freezeTableName: true, version: false })
+@Table({ tableName: 'stage1', freezeTableName: true, version: false })
 export default class s1Matrix extends Model<s1Matrix> {
   @Column(DataType.STRING)
   name!: string;
@@ -44,7 +44,7 @@ export default class s1Matrix extends Model<s1Matrix> {
   @BelongsTo(() => Pair, 'pair2Id')
   public pair2!: Pair;
 
-  // Punteggio totale per la coppia
+  // Punteggio totale pe r la coppia
   @Comment('Score of pair1 vs pair2')
   @Column(DataType.INTEGER)
   public score!: number;

@@ -11,6 +11,7 @@ export type Pair = {
 
 export type handlerPropsType = {
   pairsList: Pair[];
+  ref: unknown;
 };
 
 export type headerPropsType = {
