@@ -6,25 +6,32 @@ import { getEmptyPlayer } from '../Player/helper';
 import { useParams, useHistory } from 'react-router';
 import TableHeader from './header';
 import NoData from './noData';
-import { LoadingModal, GenericToast } from '../core/generic/Commons';
+import { LoadingModal, GenericToast, IToastProps } from '../core/generic/Commons';
 import './style.css';
 import { SessionContext } from '../core/routing/SessionContext';
 import { RightArrowIcon } from '../core/icons';
-import { TournamentProgress } from '../../models/tournament.model';
+import { TournamentProgress } from 'models/tournament.model';
+import { useSelector } from 'react-redux';
+import { TournamentSelector } from 'selectors/tournament.selector';
+import { withRouter } from 'react-router-dom';
 
 const PairsTable = () => {
+  const tournament = useSelector(TournamentSelector.getTournament);
   // Navigation
-  const { tId } = useParams();
+  // FIXME:
+  const { tId = '1' } = useParams();
   let currentHistory = useHistory();
 
   // States
   // User messages
   const [isLoading, setIsLoading] = useState({ state: false, message: 'Caricamento' });
-  const messageInitialState = { message: '', type: 'success' };
-  const [message, setMessage] = useState(messageInitialState);
+  const messageInitialState: IToastProps = { message: '', type: 'success' };
+  const [message, setMessage] = useState<IToastProps>(messageInitialState);
   // Data
-  const [data, setData] = useState({ tournament: null, rows: [], players: [] });
-  const [selectedRows, setSelectedRows] = useState([]);
+  // FIXME:
+  const [data, setData] = useState({ tournament: null as any, rows: [] as any, players: [] as any });
+  // FIXME:
+  const [selectedRows, setSelectedRows] = useState<any>([]);
   // Function params
   const [stage1Number, setStage1Number] = useState(0);
   const [newRowsNumber, setNewRowsNumber] = useState(0);
@@ -35,21 +42,22 @@ const PairsTable = () => {
   }, [tId]);
 
   // User messages
-  function showErrorMessage(message) {
+  function showErrorMessage(message: string) {
     setIsLoading({ state: false, message });
     setMessage({ message, type: 'danger' });
     setTimeout(() => setMessage(messageInitialState), 5000);
   }
-  function showSuccessMessage(message) {
+  function showSuccessMessage(message: string) {
     setIsLoading({ state: false, message });
     setMessage({ message, type: 'success' });
     setTimeout(() => setMessage(messageInitialState), 5000);
   }
 
-  async function addRow(index) {
+  async function addRow(index?: number) {
     try {
       setIsLoading({ state: true, message: 'Aggiunta riga in corso' });
-      const emptyRow = getEmptyRowModel();
+      // FIXME:
+      const emptyRow: any = getEmptyRowModel();
       emptyRow.tId = tId;
       const response = await fetch('/api/v1/pair', {
         method: 'POST',
@@ -86,8 +94,9 @@ const PairsTable = () => {
         message: selectedRows.length > 1 ? 'Cancellazione righe in corso' : 'Cancellazione riga in corso',
       });
       // Devo ripristinare i giocatori eliminati
-      let players = [];
-      selectedRows.forEach((e) => {
+      let players: any[] = [];
+      // FIXME:
+      selectedRows.forEach((e: any) => {
         if (e.player1.id) players.push(e.player1);
         if (e.player2.id) players.push(e.player2);
       });
@@ -107,7 +116,10 @@ const PairsTable = () => {
 
       setData((current) => ({
         tournament: current.tournament,
-        rows: current.rows.filter((row) => !selectedRows.find((selectedRow) => selectedRow.id === row.id)),
+        // FIXME:
+        rows: current.rows.filter(
+          (row: { id: any }) => !selectedRows.find((selectedRow: any) => selectedRow.id === row.id)
+        ),
         players: current.players,
       }));
 
@@ -120,13 +132,13 @@ const PairsTable = () => {
   }
 
   // update players list when a player is selected
-  function updateOptions(player, selected) {
+  function updateOptions(player: { id: any }, selected: { id: any }) {
     if (player && player.id)
       if (selected.id)
         setData((current) => ({
           tournament: current.tournament,
           rows: current.rows,
-          players: [...current.players.filter((e) => e.id !== selected.id), player].sort((e1, e2) =>
+          players: [...current.players.filter((e: { id: any }) => e.id !== selected.id), player].sort((e1, e2) =>
             e1.alias.localeCompare(e2.alias)
           ),
         }));
@@ -140,14 +152,14 @@ const PairsTable = () => {
       setData((current) => ({
         tournament: current.tournament,
         rows: current.rows,
-        players: current.players.filter((e) => e.id !== selected.id),
+        players: current.players.filter((e: { id: any }) => e.id !== selected.id),
       }));
   }
   // Aggiorno la colonna con il giocatore selezionato
-  const onSelect = (selectedElement, rowIndex, columnIndex) => {
-    const newRowsElement = data.rows.map((rowElement) => {
+  const onSelect = (selectedElement: { id: any }, rowIndex: any, columnIndex: number) => {
+    const newRowsElement = data.rows.map((rowElement: { id: any }) => {
       if (rowElement.id === rowIndex) {
-        let row = rowElement;
+        let row: any = rowElement;
         if (columnIndex === 1) {
           if (selectedElement.id && row.player2 && row.player2.id === selectedElement.id) {
             // Devo salvare l'elemnto che sto per sostituire
@@ -183,13 +195,14 @@ const PairsTable = () => {
     }));
   };
 
-  const handleSelect = (row, isSelected) => {
-    setSelectedRows((selectedRows) => {
-      const found = selectedRows.find((e) => e.id === row.id) ? true : false;
+  const handleSelect = (row: { id: any }, isSelected: any) => {
+    // FIXME:
+    setSelectedRows((selectedRows: any) => {
+      const found = selectedRows.find((e: any) => e.id === row.id) ? true : false;
       if (isSelected) {
         return found ? selectedRows : [row, ...selectedRows];
       } else {
-        return found ? selectedRows.filter((e) => e.id !== row.id) : selectedRows;
+        return found ? selectedRows.filter((e: any) => e.id !== row.id) : selectedRows;
       }
     });
   };
@@ -206,7 +219,9 @@ const PairsTable = () => {
       return;
     }
     // Controllo gironi non assegnati
-    const missingStage1Name = data.rows.filter((e) => !e.stage1Name || e.stage1Name === '').map((e) => e.rowNumber);
+    const missingStage1Name = data.rows
+      .filter((e: { stage1Name: string }) => !e.stage1Name || e.stage1Name === '')
+      .map((e: { rowNumber: any }) => e.rowNumber);
     if (missingStage1Name.length !== 0) {
       showErrorMessage(
         `Assegna  ${
@@ -218,8 +233,8 @@ const PairsTable = () => {
 
     // Controllo coppie non assegnate
     const missingPairs = data.rows
-      .filter((e) => e.player1.id === null || e.player2.id === null)
-      .map((e) => e.rowNumber);
+      .filter((e: { player1: { id: null }; player2: { id: null } }) => e.player1.id === null || e.player2.id === null)
+      .map((e: { rowNumber: any }) => e.rowNumber);
     if (missingPairs.length !== 0) {
       showErrorMessage(
         `Assegna  i giocatori ${
@@ -232,7 +247,7 @@ const PairsTable = () => {
     // Controllo che non ci siano gironi con meno di 1 coppia ( meglio spostare 3 )
     const MIN_PAIR_PER_STAGE = 3;
     let invalidStage = [];
-    const pairsInStage = data.rows.reduce((allNames, row) => {
+    const pairsInStage = data.rows.reduce((allNames: { [x: string]: number }, row: { stage1Name: string }) => {
       if (row.stage1Name in allNames) allNames[row.stage1Name]++;
       else allNames[row.stage1Name] = 1;
       return allNames;
@@ -271,7 +286,7 @@ const PairsTable = () => {
   const selectRow = {
     mode: 'checkbox',
     onSelect: handleSelect,
-    onSelectAll: (isSelected, rows) => rows.forEach((row) => handleSelect(row, isSelected)),
+    onSelectAll: (isSelected: any, rows: any[]) => rows.forEach((row: any) => handleSelect(row, isSelected)),
     style: { backgroundColor: '#c8e6c9' },
   };
 
@@ -311,7 +326,7 @@ const PairsTable = () => {
     setIsLoading({ state: true, message: 'Aggiornamento in corso ' });
     let current = 0;
     const names = 'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('');
-    let newRows = [];
+    let newRows: any[] = [];
     for (let index in data.rows) {
       let row = data.rows[index];
       // FIXME: if (current === stage1Number) QUESTO NON FUNZIONA ===
@@ -339,7 +354,7 @@ const PairsTable = () => {
     Math.floor((data.players.length - 1) / 2) -
       (data.rows.length === 0
         ? 0
-        : data.rows.reduce((accumulator, e) => {
+        : data.rows.reduce((accumulator: number, e: { player1: { id: any }; player2: { id: any } }) => {
             if ((!e.player1 && !e.player2) || (!e.player1.id && !e.player2.id)) return accumulator + 1;
             if (!e.player1 || !e.player1.id || !e.player2 || !e.player2.id) return accumulator + 0.5;
             return accumulator;
@@ -368,12 +383,13 @@ const PairsTable = () => {
     </>
   );
 
-  const leftOuter = (isEditable) => (
+  const leftOuter = (isEditable: boolean | undefined) => (
     <>
       {isEditable ? (
         <Row style={{ margin: '0px' }}>
           <Col md="6" sm="12">
-            <InputGroup onChange={(e) => setStage1Number(e.target.value)}>
+            {/* FIXME: */}
+            <InputGroup onChange={(e: any) => setStage1Number(e.target.value)}>
               <InputGroup.Prepend>
                 <InputGroup.Text>Assegna gironi automaticamente</InputGroup.Text>
               </InputGroup.Prepend>
@@ -400,7 +416,8 @@ const PairsTable = () => {
             </InputGroup>
           </Col>
           <Col md="6" sm="12">
-            <InputGroup onChange={(e) => setNewRowsNumber(e.target.value)}>
+            {/* FIXME: */}
+            <InputGroup onChange={(e: any) => setNewRowsNumber(e.target.value)}>
               <InputGroup.Prepend>
                 <InputGroup.Text>Aggiungi coppie</InputGroup.Text>
               </InputGroup.Prepend>
@@ -417,7 +434,7 @@ const PairsTable = () => {
               <InputGroup.Append>
                 <Button
                   variant="primary"
-                  onClick={(e) => setNewRowsNumber(availableRows)}
+                  onClick={(e: any) => setNewRowsNumber(availableRows)}
                   disabled={newRowsNumber > availableRows}
                 >
                   Max
@@ -451,7 +468,11 @@ const PairsTable = () => {
               Aggiungi Coppia
             </ListGroup.Item>
 
-            <OverlayTrigger placement="right" key="right" overlay={<Tooltip>{deleteTooltipMessage}</Tooltip>}>
+            <OverlayTrigger
+              placement="right"
+              key="right"
+              overlay={<Tooltip id="tooltip-pair">{deleteTooltipMessage}</Tooltip>}
+            >
               <span className="d-inline-block" onClick={deleteRow}>
                 <ListGroup.Item
                   action
@@ -470,16 +491,17 @@ const PairsTable = () => {
           </ListGroup>
         </Col>
         <Col md="10" sm="12">
+          {/* FIXME: */}
           <BootstrapTable
             bootstrap4
             keyField="id"
-            data={data.rows}
-            columns={columns(onSelect, data.players)}
-            cellEdit={cellEditProps(isEditable)}
-            selectRow={selectRow}
-            noDataIndication={
-              <NoData isEditable={isEditable} addRow={() => addRow()} optionsLength={data.players.length} />
-            }
+            data={data.rows as any}
+            columns={columns(onSelect, data.players) as any}
+            cellEdit={cellEditProps(isEditable) as any}
+            selectRow={selectRow as any}
+            noDataIndication={() => (
+              <NoData isEditable={isEditable || false} addRow={() => addRow()} optionsLength={data.players.length} />
+            )}
             caption={<TableHeader tournament={data.tournament} />}
             headerClasses="default-background default-color-yellow"
             striped
@@ -509,4 +531,4 @@ const PairsTable = () => {
   );
 };
 
-export default PairsTable;
+export default withRouter(PairsTable);

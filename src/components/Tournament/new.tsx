@@ -35,7 +35,7 @@ const NewTournament: React.FC<newTProps> = ({ showMessage }) => {
     console.log('handleSubmit : ', model);
 
     dispatch(TournamentAction.saveTournament.request({ model }));
-    //currentHistory.push(`/tournament/${tournament?.id ?? 1}`);
+    currentHistory.push(`/tournament/${tournament?.id ?? 1}`);
   };
 
   return (
