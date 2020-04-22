@@ -1,12 +1,12 @@
-import { TournamentModel } from '../Tournament/type';
 import { PlayerModel } from '../Player/type';
+import { TournamentDTO } from '../../models/tournament.model';
 
 export type propsType = {
   tournametId: number;
 };
 
 export type headerPropsType = {
-  tournament: TournamentModel;
+  tournament: TournamentDTO;
 };
 export type noDataPropsType = {
   optionsLength: number;
@@ -22,7 +22,7 @@ export type PairModel = {
   paid1: boolean;
   paid2: boolean;
   tournament: number;
-  tournamentId: TournamentModel;
+  tournamentId: TournamentDTO;
   player1Id: number;
   player1: PlayerModel;
   player2Id: number;

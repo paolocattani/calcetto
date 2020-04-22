@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { Modal, Container, Alert, Form, Col, Row, Button } from 'react-bootstrap';
 import { useInput } from '../core/hooks/InputHook';
 import { SessionContext } from '../core/routing/SessionContext';
-import { TrashIcon } from '../core/Icons';
+import { TrashIcon } from '../core/icons';
 type authType = {
   show: boolean;
   onHide: () => void;
@@ -32,7 +32,7 @@ const Delete = ({ show, onHide }: authType): JSX.Element => {
       const response = await fetch('/api/v1/auth/', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, username, password })
+        body: JSON.stringify({ email, username, password }),
       });
       const result = await response.json();
       if (response.ok && result) {
@@ -127,7 +127,7 @@ const Delete = ({ show, onHide }: authType): JSX.Element => {
       <Modal.Header
         style={{
           backgroundColor: '#343A40',
-          color: 'white'
+          color: 'white',
         }}
         closeButton
       >
@@ -136,7 +136,7 @@ const Delete = ({ show, onHide }: authType): JSX.Element => {
       <Modal.Body
         style={{
           backgroundColor: '#343A40',
-          color: 'white'
+          color: 'white',
         }}
       >
         <Container fluid>

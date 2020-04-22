@@ -1,7 +1,7 @@
 import React from 'react';
 import style from './style.module.css';
 import { InputGroup, FormControl } from 'react-bootstrap';
-import { DoubleRightIcon, BanIcon } from 'components/core/Icons';
+import { DoubleRightIcon, BanIcon } from 'components/core/icons';
 import { ICell } from './types';
 
 interface NodeElement extends ICell {

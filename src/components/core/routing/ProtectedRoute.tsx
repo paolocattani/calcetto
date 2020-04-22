@@ -6,13 +6,13 @@ import { routeType, getLabelByPathname } from './Routes';
 import { SessionContext } from './SessionContext';
 import { Redirect } from 'react-router-dom';
 
-export const ProtectedRoute: React.FC<routeType> = props => (
+export const ProtectedRoute: React.FC<routeType> = (props) => (
   <SessionContext.Consumer>
     {([session]) => {
       return (
         <Route
           {...props}
-          render={innerProps => {
+          render={(innerProps) => {
             const { location } = innerProps;
             // Se sono gia autenticato e sto chiedendo la login, reindirizzo alla home
             if (session.isAuthenticated && location.pathname === '/login') {

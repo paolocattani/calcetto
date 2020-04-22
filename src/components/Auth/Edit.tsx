@@ -3,7 +3,7 @@ import { Card, Container, Alert, Form, Button, Col, Row } from 'react-bootstrap'
 import { useInput } from '../core/hooks/InputHook';
 import { useSessionContext } from '../core/routing/SessionContext';
 import DatePicker from 'react-datepicker';
-import { TrashIcon, SaveIcon } from '../core/Icons';
+import { TrashIcon, SaveIcon } from '../core/icons';
 const Delete = lazy(() => import('./Delete'));
 
 const EditUser: React.FC<{}> = (): JSX.Element => {
@@ -35,7 +35,7 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
       const response = await fetch('/api/v1/auth/update', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: session.username, name, surname, email: session.email, phone, birthday })
+        body: JSON.stringify({ username: session.username, name, surname, email: session.email, phone, birthday }),
       });
       await response.json();
       if (response.ok) showSuccess('Aggiornamento effettuato ... ');
@@ -50,7 +50,7 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
     width: '100%',
     height: 'auto',
     margin: 'auto',
-    color: 'white'
+    color: 'white',
   };
 
   console.log('Rendere Edit : ', birthday);
@@ -137,7 +137,7 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
                           selected={new Date(birthday)}
                           locale="it"
                           dateFormat="dd/MM/yyyy"
-                          onChange={newValue => setBirthday(newValue ? newValue : new Date())}
+                          onChange={(newValue) => setBirthday(newValue ? newValue : new Date())}
                         />
                       )}
                     ></Form.Control>

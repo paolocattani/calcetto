@@ -35,7 +35,7 @@ const Login: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
       const response = await fetch('/api/v1/auth/authenticate', {
         method: 'POST',
         body: JSON.stringify({ username, password }),
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       });
       const result = await response.json();
       if (response.ok && result) {
@@ -43,7 +43,7 @@ const Login: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
           ...sessionContext,
           ...result,
           isAuthenticated: true,
-          isEditable: result.role === 'Admin'
+          isEditable: result.role === 'Admin',
         });
         currentHistory.push('/');
       } else {

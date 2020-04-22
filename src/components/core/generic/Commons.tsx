@@ -13,7 +13,7 @@ type loadingModalPropsType = {
 export const LoadingModal: React.FC<loadingModalPropsType> = ({
   message,
   show,
-  onHide = () => (show = false)
+  onHide = () => (show = false),
 }: loadingModalPropsType) => (
   <Modal show={show} onHide={onHide} size="xl" centered>
     <Modal.Header closeButton>
@@ -34,12 +34,14 @@ export const LoadingModal: React.FC<loadingModalPropsType> = ({
 );
 
 // Toasts
-type toastPropsType = {
+export interface IToastProps {
   message: string;
-  type?: 'success' | 'warning' | 'danger';
-};
+  type?: toastType;
+}
 
-export const GenericToast: React.FC<toastPropsType> = ({ message, type }: toastPropsType) =>
+export type toastType = 'success' | 'warning' | 'danger';
+
+export const GenericToast: React.FC<IToastProps> = ({ message, type }) =>
   message && message !== '' ? (
     <Toast className="rounded mr-2 mx-auto" key={`${type}-message`} show={message !== ''}>
       <Toast.Header closeButton={false}>
@@ -51,7 +53,7 @@ export const GenericToast: React.FC<toastPropsType> = ({ message, type }: toastP
     </Toast>
   ) : null;
 
-export const LogSessionContext: React.FC<{}> = _ => (
+export const LogSessionContext: React.FC<{}> = (_) => (
   <SessionContext.Consumer>
     {([session]) =>
       Object.entries(session).map(([key, value]) => (

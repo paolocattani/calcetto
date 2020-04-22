@@ -19,7 +19,7 @@ export default class Player extends React.Component {
     this.state = {
       rows: [],
       selectedRows: [],
-      isLoading: false
+      isLoading: false,
     };
     this.handleOnSelect = this.handleOnSelect.bind(this);
     this.deleteRow = this.deleteRow.bind(this);
@@ -31,26 +31,26 @@ export default class Player extends React.Component {
       (async () => {
         const response = await fetch('/api/v1/player/list', {
           method: 'GET',
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json' },
         });
         const result = await response.json();
 
         this.setState({
           isLoading: false,
-          rows: result.map((e, i) => ({ ...e, id: i + 1 }))
+          rows: result.map((e, i) => ({ ...e, id: i + 1 })),
         });
       })()
     );
   }
 
   handleOnSelect = (row, isSelected) => {
-    this.setState(state => {
+    this.setState((state) => {
       const { selectedRows } = state;
-      const found = selectedRows.find(e => e.id === row.id) ? true : false;
+      const found = selectedRows.find((e) => e.id === row.id) ? true : false;
       if (isSelected) {
         return found ? { selectedRows: selectedRows } : { selectedRows: [row, ...selectedRows] };
       } else {
-        return found ? { selectedRows: selectedRows.filter(e => e.id !== row.id) } : { selectedRows: selectedRows };
+        return found ? { selectedRows: selectedRows.filter((e) => e.id !== row.id) } : { selectedRows: selectedRows };
       }
     });
     // return true or dont return to approve current select action
@@ -63,13 +63,13 @@ export default class Player extends React.Component {
         const response = await fetch('/api/v1/player', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(getEmptyPlayer())
+          body: JSON.stringify(getEmptyPlayer()),
         });
         const result = await response.json();
-        this.setState(state => {
+        this.setState((state) => {
           return {
             rows: [result, ...state.rows],
-            isLoading: false
+            isLoading: false,
           };
         });
       })()
@@ -84,21 +84,21 @@ export default class Player extends React.Component {
         fetch('/api/v1/player', {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(selectedRows)
+          body: JSON.stringify(selectedRows),
         });
-        this.setState(state => {
+        this.setState((state) => {
           return {
             // Se la riga che sto analizzando è contenuta in quelle selezionata allora non la voglio
-            rows: state.rows.filter(row => !selectedRows.find(selectedRow => selectedRow.id === row.id)),
+            rows: state.rows.filter((row) => !selectedRows.find((selectedRow) => selectedRow.id === row.id)),
             selectedRows: [],
-            isLoading: false
+            isLoading: false,
           };
         });
       })()
     );
   }
 
-  cellEditProps = editabile =>
+  cellEditProps = (editabile) =>
     cellEditFactory({
       mode: editabile ? 'click' : 'none',
       blurToSave: true,
@@ -109,11 +109,11 @@ export default class Player extends React.Component {
           const response = await fetch('/api/v1/player', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(row)
+            body: JSON.stringify(row),
           });
           await response.json();
         })();
-      }
+      },
     });
 
   render() {
@@ -121,13 +121,13 @@ export default class Player extends React.Component {
     const { rows, isLoading } = state;
     const selectRow = {
       mode: 'checkbox',
-      nonSelectable: rows.filter(e => !e.editable).map(e => e.id),
+      nonSelectable: rows.filter((e) => !e.editable).map((e) => e.id),
       onSelect: this.handleOnSelect,
-      onSelectAll: (isSelected, rows) => rows.forEach(row => this.handleOnSelect(row, isSelected)),
+      onSelectAll: (isSelected, rows) => rows.forEach((row) => this.handleOnSelect(row, isSelected)),
       style: { backgroundColor: '#c8e6c9' },
-      hideSelectAll: !rows.find(e => e.editable),
+      hideSelectAll: !rows.find((e) => e.editable),
       selectColumnStyle: ({ checked, disabled, rowIndex, rowKey }) =>
-        rows[rowIndex].editable ? {} : { backgroundColor: '#dc3545' }
+        rows[rowIndex].editable ? {} : { backgroundColor: '#dc3545' },
     };
 
     const { state: { selectedRows } = [] } = this;

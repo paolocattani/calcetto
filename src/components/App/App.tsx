@@ -1,13 +1,13 @@
 import React, { Suspense } from 'react';
 // Components
-import { Header } from './Header/Header';
-import { LoadingModal /* LogSessionContext */ } from './core/generic/Commons';
+import { Header } from '../Header/Header';
+import { LoadingModal /* LogSessionContext */ } from '../core/generic/Commons';
 // Routing
 import { Switch } from 'react-router';
-import routes from './core/routing/Routes';
-import { ProtectedRoute } from './core/routing/ProtectedRoute';
+import routes from '../core/routing/Routes';
+import { ProtectedRoute } from '../core/routing/ProtectedRoute';
 // Style
-import './style/App.css';
+import './App.css';
 import { Container } from 'react-bootstrap';
 // FontAwesome 5
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -16,7 +16,7 @@ import { far } from '@fortawesome/free-regular-svg-icons';
 
 library.add(fas, far);
 
-const App: React.FC = _ => {
+const App: React.FC = (_) => {
   return (
     <div className="App">
       <Header />
@@ -25,7 +25,7 @@ const App: React.FC = _ => {
         {/*<RedirectionControl />*/}
         <Suspense fallback={<LoadingModal show={true} message={'....Caricamento'} />}>
           <Switch>
-            {routes.map(route => (
+            {routes.map((route) => (
               <ProtectedRoute {...route} key={route.index} />
             ))}
           </Switch>

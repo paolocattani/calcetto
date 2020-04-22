@@ -15,7 +15,7 @@ const playerRoles = [
   { value: 'No', label: 'Non sono un giocatore' },
   { value: 'Portiere', label: 'Portiere' },
   { value: 'Attaccante', label: 'Attaccante' },
-  { value: 'Master', label: 'Master' }
+  { value: 'Master', label: 'Master' },
 ];
 
 // https://medium.com/@faizanv/authentication-for-your-react-and-express-application-w-json-web-tokens-923515826e0#6563
@@ -33,7 +33,7 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
   const { value: birthday, setValue: setBirthday, /*bind: bindBirthday, */ reset: resetBirthday } = useInput('');
   const { value: playerRole, setValue: setPlayerRole, /*bind: bindPlayerRole, */ reset: resetPlayerRole } = useInput({
     value: 'No',
-    label: 'Non sono un giocatore'
+    label: 'Non sono un giocatore',
   });
 
   const showError = (message: SetStateAction<string>) => {
@@ -125,13 +125,13 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
       cPassword,
       phone,
       birthday,
-      playerRole
+      playerRole,
     };
     try {
       const response = await fetch('/api/v1/auth/register', {
         method: 'POST',
         body: JSON.stringify(model),
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       });
       const result = await response.json();
       if (response.ok && result) {
@@ -139,7 +139,7 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
           ...sessionContext,
           ...result,
           isAuthenticated: true,
-          isEditable: result.role === 'Admin'
+          isEditable: result.role === 'Admin',
         });
       } else {
         switch (response.status) {
@@ -234,7 +234,7 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
               dateFormat="dd/MM/yyyy"
               required
               selected={birthday}
-              onChange={val => setBirthday(val)}
+              onChange={(val) => setBirthday(val)}
             />
           </Form.Group>
         </Col>
@@ -244,7 +244,7 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
             <Select
               dateFormat="dd/MM/yyyy"
               value={playerRole}
-              onChange={newValue => setPlayerRole(newValue)}
+              onChange={(newValue) => setPlayerRole(newValue)}
               options={playerRoles}
               styles={selectStyles}
             />
@@ -269,11 +269,11 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
 export default Register;
 
 const selectStyles: StylesConfig = {
-  control: styles => ({ ...styles, height: '38px' }),
-  input: styles => ({ ...styles, height: '38px' }),
+  control: (styles) => ({ ...styles, height: '38px' }),
+  input: (styles) => ({ ...styles, height: '38px' }),
   option: (styles, { data, isDisabled, isFocused, isSelected }) => ({ ...styles, color: 'black' }),
-  placeholder: styles => ({ ...styles, height: '38px' }),
+  placeholder: (styles) => ({ ...styles, height: '38px' }),
   singleValue: (styles, { data }: any) => ({ ...styles, height: '38px' }),
-  clearIndicator: styles => ({ ...styles, height: '38px' }),
-  indicatorSeparator: styles => ({ ...styles })
+  clearIndicator: (styles) => ({ ...styles, height: '38px' }),
+  indicatorSeparator: (styles) => ({ ...styles }),
 };

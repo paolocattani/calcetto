@@ -1,12 +1,12 @@
 import React, { CSSProperties } from 'react';
-import backgroundImage from '../assets/header.jpg';
+import backgroundImage from '../../assets/header.jpg';
 import { Jumbotron, Navbar, Nav, Button, Dropdown, ButtonGroup } from 'react-bootstrap';
 import routes from '../core/routing/Routes';
 import { useSessionContext } from '../core/routing/SessionContext';
 import { Link } from 'react-router-dom';
 
 const applicationName = 'Calcetto C.S.M';
-export const Header: React.FC = _ => {
+export const Header: React.FC = (_) => {
   const [sessionContext, updateSessionContext] = useSessionContext();
 
   const logout = async () => {
@@ -20,11 +20,11 @@ export const Header: React.FC = _ => {
     backgroundImage: `url(${backgroundImage})`,
     backgroundSize: 'cover',
     padding: '60px 0px 10px 0px',
-    minHeight: '28vh'
+    minHeight: '28vh',
   };
 
   const titleStyle: CSSProperties = {
-    color: 'white'
+    color: 'white',
   };
 
   return (
@@ -41,7 +41,7 @@ export const Header: React.FC = _ => {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="mr-auto">
-                {routes.map(route =>
+                {routes.map((route) =>
                   route.visible ? (
                     route.private && !sessionContext.isAuthenticated ? null : (
                       <Nav.Link as={Link} key={route.index} to={route.path}>

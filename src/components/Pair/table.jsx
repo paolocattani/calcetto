@@ -8,9 +8,10 @@ import TableHeader from './header';
 import NoData from './noData';
 import { LoadingModal, GenericToast } from '../core/generic/Commons';
 import './style.css';
-import { TournamentProgress } from '../Tournament/type';
 import { SessionContext } from '../core/routing/SessionContext';
-import { RightArrowIcon } from '../core/Icons';
+import { RightArrowIcon } from '../core/icons';
+import { TournamentProgress } from '../../models/tournament.model';
+
 const PairsTable = () => {
   // Navigation
   const { tId } = useParams();
