@@ -19,6 +19,8 @@ function* postTournamentSaga(
   action: ReturnType<typeof TournamentAction.saveTournament.request>
 ): Generator<StrictEffect, void, any> {
   try {
+    console.log('post saga : ', action.payload);
+
     const response: PostTournamentResponse = yield call(postTournament, action.payload);
     yield put(TournamentAction.saveTournament.success(response));
   } catch (err) {

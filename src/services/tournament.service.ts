@@ -21,12 +21,12 @@ export const fetchTournaments = async (request: FetchTournamentsRequest): Promis
     return { results: [] };
   }
 };
-export const postTournament = async (request: PostTournamentRequest): Promise<PostTournamentResponse> => {
+export const postTournament = async ({ model }: PostTournamentRequest): Promise<PostTournamentResponse> => {
   try {
     const response = await fetch('/api/v1/tournament', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(request),
+      body: JSON.stringify(model),
     });
     const result: TournamentDTO = await response.json();
     return { result };
