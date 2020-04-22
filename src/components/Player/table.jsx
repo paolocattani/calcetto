@@ -10,8 +10,8 @@ import './style.css';
 import columns, { clearAllFilter } from './helper';
 import TableHeader from './header';
 import { LoadingModal } from '../core/generic/Commons';
-import { getEmptyPlayer } from '../Player/helper';
 import { SessionContext } from '../core/routing/SessionContext';
+import { getEmptyPlayer } from 'services/player.service';
 
 export default class Player extends React.Component {
   constructor(props) {

@@ -8,13 +8,11 @@ import {
 
 export const fetchTournaments = async (request: FetchTournamentsRequest): Promise<FetchTournamentsResponse> => {
   try {
-    console.log('fetchTournaments : START => ', request);
     const response = await fetch(request?.tId ? `/api/v1/tournament/${request.tId}` : '/api/v1/tournament/list', {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
     const results: TournamentDTO[] = await response.json();
-    console.log('fetchTournaments : ENDS , ', results);
     return { results };
   } catch (e) {
     handleError(e);

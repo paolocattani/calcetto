@@ -2,12 +2,13 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
 import { Type } from 'react-bootstrap-table2-editor';
+import { getEmptyPlayer } from 'services/player.service';
 
 // options for role column
 const selectOptions = {
   Portiere: 'Portiere',
   Attaccante: 'Attaccante',
-  Master: 'Master'
+  Master: 'Master',
 };
 
 // Filter
@@ -28,7 +29,7 @@ export function clearAllFilter() {
 }
 
 // Columns default
-const playerColumns = isEditable => [
+const playerColumns = (isEditable) => [
   { dataField: 'id', text: 'ID', editable: false, headerStyle: (column, colIndex) => ({ width: '3%' }) },
   {
     dataField: 'name',
@@ -38,8 +39,8 @@ const playerColumns = isEditable => [
     headerStyle: (column, colIndex) => ({ width: isEditable ? '16%' : '25%' }),
     filter: textFilter({
       placeholder: 'Filtra...',
-      getFilter: filter => (nameFilter = filter)
-    })
+      getFilter: (filter) => (nameFilter = filter),
+    }),
   },
   {
     dataField: 'surname',
@@ -49,8 +50,8 @@ const playerColumns = isEditable => [
     headerStyle: (column, colIndex) => ({ width: isEditable ? '16%' : '25%' }),
     filter: textFilter({
       placeholder: 'Filtra...',
-      getFilter: filter => (surnameFilter = filter)
-    })
+      getFilter: (filter) => (surnameFilter = filter),
+    }),
   },
   {
     dataField: 'alias',
@@ -60,8 +61,8 @@ const playerColumns = isEditable => [
     autoSelectText: true,
     filter: textFilter({
       placeholder: 'Filtra...',
-      getFilter: filter => (aliasFilter = filter)
-    })
+      getFilter: (filter) => (aliasFilter = filter),
+    }),
   },
   {
     dataField: 'role',
@@ -71,18 +72,18 @@ const playerColumns = isEditable => [
     filter: selectFilter({
       placeholder: 'Filtra...',
       options: selectOptions,
-      getFilter: filter => (roleFilter = filter)
+      getFilter: (filter) => (roleFilter = filter),
     }),
     editor: {
       type: Type.SELECT,
-      getOptions: _ => {
+      getOptions: (_) => {
         return [
           { value: 'Portiere', label: 'Portiere' },
           { value: 'Attaccante', label: 'Attaccante' },
-          { value: 'Master', label: 'Master' }
+          { value: 'Master', label: 'Master' },
         ];
-      }
-    }
+      },
+    },
   },
   {
     dataField: 'email',
@@ -93,8 +94,8 @@ const playerColumns = isEditable => [
     hidden: !isEditable,
     filter: textFilter({
       placeholder: 'Filtra...',
-      getFilter: filter => (emailFilter = filter)
-    })
+      getFilter: (filter) => (emailFilter = filter),
+    }),
   },
   {
     dataField: 'phone',
@@ -105,18 +106,18 @@ const playerColumns = isEditable => [
     hidden: !isEditable,
     filter: textFilter({
       placeholder: 'Filtra...',
-      getFilter: filter => (phoneFilter = filter)
-    })
+      getFilter: (filter) => (phoneFilter = filter),
+    }),
   },
   { dataField: 'match_played', text: 'Partite Giocate', hidden: true },
   { dataField: 'match_won', text: 'Vittorie', hidden: true },
-  { dataField: 'total_score', text: 'Punteggio', hidden: true }
+  { dataField: 'total_score', text: 'Punteggio', hidden: true },
 ];
 
 export default playerColumns;
 
 // Custom export button
-export const ExportCSVButton = props => {
+export const ExportCSVButton = (props) => {
   return (
     <Button disabled className="btn btn-success" onClick={() => props.onExport()}>
       Esporta in CSV
@@ -128,7 +129,7 @@ export const fetchPlayers = (setterFunction, tId) => {
   (async () => {
     const response = await fetch(tId ? `/api/v1/player/list/${tId}` : '/api/v1/player/list', {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
     });
     const result = await response.json();
     const model = [...result, getEmptyPlayer('Nessun Giocatore')];
@@ -146,21 +147,4 @@ export function valueFormatter(selectedOption) {
     value = selectedOption.surname ? `${selectedOption.name} - ${selectedOption.surname}` : selectedOption.name;
   }
   return value;
-}
-
-export function getEmptyPlayer(label) {
-  return {
-    id: null,
-    name: '',
-    surname: '',
-    alias: '',
-    label: label || '',
-    role: 'Portiere',
-    email: '',
-    phone: '',
-    match_played: 0,
-    match_won: 0,
-    total_score: 0,
-    editable: false
-  };
 }

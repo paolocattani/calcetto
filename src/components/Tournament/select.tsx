@@ -47,7 +47,7 @@ const FTournament = () => {
 
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
-    if (tournament) currentHistory.push(`/tournament/${tournament.id}`);
+    if (tournament) currentHistory.push('/tournament');
     else showMessage('Errore, riprovare piu tardi...', 'danger');
   };
 

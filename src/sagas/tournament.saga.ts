@@ -28,7 +28,7 @@ function* postTournamentSaga(
   }
 }
 
-export const tournamentsSagas = [
+export const TournamentsSagas = [
   takeEvery(TournamentAction.getTournaments.request, getTournamentsSaga),
   takeEvery(TournamentAction.saveTournament.request, postTournamentSaga),
 ];

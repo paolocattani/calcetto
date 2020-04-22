@@ -1,7 +1,7 @@
 import React from 'react';
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import PlayerSelect from '../Player/select';
-import { getEmptyPlayer } from '../Player/helper';
+import { getEmptyPlayer } from 'services/player.service';
 
 export const columns = (onSelect, options) => [
   { dataField: 'id', text: 'ID', editable: false, hidden: true, align: () => 'center' },
@@ -145,7 +145,6 @@ export const fetchData = async (tId) => {
     headers: { 'Content-Type': 'application/json' },
   });
   const rows = await response.json();
-  console.log('rows : ', rows);
 
   response = await fetch(tId ? `/api/v1/player/list/${tId}` : '/api/v1/player/list', {
     method: 'GET',
@@ -153,17 +152,9 @@ export const fetchData = async (tId) => {
   });
   const result = await response.json();
   const players = [...result, getEmptyPlayer('Nessun Giocatore')];
-  console.log('playerList : ', result);
 
-  // Fetch Tournament
-  response = await fetch(`/api/v1/tournament/${tId}`, {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
-  });
-  const tournament = await response.json();
-  console.log('tournament : ', tournament);
-
-  return { rows, players, tournament };
+  console.log('rows : ', rows);
+  return { rows, players };
 };
 
 export const fetchPairs = (setterFunction, tId) => {

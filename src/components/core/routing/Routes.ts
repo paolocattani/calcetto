@@ -43,7 +43,7 @@ export const routes: routeType[] = [
     index: 10,
   },
   {
-    path: '/tournament/:tId',
+    path: '/tournament',
     label: 'Selezione Coppie',
     exact: true,
     ComponentToRender: lazyPairs,
@@ -52,6 +52,7 @@ export const routes: routeType[] = [
     index: 20,
   },
   {
+    //FIXME:
     path: '/stage1/:tId',
     label: 'Torneo fase 1',
     exact: true,

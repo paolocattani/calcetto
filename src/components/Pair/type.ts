@@ -5,9 +5,6 @@ export type propsType = {
   tournametId: number;
 };
 
-export type headerPropsType = {
-  tournament: TournamentDTO;
-};
 export type noDataPropsType = {
   optionsLength: number;
   isEditable: boolean;

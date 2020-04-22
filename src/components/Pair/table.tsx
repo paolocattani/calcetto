@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, ListGroup, InputGroup, FormControl, Row, Col, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { fetchData, columns, cellEditProps, getEmptyRowModel } from './helper';
-import { getEmptyPlayer } from '../Player/helper';
-import { useParams, useHistory } from 'react-router';
+import { useHistory } from 'react-router';
 import TableHeader from './header';
 import NoData from './noData';
 import { LoadingModal, GenericToast, IToastProps } from '../core/generic/Commons';
@@ -14,12 +13,11 @@ import { TournamentProgress } from 'models/tournament.model';
 import { useSelector } from 'react-redux';
 import { TournamentSelector } from 'selectors/tournament.selector';
 import { withRouter } from 'react-router-dom';
+import { getEmptyPlayer } from 'services/player.service';
 
 const PairsTable = () => {
-  const tournament = useSelector(TournamentSelector.getTournament);
+  const tournament = useSelector(TournamentSelector.getTournament)!;
   // Navigation
-  // FIXME:
-  const { tId = '1' } = useParams();
   let currentHistory = useHistory();
 
   // States
@@ -29,7 +27,7 @@ const PairsTable = () => {
   const [message, setMessage] = useState<IToastProps>(messageInitialState);
   // Data
   // FIXME:
-  const [data, setData] = useState({ tournament: null as any, rows: [] as any, players: [] as any });
+  const [data, setData] = useState({ rows: [] as any, players: [] as any });
   // FIXME:
   const [selectedRows, setSelectedRows] = useState<any>([]);
   // Function params
@@ -38,8 +36,8 @@ const PairsTable = () => {
 
   // Initial Fetch
   useEffect(() => {
-    (async () => setData(await fetchData(tId)))();
-  }, [tId]);
+    (async () => setData(await fetchData(tournament.id)))();
+  }, [tournament.id]);
 
   // User messages
   function showErrorMessage(message: string) {
@@ -58,7 +56,7 @@ const PairsTable = () => {
       setIsLoading({ state: true, message: 'Aggiunta riga in corso' });
       // FIXME:
       const emptyRow: any = getEmptyRowModel();
-      emptyRow.tId = tId;
+      emptyRow.tId = tournament.id;
       const response = await fetch('/api/v1/pair', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -68,7 +66,6 @@ const PairsTable = () => {
       emptyRow.id = result.id;
       emptyRow.rowNumber = index || data.rows.length + 1;
       setData((current) => ({
-        tournament: current.tournament,
         rows: [emptyRow, ...current.rows],
         players: current.players,
       }));
@@ -102,7 +99,6 @@ const PairsTable = () => {
       });
       if (players)
         setData((current) => ({
-          tournament: current.tournament,
           rows: current.rows,
           players: [...players, ...current.players].sort((e1, e2) => e1.alias.localeCompare(e2.alias)),
         }));
@@ -115,7 +111,6 @@ const PairsTable = () => {
       await response.json();
 
       setData((current) => ({
-        tournament: current.tournament,
         // FIXME:
         rows: current.rows.filter(
           (row: { id: any }) => !selectedRows.find((selectedRow: any) => selectedRow.id === row.id)
@@ -136,7 +131,6 @@ const PairsTable = () => {
     if (player && player.id)
       if (selected.id)
         setData((current) => ({
-          tournament: current.tournament,
           rows: current.rows,
           players: [...current.players.filter((e: { id: any }) => e.id !== selected.id), player].sort((e1, e2) =>
             e1.alias.localeCompare(e2.alias)
@@ -144,13 +138,11 @@ const PairsTable = () => {
         }));
       else
         setData((current) => ({
-          tournament: current.tournament,
           rows: current.rows,
           players: [...current.players, player].sort((e1, e2) => e1.alias.localeCompare(e2.alias)),
         }));
     else if (selected.id)
       setData((current) => ({
-        tournament: current.tournament,
         rows: current.rows,
         players: current.players.filter((e: { id: any }) => e.id !== selected.id),
       }));
@@ -189,7 +181,6 @@ const PairsTable = () => {
       } else return rowElement;
     });
     setData((current) => ({
-      tournament: current.tournament,
       rows: newRowsElement,
       players: current.players,
     }));
@@ -208,7 +199,7 @@ const PairsTable = () => {
   };
 
   const confirmPairs = async () => {
-    if (!tId) {
+    if (!tournament.id) {
       showErrorMessage('Id torneo mancante. Verrai inviato alla Home tra 5 secondi....');
       setTimeout(() => currentHistory.push('/'), 5000);
     }
@@ -265,18 +256,18 @@ const PairsTable = () => {
     }
 
     // Update tournament progress
-    data.tournament.progress = TournamentProgress.Stage1;
+    tournament.progress = TournamentProgress.Stage1;
     try {
       await fetch('/api/v1/tournament/', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data.tournament),
+        body: JSON.stringify(tournament),
       });
     } catch (error) {
       console.log('errororroror :', error);
     }
     // Go to Stage1
-    currentHistory.push(`/stage1/${tId}`);
+    currentHistory.push(`/stage1/${tournament.id}`);
   };
   /*
   function goBack() {
@@ -296,15 +287,16 @@ const PairsTable = () => {
       const response = await fetch('/api/v1/stage1', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tId }),
+        body: JSON.stringify({ tId: tournament.id }),
       });
       await response.json();
       // Update tournament progress
-      data.tournament.progress = TournamentProgress.PairsSelection;
+      //FIXME:
+      tournament.progress = TournamentProgress.PairsSelection;
       fetch('/api/v1/tournament', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data.tournament),
+        body: JSON.stringify(tournament),
       });
       showSuccessMessage('Cancellazione completata');
     } catch (error) {
@@ -318,7 +310,7 @@ const PairsTable = () => {
       return;
     }
 
-    if (data.tournament.progress === 'Stage1' || data.tournament.progress === 'Stage2') {
+    if (tournament.progress === 'Stage1' || tournament.progress === 'Stage2') {
       showErrorMessage('Non riassegnare i gironi in quanto le coppie sono gia state confermate per la fase successiva');
       return;
     }
@@ -347,7 +339,7 @@ const PairsTable = () => {
       }
     }
     showSuccessMessage('Gironi assegnati correttamente');
-    setData((current) => ({ tournament: current.tournament, rows: newRows, players: current.players }));
+    setData((current) => ({ rows: newRows, players: current.players }));
   }
 
   const availableRows = Math.floor(
@@ -362,11 +354,11 @@ const PairsTable = () => {
   );
 
   const deleteDisabled =
-    !(selectedRows.length > 0) || data.tournament.progress === 'Stage1' || data.tournament.progress === 'Stage2';
+    !(selectedRows.length > 0) || tournament.progress === 'Stage1' || tournament.progress === 'Stage2';
 
   let deleteTooltipMessage = '';
   if (!(selectedRows.length > 0)) deleteTooltipMessage = 'Seleziona almeno una riga';
-  else if (data.tournament.progress === 'Stage1' || data.tournament.progress === 'Stage2')
+  else if (tournament.progress === 'Stage1' || tournament.progress === 'Stage2')
     deleteTooltipMessage = 'Devi prima resettare i gironi per poter cancellare delle coppie';
   else deleteTooltipMessage = 'Cancella le coppie selezionate';
 
@@ -388,8 +380,11 @@ const PairsTable = () => {
       {isEditable ? (
         <Row style={{ margin: '0px' }}>
           <Col md="6" sm="12">
-            {/* FIXME: */}
-            <InputGroup onChange={(e: any) => setStage1Number(e.target.value)}>
+            <InputGroup
+              onChange={(e: React.FormEvent<FormControl & HTMLInputElement>) =>
+                setStage1Number(Number(e.currentTarget.value))
+              }
+            >
               <InputGroup.Prepend>
                 <InputGroup.Text>Assegna gironi automaticamente</InputGroup.Text>
               </InputGroup.Prepend>
@@ -400,9 +395,7 @@ const PairsTable = () => {
                     : `Numero di gironi ( max ${Math.floor(data.rows.length / 4)} )`
                 }
                 aria-label="Numero di gironi"
-                disabled={
-                  data.rows.length < 4 || data.tournament.progress === 'Stage1' || data.tournament.progress === 'Stage2'
-                }
+                disabled={data.rows.length < 4 || tournament.progress === 'Stage1' || tournament.progress === 'Stage2'}
               />
               <InputGroup.Append>
                 <Button
@@ -416,8 +409,11 @@ const PairsTable = () => {
             </InputGroup>
           </Col>
           <Col md="6" sm="12">
-            {/* FIXME: */}
-            <InputGroup onChange={(e: any) => setNewRowsNumber(e.target.value)}>
+            <InputGroup
+              onChange={(e: React.FormEvent<FormControl & HTMLInputElement>) =>
+                setNewRowsNumber(Number(e.currentTarget.value))
+              }
+            >
               <InputGroup.Prepend>
                 <InputGroup.Text>Aggiungi coppie</InputGroup.Text>
               </InputGroup.Prepend>
@@ -502,7 +498,7 @@ const PairsTable = () => {
             noDataIndication={() => (
               <NoData isEditable={isEditable || false} addRow={() => addRow()} optionsLength={data.players.length} />
             )}
-            caption={<TableHeader tournament={data.tournament} />}
+            caption={<TableHeader />}
             headerClasses="default-background default-color-yellow"
             striped
             hover
