@@ -17,7 +17,7 @@ export const TournamentReducer = createReducer<TournamentState, Action>(initialS
   }))
   .handleAction(TournamentAction.getTournaments.success, (state, { payload: { results } }) => ({
     ...state,
-    //tournament: results && results.length > 0 ? results[0] : state.tournament,
+    tournament: results && results.length > 0 ? results[0] : state.tournament,
     tournamentsList: results,
     isLoading: false,
   }))
@@ -38,12 +38,12 @@ export const TournamentReducer = createReducer<TournamentState, Action>(initialS
     isLoading: true,
     errorMessage: undefined,
   }))
-  .handleAction(TournamentAction.getTournaments.success, (state, { payload: { results } }) => ({
+  .handleAction(TournamentAction.saveTournament.success, (state, { payload: { result } }) => ({
     ...state,
-    tournament: results && results.length > 0 ? results[0] : state.tournament,
+    tournament: result,
     isLoading: false,
   }))
-  .handleAction(TournamentAction.getTournaments.failure, (state, { payload: { message } }) => ({
+  .handleAction(TournamentAction.saveTournament.failure, (state, { payload: { message } }) => ({
     ...state,
     errorMessage: message,
     isLoading: false,
