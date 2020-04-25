@@ -7,7 +7,6 @@ import TableHeader from './header';
 import NoData from './noData';
 import { LoadingModal, GenericToast, IToastProps } from '../core/generic/Commons';
 import './style.css';
-import { SessionContext } from '../core/routing/SessionContext';
 import { RightArrowIcon } from '../core/icons';
 import { TournamentProgress } from 'models/tournament.model';
 import { useSelector } from 'react-redux';
@@ -15,8 +14,11 @@ import { TournamentSelector } from 'selectors/tournament.selector';
 import { withRouter } from 'react-router-dom';
 import { getEmptyPlayer } from 'services/player.service';
 import { cellEditProps, columns } from './editor';
+import { SessionSelector } from 'selectors/session.selector';
 
 const PairsTable = () => {
+  const session = useSelector(SessionSelector.getSession);
+
   const tournament = useSelector(TournamentSelector.getTournament)!;
   // Navigation
   let currentHistory = useHistory();
@@ -510,21 +512,15 @@ const PairsTable = () => {
   );
 
   return (
-    <SessionContext.Consumer>
-      {([session]) => (
-        <>
-          <Row>
-            <LoadingModal show={isLoading.state} message={isLoading.message} />
-            <Col md="10" sm="12">
-              {leftOuter(session.isEditable)}
-            </Col>
-            <Col md="2" sm="12">
-              {rightOuter}
-            </Col>
-          </Row>
-        </>
-      )}
-    </SessionContext.Consumer>
+    <Row>
+      <LoadingModal show={isLoading.state} message={isLoading.message} />
+      <Col md="10" sm="12">
+        {leftOuter(session.isAdmin)}
+      </Col>
+      <Col md="2" sm="12">
+        {rightOuter}
+      </Col>
+    </Row>
   );
 };
 

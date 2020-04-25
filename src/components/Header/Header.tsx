@@ -2,16 +2,19 @@ import React, { CSSProperties } from 'react';
 import backgroundImage from '../../assets/header.jpg';
 import { Jumbotron, Navbar, Nav, Button, Dropdown, ButtonGroup } from 'react-bootstrap';
 import routes from '../core/routing/Routes';
-import { useSessionContext } from '../core/routing/SessionContext';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { SessionSelector } from 'selectors/session.selector';
+import { SessionAction } from 'actions';
 
 const applicationName = 'Calcetto C.S.M';
-export const Header: React.FC = (_) => {
-  const [sessionContext, updateSessionContext] = useSessionContext();
+export const Header: React.FC = () => {
+  const dispatch = useDispatch();
+  const session = useSelector(SessionSelector.getSession);
 
   const logout = async () => {
     const response = await fetch('/api/v1/auth/logout');
-    if (response.ok) updateSessionContext({ isAuthenticated: false });
+    if (response.ok) dispatch(SessionAction.updateSession(null));
     // TODO: gestire messaggi utente
   };
 
@@ -33,7 +36,7 @@ export const Header: React.FC = (_) => {
         <h1 style={{ margin: '5vh' }}>
           <strong style={titleStyle}>{applicationName}</strong>
         </h1>
-        {sessionContext.isAuthenticated ? (
+        {session.isAuthenticated ? (
           <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Navbar.Brand as={Link} to="/">
               Home
@@ -43,7 +46,7 @@ export const Header: React.FC = (_) => {
               <Nav className="mr-auto">
                 {routes.map((route) =>
                   route.visible ? (
-                    route.private && !sessionContext.isAuthenticated ? null : (
+                    route.private && !session.isAuthenticated ? null : (
                       <Nav.Link as={Link} key={route.index} to={route.path}>
                         {route.label}
                       </Nav.Link>
@@ -51,11 +54,11 @@ export const Header: React.FC = (_) => {
                   ) : null
                 )}
               </Nav>
-              {sessionContext.name ? (
+              {session.user ? (
                 <>
                   <Dropdown alignRight as={ButtonGroup}>
                     <Button style={{ opacity: 1 }} variant="outline-warning" size="lg" disabled>
-                      <strong style={{ color: '#64bd9c', fontSize: 'larger' }}>{sessionContext.username}</strong>
+                      <strong style={{ color: '#64bd9c', fontSize: 'larger' }}>{session.user.username}</strong>
                     </Button>
                     <Dropdown.Toggle split variant="outline-warning" id="dropdown-custom-2" />
                     <Dropdown.Menu className="default-background default-border-yellow">

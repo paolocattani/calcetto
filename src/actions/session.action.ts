@@ -1,6 +1,7 @@
-import { createAsyncAction } from 'typesafe-actions';
+import { createAsyncAction, createAction } from 'typesafe-actions';
 import { Failure, Success, Request } from './constants';
 import { CheckAuthenticationRequest, CheckAuthenticationResponse } from 'models/session.model';
+import { UserDTO } from 'models/user.model';
 
 const ActionName = '[Session]';
 
@@ -11,4 +12,6 @@ export const SessionAction = {
     `${ActionName} Get Session ${Success}`,
     `${ActionName} Get Session ${Failure}`
   )<CheckAuthenticationRequest, CheckAuthenticationResponse, Error>(),
+  // set selected tournament
+  updateSession: createAction(`${ActionName} Set Session`)<UserDTO | null>(),
 };

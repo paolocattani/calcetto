@@ -10,7 +10,6 @@ import './style.css';
 import columns, { clearAllFilter } from './helper';
 import TableHeader from './header';
 import { LoadingModal } from '../core/generic/Commons';
-import { SessionContext } from '../core/routing/SessionContext';
 import { getEmptyPlayer } from 'services/player.service';
 
 export default class Player extends React.Component {
@@ -131,50 +130,47 @@ export default class Player extends React.Component {
     };
 
     const { state: { selectedRows } = [] } = this;
+    const isEditable = true; // FIXME:
     return (
-      <SessionContext.Consumer>
-        {([session]) => (
-          <>
-            <LoadingModal show={isLoading} message={'Caricamento'} />
-            <Row>
-              <Col>
-                <>
-                  <ListGroup horizontal>
-                    {session.isEditable ? (
-                      <Button variant="success" onClick={addRow}>
-                        Aggiungi giocatore
-                      </Button>
-                    ) : null}
-                    {session.isEditable ? (
-                      <Button variant="danger" onClick={deleteRow} disabled={selectedRows.length === 0}>
-                        {selectedRows.length > 1 ? 'Elimina giocatori' : 'Elimina giocatore'}
-                      </Button>
-                    ) : null}
-                    <Button variant="dark" onClick={clearAllFilter.bind(this)}>
-                      Pulisci Filtri
-                    </Button>
-                  </ListGroup>
-                  <BootstrapTable
-                    wrapperClasses="player-table"
-                    keyField="id"
-                    data={rows}
-                    columns={columns(session.isEditable)}
-                    cellEdit={this.cellEditProps(session.isEditable)}
-                    selectRow={selectRow}
-                    caption={<TableHeader />}
-                    filter={filterFactory()}
-                    headerClasses="default-background default-color-white"
-                    noDataIndication="Nessun dato reperito"
-                    striped
-                    hover
-                    bootstrap4
-                  />
-                </>
-              </Col>
-            </Row>
-          </>
-        )}
-      </SessionContext.Consumer>
+      <>
+        <LoadingModal show={isLoading} message={'Caricamento'} />
+        <Row>
+          <Col>
+            <>
+              <ListGroup horizontal>
+                {isEditable ? (
+                  <Button variant="success" onClick={addRow}>
+                    Aggiungi giocatore
+                  </Button>
+                ) : null}
+                {isEditable ? (
+                  <Button variant="danger" onClick={deleteRow} disabled={selectedRows.length === 0}>
+                    {selectedRows.length > 1 ? 'Elimina giocatori' : 'Elimina giocatore'}
+                  </Button>
+                ) : null}
+                <Button variant="dark" onClick={clearAllFilter.bind(this)}>
+                  Pulisci Filtri
+                </Button>
+              </ListGroup>
+              <BootstrapTable
+                wrapperClasses="player-table"
+                keyField="id"
+                data={rows}
+                columns={columns(isEditable)}
+                cellEdit={this.cellEditProps(isEditable)}
+                selectRow={selectRow}
+                caption={<TableHeader />}
+                filter={filterFactory()}
+                headerClasses="default-background default-color-white"
+                noDataIndication="Nessun dato reperito"
+                striped
+                hover
+                bootstrap4
+              />
+            </>
+          </Col>
+        </Row>
+      </>
     );
   }
 }

@@ -1,20 +1,21 @@
 import React, { FormEvent, SetStateAction, useState, CSSProperties, lazy } from 'react';
 import { Card, Container, Alert, Form, Button, Col, Row } from 'react-bootstrap';
 import { useInput } from '../core/hooks/InputHook';
-import { useSessionContext } from '../core/routing/SessionContext';
 import DatePicker from 'react-datepicker';
 import { TrashIcon, SaveIcon } from '../core/icons';
+import { useSelector } from 'react-redux';
+import { SessionSelector } from 'selectors/session.selector';
 const Delete = lazy(() => import('./Delete'));
 
 const EditUser: React.FC<{}> = (): JSX.Element => {
-  const [session] = useSessionContext();
+  const session = useSelector(SessionSelector.getSession);
   const [showModalDelete, setShowModalDelete] = useState(false);
 
-  const { value: name, bind: bindName /*reset: resetUsername*/ } = useInput(session.name);
-  const { value: surname, bind: bindSurname /*reset: resetUsername*/ } = useInput(session.surname);
-  const { value: phone, bind: bindPhone /*reset: resetUsername*/ } = useInput(session.phone);
+  const { value: name, bind: bindName /*reset: resetUsername*/ } = useInput(session.user!.name);
+  const { value: surname, bind: bindSurname /*reset: resetUsername*/ } = useInput(session.user!.surname);
+  const { value: phone, bind: bindPhone /*reset: resetUsername*/ } = useInput(session.user!.phone);
   const { value: birthday, setValue: setBirthday /* bind: bindBirthday ,reset: resetUsername*/ } = useInput(
-    session.birthday
+    session.user!.birthday
   );
 
   const [errorMessage, setErrorMessage] = useState('');
@@ -35,7 +36,14 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
       const response = await fetch('/api/v1/auth/update', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: session.username, name, surname, email: session.email, phone, birthday }),
+        body: JSON.stringify({
+          username: session.user!.username,
+          name,
+          surname,
+          email: session.user!.email,
+          phone,
+          birthday,
+        }),
       });
       await response.json();
       if (response.ok) showSuccess('Aggiornamento effettuato ... ');
@@ -76,7 +84,7 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
                 <Col sm="9">
                   <Form.Control
                     plaintext
-                    value={session.username!}
+                    value={session.user!.username!}
                     readOnly
                     style={{ fontSize: 'larger', fontWeight: 'bolder' }}
                     className="default-color-white "
@@ -88,7 +96,7 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
                 <Col sm="9">
                   <Form.Control
                     plaintext
-                    value={session.email!}
+                    value={session.user!.email!}
                     readOnly
                     style={{ fontSize: 'larger', fontWeight: 'bolder' }}
                     className="default-color-white"
@@ -100,7 +108,7 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
                 <Col sm="9">
                   <Form.Control
                     plaintext
-                    value={session.role!}
+                    value={session.user!.role}
                     readOnly
                     style={{ fontSize: 'larger', fontWeight: 'bolder' }}
                     className="default-color-white"

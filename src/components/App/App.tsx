@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 // Components
 import { Header } from '../Header/Header';
 import { LoadingModal /* LogSessionContext */ } from '../core/generic/Commons';
@@ -13,10 +13,17 @@ import { Container } from 'react-bootstrap';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
+import { useDispatch } from 'react-redux';
+import { SessionAction } from 'actions';
 
 library.add(fas, far);
 
 const App: React.FC = (_) => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    (async () => dispatch(SessionAction.checkAuthentication.request({})))();
+  }, [dispatch]);
+
   return (
     <div className="App">
       <Header />

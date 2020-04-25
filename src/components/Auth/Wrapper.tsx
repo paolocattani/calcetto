@@ -24,11 +24,7 @@ const AuthWrapper: React.FC = (): JSX.Element => {
 
   const modalStyle: CSSProperties = {
     textAlign: 'left',
-    //width: register ? '50vw' : '40vw',
-    //height: 'auto',
-    //margin: 'auto',
     color: 'white',
-    //marginBottom: '20vh'
   };
 
   return (

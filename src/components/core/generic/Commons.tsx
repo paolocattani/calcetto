@@ -1,7 +1,8 @@
 import React from 'react';
 import { Modal, Spinner, Toast, Alert } from 'react-bootstrap';
-import { SessionContext } from '../routing/SessionContext';
 import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { SessionSelector } from 'selectors/session.selector';
 
 // Loading Modal
 type loadingModalPropsType = {
@@ -53,17 +54,19 @@ export const GenericToast: React.FC<IToastProps> = ({ message, type }) =>
     </Toast>
   ) : null;
 
-export const LogSessionContext: React.FC<{}> = (_) => (
-  <SessionContext.Consumer>
-    {([session]) =>
-      Object.entries(session).map(([key, value]) => (
+export const LogSessionContext: React.FC<{}> = () => {
+  const session = useSelector(SessionSelector.getSession);
+
+  return (
+    <>
+      {Object.entries(session).map(([key, value]) => (
         <p>
           {key} : {value}
         </p>
-      ))
-    }
-  </SessionContext.Consumer>
-);
+      ))}
+    </>
+  );
+};
 
 export function RedirectionControl(props: any): JSX.Element {
   const location = useLocation();

@@ -1,15 +1,18 @@
 import { useInput } from '../core/hooks/InputHook';
 import { Form, Button, Col } from 'react-bootstrap';
 import React, { SetStateAction } from 'react';
-import { useSessionContext } from '../core/routing/SessionContext';
 import DatePicker from 'react-datepicker';
 import Select, { StylesConfig } from 'react-select';
 import './style.css';
 import { emailRegExp, passwordRegExp } from '../core/utils';
+import { UserDTO } from 'models/user.model';
+import { SessionAction } from 'actions';
+import { useDispatch } from 'react-redux';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
-type PropsType = {
+interface PropsType extends RouteComponentProps {
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
-};
+}
 
 const playerRoles = [
   { value: 'No', label: 'Non sono un giocatore' },
@@ -20,8 +23,7 @@ const playerRoles = [
 
 // https://medium.com/@faizanv/authentication-for-your-react-and-express-application-w-json-web-tokens-923515826e0#6563
 const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
-  const [sessionContext, updateSessionContext] = useSessionContext();
-
+  const dispatch = useDispatch();
   const { value: username, bind: bindUsername, reset: resetUsername } = useInput('');
   const { value: name, bind: bindName, reset: resetName } = useInput('');
   const { value: surname, bind: bindSurname, reset: resetSurname } = useInput('');
@@ -133,14 +135,9 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
         body: JSON.stringify(model),
         headers: { 'Content-Type': 'application/json' },
       });
-      const result = await response.json();
+      const result: UserDTO = await response.json();
       if (response.ok && result) {
-        updateSessionContext({
-          ...sessionContext,
-          ...result,
-          isAuthenticated: true,
-          isEditable: result.role === 'Admin',
-        });
+        dispatch(SessionAction.updateSession(result));
       } else {
         switch (response.status) {
           case 401:
@@ -266,7 +263,7 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
   );
 };
 
-export default Register;
+export default withRouter(Register);
 
 const selectStyles: StylesConfig = {
   control: (styles) => ({ ...styles, height: '38px' }),

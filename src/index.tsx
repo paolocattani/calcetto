@@ -6,7 +6,6 @@ import 'typeface-roboto';
 import App from './components/App/App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
-import { SessionContextProvider } from './components/core/routing/SessionContext';
 import it from 'date-fns/locale/it';
 import { setDefaultLocale, registerLocale } from 'react-datepicker';
 import { store } from 'store';
@@ -17,9 +16,7 @@ registerLocale('it', it);
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <SessionContextProvider>
-        <App />
-      </SessionContextProvider>
+      <App />
     </BrowserRouter>
   </Provider>,
   document.getElementById('root')
