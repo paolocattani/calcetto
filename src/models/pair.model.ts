@@ -1,8 +1,14 @@
 import { PlayerDTO } from './player.model';
 
+export interface PairState {
+  pairList?: PairDTO[];
+  isLoading: boolean;
+}
+
 export interface PairDTO {
   id: number | null;
   rowNumber?: number;
+  tId: number;
   alias?: string;
   stage1Name: string;
   paid1: boolean;
@@ -12,4 +18,20 @@ export interface PairDTO {
   player2Id?: number;
   player2?: PlayerDTO;
   placement?: number;
+}
+
+// Requests
+export interface FetchPairsRequest {
+  tId?: number;
+}
+export interface FetchPairsResponse {
+  results: PlayerDTO[];
+}
+
+// Requests
+export interface PostPairsRequest {
+  models: PairDTO[];
+}
+export interface PostPairsResponse {
+  results: PlayerDTO[];
 }

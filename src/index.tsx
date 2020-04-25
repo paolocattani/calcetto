@@ -9,7 +9,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { SessionContextProvider } from './components/core/routing/SessionContext';
 import it from 'date-fns/locale/it';
 import { setDefaultLocale, registerLocale } from 'react-datepicker';
-import { store } from 'components/core/store/store';
+import { store } from 'store';
 import { Provider } from 'react-redux';
 setDefaultLocale('it');
 registerLocale('it', it);

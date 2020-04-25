@@ -1,9 +1,9 @@
 import createSagaMiddleware from 'redux-saga';
 import { createStore, applyMiddleware, compose, combineReducers, ReducersMapObject } from 'redux';
 import { all } from 'redux-saga/effects';
-import { RootState } from 'models/common.model';
-import { TournamentReducer, PlayerReducer } from 'reducers';
-import { TournamentsSagas, PlayersSagas } from 'sagas';
+import { RootState } from 'models';
+import { TournamentReducer, PlayerReducer, PairReducer } from 'reducers';
+import { TournamentsSagas, PlayersSagas, PairsSagas } from 'sagas';
 
 // https://redux-saga.js.org/docs/introduction/BeginnerTutorial.html
 // custom compose for the redux devtool extension
@@ -25,6 +25,7 @@ const sagaMiddleware = createSagaMiddleware();
 const commonReducers: ReducersMapObject<RootState> = {
   tournamentState: TournamentReducer,
   playerState: PlayerReducer,
+  pairState: PairReducer,
 };
 
 // Meet the Store
@@ -32,7 +33,7 @@ export const store = createStore(combineReducers(commonReducers), composeEnhance
 
 // Exec all sagas ( watcher )
 function* rootSagas() {
-  yield all([...TournamentsSagas, ...PlayersSagas]);
+  yield all([...TournamentsSagas, ...PlayersSagas, ...PairsSagas]);
 }
 
 sagaMiddleware.run(rootSagas);
