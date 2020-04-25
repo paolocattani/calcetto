@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 // Models
-import Pair from '../model/sequelize/pair.model';
+import Pair from '../models/sequelize/pair.model';
 import { asyncMiddleware, withAuth } from '../core/middleware';
 import { Op } from 'sequelize';
 import { AppRequest } from 'controller';

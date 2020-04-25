@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import Player from '../model/sequelize/player.model';
+import Player from '../models/sequelize/player.model';
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 import { withAuth, asyncMiddleware } from '../core/middleware';
@@ -9,7 +9,7 @@ import {
   deletePlayer,
   parseBody,
   listAll,
-  listAllInTournament
+  listAllInTournament,
 } from '../manager/player.manager';
 
 const router = Router();

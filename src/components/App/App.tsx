@@ -13,14 +13,18 @@ import { Container } from 'react-bootstrap';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SessionAction } from 'actions';
+import { withRouter } from 'react-router-dom';
+import { SessionSelector } from 'selectors/session.selector';
 
 library.add(fas, far);
 
 const App: React.FC = (_) => {
   const dispatch = useDispatch();
+  const session = useSelector(SessionSelector.getSession);
   useEffect(() => {
+    // Check if user is already logged
     (async () => dispatch(SessionAction.checkAuthentication.request({})))();
   }, [dispatch]);
 

@@ -11,7 +11,7 @@ import {
   Unique,
 } from 'sequelize-typescript';
 import Player from './player.model';
-import { UserRole } from '../../model/dto/user.dto';
+import { UserRole } from '../dto/user.dto';
 
 /**
  *

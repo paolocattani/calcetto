@@ -16,3 +16,9 @@ export interface PlayerDTO {
   editable: boolean;
   label: string;
 }
+
+export enum PlayerRole {
+  GoalKeeper = 'Portiere',
+  Master = 'Master',
+  Striker = 'Attaccante',
+}

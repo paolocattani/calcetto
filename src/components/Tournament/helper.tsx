@@ -1,7 +1,7 @@
 import React, { CSSProperties } from 'react';
 import { getTodayDate } from '../core/utils';
 import { useState } from 'react';
-import { TournamentDTO, TournamentProgress, ITournamentProgress } from 'models/tournament.model';
+import { TournamentDTO, TournamentProgress } from 'models/tournament.model';
 
 export function fetchTournaments(setterFunction: typeof useState, setterFunction2: typeof useState): void {
   (async () => {
@@ -31,7 +31,7 @@ export async function getTournament(tId: number): Promise<TournamentDTO | null> 
   return response.ok ? result : null;
 }
 
-export function getEmptyTournament(name: string, progress?: ITournamentProgress): TournamentDTO {
+export function getEmptyTournament(name: string, progress?: TournamentProgress): TournamentDTO {
   return {
     id: null,
     name: name || '',

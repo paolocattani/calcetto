@@ -13,8 +13,8 @@ import {
 import Pair from './pair.model';
 import Stage1 from './stage1.model';
 import Stage2 from './stage2.model';
-import { TournamentProgress } from './types';
 import User from './user.model';
+import { TournamentProgress } from '../dto/tournament.dto';
 
 /**
  * Rapprenta un Torneo :

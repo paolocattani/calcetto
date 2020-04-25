@@ -11,8 +11,9 @@ import columns, { clearAllFilter } from './helper';
 import TableHeader from './header';
 import { LoadingModal } from '../core/generic/Commons';
 import { getEmptyPlayer } from 'services/player.service';
+import { connect } from 'react-redux';
 
-export default class Player extends React.Component {
+class Player extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -129,8 +130,11 @@ export default class Player extends React.Component {
         rows[rowIndex].editable ? {} : { backgroundColor: '#dc3545' },
     };
 
-    const { state: { selectedRows } = [] } = this;
-    const isEditable = true; // FIXME:
+    const {
+      state: { selectedRows } = [],
+      props: { isEditable },
+    } = this;
+
     return (
       <>
         <LoadingModal show={isLoading} message={'Caricamento'} />
@@ -174,3 +178,7 @@ export default class Player extends React.Component {
     );
   }
 }
+
+export default connect((state) => ({
+  isEditable: state.sessionState.isAdmin,
+}))(Player);

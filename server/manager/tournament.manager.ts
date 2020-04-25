@@ -1,6 +1,6 @@
 import { logProcess } from '../core/logger';
-import { TournamentDTO } from 'model/dto/tournament.dto';
-import Tournament from '../model/sequelize/tournament.model';
+import { TournamentDTO, TournamentProgress } from '../models/dto/tournament.dto';
+import Tournament from '../models/sequelize/tournament.model';
 import { Op } from 'sequelize';
 
 const className = 'Tournament Manager : ';
@@ -13,12 +13,12 @@ export const listAll = async (userId: number): Promise<TournamentDTO[]> => {
       where: { [Op.or]: [{ ownerId: userId }, { public: true }] },
       order: [
         ['date', 'DESC'],
-        ['name', 'DESC']
-      ]
+        ['name', 'DESC'],
+      ],
     });
     logProcess(className + 'listAll', `end. Found : (${t.length})`);
     if (!t) return [];
-    return t.map(e => convertEntityToDTO(e));
+    return t.map((e) => convertEntityToDTO(e));
   } catch (error) {
     logProcess(className + 'listAll', ` Error : ${error}`);
     return [];
@@ -28,7 +28,7 @@ export const update = async (userId: number, model: TournamentDTO): Promise<bool
   logProcess(className + 'update', 'start');
   try {
     const t = await Tournament.findOne({
-      where: { [Op.and]: { id: model.id, [Op.or]: [{ ownerId: userId }, { public: true }] } }
+      where: { [Op.and]: { id: model.id, [Op.or]: [{ ownerId: userId }, { public: true }] } },
     });
     if (!t) return false;
     await t.update({ progress: model.progress });
@@ -44,7 +44,7 @@ export const findById = async (userId: number, tId: number): Promise<TournamentD
   try {
     logProcess(className + 'findById', 'start');
     const t = await Tournament.findOne({
-      where: { [Op.and]: { id: tId, [Op.or]: [{ ownerId: userId }, { public: true }] } }
+      where: { [Op.and]: { id: tId, [Op.or]: [{ ownerId: userId }, { public: true }] } },
     });
     logProcess(className + 'findById', 'end');
     if (!t) return null;
@@ -62,8 +62,8 @@ export const findByNameAndDate = async (name: string, date: Date): Promise<Tourn
     const t: Tournament | null = await Tournament.findOne({
       where: {
         name,
-        date: { [Op.gte]: date, [Op.lte]: date }
-      }
+        date: { [Op.gte]: date, [Op.lte]: date },
+      },
     });
     logProcess(className + 'findByNameAndDate', 'end');
     if (!t) return null;
@@ -82,10 +82,10 @@ export const convertEntityToDTO = (t: Tournament | null): TournamentDTO => ({
   id: t?.id,
   name: t?.name ?? '',
   date: t?.date ?? new Date(),
-  progress: t?.progress ?? 'New',
+  progress: t?.progress ?? TournamentProgress.New,
   public: t?.public ?? false,
   label: t?.label ?? '',
-  ownerId: t?.ownerId
+  ownerId: t?.ownerId,
 });
 
 export const parseBody = (body: any) =>
@@ -96,5 +96,5 @@ export const parseBody = (body: any) =>
     progress: body.progress ?? null,
     public: body.public ?? null,
     label: body.label ?? null,
-    ownerId: body?.ownerId
+    ownerId: body?.ownerId,
   } as TournamentDTO);

@@ -24,13 +24,11 @@ export interface TournamentDTO {
   id: number | null;
   name: string;
   date: Date;
-  progress: ITournamentProgress;
+  progress: TournamentProgress;
   public: boolean;
   label: string;
   ownerId: number | null;
 }
-
-export type ITournamentProgress = 'New' | 'PairsSelection' | 'Stage1' | 'Stage2';
 
 export enum TournamentProgress {
   New = 'New',

@@ -7,7 +7,7 @@ import tournamentRouter from './tournament.controller';
 import stage1Router from './stage1.controller';
 import stage2Router from './stage2.controller';
 import authRouter from './auth.controller';
-import { UserDTO } from '../model/dto/user.dto';
+import { UserDTO } from '../models/dto/user.dto';
 
 export interface AppRequest extends Request {
   user?: UserDTO;

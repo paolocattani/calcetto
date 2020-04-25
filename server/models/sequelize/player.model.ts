@@ -8,11 +8,11 @@ import {
   AllowNull,
   Comment,
   ForeignKey,
-  BelongsTo
+  BelongsTo,
 } from 'sequelize-typescript';
 import Pair from './pair.model';
-import { PlayerRole } from './types';
 import User from './user.model';
+import { PlayerRole } from '../dto/player.dto';
 
 @Table({ tableName: 'player', freezeTableName: true, version: false })
 export default class Player extends Model<Player> {
@@ -63,7 +63,7 @@ export default class Player extends Model<Player> {
       if (this.pair1 && this.pair1.length > 0) return false;
       if (this.pair2 && this.pair2.length > 0) return false;
       else return true;
-    }
+    },
   })
   public editable!: boolean;
 
@@ -71,7 +71,7 @@ export default class Player extends Model<Player> {
     type: DataType.VIRTUAL,
     get(this: Player): string {
       return this.alias ? this.alias : `${this.name} ${this.surname}`;
-    }
+    },
   })
   public label!: string;
 

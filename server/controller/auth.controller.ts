@@ -3,7 +3,7 @@ import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 
 import { Router, Request, Response, NextFunction } from 'express';
-import User from '../model/sequelize/user.model';
+import User from '../models/sequelize/user.model';
 import { withAuth, asyncMiddleware } from '../core/middleware';
 
 import {
@@ -11,13 +11,12 @@ import {
   parseBody,
   deleteUser,
   comparePasswords,
-  generateToken,
   listAll,
   registerUser,
   findUserByEmailOrUsername,
   checkIfExist,
   findUserByEmailAndUsername,
-  addUserCookies
+  addUserCookies,
 } from '../manager/auth.manager';
 import { AppRequest } from './index';
 const router = Router();

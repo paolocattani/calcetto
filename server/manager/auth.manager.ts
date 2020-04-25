@@ -1,10 +1,9 @@
 // Session
 import { Response } from 'express';
 // Models/Types
-import Player from 'model/sequelize/player.model';
-import { PlayerRole } from 'model/sequelize/types';
-import { UserDTO, UserRole } from '../model/dto/user.dto';
-import User from '../model/sequelize/user.model';
+import Player from 'models/sequelize/player.model';
+import { UserDTO, UserRole } from '../models/dto/user.dto';
+import User from '../models/sequelize/user.model';
 // Logger utils
 import { logProcess } from '../core/logger';
 // Password
@@ -13,6 +12,7 @@ import bcrypt from 'bcrypt';
 // managers
 import * as playerManager from './player.manager';
 import { Op } from 'sequelize';
+import { PlayerRole } from 'models/dto/player.dto';
 
 // Const
 const className = 'Authentication Manager : ';
@@ -62,7 +62,7 @@ export const deleteUser = async (user: User): Promise<void> => {
   }
 };
 
-export const registerUser = async (user: User, playerRole?: string): Promise<UserDTO | null> => {
+export const registerUser = async (user: User, playerRole?: PlayerRole): Promise<UserDTO | null> => {
   try {
     logProcess(className + 'registerUser', 'start');
     user.password = await generatePassword(user.email, user.password);
@@ -82,7 +82,7 @@ export const registerUser = async (user: User, playerRole?: string): Promise<Use
         phone: record.phone,
         userId: record.id,
         alias: `${record.name} ${record.surname}`,
-        role: playerRole as PlayerRole,
+        role: playerRole,
       } as Player;
       const player = await playerManager.create(model);
       if (player) await record.update({ playerId: player.id });

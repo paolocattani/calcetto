@@ -1,13 +1,13 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { Op } from 'sequelize';
 // Model
-import Stage1Model from '../model/sequelize/stage1.model';
+import Stage1Model from '../models/sequelize/stage1.model';
 // Core
 import { asyncForEach } from '../core/utils';
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 import { asyncMiddleware, withAuth } from '../core/middleware';
-import { dbConnection } from '../model/server/AppServer';
+import { dbConnection } from '../models/server/AppServer';
 import { isAdmin } from '../manager/auth.manager';
 
 const router = Router();
