@@ -1,4 +1,6 @@
-import Player from '../sequelize/player.model';
+import { PlayerDTO } from './player.model';
+
+export interface UserState {}
 
 export interface UserDTO {
   id: number;
@@ -8,11 +10,10 @@ export interface UserDTO {
   email: string;
   phone: string;
   role: UserRole;
-  birthday?: Date;
+  birthday: Date;
   label: string;
-  player?: Player;
+  player: PlayerDTO;
 }
-
 export enum UserRole {
   Admin = 'Admin',
   User = 'User',

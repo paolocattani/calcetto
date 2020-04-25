@@ -3,7 +3,7 @@ import { Response } from 'express';
 // Models/Types
 import Player from 'model/sequelize/player.model';
 import { PlayerRole } from 'model/sequelize/types';
-import { UserDTO } from '../model/dto/user.dto';
+import { UserDTO, UserRole } from '../model/dto/user.dto';
 import User from '../model/sequelize/user.model';
 // Logger utils
 import { logProcess } from '../core/logger';
@@ -42,10 +42,10 @@ export const listAll = async (): Promise<UserDTO[]> => {
     logProcess(className + 'listAll', 'start');
     const users = await User.findAll({
       order: [['id', 'DESC']],
-      include: [User.associations.player]
+      include: [User.associations.player],
     });
     logProcess(className + 'listAll', 'end');
-    return users.map(user => convertEntityToDTO(user));
+    return users.map((user) => convertEntityToDTO(user));
   } catch (error) {
     logProcess(className + 'listAll', ` Error : ${error}`);
     return [];
@@ -68,9 +68,9 @@ export const registerUser = async (user: User, playerRole?: string): Promise<Use
     user.password = await generatePassword(user.email, user.password);
     if (user.name.startsWith('[A]')) {
       user.name = user.name.substring(3);
-      user.role = 'Admin';
+      user.role = UserRole.Admin;
     } else {
-      user.role = 'User';
+      user.role = UserRole.User;
     }
     const record = await User.create(user);
     // Se è stato assegnato un ruolo allora creo anche il giocatore
@@ -82,7 +82,7 @@ export const registerUser = async (user: User, playerRole?: string): Promise<Use
         phone: record.phone,
         userId: record.id,
         alias: `${record.name} ${record.surname}`,
-        role: playerRole as PlayerRole
+        role: playerRole as PlayerRole,
       } as Player;
       const player = await playerManager.create(model);
       if (player) await record.update({ playerId: player.id });
@@ -174,9 +174,9 @@ export const convertEntityToDTO = (user: User): UserDTO => ({
   surname: user.surname,
   email: user.email,
   phone: user.phone || '',
-  birthday: user.birthday || null,
+  birthday: user.birthday,
   label: user.label,
-  role: user.role
+  role: user.role,
 });
 
 /**
@@ -195,5 +195,5 @@ export const parseBody = (body: any) =>
     email: body.email,
     phone: body.phone,
     birthday: body.birthday,
-    role: body.role
+    role: body.role,
   } as User);

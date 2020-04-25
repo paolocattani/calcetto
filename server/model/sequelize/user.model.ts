@@ -8,10 +8,10 @@ import {
   ForeignKey,
   HasOne,
   AllowNull,
-  Unique
+  Unique,
 } from 'sequelize-typescript';
-import { UserRole } from './types';
 import Player from './player.model';
+import { UserRole } from '../../model/dto/user.dto';
 
 /**
  *
@@ -54,7 +54,7 @@ export default class User extends Model<User> {
     type: DataType.VIRTUAL,
     get(this: User): string {
       return this.name && this.surname ? `${this.name} ${this.surname}` : this.email;
-    }
+    },
   })
   public label!: string;
 
