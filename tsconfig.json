@@ -1,5 +1,6 @@
 {
   "compileOnSave": true,
+  "extends": "./tsconfig.paths.json",
   "compilerOptions": {
     "target": "es5",
     "module": "esnext",
