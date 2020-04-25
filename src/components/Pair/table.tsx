@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, ListGroup, InputGroup, FormControl, Row, Col, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
-import { fetchData, columns, cellEditProps, getEmptyRowModel } from './helper';
+import { fetchData, getEmptyRowModel } from './helper';
 import { useHistory } from 'react-router';
 import TableHeader from './header';
 import NoData from './noData';
@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import { TournamentSelector } from 'selectors/tournament.selector';
 import { withRouter } from 'react-router-dom';
 import { getEmptyPlayer } from 'services/player.service';
+import { cellEditProps, columns } from './editor';
 
 const PairsTable = () => {
   const tournament = useSelector(TournamentSelector.getTournament)!;
@@ -36,7 +37,7 @@ const PairsTable = () => {
 
   // Initial Fetch
   useEffect(() => {
-    (async () => setData(await fetchData(tournament.id)))();
+    (async () => setData(await fetchData(tournament.id!)))();
   }, [tournament.id]);
 
   // User messages
