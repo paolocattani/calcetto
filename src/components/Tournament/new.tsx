@@ -5,9 +5,8 @@ import { Form, Col, Button } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import { getEmptyTournament } from './helper';
 import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { TournamentAction } from 'actions/tournament.action';
-import { TournamentSelector } from 'selectors/tournament.selector';
 import { toastType } from 'components/core/generic/Commons';
 
 type newTProps = {

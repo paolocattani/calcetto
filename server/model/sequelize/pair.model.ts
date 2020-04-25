@@ -6,7 +6,7 @@ import Player from './player.model';
 export default class Pair extends Model<Pair> {
   @Comment('Pair alias')
   @Column(DataType.STRING)
-  public pairAlias!: string;
+  public alias!: string;
 
   @Comment('Stage 1 name')
   @Column(DataType.STRING)
@@ -48,8 +48,8 @@ export default class Pair extends Model<Pair> {
   public toString() {
     return `[ id=${this.id} , tId=${
       this.tournamentId
-    } , player1=${this.player1?.toString()} , player2=${this.player2?.toString()} , alias=${
-      this.pairAlias
-    } , stage1Name=${this.stage1Name}]`;
+    } , player1=${this.player1?.toString()} , player2=${this.player2?.toString()} , alias=${this.alias} , stage1Name=${
+      this.stage1Name
+    }]`;
   }
 }

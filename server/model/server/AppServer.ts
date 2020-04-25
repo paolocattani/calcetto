@@ -40,7 +40,7 @@ export class AppServer extends AbstractServer {
   }
 
   public async routes(application: ExpressApplication): Promise<void> {
-    const force = process.env.SERVER_FORCE && process.env.SERVER_FORCE === 'true' ? true : false;
+    const force = process.env.SERVER_FORCE && process.env.SERVER_FORCE.toLowerCase() === 'true' ? true : false;
     const options: SyncOptions = { force };
     // Sync database model ( async )
     logger.info(
