@@ -2,11 +2,13 @@ import { FetchPairsRequest, FetchPairsResponse, PostPairsResponse, PostPairsRequ
 
 export const fetchPairs = async ({ tId }: FetchPairsRequest): Promise<FetchPairsResponse> => {
   try {
+    console.log('fetchPairs : ', tId);
     const response = await fetch(`/api/v1/pair/list/?tId=${tId}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
     const results = await response.json();
+    console.log('fetchPairs : ', tId, results);
     return { results };
   } catch (e) {
     handleError(e);

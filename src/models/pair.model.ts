@@ -25,7 +25,7 @@ export interface FetchPairsRequest {
   tId?: number;
 }
 export interface FetchPairsResponse {
-  results: PlayerDTO[];
+  results: PairDTO[];
 }
 
 // Requests
@@ -33,5 +33,5 @@ export interface PostPairsRequest {
   models: PairDTO[];
 }
 export interface PostPairsResponse {
-  results: PlayerDTO[];
+  results: PairDTO[];
 }

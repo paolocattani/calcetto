@@ -20,8 +20,12 @@ export const PlayerReducer = createReducer<PlayerState, Action>(initialState)
     isLoading: false,
   }))
   // Fetch Tournament
-  .handleAction(PlayerAction.getPlayers.success, (state, { payload: { results } }) => ({
-    ...state,
-    playersList: results,
-    isLoading: false,
-  }));
+  .handleAction(PlayerAction.getPlayers.success, (state, { payload: { results } }) => {
+    console.log('PlayerAction.getPlayers.success ', results);
+
+    return {
+      ...state,
+      playersList: results,
+      isLoading: false,
+    };
+  });

@@ -7,7 +7,11 @@ function* getPlayersSaga(
   action: ReturnType<typeof PlayerAction.getPlayers.request>
 ): Generator<StrictEffect, void, any> {
   try {
+    console.log('getPlayersSaga');
+
     const response: FetchPlayersResponse = yield call(fetchPlayers, action.payload);
+    console.log('getPlayersSaga: ', response);
+
     yield put(PlayerAction.getPlayers.success(response));
   } catch (err) {
     yield put(PlayerAction.getPlayers.failure(err));

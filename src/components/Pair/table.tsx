@@ -9,7 +9,7 @@ import { LoadingModal, GenericToast, IToastProps } from '../core/generic/Commons
 import './style.css';
 import { RightArrowIcon } from '../core/icons';
 import { TournamentProgress } from 'models/tournament.model';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { TournamentSelector } from 'selectors/tournament.selector';
 import { withRouter } from 'react-router-dom';
 import { getEmptyPlayer } from 'services/player.service';
@@ -17,9 +17,10 @@ import { cellEditProps, columns } from './editor';
 import { SessionSelector } from 'selectors/session.selector';
 
 const PairsTable = () => {
+  const dispatch = useDispatch();
   const session = useSelector(SessionSelector.getSession);
-
   const tournament = useSelector(TournamentSelector.getTournament)!;
+
   // Navigation
   let currentHistory = useHistory();
 
@@ -34,8 +35,8 @@ const PairsTable = () => {
   // FIXME:
   const [selectedRows, setSelectedRows] = useState<any>([]);
   // Function params
-  const [stage1Number, setStage1Number] = useState(0);
-  const [newRowsNumber, setNewRowsNumber] = useState(0);
+  const [stage1Number, setStage1Number] = useState<number>(0);
+  const [newRowsNumber, setNewRowsNumber] = useState<number>(0);
 
   // Initial Fetch
   useEffect(() => {
@@ -365,7 +366,7 @@ const PairsTable = () => {
     deleteTooltipMessage = 'Devi prima resettare i gironi per poter cancellare delle coppie';
   else deleteTooltipMessage = 'Cancella le coppie selezionate';
 
-  //console.log('render table : ', availableRows);
+  //console.log('render table : ', players, pairs);
 
   const rightOuter = (
     <>
@@ -378,16 +379,26 @@ const PairsTable = () => {
     </>
   );
 
+  console.log(
+    ' RENDER assegna : ',
+    data.rows.length < 4 ||
+      tournament.progress === TournamentProgress.Stage1 ||
+      tournament.progress === TournamentProgress.Stage2
+  );
+  console.log(
+    ' RENDER 2 ',
+    stage1Number,
+    !stage1Number,
+    stage1Number > Math.floor(data.rows.length / 4),
+    data.rows.length < 4
+  );
+
   const leftOuter = (isEditable: boolean | undefined) => (
     <>
       {isEditable ? (
         <Row style={{ margin: '0px' }}>
           <Col md="6" sm="12">
-            <InputGroup
-              onChange={(e: React.FormEvent<FormControl & HTMLInputElement>) =>
-                setStage1Number(Number(e.currentTarget.value))
-              }
-            >
+            <InputGroup>
               <InputGroup.Prepend>
                 <InputGroup.Text>Assegna gironi automaticamente</InputGroup.Text>
               </InputGroup.Prepend>
@@ -398,7 +409,19 @@ const PairsTable = () => {
                     : `Numero di gironi ( max ${Math.floor(data.rows.length / 4)} )`
                 }
                 aria-label="Numero di gironi"
-                disabled={data.rows.length < 4 || tournament.progress === 'Stage1' || tournament.progress === 'Stage2'}
+                type="number"
+                step={1}
+                min={0}
+                max={Math.floor(data.rows.length / 4)}
+                value={stage1Number}
+                onChange={(event: React.FormEvent<FormControl & HTMLInputElement>) =>
+                  setStage1Number(Number(event.currentTarget.value))
+                }
+                disabled={
+                  data.rows.length < 4 ||
+                  tournament.progress === TournamentProgress.Stage1 ||
+                  tournament.progress === TournamentProgress.Stage2
+                }
               />
               <InputGroup.Append>
                 <Button
@@ -412,22 +435,25 @@ const PairsTable = () => {
             </InputGroup>
           </Col>
           <Col md="6" sm="12">
-            <InputGroup
-              onChange={(e: React.FormEvent<FormControl & HTMLInputElement>) =>
-                setNewRowsNumber(Number(e.currentTarget.value))
-              }
-            >
+            <InputGroup>
               <InputGroup.Prepend>
                 <InputGroup.Text>Aggiungi coppie</InputGroup.Text>
               </InputGroup.Prepend>
               <FormControl
                 disabled={availableRows <= 0}
+                type="number"
+                step={1}
+                min={1}
+                max={availableRows}
                 placeholder={
                   availableRows <= 0
                     ? 'Numero massimo di coppie gia creato'
                     : `Numero di coppie da aggiungere ( max ${availableRows} )`
                 }
                 aria-label="Numero di coppie"
+                onChange={(event: React.FormEvent<FormControl & HTMLInputElement>) =>
+                  setNewRowsNumber(Number(event.currentTarget.value))
+                }
                 value={newRowsNumber || ''}
               />
               <InputGroup.Append>
@@ -490,22 +516,23 @@ const PairsTable = () => {
           </ListGroup>
         </Col>
         <Col md="10" sm="12">
-          {/* FIXME: */}
-          <BootstrapTable
-            bootstrap4
-            keyField="id"
-            data={data.rows as any}
-            columns={columns(onSelect, data.players) as any}
-            cellEdit={cellEditProps(isEditable) as any}
-            selectRow={selectRow as any}
-            noDataIndication={() => (
-              <NoData isEditable={isEditable || false} addRow={() => addRow()} optionsLength={data.players.length} />
-            )}
-            caption={<TableHeader />}
-            headerClasses="default-background default-color-yellow"
-            striped
-            hover
-          />
+          {data.rows && data.players ? (
+            <BootstrapTable
+              bootstrap4
+              keyField="id"
+              data={data.rows}
+              columns={columns(onSelect, data.players) as any}
+              cellEdit={cellEditProps(isEditable) as any}
+              selectRow={selectRow as any}
+              noDataIndication={() => (
+                <NoData isEditable={isEditable || false} addRow={() => addRow()} optionsLength={data.players.length} />
+              )}
+              caption={<TableHeader />}
+              headerClasses="default-background default-color-yellow"
+              striped
+              hover
+            />
+          ) : null}
         </Col>
       </Row>
     </>

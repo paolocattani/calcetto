@@ -3,11 +3,15 @@ import { Card, Container, Alert, Form, Button, Col, Row } from 'react-bootstrap'
 import { useInput } from '../core/hooks/InputHook';
 import DatePicker from 'react-datepicker';
 import { TrashIcon, SaveIcon } from '../core/icons';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { SessionSelector } from 'selectors/session.selector';
+import { SessionAction } from 'actions';
+import { useHistory } from 'react-router-dom';
 const Delete = lazy(() => import('./Delete'));
 
 const EditUser: React.FC<{}> = (): JSX.Element => {
+  const dispatch = useDispatch();
+  const history = useHistory();
   const session = useSelector(SessionSelector.getSession);
   const [showModalDelete, setShowModalDelete] = useState(false);
 
@@ -31,23 +35,27 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
   };
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    console.log('onSubmit ');
+    event.preventDefault();
     try {
+      const { user } = session;
+      const model = {
+        ...user!,
+        name,
+        surname,
+        phone,
+        birthday,
+      };
       const response = await fetch('/api/v1/auth/update', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username: session.user!.username,
-          name,
-          surname,
-          email: session.user!.email,
-          phone,
-          birthday,
-        }),
+        body: JSON.stringify(model),
       });
       await response.json();
-      if (response.ok) showSuccess('Aggiornamento effettuato ... ');
-      else showError('Errore durante aggiornamento dati');
+      if (response.ok) {
+        dispatch(SessionAction.updateSession(model));
+        showSuccess('Aggiornamento effettuato ... ');
+        setTimeout(() => history.push('/'), 3000);
+      } else showError('Errore durante aggiornamento dati');
     } catch (error) {
       showError('Errore durante aggiornamento dati');
     }
@@ -61,7 +69,6 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
     color: 'white',
   };
 
-  console.log('Rendere Edit : ', birthday);
   return (
     <Col md={{ span: '6', offset: '3' }} sm="12">
       <Card style={modalStyle} className="default-background">

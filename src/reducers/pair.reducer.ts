@@ -22,6 +22,6 @@ export const PairReducer = createReducer<PairState, Action>(initialState)
   // Fetch Tournament
   .handleAction(PairAction.getPairs.success, (state, { payload: { results } }) => ({
     ...state,
-    pairsList: results,
+    pairList: results,
     isLoading: false,
   }));
