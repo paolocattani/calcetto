@@ -9,7 +9,7 @@ import { LoadingModal, GenericToast, IToastProps } from '../core/generic/Commons
 import './style.css';
 import { RightArrowIcon } from '../core/icons';
 import { TournamentProgress } from 'models/tournament.model';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { TournamentSelector } from 'selectors/tournament.selector';
 import { withRouter } from 'react-router-dom';
 import { getEmptyPlayer } from 'services/player.service';
@@ -17,7 +17,6 @@ import { cellEditProps, columns } from './editor';
 import { SessionSelector } from 'selectors/session.selector';
 
 const PairsTable = () => {
-  const dispatch = useDispatch();
   const session = useSelector(SessionSelector.getSession);
   const tournament = useSelector(TournamentSelector.getTournament)!;
 
@@ -377,20 +376,6 @@ const PairsTable = () => {
 
       <GenericToast message={message.message} type={message.type} />
     </>
-  );
-
-  console.log(
-    ' RENDER assegna : ',
-    data.rows.length < 4 ||
-      tournament.progress === TournamentProgress.Stage1 ||
-      tournament.progress === TournamentProgress.Stage2
-  );
-  console.log(
-    ' RENDER 2 ',
-    stage1Number,
-    !stage1Number,
-    stage1Number > Math.floor(data.rows.length / 4),
-    data.rows.length < 4
   );
 
   const leftOuter = (isEditable: boolean | undefined) => (

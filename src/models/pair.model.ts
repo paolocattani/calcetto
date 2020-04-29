@@ -18,6 +18,7 @@ export interface PairDTO {
   player2Id?: number;
   player2?: PlayerDTO;
   placement?: number;
+  label?: string;
 }
 
 // Requests

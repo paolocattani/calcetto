@@ -16,7 +16,7 @@ export interface IPlayerSelect {
 
 const PlayerSelection: React.FC<IPlayerSelect> = React.forwardRef((props, ref) => {
   const [selectedOption, setSelectedOption] = useState<PlayerDTO>();
-  const { styles, row, columnIndex, id, onUpdate, onSelect, options } = props;
+  const { styles, row, columnIndex, /*id,*/ onUpdate, onSelect, options } = props;
 
   const handleChange = (selectedOption: ValueType<PlayerDTO>, actionMeta: ActionMeta) => {
     // selectedOption.pairId = id;

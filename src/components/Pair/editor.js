@@ -44,7 +44,7 @@ export const columns = (onSelect, options) => [
     ),
     headerStyle: (column, colIndex) => ({ width: '20%' }),
   },
-  { dataField: 'pairAlias', text: 'Alias Coppia', headerStyle: (column, colIndex) => ({ width: '25%' }) },
+  { dataField: 'alias', text: 'Alias Coppia', headerStyle: (column, colIndex) => ({ width: '25%' }) },
   {
     dataField: 'stage1Name',
     text: 'Nome girone',
