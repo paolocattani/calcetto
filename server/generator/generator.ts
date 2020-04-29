@@ -1,7 +1,7 @@
-import Player from '../model/sequelize/player.model';
-import Pair from '../model/sequelize/pair.model';
+import Player from '../models/sequelize/player.model';
+import Pair from '../models/sequelize/pair.model';
 import { getRandomIntInclusive } from '../core/utils';
-import Tournament from '../model/sequelize/tournament.model';
+import Tournament from '../models/sequelize/tournament.model';
 import { logger } from '../core/logger';
 import { isProductionMode } from '../core/debug';
 import chalk from 'chalk';
@@ -28,7 +28,7 @@ const players = [
   { name: 'Jacopo', surname: '', alias: 'Jacopo', email: '', phone: '', role: 'Attaccante' },
   { name: 'Melanie', surname: '', alias: 'Melanie', email: '', phone: '', role: 'Attaccante' },
   { name: 'Luca', surname: '', alias: 'Luca', email: '', phone: '', role: 'Portiere' },
-  { name: 'Daniel', surname: '', alias: 'Daniel', email: '', phone: '', role: 'Attaccante' }
+  { name: 'Daniel', surname: '', alias: 'Daniel', email: '', phone: '', role: 'Attaccante' },
 ];
 
 export default async function generator(start: boolean): Promise<void> {
@@ -50,7 +50,7 @@ async function tournamentGenerator(): Promise<void> {
       name: ii,
       ownerId: null,
       progress: 'New',
-      public: true
+      public: true,
     };
     await Tournament.create(model);
   }
@@ -62,7 +62,7 @@ async function playerGenerator(): Promise<void> {
       name: players[ii].name,
       surname: players[ii].surname,
       alias: players[ii].alias,
-      role: players[ii].role
+      role: players[ii].role,
     });
 }
 
@@ -73,8 +73,8 @@ async function pairGenerator(): Promise<void> {
       tournamentId: 1,
       player1Id: getRandomIntInclusive(1, players.length),
       player2Id: getRandomIntInclusive(1, players.length),
-      pairAlias: ii % 2 === 0 ? `PAlias${ii}` : '',
-      stage1Name: getRandomIntInclusive(1, 3)
+      alias: ii % 2 === 0 ? `PAlias${ii}` : '',
+      stage1Name: getRandomIntInclusive(1, 3),
     };
     await Pair.create(model);
   }

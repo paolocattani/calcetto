@@ -9,7 +9,7 @@ import { asyncMiddleware, withAuth } from '../core/middleware';
 import { listAll, parseBody } from '../manager/stage2.manager';
 // Models
 import { AppRequest } from './index';
-import { IStage2FE } from 'model/dto/stage2.dto';
+import { IStage2FE } from 'models/dto/stage2.dto';
 
 // all API path must be relative to /api/v1/tournament
 const router = Router();

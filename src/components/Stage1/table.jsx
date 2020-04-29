@@ -3,16 +3,17 @@ import React, { useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 // helper
-
 import TableHeader from './header';
 import { getOpposite, comparator } from './helper';
-import { SessionContext } from '../core/routing/SessionContext';
-
+//
+import { useSelector } from 'react-redux';
+import { SessionSelector } from 'selectors/session.selector';
 // style
 import './style.css';
 
 const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
   const [selectedRows, setSelectedRows] = useState([]);
+  const session = useSelector(SessionSelector.getSession);
 
   const cellEditProps = (editable) =>
     cellEditFactory({
@@ -70,25 +71,23 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
     style: { backgroundColor: '#c8e6c9' },
   };
 
+  console.log(' render : ', selectedRows);
+
   return (
-    <SessionContext.Consumer>
-      {([session]) => (
-        <BootstrapTable
-          bootstrap4
-          keyField="id"
-          data={rows}
-          columns={columns}
-          selectRow={selectRow}
-          cellEdit={cellEditProps(session.isEditable)}
-          noDataIndication="Nessun dato reperito"
-          wrapperClasses="player-table"
-          headerClasses="default-background default-color-yellow"
-          caption={<TableHeader title={tableName} saved={saved} />}
-          striped
-          hover
-        />
-      )}
-    </SessionContext.Consumer>
+    <BootstrapTable
+      bootstrap4
+      keyField="id"
+      data={rows}
+      columns={columns}
+      selectRow={selectRow}
+      cellEdit={cellEditProps(session.isAdmin)}
+      noDataIndication="Nessun dato reperito"
+      wrapperClasses="player-table"
+      headerClasses="default-background default-color-yellow"
+      caption={<TableHeader title={tableName} saved={saved} />}
+      striped
+      hover
+    />
   );
 };
 

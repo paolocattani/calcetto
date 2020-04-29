@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 // Models
-import Pair from '../model/sequelize/pair.model';
+import Pair from '../models/sequelize/pair.model';
 import { asyncMiddleware, withAuth } from '../core/middleware';
 import { Op } from 'sequelize';
 import { AppRequest } from 'controller';
@@ -35,7 +35,6 @@ router.get(
         include: [Pair.associations.tournament, Pair.associations.player1, Pair.associations.player2],
       });
       const modelList = pairsList.map((row, index) => rowToModel(row, index));
-      logger.info('FETCHED : ', modelList, pairsList);
       return res.json(modelList);
     } catch (err) {
       logger.error('/list -> error: ', err);
@@ -49,13 +48,13 @@ router.post(
   withAuth,
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     const { body } = req;
-    const { player1, player2, id, tId, pairAlias, stage1Name, paid1, paid2 } = body;
+    const { player1, player2, id, tId, alias, stage1Name, paid1, paid2 } = body;
     try {
       let pair: Pair | null = null;
       const model = {
         id: id ? id : null,
         tournamentId: parseInt(tId),
-        pairAlias,
+        alias,
         player1Id: player1?.id ?? null,
         player2Id: player2?.id ?? null,
         stage1Name,
@@ -121,7 +120,7 @@ function rowToModel(row: Pair, index: number) {
       total_score: row.player2?.total_score ?? 0,
       editable: row.player2?.editable ?? false,
     },
-    pairAlias: row.pairAlias,
+    alias: row.alias,
     stage1Name: row.stage1Name,
     paid1: row.paid1 ? 'Si' : 'No',
     paid2: row.paid2 ? 'Si' : 'No',
@@ -130,8 +129,8 @@ function rowToModel(row: Pair, index: number) {
 }
 
 function valueFormatter(row: any) {
-  const { pairAlias, id, player1, player2 } = row;
-  if (pairAlias && pairAlias !== '') return `${pairAlias} ( ${id} )`;
+  const { alias, id, player1, player2 } = row;
+  if (alias && alias !== '') return `${alias} ( ${id} )`;
   if (!player1 || !player2) return '';
   const value = `${player1.alias ? player1.alias : player1.name} - ${
     player2.alias ? player2.alias : player2.name

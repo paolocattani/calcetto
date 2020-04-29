@@ -1,10 +1,14 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import { noDataPropsType } from './type';
 import { Link } from 'react-router-dom';
 
-// FIXME: change to tounament name
-const noData: React.FC<noDataPropsType> = ({ addRow, optionsLength, isEditable }: noDataPropsType) => {
+interface NoDataProps {
+  optionsLength: number;
+  isEditable: boolean;
+  addRow: () => void;
+}
+
+const noData: React.FC<NoDataProps> = ({ addRow, optionsLength, isEditable }) => {
   const MIN_PLAYERS = 8;
   const players = optionsLength - 1;
   const diff = players < MIN_PLAYERS ? MIN_PLAYERS - players : 0;

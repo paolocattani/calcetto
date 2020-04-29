@@ -1,4 +1,4 @@
-import { TournamentProgress } from '../Tournament/type';
+import { TournamentProgress } from '../../models/tournament.model';
 
 export const getTodayDate = () => formatDate(new Date());
 

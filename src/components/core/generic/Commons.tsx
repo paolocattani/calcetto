@@ -1,7 +1,8 @@
 import React from 'react';
 import { Modal, Spinner, Toast, Alert } from 'react-bootstrap';
-import { SessionContext } from '../routing/SessionContext';
 import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { SessionSelector } from 'selectors/session.selector';
 
 // Loading Modal
 type loadingModalPropsType = {
@@ -13,7 +14,7 @@ type loadingModalPropsType = {
 export const LoadingModal: React.FC<loadingModalPropsType> = ({
   message,
   show,
-  onHide = () => (show = false)
+  onHide = () => (show = false),
 }: loadingModalPropsType) => (
   <Modal show={show} onHide={onHide} size="xl" centered>
     <Modal.Header closeButton>
@@ -34,12 +35,14 @@ export const LoadingModal: React.FC<loadingModalPropsType> = ({
 );
 
 // Toasts
-type toastPropsType = {
+export interface IToastProps {
   message: string;
-  type?: 'success' | 'warning' | 'danger';
-};
+  type?: toastType;
+}
 
-export const GenericToast: React.FC<toastPropsType> = ({ message, type }: toastPropsType) =>
+export type toastType = 'success' | 'warning' | 'danger';
+
+export const GenericToast: React.FC<IToastProps> = ({ message, type }) =>
   message && message !== '' ? (
     <Toast className="rounded mr-2 mx-auto" key={`${type}-message`} show={message !== ''}>
       <Toast.Header closeButton={false}>
@@ -51,17 +54,19 @@ export const GenericToast: React.FC<toastPropsType> = ({ message, type }: toastP
     </Toast>
   ) : null;
 
-export const LogSessionContext: React.FC<{}> = _ => (
-  <SessionContext.Consumer>
-    {([session]) =>
-      Object.entries(session).map(([key, value]) => (
+export const LogSessionContext: React.FC<{}> = () => {
+  const session = useSelector(SessionSelector.getSession);
+
+  return (
+    <>
+      {Object.entries(session).map(([key, value]) => (
         <p>
           {key} : {value}
         </p>
-      ))
-    }
-  </SessionContext.Consumer>
-);
+      ))}
+    </>
+  );
+};
 
 export function RedirectionControl(props: any): JSX.Element {
   const location = useLocation();

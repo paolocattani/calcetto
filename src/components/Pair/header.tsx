@@ -1,8 +1,10 @@
 import React from 'react';
-import { headerPropsType } from './type';
 import { translateTournamentProgress } from '../core/utils';
+import { useSelector } from 'react-redux';
+import { TournamentSelector } from 'selectors/tournament.selector';
 
-const TableHeader: React.FC<headerPropsType> = ({ tournament }: headerPropsType) => {
+const TableHeader: React.FC<{}> = () => {
+  const tournament = useSelector(TournamentSelector.getTournament);
   return tournament ? (
     <h3>
       <p>

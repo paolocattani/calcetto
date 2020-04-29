@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Stage1Table from './table';
 import { handlerPropsType } from './type';
-import { columns, rowsGenerator, comparator } from './helper';
+import { comparator } from './helper';
+import { rowsGenerator, columns } from './editor';
 
 const Stage1Handler = (props: handlerPropsType): JSX.Element => {
   const { pairsList } = props;

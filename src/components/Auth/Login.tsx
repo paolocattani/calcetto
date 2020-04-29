@@ -1,17 +1,18 @@
 import { useInput } from '../core/hooks/InputHook';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import React, { SetStateAction } from 'react';
-import { useSessionContext } from '../core/routing/SessionContext';
-import { useHistory } from 'react-router-dom';
+import { useHistory, RouteComponentProps, withRouter } from 'react-router-dom';
+import { SessionAction } from 'actions';
+import { useDispatch } from 'react-redux';
 
-type PropsType = {
+interface PropsType extends RouteComponentProps {
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
-};
+}
 
 // https://medium.com/@faizanv/authentication-for-your-react-and-express-application-w-json-web-tokens-923515826e0#6563
 const Login: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
   const currentHistory = useHistory();
-  const [sessionContext, updateSessionContext] = useSessionContext();
+  const dispatch = useDispatch();
 
   const { value: username, bind: bindUsername /*reset: resetUsername*/ } = useInput('');
   const { value: password, bind: bindPassword /*reset: resetPassword*/ } = useInput('');
@@ -35,16 +36,11 @@ const Login: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
       const response = await fetch('/api/v1/auth/authenticate', {
         method: 'POST',
         body: JSON.stringify({ username, password }),
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       });
       const result = await response.json();
       if (response.ok && result) {
-        updateSessionContext({
-          ...sessionContext,
-          ...result,
-          isAuthenticated: true,
-          isEditable: result.role === 'Admin'
-        });
+        dispatch(SessionAction.updateSession(result));
         currentHistory.push('/');
       } else {
         if (response.status === 401) showError('Utente o Password errata');
@@ -77,4 +73,4 @@ const Login: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
   );
 };
 
-export default Login;
+export default withRouter(Login);

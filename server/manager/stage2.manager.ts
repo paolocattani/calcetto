@@ -1,6 +1,6 @@
 import { logProcess } from '../core/logger';
-import Stage2 from '../model/sequelize/stage2.model';
-import { IStage2FE } from 'model/dto/stage2.dto';
+import Stage2 from '../models/sequelize/stage2.model';
+import { IStage2FE } from 'models/dto/stage2.dto';
 
 const className = 'Stage2 Manager : ';
 

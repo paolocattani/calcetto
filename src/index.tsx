@@ -3,22 +3,22 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'typeface-roboto';
-import App from './components/App';
+import App from './components/App/App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
-import { SessionContextProvider } from './components/core/routing/SessionContext';
 import it from 'date-fns/locale/it';
 import { setDefaultLocale, registerLocale } from 'react-datepicker';
-
+import { store } from 'store';
+import { Provider } from 'react-redux';
 setDefaultLocale('it');
 registerLocale('it', it);
 
 ReactDOM.render(
-  <BrowserRouter>
-    <SessionContextProvider>
+  <Provider store={store}>
+    <BrowserRouter>
       <App />
-    </SessionContextProvider>
-  </BrowserRouter>,
+    </BrowserRouter>
+  </Provider>,
   document.getElementById('root')
 );
 

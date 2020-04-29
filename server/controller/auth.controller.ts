@@ -3,7 +3,7 @@ import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 
 import { Router, Request, Response, NextFunction } from 'express';
-import User from '../model/sequelize/user.model';
+import User from '../models/sequelize/user.model';
 import { withAuth, asyncMiddleware } from '../core/middleware';
 
 import {
@@ -11,13 +11,12 @@ import {
   parseBody,
   deleteUser,
   comparePasswords,
-  generateToken,
   listAll,
   registerUser,
   findUserByEmailOrUsername,
   checkIfExist,
   findUserByEmailAndUsername,
-  addUserCookies
+  addUserCookies,
 } from '../manager/auth.manager';
 import { AppRequest } from './index';
 const router = Router();
@@ -73,13 +72,12 @@ router.post(
   withAuth,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     try {
-      logger.info('/update start ');
-      let model = parseBody(req.user);
-      // logger.info('/update : ', model);
+      let model = parseBody(req.body);
       const user = await findUserByEmailAndUsername(model.email, model.username);
-      if (!user) return res.status(500).json({ error: 'Utente non trovato' });
+      if (!user) {
+        return res.status(500).json({ error: 'Utente non trovato' });
+      }
       await user.update(model);
-      logger.info('/update end ');
       return res.status(200).json(user);
     } catch (error) {
       logger.error('/update error : ', error);

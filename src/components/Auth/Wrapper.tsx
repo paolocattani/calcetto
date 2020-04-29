@@ -1,6 +1,6 @@
 import React, { useState, CSSProperties, lazy } from 'react';
 import { Button, Container, Alert, Card, Col } from 'react-bootstrap';
-import { ToggleOn, ToggleOff } from '../core/Icons';
+import { ToggleOn, ToggleOff } from '../core/icons';
 
 const Login = lazy(() => import('./Login'));
 const Register = lazy(() => import('./Register'));
@@ -24,11 +24,7 @@ const AuthWrapper: React.FC = (): JSX.Element => {
 
   const modalStyle: CSSProperties = {
     textAlign: 'left',
-    //width: register ? '50vw' : '40vw',
-    //height: 'auto',
-    //margin: 'auto',
-    color: 'white'
-    //marginBottom: '20vh'
+    color: 'white',
   };
 
   return (

@@ -1,20 +1,25 @@
 import React, { FormEvent, SetStateAction, useState, CSSProperties, lazy } from 'react';
 import { Card, Container, Alert, Form, Button, Col, Row } from 'react-bootstrap';
 import { useInput } from '../core/hooks/InputHook';
-import { useSessionContext } from '../core/routing/SessionContext';
 import DatePicker from 'react-datepicker';
-import { TrashIcon, SaveIcon } from '../core/Icons';
+import { TrashIcon, SaveIcon } from '../core/icons';
+import { useSelector, useDispatch } from 'react-redux';
+import { SessionSelector } from 'selectors/session.selector';
+import { SessionAction } from 'actions';
+import { useHistory } from 'react-router-dom';
 const Delete = lazy(() => import('./Delete'));
 
 const EditUser: React.FC<{}> = (): JSX.Element => {
-  const [session] = useSessionContext();
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const session = useSelector(SessionSelector.getSession);
   const [showModalDelete, setShowModalDelete] = useState(false);
 
-  const { value: name, bind: bindName /*reset: resetUsername*/ } = useInput(session.name);
-  const { value: surname, bind: bindSurname /*reset: resetUsername*/ } = useInput(session.surname);
-  const { value: phone, bind: bindPhone /*reset: resetUsername*/ } = useInput(session.phone);
+  const { value: name, bind: bindName /*reset: resetUsername*/ } = useInput(session.user!.name);
+  const { value: surname, bind: bindSurname /*reset: resetUsername*/ } = useInput(session.user!.surname);
+  const { value: phone, bind: bindPhone /*reset: resetUsername*/ } = useInput(session.user!.phone);
   const { value: birthday, setValue: setBirthday /* bind: bindBirthday ,reset: resetUsername*/ } = useInput(
-    session.birthday
+    session.user!.birthday
   );
 
   const [errorMessage, setErrorMessage] = useState('');
@@ -30,16 +35,27 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
   };
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    console.log('onSubmit ');
+    event.preventDefault();
     try {
+      const { user } = session;
+      const model = {
+        ...user!,
+        name,
+        surname,
+        phone,
+        birthday,
+      };
       const response = await fetch('/api/v1/auth/update', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: session.username, name, surname, email: session.email, phone, birthday })
+        body: JSON.stringify(model),
       });
       await response.json();
-      if (response.ok) showSuccess('Aggiornamento effettuato ... ');
-      else showError('Errore durante aggiornamento dati');
+      if (response.ok) {
+        dispatch(SessionAction.updateSession(model));
+        showSuccess('Aggiornamento effettuato ... ');
+        setTimeout(() => history.push('/'), 3000);
+      } else showError('Errore durante aggiornamento dati');
     } catch (error) {
       showError('Errore durante aggiornamento dati');
     }
@@ -50,10 +66,9 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
     width: '100%',
     height: 'auto',
     margin: 'auto',
-    color: 'white'
+    color: 'white',
   };
 
-  console.log('Rendere Edit : ', birthday);
   return (
     <Col md={{ span: '6', offset: '3' }} sm="12">
       <Card style={modalStyle} className="default-background">
@@ -76,7 +91,7 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
                 <Col sm="9">
                   <Form.Control
                     plaintext
-                    value={session.username!}
+                    value={session.user!.username!}
                     readOnly
                     style={{ fontSize: 'larger', fontWeight: 'bolder' }}
                     className="default-color-white "
@@ -88,7 +103,7 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
                 <Col sm="9">
                   <Form.Control
                     plaintext
-                    value={session.email!}
+                    value={session.user!.email!}
                     readOnly
                     style={{ fontSize: 'larger', fontWeight: 'bolder' }}
                     className="default-color-white"
@@ -100,7 +115,7 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
                 <Col sm="9">
                   <Form.Control
                     plaintext
-                    value={session.role!}
+                    value={session.user!.role}
                     readOnly
                     style={{ fontSize: 'larger', fontWeight: 'bolder' }}
                     className="default-color-white"
@@ -137,7 +152,7 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
                           selected={new Date(birthday)}
                           locale="it"
                           dateFormat="dd/MM/yyyy"
-                          onChange={newValue => setBirthday(newValue ? newValue : new Date())}
+                          onChange={(newValue) => setBirthday(newValue ? newValue : new Date())}
                         />
                       )}
                     ></Form.Control>

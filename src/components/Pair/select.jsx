@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
-import { fetchPairs, valueFormatter } from './helper';
+import { fetchPairs, valueFormatter } from './editor';
 
 // Probabilmente il componente Select usa Ref.... Lascio cosi..
 const PairsSelection = React.forwardRef((props, ref) => {
@@ -13,7 +13,7 @@ const PairsSelection = React.forwardRef((props, ref) => {
     return valueFormatter(selectedOption);
   }
 
-  const handleChange = selectedOption => {
+  const handleChange = (selectedOption) => {
     selectedOption.pairId = id;
     setSelectedOption(selectedOption);
     // vedi il campo label sul manager

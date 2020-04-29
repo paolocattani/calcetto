@@ -8,8 +8,8 @@ import { asyncMiddleware, withAuth } from '../core/middleware';
 // Managers
 import { listAll, findById, findByNameAndDate, parseBody, update } from '../manager/tournament.manager';
 // Models
-import Tournament from '../model/sequelize/tournament.model';
-import { TournamentDTO } from '../model/dto/tournament.dto';
+import Tournament from '../models/sequelize/tournament.model';
+import { TournamentDTO } from '../models/dto/tournament.dto';
 import { AppRequest } from './index';
 
 // all API path must be relative to /api/v1/tournament

@@ -1,6 +1,6 @@
 // Models/Types
-import { PlayerDTO } from '../model/dto/player.dto';
-import Player from '../model/sequelize/player.model';
+import { PlayerDTO } from '../models/dto/player.dto';
+import Player from '../models/sequelize/player.model';
 // Logger utils
 import { logProcess } from '../core/logger';
 
@@ -14,14 +14,14 @@ export const listAllInTournament = async (tId: number): Promise<PlayerDTO[]> => 
       order: [
         ['alias', 'DESC'],
         ['name', 'DESC'],
-        ['surname', 'DESC']
+        ['surname', 'DESC'],
       ],
-      include: [Player.associations.pair1, Player.associations.pair2]
+      include: [Player.associations.pair1, Player.associations.pair2],
     });
     logProcess(className + 'listAllInTournament', 'users fetched');
 
     const result = users
-      .filter(player => {
+      .filter((player) => {
         // Se il giocatore non ha alias o nome lo escludo in quanto non sarebbe identificabile nella selezione delle coppie
         if (player.alias === '' && player.name === '') return false;
         // Se non è ancora stato assegnato a nessuno coppia allora è disponibile
@@ -32,14 +32,14 @@ export const listAllInTournament = async (tId: number): Promise<PlayerDTO[]> => 
          * perchè non è piu tra quelli selezionabili
          */
         if (
-          (player.pair1 && player.pair1.find(e => e.tournamentId === tId)) ||
-          (player.pair2 && player.pair2.find(e => e.tournamentId === tId))
+          (player.pair1 && player.pair1.find((e) => e.tournamentId === tId)) ||
+          (player.pair2 && player.pair2.find((e) => e.tournamentId === tId))
         )
           return false;
         else return true;
       })
       // Rimappo per escludere le associazioni
-      .map(player => convertEntityToDTO(player));
+      .map((player) => convertEntityToDTO(player));
     logProcess(className + 'listAllInTournament', 'end');
     return result;
   } catch (error) {
@@ -53,10 +53,10 @@ export const listAll = async (): Promise<PlayerDTO[]> => {
     logProcess(className + 'listAll', 'start');
     const users = await Player.findAll({
       order: [['id', 'ASC']],
-      include: [Player.associations.pair1, Player.associations.pair2]
+      include: [Player.associations.pair1, Player.associations.pair2],
     });
     logProcess(className + 'listAll', 'end');
-    return users.map(player => convertEntityToDTO(player));
+    return users.map((player) => convertEntityToDTO(player));
   } catch (error) {
     logProcess(className + 'listAll', ` Error : ${error}`);
     return [];
@@ -84,7 +84,7 @@ export const create = async (model: any): Promise<Player | null> => {
 };
 
 export const deletePlayer = async (models: Player[]): Promise<number> =>
-  await Player.destroy({ where: { id: models.map(e => e.id) } });
+  await Player.destroy({ where: { id: models.map((e) => e.id) } });
 
 // Utils
 export const parseBody = (body: any) =>
@@ -98,7 +98,7 @@ export const parseBody = (body: any) =>
     phone: body.phone || '',
     match_played: body.match_played || 0,
     match_won: body.match_won || 0,
-    total_score: body.total_score || 0
+    total_score: body.total_score || 0,
   } as Player);
 
 /**
@@ -121,5 +121,5 @@ export const convertEntityToDTO = (player: Player): PlayerDTO => ({
   match_played: player.match_played || 0,
   match_won: player.match_won || 0,
   total_score: player.total_score || 0,
-  editable: player.editable
+  editable: player.editable,
 });
