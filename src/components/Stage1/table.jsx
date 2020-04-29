@@ -71,6 +71,8 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
     style: { backgroundColor: '#c8e6c9' },
   };
 
+  console.log(' render : ', selectedRows);
+
   return (
     <BootstrapTable
       bootstrap4
