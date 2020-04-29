@@ -5,7 +5,7 @@ const lazyPlayer = lazy(() => import('../../Player/table'));
 const lazyTournament = lazy(() => import('../../Tournament/select'));
 const lazyPairs = lazy(() => import('../../Pair/table'));
 const lazyStage1 = lazy(() => import('../../Stage1/wrapper'));
-const lazyStage2 = lazy(() => import('../../Stage2/table'));
+const lazyStage2 = lazy(() => import('../../Stage2/handler'));
 const lazyLogin = lazy(() => import('../../Auth/Wrapper'));
 const lazyUser = lazy(() => import('../../Auth/Edit'));
 const lazyRedirectionControl = lazy(() =>
@@ -80,11 +80,10 @@ export const routes: routeType[] = [
     index: 50,
   },
   {
-    path: '/stage2/:tId',
+    path: '/stage2',
     label: 'Torneo fase 2',
     exact: true,
     ComponentToRender: lazyStage2 as any,
-    //ComponentToRender: OrganizationChartDemo,
     visible: !(process.env.NODE_ENV === 'production'),
     private: true,
     index: 100,

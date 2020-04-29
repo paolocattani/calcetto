@@ -1,16 +1,8 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import Player from '../models/sequelize/player.model';
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 import { withAuth, asyncMiddleware } from '../core/middleware';
-import {
-  convertEntityToDTO,
-  create,
-  deletePlayer,
-  parseBody,
-  listAll,
-  listAllInTournament,
-} from '../manager/player.manager';
+import { create, deletePlayer, parseBody, listAll, listAllInTournament } from '../manager/player.manager';
 
 const router = Router();
 router.use('/', (req, res, next) => {

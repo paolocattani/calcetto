@@ -1,27 +1,25 @@
 import { getBaseLog } from '../core/utils';
-import { ICell } from './types';
+import { ICell } from 'models/stage2.model';
 
 /*
-
-Alla fine sono riuscito a risalire ad un algoritmo ! ( dopo 2 giorni )
 	_______________________________________________________________________
 	| n.   |                      |                   |                   |
 	| Riga |     16 coppie        |     8 Coppie      |   4 Coppie        |
 	|______|______________________|___________________|___________________|
 	|	     |	( rowSpan )		      |		( rowSpan )	    |	   ( rowSpan )    |
-	|      | 	                    |                   |                   |     Escludendo il primo elemento e ossevando le righe da 2 a 32 si
+	|      | 	                    |                   |                   |   Escludendo il primo elemento e ossevando le righe da 2 a 32 si
 	|  1   | 1 - 2 - 4 - 8 - 16   | 1 - 2 - 4 - 8     | 1 - 2 - 4         |  	può notare che la seguenza ha la forma di una piramide.
 	|  2   | 1                    | 1                 | 1                 |  	Esempio N= 32 :
 	|  3   | 1 - 2                | 1 - 2             | 1 - 2             |
-	|  4   | 1                    | 1                 | 1                 |  		 | 6
-	|  5   | 1 - 2 - 4            | 1 - 2 - 4         |                   |  	     |                                 5
-	|  6   | 1                    | 1                 |                   |  	     |                 4                               4
-	|  7   | 1 - 2                | 1 - 2             |                   |  	     |         3               3               3               3
-	|  8   | 1                    | 1                 |                   |  	     |     2       2       2       2       2       2       2       2
+	|  4   | 1                    | 1                 | 1                 |  		     | 6
+	|  5   | 1 - 2 - 4            | 1 - 2 - 4         |                   |  	       |                                 5
+	|  6   | 1                    | 1                 |                   |  	       |                 4                               4
+	|  7   | 1 - 2                | 1 - 2             |                   |  	       |         3               3               3               3
+	|  8   | 1                    | 1                 |                   |  	       |     2       2       2       2       2       2       2       2
 	|  9   | 1 - 2 - 4 - 8        |                   |                   |          |   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1
 	|  10  | 1                    |                   |                   |     _____|___________________________________________________________________
 	|  11  | 1 - 2                |                   |                   |     n.   | 1 2 3 4 5 6 7 8 9 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3 3
-	|  12  | 1                    |                   |                   |		Riga |                   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2
+	|  12  | 1                    |                   |                   |		Riga |                     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2
 	|  13  | 1 - 2 - 4            |                   |                   |
 	|  14  | 1                    |                   |                   |
 	|  15  | 1 - 2                |                   |                   |
@@ -106,9 +104,35 @@ export const template: ICell[][] = [
   [{ id: 1, parentId: 1, name: '4-1', winner: false }],
 ];
 
-export const emptyCell: ICell = {
+export const getEmptyCell = (name?: string): ICell => ({
   name: '',
   winner: false,
   id: 0,
   parentId: 0,
+});
+
+export const generateStructure = (rowNumber: number): ICell[][] => {
+  const N = getBaseLog(2, rowNumber) + 1;
+  let counter = rowNumber * 2;
+  const result = new Array(N).fill([]).map((e, ii) => {
+    counter /= 2;
+    let bounce = true;
+    let index = 0;
+    let temp: ICell[] = [];
+    for (let jj = 0; jj < counter; jj++) {
+      if (bounce) index++;
+      bounce = !bounce;
+      temp.push({
+        id: index,
+        parentId: ii === 0 ? 0 : jj + 1,
+        name: `${ii}-${jj + 1}`,
+        pair: undefined,
+        winner: false,
+      });
+    }
+    return [...temp];
+  });
+  console.log('generateStructure : ', result);
+
+  return result;
 };

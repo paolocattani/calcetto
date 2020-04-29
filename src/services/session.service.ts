@@ -1,6 +1,7 @@
 import { CheckAuthenticationRequest, CheckAuthenticationResponse } from 'models';
 import { UserDTO } from 'models/user.model';
 
+// eslint-disable-next-line no-empty-pattern
 export const CheckAuthentication = async ({}: CheckAuthenticationRequest): Promise<CheckAuthenticationResponse> => {
   try {
     const response = await fetch('/api/v1/auth/');

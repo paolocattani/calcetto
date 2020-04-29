@@ -1,20 +1,50 @@
 import React from 'react';
 import style from './style.module.css';
-import { getIndexes, template, emptyCell } from './helper';
+import { getIndexes, template, getEmptyCell } from './helper';
 import Cell from './cell';
 import { getBaseLog } from 'components/core/utils';
-import { IStage2, ICell } from './types';
+import { ICell } from 'models';
 
 // https://www.kodbiro.com/blog/rorgchart-react-module-for-displaying-and-editing-data-in-org-chart/
 
-const Stage2: React.FC<IStage2> = ({ elements = template }) => {
-  const rowNumber = elements[0].length;
+interface Stage2Props {
+  elements?: ICell[][];
+  rowNumber: number;
+  onClick?: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    rowIndex: number,
+    colIndex: number,
+    winner: boolean
+  ) => void;
+}
+
+const Stage2: React.FC<Stage2Props> = ({ onClick, elements = template, rowNumber = 16 }) => {
+  if (rowNumber % 8 !== 0) {
+    console.log(' rowNumerb ', rowNumber);
+    console.log(' elements ', elements);
+
+    return <p>Picche</p>;
+  }
+
+  if (!onClick) {
+    onClick = (
+      event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+      rowIndex: number,
+      colIndex: number,
+      winner: boolean
+    ) => {
+      const element = elements[colIndex - 1][rowIndex - 1];
+      console.log('onClick callback Template : ', rowIndex, colIndex, winner);
+      console.log('Element  Template: ', element);
+    };
+  }
+
   /*
    * Calcolo il numero di colonne in funzione del numero di righe
    * in quanto l'oggetto che ricevo protrebbe essere solo un parziale
    */
   const colNumber = getBaseLog(2, rowNumber) + 1;
-  const bRows = getTableBodyRows(elements, rowNumber, colNumber);
+  const bRows = getTableBodyRows(elements, rowNumber, colNumber, onClick);
   const hElem = getTableHeaderElements(colNumber);
   return (
     <table className={style.table}>
@@ -40,7 +70,17 @@ function getTableHeaderElements(colNumber: number): JSX.Element[] {
   return tds;
 }
 
-function getTableBodyRows(elements: ICell[][], rowNumber: number, colNumber: number): JSX.Element[] {
+function getTableBodyRows(
+  elements: ICell[][],
+  rowNumber: number,
+  colNumber: number,
+  onClick: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    rowIndex: number,
+    colIndex: number,
+    winner: boolean
+  ) => void
+): JSX.Element[] {
   // Conterrà tutte le righe della tabella
   const rows: JSX.Element[] = [];
   // Indice di riga progressivo
@@ -52,9 +92,18 @@ function getTableBodyRows(elements: ICell[][], rowNumber: number, colNumber: num
     const row: JSX.Element[] = [];
     for (let jj = 0; jj < index[ii]; jj++) {
       counter[jj] += 1;
-      const cell = elements[jj] ? elements[jj][counter[jj] - 1] : emptyCell;
+      const cell = elements[jj] ? elements[jj][counter[jj] - 1] : getEmptyCell();
+      // console.log('Cell : ', cell);
+
       row.push(
-        <Cell key={`cell : ${jj}-${counter[jj] - 1}`} span={Math.pow(2, jj)} colIndex={counter[jj]} {...cell} />
+        <Cell
+          key={`cell : ${jj}-${counter[jj] - 1}`}
+          span={Math.pow(2, jj)}
+          rowIndex={counter[jj]}
+          colIndex={jj + 1}
+          onClick={onClick}
+          {...cell}
+        />
       );
     }
     rows.push(

@@ -13,9 +13,8 @@ import { Container } from 'react-bootstrap';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { SessionAction } from 'actions';
-import { SessionSelector } from 'selectors/session.selector';
 
 library.add(fas, far);
 

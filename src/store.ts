@@ -4,6 +4,7 @@ import { all } from 'redux-saga/effects';
 import { RootState } from 'models';
 import { TournamentReducer, PlayerReducer, PairReducer, SessionReducer } from 'reducers';
 import { TournamentsSagas, PlayersSagas, PairsSagas, SessionSagas } from 'sagas';
+import { Stage1Reducer } from 'reducers/stage1.reducer';
 
 // https://redux-saga.js.org/docs/introduction/BeginnerTutorial.html
 // custom compose for the redux devtool extension
@@ -27,6 +28,7 @@ const commonReducers: ReducersMapObject<RootState> = {
   playerState: PlayerReducer,
   pairState: PairReducer,
   sessionState: SessionReducer,
+  stage1State: Stage1Reducer,
 };
 
 // Meet the Store
