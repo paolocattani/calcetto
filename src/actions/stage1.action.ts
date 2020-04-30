@@ -5,5 +5,5 @@ const ActionName = '[Stage1]';
 
 export const Stage1Action = {
   // get selected tournament
-  setSelectedPairs: createAction(`${ActionName} Set Selected Pairs`)<Stage1Row[] | null>(),
+  setSelectedPairs: createAction(`${ActionName} Set Selected Pairs`)<{ stageName: string; rows: Stage1Row[] }>(),
 };

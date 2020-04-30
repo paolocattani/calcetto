@@ -6,11 +6,6 @@ import Tournament from './tournament.model';
  * https://stackoverflow.com/questions/2142566/storing-matrices-in-a-relational-database
  *
  * Rapprenta un Coppia all'interno del Girone :
- *  - questa struttare dovrebbe permettermi di aggiungere coppie dinamicamente senza problemi.
- *
- * - Totale coppia
- *  Select sum(score) from matrice
- *      where idCoppia=? and idTorneo=? group by idTorneo,idCoppia
  *
  * - Posizionamento all'interno del girone
  *  Select row_number,idCoppia from matrice
@@ -18,7 +13,7 @@ import Tournament from './tournament.model';
  *
  */
 @Table({ tableName: 'stage1', freezeTableName: true, version: false })
-export default class s1Matrix extends Model<s1Matrix> {
+export default class Stage1 extends Model<Stage1> {
   @Column(DataType.STRING)
   name!: string;
 
@@ -50,7 +45,7 @@ export default class s1Matrix extends Model<s1Matrix> {
   public score!: number;
 
   // Posizionamento della coppia all'interno del girone.
-  // Potrebbe essere calcolato progressivamente con un trigger. Da valutare
+
   @Column(DataType.INTEGER)
   public placement!: number;
 }

@@ -4,7 +4,7 @@ import { valueFormatter } from './helper';
 // FIXME: import makeAnimated from 'react-select/animated';
 import { PlayerDTO } from 'models';
 
-export interface IPlayerSelect {
+export interface PlayerSelectProps {
   styles?: Partial<Styles>;
   options: PlayerDTO[];
   columnIndex: number;
@@ -14,29 +14,30 @@ export interface IPlayerSelect {
   row: any;
 }
 
-const PlayerSelection: React.FC<IPlayerSelect> = React.forwardRef((props, ref) => {
-  const [selectedOption, setSelectedOption] = useState<PlayerDTO>();
-  const { styles, row, columnIndex, /*id,*/ onUpdate, onSelect, options } = props;
+const PlayerSelection: React.FC<PlayerSelectProps> = React.forwardRef(
+  ({ styles, row, columnIndex, /*id,*/ onUpdate, onSelect, options }, ref) => {
+    const [selectedOption, setSelectedOption] = useState<PlayerDTO>();
 
-  const handleChange = (selectedOption: ValueType<PlayerDTO>, actionMeta: ActionMeta) => {
-    // selectedOption.pairId = id;
-    setSelectedOption(selectedOption as PlayerDTO);
-    const value = valueFormatter(selectedOption);
-    onUpdate(value);
-    onSelect(selectedOption, row.id, columnIndex);
-  };
+    const handleChange = (selectedOption: ValueType<PlayerDTO>, actionMeta: ActionMeta) => {
+      // selectedOption.pairId = id;
+      setSelectedOption(selectedOption as PlayerDTO);
+      const value = valueFormatter(selectedOption);
+      onUpdate(value);
+      onSelect(selectedOption, row.id, columnIndex);
+    };
 
-  return (
-    <Select
-      styles={styles}
-      options={options}
-      onChange={handleChange}
-      value={selectedOption}
-      placeholder="Cerca..."
-      isSearchable
-      isClearable
-    />
-  );
-});
+    return (
+      <Select
+        styles={styles}
+        options={options}
+        onChange={handleChange}
+        value={selectedOption}
+        placeholder="Cerca..."
+        isSearchable
+        isClearable
+      />
+    );
+  }
+);
 
 export default PlayerSelection;

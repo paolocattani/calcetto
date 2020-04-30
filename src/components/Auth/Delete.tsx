@@ -4,8 +4,8 @@ import { Modal, Container, Alert, Form, Col, Row, Button } from 'react-bootstrap
 import { useInput } from '../core/hooks/InputHook';
 import { TrashIcon } from '../core/icons';
 import { SessionSelector } from 'selectors/session.selector';
-import { SessionAction } from 'actions';
 import { useDispatch, useSelector } from 'react-redux';
+import { SessionAction } from 'actions';
 type authType = {
   show: boolean;
   onHide: () => void;

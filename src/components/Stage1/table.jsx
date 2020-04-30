@@ -6,12 +6,14 @@ import cellEditFactory from 'react-bootstrap-table2-editor';
 import TableHeader from './header';
 import { getOpposite, comparator } from './helper';
 //
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { SessionSelector } from 'selectors/session.selector';
 // style
 import './style.css';
+import { Stage1Action } from 'actions';
 
 const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
+  const dispatch = useDispatch();
   const [selectedRows, setSelectedRows] = useState([]);
   const session = useSelector(SessionSelector.getSession);
 
@@ -51,23 +53,39 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
 
   const handleOnSelect = (row, isSelected) => {
     console.log('handleOnSelect : ', row);
+    const found = selectedRows.find((e) => e.rowNumber === row.rowNumber) ? true : false;
+    let selected;
+    if (isSelected) {
+      selected = found ? selectedRows : [row, ...selectedRows];
+    } else {
+      selected = found ? selectedRows.filter((e) => e.rowNumber !== row.rowNumber) : selectedRows;
+    }
+    console.log('Selected : ', selected);
 
-    setSelectedRows(() => {
-      const found = selectedRows.find((e) => e.rowNumber === row.rowNumber) ? true : false;
-      if (isSelected) {
-        return found ? selectedRows : [row, ...selectedRows];
-      } else {
-        return found ? selectedRows.filter((e) => e.rowNumber !== row.rowNumber) : selectedRows;
-      }
-    });
-    // return true or dont return to approve current select action
+    setSelectedRows(selected);
+    dispatch(
+      Stage1Action.setSelectedPairs({
+        stageName: tableName,
+        rows: selected,
+      })
+    );
     return true;
+  };
+
+  const handleOnSelectAll = (isSelected, rows) => {
+    setSelectedRows(isSelected ? rows : []);
+    dispatch(
+      Stage1Action.setSelectedPairs({
+        stageName: tableName,
+        rows: isSelected ? rows : [],
+      })
+    );
   };
 
   const selectRow = {
     mode: 'checkbox',
     onSelect: handleOnSelect,
-    onSelectAll: (isSelected, rows) => rows.forEach((row) => handleOnSelect(row, isSelected)),
+    onSelectAll: handleOnSelectAll,
     style: { backgroundColor: '#c8e6c9' },
   };
 

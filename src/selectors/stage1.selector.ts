@@ -6,7 +6,7 @@ export const Stage1Selector = {
     return isLoading;
   },
   // Get pairs List
-  getSelectedPairs({ stage1State: { selectedPairs } }: RootState): Stage1Row[] {
-    return selectedPairs;
+  getSelectedPairs({ stage1State: { selectedPairs } }: RootState): Map<string, Stage1Row[]> | null {
+    return selectedPairs || null;
   },
 };

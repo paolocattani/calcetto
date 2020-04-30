@@ -3,10 +3,10 @@ import { Card, Container, Alert, Form, Button, Col, Row } from 'react-bootstrap'
 import { useInput } from '../core/hooks/InputHook';
 import DatePicker from 'react-datepicker';
 import { TrashIcon, SaveIcon } from '../core/icons';
-import { useSelector, useDispatch } from 'react-redux';
 import { SessionSelector } from 'selectors/session.selector';
 import { SessionAction } from 'actions';
 import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 const Delete = lazy(() => import('./Delete'));
 
 const EditUser: React.FC<{}> = (): JSX.Element => {

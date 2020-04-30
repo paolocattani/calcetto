@@ -15,6 +15,7 @@ import { withRouter } from 'react-router-dom';
 import { getEmptyPlayer } from 'services/player.service';
 import { cellEditProps, columns } from './editor';
 import { SessionSelector } from 'selectors/session.selector';
+import { PairDTO, PlayerDTO } from 'models';
 
 const PairsTable = () => {
   const session = useSelector(SessionSelector.getSession);
@@ -29,10 +30,8 @@ const PairsTable = () => {
   const messageInitialState: IToastProps = { message: '', type: 'success' };
   const [message, setMessage] = useState<IToastProps>(messageInitialState);
   // Data
-  // FIXME:
-  const [data, setData] = useState({ rows: [] as any, players: [] as any });
-  // FIXME:
-  const [selectedRows, setSelectedRows] = useState<any>([]);
+  const [data, setData] = useState({ rows: [] as PairDTO[], players: [] as PlayerDTO[] });
+  const [selectedRows, setSelectedRows] = useState<PairDTO[]>([]);
   // Function params
   const [stage1Number, setStage1Number] = useState<number>(0);
   const [newRowsNumber, setNewRowsNumber] = useState<number>(0);
@@ -57,9 +56,8 @@ const PairsTable = () => {
   async function addRow(index?: number) {
     try {
       setIsLoading({ state: true, message: 'Aggiunta riga in corso' });
-      // FIXME:
-      const emptyRow: any = getEmptyRowModel();
-      emptyRow.tId = tournament.id;
+      const emptyRow = getEmptyRowModel();
+      emptyRow.tId = tournament.id || 0;
       const response = await fetch('/api/v1/pair', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -94,11 +92,10 @@ const PairsTable = () => {
         message: selectedRows.length > 1 ? 'Cancellazione righe in corso' : 'Cancellazione riga in corso',
       });
       // Devo ripristinare i giocatori eliminati
-      let players: any[] = [];
-      // FIXME:
-      selectedRows.forEach((e: any) => {
-        if (e.player1.id) players.push(e.player1);
-        if (e.player2.id) players.push(e.player2);
+      let players: PlayerDTO[] = [];
+      selectedRows.forEach((e) => {
+        if (e.player1 && e.player1.id) players.push(e.player1);
+        if (e.player2 && e.player2.id) players.push(e.player2);
       });
       if (players)
         setData((current) => ({
@@ -114,10 +111,7 @@ const PairsTable = () => {
       await response.json();
 
       setData((current) => ({
-        // FIXME:
-        rows: current.rows.filter(
-          (row: { id: any }) => !selectedRows.find((selectedRow: any) => selectedRow.id === row.id)
-        ),
+        rows: current.rows.filter((row) => !selectedRows.find((selectedRow) => selectedRow.id === row.id)),
         players: current.players,
       }));
 
@@ -130,12 +124,12 @@ const PairsTable = () => {
   }
 
   // update players list when a player is selected
-  function updateOptions(player: { id: any }, selected: { id: any }) {
+  function updateOptions(player: PlayerDTO, selected: PlayerDTO) {
     if (player && player.id)
       if (selected.id)
         setData((current) => ({
           rows: current.rows,
-          players: [...current.players.filter((e: { id: any }) => e.id !== selected.id), player].sort((e1, e2) =>
+          players: [...current.players.filter((e) => e.id !== selected.id), player].sort((e1, e2) =>
             e1.alias.localeCompare(e2.alias)
           ),
         }));
@@ -151,7 +145,7 @@ const PairsTable = () => {
       }));
   }
   // Aggiorno la colonna con il giocatore selezionato
-  const onSelect = (selectedElement: { id: any }, rowIndex: any, columnIndex: number) => {
+  const onSelect = (selectedElement: PlayerDTO, rowIndex: number, columnIndex: number) => {
     const newRowsElement = data.rows.map((rowElement: { id: any }) => {
       if (rowElement.id === rowIndex) {
         let row: any = rowElement;
@@ -189,14 +183,13 @@ const PairsTable = () => {
     }));
   };
 
-  const handleSelect = (row: { id: any }, isSelected: any) => {
-    // FIXME:
-    setSelectedRows((selectedRows: any) => {
-      const found = selectedRows.find((e: any) => e.id === row.id) ? true : false;
+  const handleSelect = (row: PairDTO, isSelected: boolean) => {
+    setSelectedRows((selectedRows) => {
+      const found = selectedRows.find((e) => e.id === row.id) ? true : false;
       if (isSelected) {
         return found ? selectedRows : [row, ...selectedRows];
       } else {
-        return found ? selectedRows.filter((e: any) => e.id !== row.id) : selectedRows;
+        return found ? selectedRows.filter((e) => e.id !== row.id) : selectedRows;
       }
     });
   };
@@ -215,7 +208,7 @@ const PairsTable = () => {
     // Controllo gironi non assegnati
     const missingStage1Name = data.rows
       .filter((e: { stage1Name: string }) => !e.stage1Name || e.stage1Name === '')
-      .map((e: { rowNumber: any }) => e.rowNumber);
+      .map((e) => e.rowNumber);
     if (missingStage1Name.length !== 0) {
       showErrorMessage(
         `Assegna  ${
@@ -227,8 +220,8 @@ const PairsTable = () => {
 
     // Controllo coppie non assegnate
     const missingPairs = data.rows
-      .filter((e: { player1: { id: null }; player2: { id: null } }) => e.player1.id === null || e.player2.id === null)
-      .map((e: { rowNumber: any }) => e.rowNumber);
+      .filter((e) => !e.player1 || !e.player1.id || !e.player2 || !e.player2.id)
+      .map((e) => e.rowNumber);
     if (missingPairs.length !== 0) {
       showErrorMessage(
         `Assegna  i giocatori ${
@@ -280,7 +273,7 @@ const PairsTable = () => {
   const selectRow = {
     mode: 'checkbox',
     onSelect: handleSelect,
-    onSelectAll: (isSelected: any, rows: any[]) => rows.forEach((row: any) => handleSelect(row, isSelected)),
+    onSelectAll: (isSelected: boolean, rows: PairDTO[]) => setSelectedRows(isSelected ? rows : []),
     style: { backgroundColor: '#c8e6c9' },
   };
 
@@ -349,8 +342,8 @@ const PairsTable = () => {
     Math.floor((data.players.length - 1) / 2) -
       (data.rows.length === 0
         ? 0
-        : data.rows.reduce((accumulator: number, e: { player1: { id: any }; player2: { id: any } }) => {
-            if ((!e.player1 && !e.player2) || (!e.player1.id && !e.player2.id)) return accumulator + 1;
+        : data.rows.reduce((accumulator: number, e) => {
+            if ((!e.player1 && !e.player2) || (!e.player1?.id && !e.player2?.id)) return accumulator + 1;
             if (!e.player1 || !e.player1.id || !e.player2 || !e.player2.id) return accumulator + 0.5;
             return accumulator;
           }, 0))

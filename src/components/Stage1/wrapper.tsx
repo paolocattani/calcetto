@@ -7,6 +7,7 @@ import { PairDTO } from 'models';
 import { useSelector } from 'react-redux';
 import { TournamentSelector } from 'selectors/tournament.selector';
 import { withRouter } from 'react-router-dom';
+import { Stage1Selector } from 'selectors/stage1.selector';
 
 /**
  * Wraps multiple table components
@@ -14,12 +15,18 @@ import { withRouter } from 'react-router-dom';
 //https://medium.com/@renatognunes/react-hooks-passing-child-component-state-up-with-useref-de88401c2654
 const Wrapper: React.FC = (): JSX.Element => {
   const tournament = useSelector(TournamentSelector.getTournament)!;
+  const selected = useSelector(Stage1Selector.getSelectedPairs);
   const [pairsList, setPairsList] = useState<PairDTO[]>([]);
 
   let currentHistory = useHistory();
 
   function goBack() {
     currentHistory.push('/tournament');
+  }
+  function goToStage2() {
+    // TODO: eseguire controlli
+    console.log('goToStage2 : ', selected);
+    currentHistory.push('/stage2');
   }
 
   useEffect(() => fetchPairs(setPairsList, tournament.id!), [tournament.id]);
@@ -31,11 +38,10 @@ const Wrapper: React.FC = (): JSX.Element => {
         <Button variant="secondary" onClick={goBack}>
           Gestione Coppie
         </Button>
-        {/*
-          <Button variant="success" onClick={goToStage2}>
-            Prosegui
+
+        <Button variant="success" onClick={goToStage2}>
+          Prosegui
         </Button>
-        */}
       </ListGroup.Item>
       {tables}
     </>
