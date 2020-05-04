@@ -5,16 +5,15 @@ export interface PlayerDTO {
   name: string;
   surname: string;
   alias: string;
-  role: string;
+  label: string;
+  role: PlayerRole;
   email: string;
   phone: string;
+  userId?: number;
   match_played: number;
   match_won: number;
   total_score: number;
-  userId?: number;
-  user?: User;
   editable: boolean;
-  label: string;
 }
 
 export enum PlayerRole {

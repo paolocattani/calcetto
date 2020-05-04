@@ -4,7 +4,6 @@ import { getIndexes, getEmptyCell } from './helper';
 import Cell from './cell';
 import { getBaseLog } from 'components/core/utils';
 import { ICell, PairDTO } from 'models';
-import { FormControl } from 'react-bootstrap';
 import PairsSelect from 'components/Pair/select';
 
 // https://www.kodbiro.com/blog/rorgchart-react-module-for-displaying-and-editing-data-in-org-chart/

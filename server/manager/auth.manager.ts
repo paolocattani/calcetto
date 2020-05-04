@@ -32,7 +32,7 @@ export const generateToken = (value: User | UserDTO) =>
   jwt.sign({ ...value }, getSecret(), { expiresIn: '8h', algorithm: 'HS256' });
 
 export const addUserCookies = (user: UserDTO, res: Response): void => {
-  logProcess(className + 'addUserCook-ies', 'start');
+  logProcess(className + 'addUserCookies', 'start');
   res.cookie('token', generateToken(user), { httpOnly: true });
   logProcess(className + 'addUserCookies', 'end');
 };
@@ -96,13 +96,9 @@ export const registerUser = async (user: User, playerRole?: PlayerRole): Promise
 };
 
 // Utils
-export function isAdmin(token: string | object): boolean {
-  let isAdmin: boolean = false;
-  if (token && typeof token === 'string') {
-    const decodedUser = jwt.verify(token, getSecret()) as User;
-    if (decodedUser.role === 'Admin') isAdmin = true;
-  }
-  return isAdmin;
+export function isAdmin(user?: UserDTO): boolean {
+  if (!user) return false;
+  return user && user.role === UserRole.Admin;
 }
 
 export async function getUserFromToken(token: string | object): Promise<User | null> {
