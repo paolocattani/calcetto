@@ -55,9 +55,11 @@ function renderTables(pairsList: PairDTO[]): JSX.Element {
   let stage: PairDTO[] = [];
   let stageList: JSX.Element[] = [];
   // sort pairs by stage1Name
+  console.log('PairsList : ', pairsList);
+
   pairsList
     .sort((obj1, obj2) => obj1.stage1Name.localeCompare(obj2.stage1Name))
-    // FIXME: use .reduce
+    // FIXME: use .reduce  ?
     .forEach((element, index) => {
       // A rottura di stage1Name
       if (stageName === '') stageName = element.stage1Name;

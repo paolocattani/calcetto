@@ -1,5 +1,9 @@
 import { Type } from 'react-bootstrap-table2-editor';
 
+/*
+  non esistono i tipi per react-bootstrap-table2-editor
+  quindi lascio tutto quello che riguarda l'edit come .js
+*/
 const newColumn = (index, rowNumber) => {
   return {
     id: `col${index}`,
@@ -33,20 +37,6 @@ const newColumn = (index, rowNumber) => {
     },
   };
 };
-
-export function rowsGenerator(pairsList) {
-  let rows = [];
-  for (let ii = 0; ii < pairsList.length; ii++) {
-    rows.push({ pair: pairsList[ii], rowNumber: ii + 1 });
-    for (let jj = 1; jj <= pairsList.length; jj++) {
-      rows[ii][`col${jj}`] = null;
-    }
-    rows[ii]['total'] = 0;
-    rows[ii]['place'] = 0;
-    rows[ii]['id'] = `row-${pairsList[0].tId}-${ii}`;
-  }
-  return rows;
-}
 
 export const columns = (pairsList) => {
   let baseColumns = [
@@ -91,8 +81,8 @@ export const columns = (pairsList) => {
     },
     {
       // Posizionamento coppia
-      id: 'place',
-      dataField: 'place',
+      id: 'placement',
+      dataField: 'placement',
       text: 'Posizione',
       editable: true,
       type: 'number',

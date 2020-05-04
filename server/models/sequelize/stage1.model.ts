@@ -42,10 +42,9 @@ export default class Stage1 extends Model<Stage1> {
   // Punteggio totale pe r la coppia
   @Comment('Score of pair1 vs pair2')
   @Column(DataType.INTEGER)
-  public score!: number;
+  public score?: number;
 
   // Posizionamento della coppia all'interno del girone.
-
   @Column(DataType.INTEGER)
   public placement!: number;
 }

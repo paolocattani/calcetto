@@ -12,7 +12,7 @@ import { SessionSelector } from 'selectors/session.selector';
 import './style.css';
 import { Stage1Action } from 'actions';
 
-const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
+const Stage1Table = ({ rows, columns, tableName, updateCellValue, updatePlacement, saved }) => {
   const dispatch = useDispatch();
   const [selectedRows, setSelectedRows] = useState([]);
   const session = useSelector(SessionSelector.getSession);
@@ -35,19 +35,21 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, saved }) => {
           // Ricalcolo totali riga
           let acc = 0;
           for (let key in row) if (key.startsWith('col') && row[key]) acc += parseInt(row[key]);
-          rows[row.rowNumber - 1]['total'] = acc ? acc : null;
-
+          rows[row.rowNumber - 1]['total'] = acc ? acc : 0;
+          console.log('Row : ', rows[row.rowNumber - 1]);
           //... e riga opposta
           acc = 0;
           for (let key in rows[parseInt(column.text) - 1])
             if (key.startsWith('col') && rows[parseInt(column.text) - 1][key])
               acc += parseInt(rows[parseInt(column.text) - 1][key]);
-          rows[parseInt(column.text) - 1]['total'] = acc ? acc : null;
+          rows[parseInt(column.text) - 1]['total'] = acc ? acc : 0;
+          console.log('Opposite : ', rows[parseInt(column.text) - 1]);
         }
         // Aggiorno posizione relativa
         [...rows]
           .sort((e1, e2) => comparator(e1, e2))
-          .forEach((row, index) => (rows[row.rowNumber - 1]['place'] = index + 1));
+          .forEach((row, index) => (rows[row.rowNumber - 1]['placement'] = index + 1));
+        updatePlacement(rows);
       },
     });
 

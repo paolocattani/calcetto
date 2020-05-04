@@ -1,3 +1,5 @@
+import { PairDTO, Stage1Row } from 'models';
+
 /**
  *
  * @param value il valore di partenza
@@ -29,12 +31,10 @@ export function getOpposite(value: string | null) {
 }
 
 /**
- *
  * @param {*} obj1
  * @param {*} obj2
  */
-// FIXME:
-export function comparator(obj1: any, obj2: any) {
+export function comparator(obj1: Stage1Row, obj2: Stage1Row) {
   // in caso di parità valuto scontro diretto
   if (obj1.total === obj2.total) {
     if (obj1[`col${obj2.rowNumber}`] === 3 || obj1[`col${obj2.rowNumber}`] === 2) {
@@ -45,3 +45,26 @@ export function comparator(obj1: any, obj2: any) {
   }
   return obj2.total - obj1.total;
 }
+
+/**
+ * Questo metodo riceve una lista di coppie PairdDTO e la trasforma in Stage1Row.
+ * Viene utilizzato da Stage1.handler per costruire la struttura da passare alla tabella
+ * Inoltre viene passata al BE per salvare i dati sul DB.
+ *
+ * @param pairsList PairDTO[] Lista di coppie
+ *
+ */
+export const rowsGenerator = (pairsList: PairDTO[]): Stage1Row[] =>
+  pairsList.map((e, ii) => {
+    const row: Stage1Row = {
+      id: `row-${e.tId}-${ii}`,
+      rowNumber: ii + 1,
+      pair: e,
+      total: 0,
+      placement: e.placement || 0,
+    };
+    for (let jj = 1; jj <= pairsList.length; jj++) {
+      row[`col${jj}`] = null;
+    }
+    return row;
+  });
