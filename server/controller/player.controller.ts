@@ -12,6 +12,7 @@ router.use('/', (req, res, next) => {
 
 router.get(
   '/list/:tId',
+  withAuth,
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = await listAllInTournament(req.params.tId ? parseInt(req.params.tId) : 0);
@@ -24,6 +25,7 @@ router.get(
 
 router.get(
   '/list',
+  withAuth,
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     try {
       return res.json(await listAll());

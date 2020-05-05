@@ -2,7 +2,8 @@ import { PairDTO } from './pair.model';
 
 export interface Stage1State {
   isLoading: boolean;
-  selectedPairs?: Map<string, Stage1Row[]>;
+  selectedRows?: Map<string, Stage1Row[]>;
+  selectedPairs: PairDTO[];
 }
 
 export interface Stage1Row {

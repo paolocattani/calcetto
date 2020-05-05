@@ -71,9 +71,7 @@ router.post(
     const { rows, stageName } = req.body;
     const { user } = req;
     try {
-      logger.info('START : ', stageName);
       const result = await generateStage1Rows(rows, stageName, user!);
-      logger.info('END : ', stageName, result);
       return res.status(200).json(result);
     } catch (error) {
       logger.error('Error while update matrix  : ', error);

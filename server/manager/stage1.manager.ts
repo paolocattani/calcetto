@@ -8,9 +8,7 @@ import { Stage1Row } from 'models/dto/stage1.dto';
 //
 import { dbConnection } from '../models/server/AppServer';
 import { isAdmin } from '../manager/auth.manager';
-import PairModel from '../models/sequelize/pair.model';
 //
-import chalk from 'chalk';
 import { UserDTO } from 'models/dto/user.dto';
 import { Op } from 'sequelize';
 
@@ -59,7 +57,7 @@ export const updateCell = async (
     });
     if (!record) throw new Error('updateCell  : Record non trovato!');
     if (record.pair1Id === pair1Id) {
-      await record.update({ score: score });
+      await record.update({ score: score ? score : null });
     } else {
       await record.update({ score: getOpposite(score ? parseInt(score) : null) });
     }
@@ -118,6 +116,7 @@ export const generateStage1Rows = async (rows: Stage1Row[], stageName: string, u
                 name: stageName,
                 tournamentId,
               };
+              const include = [Stage1Model.associations.pair1, Stage1Model.associations.pair2];
               let record = null;
               let created = false;
               isEditable
@@ -125,8 +124,10 @@ export const generateStage1Rows = async (rows: Stage1Row[], stageName: string, u
                     where,
                     defaults: model,
                     transaction,
+                    // @ts-ignore
+                    include,
                   }))
-                : (record = await Stage1Model.findOne({ where, transaction }));
+                : (record = await Stage1Model.findOne({ where, transaction, include }));
 
               // if (stageName === '1') logger.info('model : ', created, record);
               if (!created && record) {
@@ -136,7 +137,7 @@ export const generateStage1Rows = async (rows: Stage1Row[], stageName: string, u
                   oppositeRow,
                   rowIndex,
                   record.pair1Id === pair1.id ? record.score : getOpposite(record.score),
-                  record.pair1Id === pair1.id ? pair1.placement : pair2.placement
+                  record.pair1Id === pair1.id ? record.pair1.placement : record.pair2.placement
                 );
               }
             } catch (error) {

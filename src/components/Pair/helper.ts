@@ -2,19 +2,18 @@ import { getEmptyPlayer } from 'services/player.service';
 import { Styles } from 'react-select';
 import { PairDTO } from 'models';
 
-export function getEmptyRowModel(): PairDTO {
-  return {
-    id: null,
-    tId: 0,
-    rowNumber: 0,
-    player1: getEmptyPlayer(),
-    player2: getEmptyPlayer(),
-    alias: '',
-    stage1Name: '',
-    paid1: false,
-    paid2: false,
-  };
-}
+export const getEmptyRowModel = (label?: string): PairDTO => ({
+  id: null,
+  tId: 0,
+  rowNumber: 0,
+  player1: getEmptyPlayer(),
+  player2: getEmptyPlayer(),
+  alias: label || '',
+  stage1Name: '',
+  placement: 0,
+  paid1: false,
+  paid2: false,
+});
 
 export const fetchPairs = (setterFunction: React.Dispatch<React.SetStateAction<PairDTO[]>>, tId: number) => {
   (async () => {

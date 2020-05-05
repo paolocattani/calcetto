@@ -43,7 +43,7 @@ export default ([
     col4: 0,
     col5: null,
     total: 3,
-    place: 5,
+    placement: 5,
     id: 'row-1-4',
   },
   {
@@ -88,7 +88,7 @@ export default ([
     col4: null,
     col5: 3,
     total: 5,
-    place: 3,
+    placement: 3,
     id: 'row-1-3',
   },
   {
@@ -133,7 +133,7 @@ export default ([
     col4: 3,
     col5: 0,
     total: 4,
-    place: 4,
+    placement: 4,
     id: 'row-1-2',
   },
   {
@@ -178,7 +178,7 @@ export default ([
     col4: 1,
     col5: 3,
     total: 7,
-    place: 2,
+    placement: 2,
     id: 'row-1-1',
   },
   {
@@ -223,7 +223,7 @@ export default ([
     col4: 3,
     col5: 3,
     total: 11,
-    place: 1,
+    placement: 1,
     id: 'row-1-0',
   },
   {
@@ -267,7 +267,7 @@ export default ([
     col3: null,
     col4: null,
     total: null,
-    place: 3,
+    placement: 3,
     id: 'row-1-2',
   },
   {
@@ -311,7 +311,7 @@ export default ([
     col3: null,
     col4: null,
     total: null,
-    place: 2,
+    placement: 2,
     id: 'row-1-1',
   },
   {
@@ -355,7 +355,7 @@ export default ([
     col3: null,
     col4: null,
     total: null,
-    place: 1,
+    placement: 1,
     id: 'row-1-0',
   },
 ] as unknown) as Stage1Row[];

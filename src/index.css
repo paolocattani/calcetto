@@ -34,6 +34,10 @@
 .default-border-yellow {
   border : 1px solid var(--default-yellow);
 }
+
+.inherit-background.list-group-item {
+  background-color: inherit
+}
 /* Palette-End */
 
 /* override bootstrap table style*/
@@ -57,12 +61,6 @@ body {
 tbody {
   background-color: whitesmoke
 }
-
-
-.inherit-background.list-group-item {
-  background-color: inherit
-}
-
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',

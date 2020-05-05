@@ -13,9 +13,9 @@ interface Stage2HandlerProps extends RouteComponentProps {}
 const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
   const dispatch = useDispatch();
   const tournament = useSelector(TournamentSelector.getTournament);
-  const Stage1Row = useSelector(Stage1Selector.getSelectedPairs);
+  const Stage1Row = useSelector(Stage1Selector.getSelectedRows);
   const [cells, setCells] = useState<ICell[][]>();
-  const [pairsList, setPairsList] = useState<PairDTO[]>();
+  const pairsList = useSelector(Stage1Selector.getSelectedPairs);
 
   /*
   // For test only
@@ -27,23 +27,12 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
   // FIXME: spostare controlli su Stage1
   // Trasform rows from stage1 into rows for stage2
   useEffect(() => {
-    if (!Stage1Row) return;
-    /*
-      generateStructure : Genera struttura completa per Stage2
-      .map : Assegno alla prima fase le coppie selezionate su Stage1
-    */
-    let count = 0;
-    let tempPairs: PairDTO[] = [];
-    Stage1Row.forEach((e) => {
-      if (e) {
-        tempPairs.push(...e.map((x) => x.pair));
-        count += e.length;
-      }
-    });
+    // Trovo il multiplo di 8 piu vicino al numero di coppie selezionate
+    console.log('pairsList : ', pairsList);
 
-    if (count % 8 != 0) {
-      count = 16;
-    }
+    let count = pairsList.length;
+    while (count % 8 != 0) count++;
+
     const structure = generateStructure(count);
     /*
       .map((row, ii) =>
@@ -52,8 +41,7 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
     */
     console.log('Stage2 effetc result : ', structure);
     setCells(structure);
-    setPairsList(tempPairs);
-  }, [Stage1Row]);
+  }, [Stage1Row, pairsList, pairsList.length]);
 
   const onClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,

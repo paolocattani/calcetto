@@ -1,4 +1,4 @@
-import { RootState, Stage1Row } from 'models';
+import { RootState, Stage1Row, PairDTO } from 'models';
 
 // Get state from store
 export const Stage1Selector = {
@@ -6,7 +6,10 @@ export const Stage1Selector = {
     return isLoading;
   },
   // Get pairs List
-  getSelectedPairs({ stage1State: { selectedPairs } }: RootState): Map<string, Stage1Row[]> | null {
-    return selectedPairs || null;
+  getSelectedRows({ stage1State: { selectedRows } }: RootState): Map<string, Stage1Row[]> | null {
+    return selectedRows || null;
+  },
+  getSelectedPairs({ stage1State: { selectedPairs } }: RootState): PairDTO[] {
+    return selectedPairs;
   },
 };

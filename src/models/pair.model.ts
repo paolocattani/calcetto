@@ -17,7 +17,7 @@ export interface PairDTO {
   player1?: PlayerDTO;
   player2Id?: number;
   player2?: PlayerDTO;
-  placement?: number;
+  placement: number;
   label?: string;
 }
 

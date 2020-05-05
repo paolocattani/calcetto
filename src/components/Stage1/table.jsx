@@ -9,10 +9,10 @@ import { getOpposite, comparator } from './helper';
 import { useSelector, useDispatch } from 'react-redux';
 import { SessionSelector } from 'selectors/session.selector';
 // style
-import './style.css';
 import { Stage1Action } from 'actions';
 
-const Stage1Table = ({ rows, columns, tableName, updateCellValue, updatePlacement, saved }) => {
+// TODO: convert this component to ts
+const Stage1Table = ({ rows, columns, tableName, updateCellValue, autoOrder, updatePlacement, saved }) => {
   const dispatch = useDispatch();
   const [selectedRows, setSelectedRows] = useState([]);
   const session = useSelector(SessionSelector.getSession);
@@ -46,9 +46,10 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, updatePlacemen
           console.log('Opposite : ', rows[parseInt(column.text) - 1]);
         }
         // Aggiorno posizione relativa
-        [...rows]
-          .sort((e1, e2) => comparator(e1, e2))
-          .forEach((row, index) => (rows[row.rowNumber - 1]['placement'] = index + 1));
+        if (autoOrder)
+          [...rows]
+            .sort((e1, e2) => comparator(e1, e2))
+            .forEach((row, index) => (rows[row.rowNumber - 1]['placement'] = index + 1));
         updatePlacement(rows);
       },
     });
@@ -91,7 +92,7 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, updatePlacemen
     style: { backgroundColor: '#c8e6c9' },
   };
 
-  console.log(' render : ', selectedRows);
+  console.log(' render : ', tableName, rows);
 
   return (
     <BootstrapTable
@@ -102,7 +103,7 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, updatePlacemen
       selectRow={selectRow}
       cellEdit={cellEditProps(session.isAdmin)}
       noDataIndication="Nessun dato reperito"
-      wrapperClasses="player-table"
+      //wrapperClasses="player-table"
       headerClasses="default-background default-color-yellow"
       caption={<TableHeader title={tableName} saved={saved} />}
       striped
