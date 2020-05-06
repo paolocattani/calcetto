@@ -17,19 +17,24 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
   const dispatch = useDispatch();
   const tournament = useSelector(TournamentSelector.getTournament);
   const [cells, setCells] = useState<ICell[][]>();
-  const [pairsList, setPairsList] = useState<PairDTO[]>(template as PairDTO[]);
-  const [pairsListFromStore] = useState<PairDTO[]>(template as PairDTO[]);
-  //const pairsList = useSelector(Stage1Selector.getSelectedPairs);
-
-  // FIXME: spostare controlli su Stage1
+  // const [pairsList, setPairsList] = useState<PairDTO[]>(template as PairDTO[]);
+  // const pairsListFromStore = template as PairDTO[];
+  const pairsListFromStore = useSelector(Stage1Selector.getSelectedPairs);
+  const [pairsList, setPairsList] = useState<PairDTO[]>(pairsListFromStore);
+  // Numbero di coppie iniziare ( Fase 0 )
+  const [rowNumber, setRowNumber] = useState<number>(0);
+  // TODO: agigungere controlli su Stage1
   useEffect(() => {
+    console.log('useEffect : ', pairsListFromStore.length);
     // Trovo il multiplo di 8 piu vicino al numero di coppie selezionate
     let count = pairsListFromStore.length - 1;
     while (count % 8 != 0) count++;
     // Genero la struttura completa che poi andro a popolare tramite le azioni da parte dell'utente
+    console.log('useEffect : ', count);
     const structure = generateStructure(count);
     // console.log('Stage2 effetc result : ', structure);
     setCells(structure);
+    setRowNumber(count);
   }, [pairsListFromStore.length]);
 
   // Callback tasto vittoria/sconfitta coppia : Sposta la coppia alla fase successiva
@@ -91,14 +96,12 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
     setCells(() => elements);
   };
 
-  console.log('Render Stage2Handler : ');
-
-  return cells && pairsList ? (
+  return cells && pairsList && rowNumber ? (
     <Stage2
       pairs={pairsListFromStore}
       pairsSelect={pairsList}
       onClick={onClick}
-      rowNumber={8}
+      rowNumber={rowNumber}
       elements={cells}
       onSelectPair={onSelectPair}
     />

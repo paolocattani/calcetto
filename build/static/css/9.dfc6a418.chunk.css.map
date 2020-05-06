@@ -1,0 +1,1 @@
+{"version":3,"sources":["style.css"],"names":[],"mappings":"AAAA,YACI,UACJ,CAEA,mBACI,wBAAyB,CACzB,aACJ,CAEA,2BACI,qBACJ","file":"9.dfc6a418.chunk.css","sourcesContent":[".pair-table {\r\n    width: 100%;\r\n}\r\n\r\n.pair-table-header {\r\n    background-color: #343a40;\r\n    color: #ffc107;\r\n}\r\n\r\n.pair-table-header-element {\r\n    flex-direction: column;\r\n}\r\n"]}

@@ -1,1 +1,0 @@
-{"version":3,"sources":["style.css"],"names":[],"mappings":"AAAA,cACI,UACJ,CAEA,qBACI,wBAAyB,CACzB,aAEJ","file":"12.726df0cf.chunk.css","sourcesContent":[".player-table {\r\n    width: 100%;\r\n}\r\n\r\n.player-table-header {\r\n    background-color: #343a40;\r\n    color: #ffc107;\r\n\r\n}\r\n\r\n"]}
