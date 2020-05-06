@@ -7,42 +7,32 @@ import Stage2 from './table';
 // FIXME:
 import { ICell, PairDTO } from 'models';
 import { generateStructure } from './helper';
+import { ValueType, ActionMeta } from 'react-select';
+
+import template from './template';
 
 interface Stage2HandlerProps extends RouteComponentProps {}
 
 const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
   const dispatch = useDispatch();
   const tournament = useSelector(TournamentSelector.getTournament);
-  const Stage1Row = useSelector(Stage1Selector.getSelectedRows);
   const [cells, setCells] = useState<ICell[][]>();
-  const pairsList = useSelector(Stage1Selector.getSelectedPairs);
-
-  /*
-  // For test only
-    useEffect(() => {
-      dispatch(Stage1Action.setSelectedPairs(pairsTemplate));
-    }, [dispatch]);
-  */
+  const [pairsList, setPairsList] = useState<PairDTO[]>(template as PairDTO[]);
+  const [pairsListFromStore] = useState<PairDTO[]>(template as PairDTO[]);
+  //const pairsList = useSelector(Stage1Selector.getSelectedPairs);
 
   // FIXME: spostare controlli su Stage1
-  // Trasform rows from stage1 into rows for stage2
   useEffect(() => {
     // Trovo il multiplo di 8 piu vicino al numero di coppie selezionate
-    console.log('pairsList : ', pairsList);
-
-    let count = pairsList.length;
+    let count = pairsListFromStore.length - 1;
     while (count % 8 != 0) count++;
-
+    // Genero la struttura completa che poi andro a popolare tramite le azioni da parte dell'utente
     const structure = generateStructure(count);
-    /*
-      .map((row, ii) =>
-        ii === 0 ? row.map((e, jj) => ({ ...e, pair: Stage1Row[jj].pair })) : row
-      );
-    */
-    console.log('Stage2 effetc result : ', structure);
+    // console.log('Stage2 effetc result : ', structure);
     setCells(structure);
-  }, [Stage1Row, pairsList, pairsList.length]);
+  }, [pairsListFromStore.length]);
 
+  // Callback tasto vittoria/sconfitta coppia : Sposta la coppia alla fase successiva
   const onClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     rowIndex: number,
@@ -50,8 +40,10 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
     winner: boolean
   ) => {
     const elements = [...cells!];
-    console.log('elements : ', elements);
-    console.log('onClick callback : ', elements![colIndex - 1][rowIndex - 1], rowIndex, colIndex, winner);
+    /*
+      console.log('elements : ', elements);
+      console.log('onClick callback : ', elements![colIndex - 1][rowIndex - 1], rowIndex, colIndex, winner);
+    */
     // Coppia 1 e 2 dell'incontro corrente
     let current1: ICell | null = null;
     let current2: ICell | null = null;
@@ -69,16 +61,48 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
     current1.winner = winner;
     current2.winner = !winner;
     if (next) next.pair = winner ? current1.pair : current2.pair;
-    console.log('current1,current2 : ', current1.id, current2.id);
-    console.log('next : ', next);
-    console.log('elements : ', elements);
+    /*
+      console.log('current1,current2 : ', current1.id, current2.id);
+      console.log('next : ', next);
+      console.log('elements : ', elements);
+    */
+    setCells(() => elements);
+  };
 
+  // Questa funzione viene richiamata quando viene selezionata una coppia nella prima colonna
+  const onSelectPair = (value: ValueType<PairDTO>, rowIndex: number, actionMeta?: ActionMeta) => {
+    const elements = [...cells!];
+    const newPair = value as PairDTO;
+    const prevPair = elements[0][rowIndex - 1].pair;
+    let pairs: PairDTO[] = [...pairsList];
+
+    // 1. Se ho selezionato una coppia la elimino dalla lista ( questa condizione esclude il placeholder )
+    if (newPair && newPair.id) {
+      console.log('newPair && newPair.id : ', newPair && newPair.id, newPair);
+      pairs = pairs.filter((e) => e.id != newPair.id);
+    }
+    // 2. Se nella celle era gia presente una coppia la ripristino
+    if (prevPair && prevPair.id) {
+      console.log('prevPair && prevPair.id : ', prevPair && prevPair.id, prevPair);
+      pairs = [...pairs!, prevPair];
+    }
+    setPairsList(pairs);
+    elements[0][rowIndex - 1].pair = newPair;
     setCells(() => elements);
   };
 
   console.log('Render Stage2Handler : ');
 
-  return cells && pairsList ? <Stage2 pairs={pairsList} onClick={onClick} rowNumber={8} elements={cells} /> : null;
+  return cells && pairsList ? (
+    <Stage2
+      pairs={pairsListFromStore}
+      pairsSelect={pairsList}
+      onClick={onClick}
+      rowNumber={8}
+      elements={cells}
+      onSelectPair={onSelectPair}
+    />
+  ) : null;
 };
 
 export default withRouter(Stage2Handler);

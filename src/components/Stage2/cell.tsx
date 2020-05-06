@@ -39,7 +39,7 @@ const Cell: React.FC<NodeElement> = ({
   return (
     <td rowSpan={span} className={rowIndex % 2 === 0 ? [style.cell, style.borderBottom].join(' ') : style.cell}>
       <InputGroup className={style.container}>
-        <InputGroup.Prepend>
+        <InputGroup.Prepend className={style.prepend}>
           <InputGroup.Text>{rowIndex}</InputGroup.Text>
         </InputGroup.Prepend>
         {renderCustomComponent ? (

@@ -4,7 +4,7 @@ import { PairDTO } from 'models';
 
 interface PairSelectProps {
   // indice riga ( Stage2 )
-  rowIndex?: number;
+  rowIndex: number;
   // stili
   styles?: Partial<Styles>;
   // opzioni della lista
@@ -12,7 +12,7 @@ interface PairSelectProps {
   // Callback per formattare le opzioni della lista
   getOptionLabel?: (option: PairDTO) => string;
   // Callback onChange
-  onChange?: (value: ValueType<PairDTO>, rowIndex?: number, actionMeta?: ActionMeta) => void;
+  onChange?: (value: ValueType<PairDTO>, rowIndex: number, actionMeta?: ActionMeta) => void;
 }
 
 // Probabilmente il componente Select usa Ref.... Lascio cosi..

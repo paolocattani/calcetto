@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import style from './style.module.css';
 import { getIndexes, getEmptyCell } from './helper';
 import Cell from './cell';
 import { getBaseLog } from 'components/core/utils';
 import { ICell, PairDTO } from 'models';
 import PairsSelect from 'components/Pair/select';
+import { ValueType, ActionMeta, Styles } from 'react-select';
 
 // https://www.kodbiro.com/blog/rorgchart-react-module-for-displaying-and-editing-data-in-org-chart/
 
 interface Stage2Props {
   pairs: PairDTO[];
+  pairsSelect: PairDTO[];
   elements: ICell[][];
   rowNumber: number;
   onClick: (
@@ -18,20 +20,16 @@ interface Stage2Props {
     colIndex: number,
     winner: boolean
   ) => void;
+  onSelectPair: (value: ValueType<PairDTO>, rowIndex: number, actionMeta?: ActionMeta) => void;
 }
 
-const Stage2: React.FC<Stage2Props> = ({ onClick, elements, rowNumber = 16, pairs }) => {
-  // useEffect(() => setInternal(elements), [elements]);
-
-  if (rowNumber % 8 !== 0 || !elements) {
-    return <p>Picche</p>;
-  }
+const Stage2: React.FC<Stage2Props> = ({ onClick, elements, pairsSelect, rowNumber = 64, pairs, onSelectPair }) => {
   /*
    * Calcolo il numero di colonne in funzione del numero di righe
    * in quanto l'oggetto che ricevo protrebbe essere solo un parziale
    */
   const colNumber = getBaseLog(2, rowNumber) + 1;
-  const bRows = getTableBodyRows(elements, rowNumber, colNumber, onClick, pairs);
+  const bRows = getTableBodyRows(elements, rowNumber, colNumber, onClick, pairs, pairsSelect, onSelectPair);
   const hElem = getTableHeaderElements(colNumber);
 
   return (
@@ -50,7 +48,13 @@ function getTableHeaderElements(colNumber: number): JSX.Element[] {
   const tds: JSX.Element[] = [];
   for (let ii = 1; ii <= colNumber; ii++) {
     tds.push(
-      <td key={`header ${ii}`} className={style.headerCell}>
+      <td
+        key={`header ${ii}`}
+        className={style.headerCell}
+        style={{
+          width: `${100 / colNumber}%`,
+        }}
+      >
         <strong>{`Stage-${ii}`}</strong>
       </td>
     );
@@ -68,7 +72,9 @@ function getTableBodyRows(
     colIndex: number,
     winner: boolean
   ) => void,
-  pairs: PairDTO[]
+  pairs: PairDTO[],
+  pairsSelect: PairDTO[],
+  onSelectPair: (value: ValueType<PairDTO>, rowIndex: number, actionMeta?: ActionMeta) => void
 ): JSX.Element[] {
   // Conterrà tutte le righe della tabella
   const rows: JSX.Element[] = [];
@@ -77,9 +83,23 @@ function getTableBodyRows(
   // Sequenza numero di elementi da aggiungere alla riga
   const index: number[] = getIndexes(rowNumber);
 
-  const renderCustomComponent = (rowIndex: number, colIndex: number, isLast: boolean, pair?: PairDTO) => (
-    <PairsSelect options={pairs} />
-  );
+  const renderCustomComponent = (rowIndex: number, colIndex: number, isLast: boolean, pair?: PairDTO) => {
+    const styles: Partial<Styles> = {
+      container: (provided) => ({
+        ...provided,
+        flex: '1 1 auto',
+      }),
+      option: (provided) => ({ ...provided, zIndex: 6 }),
+      menuList: (provided) => ({
+        ...provided,
+        flex: '1 1 auto',
+        zIndex: 5,
+        height: 'auto',
+      }),
+    };
+
+    return <PairsSelect styles={styles} options={pairsSelect} rowIndex={rowIndex} onChange={onSelectPair} />;
+  };
 
   for (let ii = 1; ii <= rowNumber; ii++) {
     const row: JSX.Element[] = [];

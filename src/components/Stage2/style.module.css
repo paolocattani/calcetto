@@ -23,14 +23,32 @@
 }
 
 .container{
- margin: 1rem 0rem !important;
+  /*
+  flex: 1;
+  display: flex;
+  align-content: flex-start;
+  */
+  margin: 1rem 0rem !important;
 }
 
 .row{
   background-color: antiquewhite;
 }
 
+.prepend {
+  /*
+  flex-grow: 1;
+  */
+
+}
 .append {
   background-color: white !important;
-
+  /*
+  flex-grow: 1;
+  */
+}
+.center{
+  /*
+  flex-grow: 1;
+  */
 }
