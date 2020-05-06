@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import Stage1Handler from './handler';
-import { ListGroup, Button, Form } from 'react-bootstrap';
+import { ListGroup, Button } from 'react-bootstrap';
 import { fetchPairs } from 'components/Pair/helper';
 import { PairDTO } from 'models';
 import { useSelector } from 'react-redux';
@@ -23,7 +23,7 @@ const Wrapper: React.FC = (): JSX.Element => {
   const tournament = useSelector(TournamentSelector.getTournament)!;
   const selected = useSelector(Stage1Selector.getSelectedRows);
   const [pairsList, setPairsList] = useState<PairDTO[]>([]);
-  const [autoOrder, setAutoOrder] = useState<boolean>(true);
+  const [autoOrder /*, setAutoOrder*/] = useState<boolean>(true);
   const hideError: ModalProps = { show: false, message: '' };
   const [showError, setShowError] = useState<ModalProps>(hideError);
   let currentHistory = useHistory();

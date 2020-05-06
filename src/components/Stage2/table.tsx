@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React from 'react';
 import style from './style.module.css';
 import { getIndexes, getEmptyCell } from './helper';
 import Cell from './cell';
