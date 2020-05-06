@@ -52,8 +52,7 @@ export const routes: routeType[] = [
     index: 20,
   },
   {
-    //FIXME:
-    path: '/stage1/:tId',
+    path: '/stage1',
     label: 'Torneo fase 1',
     exact: true,
     ComponentToRender: lazyStage1,

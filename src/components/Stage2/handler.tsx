@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { withRouter, RouteComponentProps, useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 // import { TournamentSelector } from 'selectors';
 import { Stage1Selector } from 'selectors/stage1.selector';
@@ -8,6 +8,8 @@ import Stage2 from './table';
 import { ICell, PairDTO } from 'models';
 import { generateStructure } from './helper';
 import { ValueType, ActionMeta } from 'react-select';
+import { ListGroup, Button } from 'react-bootstrap';
+import commonStyle from '../../common.module.css';
 
 // import template from './template';
 
@@ -18,6 +20,7 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
     const dispatch = useDispatch();
     const tournament = useSelector(TournamentSelector.getTournament);
   */
+  let currentHistory = useHistory();
   const [cells, setCells] = useState<ICell[][]>();
   /* Test
     const pairsListFromStore = template as PairDTO[];
@@ -39,6 +42,9 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
     setRowNumber(count);
   }, [pairsListFromStore.length]);
 
+  function goBack() {
+    currentHistory.push('/stage1');
+  }
   // Callback tasto vittoria/sconfitta coppia : Sposta la coppia alla fase successiva
   const onClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -88,14 +94,21 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
   };
 
   return cells && pairsList && rowNumber ? (
-    <Stage2
-      pairs={pairsListFromStore}
-      pairsSelect={pairsList}
-      onClick={onClick}
-      rowNumber={rowNumber}
-      elements={cells}
-      onSelectPair={onSelectPair}
-    />
+    <>
+      <ListGroup.Item className={commonStyle.functionsList} key={'stage-button'}>
+        <Button variant="secondary" onClick={goBack}>
+          Fase 1
+        </Button>
+      </ListGroup.Item>
+      <Stage2
+        pairs={pairsListFromStore}
+        pairsSelect={pairsList}
+        onClick={onClick}
+        rowNumber={rowNumber}
+        elements={cells}
+        onSelectPair={onSelectPair}
+      />
+    </>
   ) : null;
 };
 

@@ -11,6 +11,7 @@ import { listAll, findById, findByNameAndDate, parseBody, update } from '../mana
 import Tournament from '../models/sequelize/tournament.model';
 import { TournamentDTO } from '../models/dto/tournament.dto';
 import { AppRequest } from './index';
+import { isAdmin } from '../manager/auth.manager';
 
 // all API path must be relative to /api/v1/tournament
 const router = Router();
@@ -65,13 +66,12 @@ router.post(
     const model = parseBody(req.body);
     const user = req.user!;
     try {
-      const isEditable = user.role === 'Admin';
       let t: Tournament | TournamentDTO | null = await findByNameAndDate(model.name, model.date);
       if (t) {
         logger.info(`Tournament ${model.name} already exists....`);
         return res.json(t);
       }
-      if (isEditable) {
+      if (isAdmin(user)) {
         model.ownerId = user.id;
         t = await Tournament.create(model);
         logger.info(`tournament controller : created Tournament => ${t}`);

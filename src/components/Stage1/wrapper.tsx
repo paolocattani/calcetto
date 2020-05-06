@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { TournamentSelector } from 'selectors/tournament.selector';
 import { withRouter } from 'react-router-dom';
 import { Stage1Selector } from 'selectors/stage1.selector';
-import style from './style.module.css';
+import commonStyle from '../../common.module.css';
 import GenericModal from 'components/core/generic/GenericModal';
 
 interface ModalProps {
@@ -41,7 +41,7 @@ const Wrapper: React.FC = (): JSX.Element => {
 
   return (
     <>
-      <ListGroup.Item className={style.functionsList} key={'stage-button'}>
+      <ListGroup.Item className={commonStyle.functionsList} key={'stage-button'}>
         <Button variant="secondary" onClick={goBack}>
           Gestione Coppie
         </Button>

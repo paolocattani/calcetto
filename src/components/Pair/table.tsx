@@ -263,7 +263,7 @@ const PairsTable = () => {
       console.log('errororroror :', error);
     }
     // Go to Stage1
-    currentHistory.push(`/stage1/${tournament.id}`);
+    currentHistory.push('/stage1');
   };
   /*
   function goBack() {
