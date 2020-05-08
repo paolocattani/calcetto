@@ -6,7 +6,6 @@ import { Stage1Selector } from 'selectors/stage1.selector';
 import Stage2 from './table';
 // FIXME:
 import { ICell, PairDTO } from 'models';
-import { generateStructure } from './helper';
 import { ValueType, ActionMeta } from 'react-select';
 import { ListGroup, Button } from 'react-bootstrap';
 import commonStyle from '../../common.module.css';
@@ -18,21 +17,18 @@ import { Stage2Action } from 'actions';
 interface Stage2HandlerProps extends RouteComponentProps {}
 
 const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
-  /*
-    const dispatch = useDispatch();
-    const tournament = useSelector(TournamentSelector.getTournament);
-  */
-  let currentHistory = useHistory();
+  const currentHistory = useHistory();
   const dispatch = useDispatch();
   const tournament = useSelector(TournamentSelector.getTournament)!;
   const cells = useSelector(Stage2Selector.getCells);
+  const rowNumber = useSelector(Stage2Selector.getRowsNumber);
   /* Test
     const pairsListFromStore = template as PairDTO[];
   */
   const pairsListFromStore = useSelector(Stage1Selector.getSelectedPairs);
   const [pairsList, setPairsList] = useState<PairDTO[]>(pairsListFromStore);
   // Numbero di coppie iniziare ( Fase 0 )
-  const [rowNumber, setRowNumber] = useState<number>(0);
+  //const [rowNumber, setRowNumber] = useState<number>(0);
 
   // TODO: agigungere controlli su Stage1
   useEffect(() => {
@@ -42,11 +38,6 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
     while (count % 8 !== 0) count++;
     // Genero la struttura completa che poi andro a popolare tramite le azioni da parte dell'utente
     dispatch(Stage2Action.fetchStage2.request({ tournamentId: tournament.id!, count }));
-    // console.log('Stage2 effetc result : ', structure);
-    //const structure = generateStructure(count);
-    // console.log('Stage2 effetc result : ', structure);
-    //setCells(structure);
-    setRowNumber(count);
   }, [cells, dispatch, pairsListFromStore.length, tournament.id]);
 
   function goBack() {
