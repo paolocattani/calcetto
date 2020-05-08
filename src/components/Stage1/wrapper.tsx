@@ -4,12 +4,13 @@ import Stage1Handler from './handler';
 import { ListGroup, Button } from 'react-bootstrap';
 import { fetchPairs } from 'components/Pair/helper';
 import { PairDTO } from 'models';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { TournamentSelector } from 'selectors/tournament.selector';
 import { withRouter } from 'react-router-dom';
 import { Stage1Selector } from 'selectors/stage1.selector';
 import commonStyle from '../../common.module.css';
 import GenericModal from 'components/core/generic/GenericModal';
+import { Stage2Action } from 'actions';
 
 interface ModalProps {
   show: boolean;
@@ -20,13 +21,15 @@ interface ModalProps {
  */
 //https://medium.com/@renatognunes/react-hooks-passing-child-component-state-up-with-useref-de88401c2654
 const Wrapper: React.FC = (): JSX.Element => {
+  const currentHistory = useHistory();
+  const dispatch = useDispatch();
+
   const tournament = useSelector(TournamentSelector.getTournament)!;
   const selected = useSelector(Stage1Selector.getSelectedPairs);
   const [pairsList, setPairsList] = useState<PairDTO[]>([]);
   const [autoOrder /*, setAutoOrder*/] = useState<boolean>(true);
   const hideError: ModalProps = { show: false, message: '' };
   const [showError, setShowError] = useState<ModalProps>(hideError);
-  let currentHistory = useHistory();
 
   function goBack() {
     currentHistory.push('/tournament');
@@ -34,6 +37,9 @@ const Wrapper: React.FC = (): JSX.Element => {
   function goToStage2() {
     // TODO: eseguire controlli
 
+    let count = pairsList.length - 1;
+    while (count % 8 !== 0) count++;
+    dispatch(Stage2Action.fetchStage2.request({ tournamentId: tournament.id!, count }));
     console.log('goToStage2 : ', selected);
     currentHistory.push('/stage2');
   }

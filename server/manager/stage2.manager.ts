@@ -11,58 +11,41 @@ import { rowToModel } from './pair.manager';
 
 const className = 'Stage2 Manager : ';
 
-export const generateStage2Rows = async (tournamentId: number, rowCount: number, user: UserDTO): Promise<ICell[][]> => {
+export const generateStage2Rows = async (
+  tournamentId: number,
+  structure: ICell[][],
+  user: UserDTO
+): Promise<ICell[][]> => {
+  logProcess(className + 'generateStage2Rows', 'start');
   const transaction = await dbConnection.transaction();
-  const N = getBaseLog(2, rowCount) + 1;
-  const result = new Array(N).fill([]);
+  const cells: ICell[][] = new Array(structure.length).fill([]);
   try {
-    let counter = rowCount * 2;
-    for (let ii = 0; ii < N; ii++) {
-      counter /= 2;
-      let bounce = true;
-      let index = 0;
-      let temp: ICell[] = [];
-      for (let jj = 0; jj < counter; jj++) {
-        if (bounce) index++;
-        bounce = !bounce;
+    for (let ii = 0; ii < structure.length; ii++) {
+      for (let jj = 0; jj < structure[ii].length; jj++) {
+        const options = {
+          transaction,
+          where: { tournamentId, order: jj, step: ii },
+          associations: [Stage2Model.associations.pair],
+        };
         let record: Stage2Model | null;
-        let created = false;
-        /*
-        if (isAdmin(user))
-          [record, created] = await Stage2Model.findOrCreate({
-            transaction,
-            where: { tournamentId, order: index, step: ii },
-            // @ts-ignore
-            include: [Stage2Model.associations.pair],
-          });
-        else
-          record = await Stage2Model.findOne({
-            transaction,
-            where: { tournamentId, order: index, step: ii },
-            include: [Stage2Model.associations.pair],
-          });
-*/
-        temp.push({
-          id: index,
-          parentId: ii === 0 ? 0 : jj + 1,
-          name: `${ii}-${jj + 1}`,
-          pair: /*record?.pair ? rowToModel(record.pair, record.pair.id - 1) :*/ undefined,
-          winner: false,
-        });
+        let created: boolean;
+        if (isAdmin(user)) [record, created] = await Stage2Model.findOrCreate(options);
+        else record = await Stage2Model.findOne(options);
+        if (record?.pair) structure[ii][jj].pair = rowToModel(record.pair, 0);
+        // logger.info(`Pushing ${ii} , ${jj} : `, structure[ii][jj]);
+        cells[ii].push(structure[ii][jj]);
       }
-      result[ii].push(...temp);
     }
     await transaction.commit();
-    logger.info('generateStructure : ', result);
   } catch (error) {
     await transaction.rollback();
-    logProcess(className + 'updateCell', error);
-    logger.error('updateCell : ', error);
-    throw new Error(`updateCell  : ${error}`);
+    logProcess(className + 'generateStage2Rows', error);
+    logger.error('generateStage2Rows : ', error);
+    return structure;
   }
-  logProcess(className + 'updateCell', 'end');
+  logProcess(className + 'generateStage2Rows', 'end');
 
-  return result;
+  return structure;
 };
 
 export const parseBody = ({ tournamentId, pairId, step, order, rank }: any): IStage2FE => ({

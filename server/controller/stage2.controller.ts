@@ -22,10 +22,10 @@ router.post(
   withAuth,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     try {
-      const { tournamentId, count } = req.body;
-      const model = await generateStage2Rows(tournamentId, count, req.user!);
-      logger.info('generateStage2Rows :', model);
-      return res.status(200).json({ model });
+      const { tournamentId, structure } = req.body;
+      const model = await generateStage2Rows(tournamentId, structure, req.user!);
+      //logger.info('generateStage2Rows :', model);
+      return res.status(200).json(model);
     } catch (err) {
       logger.error(chalk.redBright('Error while fetching Stage2 ! : ', err));
       return res.status(500).json({ message: 'Internal Error' });

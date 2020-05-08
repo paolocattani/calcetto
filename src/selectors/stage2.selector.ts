@@ -8,4 +8,7 @@ export const Stage2Selector = {
   getCells({ stage2State: { cells } }: RootState): ICell[][] | undefined {
     return cells;
   },
+  getRowsNumber({ stage2State: { rowsNumber } }: RootState): number | undefined {
+    return rowsNumber;
+  },
 };

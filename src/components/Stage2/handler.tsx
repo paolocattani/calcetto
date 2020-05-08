@@ -25,9 +25,7 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
   let currentHistory = useHistory();
   const dispatch = useDispatch();
   const tournament = useSelector(TournamentSelector.getTournament)!;
-
-  // FIXME:
-  const [cells, setCells] = useState<ICell[][] | undefined>(useSelector(Stage2Selector.getCells));
+  const cells = useSelector(Stage2Selector.getCells);
   /* Test
     const pairsListFromStore = template as PairDTO[];
   */
@@ -38,18 +36,18 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
 
   // TODO: agigungere controlli su Stage1
   useEffect(() => {
-    //if (cells) return;
+    if (cells) return;
     // Trovo il multiplo di 8 piu vicino al numero di coppie selezionate
     let count = pairsListFromStore.length - 1;
     while (count % 8 !== 0) count++;
     // Genero la struttura completa che poi andro a popolare tramite le azioni da parte dell'utente
-    // dispatch(Stage2Action.fetchStage2.request({ tournamentId: tournament.id!, count }));
+    dispatch(Stage2Action.fetchStage2.request({ tournamentId: tournament.id!, count }));
     // console.log('Stage2 effetc result : ', structure);
-    const structure = generateStructure(count);
+    //const structure = generateStructure(count);
     // console.log('Stage2 effetc result : ', structure);
-    setCells(structure);
+    //setCells(structure);
     setRowNumber(count);
-  }, [pairsListFromStore.length]);
+  }, [cells, dispatch, pairsListFromStore.length, tournament.id]);
 
   function goBack() {
     currentHistory.push('/stage1');
@@ -79,7 +77,9 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
     current1.winner = winner;
     current2.winner = !winner;
     if (next) next.pair = winner ? current1.pair : current2.pair;
-    setCells(() => elements);
+    dispatch(Stage2Action.setCells(elements));
+
+    //setCells(() => elements);
   };
 
   // Questa funzione viene richiamata quando viene selezionata una coppia nella prima colonna
@@ -99,9 +99,11 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
     }
     setPairsList(pairs);
     elements[0][rowIndex - 1].pair = newPair;
-    setCells(() => elements);
+    dispatch(Stage2Action.setCells(elements));
+    //setCells(() => elements);
   };
 
+  console.log('render stage2 :', cells, pairsList, rowNumber);
   return cells && pairsList && rowNumber ? (
     <>
       <ListGroup.Item className={commonStyle.functionsList} key={'stage-button'}>

@@ -1,5 +1,11 @@
-import { createAsyncAction } from 'typesafe-actions';
-import { FetchStage2Response, FetchStage2Request, UpdateStage2CellResponse, UpdateStage2CellRequest } from 'models';
+import { createAsyncAction, createAction } from 'typesafe-actions';
+import {
+  FetchStage2Response,
+  FetchStage2Request,
+  UpdateStage2CellResponse,
+  UpdateStage2CellRequest,
+  ICell,
+} from 'models';
 import { Success, Failure } from './constants';
 
 const ActionName = '[Stage2]';
@@ -16,4 +22,5 @@ export const Stage2Action = {
     `${ActionName} Update Stage2 Cell ${Success}`,
     `${ActionName} Update Stage2 Cell ${Failure}`
   )<UpdateStage2CellRequest, UpdateStage2CellResponse, Error>(),
+  setCells: createAction(`${ActionName} Set Cells`)<ICell[][]>(),
 };

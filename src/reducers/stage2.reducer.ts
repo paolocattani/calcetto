@@ -1,6 +1,6 @@
 import { createReducer, Action } from 'typesafe-actions';
 import { Stage2State } from 'models';
-import { Stage1Action } from 'actions';
+import { Stage2Action } from 'actions';
 
 const initialState: Stage2State = {
   isLoading: false,
@@ -8,9 +8,27 @@ const initialState: Stage2State = {
 
 export const Stage2Reducer = createReducer<Stage2State, Action>(initialState)
   // Request
-  .handleAction([Stage1Action.setSelectedPairs], (state, { payload: { stageName, rows } }) => {
+  .handleAction([Stage2Action.fetchStage2.request], (state) => ({
+    ...state,
+    isLoading: true,
+  }))
+  // Failure
+  .handleAction([Stage2Action.fetchStage2.failure], (state, { payload: { message } }) => ({
+    ...state,
+    errorMessage: message,
+    isLoading: false,
+  }))
+  // Success
+  .handleAction([Stage2Action.fetchStage2.success], (state, { payload: { cells, rowsNumber } }) => {
+    console.log('Stage2Action.fetchStage2.success :', { cells, rowsNumber });
+
     return {
-      ...state,
-      isLoading: true,
+      cells,
+      rowsNumber,
+      isLoading: false,
     };
-  });
+  })
+  .handleAction([Stage2Action.setCells], (state, { payload }) => ({
+    ...state,
+    cells: payload,
+  }));

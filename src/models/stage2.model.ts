@@ -2,6 +2,7 @@ import { PairDTO } from './pair.model';
 
 export interface Stage2State {
   isLoading: boolean;
+  rowsNumber?: number;
   cells?: ICell[][];
 }
 
@@ -20,7 +21,8 @@ export interface FetchStage2Request {
   count: number;
 }
 export interface FetchStage2Response {
-  cells?: ICell[][];
+  cells: ICell[][];
+  rowsNumber: number;
 }
 
 // TODO:

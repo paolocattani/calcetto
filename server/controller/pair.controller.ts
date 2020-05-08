@@ -36,7 +36,7 @@ router.get(
         include: [Pair.associations.tournament, Pair.associations.player1, Pair.associations.player2],
       });
       const modelList = pairsList.map((row, index) => rowToModel(row, index));
-      logger.info('modelList : ', modelList);
+      // logger.info('modelList : ', modelList);
       return res.json(modelList);
     } catch (err) {
       logger.error('/list -> error: ', err);
