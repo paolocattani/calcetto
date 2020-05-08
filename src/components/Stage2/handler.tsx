@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { withRouter, RouteComponentProps, useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 // import { TournamentSelector } from 'selectors';
 import { Stage1Selector } from 'selectors/stage1.selector';
 import Stage2 from './table';
@@ -10,6 +10,8 @@ import { generateStructure } from './helper';
 import { ValueType, ActionMeta } from 'react-select';
 import { ListGroup, Button } from 'react-bootstrap';
 import commonStyle from '../../common.module.css';
+import { Stage2Selector, TournamentSelector } from 'selectors';
+import { Stage2Action } from 'actions';
 
 // import template from './template';
 
@@ -21,7 +23,11 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
     const tournament = useSelector(TournamentSelector.getTournament);
   */
   let currentHistory = useHistory();
-  const [cells, setCells] = useState<ICell[][]>();
+  const dispatch = useDispatch();
+  const tournament = useSelector(TournamentSelector.getTournament)!;
+
+  // FIXME:
+  const [cells, setCells] = useState<ICell[][] | undefined>(useSelector(Stage2Selector.getCells));
   /* Test
     const pairsListFromStore = template as PairDTO[];
   */
@@ -32,10 +38,13 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
 
   // TODO: agigungere controlli su Stage1
   useEffect(() => {
+    //if (cells) return;
     // Trovo il multiplo di 8 piu vicino al numero di coppie selezionate
     let count = pairsListFromStore.length - 1;
     while (count % 8 !== 0) count++;
     // Genero la struttura completa che poi andro a popolare tramite le azioni da parte dell'utente
+    // dispatch(Stage2Action.fetchStage2.request({ tournamentId: tournament.id!, count }));
+    // console.log('Stage2 effetc result : ', structure);
     const structure = generateStructure(count);
     // console.log('Stage2 effetc result : ', structure);
     setCells(structure);

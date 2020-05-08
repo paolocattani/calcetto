@@ -6,7 +6,7 @@ import Pair from './pair.model';
  *
  */
 @Table({ tableName: 'stage2', comment: 'Stage2', freezeTableName: true, version: false })
-export default class Resevation extends Model<Resevation> {
+export default class Stage2 extends Model<Stage2> {
   @Comment('Id Torneo')
   @ForeignKey(() => Tournament)
   @Column(DataType.INTEGER)
@@ -19,7 +19,7 @@ export default class Resevation extends Model<Resevation> {
   @Column(DataType.INTEGER)
   public pairId!: number;
   @BelongsTo(() => Pair, 'pairId')
-  public pair1!: Pair;
+  public pair!: Pair;
 
   @Comment('Step')
   @Column(DataType.INTEGER)

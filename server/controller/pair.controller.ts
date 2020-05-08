@@ -7,6 +7,7 @@ import Pair from '../models/sequelize/pair.model';
 import { asyncMiddleware, withAuth } from '../core/middleware';
 import { Op } from 'sequelize';
 import { AppRequest } from 'controller';
+import { rowToModel } from '../manager/pair.manager';
 
 const router = Router();
 
@@ -35,6 +36,7 @@ router.get(
         include: [Pair.associations.tournament, Pair.associations.player1, Pair.associations.player2],
       });
       const modelList = pairsList.map((row, index) => rowToModel(row, index));
+      logger.info('modelList : ', modelList);
       return res.json(modelList);
     } catch (err) {
       logger.error('/list -> error: ', err);
@@ -90,51 +92,3 @@ router.delete(
 );
 
 export default router;
-
-function rowToModel(row: Pair, index: number) {
-  return {
-    id: row.id,
-    rowNumber: index + 1,
-    tId: row.tournamentId,
-    player1: {
-      id: row.player1?.id ?? null,
-      alias: row.player1?.alias ?? '',
-      name: row.player1?.name ?? '',
-      surname: row.player1?.surname ?? '',
-      label: row.player1?.alias ?? '',
-      role: row.player1?.role ?? null,
-      match_played: row.player1?.match_played ?? 0,
-      match_won: row.player1?.match_won ?? 0,
-      total_score: row.player1?.total_score ?? 0,
-      editable: row.player1?.editable ?? false,
-    },
-    player2: {
-      id: row.player2?.id ?? null,
-      alias: row.player2?.alias ?? '',
-      name: row.player2?.name ?? '',
-      surname: row.player2?.surname ?? '',
-      label: row.player2?.alias ?? '',
-      role: row.player2?.role ?? null,
-      match_played: row.player2?.match_played ?? 0,
-      match_won: row.player2?.match_won ?? 0,
-      total_score: row.player2?.total_score ?? 0,
-      editable: row.player2?.editable ?? false,
-    },
-    alias: row.alias,
-    stage1Name: row.stage1Name,
-    paid1: row.paid1 ? 'Si' : 'No',
-    paid2: row.paid2 ? 'Si' : 'No',
-    label: valueFormatter(row),
-  };
-}
-
-function valueFormatter(row: any) {
-  const { alias, id, player1, player2 } = row;
-  if (alias && alias !== '') return `${alias} ( ${id} )`;
-  if (!player1 || !player2) return '';
-  const value = `${player1.alias ? player1.alias : player1.name} - ${
-    player2.alias ? player2.alias : player2.name
-  } ( ${id} )`;
-
-  return value;
-}

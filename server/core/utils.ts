@@ -11,3 +11,7 @@ export async function asyncForEach<T>(
 }
 
 export const logEntity = (entity: any) => JSON.stringify(entity, null, 2);
+
+export function getBaseLog(x: number, y: number) {
+  return Math.log(y) / Math.log(x);
+}

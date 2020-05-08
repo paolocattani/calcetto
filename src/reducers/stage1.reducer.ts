@@ -23,7 +23,6 @@ export const Stage1Reducer = createReducer<Stage1State, Action>(initialState)
           ...rows.map((e) => e.pair),
         ]
       : [...rows.map((e) => e.pair)];
-    console.log('selectedPairs : ', selectedPairs);
 
     return {
       ...state,

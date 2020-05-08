@@ -4,6 +4,8 @@ import { Request, Response, NextFunction } from 'express';
 import chalk from 'chalk';
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import { getSecret } from '../manager/auth.manager';
+import { AppRequest } from 'controller';
+import { UserDTO } from 'models/dto/user.dto';
 
 // dev logger
 export const routeLogger = (req: Request, res: Response, next: NextFunction) => {
@@ -22,12 +24,11 @@ export const asyncMiddleware = (fn: any) => (req: Request, res: Response, next: 
   Promise.resolve(fn(req, res, next)).catch(next);
 };
 
-// FIXME: fix request type
-export const withAuth = (req: any, res: Response, next: NextFunction) => {
+export const withAuth = (req: AppRequest, res: Response, next: NextFunction) => {
   const token = req.cookies.token;
   try {
     if (!token || typeof token != 'string') return res.status(401).send('Unauthorized: No token provided');
-    const decoded: any = jwt.verify(token, getSecret());
+    const decoded = jwt.verify(token, getSecret()) as UserDTO;
     // logger.info('withAuth : ', decoded);
     req.user = decoded;
     next();

@@ -38,8 +38,9 @@ const PairsTable = () => {
 
   // Initial Fetch
   useEffect(() => {
+    if (!tournament) return;
     (async () => setData(await fetchData(tournament.id!)))();
-  }, [tournament.id]);
+  }, [tournament]);
 
   // User messages
   function showErrorMessage(message: string) {

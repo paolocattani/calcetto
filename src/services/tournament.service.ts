@@ -27,6 +27,8 @@ export const postTournament = async ({ model }: PostTournamentRequest): Promise<
       body: JSON.stringify(model),
     });
     const result: TournamentDTO = await response.json();
+    console.log('postTournament : ', result);
+
     return { result };
   } catch (e) {
     handleError(e);

@@ -21,7 +21,7 @@ interface ModalProps {
 //https://medium.com/@renatognunes/react-hooks-passing-child-component-state-up-with-useref-de88401c2654
 const Wrapper: React.FC = (): JSX.Element => {
   const tournament = useSelector(TournamentSelector.getTournament)!;
-  const selected = useSelector(Stage1Selector.getSelectedRows);
+  const selected = useSelector(Stage1Selector.getSelectedPairs);
   const [pairsList, setPairsList] = useState<PairDTO[]>([]);
   const [autoOrder /*, setAutoOrder*/] = useState<boolean>(true);
   const hideError: ModalProps = { show: false, message: '' };
@@ -33,6 +33,7 @@ const Wrapper: React.FC = (): JSX.Element => {
   }
   function goToStage2() {
     // TODO: eseguire controlli
+
     console.log('goToStage2 : ', selected);
     currentHistory.push('/stage2');
   }
@@ -55,7 +56,7 @@ const Wrapper: React.FC = (): JSX.Element => {
             onChange={() => setAutoOrder(!autoOrder)}
           />
         */}
-        <Button variant="success" className="float-right" onClick={goToStage2}>
+        <Button variant="success" className="float-right" onClick={goToStage2} disabled={selected.length < 4}>
           Prosegui
         </Button>
       </ListGroup.Item>

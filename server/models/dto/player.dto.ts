@@ -1,5 +1,3 @@
-import User from '../sequelize/user.model';
-
 export interface PlayerDTO {
   id: number;
   name: string;
@@ -7,8 +5,8 @@ export interface PlayerDTO {
   alias: string;
   label: string;
   role: PlayerRole;
-  email: string;
-  phone: string;
+  email?: string;
+  phone?: string;
   userId?: number;
   match_played: number;
   match_won: number;
