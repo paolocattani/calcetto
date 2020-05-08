@@ -7,7 +7,7 @@ import { SessionSelector } from 'selectors/session.selector';
 // Loading Modal
 type loadingModalPropsType = {
   show: boolean;
-  message: string;
+  message?: string;
   onHide?: () => void;
 };
 
@@ -20,7 +20,7 @@ export const LoadingModal: React.FC<loadingModalPropsType> = ({
     <Modal.Header closeButton>
       <Modal.Title>Caricamento....</Modal.Title>
     </Modal.Header>
-    <Modal.Body>{message}</Modal.Body>
+    <Modal.Body>{message ? message : 'Caricamento....'}</Modal.Body>
     <Modal.Footer>
       <Spinner animation="border" variant="light" />
       <Spinner animation="border" variant="primary" />

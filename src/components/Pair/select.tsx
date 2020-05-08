@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import Select, { Styles, ValueType, ActionMeta } from 'react-select';
+import Select, { Styles, ValueType, ActionMeta, components } from 'react-select';
 import { PairDTO } from 'models';
+import { SelectComponents } from 'react-select/src/components';
 
 interface PairSelectProps {
   // indice riga ( Stage2 )
@@ -13,6 +14,7 @@ interface PairSelectProps {
   getOptionLabel?: (option: PairDTO) => string;
   // Callback onChange
   onChange?: (value: ValueType<PairDTO>, rowIndex: number, actionMeta?: ActionMeta) => void;
+  components?: Partial<SelectComponents<PairDTO>>;
 }
 
 // Probabilmente il componente Select usa Ref.... Lascio cosi..
@@ -28,6 +30,7 @@ const PairsSelect: React.FC<PairSelectProps> = React.forwardRef(
 
     return (
       <Select
+        components={components}
         styles={styles}
         options={options}
         onChange={handleChange}

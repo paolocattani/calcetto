@@ -11,6 +11,7 @@ import { ListGroup, Button } from 'react-bootstrap';
 import commonStyle from '../../common.module.css';
 import { Stage2Selector, TournamentSelector } from 'selectors';
 import { Stage2Action } from 'actions';
+import { LoadingModal } from 'components/core/generic/Commons';
 
 // import template from './template';
 
@@ -20,8 +21,10 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
   const currentHistory = useHistory();
   const dispatch = useDispatch();
   const tournament = useSelector(TournamentSelector.getTournament)!;
+
   const cells = useSelector(Stage2Selector.getCells);
   const rowNumber = useSelector(Stage2Selector.getRowsNumber);
+  const isLoading = useSelector(Stage2Selector.isLoading);
   /* Test
     const pairsListFromStore = template as PairDTO[];
   */
@@ -111,7 +114,9 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
         onSelectPair={onSelectPair}
       />
     </>
-  ) : null;
+  ) : (
+    <LoadingModal show={isLoading} />
+  );
 };
 
 export default withRouter(Stage2Handler);

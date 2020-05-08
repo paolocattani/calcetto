@@ -26,11 +26,8 @@ export const fetchPairs = (setterFunction: React.Dispatch<React.SetStateAction<P
   })();
 };
 
-export function valueFormatter(selectedOption: PairDTO) {
-  console.log('valueFormatter : ', selectedOption);
-  if (selectedOption.alias && selectedOption.alias !== '') return `${selectedOption.alias} ( ${selectedOption.id} )`;
-  return createAlias(selectedOption);
-}
+export const valueFormatter = (selectedOption: PairDTO) =>
+  selectedOption.alias ? `${selectedOption.alias}` : createAlias(selectedOption);
 
 export function createAlias(selectedOption: PairDTO) {
   console.log('createAlias : ', selectedOption);
@@ -38,7 +35,7 @@ export function createAlias(selectedOption: PairDTO) {
   const { player1, player2, id } = selectedOption;
   value += player1!.alias ? player1!.alias : player1!.name;
   value += ' - ' + player2!.alias ? player2!.alias : player2!.name;
-  value += ` ( ${id} )`;
+  // value += ` ( ${id} )`;
   return value;
 }
 

@@ -5,7 +5,8 @@ import Cell from './cell';
 import { getBaseLog } from 'components/core/utils';
 import { ICell, PairDTO } from 'models';
 import PairsSelect from 'components/Pair/select';
-import { ValueType, ActionMeta, Styles } from 'react-select';
+import { ValueType, ActionMeta, Styles, OptionProps } from 'react-select';
+import { valueFormatter } from 'components/Pair/helper';
 
 // https://www.kodbiro.com/blog/rorgchart-react-module-for-displaying-and-editing-data-in-org-chart/
 
@@ -97,8 +98,28 @@ function getTableBodyRows(
         height: 'auto',
       }),
     };
+    const getOptionLabel = (option: PairDTO) =>
+      option.id
+        ? `${option.placement}${option.stage1Name} : ${
+            option.alias ? option.alias : `${option.player1?.name} - ${option.player2?.name} `
+          }`
+        : 'Placeholder';
 
-    return <PairsSelect styles={styles} options={pairsSelect} rowIndex={rowIndex} onChange={onSelectPair} />;
+    const CustomOption = ({ innerRef, innerProps, data }: OptionProps<PairDTO>) => (
+      <div ref={innerRef} {...innerProps}>
+        {data.placement}
+      </div>
+    );
+    return (
+      <PairsSelect
+        //components={{ Option: CustomOption }}
+        styles={styles}
+        options={pairsSelect}
+        rowIndex={rowIndex}
+        onChange={onSelectPair}
+        getOptionLabel={getOptionLabel}
+      />
+    );
   };
 
   for (let ii = 1; ii <= rowNumber; ii++) {
