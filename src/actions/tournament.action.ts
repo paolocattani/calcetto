@@ -4,6 +4,8 @@ import {
   PostTournamentRequest,
   FetchTournamentsResponse,
   PostTournamentResponse,
+  UpdateTournamentRequest,
+  UpdateTournamentResponse,
 } from '../models/tournament.model';
 import { createAsyncAction, createAction } from 'typesafe-actions';
 import { Failure, Success, Request } from './constants';
@@ -25,4 +27,10 @@ export const TournamentAction = {
     `${ActionName} Save Tournament ${Success}`,
     `${ActionName} Save Tournament ${Failure}`
   )<PostTournamentRequest, PostTournamentResponse, Error>(),
+  // save a new tournament
+  updateTournament: createAsyncAction(
+    `${ActionName} Update Tournament Progress ${Request}`,
+    `${ActionName} Update Tournament Progress ${Success}`,
+    `${ActionName} Update Tournament Progress ${Failure}`
+  )<UpdateTournamentRequest, UpdateTournamentResponse, Error>(),
 };

@@ -11,14 +11,17 @@ type authType = {
   onHide: () => void;
 };
 
+// Componente per cancellazione utente
 const Delete = ({ show, onHide }: authType): JSX.Element => {
   const dispatch = useDispatch();
+  const currentHistory = useHistory();
+  // Dati utente
   const session = useSelector(SessionSelector.getSession);
   const [errorMessage, setErrorMessage] = useState('');
+  // Hook gestione campo password
   const { value: password, bind: bindPassword } = useInput('');
 
-  const currentHistory = useHistory();
-
+  // Util per mostrare messaggi all'utente
   const showError = (message: SetStateAction<string>) => {
     setErrorMessage(message);
     setTimeout(() => setErrorMessage(''), 3000);
@@ -51,16 +54,6 @@ const Delete = ({ show, onHide }: authType): JSX.Element => {
     }
   };
 
-  /*
-  const modalStyle: CSSProperties = {
-    textAlign: 'left',
-    width: '40vw',
-    height: 'auto',
-    margin: 'auto',
-    backgroundColor: '#343A40',
-    color: 'white'
-  };
-*/
   const error = errorMessage ? (
     <Alert key={'auth-alert'} variant={'danger'}>
       {errorMessage}{' '}

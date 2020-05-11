@@ -22,6 +22,7 @@ import { SessionSelector } from 'selectors/session.selector';
 const FTournament = () => {
   // Redux
   const dispatch = useDispatch();
+  const currentHistory = useHistory();
   const session = useSelector(SessionSelector.getSession);
 
   // Tournament list from Db
@@ -33,7 +34,6 @@ const FTournament = () => {
 
   const messageInitialState: IToastProps = { message: '', type: 'success' };
   const [message, setMessage] = useState(messageInitialState);
-  let currentHistory = useHistory();
 
   useEffect(() => {
     if (!tournamentsList || tournamentsList.length === 0) {
@@ -58,7 +58,7 @@ const FTournament = () => {
     setNewTournament(value);
   };
 
-  console.log('render tournament :', tournament, tournamentsList);
+  // console.log('render tournament :', tournament, tournamentsList);
 
   return (
     <>

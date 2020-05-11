@@ -15,12 +15,10 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
   const session = useSelector(SessionSelector.getSession);
   const [showModalDelete, setShowModalDelete] = useState(false);
 
-  const { value: name, bind: bindName /*reset: resetUsername*/ } = useInput(session.user!.name);
-  const { value: surname, bind: bindSurname /*reset: resetUsername*/ } = useInput(session.user!.surname);
-  const { value: phone, bind: bindPhone /*reset: resetUsername*/ } = useInput(session.user!.phone);
-  const { value: birthday, setValue: setBirthday /* bind: bindBirthday ,reset: resetUsername*/ } = useInput(
-    session.user!.birthday
-  );
+  const { value: name, bind: bindName } = useInput(session.user!.name);
+  const { value: surname, bind: bindSurname } = useInput(session.user!.surname);
+  const { value: phone, bind: bindPhone } = useInput(session.user!.phone);
+  const { value: birthday, setValue: setBirthday } = useInput(session.user!.birthday);
 
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');

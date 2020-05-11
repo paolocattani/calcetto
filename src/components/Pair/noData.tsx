@@ -8,6 +8,7 @@ interface NoDataProps {
   addRow: () => void;
 }
 
+// Componente da mostrare se non sono presenti coppie
 const noData: React.FC<NoDataProps> = ({ addRow, optionsLength, isEditable }) => {
   const MIN_PLAYERS = 8;
   const players = optionsLength - 1;

@@ -74,7 +74,7 @@ async function pairGenerator(): Promise<void> {
       player1Id: getRandomIntInclusive(1, players.length),
       player2Id: getRandomIntInclusive(1, players.length),
       alias: ii % 2 === 0 ? `PAlias${ii}` : '',
-      stage1Name: getRandomIntInclusive(1, 3),
+      // stage1Name: getRandomIntInclusive(1, 3),
     };
     await Pair.create(model);
   }

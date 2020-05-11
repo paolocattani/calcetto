@@ -54,6 +54,7 @@ export const GenericToast: React.FC<IToastProps> = ({ message, type }) =>
     </Toast>
   ) : null;
 
+// Util per loggare i dati utente in sessione
 export const LogSessionContext: React.FC<{}> = () => {
   const session = useSelector(SessionSelector.getSession);
 
@@ -68,6 +69,7 @@ export const LogSessionContext: React.FC<{}> = () => {
   );
 };
 
+// TODO: Componente fallback se route non trovata
 export function RedirectionControl(props: any): JSX.Element {
   const location = useLocation();
   return (

@@ -9,6 +9,7 @@ type propsType = {
   size?: 'sm' | 'lg' | 'xl';
 };
 
+// Modale generico
 const GenericModal: React.FC<propsType> = ({ title, show, onHide, component, size }: propsType) => {
   let showWrapper = show;
   if (!onHide) onHide = () => (showWrapper = false);

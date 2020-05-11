@@ -1,6 +1,5 @@
 import React, { lazy } from 'react';
 
-// import { OrganizationChartDemo } from '../Stage2/table';
 const lazyPlayer = lazy(() => import('../../Player/table'));
 const lazyTournament = lazy(() => import('../../Tournament/select'));
 const lazyPairs = lazy(() => import('../../Pair/table'));
@@ -83,7 +82,7 @@ export const routes: routeType[] = [
     label: 'Torneo fase 2',
     exact: true,
     ComponentToRender: lazyStage2 as any,
-    visible: !(process.env.NODE_ENV === 'production'),
+    visible: false,
     private: true,
     index: 100,
   },

@@ -2,7 +2,12 @@
 export interface FetchTournamentsRequest {
   tId?: number;
 }
+
 export interface PostTournamentRequest {
+  model: TournamentDTO;
+}
+
+export interface UpdateTournamentRequest {
   model: TournamentDTO;
 }
 
@@ -13,6 +18,10 @@ export interface FetchTournamentsResponse {
 export interface PostTournamentResponse {
   result: TournamentDTO | null;
 }
+export interface UpdateTournamentResponse {
+  result: TournamentDTO;
+}
+
 //
 export interface TournamentState {
   tournament: TournamentDTO | null;

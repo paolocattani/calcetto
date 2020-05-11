@@ -24,6 +24,8 @@ export const listAll = async (userId: number): Promise<TournamentDTO[]> => {
     return [];
   }
 };
+
+// Aggiorna un torneo esistente
 export const update = async (userId: number, model: TournamentDTO): Promise<boolean> => {
   logProcess(className + 'update', 'start');
   try {
@@ -40,6 +42,8 @@ export const update = async (userId: number, model: TournamentDTO): Promise<bool
   return true;
 };
 
+// TODO: si potrebbe creare un metodo piu generico per esiste la ricerca su uno qualsiasi dei campi della entity
+// Cerca un torneo tramite ID
 export const findById = async (userId: number, tId: number): Promise<TournamentDTO | null> => {
   try {
     logProcess(className + 'findById', 'start');
@@ -55,6 +59,7 @@ export const findById = async (userId: number, tId: number): Promise<TournamentD
   }
 };
 
+// Cerca trmite nome e data
 export const findByNameAndDate = async (name: string, date: Date): Promise<TournamentDTO | null> => {
   try {
     logProcess(className + 'findByNameAndDate', 'start');

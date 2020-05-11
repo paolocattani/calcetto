@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+// Hook per facilitare la gestione dei campi di una form nei componenti funzionali
 // FIXME:
 // https://rangle.io/blog/simplifying-controlled-inputs-with-hooks/
 export const useInput = (initialValue: any) => {
@@ -13,7 +14,7 @@ export const useInput = (initialValue: any) => {
       value,
       onChange: (event: React.FormEvent<HTMLSelectElement>) => {
         setValue(event.currentTarget.value);
-      }
-    }
+      },
+    },
   };
 };

@@ -3,14 +3,16 @@ import { useHistory } from 'react-router';
 import Stage1Handler from './handler';
 import { ListGroup, Button } from 'react-bootstrap';
 import { fetchPairs } from 'components/Pair/helper';
-import { PairDTO } from 'models';
+import { PairDTO, TournamentProgress } from 'models';
 import { useSelector, useDispatch } from 'react-redux';
 import { TournamentSelector } from 'selectors/tournament.selector';
 import { withRouter } from 'react-router-dom';
 import { Stage1Selector } from 'selectors/stage1.selector';
 import commonStyle from '../../common.module.css';
 import GenericModal from 'components/core/generic/GenericModal';
-import { Stage2Action } from 'actions';
+import { Stage2Action, TournamentAction } from 'actions';
+import { Session } from 'inspector';
+import { SessionSelector } from 'selectors/session.selector';
 
 interface ModalProps {
   show: boolean;
@@ -24,8 +26,10 @@ const Wrapper: React.FC = (): JSX.Element => {
   const currentHistory = useHistory();
   const dispatch = useDispatch();
 
+  const session = useSelector(SessionSelector.getSession);
   const tournament = useSelector(TournamentSelector.getTournament)!;
   const selected = useSelector(Stage1Selector.getSelectedPairs);
+
   const [pairsList, setPairsList] = useState<PairDTO[]>([]);
   const [autoOrder /*, setAutoOrder*/] = useState<boolean>(true);
   const hideError: ModalProps = { show: false, message: '' };
@@ -35,7 +39,16 @@ const Wrapper: React.FC = (): JSX.Element => {
     currentHistory.push('/tournament');
   }
   function goToStage2() {
-    // TODO: eseguire controlli
+    // TODO: eseguire controlli e eventualemente mostrare messaggi utente
+
+    // Se sono un utente che puo modificare e il torneo è in una fase minore ( vedi ordinamento Enum ) di quella attuale
+    // allora aggiorno lo stato del torneo
+    if (session.isAdmin && tournament.progress < TournamentProgress.Stage2) {
+      tournament.progress = TournamentProgress.Stage2;
+      dispatch(TournamentAction.updateTournament.request({ model: tournament }));
+    }
+    // Go to Stage1
+    currentHistory.push('/stage1');
 
     let count = pairsList.length - 1;
     while (count % 8 !== 0) count++;

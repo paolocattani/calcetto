@@ -9,20 +9,21 @@ import { LoadingModal, GenericToast, IToastProps } from '../core/generic/Commons
 import './style.css';
 import { RightArrowIcon } from '../core/icons';
 import { TournamentProgress } from 'models/tournament.model';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { TournamentSelector } from 'selectors/tournament.selector';
 import { withRouter } from 'react-router-dom';
 import { getEmptyPlayer } from 'services/player.service';
 import { cellEditProps, columns } from './editor';
 import { SessionSelector } from 'selectors/session.selector';
 import { PairDTO, PlayerDTO } from 'models';
+import { TournamentAction } from 'actions';
 
 const PairsTable = () => {
+  // Navigation
+  const currentHistory = useHistory();
+  const dispatch = useDispatch();
   const session = useSelector(SessionSelector.getSession);
   const tournament = useSelector(TournamentSelector.getTournament)!;
-
-  // Navigation
-  let currentHistory = useHistory();
 
   // States
   // User messages
@@ -252,16 +253,11 @@ const PairsTable = () => {
       return;
     }
 
-    // Update tournament progress
-    tournament.progress = TournamentProgress.Stage1;
-    try {
-      await fetch('/api/v1/tournament/', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(tournament),
-      });
-    } catch (error) {
-      console.log('errororroror :', error);
+    // Se sono un utente che puo modificare e il torneo è in una fase minore ( vedi ordinamento Enum ) di quella attuale
+    // allora aggiorno lo stato del torneo
+    if (session.isAdmin && tournament.progress < TournamentProgress.Stage1) {
+      tournament.progress = TournamentProgress.Stage1;
+      dispatch(TournamentAction.updateTournament.request({ model: tournament }));
     }
     // Go to Stage1
     currentHistory.push('/stage1');

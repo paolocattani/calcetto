@@ -8,6 +8,8 @@ import { SessionSelector } from 'selectors/session.selector';
 import { SessionAction } from 'actions';
 
 const applicationName = 'Calcetto C.S.M';
+
+// Header applicazione, include navbar
 export const Header: React.FC = () => {
   const dispatch = useDispatch();
   const session = useSelector(SessionSelector.getSession);

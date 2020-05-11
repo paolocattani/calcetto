@@ -12,6 +12,7 @@ interface AbstractIconProps extends IconProps {
   iconName: IconName;
 }
 
+// Wrapper per icone FontAwesome
 const Icon: React.FC<AbstractIconProps> = ({ size, prefix, iconName, color }) => (
   <FontAwesomeIcon color={color} size={size} icon={findIconDefinition({ prefix, iconName })} />
 );

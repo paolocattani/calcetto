@@ -4,6 +4,8 @@ import {
   TournamentDTO,
   PostTournamentRequest,
   PostTournamentResponse,
+  UpdateTournamentRequest,
+  UpdateTournamentResponse,
 } from '../models/tournament.model';
 
 export const fetchTournaments = async (request: FetchTournamentsRequest): Promise<FetchTournamentsResponse> => {
@@ -19,6 +21,7 @@ export const fetchTournaments = async (request: FetchTournamentsRequest): Promis
     return { results: [] };
   }
 };
+
 export const postTournament = async ({ model }: PostTournamentRequest): Promise<PostTournamentResponse> => {
   try {
     const response = await fetch('/api/v1/tournament', {
@@ -33,6 +36,21 @@ export const postTournament = async ({ model }: PostTournamentRequest): Promise<
   } catch (e) {
     handleError(e);
     return { result: null };
+  }
+};
+
+export const updateTournament = async ({ model }: UpdateTournamentRequest): Promise<UpdateTournamentResponse> => {
+  try {
+    const response = await fetch('/api/v1/tournament', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(model),
+    });
+    const result: TournamentDTO = await response.json();
+    return { result };
+  } catch (e) {
+    handleError(e);
+    return { result: model };
   }
 };
 

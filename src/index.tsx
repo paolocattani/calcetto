@@ -26,3 +26,10 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 process.env.NODE_ENV !== 'production' ? serviceWorker.unregister() : serviceWorker.register();
+
+// Redefine console so it does not in production env
+if (process.env.NODE_ENV === 'production') {
+  if (!window.console) (window as any).console = {};
+  var methods = ['log', 'debug', 'warn', 'info'];
+  for (var i = 0; i < methods.length; i++) (window as any).console[methods[i]] = () => {};
+}
