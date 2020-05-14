@@ -1,5 +1,5 @@
 import { put, call, StrictEffect, takeEvery } from 'redux-saga/effects';
-import { PairAction, Stage2Action } from 'actions';
+import { Stage2Action } from 'actions';
 import { fetchStage2 } from 'services/stage2.service';
 import { FetchStage2Response } from 'models';
 

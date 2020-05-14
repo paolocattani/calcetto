@@ -1,4 +1,4 @@
-import { RootState, Stage1Row, PairDTO, ICell } from 'models';
+import { RootState, ICell } from 'models';
 
 // Get state from store
 export const Stage2Selector = {

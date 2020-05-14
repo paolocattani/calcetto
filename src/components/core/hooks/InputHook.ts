@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // Hook per facilitare la gestione dei campi di una form nei componenti funzionali
-// FIXME:
+// FIXME: usare generics
 // https://rangle.io/blog/simplifying-controlled-inputs-with-hooks/
 export const useInput = (initialValue: any) => {
   const [value, setValue] = useState(initialValue);

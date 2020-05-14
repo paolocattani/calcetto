@@ -28,11 +28,14 @@ export const getSecret = () => (process.env.SERVER_HASH ? process.env.SERVER_HAS
 
 export const generateHashSecret = (email: string, password: string) => email + getSecret() + password;
 
-export const generateToken = (value: User | UserDTO) =>
-  jwt.sign({ ...value }, getSecret(), { expiresIn: '8h', algorithm: 'HS256' });
+export const generateToken = (value: UserDTO) =>
+  jwt.sign({ ...value }, getSecret(), {
+    expiresIn: process.env.SERVER_TOKEN_EXPIRES_IN || '8h',
+    algorithm: 'HS256',
+  });
 
 export const addUserCookies = (user: UserDTO, res: Response): void => {
-  logProcess(className + 'addUserCookies', 'start');
+  logProcess(className + 'addUserCookies', `start ${process.env.SERVER_TOKEN_EXPIRES_IN || '8h'}`);
   res.cookie('token', generateToken(user), { httpOnly: true });
   logProcess(className + 'addUserCookies', 'end');
 };

@@ -21,7 +21,7 @@ import {
 import { AppRequest } from './index';
 const router = Router();
 
-router.use('/', (req, res, next) => {
+router.use('/', (req: Request, res: Response, next: NextFunction) => {
   if (isDevMode()) logger.info(`Auth Manager : ${req.method} ${req.originalUrl.replace('/api/v1/auth', '')} `);
   next();
 });
@@ -41,8 +41,7 @@ router.get(
 router.get(
   '/logout',
   withAuth,
-  asyncMiddleware(async (req: any, res: Response, next: NextFunction) => {
-    // FIXME: logout
+  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     res.cookie('token', { expires: new Date(Date.now()), httpOnly: true });
     return res.status(200).json({ message: 'logout complete' });
   })

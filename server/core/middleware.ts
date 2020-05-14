@@ -24,19 +24,28 @@ export const asyncMiddleware = (fn: any) => (req: Request, res: Response, next: 
   Promise.resolve(fn(req, res, next)).catch(next);
 };
 
+// Controllo autenticazione. Da utilizzare per tutte le API che richiedono autenticazione
 export const withAuth = (req: AppRequest, res: Response, next: NextFunction) => {
   const token = req.cookies.token;
-  try {
-    if (!token || typeof token != 'string') return res.status(401).send('Unauthorized: No token provided');
-    const decoded = jwt.verify(token, getSecret()) as UserDTO;
+  if (!token || typeof token != 'string') return res.status(401).send('Unauthorized: No token provided');
+  const [user, isTokenValid] = safeVerifyToken(token);
+  if (isTokenValid && user) {
     // logger.info('withAuth : ', decoded);
-    req.user = decoded;
+    req.user = user;
     next();
+  } else {
+    logger.error('Unauthorized:  Token Expired ');
+    return res.status(401).send('Unauthorized: Invalid token');
+  }
+};
+
+// wrapper per verificare il token
+export const safeVerifyToken = (token: any): [UserDTO | null, boolean] => {
+  let decoded = null;
+  try {
+    decoded = jwt.verify(token, getSecret()) as UserDTO;
+    return [decoded, true];
   } catch (error) {
-    if (error instanceof TokenExpiredError) {
-      logger.error('Unauthorized:  Token Expires ');
-      return res.status(401).send('Unauthorized: Invalid token');
-    }
-    return res.status(500).send('Unhandled Authentication Error');
+    return [null, false];
   }
 };

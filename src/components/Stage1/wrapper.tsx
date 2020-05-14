@@ -11,7 +11,6 @@ import { Stage1Selector } from 'selectors/stage1.selector';
 import commonStyle from '../../common.module.css';
 import GenericModal from 'components/core/generic/GenericModal';
 import { Stage2Action, TournamentAction } from 'actions';
-import { Session } from 'inspector';
 import { SessionSelector } from 'selectors/session.selector';
 
 interface ModalProps {

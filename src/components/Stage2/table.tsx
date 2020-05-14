@@ -5,8 +5,8 @@ import Cell from './cell';
 import { getBaseLog } from 'components/core/utils';
 import { ICell, PairDTO } from 'models';
 import PairsSelect from 'components/Pair/select';
-import { ValueType, ActionMeta, Styles, OptionProps } from 'react-select';
-import { valueFormatter } from 'components/Pair/helper';
+import { ValueType, ActionMeta, Styles /*, OptionProps */ } from 'react-select';
+// import { valueFormatter } from 'components/Pair/helper';
 
 // https://www.kodbiro.com/blog/rorgchart-react-module-for-displaying-and-editing-data-in-org-chart/
 
@@ -104,12 +104,13 @@ function getTableBodyRows(
             option.alias ? option.alias : `${option.player1?.name} - ${option.player2?.name} `
           }`
         : 'Placeholder';
-
+    /* TODO:
     const CustomOption = ({ innerRef, innerProps, data }: OptionProps<PairDTO>) => (
       <div ref={innerRef} {...innerProps}>
         {data.placement}
       </div>
     );
+    */
     return (
       <PairsSelect
         //components={{ Option: CustomOption }}

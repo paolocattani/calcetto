@@ -32,7 +32,7 @@ export const valueFormatter = (selectedOption: PairDTO) =>
 export function createAlias(selectedOption: PairDTO) {
   console.log('createAlias : ', selectedOption);
   let value = `${selectedOption.rowNumber} : `;
-  const { player1, player2, id } = selectedOption;
+  const { player1, player2 } = selectedOption;
   value += player1!.alias ? player1!.alias : player1!.name;
   value += ' - ' + player2!.alias ? player2!.alias : player2!.name;
   // value += ` ( ${id} )`;

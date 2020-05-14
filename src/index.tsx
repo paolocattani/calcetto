@@ -30,6 +30,5 @@ process.env.NODE_ENV !== 'production' ? serviceWorker.unregister() : serviceWork
 // Redefine console so it does not in production env
 if (process.env.NODE_ENV === 'production') {
   if (!window.console) (window as any).console = {};
-  var methods = ['log', 'debug', 'warn', 'info'];
-  for (var i = 0; i < methods.length; i++) (window as any).console[methods[i]] = () => {};
+  ['log', 'debug', 'warn', 'info'].forEach((e) => ((window as any).console[e] = () => {}));
 }
