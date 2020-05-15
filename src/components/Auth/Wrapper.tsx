@@ -10,7 +10,7 @@ const Register = lazy(() => import('./Register'));
 const AuthWrapper: React.FC = (): JSX.Element => {
   // State
   const [register, setRegister] = useState(false); // Mostra form registrazione/login
-  const [errorMessage, setErrorMessage] = useState(useSelector(SessionSelector.getMessage)?.message || '');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const title = register ? 'Registrati' : 'Login';
   const body = register ? <Register setErrorMessage={setErrorMessage} /> : <Login setErrorMessage={setErrorMessage} />;

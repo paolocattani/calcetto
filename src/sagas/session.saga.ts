@@ -21,7 +21,9 @@ https://github.com/redux-saga/redux-saga/blob/master/docs/advanced/Channels.md#u
 https://github.com/redux-saga/redux-saga/issues/940#issuecomment-298170212
 */
 
-function* watchSessionSaga(): Generator<StrictEffect, void, any> {
+function* watchSessionSaga(
+  action: ReturnType<typeof SessionAction.sessionControl.request>
+): Generator<StrictEffect, void, any> {
   try {
     console.log('watchSessionSaga : start');
     const eventChannel = new EventSource('/sse/v1/session');
@@ -29,8 +31,9 @@ function* watchSessionSaga(): Generator<StrictEffect, void, any> {
     while (true) {
       const message: Message = yield take(channel);
       if (message) {
-        put(SessionAction.updateSession({ message: { type: 'danger', message: message.message! } }));
         console.log('Message from queue : ', message);
+        yield put(SessionAction.updateSession({ message: { type: 'danger', message: 'La tua sessione è scaduta' } }));
+        action.payload.history.push('/login');
       }
     }
   } catch (err) {

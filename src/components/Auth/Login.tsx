@@ -45,7 +45,11 @@ const Login: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
         // Messaggio di benvenuto
         const message: UserMessage = { type: 'success', message: `Bentornato ${result.username} !` };
         dispatch(SessionAction.updateSession({ user: result, message }));
-        dispatch(SessionAction.sessionControl.request({}));
+        dispatch(
+          SessionAction.sessionControl.request({
+            history: currentHistory,
+          })
+        );
         currentHistory.push('/');
       } else {
         if (response.status === 401) showError('Utente o Password errata');

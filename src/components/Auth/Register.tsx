@@ -8,7 +8,7 @@ import { emailRegExp, passwordRegExp } from '../core/utils';
 import { UserDTO } from 'models/user.model';
 import { SessionAction } from 'actions';
 import { useDispatch } from 'react-redux';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { withRouter, RouteComponentProps, useHistory } from 'react-router-dom';
 import { PlayerRole, UserMessage } from 'models';
 
 interface PropsType extends RouteComponentProps {
@@ -25,6 +25,7 @@ const playerRoles = [
 // https://medium.com/@faizanv/authentication-for-your-react-and-express-application-w-json-web-tokens-923515826e0#6563
 const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
   const dispatch = useDispatch();
+  const currentHistory = useHistory();
   const { value: username, bind: bindUsername, reset: resetUsername } = useInput('');
   const { value: name, bind: bindName, reset: resetName } = useInput('');
   const { value: surname, bind: bindSurname, reset: resetSurname } = useInput('');
@@ -127,7 +128,7 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
         // Messaggio di benvenuto
         const message: UserMessage = { type: 'success', message: `Benvenuto ${result.username} !` };
         dispatch(SessionAction.updateSession({ user: result, message }));
-        dispatch(SessionAction.sessionControl.request({}));
+        dispatch(SessionAction.sessionControl.request({ history: currentHistory }));
       } else {
         switch (response.status) {
           case 401:

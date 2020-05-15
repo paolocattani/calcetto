@@ -5,11 +5,12 @@ import 'react-datepicker/dist/react-datepicker.css';
 import 'typeface-roboto';
 import App from './components/App/App';
 import * as serviceWorker from './serviceWorker';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, useHistory } from 'react-router-dom';
 import it from 'date-fns/locale/it';
 import { setDefaultLocale, registerLocale } from 'react-datepicker';
 import { store } from 'store';
 import { Provider } from 'react-redux';
+
 setDefaultLocale('it');
 registerLocale('it', it);
 

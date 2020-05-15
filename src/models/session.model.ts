@@ -1,5 +1,6 @@
 import { UserDTO } from './user.model';
 import { PlayerRole, UserMessage } from 'models';
+import * as H from 'history';
 
 export interface SessionState {
   user?: UserDTO;
@@ -24,7 +25,9 @@ export interface SessionDTO {}
 
 // Request
 export interface CheckAuthenticationRequest {}
-export interface WatchSessionRequest {}
+export interface WatchSessionRequest {
+  history: H.History<unknown>;
+}
 export interface LoginRequest {}
 export interface RegisterRequest {}
 
