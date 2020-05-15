@@ -9,16 +9,17 @@ import { UserDTO } from 'models/user.model';
 import { SessionAction } from 'actions';
 import { useDispatch } from 'react-redux';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { PlayerRole, UserMessage } from 'models';
 
 interface PropsType extends RouteComponentProps {
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const playerRoles = [
-  { value: 'No', label: 'Non sono un giocatore' },
-  { value: 'Portiere', label: 'Portiere' },
-  { value: 'Attaccante', label: 'Attaccante' },
-  { value: 'Master', label: 'Master' },
+  { value: PlayerRole.None, label: 'Non sono un giocatore' },
+  { value: PlayerRole.GoalKeeper, label: 'Portiere' },
+  { value: PlayerRole.Striker, label: 'Attaccante' },
+  { value: PlayerRole.Master, label: 'Master' },
 ];
 
 // https://medium.com/@faizanv/authentication-for-your-react-and-express-application-w-json-web-tokens-923515826e0#6563
@@ -32,11 +33,8 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
   const { value: password, bind: bindPassword, reset: resetPassword } = useInput('');
   const { value: cPassword, bind: bindCPassword, reset: resetCPassword } = useInput('');
   const { value: phone, bind: bindPhone, reset: resetPhone } = useInput('');
-  const { value: birthday, setValue: setBirthday, /*bind: bindBirthday, */ reset: resetBirthday } = useInput('');
-  const { value: playerRole, setValue: setPlayerRole, /*bind: bindPlayerRole, */ reset: resetPlayerRole } = useInput({
-    value: 'No',
-    label: 'Non sono un giocatore',
-  });
+  const { value: birthday, setValue: setBirthday, reset: resetBirthday } = useInput('');
+  const { value: playerRole, setValue: setPlayerRole, reset: resetPlayerRole } = useInput(playerRoles[0]);
 
   const showError = (message: SetStateAction<string>) => {
     setErrorMessage(message);
@@ -117,27 +115,19 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
   const handleSubmit = async (evt: React.SyntheticEvent) => {
     evt.preventDefault();
     if (!isValid()) return;
-    const model = {
-      username,
-      name,
-      surname,
-      email,
-      cEmail,
-      password,
-      cPassword,
-      phone,
-      birthday,
-      playerRole,
-    };
+
     try {
       const response = await fetch('/api/v1/auth/register', {
         method: 'POST',
-        body: JSON.stringify(model),
+        body: JSON.stringify({ username, name, surname, email, password, phone, birthday, playerRole }),
         headers: { 'Content-Type': 'application/json' },
       });
       const result: UserDTO = await response.json();
       if (response.ok && result) {
-        dispatch(SessionAction.updateSession(result));
+        // Messaggio di benvenuto
+        const message: UserMessage = { type: 'success', message: `Benvenuto ${result.username} !` };
+        dispatch(SessionAction.updateSession({ user: result, message }));
+        dispatch(SessionAction.sessionControl.request({}));
       } else {
         switch (response.status) {
           case 401:

@@ -5,6 +5,7 @@ import { RootState } from 'models';
 import { TournamentReducer, PlayerReducer, PairReducer, SessionReducer, Stage1Reducer, Stage2Reducer } from 'reducers';
 import { TournamentsSagas, PlayersSagas, PairsSagas, SessionSagas } from 'sagas';
 import { Stage2Sagas } from 'sagas/stage2.saga';
+// import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 
 // https://redux-saga.js.org/docs/introduction/BeginnerTutorial.html
 // custom compose for the redux devtool extension
@@ -30,6 +31,7 @@ const commonReducers: ReducersMapObject<RootState> = {
   sessionState: SessionReducer,
   stage1State: Stage1Reducer,
   stage2State: Stage2Reducer,
+  //routing: routerReducer
 };
 
 // Meet the Store

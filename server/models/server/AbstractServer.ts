@@ -21,6 +21,7 @@ import chalk from 'chalk';
 import path from 'path';
 import cluster from 'cluster';
 import { cpus as osCpus } from 'os';
+import { Z_SYNC_FLUSH } from 'zlib';
 
 /* Interface */
 export interface IServer {
@@ -67,15 +68,19 @@ export abstract class AbstractServer implements IServer {
       this.application
         .options('*', cors(this.corsOptions)) // Preflight Request
         .use(morgan(isProductionMode() ? 'combined' : 'common'))
-        .disable('x-powered-by')
-        .use(compression())
+        // Escludo compression per 'text/event-stream'
+        .use(
+          //https://github.com/expressjs/compression/issues/61
+          compression({
+            filter: (req, res) => res.getHeader('Content-Type') != 'text/event-stream',
+          })
+        )
         .use(helmet({ dnsPrefetchControl: { allow: true } }))
         //this.application.set('trust proxy', 1);
         .use(json())
         .use(urlencoded({ extended: false }))
         .use(cookieParser())
-        .use(cors(this.corsOptions))
-        .disable('x-powered-by')
+        .disable('X-Powered-By')
         .all('*', routeLogger);
 
       this.routes(this.application);
@@ -88,7 +93,7 @@ export abstract class AbstractServer implements IServer {
         express.static(buildPath, {
           maxAge: process.env.STATIC_CONTENTS_CACHE ? process.env.STATIC_CONTENTS_CACHE : '0',
           lastModified: true,
-          redirect: true
+          redirect: true,
         })
       );
 
@@ -106,5 +111,5 @@ export abstract class AbstractServer implements IServer {
   public abstract routes(application: ExpressApplication): void;
 }
 
-process.on('uncaughtException', err => logger.fatal(err));
-process.on('unhandledRejection', err => logger.fatal(err));
+process.on('uncaughtException', (err) => logger.fatal(err));
+process.on('unhandledRejection', (err) => logger.fatal(err));

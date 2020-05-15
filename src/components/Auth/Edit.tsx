@@ -50,7 +50,7 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
       });
       await response.json();
       if (response.ok) {
-        dispatch(SessionAction.updateSession(model));
+        dispatch(SessionAction.updateSession({ user: model }));
         showSuccess('Aggiornamento effettuato ... ');
         setTimeout(() => history.push('/'), 3000);
       } else showError('Errore durante aggiornamento dati');

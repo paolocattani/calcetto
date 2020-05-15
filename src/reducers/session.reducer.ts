@@ -22,18 +22,19 @@ export const SessionReducer = createReducer<SessionState, Action>(initialState)
     errorMessage: message,
     isLoading: false,
   }))
-  // Check Authentication
-  .handleAction(SessionAction.updateSession, (state, { payload }) => ({
-    ...state,
-    user: payload ? payload : undefined,
-    isAuthenticated: payload ? true : false,
-    isAdmin: payload ? payload.role === UserRole.Admin : false,
-    isLoading: false,
-  }))
-  .handleAction(SessionAction.checkAuthentication.success, (state, { payload: { user } }) => ({
-    ...state,
-    user,
-    isAuthenticated: user ? true : false,
-    isAdmin: user ? user.role === UserRole.Admin : false,
-    isLoading: false,
-  }));
+  .handleAction(
+    [
+      SessionAction.checkAuthentication.success,
+      SessionAction.register.success,
+      SessionAction.login.success,
+      SessionAction.updateSession,
+    ],
+    (state, { payload: { user, message } }) => ({
+      ...state,
+      user,
+      isAuthenticated: user ? true : false,
+      isAdmin: user ? user.role === UserRole.Admin : false,
+      message,
+      isLoading: false,
+    })
+  );

@@ -31,6 +31,7 @@ export interface PlayerDTO {
 }
 
 export enum PlayerRole {
+  None = 'No',
   GoalKeeper = 'Portiere',
   Master = 'Master',
   Striker = 'Attaccante',

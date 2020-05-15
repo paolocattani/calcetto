@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 // Components
 import { Header } from '../Header/Header';
 import { LoadingModal /* LogSessionContext */ } from '../core/generic/Commons';
@@ -8,18 +8,21 @@ import routes from '../core/routing/Routes';
 import { ProtectedRoute } from '../core/routing/ProtectedRoute';
 // Style
 import './App.css';
-import { Container } from 'react-bootstrap';
+import { Container, Alert } from 'react-bootstrap';
 // FontAwesome 5
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SessionAction } from 'actions';
+import { SessionSelector } from '../../selectors/session.selector';
 
 library.add(fas, far);
 
 const App: React.FC = (_) => {
   const dispatch = useDispatch();
+  const message = useSelector(SessionSelector.getMessage);
+  const [, setShow] = useState<boolean>();
 
   // Check if user is already logged
   useEffect(() => {
@@ -32,6 +35,21 @@ const App: React.FC = (_) => {
       <Container fluid style={{ marginBottom: '20vh' }}>
         {/*<LogSessionContext /> */}
         {/*<RedirectionControl />*/}
+        {
+          // Show user message
+          message ? (
+            <Alert
+              variant={message.type}
+              key={'welcome-message'}
+              show={true}
+              onClose={() => setShow(false)}
+              dismissible
+            >
+              <Alert.Heading>{message.message}</Alert.Heading>
+            </Alert>
+          ) : null
+        }
+        {/* */}
         <Suspense fallback={<LoadingModal show={true} message={'....Caricamento'} />}>
           <Switch>
             {routes.map((route) => (

@@ -16,7 +16,7 @@ export const Header: React.FC = () => {
 
   const logout = async () => {
     const response = await fetch('/api/v1/auth/logout');
-    if (response.ok) dispatch(SessionAction.updateSession(null));
+    if (response.ok) dispatch(SessionAction.updateSession({ user: undefined }));
     // TODO: gestire messaggi utente
   };
 

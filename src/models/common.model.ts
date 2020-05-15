@@ -8,3 +8,8 @@ export interface RootState {
   stage2State: Stage2State;
   sessionState: SessionState;
 }
+
+export interface UserMessage {
+  type: 'success' | 'warning' | 'danger';
+  message: string;
+}

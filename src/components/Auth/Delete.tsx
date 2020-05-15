@@ -41,7 +41,7 @@ const Delete = ({ show, onHide }: authType): JSX.Element => {
       });
       const result = await response.json();
       if (response.ok && result) {
-        dispatch(SessionAction.updateSession(null));
+        dispatch(SessionAction.updateSession({}));
         onHide();
         currentHistory.push('/');
       } else {

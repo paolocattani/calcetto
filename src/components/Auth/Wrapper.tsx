@@ -1,6 +1,8 @@
 import React, { useState, CSSProperties, lazy } from 'react';
 import { Button, Container, Alert, Card, Col } from 'react-bootstrap';
 import { ToggleOn, ToggleOff } from '../core/icons';
+import { useSelector } from 'react-redux';
+import { SessionSelector } from 'selectors/session.selector';
 
 const Login = lazy(() => import('./Login'));
 const Register = lazy(() => import('./Register'));
@@ -8,7 +10,7 @@ const Register = lazy(() => import('./Register'));
 const AuthWrapper: React.FC = (): JSX.Element => {
   // State
   const [register, setRegister] = useState(false); // Mostra form registrazione/login
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState(useSelector(SessionSelector.getMessage)?.message || '');
 
   const title = register ? 'Registrati' : 'Login';
   const body = register ? <Register setErrorMessage={setErrorMessage} /> : <Login setErrorMessage={setErrorMessage} />;

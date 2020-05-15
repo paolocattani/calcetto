@@ -1,7 +1,7 @@
-import { put, call, StrictEffect, takeEvery } from 'redux-saga/effects';
+import { put, call, StrictEffect, takeEvery, take, takeLatest } from 'redux-saga/effects';
 import { SessionAction } from 'actions/session.action';
 import { CheckAuthenticationRequest } from 'models';
-import { CheckAuthentication } from 'services/session.service';
+import { CheckAuthentication, createCommunicationChannel, Message } from 'services/session.service';
 
 function* checkAuthenticationSaga(
   action: ReturnType<typeof SessionAction.checkAuthentication.request>
@@ -14,4 +14,31 @@ function* checkAuthenticationSaga(
   }
 }
 
-export const SessionSagas = [takeEvery(SessionAction.checkAuthentication.request, checkAuthenticationSaga)];
+/*
+FIXME:
+https://github.com/redux-saga/redux-saga/issues/868
+https://github.com/redux-saga/redux-saga/blob/master/docs/advanced/Channels.md#using-the-eventchannel-factory-to-connect-to-external-events
+https://github.com/redux-saga/redux-saga/issues/940#issuecomment-298170212
+*/
+
+function* watchSessionSaga(): Generator<StrictEffect, void, any> {
+  try {
+    console.log('watchSessionSaga : start');
+    const eventChannel = new EventSource('/sse/v1/session');
+    const channel = yield call(createCommunicationChannel, eventChannel);
+    while (true) {
+      const message: Message = yield take(channel);
+      if (message) {
+        put(SessionAction.updateSession({ message: { type: 'danger', message: message.message! } }));
+        console.log('Message from queue : ', message);
+      }
+    }
+  } catch (err) {
+    console.log('watchSessionSaga.err : ', err);
+  }
+}
+
+export const SessionSagas = [
+  takeEvery(SessionAction.checkAuthentication.request, checkAuthenticationSaga),
+  takeLatest(SessionAction.sessionControl.request, watchSessionSaga),
+];

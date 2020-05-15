@@ -4,6 +4,8 @@ import React, { SetStateAction } from 'react';
 import { useHistory, RouteComponentProps, withRouter } from 'react-router-dom';
 import { SessionAction } from 'actions';
 import { useDispatch } from 'react-redux';
+import { UserDTO } from 'models/user.model';
+import { UserMessage } from 'models';
 
 interface PropsType extends RouteComponentProps {
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
@@ -11,11 +13,11 @@ interface PropsType extends RouteComponentProps {
 
 // https://medium.com/@faizanv/authentication-for-your-react-and-express-application-w-json-web-tokens-923515826e0#6563
 const Login: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
-  const currentHistory = useHistory();
   const dispatch = useDispatch();
+  const currentHistory = useHistory();
 
-  const { value: username, bind: bindUsername /*reset: resetUsername*/ } = useInput('');
-  const { value: password, bind: bindPassword /*reset: resetPassword*/ } = useInput('');
+  const { value: username, bind: bindUsername } = useInput('');
+  const { value: password, bind: bindPassword } = useInput('');
 
   const showError = (message: SetStateAction<string>) => {
     setErrorMessage(message);
@@ -38,12 +40,16 @@ const Login: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
         body: JSON.stringify({ username, password }),
         headers: { 'Content-Type': 'application/json' },
       });
-      const result = await response.json();
+      const result: UserDTO = await response.json();
       if (response.ok && result) {
-        dispatch(SessionAction.updateSession(result));
+        // Messaggio di benvenuto
+        const message: UserMessage = { type: 'success', message: `Bentornato ${result.username} !` };
+        dispatch(SessionAction.updateSession({ user: result, message }));
+        dispatch(SessionAction.sessionControl.request({}));
         currentHistory.push('/');
       } else {
         if (response.status === 401) showError('Utente o Password errata');
+        else showError('Errore server. Riprovare piu tardi');
       }
     } catch (error) {
       console.log('onSubmitLogin : ', error);
