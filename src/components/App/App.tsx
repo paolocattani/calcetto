@@ -22,7 +22,7 @@ library.add(fas, far);
 const App: React.FC = (_) => {
   const dispatch = useDispatch();
   const message = useSelector(SessionSelector.getMessage);
-  const [show, setShow] = useState<boolean>(useSelector(SessionSelector.showMessage) || false);
+  const show = useSelector(SessionSelector.showMessage);
 
   // Check if user is already logged
   useEffect(() => {
@@ -34,7 +34,6 @@ const App: React.FC = (_) => {
       <Header />
       <Container fluid style={{ marginBottom: '20vh' }}>
         {/*<LogSessionContext /> */}
-        <p>{message ? `exists ${show}` : `not exists : ${show}`}</p>
         {/*<RedirectionControl />*/}
         {
           /* Show user message */
@@ -43,7 +42,7 @@ const App: React.FC = (_) => {
               variant={message.type}
               key={'welcome-message'}
               show={show}
-              onClose={() => setShow(false)}
+              onClose={() => dispatch(SessionAction.hideMessage({}))}
               dismissible
             >
               <Alert.Heading>{message.message}</Alert.Heading>

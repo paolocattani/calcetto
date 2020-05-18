@@ -57,13 +57,15 @@ export abstract class AbstractServer implements IServer {
       logger.info(`Starting server ${chalk.yellow(this.serverName)} as Cluster Mode..`);
       logger.info(`${osCpus().length} current available CPUs but using ${this.maxCPUs}`);
       for (let i = 0; i < this.maxCPUs! - 1; i++) cluster.fork();
-      cluster.on('exit', (worker, code, signal) =>
+      cluster.on('exit', (worker, code, signal) => {
         logger.error(
           `Node cluster worker ${chalk.blue(process.pid.toString())} for server ${chalk.yellow(
             this.serverName
-          )} died. code ${chalk.red.bold(code.toString())}, signal ${chalk.red.bold(signal)}`
-        )
-      );
+          )} died. Code ${chalk.red.bold(code.toString())}, Signal ${chalk.red.bold(signal)}`
+        );
+        logger.info('Starting a new worker....');
+        cluster.fork();
+      });
     } else {
       this.application
         .options('*', cors(this.corsOptions)) // Preflight Request
@@ -132,3 +134,5 @@ export abstract class AbstractServer implements IServer {
 
 process.on('uncaughtException', (err) => logger.fatal(err));
 process.on('unhandledRejection', (err) => logger.fatal(err));
+
+// Restart workers :  https://www.sitepoint.com/how-to-create-a-node-js-cluster-for-speeding-up-your-apps/

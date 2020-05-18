@@ -22,6 +22,7 @@ export const SessionReducer = createReducer<SessionState, Action>(initialState)
     errorMessage: message,
     isLoading: false,
   }))
+  .handleAction(SessionAction.hideMessage, (state, action) => ({ ...state, message: undefined, showMessage: false }))
   .handleAction(
     [
       SessionAction.checkAuthentication.success,

@@ -127,7 +127,7 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
       if (response.ok && result) {
         // Messaggio di benvenuto
         const message: UserMessage = { type: 'success', message: `Benvenuto ${result.username} !` };
-        dispatch(SessionAction.updateSession({ user: result, message }));
+        dispatch(SessionAction.updateSession({ user: result, message, showMessage: true }));
         dispatch(SessionAction.sessionControl.request({ history: currentHistory }));
       } else {
         switch (response.status) {
