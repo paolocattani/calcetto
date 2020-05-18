@@ -8,6 +8,7 @@ export interface SessionState {
   isAdmin: boolean;
   isLoading: boolean;
   message?: UserMessage;
+  showMessage?: boolean;
 }
 
 export interface UserRegistration {

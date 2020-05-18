@@ -16,6 +16,8 @@ import { PlayerRole } from 'models/dto/player.dto';
 
 // Const
 const className = 'Authentication Manager : ';
+const DEFAULT_TOKEN_EXPIRATION = '8h';
+const DEFAULT_HASH = 'dummy$Hash';
 
 // Password utils
 export const generatePassword = async (email: string, password: string) =>
@@ -24,22 +26,24 @@ export const generatePassword = async (email: string, password: string) =>
 export const comparePasswords = async (email: string, password: string, hash: string): Promise<boolean> =>
   await bcrypt.compare(generateHashSecret(email, password), hash);
 
-export const getSecret = () => (process.env.SERVER_HASH ? process.env.SERVER_HASH : 'dummy$Hash');
-
+export const getSecret = () => process.env.SERVER_HASH || DEFAULT_HASH;
+export const getExpiration = () => process.env.SERVER_TOKEN_EXPIRES_IN || DEFAULT_TOKEN_EXPIRATION;
 export const generateHashSecret = (email: string, password: string) => email + getSecret() + password;
 
+// Generate JWT Token
 export const generateToken = (value: UserDTO) =>
   jwt.sign({ ...value }, getSecret(), {
-    expiresIn: process.env.SERVER_TOKEN_EXPIRES_IN || '8h',
+    expiresIn: getExpiration(),
     algorithm: 'HS256',
   });
 
+// Add token to cookies
 export const addUserCookies = (user: UserDTO, res: Response): void => {
-  logProcess(className + 'addUserCookies', `start ${process.env.SERVER_TOKEN_EXPIRES_IN || '8h'}`);
+  logProcess(className + 'addUserCookies', ` : ${getExpiration()}`);
   res.cookie('token', generateToken(user), { httpOnly: true });
-  logProcess(className + 'addUserCookies', 'end');
 };
 
+// List all users
 export const listAll = async (): Promise<UserDTO[]> => {
   try {
     logProcess(className + 'listAll', 'start');
@@ -55,6 +59,7 @@ export const listAll = async (): Promise<UserDTO[]> => {
   }
 };
 
+// Delete users
 export const deleteUser = async (user: User): Promise<void> => {
   try {
     logProcess(className + 'deleteUser', 'start');
@@ -65,6 +70,7 @@ export const deleteUser = async (user: User): Promise<void> => {
   }
 };
 
+// Register new user
 export const registerUser = async (user: User, playerRole?: PlayerRole): Promise<UserDTO | null> => {
   try {
     logProcess(className + 'registerUser', 'start');
@@ -102,13 +108,6 @@ export const registerUser = async (user: User, playerRole?: PlayerRole): Promise
 export function isAdmin(user?: UserDTO): boolean {
   if (!user) return false;
   return user && user.role === UserRole.Admin;
-}
-
-export async function getUserFromToken(token: string | object): Promise<User | null> {
-  if (token && typeof token === 'string') {
-    const decodedUser = jwt.verify(token, getSecret()) as User;
-    return decodedUser.email ? await findUserByEmail(decodedUser.email) : decodedUser;
-  } else return null;
 }
 
 export async function findUserByEmail(email: string) {

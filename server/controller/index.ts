@@ -10,7 +10,7 @@ import stage1Router from './stage1.controller';
 import stage2Router from './stage2.controller';
 import authRouter from './auth.controller';
 // SSE
-import { sessionControl } from '../events/session.events';
+import { sessionControl } from '../events/events';
 
 export interface AppRequest extends Request {
   user?: UserDTO;
