@@ -29,12 +29,12 @@ export const SessionReducer = createReducer<SessionState, Action>(initialState)
       SessionAction.login.success,
       SessionAction.updateSession,
     ],
-    (state, { payload: { user, message } }) => ({
-      ...state,
+    (state, { payload: { user, message, showMessage } }) => ({
       user,
+      showMessage,
+      message,
       isAuthenticated: user ? true : false,
       isAdmin: user ? user.role === UserRole.Admin : false,
-      message,
       isLoading: false,
     })
   );

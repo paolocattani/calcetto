@@ -36,6 +36,7 @@ export interface RegisterRequest {}
 export interface AuthenticationResponse {
   user?: UserDTO;
   message?: UserMessage;
+  showMessage?: boolean;
 }
 
 // Error

@@ -6,7 +6,7 @@ import { create, deletePlayer, parseBody, listAll, listAllInTournament } from '.
 
 const router = Router();
 router.use('/', (req, res, next) => {
-  if (isDevMode()) logger.info(`Player Manager : ${req.method} ${req.originalUrl.replace('/api/v1/player', '')} `);
+  if (isDevMode()) logger.info(`Player Controller : ${req.method} ${req.originalUrl.replace('/api/v1/player', '')} `);
   next();
 });
 

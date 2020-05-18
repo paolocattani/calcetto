@@ -1,4 +1,4 @@
-import { Router, Application as ExpressApplication, Request } from 'express';
+import { Application as ExpressApplication, Request } from 'express';
 
 // Models
 import { UserDTO } from '../models/dto/user.dto';

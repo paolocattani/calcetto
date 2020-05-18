@@ -6,7 +6,7 @@
 import '../../core/env';
 import { logger } from '../../core/logger';
 import { isProductionMode } from '../../core/debug';
-import { routeLogger, routeNotFound } from '../../core/middleware';
+import { routeLogger } from '../../core/middleware';
 // Express
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -30,8 +30,8 @@ export interface IServer {
   maxCPUs?: number;
 }
 
-/* Constants */
 /* Class */
+// TODO: http://expressjs.com/en/advanced/best-practice-security.html
 export abstract class AbstractServer implements IServer {
   serverName: string;
   serverPort: number;
@@ -104,6 +104,25 @@ export abstract class AbstractServer implements IServer {
           )} : listening on port ${chalk.green(this.serverPort.toString())}`
         );
       });
+
+      // Server Status
+      setInterval(() => {
+        logger.info(chalk.bold.redBright(`--- Worker@${process.pid} status ---------------- `));
+        logger.info(chalk.greenBright('   Uptime        : '), process.uptime());
+        logger.info(chalk.greenBright('   CPU usage'));
+        const cpu = process.cpuUsage();
+        for (let key in cpu) {
+          logger.info(`     ${key}    : ${cpu[key as keyof NodeJS.CpuUsage]} `);
+        }
+        logger.info(chalk.greenBright('   Memory usage'));
+        const memory = process.memoryUsage();
+        for (let key in memory) {
+          logger.info(
+            `     ${key}    : ${Math.round((memory[key as keyof NodeJS.MemoryUsage] / 1024 / 1024) * 100) / 100} MB`
+          );
+        }
+        logger.info(chalk.bold.redBright('--------------------------------------- '));
+      }, 30 * 60 * 1000);
     }
   }
 

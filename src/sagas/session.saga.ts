@@ -32,7 +32,12 @@ function* watchSessionSaga(
       const message: Message = yield take(channel);
       if (message) {
         console.log('Message from queue : ', message);
-        yield put(SessionAction.updateSession({ message: { type: 'danger', message: 'La tua sessione è scaduta' } }));
+        yield put(
+          SessionAction.updateSession({
+            message: { type: 'danger', message: 'La tua sessione è scaduta' },
+            showMessage: true,
+          })
+        );
         action.payload.history.push('/login');
       }
     }

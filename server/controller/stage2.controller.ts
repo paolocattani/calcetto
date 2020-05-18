@@ -13,7 +13,7 @@ import { AppRequest } from './index';
 // all API path must be relative to /api/v1/tournament
 const router = Router();
 router.use('/', (req, res, next) => {
-  if (isDevMode()) logger.info(`Stage2 Manager : ${req.method} ${req.originalUrl.replace('/api/v1/stage2', '')} `);
+  if (isDevMode()) logger.info(`Stage2 Controller : ${req.method} ${req.originalUrl.replace('/api/v1/stage2', '')} `);
   next();
 });
 

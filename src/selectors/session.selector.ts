@@ -5,17 +5,23 @@ export const SessionSelector = {
   isLoading({ sessionState: { isLoading } }: RootState) {
     return isLoading;
   },
-  getMessage({ sessionState: { message } }: RootState) {
-    return message;
-  },
-  getUser({ sessionState: { user } }: RootState) {
-    return user;
-  },
+  // Authentication / Role
   isAdmin({ sessionState: { isAdmin } }: RootState) {
     return isAdmin;
   },
   isAuthenticated({ sessionState: { isAuthenticated } }: RootState) {
     return isAuthenticated;
+  },
+  // User Message
+  getMessage({ sessionState: { message } }: RootState) {
+    return message;
+  },
+  showMessage({ sessionState: { showMessage } }: RootState) {
+    return showMessage;
+  },
+  // User / Session
+  getUser({ sessionState: { user } }: RootState) {
+    return user;
   },
   getSession({ sessionState }: RootState) {
     return sessionState;

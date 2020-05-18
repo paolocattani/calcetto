@@ -22,7 +22,7 @@ import { AppRequest } from './index';
 const router = Router();
 
 router.use('/', (req: Request, res: Response, next: NextFunction) => {
-  if (isDevMode()) logger.info(`Auth Manager : ${req.method} ${req.originalUrl.replace('/api/v1/auth', '')} `);
+  if (isDevMode()) logger.info(`Auth Controller : ${req.method} ${req.originalUrl.replace('/api/v1/auth', '')} `);
   next();
 });
 

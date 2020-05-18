@@ -17,7 +17,7 @@ import { isAdmin } from '../manager/auth.manager';
 const router = Router();
 router.use('/', (req, res, next) => {
   if (isDevMode())
-    logger.info(`Tournament Manager : ${req.method} ${req.originalUrl.replace('/api/v1/tournament', '')} `);
+    logger.info(`Tournament Controller : ${req.method} ${req.originalUrl.replace('/api/v1/tournament', '')} `);
   next();
 });
 

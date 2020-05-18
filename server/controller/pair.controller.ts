@@ -12,7 +12,7 @@ import { rowToModel } from '../manager/pair.manager';
 const router = Router();
 
 router.use('/', (req, res, next) => {
-  if (isDevMode()) logger.info(`Pair Manager : ${req.method} ${req.originalUrl.replace('/api/v1/pair', '')} `);
+  if (isDevMode()) logger.info(`Pair Controller : ${req.method} ${req.originalUrl.replace('/api/v1/pair', '')} `);
   next();
 });
 

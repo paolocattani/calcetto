@@ -11,7 +11,7 @@ import { deleteStage1, updatePlacement, generateStage1Rows, getOpposite, updateC
 
 const router = Router();
 router.use('/', (req, res, next) => {
-  if (isDevMode()) logger.info(`Stage1 Manager : ${req.method} ${req.originalUrl.replace('/api/v1/stage1', '')} `);
+  if (isDevMode()) logger.info(`Stage1 Controller : ${req.method} ${req.originalUrl.replace('/api/v1/stage1', '')} `);
   next();
 });
 

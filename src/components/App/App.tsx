@@ -22,7 +22,7 @@ library.add(fas, far);
 const App: React.FC = (_) => {
   const dispatch = useDispatch();
   const message = useSelector(SessionSelector.getMessage);
-  const [show, setShow] = useState<boolean>(message ? true : false);
+  const [show, setShow] = useState<boolean>(useSelector(SessionSelector.showMessage) || false);
 
   // Check if user is already logged
   useEffect(() => {
