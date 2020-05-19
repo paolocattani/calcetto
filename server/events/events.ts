@@ -6,10 +6,11 @@ import { logger, logProcess } from '../core/logger';
 import { asyncMiddleware, safeVerifyToken } from '../core/middleware';
 import { DEFAULT_HEADERS, EOM, CHAR_SET } from './constants';
 import { SessionStatus, Message, ConnectedClient } from './types';
+import { date } from 'yup';
 
-const className = 'Session Events : ';
 let connectedClients: ConnectedClient[] = [];
 let ii = 0;
+
 export const sessionControl = asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
   req.socket.setTimeout(10000);
   const token = req.cookies.token;
@@ -21,7 +22,8 @@ export const sessionControl = asyncMiddleware(async (req: AppRequest, res: Respo
 
   // Aggiugo questo client a quelli collegati
   const id = ii++;
-  connectedClients.push({ token, response: res });
+  const currentDate = new Date();
+  connectedClients.push({ id: currentDate, token, response: res });
   logger.info(`New User connected . Total connected : ${connectedClients.length}`);
   // Controllo ogni 5 secondi
   // https://gist.github.com/akirattii/257d7efc8430c7e3fd0b4ec60fc7a768
@@ -36,14 +38,17 @@ export const sessionControl = asyncMiddleware(async (req: AppRequest, res: Respo
     // TODO: aggiornamento girone
   }, 5000);
 
-  // on Connection Close
-  res.on('close', () => {
-    logger.info(`User ${user?.username ?? ''} disconnected. . Total connected : ${connectedClients.length + 1}`);
+  const stopWatcher = () => {
+    connectedClients = connectedClients.filter((e) => e.id != currentDate);
+    logger.info(`User ${user?.username ?? ''} disconnected. . Total connected : ${connectedClients.length}`);
     if (intervalId) {
-      logger.info(`Closing ${id}`);
       clearInterval(intervalId);
     }
-  });
+  };
+
+  // on Connection Close
+  res.on('close', () => stopWatcher());
+  res.on('end', () => stopWatcher());
 });
 
 // Verifica se il token per questo client è ancora valido

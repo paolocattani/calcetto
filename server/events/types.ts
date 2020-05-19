@@ -11,6 +11,7 @@ export interface Message {
 }
 
 export interface ConnectedClient {
+  id: Date;
   token: string;
   response: Response;
 }

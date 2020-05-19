@@ -25,7 +25,9 @@ export interface UserRegistration {
 export interface SessionDTO {}
 
 // Request
-export interface CheckAuthenticationRequest {}
+export interface CheckAuthenticationRequest {
+  history: H.History<unknown>;
+}
 export interface WatchSessionRequest {
   history: H.History<unknown>;
 }

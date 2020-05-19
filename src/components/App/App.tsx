@@ -1,9 +1,9 @@
 import React, { Suspense, useEffect, useState } from 'react';
 // Components
 import { Header } from '../Header/Header';
-import { LoadingModal /* LogSessionContext */ } from '../core/generic/Commons';
+import { LoadingModal } from '../core/generic/Commons';
 // Routing
-import { Switch } from 'react-router';
+import { Switch, useHistory } from 'react-router';
 import routes from '../core/routing/Routes';
 import { ProtectedRoute } from '../core/routing/ProtectedRoute';
 // Style
@@ -21,13 +21,14 @@ library.add(fas, far);
 
 const App: React.FC = (_) => {
   const dispatch = useDispatch();
+  const currentHistory = useHistory();
   const message = useSelector(SessionSelector.getMessage);
   const show = useSelector(SessionSelector.showMessage);
 
   // Check if user is already logged
   useEffect(() => {
-    dispatch(SessionAction.checkAuthentication.request({}));
-  }, [dispatch]);
+    dispatch(SessionAction.checkAuthentication.request({ history: currentHistory }));
+  }, [currentHistory, dispatch]);
 
   return (
     <div className="App">

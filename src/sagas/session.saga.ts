@@ -1,14 +1,15 @@
 import { put, call, StrictEffect, takeEvery, take, takeLatest } from 'redux-saga/effects';
 import { SessionAction } from 'actions/session.action';
-import { CheckAuthenticationRequest } from 'models';
+import { AuthenticationResponse } from 'models';
 import { CheckAuthentication, createSessionChannel, Message } from 'services/session.service';
 
-function* checkAuthenticationSaga(
-  action: ReturnType<typeof SessionAction.checkAuthentication.request>
-): Generator<StrictEffect, void, any> {
+function* checkAuthenticationSaga({
+  payload,
+}: ReturnType<typeof SessionAction.checkAuthentication.request>): Generator<StrictEffect, void, any> {
   try {
-    const response: CheckAuthenticationRequest = yield call(CheckAuthentication, action.payload);
+    const response: AuthenticationResponse = yield call(CheckAuthentication, payload);
     yield put(SessionAction.checkAuthentication.success(response));
+    yield put(SessionAction.sessionControl.request({ history: payload.history }));
   } catch (err) {
     yield put(SessionAction.checkAuthentication.failure(err));
   }
