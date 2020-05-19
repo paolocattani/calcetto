@@ -3,7 +3,10 @@ import { UserDTO } from 'models/user.model';
 import { eventChannel, buffers, END } from 'redux-saga';
 
 export enum SessionStatus {
+  // Sessione scaduta, reindirizza l'utente alla login
   SESSION_EXPIRED = 'session_expired',
+  // Necessario aggiornamento dati su Stage1
+  NEED_REFRESH = 'need_refresh',
 }
 
 export interface Message {
@@ -25,7 +28,7 @@ export const CheckAuthentication = async ({}: CheckAuthenticationRequest): Promi
   }
 };
 
-export const createCommunicationChannel = (channel: EventSource) =>
+export const createSessionChannel = (channel: EventSource) =>
   eventChannel<Message>((emitter) => {
     // Listen for open channel
     const openListener = (event: Event) => console.log('Session Channel is now open.');

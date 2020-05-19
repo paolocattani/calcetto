@@ -12,4 +12,7 @@ export const Stage1Selector = {
   getSelectedPairs({ stage1State: { selectedPairs } }: RootState): PairDTO[] {
     return selectedPairs;
   },
+  getNeedRefresh({ stage1State: { needRefresh } }: RootState): boolean {
+    return needRefresh;
+  },
 };

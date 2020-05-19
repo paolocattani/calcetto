@@ -4,12 +4,18 @@ import { Stage1Action } from 'actions';
 import { getEmptyRowModel } from 'components/Pair/helper';
 
 const initialState: Stage1State = {
+  needRefresh: false,
   selectedPairs: [getEmptyRowModel('placeholder')],
   isLoading: false,
 };
 
 export const Stage1Reducer = createReducer<Stage1State, Action>(initialState)
-  // Request
+  // Gestione Watcher
+  // All'avvio del watcher reimposto needRefresh
+  .handleAction([Stage1Action.stage1Watcher.request], (state) => ({ ...state, needRefresh: false }))
+  .handleAction([Stage1Action.stage1Watcher.failure], (state) => ({ ...state }))
+  .handleAction([Stage1Action.stage1Watcher.success], (state) => ({ ...state, needRefresh: true }))
+  //
   .handleAction([Stage1Action.setSelectedPairs], (state, { payload: { stageName, rows } }) => {
     const selected = state.selectedRows ? state.selectedRows : new Map<string, Stage1Row[]>();
     selected.set(stageName, rows);

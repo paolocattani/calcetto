@@ -10,7 +10,7 @@ import { withRouter } from 'react-router-dom';
 import { Stage1Selector } from 'selectors/stage1.selector';
 import commonStyle from '../../common.module.css';
 import GenericModal from 'components/core/generic/GenericModal';
-import { Stage2Action, TournamentAction } from 'actions';
+import { Stage2Action, TournamentAction, Stage1Action } from 'actions';
 import { SessionSelector } from 'selectors/session.selector';
 
 interface ModalProps {
@@ -20,13 +20,17 @@ interface ModalProps {
 /**
  * Wraps multiple table components
  */
-//https://medium.com/@renatognunes/react-hooks-passing-child-component-state-up-with-useref-de88401c2654
 const Wrapper: React.FC = (): JSX.Element => {
   const currentHistory = useHistory();
   const dispatch = useDispatch();
 
+  // Session
   const session = useSelector(SessionSelector.getSession);
+  // Torneo
   const tournament = useSelector(TournamentSelector.getTournament)!;
+  // Sono presenti aggiornamenti
+  const needRefresh = useSelector(Stage1Selector.getNeedRefresh);
+  // Squadre selezionate
   const selected = useSelector(Stage1Selector.getSelectedPairs);
 
   const [pairsList, setPairsList] = useState<PairDTO[]>([]);
@@ -56,7 +60,9 @@ const Wrapper: React.FC = (): JSX.Element => {
     currentHistory.push('/stage2');
   }
 
-  useEffect(() => fetchPairs(setPairsList, tournament.id!), [tournament.id]);
+  useEffect(() => {
+    if (!pairsList || needRefresh) fetchPairs(setPairsList, tournament.id!);
+  }, [tournament.id, needRefresh, pairsList]);
 
   return (
     <>

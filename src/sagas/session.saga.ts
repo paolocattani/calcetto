@@ -1,7 +1,7 @@
 import { put, call, StrictEffect, takeEvery, take, takeLatest } from 'redux-saga/effects';
 import { SessionAction } from 'actions/session.action';
 import { CheckAuthenticationRequest } from 'models';
-import { CheckAuthentication, createCommunicationChannel, Message } from 'services/session.service';
+import { CheckAuthentication, createSessionChannel, Message } from 'services/session.service';
 
 function* checkAuthenticationSaga(
   action: ReturnType<typeof SessionAction.checkAuthentication.request>
@@ -27,7 +27,7 @@ function* watchSessionSaga(
   try {
     console.log('watchSessionSaga : start');
     const eventChannel = new EventSource('/sse/v1/session');
-    const channel = yield call(createCommunicationChannel, eventChannel);
+    const channel = yield call(createSessionChannel, eventChannel);
     while (true) {
       const message: Message = yield take(channel);
       if (message) {
