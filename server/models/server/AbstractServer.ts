@@ -21,7 +21,6 @@ import chalk from 'chalk';
 import path from 'path';
 import cluster from 'cluster';
 import { cpus as osCpus } from 'os';
-import { Z_SYNC_FLUSH } from 'zlib';
 
 /* Interface */
 export interface IServer {

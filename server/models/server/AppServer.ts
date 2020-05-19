@@ -1,7 +1,7 @@
 // Server
 import { CorsOptions } from 'cors';
 import { AbstractServer } from './AbstractServer';
-import { Application as ExpressApplication, NextFunction, Request, Response } from 'express';
+import { Application as ExpressApplication } from 'express';
 // Db
 import syncDb from '../sequelize';
 import { SyncOptions } from 'sequelize/types';
@@ -25,6 +25,7 @@ const whiteList: string[] = [
 ];
 
 export let dbConnection: Sequelize;
+
 // FIXME:
 const applicationCorsOption: CorsOptions = {
   origin: (origin, callback) =>
