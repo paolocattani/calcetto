@@ -3,7 +3,7 @@ import { isDevMode } from '../core/debug';
 import { Request, Response, NextFunction } from 'express';
 import chalk from 'chalk';
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
-import { getSecret } from '../manager/auth.manager';
+import { getSecret, isAdmin } from '../manager/auth.manager';
 import { AppRequest } from 'controller';
 import { UserDTO } from 'models/dto/user.dto';
 
@@ -37,6 +37,14 @@ export const withAuth = (req: AppRequest, res: Response, next: NextFunction) => 
     logger.error('Unauthorized:  Token Expired ');
     return res.status(401).send('Unauthorized: Invalid token');
   }
+};
+
+// Controllo se l'utente ha le autorizzazioni di amminstratore, altrimenti picche
+export const withAdminRights = (req: AppRequest, res: Response, next: NextFunction) => {
+  logger.info('withAdminRights : ', isAdmin(req.user));
+  if (!isAdmin(req.user)) {
+    return res.status(401).send('Unauthorized');
+  } else next();
 };
 
 // wrapper per verificare il token

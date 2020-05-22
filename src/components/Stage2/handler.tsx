@@ -25,33 +25,19 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
   const cells = useSelector(Stage2Selector.getCells);
   const rowNumber = useSelector(Stage2Selector.getRowsNumber);
   const isLoading = useSelector(Stage2Selector.isLoading);
-  /* Test
-    const pairsListFromStore = template as PairDTO[];
-  */
   const pairsListFromStore = useSelector(Stage1Selector.getSelectedPairs);
   const [pairsList, setPairsList] = useState<PairDTO[]>(pairsListFromStore);
-  // Numbero di coppie iniziare ( Fase 0 )
-  //const [rowNumber, setRowNumber] = useState<number>(0);
-
-  // TODO: agigungere controlli su Stage1
-  useEffect(() => {
-    if (cells) return;
-    // Trovo il multiplo di 8 piu vicino al numero di coppie selezionate
-    let count = pairsListFromStore.length - 1;
-    while (count % 8 !== 0) count++;
-    // Genero la struttura completa che poi andro a popolare tramite le azioni da parte dell'utente
-    dispatch(Stage2Action.fetchStage2.request({ tournamentId: tournament.id!, count }));
-  }, [cells, dispatch, pairsListFromStore.length, tournament.id]);
 
   function goBack() {
     currentHistory.push('/stage1');
   }
+
   // Callback tasto vittoria/sconfitta coppia : Sposta la coppia alla fase successiva
   const onClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     rowIndex: number,
     colIndex: number,
-    winner: boolean
+    isWinner: boolean
   ) => {
     const elements = [...cells!];
     // Coppia 1 e 2 dell'incontro corrente
@@ -66,14 +52,14 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
       current1 = elements![colIndex - 1][rowIndex - 1];
       current2 = elements![colIndex - 1][rowIndex - 2];
     }
-    next = elements![colIndex][current1.id - 1];
+    next = elements![colIndex][current1.matchId - 1];
+    console.log(' onClick : ', current1, current2, next);
 
-    current1.winner = winner;
-    current2.winner = !winner;
-    if (next) next.pair = winner ? current1.pair : current2.pair;
+    current1.isWinner = isWinner;
+    current2.isWinner = !isWinner;
+    if (next) next.pair = isWinner ? current1.pair : current2.pair;
+    dispatch(Stage2Action.updateCell.request({ cell1: current1, cell2: current2 }));
     dispatch(Stage2Action.setCells(elements));
-
-    //setCells(() => elements);
   };
 
   // Questa funzione viene richiamata quando viene selezionata una coppia nella prima colonna
@@ -94,7 +80,6 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
     setPairsList(pairs);
     elements[0][rowIndex - 1].pair = newPair;
     dispatch(Stage2Action.setCells(elements));
-    //setCells(() => elements);
   };
 
   console.log('render stage2 :', cells, pairsList, rowNumber);

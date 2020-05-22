@@ -23,7 +23,7 @@ interface NodeElement extends ICell {
 const Cell: React.FC<NodeElement> = ({
   onClick,
   name,
-  winner,
+  isWinner,
   span,
   rowIndex,
   colIndex,
@@ -34,7 +34,7 @@ const Cell: React.FC<NodeElement> = ({
 }) => {
   let icon: JSX.Element;
   if (isLast) icon = <TrophyIcon size="lg" color="gold" />;
-  else icon = winner ? <DoubleRightIcon size="lg" color="green" /> : <BanIcon size="1x" color="red" />;
+  else icon = isWinner ? <DoubleRightIcon size="lg" color="green" /> : <BanIcon size="1x" color="red" />;
 
   return (
     <td rowSpan={span} className={rowIndex % 2 === 0 ? [style.cell, style.borderBottom].join(' ') : style.cell}>
@@ -58,7 +58,7 @@ const Cell: React.FC<NodeElement> = ({
           <Button
             disabled={buttonDisabled}
             className={style.append}
-            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onClick(e, rowIndex, colIndex, !winner)}
+            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onClick(e, rowIndex, colIndex, !isWinner)}
           >
             {icon}
           </Button>

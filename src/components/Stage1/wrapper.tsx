@@ -10,7 +10,7 @@ import { withRouter } from 'react-router-dom';
 import { Stage1Selector } from 'selectors/stage1.selector';
 import commonStyle from '../../common.module.css';
 import GenericModal from 'components/core/generic/GenericModal';
-import { Stage2Action, TournamentAction, Stage1Action } from 'actions';
+import { Stage2Action, TournamentAction } from 'actions';
 import { SessionSelector } from 'selectors/session.selector';
 
 interface ModalProps {
@@ -50,18 +50,18 @@ const Wrapper: React.FC = (): JSX.Element => {
       tournament.progress = TournamentProgress.Stage2;
       dispatch(TournamentAction.updateTournament.request({ model: tournament }));
     }
-    // Go to Stage1
-    currentHistory.push('/stage1');
 
-    let count = pairsList.length - 1;
-    while (count % 8 !== 0) count++;
+    let count = 0;
+    if (pairsList.length > 4) {
+      count = pairsList.length - 1;
+      while (count % 8 !== 0) count++;
+    }
     dispatch(Stage2Action.fetchStage2.request({ tournamentId: tournament.id!, count }));
-    console.log('goToStage2 : ', selected);
     currentHistory.push('/stage2');
   }
 
   useEffect(() => {
-    if (!pairsList || needRefresh) fetchPairs(setPairsList, tournament.id!);
+    if (!pairsList || pairsList.length === 0 || needRefresh) fetchPairs(setPairsList, tournament.id!);
   }, [tournament.id, needRefresh, pairsList]);
 
   return (
@@ -69,6 +69,9 @@ const Wrapper: React.FC = (): JSX.Element => {
       <ListGroup.Item className={commonStyle.functionsList} key={'stage-button'}>
         <Button variant="secondary" onClick={goBack}>
           Gestione Coppie
+        </Button>
+        <Button variant="secondary" onClick={() => dispatch(Stage2Action.delete.request({ tId: tournament.id! }))}>
+          Reset Fase 2
         </Button>
         {/* FIXME:
           <Form.Check
@@ -80,8 +83,13 @@ const Wrapper: React.FC = (): JSX.Element => {
             onChange={() => setAutoOrder(!autoOrder)}
           />
         */}
-        <Button variant="success" className="float-right" onClick={goToStage2} disabled={selected.length < 4}>
-          Prosegui
+        <Button
+          variant="success"
+          className="float-right"
+          onClick={goToStage2}
+          disabled={selected.length < 4 && tournament.progress < TournamentProgress.Stage2}
+        >
+          {tournament.progress} - Prosegui
         </Button>
       </ListGroup.Item>
       <GenericModal

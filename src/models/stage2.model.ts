@@ -7,11 +7,13 @@ export interface Stage2State {
 }
 
 export interface ICell {
-  id: number;
+  matchId: number;
+  cellRowIndex: number;
+  cellColIndex: number;
   parentId: number;
   pair?: PairDTO;
   name?: string;
-  winner: boolean;
+  isWinner: boolean;
   placement?: number;
 }
 
@@ -25,9 +27,13 @@ export interface FetchStage2Response {
   rowsNumber: number;
 }
 
-// TODO:
 export interface UpdateStage2CellRequest {
   cell1: ICell;
   cell2: ICell;
 }
 export interface UpdateStage2CellResponse {}
+
+export interface DeleteStage2Request {
+  tId: number;
+}
+export interface DeleteStage2Response {}

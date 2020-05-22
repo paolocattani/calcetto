@@ -4,7 +4,7 @@ import { Router, Response, NextFunction } from 'express';
 
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
-import { asyncMiddleware, withAuth } from '../core/middleware';
+import { asyncMiddleware, withAuth, withAdminRights } from '../core/middleware';
 
 import { AppRequest } from './index';
 import { deleteStage1, updatePlacement, generateStage1Rows, getOpposite, updateCell } from '../manager/stage1.manager';
@@ -18,6 +18,7 @@ router.use('/', (req, res, next) => {
 router.post(
   '/placement',
   withAuth,
+  withAdminRights,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     const { rows } = req.body;
     await updatePlacement(rows);
@@ -31,6 +32,7 @@ router.post(
 router.delete(
   '/',
   withAuth,
+  withAdminRights,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     const { tId } = req.body;
     await deleteStage1(tId);
@@ -44,6 +46,7 @@ router.delete(
 router.post(
   '/cell',
   withAuth,
+  withAdminRights,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     const { tId, tableName, pair1Id, pair2Id, score } = req.body;
     try {

@@ -64,8 +64,10 @@ export const getIndexes = (pairsNumber: number): number[] => {
 
 export const getEmptyCell = (name?: string): ICell => ({
   name: '',
-  winner: false,
-  id: 0,
+  isWinner: false,
+  matchId: 0,
+  cellRowIndex: 0,
+  cellColIndex: 0,
   parentId: 0,
 });
 
@@ -82,16 +84,18 @@ export const generateStructure = (rowNumber: number): ICell[][] => {
       if (bounce) index++;
       bounce = !bounce;
       temp.push({
-        id: index,
+        matchId: index,
+        cellColIndex: ii,
+        cellRowIndex: jj,
         parentId: ii === 0 ? 0 : jj + 1,
         name: `${ii}-${jj + 1}`,
         pair: undefined,
-        winner: false,
+        isWinner: false,
       });
     }
     return [...temp];
   });
-  console.log('generateStructure : ', result);
+  // console.log('generateStructure : ', result);
 
   return result;
 };

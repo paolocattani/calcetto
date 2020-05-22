@@ -9,10 +9,12 @@ export interface IStage2FE {
 }
 
 export interface ICell {
-  id: number;
+  matchId: number;
+  cellRowIndex: number;
+  cellColIndex: number;
   parentId: number;
   pair?: PairDTO;
   name?: string;
-  winner: boolean;
+  isWinner: boolean;
   placement?: number;
 }
