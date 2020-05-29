@@ -5,7 +5,7 @@ import { fetchData, getEmptyRowModel } from './helper';
 import { useHistory } from 'react-router';
 import TableHeader from './header';
 import NoData from './noData';
-import { LoadingModal, GenericToast, IToastProps } from '../core/generic/Commons';
+import { LoadingModal, GenericToast, IToastProps, YesNoModal, YesNoModalProps } from '../core/generic/Commons';
 import './style.css';
 import { RightArrowIcon } from '../core/icons';
 import { TournamentProgress } from 'models/tournament.model';
@@ -18,6 +18,12 @@ import { SessionSelector } from 'selectors/session.selector';
 import { PairDTO, PlayerDTO } from 'models';
 import { TournamentAction } from 'actions';
 
+const hideAskUser = {
+  message: '',
+  onClick: () => console.log(''),
+  show: false,
+  title: '',
+};
 const PairsTable = () => {
   // Navigation
   const currentHistory = useHistory();
@@ -28,8 +34,11 @@ const PairsTable = () => {
   // States
   // User messages
   const [isLoading, setIsLoading] = useState({ state: false, message: 'Caricamento' });
+
   const messageInitialState: IToastProps = { message: '', type: 'success' };
   const [message, setMessage] = useState<IToastProps>(messageInitialState);
+  const [askUser, setAskUser] = useState<YesNoModalProps>(hideAskUser);
+
   // Data
   const [data, setData] = useState({ rows: [] as PairDTO[], players: [] as PlayerDTO[] });
   const [selectedRows, setSelectedRows] = useState<PairDTO[]>([]);
@@ -262,11 +271,11 @@ const PairsTable = () => {
     // Go to Stage1
     currentHistory.push('/stage1');
   };
-  /*
+
   function goBack() {
     currentHistory.push('/');
   }
-*/
+
   const selectRow = {
     mode: 'checkbox',
     onSelect: handleSelect,
@@ -274,7 +283,7 @@ const PairsTable = () => {
     style: { backgroundColor: '#c8e6c9' },
   };
 
-  async function deleteStage1() {
+  const processDeleteStage1 = async () => {
     try {
       setIsLoading({ state: true, message: 'Cancellazione in corso' });
       const response = await fetch('/api/v1/stage1', {
@@ -284,17 +293,30 @@ const PairsTable = () => {
       });
       await response.json();
       // Update tournament progress
-      //FIXME:
-      tournament.progress = TournamentProgress.PairsSelection;
-      fetch('/api/v1/tournament', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(tournament),
-      });
+      if (session.isAdmin && tournament.progress < TournamentProgress.Stage1) {
+        tournament.progress = TournamentProgress.PairsSelection;
+        dispatch(TournamentAction.updateTournament.request({ model: tournament }));
+      }
       showSuccessMessage('Cancellazione completata');
+      setAskUser(hideAskUser);
     } catch (error) {
       showErrorMessage('Errore cancellazione Fase 1');
     }
+  };
+
+  function deleteStage1() {
+    if (tournament.progress > TournamentProgress.Stage1) {
+      showErrorMessage('Non è possibile cancellare in quanto il torneo è gia alla fase 2');
+      return;
+    }
+    // Chiedo conferma all'utente
+    setAskUser({
+      message: 'Vuoi resettare i gironi ? ',
+      onClick: () => processDeleteStage1(),
+      onHide: () => setAskUser(hideAskUser),
+      show: true,
+      title: 'Reset Gironi',
+    });
   }
 
   async function setStage1Name() {
@@ -303,7 +325,7 @@ const PairsTable = () => {
       return;
     }
 
-    if (tournament.progress === 'Stage1' || tournament.progress === 'Stage2') {
+    if (tournament.progress === TournamentProgress.Stage1 || tournament.progress === TournamentProgress.Stage2) {
       showErrorMessage('Non riassegnare i gironi in quanto le coppie sono gia state confermate per la fase successiva');
       return;
     }
@@ -357,170 +379,166 @@ const PairsTable = () => {
 
   //console.log('render table : ', players, pairs);
 
-  const rightOuter = (
-    <>
-      <Button type="button" onClick={confirmPairs} size="lg" variant="outline-warning" className="default-color-white">
-        <span style={{ fontSize: 'larger', fontWeight: 'bolder', padding: '1vw' }}>Prosegui</span>
-        <RightArrowIcon size="lg" />
-      </Button>
-
-      <GenericToast message={message.message} type={message.type} />
-    </>
-  );
-
-  const leftOuter = (isEditable: boolean | undefined) => (
-    <>
-      {isEditable ? (
-        <Row style={{ margin: '0px' }}>
-          <Col md="6" sm="12">
-            <InputGroup>
-              <InputGroup.Prepend>
-                <InputGroup.Text>Assegna gironi automaticamente</InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                placeholder={
-                  data.rows.length < 4
-                    ? 'Inserisci almeno 4 coppie'
-                    : `Numero di gironi ( max ${Math.floor(data.rows.length / 4)} )`
-                }
-                aria-label="Numero di gironi"
-                type="number"
-                step={1}
-                min={0}
-                max={Math.floor(data.rows.length / 4)}
-                value={stage1Number}
-                onChange={(event: React.FormEvent<FormControl & HTMLInputElement>) =>
-                  setStage1Number(Number(event.currentTarget.value))
-                }
-                disabled={
-                  data.rows.length < 4 ||
-                  tournament.progress === TournamentProgress.Stage1 ||
-                  tournament.progress === TournamentProgress.Stage2
-                }
-              />
-              <InputGroup.Append>
-                <Button
-                  variant="primary"
-                  onClick={setStage1Name}
-                  disabled={!stage1Number || stage1Number > Math.floor(data.rows.length / 4) || data.rows.length < 4}
-                >
-                  Esegui
-                </Button>
-              </InputGroup.Append>
-            </InputGroup>
-          </Col>
-          <Col md="6" sm="12">
-            <InputGroup>
-              <InputGroup.Prepend>
-                <InputGroup.Text>Aggiungi coppie</InputGroup.Text>
-              </InputGroup.Prepend>
-              <FormControl
-                disabled={availableRows <= 0}
-                type="number"
-                step={1}
-                min={1}
-                max={availableRows}
-                placeholder={
-                  availableRows <= 0
-                    ? 'Numero massimo di coppie gia creato'
-                    : `Numero di coppie da aggiungere ( max ${availableRows} )`
-                }
-                aria-label="Numero di coppie"
-                onChange={(event: React.FormEvent<FormControl & HTMLInputElement>) =>
-                  setNewRowsNumber(Number(event.currentTarget.value))
-                }
-                value={newRowsNumber || ''}
-              />
-              <InputGroup.Append>
-                <Button
-                  variant="primary"
-                  onClick={(e: any) => setNewRowsNumber(availableRows)}
-                  disabled={newRowsNumber > availableRows}
-                >
-                  Max
-                </Button>
-                <Button
-                  variant="primary"
-                  onClick={addMultipleRows}
-                  disabled={!newRowsNumber || newRowsNumber > availableRows}
-                >
-                  Esegui
-                </Button>
-              </InputGroup.Append>
-            </InputGroup>
-          </Col>
-        </Row>
-      ) : null}
-      <Row style={{ margin: '5vh 0vh' }}>
-        <Col md="2" sm="12">
-          <ListGroup>
-            {/*
-            <ListGroup.Item action variant="secondary" onClick={goBack}>
-              Home
-            </ListGroup.Item>
-            */}
-            <ListGroup.Item
-              action
-              variant="success"
-              onClick={() => addRow()}
-              disabled={availableRows <= 0 || !isEditable}
-            >
-              Aggiungi Coppia
-            </ListGroup.Item>
-
-            <OverlayTrigger
-              placement="right"
-              key="right"
-              overlay={<Tooltip id="tooltip-pair">{deleteTooltipMessage}</Tooltip>}
-            >
-              <span className="d-inline-block" onClick={deleteRow}>
-                <ListGroup.Item
-                  action
-                  variant="danger"
-                  style={{ pointerEvents: 'none' }}
-                  disabled={deleteDisabled || !isEditable}
-                >
-                  Elimina Coppia {deleteDisabled}
-                </ListGroup.Item>
-              </span>
-            </OverlayTrigger>
-
-            <ListGroup.Item action variant="danger" onClick={deleteStage1} disabled={!isEditable}>
-              Reset gironi
-            </ListGroup.Item>
-          </ListGroup>
-        </Col>
-        <Col md="10" sm="12">
-          {data.rows && data.players ? (
-            <BootstrapTable
-              bootstrap4
-              keyField="id"
-              data={data.rows}
-              columns={columns(onSelect, data.players) as any}
-              cellEdit={cellEditProps(isEditable) as any}
-              selectRow={selectRow as any}
-              noDataIndication={() => (
-                <NoData isEditable={isEditable || false} addRow={() => addRow()} optionsLength={data.players.length} />
-              )}
-              caption={<TableHeader />}
-              headerClasses="default-background default-color-yellow"
-              striped
-              hover
-            />
-          ) : null}
-        </Col>
-      </Row>
-    </>
-  );
-
   return (
     <Row>
+      <YesNoModal message={askUser.message} title={askUser.title} onClick={askUser.onClick} show={askUser.show} />
       <LoadingModal show={isLoading.state} message={isLoading.message} />
       <Col md="10" sm="12">
-        {leftOuter(session.isAdmin)}
+        {session.isAdmin ? (
+          <Row style={{ margin: '0px' }}>
+            <Col md="6" sm="12">
+              <InputGroup>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>Assegna gironi automaticamente</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  placeholder={
+                    data.rows.length < 4
+                      ? 'Inserisci almeno 4 coppie'
+                      : `Numero di gironi ( max ${Math.floor(data.rows.length / 4)} )`
+                  }
+                  aria-label="Numero di gironi"
+                  type="number"
+                  step={1}
+                  min={0}
+                  max={Math.floor(data.rows.length / 4)}
+                  value={stage1Number}
+                  onChange={(event: React.FormEvent<FormControl & HTMLInputElement>) =>
+                    setStage1Number(Number(event.currentTarget.value))
+                  }
+                  disabled={
+                    data.rows.length < 4 ||
+                    tournament.progress === TournamentProgress.Stage1 ||
+                    tournament.progress === TournamentProgress.Stage2
+                  }
+                />
+                <InputGroup.Append>
+                  <Button
+                    variant="primary"
+                    onClick={setStage1Name}
+                    disabled={!stage1Number || stage1Number > Math.floor(data.rows.length / 4) || data.rows.length < 4}
+                  >
+                    Esegui
+                  </Button>
+                </InputGroup.Append>
+              </InputGroup>
+            </Col>
+            <Col md="6" sm="12">
+              <InputGroup>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>Aggiungi coppie</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  disabled={availableRows <= 0}
+                  type="number"
+                  step={1}
+                  min={1}
+                  max={availableRows}
+                  placeholder={
+                    availableRows <= 0
+                      ? 'Numero massimo di coppie gia creato'
+                      : `Numero di coppie da aggiungere ( max ${availableRows} )`
+                  }
+                  aria-label="Numero di coppie"
+                  onChange={(event: React.FormEvent<FormControl & HTMLInputElement>) =>
+                    setNewRowsNumber(Number(event.currentTarget.value))
+                  }
+                  value={newRowsNumber || ''}
+                />
+                <InputGroup.Append>
+                  <Button
+                    variant="primary"
+                    onClick={(e: any) => setNewRowsNumber(availableRows)}
+                    disabled={newRowsNumber > availableRows}
+                  >
+                    Max
+                  </Button>
+                  <Button
+                    variant="primary"
+                    onClick={addMultipleRows}
+                    disabled={!newRowsNumber || newRowsNumber > availableRows}
+                  >
+                    Esegui
+                  </Button>
+                </InputGroup.Append>
+              </InputGroup>
+            </Col>
+          </Row>
+        ) : null}
+        <Row style={{ margin: '5vh 0vh' }}>
+          <Col md="2" sm="12">
+            <ListGroup>
+              <ListGroup.Item action variant="secondary" onClick={goBack}>
+                Home
+              </ListGroup.Item>
+              <ListGroup.Item
+                action
+                variant="success"
+                onClick={() => addRow()}
+                disabled={availableRows <= 0 || !session.isAdmin}
+              >
+                Aggiungi Coppia
+              </ListGroup.Item>
+
+              <OverlayTrigger
+                placement="right"
+                key="right"
+                overlay={<Tooltip id="tooltip-pair">{deleteTooltipMessage}</Tooltip>}
+              >
+                <span className="d-inline-block" onClick={deleteRow}>
+                  <ListGroup.Item
+                    action
+                    variant="danger"
+                    style={{ pointerEvents: 'none' }}
+                    disabled={deleteDisabled || !session.isAdmin}
+                  >
+                    Elimina Coppia {deleteDisabled}
+                  </ListGroup.Item>
+                </span>
+              </OverlayTrigger>
+
+              <ListGroup.Item action variant="danger" onClick={deleteStage1} disabled={!session.isAdmin}>
+                Reset gironi
+              </ListGroup.Item>
+            </ListGroup>
+          </Col>
+          <Col md="10" sm="12">
+            {data.rows && data.players ? (
+              <BootstrapTable
+                bootstrap4
+                keyField="id"
+                data={data.rows}
+                columns={columns(onSelect, data.players) as any}
+                cellEdit={cellEditProps(session.isAdmin) as any}
+                selectRow={selectRow as any}
+                noDataIndication={() => (
+                  <NoData
+                    isEditable={session.isAdmin || false}
+                    addRow={() => addRow()}
+                    optionsLength={data.players.length}
+                  />
+                )}
+                caption={<TableHeader />}
+                headerClasses="default-background default-color-yellow"
+                striped
+                hover
+              />
+            ) : null}
+          </Col>
+        </Row>
       </Col>
       <Col md="2" sm="12">
-        {rightOuter}
+        <Button
+          type="button"
+          onClick={confirmPairs}
+          size="lg"
+          variant="outline-warning"
+          className="default-color-white"
+        >
+          <span style={{ fontSize: 'larger', fontWeight: 'bolder', padding: '1vw' }}>Prosegui</span>
+          <RightArrowIcon size="lg" />
+        </Button>
+        <GenericToast message={message.message} type={message.type} />{' '}
       </Col>
     </Row>
   );

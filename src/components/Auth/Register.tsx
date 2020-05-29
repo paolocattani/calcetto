@@ -129,6 +129,7 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
         const message: UserMessage = { type: 'success', message: `Benvenuto ${result.username} !` };
         dispatch(SessionAction.updateSession({ user: result, message, showMessage: true }));
         dispatch(SessionAction.sessionControl.request({ history: currentHistory }));
+        setTimeout(() => dispatch(SessionAction.hideMessage({})), 5000);
       } else {
         switch (response.status) {
           case 401:

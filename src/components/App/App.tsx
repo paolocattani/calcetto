@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useEffect } from 'react';
 // Components
 import { Header } from '../Header/Header';
 import { LoadingModal } from '../core/generic/Commons';
@@ -36,9 +36,10 @@ const App: React.FC = (_) => {
       <Container fluid style={{ marginBottom: '20vh' }}>
         {/*<LogSessionContext /> */}
         {/*<RedirectionControl />*/}
+
         {
           /* Show user message */
-          message ? (
+          message && show ? (
             <Alert
               variant={message.type}
               key={'welcome-message'}

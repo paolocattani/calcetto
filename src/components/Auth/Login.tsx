@@ -50,6 +50,7 @@ const Login: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
             history: currentHistory,
           })
         );
+        setTimeout(() => dispatch(SessionAction.hideMessage({})), 5000);
         currentHistory.push('/');
       } else {
         if (response.status === 401) showError('Utente o Password errata');
