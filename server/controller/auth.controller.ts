@@ -17,6 +17,7 @@ import {
   checkIfExist,
   findUserByEmailAndUsername,
   addUserCookies,
+  isValidRegister,
 } from '../manager/auth.manager';
 import { AppRequest } from './index';
 const router = Router();
@@ -53,8 +54,16 @@ router.post(
     logger.info('/register start ');
     const { body } = req;
     let model: User = parseBody(body);
+    // Ripeto i controlli di validità sui dati anche qui in caso siano in qualche modo stati
+    // bypassati quelli a FE.
+    const isValidMessage = isValidRegister(model);
+    if (isValidMessage !== '') {
+      res.status(403).json({ message: isValidMessage });
+    }
     const user = await checkIfExist(model);
-    if (user) return res.status(403).json({ message: 'Email o Username gia utilizzati. ' });
+    if (user) {
+      return res.status(403).json({ message: 'Email o Username gia utilizzati. ' });
+    }
     const record = await registerUser(model, body.playerRole);
     if (record) {
       addUserCookies(record, res);

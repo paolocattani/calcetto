@@ -18,6 +18,12 @@ import { PlayerRole } from 'models/dto/player.dto';
 const className = 'Authentication Manager : ';
 const DEFAULT_TOKEN_EXPIRATION = '8h';
 const DEFAULT_HASH = 'dummy$Hash';
+export const phoneRegExp = new RegExp('^d{10}$');
+export const passwordRegExp = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,16})');
+export const emailRegExp = new RegExp(
+  // eslint-disable-next-line quotes
+  "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
+);
 
 // Password utils
 export const generatePassword = async (email: string, password: string) =>
@@ -160,6 +166,32 @@ export async function checkIfExist(user: User) {
     return null;
   }
 }
+
+export const isValidRegister = (user: User): string => {
+  let result = '';
+  if (!user.username) {
+    result = 'Scegli uno username';
+  }
+  if (!user.name) {
+    result = 'Inserire il nome';
+  }
+  if (!user.surname) {
+    result = 'Inserire il cognome';
+  }
+  if (!user.email) {
+    result = 'Inserire una email';
+  }
+  if (!emailRegExp.test(user.email)) {
+    result = 'Inserire una email valida';
+  }
+  if (!user.password) {
+    result = 'Inserire una password';
+  }
+  if (!passwordRegExp.test(user.password)) {
+    result = 'La password non rispetta i criteri';
+  }
+  return result;
+};
 
 /**
  * Converte l'entity in un DTO da passare al FE.
