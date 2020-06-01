@@ -148,3 +148,20 @@ export function valueFormatter(selectedOption) {
   }
   return value;
 }
+
+export function getEmptyPlayer(label) {
+  return {
+    id: null,
+    name: '',
+    surname: '',
+    alias: '',
+    label: label || '',
+    role: 'Portiere',
+    email: '',
+    phone: '',
+    match_played: 0,
+    match_won: 0,
+    total_score: 0,
+    editable: false
+  };
+}
