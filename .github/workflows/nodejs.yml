@@ -18,6 +18,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm install
+    # Code quality
+    # - uses: hallee/eslint-action@1.0.1
     - run: npm run CRA:build --if-present
       # env:
         # CI: true

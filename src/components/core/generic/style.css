@@ -1,0 +1,7 @@
+.YesNoModal .modal-content{
+    border-color: #ffc107;
+}
+
+.YesNoModal .modal-content .close{
+    color : whitesmoke
+}

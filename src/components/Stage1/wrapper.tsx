@@ -1,63 +1,139 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router';
-import { fetchPairs } from '../Pair/helper';
-import { Pair, wapperPropsType } from './type';
+import { useHistory } from 'react-router';
 import Stage1Handler from './handler';
 import { ListGroup, Button } from 'react-bootstrap';
+import { fetchPairs } from 'components/Pair/helper';
+import { PairDTO, TournamentProgress } from 'models';
+import { useSelector, useDispatch } from 'react-redux';
+import { TournamentSelector } from 'selectors/tournament.selector';
+import { withRouter } from 'react-router-dom';
+import { Stage1Selector } from 'selectors/stage1.selector';
+import commonStyle from '../../common.module.css';
+import GenericModal from 'components/core/generic/GenericModal';
+import { Stage2Action, TournamentAction } from 'actions';
+import { SessionSelector } from 'selectors/session.selector';
 
+interface ModalProps {
+  show: boolean;
+  message: string;
+}
 /**
  * Wraps multiple table components
  */
-const Wrapper: React.FC<wapperPropsType> = (props: wapperPropsType): JSX.Element => {
-  const { tId } = useParams();
-  const [pairsList, setPairsList] = useState<Pair[]>([]);
+const Wrapper: React.FC = (): JSX.Element => {
+  const currentHistory = useHistory();
+  const dispatch = useDispatch();
 
-  let currentHistory = useHistory();
+  // Session
+  const session = useSelector(SessionSelector.getSession);
+  // Torneo
+  const tournament = useSelector(TournamentSelector.getTournament)!;
+  // Sono presenti aggiornamenti
+  const needRefresh = useSelector(Stage1Selector.getNeedRefresh);
+  // Squadre selezionate
+  const selected = useSelector(Stage1Selector.getSelectedPairs);
+
+  const [pairsList, setPairsList] = useState<PairDTO[]>([]);
+  const [autoOrder /*, setAutoOrder*/] = useState<boolean>(true);
+  const hideError: ModalProps = { show: false, message: '' };
+  const [showError, setShowError] = useState<ModalProps>(hideError);
+
   function goBack() {
-    currentHistory.push(`/tournament/${tId}`);
+    currentHistory.push('/tournament');
+  }
+  function goToStage2() {
+    // TODO: eseguire controlli e eventualemente mostrare messaggi utente
+
+    // Se sono un utente che puo modificare e il torneo è in una fase minore ( vedi ordinamento Enum ) di quella attuale
+    // allora aggiorno lo stato del torneo
+    if (session.isAdmin && tournament.progress < TournamentProgress.Stage2) {
+      tournament.progress = TournamentProgress.Stage2;
+      dispatch(TournamentAction.updateTournament.request({ model: tournament }));
+    }
+
+    let count = 0;
+    if (pairsList.length > 4) {
+      count = pairsList.length - 1;
+      while (count % 8 !== 0) count++;
+    }
+    dispatch(Stage2Action.fetchStage2.request({ tournamentId: tournament.id!, count }));
+    currentHistory.push('/stage2');
   }
 
-  useEffect(() => fetchPairs(setPairsList, tId), [tId]);
-  // sort pairs by stage1Name
-  pairsList.sort((obj1, obj2) => obj1.stage1Name.localeCompare(obj2.stage1Name));
+  useEffect(() => {
+    if (!pairsList || pairsList.length === 0 || needRefresh) fetchPairs(setPairsList, tournament.id!);
+  }, [tournament.id, needRefresh, pairsList]);
+
   return (
     <>
-      <ListGroup.Item key={'stage-button'}>
+      <ListGroup.Item className={commonStyle.functionsList} key={'stage-button'}>
         <Button variant="secondary" onClick={goBack}>
           Gestione Coppie
         </Button>
+        <Button variant="secondary" onClick={() => dispatch(Stage2Action.delete.request({ tId: tournament.id! }))}>
+          Reset Fase 2
+        </Button>
+        {/* FIXME:
+          <Form.Check
+            custom
+            checked={autoOrder}
+            type="checkbox"
+            id="autoOrder"
+            label={`Ordinamento Automatico ${autoOrder}`}
+            onChange={() => setAutoOrder(!autoOrder)}
+          />
+        */}
+        <Button
+          variant="success"
+          className="float-right"
+          onClick={goToStage2}
+          disabled={selected.length < 4 && tournament.progress < TournamentProgress.Stage2}
+        >
+          {tournament.progress} - Prosegui
+        </Button>
       </ListGroup.Item>
-      {renderTables(pairsList, tId)}
+      <GenericModal
+        show={showError.show}
+        title="Errore"
+        onHide={() => setShowError(hideError)}
+        component={<p>{showError.message}</p>}
+        size="xl"
+      />
+      {renderTables(pairsList, autoOrder)}
     </>
   );
 };
 
-export default Wrapper;
+export default withRouter(Wrapper);
 
-function renderTables(pairsList: Pair[], tId: string | undefined): JSX.Element {
+function renderTables(pairsList: PairDTO[], autoOrder: boolean): JSX.Element {
   let stageName = '';
-  let stage: Pair[] = [];
+  let stage: PairDTO[] = [];
   let stageList: JSX.Element[] = [];
+  // sort pairs by stage1Name
+  console.log('PairsList : ', pairsList);
 
-  pairsList.forEach((element, index) => {
-    // A rottura di stage1Name
-    if (stageName === '') stageName = element.stage1Name;
-    if (stageName !== element.stage1Name) {
-      stageList.push(
-        <ListGroup.Item key={`stage-${stageName}`}>
-          <Stage1Handler pairsList={stage} />
-        </ListGroup.Item>
-      );
-      // console.log(`stages ${stageName} :`, stage, stage.length);
-      stageName = element.stage1Name;
-      stage = [];
-    }
-    stage.push(element);
-  });
+  pairsList
+    .sort((obj1, obj2) => obj1.stage1Name.localeCompare(obj2.stage1Name))
+    // FIXME: use .reduce  ?
+    .forEach((element, index) => {
+      // A rottura di stage1Name
+      if (stageName === '') stageName = element.stage1Name;
+      if (stageName !== element.stage1Name) {
+        stageList.push(
+          <ListGroup.Item className={'inherit-background'} key={`stage-${stageName}`}>
+            <Stage1Handler pairsList={stage} autoOrder={autoOrder} />
+          </ListGroup.Item>
+        );
+        stageName = element.stage1Name;
+        stage = [];
+      }
+      stage.push(element);
+    });
   if (stage.length > 0) {
     stageList.push(
-      <ListGroup.Item key={`stage-${stageName}`}>
-        <Stage1Handler pairsList={stage} />
+      <ListGroup.Item className={'inherit-background'} key={`stage-${stageName}`}>
+        <Stage1Handler pairsList={stage} autoOrder={autoOrder} />
       </ListGroup.Item>
     );
     // console.log(`stages ${stageName} :`, stage);

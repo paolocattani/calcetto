@@ -4,22 +4,22 @@ import { Button, Row, Col, ListGroup } from 'react-bootstrap';
 // react-bootstrap-table
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory from 'react-bootstrap-table2-filter';
-import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 // helper/ style
 import './style.css';
-import columns, { clearAllFilter, ExportCSVButton } from './helper';
+import columns, { clearAllFilter } from './helper';
 import TableHeader from './header';
-import { LoadingModal } from '../core/Commons';
-import { getEmptyPlayer } from '../Player/helper';
+import { LoadingModal } from '../core/generic/Commons';
+import { getEmptyPlayer } from 'services/player.service';
+import { connect } from 'react-redux';
 
-export default class Player extends React.Component {
+class Player extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       rows: [],
       selectedRows: [],
-      isLoading: false
+      isLoading: false,
     };
     this.handleOnSelect = this.handleOnSelect.bind(this);
     this.deleteRow = this.deleteRow.bind(this);
@@ -29,27 +29,28 @@ export default class Player extends React.Component {
   async componentDidMount() {
     this.setState({ isLoading: true }, () =>
       (async () => {
-        const response = await fetch('/api/player/list', {
+        const response = await fetch('/api/v1/player/list', {
           method: 'GET',
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json' },
         });
         const result = await response.json();
+
         this.setState({
           isLoading: false,
-          rows: result
+          rows: result.map((e, i) => ({ ...e, id: i + 1 })),
         });
       })()
     );
   }
 
   handleOnSelect = (row, isSelected) => {
-    this.setState(state => {
+    this.setState((state) => {
       const { selectedRows } = state;
-      const found = selectedRows.find(e => e.id === row.id) ? true : false;
+      const found = selectedRows.find((e) => e.id === row.id) ? true : false;
       if (isSelected) {
         return found ? { selectedRows: selectedRows } : { selectedRows: [row, ...selectedRows] };
       } else {
-        return found ? { selectedRows: selectedRows.filter(e => e.id !== row.id) } : { selectedRows: selectedRows };
+        return found ? { selectedRows: selectedRows.filter((e) => e.id !== row.id) } : { selectedRows: selectedRows };
       }
     });
     // return true or dont return to approve current select action
@@ -59,16 +60,16 @@ export default class Player extends React.Component {
   addRow() {
     this.setState({ isLoading: true }, () =>
       (async () => {
-        const response = await fetch('/api/player', {
+        const response = await fetch('/api/v1/player', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(getEmptyPlayer())
+          body: JSON.stringify(getEmptyPlayer()),
         });
         const result = await response.json();
-        this.setState(state => {
+        this.setState((state) => {
           return {
             rows: [result, ...state.rows],
-            isLoading: false
+            isLoading: false,
           };
         });
       })()
@@ -80,99 +81,104 @@ export default class Player extends React.Component {
     if (!selectedRows) return;
     this.setState({ isLoading: true }, () =>
       (async () => {
-        const response = await fetch('/api/player', {
+        fetch('/api/v1/player', {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(selectedRows)
+          body: JSON.stringify(selectedRows),
         });
-        const result = await response.json();
-        this.setState(state => {
+        this.setState((state) => {
           return {
             // Se la riga che sto analizzando è contenuta in quelle selezionata allora non la voglio
-            rows: state.rows.filter(row => !selectedRows.find(selectedRow => selectedRow.id === row.id)),
+            rows: state.rows.filter((row) => !selectedRows.find((selectedRow) => selectedRow.id === row.id)),
             selectedRows: [],
-            isLoading: false
+            isLoading: false,
           };
         });
       })()
     );
   }
 
-  cellEditProps = cellEditFactory({
-    mode: 'click',
-    blurToSave: true,
-    autoSelectText: true,
-    afterSaveCell: (oldValue, newValue, row, column) => {
-      (async () => {
-        // TODO: gestire try-catch
-        const response = await fetch('/api/player', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(row)
-        });
-        await response.json();
-      })();
-    }
-  });
+  cellEditProps = (editabile) =>
+    cellEditFactory({
+      mode: editabile ? 'click' : 'none',
+      blurToSave: true,
+      autoSelectText: true,
+      afterSaveCell: (oldValue, newValue, row, column) => {
+        (async () => {
+          // TODO: gestire try-catch
+          const response = await fetch('/api/v1/player', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(row),
+          });
+          await response.json();
+        })();
+      },
+    });
 
   render() {
     const { state, deleteRow, addRow } = this;
     const { rows, isLoading } = state;
-
     const selectRow = {
       mode: 'checkbox',
-      nonSelectable: rows.filter(e => (e.editable ? false : true)).map(e => e.id),
+      nonSelectable: rows.filter((e) => !e.editable).map((e) => e.id),
       onSelect: this.handleOnSelect,
-      onSelectAll: (isSelected, rows) => rows.forEach(row => this.handleOnSelect(row, isSelected)),
+      onSelectAll: (isSelected, rows) => rows.forEach((row) => this.handleOnSelect(row, isSelected)),
       style: { backgroundColor: '#c8e6c9' },
+      hideSelectAll: !rows.find((e) => e.editable),
       selectColumnStyle: ({ checked, disabled, rowIndex, rowKey }) =>
-        rows[rowIndex].editable ? { backgroundColor: '#28a745' } : { backgroundColor: '#dc3545' }
+        rows[rowIndex].editable ? {} : { backgroundColor: '#dc3545' },
     };
+
+    const {
+      state: { selectedRows } = [],
+      props: { isEditable },
+    } = this;
 
     return (
       <>
         <LoadingModal show={isLoading} message={'Caricamento'} />
         <Row>
           <Col>
-            <ToolkitProvider keyField="id" data={rows} columns={columns} exportCSV>
-              {props => (
-                <>
-                  <ListGroup horizontal>
-                    <Button variant="success" onClick={addRow}>
-                      Aggiungi giocatore
-                    </Button>
-                    <Button variant="danger" onClick={deleteRow}>
-                      Calcella giocatore
-                    </Button>
-                    <Button variant="dark" onClick={clearAllFilter.bind(this)}>
-                      Pulisci Filtri
-                    </Button>
-                  </ListGroup>
-
-                  {/* FIXME:
-                  <ExportCSVButton {...props.csvProps} />
-                  */}
-                  <BootstrapTable
-                    wrapperClasses="player-table"
-                    keyField="id"
-                    data={rows}
-                    columns={columns}
-                    cellEdit={this.cellEditProps}
-                    selectRow={selectRow}
-                    caption={<TableHeader />}
-                    filter={filterFactory()}
-                    headerClasses="player-table-header"
-                    noDataIndication="Nessun dato reperito"
-                    striped
-                    hover
-                    bootstrap4
-                  />
-                </>
-              )}
-            </ToolkitProvider>
+            <>
+              <ListGroup horizontal>
+                {isEditable ? (
+                  <Button variant="success" onClick={addRow}>
+                    Aggiungi giocatore
+                  </Button>
+                ) : null}
+                {isEditable ? (
+                  <Button variant="danger" onClick={deleteRow} disabled={selectedRows.length === 0}>
+                    {selectedRows.length > 1 ? 'Elimina giocatori' : 'Elimina giocatore'}
+                  </Button>
+                ) : null}
+                <Button variant="dark" onClick={clearAllFilter.bind(this)}>
+                  Pulisci Filtri
+                </Button>
+              </ListGroup>
+              <BootstrapTable
+                wrapperClasses="player-table"
+                keyField="id"
+                data={rows}
+                columns={columns(isEditable)}
+                cellEdit={this.cellEditProps(isEditable)}
+                selectRow={selectRow}
+                caption={<TableHeader />}
+                filter={filterFactory()}
+                headerClasses="default-background default-color-white"
+                noDataIndication="Nessun dato reperito"
+                striped
+                hover
+                bootstrap4
+              />
+            </>
           </Col>
         </Row>
       </>
     );
   }
 }
+
+export default connect((state) => ({
+  isEditable: state.sessionState.isAdmin,
+}))(Player);

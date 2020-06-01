@@ -1,0 +1,19 @@
+.App {
+  text-align: center;
+}
+
+.app-header {
+  background-color: #282c34;
+  /*
+    background-image: url("https://image.shutterstock.com/z/stock-photo-table-football-foosball-soccer-game-aka-kicker-abstract-light-400019149.jpg");
+  */
+  background-image: url("https://c.pxhere.com/photos/2e/b9/game_soccer_table_football_player_figure-69348.jpg!d");
+  background-size: cover;
+  min-height: 20vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}

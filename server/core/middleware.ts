@@ -2,17 +2,14 @@ import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 import { Request, Response, NextFunction } from 'express';
 import chalk from 'chalk';
-// Auth middleware
-export const secured = (req: Request, res: Response, next: NextFunction) => {
-  if (req.user || req.path == '/') return next();
-  if (isDevMode()) logger.info('This is a secure route, redirect to login');
-  req.session!.returnTo = req.originalUrl;
-  res.redirect('/login');
-};
+import jwt, { TokenExpiredError } from 'jsonwebtoken';
+import { getSecret, isAdmin } from '../manager/auth.manager';
+import { AppRequest } from 'controller';
+import { UserDTO } from 'models/dto/user.dto';
 
 // dev logger
 export const routeLogger = (req: Request, res: Response, next: NextFunction) => {
-  if (isDevMode()) logger.info(`Serving route : ${req.originalUrl}`);
+  if (isDevMode()) logger.info(`Serving route : ${chalk.greenBright.bold(req.originalUrl)}`);
   next();
 };
 
@@ -25,4 +22,38 @@ export const routeNotFound = (req: Request, res: Response, next: NextFunction) =
 // Da utilizzare per le funzioni async, altrimenti viene ritornata una Promise
 export const asyncMiddleware = (fn: any) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(fn(req, res, next)).catch(next);
+};
+
+// Controllo autenticazione. Da utilizzare per tutte le API che richiedono autenticazione
+export const withAuth = (req: AppRequest, res: Response, next: NextFunction) => {
+  const token = req.cookies.token;
+  if (!token || typeof token != 'string') return res.status(401).send('Unauthorized: No token provided');
+  const [user, isTokenValid] = safeVerifyToken(token);
+  if (isTokenValid && user) {
+    // logger.info('withAuth : ', decoded);
+    req.user = user;
+    next();
+  } else {
+    logger.error('Unauthorized:  Token Expired ');
+    return res.status(401).send('Unauthorized: Invalid token');
+  }
+};
+
+// Controllo se l'utente ha le autorizzazioni di amminstratore, altrimenti picche
+export const withAdminRights = (req: AppRequest, res: Response, next: NextFunction) => {
+  logger.info('withAdminRights : ', isAdmin(req.user));
+  if (!isAdmin(req.user)) {
+    return res.status(401).send('Unauthorized');
+  } else next();
+};
+
+// wrapper per verificare il token
+export const safeVerifyToken = (token: any): [UserDTO | null, boolean] => {
+  let decoded = null;
+  try {
+    decoded = jwt.verify(token, getSecret()) as UserDTO;
+    return [decoded, true];
+  } catch (error) {
+    return [null, false];
+  }
 };

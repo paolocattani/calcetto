@@ -1,0 +1,71 @@
+import { FetchStage2Response, FetchStage2Request, ICell } from 'models';
+import { generateStructure } from 'components/Stage2/helper';
+
+export const deleteStage2 = async (tId: number) => {
+  const response = await fetch('/api/v1/stage2', {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ tId }),
+  });
+  await response.json();
+};
+
+export const updateCells = async (cell1: ICell, cell2: ICell) => {
+  try {
+    const response = await fetch('/api/v1/stage2/cells', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ cell1, cell2 }),
+    });
+    await response.json();
+  } catch (e) {
+    handleError(e);
+  } finally {
+    return;
+  }
+};
+
+export const fetchStage2 = async ({
+  count: rowsNumber,
+  tournamentId,
+}: FetchStage2Request): Promise<FetchStage2Response> => {
+  if (rowsNumber === 0) {
+    rowsNumber = await countStage2Step0(tournamentId);
+  }
+  const structure = generateStructure(rowsNumber);
+  try {
+    const response = await fetch('/api/v1/stage2', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tournamentId, structure }),
+    });
+    const cells = await response.json();
+    // console.log('response : ', cells);
+    return { cells, rowsNumber };
+  } catch (e) {
+    handleError(e);
+    return { cells: structure, rowsNumber };
+  }
+};
+
+const countStage2Step0 = async (tournamentId: number) => {
+  let count = 0;
+  try {
+    const response = await fetch('/api/v1/stage2/count', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tournamentId }),
+    });
+    count = await response.json();
+    // console.log('response : ', cells);
+  } catch (e) {
+    handleError(e);
+  } finally {
+    return count;
+  }
+};
+
+const handleError = (errorMessage: string): FetchStage2Request => {
+  console.warn('Stage2 Error : ', errorMessage);
+  throw new Error('Something went wrong');
+};

@@ -1,0 +1,54 @@
+.table {
+  border: black 2px solid;
+  text-align: center;
+  margin: 0 auto;
+  background-color: inherit;
+  width: 100%;
+}
+
+.cell {
+  border-right: black 0.1px solid;
+}
+
+.borderBottom {
+  border-bottom: black 0.1px solid;
+}
+
+.headerCell {
+  background-color: #343a40;
+  height: 8vh;
+  color: #ffc107;
+  border: black 3px solid;
+  font-size: larger;
+}
+
+.container{
+  /*
+  flex: 1;
+  display: flex;
+  align-content: flex-start;
+  */
+  margin: 1rem 0rem !important;
+}
+
+.row{
+  background-color: antiquewhite;
+}
+
+.prepend {
+  /*
+  flex-grow: 1;
+  */
+
+}
+.append {
+  background-color: white !important;
+  /*
+  flex-grow: 1;
+  */
+}
+.center{
+  /*
+  flex-grow: 1;
+  */
+}
