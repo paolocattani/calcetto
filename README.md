@@ -1,44 +1,33 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Calcetto
+![Node.js CI](https://github.com/paolocattani/calcetto/workflows/Node.js%20CI/badge.svg?branch=develop&event=push)
 
-## Available Scripts
+## TODO
+-
+-
+-
 
-In the project directory, you can run:
+# Guide
 
-### `npm start`
+## Linter and Prettier
+- [Linter and Prettier](https://www.robertcooper.me/using-eslint-and-prettier-in-a-typescript-project)
+- [Roadmap: TSLint -> ESLint #4534](https://github.com/palantir/tslint/issues/4534)
+ - [Official Site](https://eslint.org/docs/user-guide/configuring)
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Node
+- Recap on [Import/Export ES6](https://medium.com/@etherealm/named-export-vs-default-export-in-es6-affb483a0910)
+- IIFE : [a trick to use async function inside not async functions](https://medium.com/javascript-in-plain-english/https-medium-com-javascript-in-plain-english-stop-feeling-iffy-about-using-an-iife-7b0292aba174)
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
 
-### `npm test`
+## React
+- Examples :
+  - [Simple Form](https://www.carlrippon.com/building-super-simple-react-form-component-typescript-basics/)
+  - [React-Bootstrap-Table/Storybook](https://react-bootstrap-table.github.io/react-bootstrap-table2/storybook/index.html?selectedKind=Cell%20Editing&selectedStory=Click%20to%20Edit&full=0&addons=1&stories=1&panelRight=0&addonPanel=storybook%2Factions%2Factions-panel)
+  - [React-Bootstrap-Table/Github](https://github.com/react-bootstrap-table/react-bootstrap-table2)
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- Recap on [React Hooks in Typescript](https://medium.com/@jrwebdev/react-hooks-in-typescript-88fce7001d0d)
+- Remove console.log for production build by [editing webpack configuration](https://stackoverflow.com/questions/56276325/how-can-remove-console-log-in-the-production-build-of-a-react-application-create)
+- Authentication process : [A better authentication process](https://stackoverflow.com/questions/59422159/redirecting-a-user-to-the-page-they-requested-after-successful-authentication-wi/59423442#59423442)
+- Handle private routing : [Private Routing with react-router-dom](https://stackoverflow.com/questions/47747754/how-to-rewrite-the-protected-router-using-typescript-and-react-router-4-and-5)
+- Sync all client :
+  - [Hamoni Project](https://github.com/pmbanugo/realtime-react-datatable)
+  - SSE - Server Sent Events : [express-sse](https://www.npmjs.com/package/express-sse)
