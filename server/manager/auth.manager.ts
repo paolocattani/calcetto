@@ -11,7 +11,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 // managers
 import * as playerManager from './player.manager';
-import { Op } from 'sequelize';
+import { Op, Sequelize } from 'sequelize';
 import { PlayerRole } from 'models/dto/player.dto';
 
 // Const
@@ -129,7 +129,14 @@ export async function findUserByEmail(email: string) {
 export async function findUserDTOByEmailOrUsername(username: string) {
   try {
     logProcess(className + 'findUserDTOByEmailOrUsername', '');
-    const user = await User.findOne({ where: { [Op.or]: [{ email: username }, { username }] } });
+    const user = await User.findOne({
+      where: {
+        [Op.or]: [
+          Sequelize.where(Sequelize.fn('lower', Sequelize.col('email')), username.toLowerCase()),
+          Sequelize.where(Sequelize.fn('lower', Sequelize.col('username')), username.toLowerCase()),
+        ],
+      },
+    });
     return user ? convertEntityToDTO(user) : null;
   } catch (error) {
     logProcess(className + 'findUserDTOByEmailOrUsername', ` Error : ${error}`);
@@ -140,7 +147,14 @@ export async function findUserDTOByEmailOrUsername(username: string) {
 export async function findUserByEmailOrUsername(username: string) {
   try {
     logProcess(className + 'findUserByEmailOrUsername', '');
-    return await User.findOne({ where: { [Op.or]: [{ email: username }, { username }] } });
+    return await User.findOne({
+      where: {
+        [Op.or]: [
+          Sequelize.where(Sequelize.fn('lower', Sequelize.col('email')), username.toLowerCase()),
+          Sequelize.where(Sequelize.fn('lower', Sequelize.col('username')), username.toLowerCase()),
+        ],
+      },
+    });
   } catch (error) {
     logProcess(className + 'findUserByEmailOrUsername', ` Error : ${error}`);
     return null;
@@ -150,7 +164,14 @@ export async function findUserByEmailOrUsername(username: string) {
 export async function findUserByEmailAndUsername(email: string, username: string) {
   try {
     logProcess(className + 'findUserByEmailAndUsername', '');
-    return await User.findOne({ where: { email, username } });
+    return await User.findOne({
+      where: {
+        [Op.and]: [
+          Sequelize.where(Sequelize.fn('lower', Sequelize.col('email')), email.toLowerCase()),
+          Sequelize.where(Sequelize.fn('lower', Sequelize.col('username')), username.toLowerCase()),
+        ],
+      },
+    });
   } catch (error) {
     logProcess(className + 'findUserByEmailAndUsername', ` Error : ${error}`);
     return null;
@@ -160,7 +181,14 @@ export async function findUserByEmailAndUsername(email: string, username: string
 export async function checkIfExist(user: User) {
   try {
     logProcess(className + 'checkIfExist', '');
-    return await User.findOne({ where: { [Op.or]: [{ email: user.email }, { username: user.username }] } });
+    return await User.findOne({
+      where: {
+        [Op.or]: [
+          Sequelize.where(Sequelize.fn('lower', Sequelize.col('email')), user.email.toLowerCase()),
+          Sequelize.where(Sequelize.fn('lower', Sequelize.col('username')), user.username.toLowerCase()),
+        ],
+      },
+    });
   } catch (error) {
     logProcess(className + 'checkIfExist', ` Error : ${error}`);
     return null;

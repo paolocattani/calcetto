@@ -36,7 +36,6 @@ const App: React.FC = (_) => {
       <Container fluid style={{ marginBottom: '20vh' }}>
         {/*<LogSessionContext /> */}
         {/*<RedirectionControl />*/}
-
         {
           /* Show user message */
           message && show ? (
