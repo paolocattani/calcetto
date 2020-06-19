@@ -38,5 +38,4 @@ export const SessionAction = {
   )<WatchSessionRequest, AuthenticationResponse, AuthenticationError>(),
   // set selected tournament
   updateSession: createAction(`${ActionName} Set Session`)<AuthenticationResponse>(),
-  hideMessage: createAction(`${ActionName} Hide Session Message`)<{}>(),
 };

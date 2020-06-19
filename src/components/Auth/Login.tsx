@@ -6,6 +6,7 @@ import { SessionAction } from 'actions';
 import { useDispatch } from 'react-redux';
 import { UserDTO } from 'models/user.model';
 import { UserMessage } from 'models';
+import { toast } from 'react-toastify';
 
 interface PropsType extends RouteComponentProps {
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
@@ -19,19 +20,14 @@ const Login: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
   const { value: username, bind: bindUsername } = useInput('');
   const { value: password, bind: bindPassword } = useInput('');
 
-  const showError = (message: SetStateAction<string>) => {
-    setErrorMessage(message);
-    setTimeout(() => setErrorMessage(''), 3000);
-  };
-
   const handleSubmit = async (evt: React.SyntheticEvent) => {
     evt.preventDefault();
     if (!username || username === '') {
-      showError('Inserire username o password');
+      toast.error('Inserire username o password');
       return;
     }
     if (!password || password === '') {
-      showError('Inserire la password');
+      toast.error('Inserire la password');
       return;
     }
     try {
@@ -44,21 +40,21 @@ const Login: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
       if (response.ok && result) {
         // Messaggio di benvenuto
         const message: UserMessage = { type: 'success', message: `Bentornato ${result.username} !` };
+        toast.success(message.message);
         dispatch(SessionAction.updateSession({ user: result, message, showMessage: true }));
         dispatch(
           SessionAction.sessionControl.request({
             history: currentHistory,
           })
         );
-        setTimeout(() => dispatch(SessionAction.hideMessage({})), 5000);
         currentHistory.push('/');
       } else {
-        if (response.status === 401) showError('Utente o Password errata');
-        else showError('Errore server. Riprovare piu tardi');
+        if (response.status === 401) toast.error('Utente o Password errata');
+        else toast.error('Errore server. Riprovare piu tardi');
       }
     } catch (error) {
       console.log('onSubmitLogin : ', error);
-      showError('Errore durante il processo di registrazione. Riprovare piu tardi');
+      toast.error('Errore durante il processo di registrazione. Riprovare piu tardi');
     }
   };
 

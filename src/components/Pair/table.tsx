@@ -17,6 +17,7 @@ import { cellEditProps, columns } from './editor';
 import { SessionSelector } from 'selectors/session.selector';
 import { PairDTO, PlayerDTO } from 'models';
 import { TournamentAction } from 'actions';
+import { toast } from 'react-toastify';
 
 const hideAskUser = {
   message: '',
@@ -36,7 +37,6 @@ const PairsTable = () => {
   const [isLoading, setIsLoading] = useState({ state: false, message: 'Caricamento' });
 
   const messageInitialState: IToastProps = { message: '', type: 'success' };
-  const [message, setMessage] = useState<IToastProps>(messageInitialState);
   const [askUser, setAskUser] = useState<YesNoModalProps>(hideAskUser);
 
   // Data
@@ -55,13 +55,11 @@ const PairsTable = () => {
   // User messages
   function showErrorMessage(message: string) {
     setIsLoading({ state: false, message });
-    setMessage({ message, type: 'danger' });
-    setTimeout(() => setMessage(messageInitialState), 5000);
+    toast.error(message, { autoClose: 10000 });
   }
   function showSuccessMessage(message: string) {
     setIsLoading({ state: false, message });
-    setMessage({ message, type: 'success' });
-    setTimeout(() => setMessage(messageInitialState), 5000);
+    toast.success(message);
   }
 
   async function addRow(index?: number) {
@@ -383,7 +381,7 @@ const PairsTable = () => {
     <Row>
       <YesNoModal message={askUser.message} title={askUser.title} onClick={askUser.onClick} show={askUser.show} />
       <LoadingModal show={isLoading.state} message={isLoading.message} />
-      <Col md="10" sm="12">
+      <Col>
         {session.isAdmin ? (
           <Row style={{ margin: '0px' }}>
             <Col md="6" sm="12">
@@ -468,6 +466,17 @@ const PairsTable = () => {
         <Row style={{ margin: '5vh 0vh' }}>
           <Col md="2" sm="12">
             <ListGroup>
+              <Button
+                type="button"
+                onClick={confirmPairs}
+                size="lg"
+                variant="outline-warning"
+                className="default-color-white"
+              >
+                <span style={{ fontSize: 'larger', fontWeight: 'bolder', padding: '1vw' }}>Prosegui</span>
+                <RightArrowIcon size="lg" />
+              </Button>
+
               <ListGroup.Item action variant="secondary" onClick={goBack}>
                 Home
               </ListGroup.Item>
@@ -526,19 +535,6 @@ const PairsTable = () => {
             ) : null}
           </Col>
         </Row>
-      </Col>
-      <Col md="2" sm="12">
-        <Button
-          type="button"
-          onClick={confirmPairs}
-          size="lg"
-          variant="outline-warning"
-          className="default-color-white"
-        >
-          <span style={{ fontSize: 'larger', fontWeight: 'bolder', padding: '1vw' }}>Prosegui</span>
-          <RightArrowIcon size="lg" />
-        </Button>
-        <GenericToast message={message.message} type={message.type} />{' '}
       </Col>
     </Row>
   );

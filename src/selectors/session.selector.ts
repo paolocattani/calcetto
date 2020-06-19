@@ -12,13 +12,6 @@ export const SessionSelector = {
   isAuthenticated({ sessionState: { isAuthenticated } }: RootState) {
     return isAuthenticated;
   },
-  // User Message
-  getMessage({ sessionState: { message } }: RootState) {
-    return message;
-  },
-  showMessage({ sessionState: { showMessage } }: RootState) {
-    return showMessage;
-  },
   // User / Session
   getUser({ sessionState: { user } }: RootState) {
     return user;

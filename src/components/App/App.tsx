@@ -8,22 +8,22 @@ import routes from '../core/routing/Routes';
 import { ProtectedRoute } from '../core/routing/ProtectedRoute';
 // Style
 import './App.css';
-import { Container, Alert } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 // FontAwesome 5
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { SessionAction } from 'actions';
-import { SessionSelector } from '../../selectors/session.selector';
+// Toasts
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 library.add(fas, far);
 
 const App: React.FC = (_) => {
   const dispatch = useDispatch();
   const currentHistory = useHistory();
-  const message = useSelector(SessionSelector.getMessage);
-  const show = useSelector(SessionSelector.showMessage);
 
   // Check if user is already logged
   useEffect(() => {
@@ -36,20 +36,8 @@ const App: React.FC = (_) => {
       <Container fluid style={{ marginBottom: '20vh' }}>
         {/*<LogSessionContext /> */}
         {/*<RedirectionControl />*/}
-        {
-          /* Show user message */
-          message && show ? (
-            <Alert
-              variant={message.type}
-              key={'welcome-message'}
-              show={show}
-              onClose={() => dispatch(SessionAction.hideMessage({}))}
-              dismissible
-            >
-              <Alert.Heading>{message.message}</Alert.Heading>
-            </Alert>
-          ) : null
-        }
+        <ToastContainer autoClose={2000} />
+
         <Suspense fallback={<LoadingModal show={true} message={'....Caricamento'} />}>
           <Switch>
             {routes.map((route) => (

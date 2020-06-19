@@ -18,6 +18,7 @@ import { TournamentAction } from 'actions/tournament.action';
 import { withRouter } from 'react-router-dom';
 import { TournamentDTO } from 'models/tournament.model';
 import { SessionSelector } from 'selectors/session.selector';
+import { toast } from 'react-toastify';
 
 const FTournament = () => {
   // Redux
@@ -32,9 +33,6 @@ const FTournament = () => {
   // State definition
   const [newTournament, setNewTournament] = useState(false);
 
-  const messageInitialState: IToastProps = { message: '', type: 'success' };
-  const [message, setMessage] = useState(messageInitialState);
-
   useEffect(() => {
     if (!tournamentsList || tournamentsList.length === 0) {
       console.log('useEffect: ', tournamentsList);
@@ -42,15 +40,10 @@ const FTournament = () => {
     }
   }, [dispatch, tournamentsList]);
 
-  const showMessage = (message: string, type: toastType) => {
-    setMessage({ message, type });
-    setTimeout(() => setMessage(messageInitialState), 5000);
-  };
-
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
     if (tournament) currentHistory.push('/tournament');
-    else showMessage('Errore, riprovare piu tardi...', 'danger');
+    else toast.error('Errore, riprovare piu tardi...');
   };
 
   const onNewTournament = (value: React.SetStateAction<boolean>) => {
@@ -62,15 +55,13 @@ const FTournament = () => {
 
   return (
     <>
-      <GenericToast message={message.message} type={message.type} />
-
       <Col md={{ span: '6', offset: '3' }} sm="12">
         <Card style={cardStyle}>
           <Card.Header as="h2">Torneo</Card.Header>
           <Card.Body>
             <Col>
               {session.isAdmin && newTournament ? (
-                <NewTournament showMessage={showMessage} />
+                <NewTournament />
               ) : (
                 <Form onSubmit={handleSubmit}>
                   <label htmlFor="tournamentSelect">Selezione Torneo</label>

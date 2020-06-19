@@ -10,6 +10,7 @@ import { SessionAction } from 'actions';
 import { useDispatch } from 'react-redux';
 import { withRouter, RouteComponentProps, useHistory } from 'react-router-dom';
 import { PlayerRole, UserMessage } from 'models';
+import { toast } from 'react-toastify';
 
 interface PropsType extends RouteComponentProps {
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
@@ -37,11 +38,6 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
   const { value: birthday, setValue: setBirthday, reset: resetBirthday } = useInput('');
   const { value: playerRole, setValue: setPlayerRole, reset: resetPlayerRole } = useInput(playerRoles[0]);
 
-  const showError = (message: SetStateAction<string>) => {
-    setErrorMessage(message);
-    setTimeout(() => setErrorMessage(''), 3000);
-  };
-
   const reset = () => {
     resetUsername();
     resetName();
@@ -57,56 +53,56 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
 
   const isValid = () => {
     if (!username) {
-      showError('Scegli uno username');
+      toast.error('Scegli uno username');
       return false;
     }
     if (!name) {
-      showError('Inserire il nome');
+      toast.error('Inserire il nome');
       return false;
     }
     if (!surname) {
-      showError('Inserire il cognome');
+      toast.error('Inserire il cognome');
       return false;
     }
     if (!email) {
-      showError('Inserire una email');
+      toast.error('Inserire una email');
       return false;
     }
     if (!emailRegExp.test(email)) {
-      showError('Inserire una email valida');
+      toast.error('Inserire una email valida');
       return false;
     }
 
     if (!cEmail) {
-      showError('Inserire la conferma email');
+      toast.error('Inserire la conferma email');
       return false;
     }
     if (!emailRegExp.test(cEmail)) {
-      showError('Inserire una email valida');
+      toast.error('Inserire una email valida');
       return false;
     }
     if (email !== cEmail) {
-      showError('Le email non corrispondono');
+      toast.error('Le email non corrispondono');
       return false;
     }
     if (!password) {
-      showError('Inserire una password');
+      toast.error('Inserire una password');
       return false;
     }
     if (!passwordRegExp.test(password)) {
-      showError('La password non rispetta i criteri');
+      toast.error('La password non rispetta i criteri');
       return false;
     }
     if (!cPassword) {
-      showError('Inserire la conferma password');
+      toast.error('Inserire la conferma password');
       return false;
     }
     if (!passwordRegExp.test(cPassword)) {
-      showError('La password non rispetta i criteri');
+      toast.error('La password non rispetta i criteri');
       return false;
     }
     if (password !== cPassword) {
-      showError('Le password non corrispondono');
+      toast.error('Le password non corrispondono');
       return false;
     }
 
@@ -127,16 +123,16 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
       if (response.ok && result) {
         // Messaggio di benvenuto
         const message: UserMessage = { type: 'success', message: `Benvenuto ${result.username} !` };
-        dispatch(SessionAction.updateSession({ user: result, message, showMessage: true }));
+        toast.success(message.message);
+        dispatch(SessionAction.updateSession({ user: result }));
         dispatch(SessionAction.sessionControl.request({ history: currentHistory }));
-        setTimeout(() => dispatch(SessionAction.hideMessage({})), 5000);
       } else {
         switch (response.status) {
           case 401:
-            showError('Utente o Password errata');
+            toast.error('Utente o Password errata');
             break;
           case 403:
-            showError('Utente o Email gia registrati');
+            toast.error('Utente o Email gia registrati');
             break;
           default:
             break;
@@ -144,7 +140,7 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
       }
     } catch (error) {
       console.error('onSubmitLogin : ', error);
-      showError('Errore durante il processo di registrazione. Riprovare piu tardi');
+      toast.error('Errore durante il processo di registrazione. Riprovare piu tardi');
     }
   };
 

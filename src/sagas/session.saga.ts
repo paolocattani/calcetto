@@ -2,6 +2,7 @@ import { put, call, StrictEffect, takeEvery, take, takeLatest } from 'redux-saga
 import { SessionAction } from 'actions/session.action';
 import { AuthenticationResponse } from 'models';
 import { CheckAuthentication, createSessionChannel, Message } from 'services/session.service';
+import { toast } from 'react-toastify';
 
 function* checkAuthenticationSaga({
   payload,
@@ -33,12 +34,7 @@ function* watchSessionSaga(
       const message: Message = yield take(channel);
       if (message) {
         console.log('Message from queue : ', message);
-        yield put(
-          SessionAction.updateSession({
-            message: { type: 'danger', message: 'La tua sessione è scaduta' },
-            showMessage: true,
-          })
-        );
+        toast.error('La tua sessione è scaduta');
         action.payload.history.push('/login');
       }
     }

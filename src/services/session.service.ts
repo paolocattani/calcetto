@@ -28,6 +28,7 @@ export const CheckAuthentication = async ({}: CheckAuthenticationRequest): Promi
   }
 };
 
+// Session Control
 export const createSessionChannel = (channel: EventSource) =>
   eventChannel<Message>((emitter) => {
     // Listen for open channel

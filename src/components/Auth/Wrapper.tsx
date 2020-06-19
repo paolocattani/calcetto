@@ -1,8 +1,6 @@
 import React, { useState, CSSProperties, lazy } from 'react';
 import { Button, Container, Alert, Card, Col } from 'react-bootstrap';
 import { ToggleOn, ToggleOff } from '../core/icons';
-import { useSelector } from 'react-redux';
-import { SessionSelector } from 'selectors/session.selector';
 
 const Login = lazy(() => import('./Login'));
 const Register = lazy(() => import('./Register'));

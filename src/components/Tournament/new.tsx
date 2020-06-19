@@ -7,13 +7,11 @@ import { getEmptyTournament } from './helper';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { TournamentAction } from 'actions/tournament.action';
-import { toastType } from 'components/core/generic/Commons';
+import { toast } from 'react-toastify';
 
-type newTProps = {
-  showMessage: (message: string, type: toastType) => void;
-};
+type newTProps = {};
 
-const NewTournament: React.FC<newTProps> = ({ showMessage }) => {
+const NewTournament: React.FC<newTProps> = (_) => {
   let currentHistory = useHistory();
   const dispatch = useDispatch();
   const [name, setName] = useState<string>('');
@@ -23,7 +21,7 @@ const NewTournament: React.FC<newTProps> = ({ showMessage }) => {
   const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>): Promise<void> => {
     evt.preventDefault();
     if (!name) {
-      showMessage('Inserire un nome per il torneo', 'danger');
+      toast.error('Inserire un nome per il torneo');
       return;
     }
 
