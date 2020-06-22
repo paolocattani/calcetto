@@ -16,8 +16,9 @@ import { far } from '@fortawesome/free-regular-svg-icons';
 import { useDispatch } from 'react-redux';
 import { SessionAction } from 'actions';
 // Toasts
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import './toast.css';
 
 library.add(fas, far);
 

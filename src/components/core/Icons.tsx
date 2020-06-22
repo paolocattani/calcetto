@@ -24,11 +24,11 @@ export const TrashIcon: React.FC<IconProps> = ({ size, color }) => (
 export const SaveIcon: React.FC<IconProps> = ({ size, color }) => (
   <Icon size={size} color={color} prefix="far" iconName="save" />
 );
+
+// Solid
 export const RightArrowIcon: React.FC<IconProps> = ({ size, color }) => (
   <Icon size={size} prefix="fas" iconName="arrow-alt-circle-right" />
 );
-
-// Solid
 export const ToggleOn: React.FC<IconProps> = ({ size, color }) => (
   <Icon size={size} color={color} prefix="fas" iconName="toggle-on" />
 );

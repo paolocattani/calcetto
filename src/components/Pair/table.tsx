@@ -5,9 +5,10 @@ import { fetchData, getEmptyRowModel } from './helper';
 import { useHistory } from 'react-router';
 import TableHeader from './header';
 import NoData from './noData';
-import { LoadingModal, GenericToast, IToastProps, YesNoModal, YesNoModalProps } from '../core/generic/Commons';
+import { LoadingModal, YesNoModal, YesNoModalProps } from '../core/generic/Commons';
 import './style.css';
-import { RightArrowIcon } from '../core/icons';
+import style from './style.module.css';
+import { RightArrowIcon, TrashIcon, PlusIcon } from '../core/icons';
 import { TournamentProgress } from 'models/tournament.model';
 import { useSelector, useDispatch } from 'react-redux';
 import { TournamentSelector } from 'selectors/tournament.selector';
@@ -35,8 +36,6 @@ const PairsTable = () => {
   // States
   // User messages
   const [isLoading, setIsLoading] = useState({ state: false, message: 'Caricamento' });
-
-  const messageInitialState: IToastProps = { message: '', type: 'success' };
   const [askUser, setAskUser] = useState<YesNoModalProps>(hideAskUser);
 
   // Data
@@ -377,141 +376,130 @@ const PairsTable = () => {
 
   //console.log('render table : ', players, pairs);
 
+  const assignMatches = () => (
+    <InputGroup>
+      <InputGroup.Prepend>
+        <InputGroup.Text>Assegna gironi</InputGroup.Text>
+      </InputGroup.Prepend>
+      <FormControl
+        placeholder={
+          data.rows.length < 4
+            ? 'Inserisci almeno 4 coppie'
+            : `Numero di gironi ( max ${Math.floor(data.rows.length / 4)} )`
+        }
+        aria-label="Numero di gironi"
+        type="number"
+        step={1}
+        min={0}
+        max={Math.floor(data.rows.length / 4)}
+        value={stage1Number}
+        onChange={(event: React.FormEvent<FormControl & HTMLInputElement>) =>
+          setStage1Number(Number(event.currentTarget.value))
+        }
+        disabled={
+          data.rows.length < 4 ||
+          tournament.progress === TournamentProgress.Stage1 ||
+          tournament.progress === TournamentProgress.Stage2
+        }
+      />
+      <InputGroup.Append>
+        <Button
+          variant="primary"
+          onClick={setStage1Name}
+          disabled={!stage1Number || stage1Number > Math.floor(data.rows.length / 4) || data.rows.length < 4}
+        >
+          Esegui
+        </Button>
+      </InputGroup.Append>
+    </InputGroup>
+  );
+  const addPairs = () => (
+    <InputGroup>
+      <InputGroup.Prepend>
+        <InputGroup.Text>Aggiungi coppie</InputGroup.Text>
+      </InputGroup.Prepend>
+      <FormControl
+        disabled={availableRows <= 0}
+        type="number"
+        step={1}
+        min={1}
+        max={availableRows}
+        placeholder={
+          availableRows <= 0
+            ? 'Numero massimo di coppie gia creato'
+            : `Numero di coppie da aggiungere ( max ${availableRows} )`
+        }
+        aria-label="Numero di coppie"
+        onChange={(event: React.FormEvent<FormControl & HTMLInputElement>) =>
+          setNewRowsNumber(Number(event.currentTarget.value))
+        }
+        value={newRowsNumber || ''}
+      />
+      <InputGroup.Append>
+        <Button
+          variant="primary"
+          onClick={(e: any) => setNewRowsNumber(availableRows)}
+          disabled={newRowsNumber > availableRows}
+        >
+          Max
+        </Button>
+        <Button variant="primary" onClick={addMultipleRows} disabled={!newRowsNumber || newRowsNumber > availableRows}>
+          Esegui
+        </Button>
+      </InputGroup.Append>
+    </InputGroup>
+  );
+  const ToolsBar = () => (
+    <Col className={style.toolsBarContainer}>
+      <div className={style.firstRow}>
+        <Button variant="secondary" className="align-middle" onClick={goBack}>
+          Home
+        </Button>
+        <Button
+          variant="success"
+          className="align-middle"
+          onClick={() => addRow()}
+          disabled={availableRows <= 0 || !session.isAdmin}
+        >
+          <PlusIcon /> Aggiungi Coppia
+        </Button>
+        <Button
+          variant="danger"
+          className="align-middle"
+          onClick={deleteRow}
+          disabled={deleteDisabled || !session.isAdmin}
+        >
+          <i className="fas fa-trash-alt"></i>
+          <TrashIcon /> Elimina Coppia
+        </Button>
+        <Button variant="danger" className="align-middle" onClick={deleteStage1} disabled={!session.isAdmin}>
+          Reset gironi
+        </Button>
+        <Button
+          variant="outline-warning"
+          className="default-color-white float-right align-middle"
+          onClick={confirmPairs}
+          disabled={!session.isAdmin}
+        >
+          <b>Prosegui </b> <RightArrowIcon />
+        </Button>
+      </div>
+      {session.isAdmin ? (
+        <>
+          {assignMatches()}
+          {addPairs()}
+        </>
+      ) : null}
+    </Col>
+  );
   return (
-    <Row>
+    <div>
       <YesNoModal message={askUser.message} title={askUser.title} onClick={askUser.onClick} show={askUser.show} />
       <LoadingModal show={isLoading.state} message={isLoading.message} />
       <Col>
-        {session.isAdmin ? (
-          <Row style={{ margin: '0px' }}>
-            <Col md="6" sm="12">
-              <InputGroup>
-                <InputGroup.Prepend>
-                  <InputGroup.Text>Assegna gironi automaticamente</InputGroup.Text>
-                </InputGroup.Prepend>
-                <FormControl
-                  placeholder={
-                    data.rows.length < 4
-                      ? 'Inserisci almeno 4 coppie'
-                      : `Numero di gironi ( max ${Math.floor(data.rows.length / 4)} )`
-                  }
-                  aria-label="Numero di gironi"
-                  type="number"
-                  step={1}
-                  min={0}
-                  max={Math.floor(data.rows.length / 4)}
-                  value={stage1Number}
-                  onChange={(event: React.FormEvent<FormControl & HTMLInputElement>) =>
-                    setStage1Number(Number(event.currentTarget.value))
-                  }
-                  disabled={
-                    data.rows.length < 4 ||
-                    tournament.progress === TournamentProgress.Stage1 ||
-                    tournament.progress === TournamentProgress.Stage2
-                  }
-                />
-                <InputGroup.Append>
-                  <Button
-                    variant="primary"
-                    onClick={setStage1Name}
-                    disabled={!stage1Number || stage1Number > Math.floor(data.rows.length / 4) || data.rows.length < 4}
-                  >
-                    Esegui
-                  </Button>
-                </InputGroup.Append>
-              </InputGroup>
-            </Col>
-            <Col md="6" sm="12">
-              <InputGroup>
-                <InputGroup.Prepend>
-                  <InputGroup.Text>Aggiungi coppie</InputGroup.Text>
-                </InputGroup.Prepend>
-                <FormControl
-                  disabled={availableRows <= 0}
-                  type="number"
-                  step={1}
-                  min={1}
-                  max={availableRows}
-                  placeholder={
-                    availableRows <= 0
-                      ? 'Numero massimo di coppie gia creato'
-                      : `Numero di coppie da aggiungere ( max ${availableRows} )`
-                  }
-                  aria-label="Numero di coppie"
-                  onChange={(event: React.FormEvent<FormControl & HTMLInputElement>) =>
-                    setNewRowsNumber(Number(event.currentTarget.value))
-                  }
-                  value={newRowsNumber || ''}
-                />
-                <InputGroup.Append>
-                  <Button
-                    variant="primary"
-                    onClick={(e: any) => setNewRowsNumber(availableRows)}
-                    disabled={newRowsNumber > availableRows}
-                  >
-                    Max
-                  </Button>
-                  <Button
-                    variant="primary"
-                    onClick={addMultipleRows}
-                    disabled={!newRowsNumber || newRowsNumber > availableRows}
-                  >
-                    Esegui
-                  </Button>
-                </InputGroup.Append>
-              </InputGroup>
-            </Col>
-          </Row>
-        ) : null}
-        <Row style={{ margin: '5vh 0vh' }}>
-          <Col md="2" sm="12">
-            <ListGroup>
-              <Button
-                type="button"
-                onClick={confirmPairs}
-                size="lg"
-                variant="outline-warning"
-                className="default-color-white"
-              >
-                <span style={{ fontSize: 'larger', fontWeight: 'bolder', padding: '1vw' }}>Prosegui</span>
-                <RightArrowIcon size="lg" />
-              </Button>
-
-              <ListGroup.Item action variant="secondary" onClick={goBack}>
-                Home
-              </ListGroup.Item>
-              <ListGroup.Item
-                action
-                variant="success"
-                onClick={() => addRow()}
-                disabled={availableRows <= 0 || !session.isAdmin}
-              >
-                Aggiungi Coppia
-              </ListGroup.Item>
-
-              <OverlayTrigger
-                placement="right"
-                key="right"
-                overlay={<Tooltip id="tooltip-pair">{deleteTooltipMessage}</Tooltip>}
-              >
-                <span className="d-inline-block" onClick={deleteRow}>
-                  <ListGroup.Item
-                    action
-                    variant="danger"
-                    style={{ pointerEvents: 'none' }}
-                    disabled={deleteDisabled || !session.isAdmin}
-                  >
-                    Elimina Coppia {deleteDisabled}
-                  </ListGroup.Item>
-                </span>
-              </OverlayTrigger>
-
-              <ListGroup.Item action variant="danger" onClick={deleteStage1} disabled={!session.isAdmin}>
-                Reset gironi
-              </ListGroup.Item>
-            </ListGroup>
-          </Col>
-          <Col md="10" sm="12">
+        <Row>{ToolsBar()}</Row>
+        <Row>
+          <Col>
             {data.rows && data.players ? (
               <BootstrapTable
                 bootstrap4
@@ -536,7 +524,7 @@ const PairsTable = () => {
           </Col>
         </Row>
       </Col>
-    </Row>
+    </div>
   );
 };
 
