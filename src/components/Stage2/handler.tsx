@@ -7,7 +7,7 @@ import Stage2 from './table';
 // FIXME:
 import { ICell, PairDTO } from 'models';
 import { ValueType, ActionMeta } from 'react-select';
-import { ListGroup, Button } from 'react-bootstrap';
+import { ListGroup, Button, Col } from 'react-bootstrap';
 import commonStyle from '../../common.module.css';
 import { Stage2Selector, TournamentSelector } from 'selectors';
 import { Stage2Action } from 'actions';
@@ -85,11 +85,14 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
   console.log('render stage2 :', cells, pairsList, rowNumber);
   return cells && pairsList && rowNumber ? (
     <>
-      <ListGroup.Item className={commonStyle.functionsList} key={'stage-button'}>
-        <Button variant="secondary" onClick={goBack}>
-          Fase 1
-        </Button>
-      </ListGroup.Item>
+      <Col className={commonStyle.toolsBarContainer}>
+        <div className={commonStyle.toolsBar}>
+          <Button variant="secondary" className="align-middle" onClick={goBack}>
+            Fase 1
+          </Button>
+        </div>
+      </Col>
+
       <Stage2
         pairs={pairsListFromStore}
         pairsSelect={pairsList}

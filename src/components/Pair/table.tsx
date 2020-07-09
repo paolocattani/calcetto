@@ -7,7 +7,7 @@ import TableHeader from './header';
 import NoData from './noData';
 import { LoadingModal, YesNoModal, YesNoModalProps } from '../core/generic/Commons';
 import './style.css';
-import style from './style.module.css';
+import commonStyle from '../../common.module.css';
 import { RightArrowIcon, TrashIcon, PlusIcon } from '../core/icons';
 import { TournamentProgress } from 'models/tournament.model';
 import { useSelector, useDispatch } from 'react-redux';
@@ -450,9 +450,9 @@ const PairsTable = () => {
     </InputGroup>
   );
   const ToolsBar = () => (
-    <Col className={style.toolsBarContainer}>
-      <div className={style.firstRow}>
-        <Button variant="secondary" className="align-middle" onClick={goBack}>
+    <Col className={commonStyle.toolsBarContainer}>
+      <div className={commonStyle.toolsBar}>
+        <Button variant="secondary" className="float-left align-middle" onClick={goBack}>
           Home
         </Button>
         <Button
@@ -469,7 +469,6 @@ const PairsTable = () => {
           onClick={deleteRow}
           disabled={deleteDisabled || !session.isAdmin}
         >
-          <i className="fas fa-trash-alt"></i>
           <TrashIcon /> Elimina Coppia
         </Button>
         <Button variant="danger" className="align-middle" onClick={deleteStage1} disabled={!session.isAdmin}>

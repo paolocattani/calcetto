@@ -74,7 +74,6 @@ const Stage1Handler = ({ pairsList, autoOrder }: handlerPropsType): JSX.Element 
 
   return (
     <>
-      {/*saved ? <p>Salvato....</p> : null*/}
       {isLoading ? (
         <h3>
           Caricamento girone <b>{tableName}</b> in corso....

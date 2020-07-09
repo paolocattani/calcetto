@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import Stage1Handler from './handler';
-import { ListGroup, Button } from 'react-bootstrap';
+import { ListGroup, Button, Row, Col } from 'react-bootstrap';
 import { fetchPairs } from 'components/Pair/helper';
 import { PairDTO, TournamentProgress } from 'models';
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,9 +9,10 @@ import { TournamentSelector } from 'selectors/tournament.selector';
 import { withRouter } from 'react-router-dom';
 import { Stage1Selector } from 'selectors/stage1.selector';
 import commonStyle from '../../common.module.css';
-import GenericModal from 'components/core/generic/GenericModal';
+
 import { Stage2Action, TournamentAction } from 'actions';
 import { SessionSelector } from 'selectors/session.selector';
+import { RightArrowIcon, TrashIcon } from 'components/core/icons';
 
 interface ModalProps {
   show: boolean;
@@ -66,14 +67,21 @@ const Wrapper: React.FC = (): JSX.Element => {
 
   return (
     <>
-      <ListGroup.Item className={commonStyle.functionsList} key={'stage-button'}>
-        <Button variant="secondary" onClick={goBack}>
-          Gestione Coppie
-        </Button>
-        <Button variant="secondary" onClick={() => dispatch(Stage2Action.delete.request({ tId: tournament.id! }))}>
-          Reset Fase 2
-        </Button>
-        {/* FIXME:
+      <Col className={commonStyle.toolsBarContainer}>
+        <div className={commonStyle.toolsBar}>
+          <Button variant="secondary" onClick={goBack} className="float-left">
+            Gestione Coppie
+          </Button>
+          <Button
+            variant="danger"
+            className="align-middle"
+            onClick={() => dispatch(Stage2Action.delete.request({ tId: tournament.id! }))}
+            disabled={!session.isAdmin}
+          >
+            <TrashIcon /> Reset Fase 2
+          </Button>
+
+          {/* FIXME:
           <Form.Check
             custom
             checked={autoOrder}
@@ -83,22 +91,16 @@ const Wrapper: React.FC = (): JSX.Element => {
             onChange={() => setAutoOrder(!autoOrder)}
           />
         */}
-        <Button
-          variant="success"
-          className="float-right"
-          onClick={goToStage2}
-          disabled={selected.length < 4 && tournament.progress < TournamentProgress.Stage2}
-        >
-          {tournament.progress} - Prosegui
-        </Button>
-      </ListGroup.Item>
-      <GenericModal
-        show={showError.show}
-        title="Errore"
-        onHide={() => setShowError(hideError)}
-        component={<p>{showError.message}</p>}
-        size="xl"
-      />
+          <Button
+            variant="outline-warning"
+            className="default-color-white float-right align-middle"
+            onClick={goToStage2}
+            disabled={selected.length < 4 && tournament.progress < TournamentProgress.Stage2}
+          >
+            <b>Prosegui </b> <RightArrowIcon />
+          </Button>
+        </div>
+      </Col>
       {renderTables(pairsList, autoOrder)}
     </>
   );
@@ -120,22 +122,14 @@ function renderTables(pairsList: PairDTO[], autoOrder: boolean): JSX.Element {
       // A rottura di stage1Name
       if (stageName === '') stageName = element.stage1Name;
       if (stageName !== element.stage1Name) {
-        stageList.push(
-          <ListGroup.Item className={'inherit-background'} key={`stage-${stageName}`}>
-            <Stage1Handler pairsList={stage} autoOrder={autoOrder} />
-          </ListGroup.Item>
-        );
+        stageList.push(<Stage1Handler pairsList={stage} autoOrder={autoOrder} />);
         stageName = element.stage1Name;
         stage = [];
       }
       stage.push(element);
     });
   if (stage.length > 0) {
-    stageList.push(
-      <ListGroup.Item className={'inherit-background'} key={`stage-${stageName}`}>
-        <Stage1Handler pairsList={stage} autoOrder={autoOrder} />
-      </ListGroup.Item>
-    );
+    stageList.push(<Stage1Handler pairsList={stage} autoOrder={autoOrder} />);
     // console.log(`stages ${stageName} :`, stage);
   }
 
