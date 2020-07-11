@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, ListGroup, InputGroup, FormControl, Row, Col, Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { Button, InputGroup, FormControl, Row, Col } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { fetchData, getEmptyRowModel } from './helper';
 import { useHistory } from 'react-router';
@@ -368,12 +368,13 @@ const PairsTable = () => {
   const deleteDisabled =
     !(selectedRows.length > 0) || tournament.progress === 'Stage1' || tournament.progress === 'Stage2';
 
+  /*
   let deleteTooltipMessage = '';
   if (!(selectedRows.length > 0)) deleteTooltipMessage = 'Seleziona almeno una riga';
   else if (tournament.progress === 'Stage1' || tournament.progress === 'Stage2')
     deleteTooltipMessage = 'Devi prima resettare i gironi per poter cancellare delle coppie';
   else deleteTooltipMessage = 'Cancella le coppie selezionate';
-
+*/
   //console.log('render table : ', players, pairs);
 
   const assignMatches = () => (

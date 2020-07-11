@@ -11,6 +11,14 @@
     margin-bottom: 2em;
 }
 
+.toolsBarContainer div {
+    padding-bottom: 5px;
+}
+
+.toolsBarContainer div:nth-child(1) button{
+    margin: 10px;
+}
+
 .toolsBarRow{
     padding: 10px;
 }

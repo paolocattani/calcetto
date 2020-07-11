@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import Stage1Handler from './handler';
-import { ListGroup, Button, Row, Col } from 'react-bootstrap';
+import { ListGroup, Button, Col } from 'react-bootstrap';
 import { fetchPairs } from 'components/Pair/helper';
 import { PairDTO, TournamentProgress } from 'models';
 import { useSelector, useDispatch } from 'react-redux';
@@ -36,8 +36,6 @@ const Wrapper: React.FC = (): JSX.Element => {
 
   const [pairsList, setPairsList] = useState<PairDTO[]>([]);
   const [autoOrder /*, setAutoOrder*/] = useState<boolean>(true);
-  const hideError: ModalProps = { show: false, message: '' };
-  const [showError, setShowError] = useState<ModalProps>(hideError);
 
   function goBack() {
     currentHistory.push('/tournament');

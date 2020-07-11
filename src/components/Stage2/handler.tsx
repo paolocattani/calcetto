@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { withRouter, RouteComponentProps, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 // import { TournamentSelector } from 'selectors';
@@ -7,9 +7,9 @@ import Stage2 from './table';
 // FIXME:
 import { ICell, PairDTO } from 'models';
 import { ValueType, ActionMeta } from 'react-select';
-import { ListGroup, Button, Col } from 'react-bootstrap';
+import { Button, Col } from 'react-bootstrap';
 import commonStyle from '../../common.module.css';
-import { Stage2Selector, TournamentSelector } from 'selectors';
+import { Stage2Selector } from 'selectors';
 import { Stage2Action } from 'actions';
 import { LoadingModal } from 'components/core/generic/Commons';
 
@@ -20,7 +20,6 @@ interface Stage2HandlerProps extends RouteComponentProps {}
 const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
   const currentHistory = useHistory();
   const dispatch = useDispatch();
-  const tournament = useSelector(TournamentSelector.getTournament)!;
 
   const cells = useSelector(Stage2Selector.getCells);
   const rowNumber = useSelector(Stage2Selector.getRowsNumber);
@@ -82,7 +81,7 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
     dispatch(Stage2Action.setCells(elements));
   };
 
-  console.log('render stage2 :', cells, pairsList, rowNumber);
+  // console.log('render stage2 :', cells, pairsList, rowNumber);
   return cells && pairsList && rowNumber ? (
     <>
       <Col className={commonStyle.toolsBarContainer}>
