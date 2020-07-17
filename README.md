@@ -1,7 +1,7 @@
 # Calcetto
 ![Node.js CI](https://github.com/paolocattani/calcetto/workflows/Node.js%20CI/badge.svg?branch=develop&event=push)
-![Code Quality](https://www.code-inspector.com/project/11107/score/svg) 
-![Code Grade](https://www.code-inspector.com/project/11107/status/svg) 
+![Code Quality](https://www.code-inspector.com/project/11105/score/svg) 
+![Code Grade](https://www.code-inspector.com/project/11105/status/svg) 
 
 ## TODO
 - https://blog.logrocket.com/how-to-create-a-custom-toast-component-with-react/
