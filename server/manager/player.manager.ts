@@ -87,7 +87,7 @@ export const deletePlayer = async (models: Player[]): Promise<number> =>
   await Player.destroy({ where: { id: models.map((e) => e.id) } });
 
 // Utils
-export const parseBody = (body: any) =>
+export const parseBody = (body: any): Player =>
   ({
     id: body.id,
     name: body.name || '',
