@@ -25,8 +25,8 @@ export default class Player extends Model<Player> {
   @Column(DataType.STRING)
   public alias!: string;
 
-  @Default('Portiere')
-  @Column(DataType.ENUM('Portiere', 'Attaccante', 'Master'))
+  @Default(PlayerRole.GoalKeeper)
+  @Column(DataType.ENUM(PlayerRole.GoalKeeper, PlayerRole.Striker, PlayerRole.Master))
   public role!: PlayerRole;
 
   @Column(DataType.STRING)

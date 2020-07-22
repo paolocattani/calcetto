@@ -3,13 +3,7 @@ import { Button } from 'react-bootstrap';
 import { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
 import { Type } from 'react-bootstrap-table2-editor';
 import { getEmptyPlayer } from 'services/player.service';
-
-// options for role column
-const selectOptions = {
-  Portiere: 'Portiere',
-  Attaccante: 'Attaccante',
-  Master: 'Master',
-};
+import { PlayerRole } from '../../models/player.model';
 
 // Filter
 let nameFilter;
@@ -71,16 +65,20 @@ const playerColumns = (isEditable) => [
     headerStyle: (column, colIndex) => ({ width: `${isEditable ? '11' : '15'}%` }),
     filter: selectFilter({
       placeholder: 'Filtra...',
-      options: selectOptions,
+      options: {
+        [PlayerRole.GoalKeeper]: PlayerRole.GoalKeeper,
+        [PlayerRole.Striker]: PlayerRole.Striker,
+        [PlayerRole.Master]: PlayerRole.Master,
+      },
       getFilter: (filter) => (roleFilter = filter),
     }),
     editor: {
       type: Type.SELECT,
       getOptions: (_) => {
         return [
-          { value: 'Portiere', label: 'Portiere' },
-          { value: 'Attaccante', label: 'Attaccante' },
-          { value: 'Master', label: 'Master' },
+          { value: PlayerRole.GoalKeeper, label: PlayerRole.GoalKeeper },
+          { value: PlayerRole.Striker, label: PlayerRole.Striker },
+          { value: PlayerRole.Master, label: PlayerRole.Master },
         ];
       },
     },
@@ -117,13 +115,11 @@ const playerColumns = (isEditable) => [
 export default playerColumns;
 
 // Custom export button
-export const ExportCSVButton = (props) => {
-  return (
-    <Button disabled className="btn btn-success" onClick={() => props.onExport()}>
-      Esporta in CSV
-    </Button>
-  );
-};
+export const ExportCSVButton = (props) => (
+  <Button disabled className="btn btn-success" onClick={() => props.onExport()}>
+    Esporta in CSV
+  </Button>
+);
 
 export const fetchPlayers = (setterFunction, tId) => {
   (async () => {

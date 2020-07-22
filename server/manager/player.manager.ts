@@ -1,5 +1,5 @@
 // Models/Types
-import { PlayerDTO } from '../models/dto/player.dto';
+import { PlayerDTO, PlayerRole } from '../models/dto/player.dto';
 import Player from '../models/sequelize/player.model';
 // Logger utils
 import { logProcess } from '../core/logger';
@@ -93,7 +93,7 @@ export const parseBody = (body: any) =>
     name: body.name || '',
     surname: body.surname || '',
     alias: body.alias || '',
-    role: body.role || 'ATTACCANTE',
+    role: body.role || PlayerRole.Striker,
     email: body.email || '',
     phone: body.phone || '',
     match_played: body.match_played || 0,

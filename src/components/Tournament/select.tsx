@@ -141,5 +141,18 @@ const customStyles: Partial<Styles> | undefined = {
   }),
   control: (provided) => ({ ...provided, height: '3vmin', marginBottom: '40px' }),
   singleValue: (provided) => ({ ...provided }),
-  valueContainer: (provided) => ({ ...provided, height: '100%', fontSize: 'larger' }),
+
+  valueContainer: (provided) => ({
+    ...provided,
+    height: '100%',
+    fontSize: 'larger',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    '&:active': {
+      height: '100%',
+      fontSize: 'larger',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+    },
+  }),
 };

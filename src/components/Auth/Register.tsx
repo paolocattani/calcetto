@@ -17,10 +17,10 @@ interface PropsType extends RouteComponentProps {
 }
 
 const playerRoles = [
-  { value: PlayerRole.None, label: 'Non sono un giocatore' },
-  { value: PlayerRole.GoalKeeper, label: 'Portiere' },
-  { value: PlayerRole.Striker, label: 'Attaccante' },
-  { value: PlayerRole.Master, label: 'Master' },
+  { value: PlayerRole.NotAPlayer, label: PlayerRole.NotAPlayer },
+  { value: PlayerRole.GoalKeeper, label: PlayerRole.GoalKeeper },
+  { value: PlayerRole.Striker, label: PlayerRole.Striker },
+  { value: PlayerRole.Master, label: PlayerRole.Master },
 ];
 
 // https://medium.com/@faizanv/authentication-for-your-react-and-express-application-w-json-web-tokens-923515826e0#6563

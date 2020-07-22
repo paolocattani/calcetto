@@ -3,89 +3,76 @@ import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import PlayerSelect from '../Player/select';
 import { customStyles } from './helper';
 
+const ALIGN_CENTER = 'center';
+const YES = 'Si';
+const NO = 'No';
+
+const playerSelection = (editorProps, value, row, rowIndex, columnIndex, onSelect, options) => (
+  <PlayerSelect
+    {...editorProps}
+    id={columnIndex}
+    row={row}
+    rowIndex={rowIndex}
+    columnIndex={columnIndex}
+    value={value}
+    onSelect={onSelect}
+    options={options}
+    styles={customStyles}
+  />
+);
+
+const checkBoxProps = {
+  align: () => ALIGN_CENTER,
+  headerStyle: (column, colIndex) => ({ width: '7,5%' }),
+  editor: {
+    type: Type.CHECKBOX,
+    value: `${YES}:${NO}`,
+  },
+  style: (content, row, rowIndex, columnIndex) => (content !== NO ? { backgroundColor: '#ffbf47' } : null),
+};
+
 export const columns = (onSelect, options) => [
-  { dataField: 'id', text: 'ID', editable: false, hidden: true, align: () => 'center' },
-  { dataField: 'rowNumber', text: 'ID', editable: false, align: () => 'center' },
+  { dataField: 'id', text: 'ID', editable: false, hidden: true, align: () => ALIGN_CENTER },
+  { dataField: 'rowNumber', text: 'ID', editable: false, align: () => ALIGN_CENTER },
   {
     dataField: 'player1.alias',
     text: 'Giocatore 1',
-    align: () => 'center',
-    editorRenderer: (editorProps, value, row, column, rowIndex, columnIndex) => (
-      <PlayerSelect
-        {...editorProps}
-        id={columnIndex}
-        row={row}
-        rowIndex={rowIndex}
-        columnIndex={columnIndex}
-        value={value}
-        onSelect={onSelect}
-        options={options}
-        styles={customStyles}
-      />
-    ),
+    align: () => ALIGN_CENTER,
+    editorRenderer: (editorProps, value, row, column, rowIndex, columnIndex) =>
+      playerSelection(editorProps, value, row, rowIndex, columnIndex, onSelect, options),
     headerStyle: (column, colIndex) => ({ width: '20%' }),
   },
   {
     dataField: 'player2.alias',
     text: 'Giocatore 2',
-    align: () => 'center',
-    editorRenderer: (editorProps, value, row, column, rowIndex, columnIndex) => (
-      <PlayerSelect
-        {...editorProps}
-        id={columnIndex}
-        row={row}
-        rowIndex={rowIndex}
-        columnIndex={columnIndex}
-        value={value}
-        onSelect={onSelect}
-        options={options}
-        styles={customStyles}
-      />
-    ),
+    align: () => ALIGN_CENTER,
+    editorRenderer: (editorProps, value, row, column, rowIndex, columnIndex) =>
+      playerSelection(editorProps, value, row, rowIndex, columnIndex, onSelect, options),
     headerStyle: (column, colIndex) => ({ width: '20%' }),
   },
   { dataField: 'alias', text: 'Alias Coppia', headerStyle: (column, colIndex) => ({ width: '25%' }) },
   {
     dataField: 'stage1Name',
     text: 'Nome girone',
-    align: () => 'center',
+    align: () => ALIGN_CENTER,
     headerStyle: (column, colIndex) => ({ width: '10%' }),
     editor: {
       type: Type.SELECT,
       options: 'abcdefghijklmnopqrstuvwxyz'
         .toUpperCase()
         .split('')
-        .map((e) => {
-          return { value: e, label: e };
-        }),
+        .map((e) => ({ value: e, label: e })),
     },
   },
   {
     dataField: 'paid1',
     text: 'Pagato 1',
-    align: () => 'center',
-    headerStyle: (column, colIndex) => ({ width: '7,5%' }),
-    editor: {
-      type: Type.CHECKBOX,
-      value: 'Si:No',
-    },
-
-    style: (content, row, rowIndex, columnIndex) => {
-      if (content !== 'Si') return { backgroundColor: '#ffbf47' };
-    },
+    ...checkBoxProps,
   },
   {
     dataField: 'paid2',
     text: 'Pagato 2',
-    align: () => 'center',
-    headerStyle: (column, colIndex) => ({ width: '7,5%' }),
-    editor: {
-      type: Type.CHECKBOX,
-      value: 'Si:No',
-    },
-    style: (content, row, rowIndex, columnIndex) => {
-      if (content !== 'Si') return { backgroundColor: '#ffbf47' };
-    },
+    ...checkBoxProps,
   },
 ];
 
