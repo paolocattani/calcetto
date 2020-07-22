@@ -30,8 +30,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
       # Test
-      - name: Test
-        run: npm run start
+      #- name: Test
+      #  run: npm run start
 
   # Code Quality
   check-quality:
