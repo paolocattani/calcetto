@@ -4,7 +4,7 @@ import { AppRequest } from 'controller';
 // Core
 import { logger } from '../core/logger';
 import { asyncMiddleware, safeVerifyToken } from '../core/middleware';
-import { DEFAULT_HEADERS, EOM, CHAR_SET } from './constants';
+import { DEFAULT_HEADERS, EOM, CHAR_SET } from './const';
 import { SessionStatus, Message, ConnectedClient } from './types';
 
 let connectedClients: ConnectedClient[] = [];
