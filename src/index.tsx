@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -15,11 +15,13 @@ setDefaultLocale('it');
 registerLocale('it', it);
 
 ReactDOM.render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </Provider>,
+  <StrictMode>
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </StrictMode>,
   document.getElementById('root')
 );
 
