@@ -1,5 +1,5 @@
 import { put, call, StrictEffect, takeEvery } from 'redux-saga/effects';
-import { fetchTournaments, postTournament } from 'services/tournament.service';
+import { fetchTournaments, postTournament, updateTournament } from 'services/tournament.service';
 import { PostTournamentResponse, FetchTournamentsResponse } from 'models/tournament.model';
 import { TournamentAction } from 'actions/tournament.action';
 
@@ -30,7 +30,7 @@ function* updateTournamentSaga(
   action: ReturnType<typeof TournamentAction.saveTournament.request>
 ): Generator<StrictEffect, void, any> {
   try {
-    const response: PostTournamentResponse = yield call(postTournament, action.payload);
+    const response: PostTournamentResponse = yield call(updateTournament, action.payload);
     yield put(TournamentAction.saveTournament.success(response));
   } catch (err) {
     yield put(TournamentAction.saveTournament.failure(err));

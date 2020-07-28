@@ -21,11 +21,9 @@ router.get(
   withAuth,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     try {
-      const {
-        user,
-        query: { tId },
-      } = req;
-      if (!tId) return res.status(500).json({ message: 'Missing tournament' });
+      const { user, query } = req;
+      if (!query.tId) return res.status(500).json({ message: 'Missing tournament' });
+      const tId = parseInt(query.tId as string);
       logger.info(`Looking for pairs in tournament ${chalk.greenBright(tId.toString())}`);
       const pairsList = await Pair.findAll({
         where: {

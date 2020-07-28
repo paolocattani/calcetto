@@ -10,17 +10,21 @@ const AuthWrapper: React.FC = (): JSX.Element => {
   const [register, setRegister] = useState(false); // Mostra form registrazione/login
   const [errorMessage, setErrorMessage] = useState('');
 
-  const title = register ? 'Registrati' : 'Login';
-  const body = register ? <Register setErrorMessage={setErrorMessage} /> : <Login setErrorMessage={setErrorMessage} />;
-  const buttonString = register ? (
-    <>
-      <ToggleOn /> <strong>Login</strong>
-    </>
-  ) : (
-    <>
-      <ToggleOff /> <strong>Registrati</strong>
-    </>
-  );
+  const [title, body, buttonString] = register
+    ? [
+        'Registrati',
+        <Register setErrorMessage={setErrorMessage} />,
+        <>
+          <ToggleOn /> <strong>Login</strong>
+        </>,
+      ]
+    : [
+        'Login',
+        <Login setErrorMessage={setErrorMessage} />,
+        <>
+          <ToggleOff /> <strong>Registrati</strong>
+        </>,
+      ];
 
   const modalStyle: CSSProperties = {
     textAlign: 'left',

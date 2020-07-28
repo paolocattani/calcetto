@@ -62,7 +62,7 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
   };
 
   // Questa funzione viene richiamata quando viene selezionata una coppia nella prima colonna
-  const onSelectPair = (value: ValueType<PairDTO>, rowIndex: number, actionMeta?: ActionMeta) => {
+  const onSelectPair = (value: ValueType<PairDTO>, rowIndex: number, actionMeta?: ActionMeta<PairDTO>) => {
     const elements = [...cells!];
     const newPair = value as PairDTO;
     const prevPair = elements[0][rowIndex - 1].pair;

@@ -2,7 +2,7 @@ import { useInput } from '../core/hooks/InputHook';
 import { Form, Button, Col } from 'react-bootstrap';
 import React, { SetStateAction } from 'react';
 import DatePicker from 'react-datepicker';
-import Select, { StylesConfig } from 'react-select';
+import Select, { StylesConfig, ValueType } from 'react-select';
 import './style.css';
 import { emailRegExp, passwordRegExp } from '../core/utils';
 import { UserDTO } from 'models/user.model';
@@ -16,7 +16,11 @@ interface PropsType extends RouteComponentProps {
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const playerRoles = [
+type PlayerRoleType = {
+  value: PlayerRole;
+  label: PlayerRole;
+};
+const playerRoles: ReadonlyArray<PlayerRoleType> = [
   { value: PlayerRole.NotAPlayer, label: PlayerRole.NotAPlayer },
   { value: PlayerRole.GoalKeeper, label: PlayerRole.GoalKeeper },
   { value: PlayerRole.Striker, label: PlayerRole.Striker },
@@ -27,16 +31,18 @@ const playerRoles = [
 const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
   const dispatch = useDispatch();
   const currentHistory = useHistory();
-  const { value: username, bind: bindUsername, reset: resetUsername } = useInput('');
-  const { value: name, bind: bindName, reset: resetName } = useInput('');
-  const { value: surname, bind: bindSurname, reset: resetSurname } = useInput('');
-  const { value: email, bind: bindEmail, reset: resetEmail } = useInput('');
-  const { value: cEmail, bind: bindCEmail, reset: resetCEmail } = useInput('');
-  const { value: password, bind: bindPassword, reset: resetPassword } = useInput('');
-  const { value: cPassword, bind: bindCPassword, reset: resetCPassword } = useInput('');
-  const { value: phone, bind: bindPhone, reset: resetPhone } = useInput('');
-  const { value: birthday, setValue: setBirthday, reset: resetBirthday } = useInput('');
-  const { value: playerRole, setValue: setPlayerRole, reset: resetPlayerRole } = useInput(playerRoles[0]);
+  const { value: username, bind: bindUsername, reset: resetUsername } = useInput<string>('');
+  const { value: name, bind: bindName, reset: resetName } = useInput<string>('');
+  const { value: surname, bind: bindSurname, reset: resetSurname } = useInput<string>('');
+  const { value: email, bind: bindEmail, reset: resetEmail } = useInput<string>('');
+  const { value: cEmail, bind: bindCEmail, reset: resetCEmail } = useInput<string>('');
+  const { value: password, bind: bindPassword, reset: resetPassword } = useInput<string>('');
+  const { value: cPassword, bind: bindCPassword, reset: resetCPassword } = useInput<string>('');
+  const { value: phone, bind: bindPhone, reset: resetPhone } = useInput<string>('');
+  const { value: birthday, setValue: setBirthday, reset: resetBirthday } = useInput<Date | null>(new Date());
+  const { value: playerRole, setValue: setPlayerRole, reset: resetPlayerRole } = useInput<PlayerRoleType>(
+    playerRoles[0]
+  );
 
   const reset = () => {
     resetUsername();
@@ -144,6 +150,12 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
     }
   };
 
+  const onSelectPlayerRole = (newRole: ValueType<PlayerRoleType>) => {
+    if (newRole) {
+      setPlayerRole(newRole as PlayerRoleType);
+    }
+  };
+
   return (
     <Form onSubmit={handleSubmit}>
       {/* Username - Name - Surname */}
@@ -227,9 +239,8 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
           <Form.Group>
             <Form.Label>Ruolo</Form.Label>
             <Select
-              dateFormat="dd/MM/yyyy"
               value={playerRole}
-              onChange={(newValue) => setPlayerRole(newValue)}
+              onChange={(newValue) => onSelectPlayerRole(newValue)}
               options={playerRoles}
               styles={selectStyles}
             />

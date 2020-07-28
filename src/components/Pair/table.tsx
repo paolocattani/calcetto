@@ -1,24 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { Button, InputGroup, FormControl, Row, Col } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
-import { fetchData, getEmptyRowModel } from './helper';
 import { useHistory } from 'react-router';
+import { useSelector, useDispatch } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { toast } from 'react-toastify';
+// Components
 import TableHeader from './header';
 import NoData from './noData';
+// Core / Helper / Editor
 import { LoadingModal, YesNoModal, YesNoModalProps } from '../core/generic/Commons';
+import { FormEventType } from '../core/generic/CommonTypes';
+import { RightArrowIcon, TrashIcon, PlusIcon } from '../core/icons';
+import { cellEditProps, columns } from './editor';
+import { fetchData, getEmptyRowModel } from './helper';
+// Style
 import './style.css';
 import commonStyle from '../../common.module.css';
-import { RightArrowIcon, TrashIcon, PlusIcon } from '../core/icons';
-import { TournamentProgress } from 'models/tournament.model';
-import { useSelector, useDispatch } from 'react-redux';
-import { TournamentSelector } from 'selectors/tournament.selector';
-import { withRouter } from 'react-router-dom';
+// Service
 import { getEmptyPlayer } from 'services/player.service';
-import { cellEditProps, columns } from './editor';
+// Selector
 import { SessionSelector } from 'selectors/session.selector';
+import { TournamentSelector } from 'selectors/tournament.selector';
+// Models
 import { PairDTO, PlayerDTO } from 'models';
+import { TournamentProgress } from 'models/tournament.model';
+// Action
 import { TournamentAction } from 'actions';
-import { toast } from 'react-toastify';
 
 const hideAskUser = {
   message: '',
@@ -354,6 +362,7 @@ const PairsTable = () => {
     setData((current) => ({ rows: newRows, players: current.players }));
   }
 
+  console.log("availableRows : ", data.rows);
   const availableRows = Math.floor(
     Math.floor((data.players.length - 1) / 2) -
       (data.rows.length === 0
@@ -394,9 +403,7 @@ const PairsTable = () => {
         min={0}
         max={Math.floor(data.rows.length / 4)}
         value={stage1Number}
-        onChange={(event: React.FormEvent<FormControl & HTMLInputElement>) =>
-          setStage1Number(Number(event.currentTarget.value))
-        }
+        onChange={(event: React.FormEvent<FormEventType>) => setStage1Number(Number(event.currentTarget.value))}
         disabled={
           data.rows.length < 4 ||
           tournament.progress === TournamentProgress.Stage1 ||
@@ -431,9 +438,7 @@ const PairsTable = () => {
             : `Numero di coppie da aggiungere ( max ${availableRows} )`
         }
         aria-label="Numero di coppie"
-        onChange={(event: React.FormEvent<FormControl & HTMLInputElement>) =>
-          setNewRowsNumber(Number(event.currentTarget.value))
-        }
+        onChange={(event: React.FormEvent<FormEventType>) => setNewRowsNumber(Number(event.currentTarget.value))}
         value={newRowsNumber || ''}
       />
       <InputGroup.Append>

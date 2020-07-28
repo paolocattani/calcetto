@@ -17,8 +17,8 @@ const Login: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
   const dispatch = useDispatch();
   const currentHistory = useHistory();
 
-  const { value: username, bind: bindUsername } = useInput('');
-  const { value: password, bind: bindPassword } = useInput('');
+  const { value: username, bind: bindUsername } = useInput<string>('');
+  const { value: password, bind: bindPassword } = useInput<string>('');
 
   const handleSubmit = async (evt: React.SyntheticEvent) => {
     evt.preventDefault();

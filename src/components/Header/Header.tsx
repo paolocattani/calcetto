@@ -67,7 +67,7 @@ export const Header: React.FC = () => {
                       <Dropdown.Item
                         className="default-color-white default-hover-green"
                         as="button"
-                        variant="warning"
+                        // FIXME: variant="warning"
                         onClick={logout}
                         eventKey="1"
                       >

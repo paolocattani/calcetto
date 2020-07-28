@@ -18,7 +18,7 @@ const PlayerSelection: React.FC<PlayerSelectProps> = React.forwardRef(
   ({ styles, row, columnIndex, /*id,*/ onUpdate, onSelect, options }, ref) => {
     const [selectedOption, setSelectedOption] = useState<PlayerDTO>();
 
-    const handleChange = (selectedOption: ValueType<PlayerDTO>, actionMeta: ActionMeta) => {
+    const handleChange = (selectedOption: ValueType<PlayerDTO>, actionMeta: ActionMeta<PlayerDTO>) => {
       // selectedOption.pairId = id;
       setSelectedOption(selectedOption as PlayerDTO);
       const value = valueFormatter(selectedOption);

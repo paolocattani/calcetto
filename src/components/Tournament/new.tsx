@@ -8,6 +8,7 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { TournamentAction } from 'actions/tournament.action';
 import { toast } from 'react-toastify';
+import { FormEventType } from 'components/core/generic/CommonTypes';
 
 type newTProps = {};
 
@@ -44,7 +45,7 @@ const NewTournament: React.FC<newTProps> = (_) => {
               placeholder="Nome Torneo"
               maxLength={30}
               value={name}
-              onChange={(event: React.FormEvent<HTMLSelectElement>) => setName(event.currentTarget.value)}
+              onChange={(event: React.FormEvent<FormEventType>) => setName(event.currentTarget.value)}
             />
           </Form.Group>
         </Col>

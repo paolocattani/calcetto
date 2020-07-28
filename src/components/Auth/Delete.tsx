@@ -19,7 +19,7 @@ const Delete = ({ show, onHide }: authType): JSX.Element => {
   const session = useSelector(SessionSelector.getSession);
   const [errorMessage, setErrorMessage] = useState('');
   // Hook gestione campo password
-  const { value: password, bind: bindPassword } = useInput('');
+  const { value: password, bind: bindPassword } = useInput<string>('');
 
   // Util per mostrare messaggi all'utente
   const showError = (message: SetStateAction<string>) => {

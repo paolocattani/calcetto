@@ -21,7 +21,7 @@ interface Stage2Props {
     colIndex: number,
     winner: boolean
   ) => void;
-  onSelectPair: (value: ValueType<PairDTO>, rowIndex: number, actionMeta?: ActionMeta) => void;
+  onSelectPair: (value: ValueType<PairDTO>, rowIndex: number, actionMeta?: ActionMeta<PairDTO>) => void;
 }
 
 const Stage2: React.FC<Stage2Props> = ({ onClick, elements, pairsSelect, rowNumber = 64, pairs, onSelectPair }) => {
@@ -75,7 +75,7 @@ function getTableBodyRows(
   ) => void,
   pairs: PairDTO[],
   pairsSelect: PairDTO[],
-  onSelectPair: (value: ValueType<PairDTO>, rowIndex: number, actionMeta?: ActionMeta) => void
+  onSelectPair: (value: ValueType<PairDTO>, rowIndex: number, actionMeta?: ActionMeta<PairDTO>) => void
 ): JSX.Element[] {
   // Conterrà tutte le righe della tabella
   const rows: JSX.Element[] = [];
