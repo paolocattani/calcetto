@@ -13,6 +13,7 @@ import commonStyle from '../../common.module.css';
 import { Stage2Action, TournamentAction } from 'actions';
 import { SessionSelector } from 'selectors/session.selector';
 import { RightArrowIcon, TrashIcon } from 'components/core/icons';
+import { PairSelector } from 'selectors';
 
 interface ModalProps {
   show: boolean;
@@ -33,8 +34,10 @@ const Wrapper: React.FC = (): JSX.Element => {
   const needRefresh = useSelector(Stage1Selector.getNeedRefresh);
   // Squadre selezionate
   const selected = useSelector(Stage1Selector.getSelectedPairs);
+  // Lista coppie
+  const pairsList = useSelector(PairSelector.getPairsList);
 
-  const [pairsList, setPairsList] = useState<PairDTO[]>([]);
+  // TODO:
   const [autoOrder /*, setAutoOrder*/] = useState<boolean>(true);
 
   function goBack() {
@@ -51,7 +54,7 @@ const Wrapper: React.FC = (): JSX.Element => {
     }
 
     let count = 0;
-    if (pairsList.length > 4) {
+    if (pairsList && pairsList.length > 4) {
       count = pairsList.length - 1;
       while (count % 8 !== 0) count++;
     }
@@ -60,8 +63,11 @@ const Wrapper: React.FC = (): JSX.Element => {
   }
 
   useEffect(() => {
-    if (!pairsList || pairsList.length === 0 || needRefresh) fetchPairs(setPairsList, tournament.id!);
-  }, [tournament.id, needRefresh, pairsList]);
+    if (!pairsList) {
+      currentHistory.push('/');
+    }
+    console.log('Refreshing...');
+  }, [currentHistory, needRefresh, pairsList]);
 
   return (
     <>

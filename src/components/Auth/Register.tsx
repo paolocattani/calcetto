@@ -1,6 +1,6 @@
 import { useInput } from '../core/hooks/InputHook';
 import { Form, Button, Col } from 'react-bootstrap';
-import React, { SetStateAction } from 'react';
+import React from 'react';
 import DatePicker from 'react-datepicker';
 import Select, { StylesConfig, ValueType } from 'react-select';
 import './style.css';

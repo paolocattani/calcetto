@@ -13,7 +13,7 @@ import NewTournament from './new';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { TournamentSelector } from 'selectors/tournament.selector';
-import { TournamentAction } from 'actions/tournament.action';
+import { TournamentAction, PairAction } from 'actions';
 import { withRouter } from 'react-router-dom';
 import { TournamentDTO } from 'models/tournament.model';
 import { SessionSelector } from 'selectors/session.selector';
@@ -41,8 +41,14 @@ const FTournament = () => {
 
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
-    if (tournament) currentHistory.push('/tournament');
-    else toast.error('Errore, riprovare piu tardi...');
+    if (tournament) {
+      if (session.isAdmin) {
+        currentHistory.push('/tournament');
+      } else {
+        dispatch(PairAction.getPairs.request({ tId: tournament.id! }));
+        currentHistory.push('/stage1');
+      }
+    } else toast.error('Errore, riprovare piu tardi...');
   };
 
   const onNewTournament = (value: React.SetStateAction<boolean>) => {

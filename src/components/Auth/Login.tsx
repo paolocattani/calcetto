@@ -1,6 +1,6 @@
 import { useInput } from '../core/hooks/InputHook';
 import { Form, Button, Row, Col } from 'react-bootstrap';
-import React, { SetStateAction } from 'react';
+import React from 'react';
 import { useHistory, RouteComponentProps, withRouter } from 'react-router-dom';
 import { SessionAction } from 'actions';
 import { useDispatch } from 'react-redux';

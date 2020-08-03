@@ -5,7 +5,7 @@ import Player from 'models/sequelize/player.model';
 import { UserDTO, UserRole } from '../models/dto/user.dto';
 import User from '../models/sequelize/user.model';
 // Logger utils
-import { logProcess } from '../core/logger';
+import { logProcess, logger } from '../core/logger';
 // Password
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
@@ -87,6 +87,7 @@ export const registerUser = async (user: User, playerRole?: PlayerRole): Promise
     } else {
       user.role = UserRole.User;
     }
+    logger.info(`User : ${JSON.stringify(user, null, 2)}`);
     const record = await User.create(user);
     // Se è stato assegnato un ruolo allora creo anche il giocatore
     if (playerRole) {
@@ -99,8 +100,12 @@ export const registerUser = async (user: User, playerRole?: PlayerRole): Promise
         alias: `${record.name} ${record.surname}`,
         role: playerRole,
       } as Player;
+      logger.info(`Player : ${JSON.stringify(model)}`);
       const player = await playerManager.create(model);
-      if (player) await record.update({ playerId: player.id });
+      if (player) {
+        logger.info(`User : ${JSON.stringify(record, null, 2)}`);
+        await record.update({ playerId: player.id });
+      }
     }
     logProcess(className + 'registerUser', 'end');
     return convertEntityToDTO(record);

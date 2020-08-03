@@ -26,7 +26,7 @@ router.get(
   withAuth,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     try {
-      return res.status(200).json(await listAll(req.user!.id));
+      return res.status(200).json(await listAll(req.user!));
     } catch (err) {
       logger.error(chalk.redBright('Error while fetching tournament ! : ', err));
       return res.status(500).json({ message: 'Internal Error' });
@@ -40,9 +40,9 @@ router.get(
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     try {
       if (!req.params.tId) return res.status(500).json({ message: 'Invalid data' });
-      const t = await findById(req.user!.id, parseInt(req.params.tId));
+      const t = await findById(req.user!, parseInt(req.params.tId));
       if (!t) return res.status(500).json({ message: 'Not found' });
-      return res.status(200).json(await findById(req.user!.id, parseInt(req.params.tId)));
+      return res.status(200).json(await findById(req.user!, parseInt(req.params.tId)));
     } catch (err) {
       logger.error(chalk.redBright('Error while fetching tournament ! : ', err));
       return res.status(500).json({ message: 'Internal Error' });
@@ -54,7 +54,7 @@ router.put(
   '/',
   withAuth,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
-    const result = await update(req.user!.id, parseBody(req.body));
+    const result = await update(req.user!, parseBody(req.body));
     return res.sendStatus(result ? 200 : 500);
   })
 );
@@ -66,7 +66,7 @@ router.post(
     const model = parseBody(req.body);
     const user = req.user!;
     try {
-      let t: Tournament | TournamentDTO | null = await findByNameAndDate(model.name, model.date);
+      let t: Tournament | TournamentDTO | null = await findByNameAndDate(model.name, model.date, user);
       if (t) {
         logger.info(`Tournament ${model.name} already exists....`);
         return res.json(t);

@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import { FormEventType } from '../generic/CommonTypes';
 
 // Hook per facilitare la gestione dei campi di una form nei componenti funzionali
-// FIXME: usare generics
 // https://rangle.io/blog/simplifying-controlled-inputs-with-hooks/
 export const useInput = <T extends any>(initialValue: T) => {
   const [value, setValue] = useState<T>(initialValue);
@@ -11,9 +11,7 @@ export const useInput = <T extends any>(initialValue: T) => {
     reset: () => setValue(initialValue),
     bind: {
       value,
-      onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        setValue(event.currentTarget.value as T);
-      },
+      onChange: (event: React.ChangeEvent<FormEventType>) => setValue(event.currentTarget.value as T),
     },
   };
 };

@@ -42,7 +42,7 @@ export const postTournament = async ({ model }: PostTournamentRequest): Promise<
 export const updateTournament = async ({ model }: UpdateTournamentRequest): Promise<UpdateTournamentResponse> => {
   try {
     const response = await fetch('/api/v1/tournament', {
-      method: 'POST',
+      method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(model),
     });

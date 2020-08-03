@@ -1,24 +1,36 @@
 import { logProcess } from '../core/logger';
 import { TournamentDTO, TournamentProgress } from '../models/dto/tournament.dto';
 import Tournament from '../models/sequelize/tournament.model';
-import { Op } from 'sequelize';
+import { Op, WhereAttributeHash } from 'sequelize';
+import { UserDTO, UserRole } from '../models/dto/user.dto';
+import { getWhereFromMap } from '../core/utils';
 
 const className = 'Tournament Manager : ';
-
-export const listAll = async (userId: number): Promise<TournamentDTO[]> => {
+const defaultFilter = (user: UserDTO) => ({ [Op.or]: [{ ownerId: user.id }, { public: true }] });
+export const listAll = async (user: UserDTO): Promise<TournamentDTO[]> => {
   try {
     logProcess(className + 'listAll', 'start');
-
+    /*
+     * Per utenti non admin mostro solo i torneo che sono alla fase 1,
+     *  perchè dalla selezione torneo passano direttamente alla fase 1
+     *  ( senza passare per la selezione giocatori )
+     */
     const t: Tournament[] = await Tournament.findAll({
-      where: { [Op.or]: [{ ownerId: userId }, { public: true }] },
+      where:
+        user.role !== UserRole.Admin
+          ? {
+              progress: [TournamentProgress.Stage1, TournamentProgress.Stage2],
+              ...defaultFilter(user),
+            }
+          : { ...defaultFilter(user) },
       order: [
         ['date', 'DESC'],
         ['name', 'DESC'],
       ],
     });
+
     logProcess(className + 'listAll', `end. Found : (${t.length})`);
-    if (!t) return [];
-    return t.map((e) => convertEntityToDTO(e));
+    return t.map((e) => convertEntityToDTO(e) as TournamentDTO);
   } catch (error) {
     logProcess(className + 'listAll', ` Error : ${error}`);
     return [];
@@ -26,14 +38,14 @@ export const listAll = async (userId: number): Promise<TournamentDTO[]> => {
 };
 
 // Aggiorna un torneo esistente
-export const update = async (userId: number, model: TournamentDTO): Promise<boolean> => {
+export const update = async (user: UserDTO, model: TournamentDTO): Promise<boolean> => {
   logProcess(className + 'update', 'start');
   try {
-    const t = await Tournament.findOne({
-      where: { [Op.and]: { id: model.id, [Op.or]: [{ ownerId: userId }, { public: true }] } },
-    });
+    const params = new Map<string, Object>();
+    params.set('id', model.id);
+    const t = await findByParams(params, user);
     if (!t) return false;
-    await t.update({ progress: model.progress });
+    else await t.update({ progress: model.progress });
   } catch (error) {
     logProcess(className + 'update', 'error');
     return false;
@@ -42,39 +54,41 @@ export const update = async (userId: number, model: TournamentDTO): Promise<bool
   return true;
 };
 
-// TODO: si potrebbe creare un metodo piu generico per esiste la ricerca su uno qualsiasi dei campi della entity
 // Cerca un torneo tramite ID
-export const findById = async (userId: number, tId: number): Promise<TournamentDTO | null> => {
-  try {
-    logProcess(className + 'findById', 'start');
-    const t = await Tournament.findOne({
-      where: { [Op.and]: { id: tId, [Op.or]: [{ ownerId: userId }, { public: true }] } },
-    });
-    logProcess(className + 'findById', 'end');
-    if (!t) return null;
-    return convertEntityToDTO(t);
-  } catch (error) {
-    logProcess(className + 'findById', ` Error : ${error}`);
-    return null;
-  }
+export const findById = async (user: UserDTO, tId: number): Promise<TournamentDTO | null> => {
+  logProcess(className + 'findById', 'start');
+  const params = new Map<string, Object>();
+  params.set('id', tId);
+  const result = await findByParams(params, user);
+  logProcess(className + 'findById', 'end');
+  return convertEntityToDTO(result);
 };
 
 // Cerca trmite nome e data
-export const findByNameAndDate = async (name: string, date: Date): Promise<TournamentDTO | null> => {
-  try {
-    logProcess(className + 'findByNameAndDate', 'start');
+export const findByNameAndDate = async (name: string, date: Date, user: UserDTO): Promise<TournamentDTO | null> => {
+  logProcess(className + 'findByNameAndDate', 'start');
+  const params = new Map<string, Object>();
+  params.set('name', name);
+  params.set('date', { [Op.gte]: date, [Op.lte]: date });
+  const result = await findByParams(params, user);
+  logProcess(className + 'findByNameAndDate', 'end');
+  return convertEntityToDTO(result);
+};
 
-    const t: Tournament | null = await Tournament.findOne({
-      where: {
-        name,
-        date: { [Op.gte]: date, [Op.lte]: date },
-      },
+export const findByParams = async (parameters: Map<string, Object>, user: UserDTO): Promise<Tournament | null> => {
+  try {
+    logProcess(className + 'findByParams', 'start');
+    const result: Tournament | null = await Tournament.findOne({
+      where: { ...getWhereFromMap(parameters), ...defaultFilter(user) },
+      order: [
+        ['date', 'DESC'],
+        ['name', 'DESC'],
+      ],
     });
-    logProcess(className + 'findByNameAndDate', 'end');
-    if (!t) return null;
-    return convertEntityToDTO(t);
+    logProcess(className + 'findByParams', 'end');
+    return result;
   } catch (error) {
-    logProcess(className + 'findByNameAndDate', ` Error : ${error}`);
+    logProcess(className + 'findByParams', ` Error : ${error}`);
     return null;
   }
 };
@@ -83,15 +97,18 @@ export const findByNameAndDate = async (name: string, date: Date): Promise<Tourn
  * Converte l'entity in un DTO da passare al FE.
  * @param user  Tournament entity
  */
-export const convertEntityToDTO = (t: Tournament | null): TournamentDTO => ({
-  id: t?.id,
-  name: t?.name ?? '',
-  date: t?.date ?? new Date(),
-  progress: t?.progress ?? TournamentProgress.New,
-  public: t?.public ?? false,
-  label: t?.label ?? '',
-  ownerId: t?.ownerId,
-});
+export const convertEntityToDTO = (t: Tournament | null): TournamentDTO | null =>
+  t
+    ? {
+        id: t?.id,
+        name: t?.name ?? '',
+        date: t?.date ?? new Date(),
+        progress: t?.progress ?? TournamentProgress.New,
+        public: t?.public ?? false,
+        label: t?.label ?? '',
+        ownerId: t?.ownerId,
+      }
+    : null;
 
 export const parseBody = (body: any) =>
   ({

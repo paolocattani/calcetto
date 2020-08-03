@@ -1,3 +1,5 @@
+import { WhereAttributeHash } from 'sequelize';
+
 export const getRandomIntInclusive = (min: number, max: number): number =>
   Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1)) + Math.ceil(min);
 
@@ -15,3 +17,6 @@ export const logEntity = (entity: any) => JSON.stringify(entity, null, 2);
 export function getBaseLog(x: number, y: number) {
   return Math.log(y) / Math.log(x);
 }
+
+export const getWhereFromMap = (parameters: Map<string, Object>): WhereAttributeHash =>
+  [...parameters.entries()].reduce((acc, entry) => ({ ...acc, ...{ [entry[0]]: entry[1] } }), {});

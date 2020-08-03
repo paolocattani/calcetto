@@ -26,7 +26,7 @@ import { TournamentSelector } from 'selectors/tournament.selector';
 import { PairDTO, PlayerDTO } from 'models';
 import { TournamentProgress } from 'models/tournament.model';
 // Action
-import { TournamentAction } from 'actions';
+import { TournamentAction, PairAction } from 'actions';
 
 const hideAskUser = {
   message: '',
@@ -274,6 +274,7 @@ const PairsTable = () => {
       dispatch(TournamentAction.updateTournament.request({ model: tournament }));
     }
     // Go to Stage1
+    dispatch(PairAction.getPairs.request({ tId: tournament.id! }));
     currentHistory.push('/stage1');
   };
 
@@ -362,7 +363,7 @@ const PairsTable = () => {
     setData((current) => ({ rows: newRows, players: current.players }));
   }
 
-  console.log("availableRows : ", data.rows);
+  console.log('availableRows : ', data.rows);
   const availableRows = Math.floor(
     Math.floor((data.players.length - 1) / 2) -
       (data.rows.length === 0
