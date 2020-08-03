@@ -8,7 +8,7 @@ import { PairDTO, TournamentProgress } from 'models';
 // Style
 import commonStyle from '../../common.module.css';
 import { RightArrowIcon, TrashIcon, LeftArrowIcon } from '../core/icons';
-import { ListGroup, Button, Col } from 'react-bootstrap';
+import { ListGroup, Button, Col, Row } from 'react-bootstrap';
 // Actions, Selectors
 import { Stage2Action, TournamentAction } from 'actions';
 import { SessionSelector, TournamentSelector, Stage1Selector, PairSelector } from 'selectors';
@@ -69,21 +69,21 @@ const Wrapper: React.FC = (): JSX.Element => {
   return (
     <>
       <Col className={commonStyle.toolsBarContainer}>
-        <div className={commonStyle.toolsBar}>
-          <Button variant="secondary" onClick={goBack} className="float-left">
-            <LeftArrowIcon /> Indietro
-          </Button>
-          <Button variant="secondary" onClick={goBack} className="float-left">
-            <LeftArrowIcon /> Indietro
-          </Button>
-          <Button
-            variant="danger"
-            className="align-middle"
-            onClick={() => dispatch(Stage2Action.delete.request({ tId: tournament.id! }))}
-            disabled={!session.isAdmin}
-          >
-            <TrashIcon /> Reset Fase 2
-          </Button>
+        <Row className={commonStyle.toolsBarRow}>
+          <Col>
+            <Button variant="secondary" onClick={goBack} className="float-left">
+              <LeftArrowIcon /> Indietro
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              variant="danger"
+              onClick={() => dispatch(Stage2Action.delete.request({ tId: tournament.id! }))}
+              disabled={!session.isAdmin}
+            >
+              <TrashIcon /> Reset Fase 2
+            </Button>
+          </Col>
           {/* FIXME:
           <Form.Check
             custom
@@ -94,15 +94,17 @@ const Wrapper: React.FC = (): JSX.Element => {
             onChange={() => setAutoOrder(!autoOrder)}
           />
         */}
-          <Button
-            variant="outline-warning"
-            className="default-color-white float-right align-middle"
-            onClick={goToStage2}
-            disabled={selected.length < 4 && tournament.progress < TournamentProgress.Stage2}
-          >
-            <b>Prosegui </b> <RightArrowIcon />
-          </Button>
-        </div>
+          <Col>
+            <Button
+              variant="outline-warning"
+              className="default-color-white float-right"
+              onClick={goToStage2}
+              disabled={selected.length < 4 && tournament.progress < TournamentProgress.Stage2}
+            >
+              <b>Prosegui </b> <RightArrowIcon />
+            </Button>
+          </Col>
+        </Row>
       </Col>
       {pairsList ? renderTables(pairsList, autoOrder) : null}
     </>
