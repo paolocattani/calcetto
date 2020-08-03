@@ -15,7 +15,7 @@ import { Stage1Action } from 'actions';
 const Stage1Table = ({ rows, columns, tableName, updateCellValue, autoOrder, updatePlacement, saved }) => {
   const dispatch = useDispatch();
   const [selectedRows, setSelectedRows] = useState([]);
-  const session = useSelector(SessionSelector.getSession);
+  const isAdmin = useSelector(SessionSelector.isAdmin);
 
   const cellEditProps = (editable) =>
     cellEditFactory({
@@ -90,18 +90,20 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, autoOrder, upd
     onSelect: handleOnSelect,
     onSelectAll: handleOnSelectAll,
     style: { backgroundColor: '#c8e6c9' },
+    hideSelectColumn: !isAdmin,
   };
 
   console.log(' render : ', tableName, rows);
 
   return (
     <BootstrapTable
+      key={`Stege1-${tableName}`}
       bootstrap4
       keyField="id"
       data={rows}
       columns={columns}
       selectRow={selectRow}
-      cellEdit={cellEditProps(session.isAdmin)}
+      cellEdit={cellEditProps(isAdmin)}
       noDataIndication="Nessun dato reperito"
       //wrapperClasses="player-table"
       headerClasses="default-background default-color-yellow"

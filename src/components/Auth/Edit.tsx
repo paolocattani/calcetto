@@ -2,7 +2,7 @@ import React, { FormEvent, SetStateAction, useState, CSSProperties, lazy } from 
 import { Card, Container, Alert, Form, Button, Col, Row } from 'react-bootstrap';
 import { useInput } from '../core/hooks/InputHook';
 import DatePicker from 'react-datepicker';
-import { TrashIcon, SaveIcon } from '../core/icons';
+import { TrashIcon, SaveIcon, TimesIcon } from '../core/icons';
 import { SessionSelector } from 'selectors/session.selector';
 import { SessionAction } from 'actions';
 import { useHistory } from 'react-router-dom';
@@ -71,7 +71,16 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
     <Col md={{ span: '6', offset: '3' }} sm="12">
       <Card style={modalStyle} className="default-background">
         <Form onSubmit={onSubmit}>
-          <Card.Header as="h2">Gestione dati utente</Card.Header>
+          <Card.Header as="h2">
+            <Row>
+              <Col md="9">Gestione dati utente</Col>
+              <Col md="3">
+                <Button variant="outline-warning" className="float-right" onClick={() => history.push('/')}>
+                  <TimesIcon /> Chiudi
+                </Button>
+              </Col>
+            </Row>
+          </Card.Header>
           <Card.Body>
             <Container>
               {errorMessage ? (

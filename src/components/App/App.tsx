@@ -6,6 +6,7 @@ import { LoadingModal } from '../core/generic/Commons';
 import { Switch, useHistory } from 'react-router';
 import routes from '../core/routing/Routes';
 import { ProtectedRoute } from '../core/routing/ProtectedRoute';
+import ErrorBoundary from '../core/errorBoundary';
 // Style
 import './App.css';
 import { Container } from 'react-bootstrap';
@@ -33,20 +34,22 @@ const App: React.FC = (_) => {
 
   return (
     <div className="App">
-      <Header />
-      <Container fluid style={{ marginBottom: '20vh' }}>
-        {/*<LogSessionContext /> */}
-        {/*<RedirectionControl />*/}
-        <ToastContainer autoClose={2000} />
+      <ErrorBoundary>
+        <Header />
+        <Container fluid style={{ marginBottom: '20vh' }}>
+          {/*<LogSessionContext /> */}
+          {/*<RedirectionControl />*/}
+          <ToastContainer autoClose={2000} />
 
-        <Suspense fallback={<LoadingModal show={true} message={'....Caricamento'} />}>
-          <Switch>
-            {routes.map((route) => (
-              <ProtectedRoute {...route} key={route.index} />
-            ))}
-          </Switch>
-        </Suspense>
-      </Container>
+          <Suspense fallback={<LoadingModal show={true} message={'....Caricamento'} />}>
+            <Switch>
+              {routes.map((route) => (
+                <ProtectedRoute {...route} key={route.index} />
+              ))}
+            </Switch>
+          </Suspense>
+        </Container>
+      </ErrorBoundary>
     </div>
   );
 };

@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
+// React, Router, Redux
 import { useHistory } from 'react-router';
-import Stage1Handler from './handler';
-import { ListGroup, Button, Col } from 'react-bootstrap';
-import { fetchPairs } from 'components/Pair/helper';
-import { PairDTO, TournamentProgress } from 'models';
-import { useSelector, useDispatch } from 'react-redux';
-import { TournamentSelector } from 'selectors/tournament.selector';
 import { withRouter } from 'react-router-dom';
-import { Stage1Selector } from 'selectors/stage1.selector';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+// Models
+import { PairDTO, TournamentProgress } from 'models';
+// Style
 import commonStyle from '../../common.module.css';
-
+import { RightArrowIcon, TrashIcon, LeftArrowIcon } from '../core/icons';
+import { ListGroup, Button, Col } from 'react-bootstrap';
+// Actions, Selectors
 import { Stage2Action, TournamentAction } from 'actions';
-import { SessionSelector } from 'selectors/session.selector';
-import { RightArrowIcon, TrashIcon } from 'components/core/icons';
-import { PairSelector } from 'selectors';
+import { SessionSelector, TournamentSelector, Stage1Selector, PairSelector } from 'selectors';
+//
+import Stage1Handler from './handler';
 
 interface ModalProps {
   show: boolean;
@@ -41,7 +41,7 @@ const Wrapper: React.FC = (): JSX.Element => {
   const [autoOrder /*, setAutoOrder*/] = useState<boolean>(true);
 
   function goBack() {
-    currentHistory.push('/tournament');
+    currentHistory.push(session.isAdmin ? '/tournament' : '/');
   }
   function goToStage2() {
     // TODO: eseguire controlli e eventualemente mostrare messaggi utente
@@ -63,9 +63,6 @@ const Wrapper: React.FC = (): JSX.Element => {
   }
 
   useEffect(() => {
-    if (!pairsList) {
-      currentHistory.push('/');
-    }
     console.log('Refreshing...');
   }, [currentHistory, needRefresh, pairsList]);
 
@@ -74,7 +71,10 @@ const Wrapper: React.FC = (): JSX.Element => {
       <Col className={commonStyle.toolsBarContainer}>
         <div className={commonStyle.toolsBar}>
           <Button variant="secondary" onClick={goBack} className="float-left">
-            Gestione Coppie
+            <LeftArrowIcon /> Indietro
+          </Button>
+          <Button variant="secondary" onClick={goBack} className="float-left">
+            <LeftArrowIcon /> Indietro
           </Button>
           <Button
             variant="danger"
@@ -84,7 +84,6 @@ const Wrapper: React.FC = (): JSX.Element => {
           >
             <TrashIcon /> Reset Fase 2
           </Button>
-
           {/* FIXME:
           <Form.Check
             custom
@@ -105,20 +104,18 @@ const Wrapper: React.FC = (): JSX.Element => {
           </Button>
         </div>
       </Col>
-      {renderTables(pairsList, autoOrder)}
+      {pairsList ? renderTables(pairsList, autoOrder) : null}
     </>
   );
 };
 
 export default withRouter(Wrapper);
 
-function renderTables(pairsList: PairDTO[], autoOrder: boolean): JSX.Element {
+function renderTables(pairsList: PairDTO[], autoOrder: boolean): JSX.Element[] {
   let stageName = '';
   let stage: PairDTO[] = [];
-  let stageList: JSX.Element[] = [];
+  let stageList: Array<JSX.Element> = [];
   // sort pairs by stage1Name
-  console.log('PairsList : ', pairsList);
-
   pairsList
     .sort((obj1, obj2) => obj1.stage1Name.localeCompare(obj2.stage1Name))
     // FIXME: use .reduce  ?
@@ -126,16 +123,16 @@ function renderTables(pairsList: PairDTO[], autoOrder: boolean): JSX.Element {
       // A rottura di stage1Name
       if (stageName === '') stageName = element.stage1Name;
       if (stageName !== element.stage1Name) {
-        stageList.push(<Stage1Handler pairsList={stage} autoOrder={autoOrder} />);
+        stageList.push(<Stage1Handler key={`Stage1-${stageName}`} pairsList={stage} autoOrder={autoOrder} />);
         stageName = element.stage1Name;
         stage = [];
       }
       stage.push(element);
     });
   if (stage.length > 0) {
-    stageList.push(<Stage1Handler pairsList={stage} autoOrder={autoOrder} />);
+    stageList.push(<Stage1Handler key={`Stage1-${stageName}`} pairsList={stage} autoOrder={autoOrder} />);
     // console.log(`stages ${stageName} :`, stage);
   }
 
-  return <ListGroup variant="flush">{stageList}</ListGroup>;
+  return stageList;
 }

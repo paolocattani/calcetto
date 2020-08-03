@@ -30,7 +30,13 @@ export const SaveIcon: React.FC<IconProps> = ({ size, color }) => (
 
 // Solid
 export const RightArrowIcon: React.FC<IconProps> = ({ size, color }) => (
-  <Icon size={size} prefix={SOLID} iconName="arrow-alt-circle-right" />
+  <Icon size={size} color={color} prefix={SOLID} iconName="arrow-alt-circle-right" />
+);
+export const LeftArrowIcon: React.FC<IconProps> = ({ size, color }) => (
+  <Icon size={size} color={color} prefix={SOLID} iconName="arrow-alt-circle-left" />
+);
+export const TimesIcon: React.FC<IconProps> = ({ size, color }) => (
+  <Icon size={size} color={color} prefix={SOLID} iconName="times" />
 );
 export const ToggleOn: React.FC<IconProps> = ({ size, color }) => (
   <Icon size={size} color={color} prefix={SOLID} iconName="toggle-on" />

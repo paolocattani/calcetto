@@ -35,6 +35,7 @@ function* watchSessionSaga(
       if (message) {
         console.log('Message from queue : ', message);
         toast.error('La tua sessione è scaduta');
+        yield put(SessionAction.updateSession({ user: undefined }));
         action.payload.history.push('/login');
       }
     }

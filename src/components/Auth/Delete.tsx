@@ -66,7 +66,7 @@ const Delete = ({ show, onHide }: authType): JSX.Element => {
         handleSubmit(e, session.user!.email, session.user!.username)
       }
     >
-      <Form.Group as={Row} controlId="email">
+      <Form.Group as={Row} controlId="emailDelete">
         <Form.Label column sm="2">
           Email
         </Form.Label>
@@ -80,7 +80,7 @@ const Delete = ({ show, onHide }: authType): JSX.Element => {
           />
         </Col>
       </Form.Group>
-      <Form.Group as={Row} controlId="username">
+      <Form.Group as={Row} controlId="usernameDelete">
         <Form.Label column sm="2">
           Username
         </Form.Label>

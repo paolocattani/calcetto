@@ -8,7 +8,7 @@ import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
 import it from 'date-fns/locale/it';
 import { setDefaultLocale, registerLocale } from 'react-datepicker';
-import { store } from 'store';
+import { store } from './store';
 import { Provider } from 'react-redux';
 
 setDefaultLocale('it');

@@ -33,7 +33,7 @@ export const SessionReducer = createReducer<SessionState, Action>(initialState)
       user,
       showMessage,
       message,
-      isAuthenticated: user ? true : false,
+      isAuthenticated: !!user,
       isAdmin: user ? user.role === UserRole.Admin : false,
       isLoading: false,
     })
