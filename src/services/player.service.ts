@@ -1,4 +1,5 @@
 import { FetchPlayersRequest, FetchPlayersResponse, PlayerRole, PlayerDTO } from 'models';
+import { handleError } from './common';
 
 export const fetchPlayers = async ({ tId, addEmpty }: FetchPlayersRequest): Promise<FetchPlayersResponse> => {
   try {
@@ -9,14 +10,9 @@ export const fetchPlayers = async ({ tId, addEmpty }: FetchPlayersRequest): Prom
     const result = await response.json();
     return { results: addEmpty ? [...result, getEmptyPlayer('Nessun Giocatore')] : result };
   } catch (e) {
-    handleError(e);
+    handleError(e, 'Error players fetch');
     return { results: [] };
   }
-};
-
-const handleError = (errorMessage: string): FetchPlayersResponse => {
-  console.warn('Player Error : ', errorMessage);
-  throw new Error('Something went wrong');
 };
 
 export function getEmptyPlayer(label?: string): PlayerDTO {

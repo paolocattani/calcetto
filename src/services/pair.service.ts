@@ -1,4 +1,5 @@
 import { FetchPairsRequest, FetchPairsResponse, PostPairsResponse, PostPairsRequest } from 'models';
+import { handleError } from './common';
 
 export const fetchPairs = async ({ tId }: FetchPairsRequest): Promise<FetchPairsResponse> => {
   try {
@@ -11,7 +12,7 @@ export const fetchPairs = async ({ tId }: FetchPairsRequest): Promise<FetchPairs
     console.log('fetchPairs : ', tId, results);
     return { results };
   } catch (e) {
-    handleError(e);
+    handleError(e, 'Error pairs fetch');
     return { results: [] };
   }
 };
@@ -26,12 +27,7 @@ export const postPair = async ({ models }: PostPairsRequest): Promise<PostPairsR
     const results = await response.json();
     return { results };
   } catch (e) {
-    handleError(e);
+    handleError(e, 'Error pairs update');
     return { results: [] };
   }
-};
-
-const handleError = (errorMessage: string): FetchPairsResponse => {
-  console.warn('Pair Error : ', errorMessage);
-  throw new Error('Something went wrong');
 };

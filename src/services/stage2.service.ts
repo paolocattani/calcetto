@@ -1,5 +1,6 @@
 import { FetchStage2Response, FetchStage2Request, ICell } from 'models';
 import { generateStructure } from 'components/Stage2/helper';
+import { handleError } from './common';
 
 export const deleteStage2 = async (tId: number) => {
   const response = await fetch('/api/v1/stage2', {
@@ -19,9 +20,7 @@ export const updateCells = async (cell1: ICell, cell2: ICell) => {
     });
     await response.json();
   } catch (e) {
-    handleError(e);
-  } finally {
-    return;
+    handleError(e, 'Error stage2 update');
   }
 };
 
@@ -43,7 +42,7 @@ export const fetchStage2 = async ({
     // console.log('response : ', cells);
     return { cells, rowsNumber };
   } catch (e) {
-    handleError(e);
+    handleError(e, 'Error stage2 fetch');
     return { cells: structure, rowsNumber };
   }
 };
@@ -59,13 +58,8 @@ const countStage2Step0 = async (tournamentId: number) => {
     count = await response.json();
     // console.log('response : ', cells);
   } catch (e) {
-    handleError(e);
+    handleError(e, 'Error stage2 count');
   } finally {
     return count;
   }
-};
-
-const handleError = (errorMessage: string): FetchStage2Request => {
-  console.warn('Stage2 Error : ', errorMessage);
-  throw new Error('Something went wrong');
 };

@@ -1,6 +1,7 @@
 import { CheckAuthenticationRequest, AuthenticationResponse } from 'models';
 import { UserDTO } from 'models/user.model';
 import { eventChannel, buffers, END } from 'redux-saga';
+import { handleError } from './common';
 
 export enum SessionStatus {
   // Sessione scaduta, reindirizza l'utente alla login
@@ -19,11 +20,9 @@ export const CheckAuthentication = async ({}: CheckAuthenticationRequest): Promi
   try {
     const response = await fetch('/api/v1/auth/');
     const user: UserDTO | null = await response.json();
-    console.log('SessionContext.user : ', user);
-
     return { user: user && response.ok ? user : undefined };
   } catch (error) {
-    handleError('SessionContext.error :');
+    handleError('SessionContext.error ', 'Connection error.');
     return { user: undefined };
   }
 };
@@ -32,7 +31,7 @@ export const CheckAuthentication = async ({}: CheckAuthenticationRequest): Promi
 export const createSessionChannel = (channel: EventSource) =>
   eventChannel<Message>((emitter) => {
     // Listen for open channel
-    const openListener = (event: Event) => console.log('Session Channel is now open.');
+    const openListener = (event: Event) => console.log('Connected...');
 
     // Listen for new message
     const messageListener = (messageEvent: MessageEvent) => {
@@ -62,8 +61,3 @@ export const createSessionChannel = (channel: EventSource) =>
     };
     return closeConnection;
   }, buffers.expanding());
-
-const handleError = (errorMessage: string) => {
-  console.warn('Session Error : ', errorMessage);
-  throw new Error('Something went wrong');
-};
