@@ -5,10 +5,10 @@ import { dbLogger as logger } from '../core/logger';
 export default {
   development: {
     use_env_variable: 'DEV_URL',
-    logging: sqlString => logger.warn(sqlString)
+    logging: (sqlString: string) => logger.warn(sqlString),
   },
   production: {
     use_env_variable: 'DATABASE_URL',
-    logging: false
-  }
+    logging: false,
+  },
 };
