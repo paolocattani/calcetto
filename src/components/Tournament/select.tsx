@@ -39,7 +39,7 @@ const FTournament = () => {
     }
   }, [dispatch, tournamentsList]);
 
-  const handleSubmit = async (event: { preventDefault: () => void }) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLElement>): Promise<void> => {
     event.preventDefault();
     if (tournament) {
       if (session.isAdmin) {
