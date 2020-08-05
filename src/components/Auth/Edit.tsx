@@ -157,7 +157,7 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
                       as={() => (
                         <DatePicker
                           selected={new Date(birthday)}
-                          locale="it"
+                          locale="it-IT"
                           dateFormat="dd/MM/yyyy"
                           onChange={(newValue) => setBirthday(newValue ? newValue : new Date())}
                         />

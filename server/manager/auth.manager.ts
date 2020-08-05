@@ -11,8 +11,9 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 // managers
 import * as playerManager from './player.manager';
-import { Op, Sequelize } from 'sequelize';
+import { Op } from 'sequelize';
 import { PlayerRole } from 'models/dto/player.dto';
+import { lowerWrapper } from '../core/utils';
 
 // Const
 const className = 'Authentication Manager : ';
@@ -136,10 +137,7 @@ export async function findUserDTOByEmailOrUsername(username: string) {
     logProcess(className + 'findUserDTOByEmailOrUsername', '');
     const user = await User.findOne({
       where: {
-        [Op.or]: [
-          Sequelize.where(Sequelize.fn('lower', Sequelize.col('email')), username.toLowerCase()),
-          Sequelize.where(Sequelize.fn('lower', Sequelize.col('username')), username.toLowerCase()),
-        ],
+        [Op.or]: [lowerWrapper('email', username), lowerWrapper('username', username)],
       },
     });
     return user ? convertEntityToDTO(user) : null;
@@ -154,10 +152,7 @@ export async function findUserByEmailOrUsername(username: string) {
     logProcess(className + 'findUserByEmailOrUsername', '');
     return await User.findOne({
       where: {
-        [Op.or]: [
-          Sequelize.where(Sequelize.fn('lower', Sequelize.col('email')), username.toLowerCase()),
-          Sequelize.where(Sequelize.fn('lower', Sequelize.col('username')), username.toLowerCase()),
-        ],
+        [Op.or]: [lowerWrapper('email', username), lowerWrapper('username', username)],
       },
     });
   } catch (error) {
@@ -171,10 +166,7 @@ export async function findUserByEmailAndUsername(email: string, username: string
     logProcess(className + 'findUserByEmailAndUsername', '');
     return await User.findOne({
       where: {
-        [Op.and]: [
-          Sequelize.where(Sequelize.fn('lower', Sequelize.col('email')), email.toLowerCase()),
-          Sequelize.where(Sequelize.fn('lower', Sequelize.col('username')), username.toLowerCase()),
-        ],
+        [Op.and]: [lowerWrapper('email', email), lowerWrapper('username', username)],
       },
     });
   } catch (error) {
@@ -188,10 +180,7 @@ export async function checkIfExist(user: User) {
     logProcess(className + 'checkIfExist', '');
     return await User.findOne({
       where: {
-        [Op.or]: [
-          Sequelize.where(Sequelize.fn('lower', Sequelize.col('email')), user.email.toLowerCase()),
-          Sequelize.where(Sequelize.fn('lower', Sequelize.col('username')), user.username.toLowerCase()),
-        ],
+        [Op.or]: [lowerWrapper('email', user.email), lowerWrapper('username', user.username)],
       },
     });
   } catch (error) {

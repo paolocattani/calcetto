@@ -29,7 +29,7 @@ const Wrapper: React.FC = (): JSX.Element => {
   // Session
   const session = useSelector(SessionSelector.getSession);
   // Torneo
-  const tournament = useSelector(TournamentSelector.getTournament)!;
+  const tournament = useSelector(TournamentSelector.getTournament, (prev, curr) => prev?.progress !== curr?.progress)!;
   // Sono presenti aggiornamenti
   const needRefresh = useSelector(Stage1Selector.getNeedRefresh);
   // Squadre selezionate
@@ -62,10 +62,6 @@ const Wrapper: React.FC = (): JSX.Element => {
     currentHistory.push('/stage2');
   }
 
-  useEffect(() => {
-    console.log('Refreshing...');
-  }, [currentHistory, needRefresh, pairsList]);
-
   return (
     <>
       <Col className={commonStyle.toolsBarContainer}>
@@ -79,7 +75,7 @@ const Wrapper: React.FC = (): JSX.Element => {
             <Button
               variant="danger"
               onClick={() => dispatch(Stage2Action.delete.request({ tId: tournament.id! }))}
-              disabled={!session.isAdmin}
+              disabled={!session.isAdmin || (session.isAdmin && tournament.progress < TournamentProgress.Stage2)}
             >
               <TrashIcon /> Reset Fase 2
             </Button>

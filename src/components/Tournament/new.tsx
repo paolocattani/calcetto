@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { TournamentAction } from 'actions/tournament.action';
 import { toast } from 'react-toastify';
 import { FormEventType } from 'components/core/generic/CommonTypes';
+import { isValidTournament } from 'services/tournament.service';
 
 type newTProps = {};
 
@@ -29,8 +30,13 @@ const NewTournament: React.FC<newTProps> = (_) => {
     let model = getEmptyTournament(name);
     model.date = date;
     model.public = visible;
-    dispatch(TournamentAction.saveTournament.request({ model }));
-    currentHistory.push('/tournament');
+    const { isValid, errorMessage } = await isValidTournament({ model });
+    if (isValid) {
+      dispatch(TournamentAction.saveTournament.request({ model }));
+      currentHistory.push('/tournament');
+    } else {
+      toast.error(errorMessage);
+    }
   };
 
   return (

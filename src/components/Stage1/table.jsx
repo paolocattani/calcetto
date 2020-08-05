@@ -10,12 +10,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import { SessionSelector } from 'selectors/session.selector';
 // style
 import { Stage1Action } from 'actions';
+import { TournamentSelector } from 'selectors';
+import { TournamentProgress } from 'models';
 
 // TODO: convert this component to ts
 const Stage1Table = ({ rows, columns, tableName, updateCellValue, autoOrder, updatePlacement, saved }) => {
   const dispatch = useDispatch();
   const [selectedRows, setSelectedRows] = useState([]);
   const isAdmin = useSelector(SessionSelector.isAdmin);
+  const tournament = useSelector(TournamentSelector.getTournament);
 
   const cellEditProps = (editable) =>
     cellEditFactory({
@@ -90,7 +93,7 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, autoOrder, upd
     onSelect: handleOnSelect,
     onSelectAll: handleOnSelectAll,
     style: { backgroundColor: '#c8e6c9' },
-    hideSelectColumn: !isAdmin,
+    hideSelectColumn: !isAdmin || tournament.progress >= TournamentProgress.Stage2,
   };
 
   console.log(' render : ', tableName, rows);

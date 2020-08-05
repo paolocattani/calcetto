@@ -11,6 +11,10 @@ export interface UpdateTournamentRequest {
   model: TournamentDTO;
 }
 
+export interface IsValidTournamentRequest {
+  model: TournamentDTO;
+}
+
 // Responses
 export interface FetchTournamentsResponse {
   results: TournamentDTO[];
@@ -20,6 +24,10 @@ export interface PostTournamentResponse {
 }
 export interface UpdateTournamentResponse {
   result: TournamentDTO;
+}
+export interface IsValidTournamentResponse {
+  isValid: boolean;
+  errorMessage: string;
 }
 
 //

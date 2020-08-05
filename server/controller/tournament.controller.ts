@@ -21,6 +21,7 @@ router.use('/', (req, res, next) => {
   next();
 });
 
+// GET
 router.get(
   '/list',
   withAuth,
@@ -50,12 +51,29 @@ router.get(
   })
 );
 
+// PUT
 router.put(
   '/',
   withAuth,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     const result = await update(req.user!, parseBody(req.body));
     return res.sendStatus(result ? 200 : 500);
+  })
+);
+
+// POST
+router.post(
+  '/isValid',
+  withAuth,
+  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
+    const {
+      body: { name, date },
+      user,
+    } = req;
+    const tournament = await findByNameAndDate(name, date, user!);
+    const isValid = !tournament;
+    const errorMessage = !isValid ? 'Torneo gia presente' : '';
+    return res.status(200).json({ isValid, errorMessage });
   })
 );
 

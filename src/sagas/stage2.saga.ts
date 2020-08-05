@@ -1,14 +1,22 @@
-import { put, call, StrictEffect, takeEvery } from 'redux-saga/effects';
-import { Stage2Action } from 'actions';
+import { put, call, StrictEffect, takeEvery, select } from 'redux-saga/effects';
+import { Stage2Action, TournamentAction } from 'actions';
 import { fetchStage2, updateCells, deleteStage2 } from 'services/stage2.service';
-import { FetchStage2Response } from 'models';
+import { FetchStage2Response, TournamentProgress, DeleteStage2Response } from 'models';
+import { TournamentSelector } from 'selectors';
+import { toast } from 'react-toastify';
 
 function* deleteStage2Saga(action: ReturnType<typeof Stage2Action.delete.request>): Generator<StrictEffect, void, any> {
   try {
-    const response: FetchStage2Response = yield call(deleteStage2, action.payload.tId);
-    yield put(Stage2Action.fetchStage2.success(response));
+    const response: DeleteStage2Response = yield call(deleteStage2, action.payload.tId);
+    yield put(Stage2Action.delete.success(response));
+    const tournament = yield select(TournamentSelector.getTournament);
+    tournament!.progress = TournamentProgress.Stage1;
+    console.log('deleteStage2Saga : ', tournament);
+    toast.success('Fase 2 eiminata...');
+    yield put(TournamentAction.updateTournament.request({ model: tournament }));
   } catch (err) {
-    yield put(Stage2Action.fetchStage2.failure(err));
+    yield put(Stage2Action.delete.failure(err));
+    toast.error('Error while deleting Stage2');
   }
 }
 
@@ -20,6 +28,7 @@ function* fetchStage2Saga(
     yield put(Stage2Action.fetchStage2.success(response));
   } catch (err) {
     yield put(Stage2Action.fetchStage2.failure(err));
+    toast.error('Error while fetching Stage2');
   }
 }
 
@@ -31,6 +40,7 @@ function* updateCellsSaga({
     yield put(Stage2Action.updateCell.success({}));
   } catch (err) {
     yield put(Stage2Action.updateCell.failure(err));
+    toast.error('Error while updating Stage2');
   }
 }
 

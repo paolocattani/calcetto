@@ -64,10 +64,10 @@ export const isValidTournament = async ({ model }: IsValidTournamentRequest): Pr
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(model),
     });
-    const { isValid }: IsValidTournamentResponse = await response.json();
-    return { isValid };
+    const { isValid, errorMessage }: IsValidTournamentResponse = await response.json();
+    return { isValid, errorMessage };
   } catch (e) {
     handleError(e, 'Error validating Tournament');
-    return { isValid: false };
+    return { isValid: false, errorMessage: '' };
   }
 };

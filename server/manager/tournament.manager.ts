@@ -1,9 +1,9 @@
-import { logProcess } from '../core/logger';
+import { logProcess, logger } from '../core/logger';
 import { TournamentDTO, TournamentProgress } from '../models/dto/tournament.dto';
 import Tournament from '../models/sequelize/tournament.model';
-import { Op, WhereAttributeHash } from 'sequelize';
+import { Op, WhereAttributeHash, Sequelize, WhereOptions } from 'sequelize';
 import { UserDTO, UserRole } from '../models/dto/user.dto';
-import { getWhereFromMap } from '../core/utils';
+import { getWhereFromMap, justADate, castWrapper, lowerWrapper, dateInRageWrapper } from '../core/utils';
 
 const className = 'Tournament Manager : ';
 const defaultFilter = (user: UserDTO) => ({ [Op.or]: [{ ownerId: user.id }, { public: true }] });
@@ -41,7 +41,7 @@ export const listAll = async (user: UserDTO): Promise<TournamentDTO[]> => {
 export const update = async (user: UserDTO, model: TournamentDTO): Promise<boolean> => {
   logProcess(className + 'update', 'start');
   try {
-    const params = new Map<string, Object>();
+    const params = new Map<string, WhereOptions | Object>();
     params.set('id', model.id);
     const t = await findByParams(params, user);
     if (!t) return false;
@@ -57,7 +57,7 @@ export const update = async (user: UserDTO, model: TournamentDTO): Promise<boole
 // Cerca un torneo tramite ID
 export const findById = async (user: UserDTO, tId: number): Promise<TournamentDTO | null> => {
   logProcess(className + 'findById', 'start');
-  const params = new Map<string, Object>();
+  const params = new Map<string, WhereOptions | Object>();
   params.set('id', tId);
   const result = await findByParams(params, user);
   logProcess(className + 'findById', 'end');
@@ -67,15 +67,24 @@ export const findById = async (user: UserDTO, tId: number): Promise<TournamentDT
 // Cerca trmite nome e data
 export const findByNameAndDate = async (name: string, date: Date, user: UserDTO): Promise<TournamentDTO | null> => {
   logProcess(className + 'findByNameAndDate', 'start');
-  const params = new Map<string, Object>();
-  params.set('name', name);
-  params.set('date', { [Op.gte]: date, [Op.lte]: date });
-  const result = await findByParams(params, user);
+  const result: Tournament | null = await Tournament.findOne({
+    where: {
+      [Op.and]: [lowerWrapper('name', name), dateInRageWrapper('date', date, date)],
+      ...defaultFilter(user),
+    },
+    order: [
+      ['date', 'DESC'],
+      ['name', 'DESC'],
+    ],
+  });
   logProcess(className + 'findByNameAndDate', 'end');
   return convertEntityToDTO(result);
 };
 
-export const findByParams = async (parameters: Map<string, Object>, user: UserDTO): Promise<Tournament | null> => {
+export const findByParams = async (
+  parameters: Map<string, WhereOptions | Object>,
+  user: UserDTO
+): Promise<Tournament | null> => {
   try {
     logProcess(className + 'findByParams', 'start');
     const result: Tournament | null = await Tournament.findOne({
