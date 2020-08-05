@@ -29,9 +29,12 @@ jobs:
       # Install dependecies
       - name: Install dependencies
         run: npm ci
-      # Test
-      #- name: Test
-      #  run: npm run start
+      # Build client
+      - name: Build client
+        run: npm run CRA:build
+      # Build server
+      - name: Build server
+        run: npm run prod:build:server
 
   # Code Quality
   check-quality:
