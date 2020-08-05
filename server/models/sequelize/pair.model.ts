@@ -1,4 +1,4 @@
-import { Column, Comment, Model, DataType, Table, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Column, Comment, Model, DataType, Table, ForeignKey, BelongsTo, Default } from 'sequelize-typescript';
 import Tournament from './tournament.model';
 import Player from './player.model';
 
@@ -16,9 +16,17 @@ export default class Pair extends Model<Pair> {
   @Column(DataType.INTEGER)
   public placement!: number;
 
+  @Default(false)
+  @Comment('Selected for stage 2')
+  @Column(DataType.BOOLEAN)
+  public stage2Selected?: boolean;
+
+  // TODO: Paid
+  @Default(false)
   @Column(DataType.BOOLEAN)
   public paid1!: boolean;
 
+  @Default(false)
   @Column(DataType.BOOLEAN)
   public paid2!: boolean;
 

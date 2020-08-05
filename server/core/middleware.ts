@@ -1,11 +1,14 @@
-import { logger } from '../core/logger';
-import { isDevMode } from '../core/debug';
 import { Request, Response, NextFunction } from 'express';
 import chalk from 'chalk';
-import jwt, { TokenExpiredError } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { getSecret, isAdmin } from '../manager/auth.manager';
 import { AppRequest } from 'controller';
+// Models
+import User from '../models/sequelize/user.model';
 import { UserDTO } from 'models/dto/user.dto';
+// Core
+import { logger } from '../core/logger';
+import { isDevMode } from '../core/debug';
 
 // dev logger
 export const routeLogger = (req: Request, res: Response, next: NextFunction) => {
@@ -25,14 +28,18 @@ export const asyncMiddleware = (fn: any) => (req: Request, res: Response, next: 
 };
 
 // Controllo autenticazione. Da utilizzare per tutte le API che richiedono autenticazione
-export const withAuth = (req: AppRequest, res: Response, next: NextFunction) => {
+export const withAuth = async (req: AppRequest, res: Response, next: NextFunction) => {
   const token = req.cookies.token;
   if (!token || typeof token != 'string') return res.status(401).send('Unauthorized: No token provided');
   const [user, isTokenValid] = safeVerifyToken(token);
   if (isTokenValid && user) {
-    // logger.info('withAuth : ', decoded);
-    req.user = user;
-    next();
+    // Controllo se l'utente esiste ancora a db
+    const userDb = await User.findByPk(user.id);
+    if (userDb) {
+      // logger.info('withAuth : ', decoded);
+      req.user = user;
+      next();
+    }
   } else {
     logger.error('Unauthorized:  Token Expired ');
     return res.status(401).send('Unauthorized: Invalid token');
@@ -41,7 +48,6 @@ export const withAuth = (req: AppRequest, res: Response, next: NextFunction) => 
 
 // Controllo se l'utente ha le autorizzazioni di amminstratore, altrimenti picche
 export const withAdminRights = (req: AppRequest, res: Response, next: NextFunction) => {
-  logger.info('withAdminRights : ', isAdmin(req.user));
   if (!isAdmin(req.user)) {
     return res.status(401).send('Unauthorized');
   } else next();
@@ -56,4 +62,9 @@ export const safeVerifyToken = (token: any): [UserDTO | null, boolean] => {
   } catch (error) {
     return [null, false];
   }
+};
+
+//TODO: Controllo accessi
+export const auditControl = (req: Request, res: Response, next: NextFunction) => {
+  next();
 };
