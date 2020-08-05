@@ -1,14 +1,14 @@
 // React, Router, Redux
 import { useHistory } from 'react-router';
 import { withRouter } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // Models
 import { PairDTO, TournamentProgress } from 'models';
 // Style
 import commonStyle from '../../common.module.css';
 import { RightArrowIcon, TrashIcon, LeftArrowIcon } from '../core/icons';
-import { ListGroup, Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 // Actions, Selectors
 import { Stage2Action, TournamentAction } from 'actions';
 import { SessionSelector, TournamentSelector, Stage1Selector, PairSelector } from 'selectors';
@@ -62,6 +62,7 @@ const Wrapper: React.FC = (): JSX.Element => {
     currentHistory.push('/stage2');
   }
 
+  console.log('Refreshing : ', needRefresh);
   return (
     <>
       <Col className={commonStyle.toolsBarContainer}>

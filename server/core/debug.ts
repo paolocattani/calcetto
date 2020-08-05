@@ -1,6 +1,5 @@
 import './env';
 import util from 'util';
-import { logger } from './logger';
 
 export function getEnv(): string {
   return process.env.NODE_ENV!;

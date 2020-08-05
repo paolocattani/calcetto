@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, InputGroup, FormControl, Row, Col } from 'react-bootstrap';
-import BootstrapTable from 'react-bootstrap-table-next';
+import BootstrapTable, { SelectRowProps, ColumnDescription } from 'react-bootstrap-table-next';
 import { useHistory } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -34,7 +34,8 @@ const hideAskUser = {
   show: false,
   title: '',
 };
-const PairsTable = () => {
+interface PairTableProps {}
+const PairsTable: React.FC<PairTableProps> = () => {
   // Navigation
   const currentHistory = useHistory();
   const dispatch = useDispatch();
@@ -282,7 +283,7 @@ const PairsTable = () => {
     currentHistory.push('/');
   }
 
-  const selectRow = {
+  const selectRow: SelectRowProps<PairDTO> = {
     mode: 'checkbox',
     onSelect: handleSelect,
     onSelectAll: (isSelected: boolean, rows: PairDTO[]) => setSelectedRows(isSelected ? rows : []),
@@ -456,7 +457,7 @@ const PairsTable = () => {
       </InputGroup.Append>
     </InputGroup>
   );
-  const ToolsBar = () => (
+  const toolsBar = () => (
     <Col className={commonStyle.toolsBarContainer}>
       <div className={commonStyle.toolsBar}>
         <Button variant="secondary" className="float-left align-middle" onClick={goBack}>
@@ -498,12 +499,13 @@ const PairsTable = () => {
       ) : null}
     </Col>
   );
+
   return (
     <div>
       <YesNoModal message={askUser.message} title={askUser.title} onClick={askUser.onClick} show={askUser.show} />
       <LoadingModal show={isLoading.state} message={isLoading.message} />
       <Col>
-        <Row>{ToolsBar()}</Row>
+        <Row>{toolsBar()}</Row>
         <Row>
           <Col>
             {data.rows && data.players ? (
@@ -511,9 +513,9 @@ const PairsTable = () => {
                 bootstrap4
                 keyField="id"
                 data={data.rows}
-                columns={columns(onSelect, data.players) as any}
-                cellEdit={cellEditProps(session.isAdmin) as any}
-                selectRow={selectRow as any}
+                columns={columns(onSelect, data.players) as ColumnDescription<PairDTO>[]}
+                cellEdit={cellEditProps(session.isAdmin)}
+                selectRow={selectRow}
                 noDataIndication={() => (
                   <NoData
                     isEditable={session.isAdmin || false}
