@@ -48,9 +48,10 @@ export const updateCell = async (
 ) => {
   logProcess(className + 'updateCell', 'start');
   try {
+    logger.info('updateCell : ', tournamentId, name, pair1Id, pair2Id, score);
     const record = await Stage1Model.findOne({
       where: {
-        [Op.or]: [{ [Op.and]: { pair1Id, pair2Id } }, { [Op.and]: { pair1Id, pair2Id } }],
+        [Op.or]: [{ [Op.and]: { pair1Id, pair2Id } }, { [Op.and]: { pair1Id: pair2Id, pair2Id: pair1Id } }],
         name,
         tournamentId,
       },
