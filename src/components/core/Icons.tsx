@@ -29,6 +29,12 @@ export const SaveIcon: React.FC<IconProps> = ({ size, color }) => (
 );
 
 // Solid
+export const HomeIcon: React.FC<IconProps> = ({ size, color }) => (
+  <Icon size={size} color={color} prefix={SOLID} iconName="home" />
+);
+export const BroomIcon: React.FC<IconProps> = ({ size, color }) => (
+  <Icon size={size} color={color} prefix={SOLID} iconName="broom" />
+);
 export const RightArrowIcon: React.FC<IconProps> = ({ size, color }) => (
   <Icon size={size} color={color} prefix={SOLID} iconName="arrow-alt-circle-right" />
 );

@@ -108,7 +108,6 @@ const Stage1Table = ({ rows, columns, tableName, updateCellValue, autoOrder, upd
       selectRow={selectRow}
       cellEdit={cellEditProps(isAdmin)}
       noDataIndication="Nessun dato reperito"
-      //wrapperClasses="player-table"
       headerClasses="default-background default-color-yellow"
       caption={<TableHeader title={tableName} saved={saved} />}
       striped

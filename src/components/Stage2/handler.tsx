@@ -7,11 +7,12 @@ import Stage2 from './table';
 // FIXME:
 import { ICell, PairDTO } from 'models';
 import { ValueType, ActionMeta } from 'react-select';
-import { Button, Col } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import commonStyle from '../../common.module.css';
 import { Stage2Selector } from 'selectors';
 import { Stage2Action } from 'actions';
 import { LoadingModal } from 'components/core/generic/Commons';
+import { LeftArrowIcon } from 'components/core/icons';
 
 // import template from './template';
 
@@ -85,11 +86,13 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
   return cells && pairsList && rowNumber ? (
     <>
       <Col className={commonStyle.toolsBarContainer}>
-        <div className={commonStyle.toolsBar}>
-          <Button variant="secondary" className="align-middle" onClick={goBack}>
-            Fase 1
-          </Button>
-        </div>
+        <Row className={commonStyle.toolsBarRow}>
+          <Col>
+            <Button variant="secondary" className="float-left" onClick={goBack}>
+              <LeftArrowIcon /> Indietro
+            </Button>
+          </Col>
+        </Row>
       </Col>
 
       <Stage2

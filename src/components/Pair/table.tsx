@@ -11,7 +11,7 @@ import NoData from './noData';
 // Core / Helper / Editor
 import { LoadingModal, YesNoModal, YesNoModalProps } from '../core/generic/Commons';
 import { FormEventType } from '../core/generic/CommonTypes';
-import { RightArrowIcon, TrashIcon, PlusIcon } from '../core/icons';
+import { RightArrowIcon, TrashIcon, PlusIcon, HomeIcon } from '../core/icons';
 import { cellEditProps, columns } from './editor';
 import { fetchData, getEmptyRowModel } from './helper';
 // Style
@@ -461,7 +461,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
     <Col className={commonStyle.toolsBarContainer}>
       <div className={commonStyle.toolsBar}>
         <Button variant="secondary" className="float-left align-middle" onClick={goBack}>
-          Home
+          <HomeIcon /> Home
         </Button>
         <Button
           variant="success"

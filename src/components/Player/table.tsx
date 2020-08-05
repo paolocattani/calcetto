@@ -15,6 +15,7 @@ import { PlayerDTO } from 'models';
 import { PlayerAction } from 'actions';
 import { getEmptyPlayer } from 'services/player.service';
 import { PlayerSelector, SessionSelector } from 'selectors';
+import { TrashIcon, PlusIcon, BroomIcon, HomeIcon } from '../core/icons';
 
 interface PlayerProps {}
 const PlayerTable: React.FC<PlayerProps> = () => {
@@ -36,19 +37,22 @@ const PlayerTable: React.FC<PlayerProps> = () => {
     <Col className={commonStyle.toolsBarContainer}>
       <div className={commonStyle.toolsBar}>
         <Button variant="secondary" className="float-left align-middle" onClick={goBack}>
-          Home
+          <HomeIcon />
+          <span> Home</span>
         </Button>
         {isAdmin ? (
           <Button variant="success" onClick={addRow}>
-            Aggiungi giocatore
+            <PlusIcon />
+            <span> Aggiungi giocatore</span>
           </Button>
         ) : null}
         <Button variant="dark" onClick={clearAllFilter}>
-          Pulisci Filtri
+          <BroomIcon />
+          <span> Pulisci Filtri</span>
         </Button>
         {isAdmin ? (
           <Button variant="danger" className="float-right" onClick={deleteRow} disabled={selectedRows.length === 0}>
-            {selectedRows.length > 1 ? 'Elimina giocatori' : 'Elimina giocatore'}
+            <TrashIcon /> {selectedRows.length > 1 ? 'Elimina giocatori' : 'Elimina giocatore'}
           </Button>
         ) : null}
       </div>

@@ -26,17 +26,18 @@ const Stage1Handler = ({ pairsList, autoOrder }: handlerPropsType): JSX.Element 
   // Aggiornamento dati
   const updateCellValue = async (oldValue: any, newValue: any, row: any, column: any) => {
     // console.log('updateCellValue : ', newValue, row, column);
-    const model1 = {
+    const model = {
       tId: row.pair.tId,
       tableName,
       score: newValue,
       pair1Id: row.pair.id,
       pair2Id: rows[parseInt(column.text) - 1].pair.id,
     };
+    console.log('updateCellValue : ', model);
     const response = await fetch('/api/v1/stage1/cell', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(model1),
+      body: JSON.stringify(model),
     });
     await response.json();
     if (response.ok) {

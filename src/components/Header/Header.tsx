@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { SessionSelector } from 'selectors/session.selector';
 import { SessionAction } from 'actions';
+import { HomeIcon } from 'components/core/icons';
 
 const applicationName = 'Calcetto C.S.M';
 
@@ -41,7 +42,8 @@ export const Header: React.FC = () => {
         {session.isAuthenticated ? (
           <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Navbar.Brand as={Link} to="/">
-              Home
+              <HomeIcon />
+              <span> Home</span>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
