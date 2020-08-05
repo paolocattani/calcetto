@@ -14,6 +14,7 @@ import * as playerManager from './player.manager';
 import { Op } from 'sequelize';
 import { PlayerRole } from 'models/dto/player.dto';
 import { lowerWrapper } from '../core/utils';
+import { isProductionMode } from '../core/debug';
 
 // Const
 const className = 'Authentication Manager : ';
@@ -47,7 +48,16 @@ export const generateToken = (value: UserDTO) =>
 // Add token to cookies
 export const addUserCookies = (user: UserDTO, res: Response): void => {
   logProcess(className + 'addUserCookies', ` : ${getExpiration()}`);
-  res.cookie('token', generateToken(user), { httpOnly: true });
+  res.cookie(
+    'token',
+    generateToken(user),
+    isProductionMode()
+      ? {
+          secure: true,
+          sameSite: 'none',
+        }
+      : { httpOnly: true }
+  );
 };
 
 // List all users
