@@ -2,21 +2,9 @@ import { RootState } from 'models';
 
 // Get state from store
 export const SessionSelector = {
-  isLoading({ sessionState: { isLoading } }: RootState) {
-    return isLoading;
-  },
-  // Authentication / Role
-  isAdmin({ sessionState: { isAdmin } }: RootState) {
-    return isAdmin;
-  },
-  isAuthenticated({ sessionState: { isAuthenticated } }: RootState) {
-    return isAuthenticated;
-  },
-  // User / Session
-  getUser({ sessionState: { user } }: RootState) {
-    return user;
-  },
-  getSession({ sessionState }: RootState) {
-    return sessionState;
-  },
+  isLoading: ({ sessionState: { isLoading } }: RootState) => isLoading,
+  isAdmin: ({ sessionState: { isAdmin } }: RootState) => isAdmin,
+  isAuthenticated: ({ sessionState: { isAuthenticated } }: RootState) => isAuthenticated,
+  getUser: ({ sessionState: { user } }: RootState) => user,
+  getSession: ({ sessionState }: RootState) => sessionState,
 };

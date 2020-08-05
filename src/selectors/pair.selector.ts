@@ -1,12 +1,7 @@
-import { PairDTO, RootState } from 'models';
+import { RootState } from 'models';
 
 // Get state from store
 export const PairSelector = {
-  isLoading({ pairState: { isLoading } }: RootState): boolean {
-    return isLoading;
-  },
-  // Get pairs List
-  getPairsList({ pairState: { pairList } }: RootState): PairDTO[] | undefined {
-    return pairList;
-  },
+  isLoading: ({ pairState: { isLoading } }: RootState) => isLoading,
+  getPairsList: ({ pairState: { pairList } }: RootState) => pairList,
 };
