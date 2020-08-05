@@ -1,9 +1,10 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
+import filterTableFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
 import { Type } from 'react-bootstrap-table2-editor';
 import { getEmptyPlayer } from 'services/player.service';
 import { PlayerRole } from '../../models/player.model';
+import cellEditFactory from 'react-bootstrap-table2-editor';
 
 // Filter
 let nameFilter;
@@ -22,15 +23,24 @@ export function clearAllFilter() {
   phoneFilter('');
 }
 
+export const filterFactory = filterTableFactory();
+export const cellEditProps = (isAdmin, dispatch) =>
+  cellEditFactory({
+    mode: isAdmin ? 'click' : 'none',
+    blurToSave: true,
+    autoSelectText: true,
+    afterSaveCell: (oldValue, newValue, player, column) => dispatch(player),
+  });
+
 // Columns default
-const playerColumns = (isEditable) => [
-  { dataField: 'id', text: 'ID', editable: false, headerStyle: (column, colIndex) => ({ width: '3%' }) },
+const playerColumns = (isAdmin) => [
+  { dataField: 'rowNumber', text: 'ID', editable: false, headerStyle: (column, colIndex) => ({ width: '3%' }) },
   {
     dataField: 'name',
     text: 'Nome',
     headerClasses: 'player-table-header-element',
     autoSelectText: true,
-    headerStyle: (column, colIndex) => ({ width: isEditable ? '16%' : '25%' }),
+    headerStyle: (column, colIndex) => ({ width: isAdmin ? '16%' : '25%' }),
     filter: textFilter({
       placeholder: 'Filtra...',
       getFilter: (filter) => (nameFilter = filter),
@@ -41,7 +51,7 @@ const playerColumns = (isEditable) => [
     text: 'Cognome',
     headerClasses: 'player-table-header-element',
     autoSelectText: true,
-    headerStyle: (column, colIndex) => ({ width: isEditable ? '16%' : '25%' }),
+    headerStyle: (column, colIndex) => ({ width: isAdmin ? '16%' : '25%' }),
     filter: textFilter({
       placeholder: 'Filtra...',
       getFilter: (filter) => (surnameFilter = filter),
@@ -51,7 +61,7 @@ const playerColumns = (isEditable) => [
     dataField: 'alias',
     text: 'Alias',
     headerClasses: 'player-table-header-element',
-    headerStyle: (column, colIndex) => ({ width: isEditable ? '17%' : '25%' }),
+    headerStyle: (column, colIndex) => ({ width: isAdmin ? '17%' : '25%' }),
     autoSelectText: true,
     filter: textFilter({
       placeholder: 'Filtra...',
@@ -62,7 +72,7 @@ const playerColumns = (isEditable) => [
     dataField: 'role',
     text: 'Roulo',
     headerClasses: 'player-table-header-element',
-    headerStyle: (column, colIndex) => ({ width: `${isEditable ? '11' : '15'}%` }),
+    headerStyle: (column, colIndex) => ({ width: `${isAdmin ? '11' : '15'}%` }),
     filter: selectFilter({
       placeholder: 'Filtra...',
       options: {
@@ -89,7 +99,7 @@ const playerColumns = (isEditable) => [
     headerStyle: (column, colIndex) => ({ width: '20%' }),
     headerClasses: 'player-table-header-element',
     autoSelectText: true,
-    hidden: !isEditable,
+    hidden: !isAdmin,
     filter: textFilter({
       placeholder: 'Filtra...',
       getFilter: (filter) => (emailFilter = filter),
@@ -101,7 +111,7 @@ const playerColumns = (isEditable) => [
     text: 'Telefono',
     headerClasses: 'player-table-header-element',
     autoSelectText: true,
-    hidden: !isEditable,
+    hidden: !isAdmin,
     filter: textFilter({
       placeholder: 'Filtra...',
       getFilter: (filter) => (phoneFilter = filter),

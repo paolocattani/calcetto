@@ -1,16 +1,29 @@
 // Requests
 export interface FetchPlayersRequest {
   tId?: number;
-  addEmpty: boolean;
+  addEmpty?: boolean;
+}
+export interface UpdatePlayerRequest {
+  player: PlayerDTO;
+}
+export interface DeletePlayersRequest {
+  players: PlayerDTO[];
 }
 // Responses
 export interface FetchPlayersResponse {
   results: PlayerDTO[];
 }
+export interface UpdatePlayerResponse {
+  player: PlayerDTO;
+}
+export interface DeletePlayersResponse {
+  players: PlayerDTO[];
+}
 
+//
 export interface PlayerState {
   player?: PlayerDTO;
-  playerList?: PlayerDTO[];
+  playersList: PlayerDTO[];
   isLoading: boolean;
 }
 
@@ -28,6 +41,7 @@ export interface PlayerDTO {
   match_won?: number;
   total_score?: number;
   editable: boolean;
+  rowNumber: number;
 }
 
 export enum PlayerRole {
