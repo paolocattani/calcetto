@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Select, { Styles, ValueType, ActionMeta, components } from 'react-select';
-import { PairDTO } from 'models';
+import { PairDTO } from 'redux/models';
 import { SelectComponents } from 'react-select/src/components';
 
 interface PairSelectProps {

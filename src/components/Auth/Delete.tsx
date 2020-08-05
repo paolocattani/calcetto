@@ -3,9 +3,9 @@ import { useHistory } from 'react-router-dom';
 import { Modal, Container, Alert, Form, Col, Row, Button } from 'react-bootstrap';
 import { useInput } from '../core/hooks/InputHook';
 import { TrashIcon } from '../core/icons';
-import { SessionSelector } from 'selectors/session.selector';
+import { SessionSelector } from 'redux/selectors';
 import { useDispatch, useSelector } from 'react-redux';
-import { SessionAction } from 'actions';
+import { SessionAction } from 'redux/actions';
 type authType = {
   show: boolean;
   onHide: () => void;

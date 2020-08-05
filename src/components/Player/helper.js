@@ -2,8 +2,8 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import filterTableFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
 import { Type } from 'react-bootstrap-table2-editor';
-import { getEmptyPlayer } from 'services/player.service';
-import { PlayerRole } from '../../models/player.model';
+import { getEmptyPlayer } from 'redux/services/player.service';
+import { PlayerRole } from '../../redux/models/player.model';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 
 // Filter

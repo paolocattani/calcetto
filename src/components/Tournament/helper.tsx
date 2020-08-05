@@ -1,5 +1,5 @@
 import React, { CSSProperties } from 'react';
-import { TournamentDTO, TournamentProgress } from 'models/tournament.model';
+import { TournamentDTO, TournamentProgress } from 'redux/models/tournament.model';
 
 export async function getTournament(tId: number): Promise<TournamentDTO | null> {
   const response = await fetch(`/api/v1/tournament/${tId}`, {

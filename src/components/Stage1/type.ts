@@ -1,4 +1,4 @@
-import { PairDTO } from 'models';
+import { PairDTO } from 'redux/models';
 
 export type handlerPropsType = {
   pairsList: PairDTO[];

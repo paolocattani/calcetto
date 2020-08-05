@@ -6,10 +6,10 @@ import DatePicker from 'react-datepicker';
 import { getEmptyTournament } from './helper';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { TournamentAction } from 'actions/tournament.action';
+import { TournamentAction } from 'redux/actions/tournament.action';
 import { toast } from 'react-toastify';
 import { FormEventType } from 'components/core/generic/CommonTypes';
-import { isValidTournament } from 'services/tournament.service';
+import { isValidTournament } from 'redux/services/tournament.service';
 
 type newTProps = {};
 

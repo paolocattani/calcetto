@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { withRouter, RouteComponentProps, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 // import { TournamentSelector } from 'selectors';
-import { Stage1Selector } from 'selectors/stage1.selector';
+import { Stage1Selector } from 'redux/selectors/stage1.selector';
 import Stage2 from './table';
 // FIXME:
-import { ICell, PairDTO } from 'models';
+import { ICell, PairDTO } from 'redux/models';
 import { ValueType, ActionMeta } from 'react-select';
 import { Button, Col, Row } from 'react-bootstrap';
 import commonStyle from '../../common.module.css';
-import { Stage2Selector } from 'selectors';
-import { Stage2Action } from 'actions';
+import { Stage2Selector } from 'redux/selectors';
+import { Stage2Action } from 'redux/actions';
 import { LoadingModal } from 'components/core/generic/Commons';
 import { LeftArrowIcon } from 'components/core/icons';
 

@@ -3,7 +3,7 @@ import style from './style.module.css';
 import { getIndexes, getEmptyCell } from './helper';
 import Cell from './cell';
 import { getBaseLog } from 'components/core/utils';
-import { ICell, PairDTO } from 'models';
+import { ICell, PairDTO } from 'redux/models';
 import PairsSelect from 'components/Pair/select';
 import { ValueType, ActionMeta, Styles /*, OptionProps */ } from 'react-select';
 // import { valueFormatter } from 'components/Pair/helper';

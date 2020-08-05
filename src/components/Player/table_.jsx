@@ -10,7 +10,7 @@ import './style.css';
 import columns, { clearAllFilter } from './helper';
 import TableHeader from './header';
 import { LoadingModal } from '../core/generic/Commons';
-import { getEmptyPlayer } from 'services/player.service';
+import { getEmptyPlayer } from 'redux/services/player.service';
 import { connect } from 'react-redux';
 
 class Player extends React.Component {

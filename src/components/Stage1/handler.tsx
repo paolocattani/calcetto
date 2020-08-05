@@ -3,7 +3,7 @@ import Stage1Table from './table';
 import { handlerPropsType } from './type';
 import { rowsGenerator, comparator } from './helper';
 import { columns } from './editor';
-import { Stage1Row } from 'models';
+import { Stage1Row } from 'redux/models';
 
 const Stage1Handler = ({ pairsList, autoOrder }: handlerPropsType): JSX.Element => {
   const [isLoading, setIsLoading] = useState(false);

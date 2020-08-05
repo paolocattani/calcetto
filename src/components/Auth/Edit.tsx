@@ -3,8 +3,8 @@ import { Card, Container, Alert, Form, Button, Col, Row } from 'react-bootstrap'
 import { useInput } from '../core/hooks/InputHook';
 import DatePicker from 'react-datepicker';
 import { TrashIcon, SaveIcon, TimesIcon } from '../core/icons';
-import { SessionSelector } from 'selectors/session.selector';
-import { SessionAction } from 'actions';
+import { SessionSelector } from 'redux/selectors/session.selector';
+import { SessionAction } from 'redux/actions';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 const Delete = lazy(() => import('./Delete'));

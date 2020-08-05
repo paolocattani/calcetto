@@ -5,11 +5,11 @@ import DatePicker from 'react-datepicker';
 import Select, { StylesConfig, ValueType } from 'react-select';
 import './style.css';
 import { emailRegExp, passwordRegExp } from '../core/utils';
-import { UserDTO } from 'models/user.model';
-import { SessionAction } from 'actions';
+import { UserDTO } from 'redux/models/user.model';
+import { SessionAction } from 'redux/actions';
 import { useDispatch } from 'react-redux';
 import { withRouter, RouteComponentProps, useHistory } from 'react-router-dom';
-import { PlayerRole, UserMessage } from 'models';
+import { PlayerRole, UserMessage } from 'redux/models';
 import { toast } from 'react-toastify';
 
 interface PropsType extends RouteComponentProps {

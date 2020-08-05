@@ -12,11 +12,11 @@ import { formatDate, translateTournamentProgress } from '../core/utils';
 import NewTournament from './new';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { TournamentSelector } from 'selectors/tournament.selector';
-import { TournamentAction, PairAction } from 'actions';
+import { TournamentSelector } from 'redux/selectors/tournament.selector';
+import { TournamentAction, PairAction } from 'redux/actions';
 import { withRouter } from 'react-router-dom';
-import { TournamentDTO } from 'models/tournament.model';
-import { SessionSelector } from 'selectors/session.selector';
+import { TournamentDTO } from 'redux/models/tournament.model';
+import { SessionSelector } from 'redux/selectors/session.selector';
 import { toast } from 'react-toastify';
 
 const FTournament = () => {

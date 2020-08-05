@@ -2,8 +2,8 @@ import React from 'react';
 import style from './style.module.css';
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
 import { DoubleRightIcon, BanIcon, TrophyIcon } from 'components/core/icons';
-import { ICell } from 'models/stage2.model';
-import { PairDTO } from 'models';
+import { ICell } from 'redux/models/stage2.model';
+import { PairDTO } from 'redux/models';
 
 interface NodeElement extends ICell {
   span: number;

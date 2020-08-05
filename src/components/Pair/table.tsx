@@ -18,15 +18,15 @@ import { fetchData, getEmptyRowModel } from './helper';
 import './style.css';
 import commonStyle from '../../common.module.css';
 // Service
-import { getEmptyPlayer } from 'services/player.service';
+import { getEmptyPlayer } from 'redux/services/player.service';
 // Selector
-import { SessionSelector } from 'selectors/session.selector';
-import { TournamentSelector } from 'selectors/tournament.selector';
+import { SessionSelector } from 'redux/selectors/session.selector';
+import { TournamentSelector } from 'redux/selectors/tournament.selector';
 // Models
-import { PairDTO, PlayerDTO } from 'models';
-import { TournamentProgress } from 'models/tournament.model';
+import { PairDTO, PlayerDTO } from 'redux/models';
+import { TournamentProgress } from 'redux/models/tournament.model';
 // Action
-import { TournamentAction, PairAction } from 'actions';
+import { TournamentAction, PairAction } from 'redux/actions';
 
 const hideAskUser = {
   message: '',

@@ -5,7 +5,7 @@ import { Route } from 'react-router';
 import { routeType, getLabelByPathname } from './Routes';
 import { Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { SessionSelector } from 'selectors/session.selector';
+import { SessionSelector } from 'redux/selectors/session.selector';
 
 // HOC gestisce la visibilità dei componenti ed eventualmente reindirizza alla login
 export const ProtectedRoute: React.FC<routeType> = (props) => {

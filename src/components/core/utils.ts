@@ -1,4 +1,4 @@
-import { TournamentProgress } from '../../models/tournament.model';
+import { TournamentProgress } from '../../redux/models/tournament.model';
 
 export const getTodayDate = () => formatDate(new Date());
 

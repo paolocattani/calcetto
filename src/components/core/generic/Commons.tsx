@@ -2,7 +2,7 @@ import React, { CSSProperties } from 'react';
 import { Modal, Spinner, Toast, Alert, Row, Button, Container, Col } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { SessionSelector } from 'selectors/session.selector';
+import { SessionSelector } from 'redux/selectors/session.selector';
 import './style.css';
 
 // Loading Modal

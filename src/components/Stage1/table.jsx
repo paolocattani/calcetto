@@ -7,11 +7,11 @@ import TableHeader from './header';
 import { getOpposite, comparator } from './helper';
 //
 import { useSelector, useDispatch } from 'react-redux';
-import { SessionSelector } from 'selectors/session.selector';
+import { SessionSelector } from 'redux/selectors/session.selector';
 // style
-import { Stage1Action } from 'actions';
-import { TournamentSelector } from 'selectors';
-import { TournamentProgress } from 'models';
+import { Stage1Action } from 'redux/actions';
+import { TournamentSelector } from 'redux/selectors';
+import { TournamentProgress } from 'redux/models';
 
 // TODO: convert this component to ts
 const Stage1Table = ({ rows, columns, tableName, updateCellValue, autoOrder, updatePlacement, saved }) => {

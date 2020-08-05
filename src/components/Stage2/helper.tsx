@@ -1,5 +1,5 @@
 import { getBaseLog } from '../core/utils';
-import { ICell } from 'models/stage2.model';
+import { ICell } from 'redux/models/stage2.model';
 
 /*
 	_______________________________________________________________________

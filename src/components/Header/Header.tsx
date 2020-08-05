@@ -4,8 +4,8 @@ import { Jumbotron, Navbar, Nav, Button, Dropdown, ButtonGroup } from 'react-boo
 import routes from '../core/routing/Routes';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { SessionSelector } from 'selectors/session.selector';
-import { SessionAction } from 'actions';
+import { SessionSelector } from 'redux/selectors/session.selector';
+import { SessionAction } from 'redux/actions';
 import { HomeIcon } from 'components/core/icons';
 
 const applicationName = 'Calcetto C.S.M';

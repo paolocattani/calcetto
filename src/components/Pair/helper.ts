@@ -1,6 +1,6 @@
-import { getEmptyPlayer } from 'services/player.service';
+import { getEmptyPlayer } from 'redux/services/player.service';
 import { Styles } from 'react-select';
-import { PairDTO } from 'models';
+import { PairDTO } from 'redux/models';
 
 export const getEmptyRowModel = (label?: string): PairDTO => ({
   id: null,

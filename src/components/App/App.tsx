@@ -15,7 +15,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { useDispatch } from 'react-redux';
-import { SessionAction } from 'actions';
+import { SessionAction } from 'redux/actions';
 // Toasts
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

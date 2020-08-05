@@ -1,7 +1,7 @@
 import React from 'react';
 import { translateTournamentProgress } from '../core/utils';
 import { useSelector } from 'react-redux';
-import { TournamentSelector } from 'selectors/tournament.selector';
+import { TournamentSelector } from 'redux/selectors/tournament.selector';
 
 const TableHeader: React.FC<{}> = () => {
   const tournament = useSelector(TournamentSelector.getTournament);

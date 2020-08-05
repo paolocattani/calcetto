@@ -2,10 +2,10 @@ import { useInput } from '../core/hooks/InputHook';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import React from 'react';
 import { useHistory, RouteComponentProps, withRouter } from 'react-router-dom';
-import { SessionAction } from 'actions';
+import { SessionAction } from 'redux/actions';
 import { useDispatch } from 'react-redux';
-import { UserDTO } from 'models/user.model';
-import { UserMessage } from 'models';
+import { UserDTO } from 'redux/models/user.model';
+import { UserMessage } from 'redux/models';
 import { toast } from 'react-toastify';
 
 interface PropsType extends RouteComponentProps {
