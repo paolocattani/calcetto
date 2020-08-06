@@ -22,7 +22,6 @@ export const CheckAuthentication = async ({}: CheckAuthenticationRequest): Promi
     const user: UserDTO | null = await response.json();
     return { user: user && response.ok ? user : undefined };
   } catch (error) {
-    handleError('SessionContext.error ', 'Connection error.');
     return { user: undefined };
   }
 };

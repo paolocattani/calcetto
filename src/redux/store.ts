@@ -13,6 +13,8 @@ import {
 import { TournamentsSagas, PlayersSagas, PairsSagas, SessionSagas } from 'redux/sagas';
 import { Stage2Sagas } from 'redux/sagas/stage2.saga';
 
+// TODO: https://manukyan.dev/posts/2019-04-15-code-splitting-for-redux-and-optional-redux-saga/#:~:text=Redux%20Saga%20Code%20Splitting,whenever%20those%20actions%20are%20dispatched.
+
 // https://redux-saga.js.org/docs/introduction/BeginnerTutorial.html
 // custom compose for the redux devtool extension
 const composeEnhancer = (() => {
@@ -42,7 +44,7 @@ const commonReducers: ReducersMapObject<RootState> = {
 // Meet the Store
 export const store = createStore(combineReducers(commonReducers), composeEnhancer(applyMiddleware(sagaMiddleware)));
 
-// Exec all sagas ( watcher )
+// Exec all sagas
 function* rootSagas() {
   yield all([...TournamentsSagas, ...PlayersSagas, ...PairsSagas, ...SessionSagas, ...Stage2Sagas]);
 }

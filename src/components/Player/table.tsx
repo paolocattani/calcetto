@@ -105,7 +105,7 @@ const PlayerTable: React.FC<PlayerProps> = () => {
               bootstrap4
               keyField="id"
               data={playersList}
-              columns={columns(isAdmin) as ColumnDescription<PlayerDTO>[]}
+              columns={columns(isAdmin) as ColumnDescription<PlayerDTO, PlayerDTO>[]}
               cellEdit={cellEditProps(isAdmin, (player: PlayerDTO) =>
                 dispatch(PlayerAction.savePlayer.request({ player }))
               )}

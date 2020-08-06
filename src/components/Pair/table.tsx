@@ -364,7 +364,6 @@ const PairsTable: React.FC<PairTableProps> = () => {
     setData((current) => ({ rows: newRows, players: current.players }));
   }
 
-  console.log('availableRows : ', data.rows);
   const availableRows = Math.floor(
     Math.floor((data.players.length - 1) / 2) -
       (data.rows.length === 0
