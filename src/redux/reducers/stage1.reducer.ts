@@ -5,7 +5,7 @@ import { getEmptyRowModel } from 'components/Pair/helper';
 
 const initialState: Stage1State = {
   needRefresh: false,
-  selectedPairs: [getEmptyRowModel('placeholder')],
+  selectedPairs: [getEmptyRowModel('-')],
   isLoading: false,
   stages: [],
 };

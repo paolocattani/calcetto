@@ -103,7 +103,7 @@ function getTableBodyRows(
         ? `${option.placement}${option.stage1Name} : ${
             option.alias ? option.alias : `${option.player1?.name} - ${option.player2?.name} `
           }`
-        : 'Placeholder';
+        : '-';
     /* TODO:
     const CustomOption = ({ innerRef, innerProps, data }: OptionProps<PairDTO>) => (
       <div ref={innerRef} {...innerProps}>
