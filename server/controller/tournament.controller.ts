@@ -57,7 +57,7 @@ router.put(
   withAuth,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     const result = await update(req.user!, parseBody(req.body));
-    return res.sendStatus(result ? 200 : 500);
+    return res.status(200).json(result);
   })
 );
 

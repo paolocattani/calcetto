@@ -38,20 +38,23 @@ export const listAll = async (user: UserDTO): Promise<TournamentDTO[]> => {
 };
 
 // Aggiorna un torneo esistente
-export const update = async (user: UserDTO, model: TournamentDTO): Promise<boolean> => {
+export const update = async (user: UserDTO, model: TournamentDTO): Promise<TournamentDTO | null> => {
   logProcess(className + 'update', 'start');
   try {
     const params = new Map<string, WhereOptions | Object>();
     params.set('id', model.id);
     const t = await findByParams(params, user);
-    if (!t) return false;
-    else await t.update({ progress: model.progress });
+    if (!t) {
+      logProcess(className + 'update', 'end : Tournament not found');
+      return model;
+    }
+    const result = await t.update({ progress: model.progress });
+    logProcess(className + 'update', 'end');
+    return convertEntityToDTO(result);
   } catch (error) {
     logProcess(className + 'update', 'error');
-    return false;
+    return model;
   }
-  logProcess(className + 'update', 'end');
-  return true;
 };
 
 // Cerca un torneo tramite ID
