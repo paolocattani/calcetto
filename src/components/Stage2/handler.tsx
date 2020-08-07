@@ -13,6 +13,7 @@ import { Stage2Selector } from 'redux/selectors';
 import { Stage2Action } from 'redux/actions';
 import { LoadingModal } from 'components/core/generic/Commons';
 import { LeftArrowIcon } from 'components/core/icons';
+import TournamentBadge from 'components/Tournament/badge';
 
 // import template from './template';
 
@@ -94,6 +95,7 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
           </Col>
         </Row>
       </Col>
+      <TournamentBadge />
 
       <Stage2
         pairs={pairsListFromStore}

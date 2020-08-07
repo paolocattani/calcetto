@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { toast } from 'react-toastify';
 // Components
-import TableHeader from './header';
 import NoData from './noData';
 // Core / Helper / Editor
 import { LoadingModal, YesNoModal, YesNoModalProps } from '../core/generic/Commons';
@@ -27,6 +26,7 @@ import { PairDTO, PlayerDTO } from 'redux/models';
 import { TournamentProgress } from 'redux/models/tournament.model';
 // Action
 import { TournamentAction, PairAction } from 'redux/actions';
+import TournamentBadge from 'components/Tournament/badge';
 
 const hideAskUser = {
   message: '',
@@ -39,7 +39,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
   // Navigation
   const currentHistory = useHistory();
   const dispatch = useDispatch();
-  const session = useSelector(SessionSelector.getSession);
+  const isAdmin = useSelector(SessionSelector.isAdmin);
   const tournament = useSelector(TournamentSelector.getTournament)!;
 
   // States
@@ -48,7 +48,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
   const [askUser, setAskUser] = useState<YesNoModalProps>(hideAskUser);
 
   // Data
-  const [data, setData] = useState({ rows: [] as PairDTO[], players: [] as PlayerDTO[] });
+  const [data, setData] = useState<{ rows: PairDTO[]; players: PlayerDTO[] }>({ rows: [], players: [] });
   const [selectedRows, setSelectedRows] = useState<PairDTO[]>([]);
   // Function params
   const [stage1Number, setStage1Number] = useState<number>(0);
@@ -270,7 +270,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 
     // Se sono un utente che puo modificare e il torneo è in una fase minore ( vedi ordinamento Enum ) di quella attuale
     // allora aggiorno lo stato del torneo
-    if (session.isAdmin && tournament.progress < TournamentProgress.Stage1) {
+    if (isAdmin && tournament.progress < TournamentProgress.Stage1) {
       tournament.progress = TournamentProgress.Stage1;
       dispatch(TournamentAction.updateTournament.request({ model: tournament }));
     }
@@ -288,6 +288,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
     onSelect: handleSelect,
     onSelectAll: (isSelected: boolean, rows: PairDTO[]) => setSelectedRows(isSelected ? rows : []),
     style: { backgroundColor: '#c8e6c9' },
+    hideSelectColumn: !isAdmin || tournament.progress > TournamentProgress.PairsSelection,
   };
 
   const processDeleteStage1 = async () => {
@@ -300,7 +301,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
       });
       await response.json();
       // Update tournament progress
-      if (session.isAdmin && tournament.progress < TournamentProgress.Stage1) {
+      if (isAdmin && tournament.progress < TournamentProgress.Stage1) {
         tournament.progress = TournamentProgress.PairsSelection;
         dispatch(TournamentAction.updateTournament.request({ model: tournament }));
       }
@@ -332,7 +333,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
       return;
     }
 
-    if (tournament.progress === TournamentProgress.Stage1 || tournament.progress === TournamentProgress.Stage2) {
+    if (tournament.progress > TournamentProgress.PairsSelection) {
       showErrorMessage('Non riassegnare i gironi in quanto le coppie sono gia state confermate per la fase successiva');
       return;
     }
@@ -375,8 +376,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
           }, 0))
   );
 
-  const deleteDisabled =
-    !(selectedRows.length > 0) || tournament.progress === 'Stage1' || tournament.progress === 'Stage2';
+  const deleteDisabled = !(selectedRows.length > 0) || tournament.progress > TournamentProgress.PairsSelection;
 
   /*
   let deleteTooltipMessage = '';
@@ -457,46 +457,56 @@ const PairsTable: React.FC<PairTableProps> = () => {
     </InputGroup>
   );
   const toolsBar = () => (
-    <Col className={commonStyle.toolsBarContainer}>
-      <div className={commonStyle.toolsBar}>
-        <Button variant="secondary" className="float-left align-middle" onClick={goBack}>
-          <HomeIcon /> Home
-        </Button>
-        <Button
-          variant="success"
-          className="align-middle"
-          onClick={() => addRow()}
-          disabled={availableRows <= 0 || !session.isAdmin}
-        >
-          <PlusIcon /> Aggiungi Coppia
-        </Button>
-        <Button
-          variant="danger"
-          className="align-middle"
-          onClick={deleteRow}
-          disabled={deleteDisabled || !session.isAdmin}
-        >
-          <TrashIcon /> Elimina Coppia
-        </Button>
-        <Button variant="danger" className="align-middle" onClick={deleteStage1} disabled={!session.isAdmin}>
-          Reset gironi
-        </Button>
-        <Button
-          variant="outline-warning"
-          className="default-color-white float-right align-middle"
-          onClick={confirmPairs}
-          disabled={!session.isAdmin}
-        >
-          <b>Prosegui </b> <RightArrowIcon />
-        </Button>
-      </div>
-      {session.isAdmin ? (
+    <div className={commonStyle.toolsBarContainer}>
+      <Row className={commonStyle.toolsBar}>
+        <Col>
+          <Button variant="secondary" className="float-left align-middle" onClick={goBack}>
+            <HomeIcon /> Home
+          </Button>
+        </Col>
+
+        {tournament.progress > TournamentProgress.PairsSelection ? null : (
+          <Col>
+            <Button
+              variant="success"
+              className="align-middle"
+              onClick={() => addRow()}
+              disabled={availableRows <= 0 || !isAdmin}
+            >
+              <PlusIcon /> Aggiungi Coppia
+            </Button>
+          </Col>
+        )}
+        {tournament.progress > TournamentProgress.PairsSelection ? null : (
+          <Col>
+            <Button variant="danger" className="align-middle" onClick={deleteRow} disabled={deleteDisabled || !isAdmin}>
+              <TrashIcon /> {selectedRows.length === 1 ? 'Elimina coppia' : 'Elimina coppie'}
+            </Button>
+          </Col>
+        )}
+        <Col>
+          <Button variant="danger" className="align-middle" onClick={deleteStage1} disabled={!isAdmin}>
+            Reset gironi
+          </Button>
+        </Col>
+        <Col>
+          <Button
+            variant="outline-warning"
+            className="default-color-white float-right align-middle"
+            onClick={confirmPairs}
+            disabled={!isAdmin}
+          >
+            <b>Prosegui </b> <RightArrowIcon />
+          </Button>
+        </Col>
+      </Row>
+      {isAdmin ? (
         <>
           {assignMatches()}
           {addPairs()}
         </>
       ) : null}
-    </Col>
+    </div>
   );
 
   return (
@@ -504,7 +514,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
       <YesNoModal message={askUser.message} title={askUser.title} onClick={askUser.onClick} show={askUser.show} />
       <LoadingModal show={isLoading.state} message={isLoading.message} />
       <Col>
-        <Row>{toolsBar()}</Row>
+        {toolsBar()}
         <Row>
           <Col>
             {data.rows && data.players ? (
@@ -512,17 +522,13 @@ const PairsTable: React.FC<PairTableProps> = () => {
                 bootstrap4
                 keyField="id"
                 data={data.rows}
-                columns={columns(onSelect, data.players) as ColumnDescription<PairDTO>[]}
-                cellEdit={cellEditProps(session.isAdmin)}
+                columns={columns(onSelect, data.players) as ColumnDescription<PairDTO, PairDTO>[]}
+                cellEdit={cellEditProps(isAdmin)}
                 selectRow={selectRow}
                 noDataIndication={() => (
-                  <NoData
-                    isEditable={session.isAdmin || false}
-                    addRow={() => addRow()}
-                    optionsLength={data.players.length}
-                  />
+                  <NoData isEditable={isAdmin || false} addRow={() => addRow()} optionsLength={data.players.length} />
                 )}
-                caption={<TableHeader />}
+                caption={<TournamentBadge />}
                 headerClasses="default-background default-color-yellow"
                 striped
                 hover

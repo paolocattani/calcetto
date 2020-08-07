@@ -8,11 +8,13 @@ import { PairDTO, TournamentProgress } from 'redux/models';
 // Style
 import commonStyle from '../../common.module.css';
 import { RightArrowIcon, TrashIcon, LeftArrowIcon } from '../core/icons';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Row, Badge } from 'react-bootstrap';
 // Actions, Selectors
 import { Stage2Action, TournamentAction } from 'redux/actions';
 import { SessionSelector, TournamentSelector, Stage1Selector, PairSelector } from 'redux/selectors';
 import Stage1Table from './table';
+import { formatDate } from 'components/core/utils';
+import TournamentBadge from 'components/Tournament/badge';
 
 interface ModalProps {
   show: boolean;
@@ -62,46 +64,40 @@ const Wrapper: React.FC = (): JSX.Element => {
   }
 
   console.log('Refreshing : ', needRefresh);
+  const toolsBar = (
+    <div className={commonStyle.toolsBarContainer}>
+      <Row className={commonStyle.toolsBarRow}>
+        <Col>
+          <Button variant="secondary" onClick={goBack} className="float-left">
+            <LeftArrowIcon /> Indietro
+          </Button>
+        </Col>
+        <Col>
+          <Button
+            variant="danger"
+            onClick={() => dispatch(Stage2Action.delete.request({ tId: tournament.id! }))}
+            disabled={!session.isAdmin || (session.isAdmin && tournament.progress < TournamentProgress.Stage2)}
+          >
+            <TrashIcon /> Reset Fase 2
+          </Button>
+        </Col>
+        <Col>
+          <Button
+            variant="outline-warning"
+            className="default-color-white float-right"
+            onClick={goToStage2}
+            disabled={selected.length < 4 && tournament.progress < TournamentProgress.Stage2}
+          >
+            <b>Prosegui </b> <RightArrowIcon />
+          </Button>
+        </Col>
+      </Row>
+    </div>
+  );
   return (
     <>
-      <Col className={commonStyle.toolsBarContainer}>
-        <Row className={commonStyle.toolsBarRow}>
-          <Col>
-            <Button variant="secondary" onClick={goBack} className="float-left">
-              <LeftArrowIcon /> Indietro
-            </Button>
-          </Col>
-          <Col>
-            <Button
-              variant="danger"
-              onClick={() => dispatch(Stage2Action.delete.request({ tId: tournament.id! }))}
-              disabled={!session.isAdmin || (session.isAdmin && tournament.progress < TournamentProgress.Stage2)}
-            >
-              <TrashIcon /> Reset Fase 2
-            </Button>
-          </Col>
-          {/* FIXME:
-          <Form.Check
-            custom
-            checked={autoOrder}
-            type="checkbox"
-            id="autoOrder"
-            label={`Ordinamento Automatico ${autoOrder}`}
-            onChange={() => setAutoOrder(!autoOrder)}
-          />
-        */}
-          <Col>
-            <Button
-              variant="outline-warning"
-              className="default-color-white float-right"
-              onClick={goToStage2}
-              disabled={selected.length < 4 && tournament.progress < TournamentProgress.Stage2}
-            >
-              <b>Prosegui </b> <RightArrowIcon />
-            </Button>
-          </Col>
-        </Row>
-      </Col>
+      {toolsBar}
+      <TournamentBadge />
       {pairsList ? renderTables(pairsList, autoOrder) : null}
     </>
   );
