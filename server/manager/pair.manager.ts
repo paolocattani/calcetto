@@ -1,5 +1,50 @@
-import Pair from 'models/sequelize/pair.model';
-import { PairDTO } from 'models/dto/pair.dto';
+import Pair from '../models/sequelize/pair.model';
+import { PairDTO, UserDTO } from '../models/dto/';
+import { logProcess } from '../core/logger';
+import { Op } from 'sequelize';
+
+const className = 'Pairs Manager';
+
+export const findAlias = async (player1Id: number, player2Id: number): Promise<string> => {
+  logProcess(className + 'findAlias', 'start');
+  try {
+    const pair = await Pair.findOne({
+      where: {
+        player1Id,
+        player2Id,
+        alias: {
+          [Op.ne]: '',
+          [Op.not]: null,
+        },
+      },
+      order: [['updatedAt', 'DESC']],
+    });
+    logProcess(className + 'findAlias', 'end');
+    return pair?.alias ?? '';
+  } catch (error) {
+    logProcess(className + 'findAlias', 'error');
+    return '';
+  }
+};
+export const listInTournament = async (tId: number, user: UserDTO): Promise<PairDTO[]> => {
+  logProcess(className + 'listInTournament', 'start');
+  try {
+    const pairsList = await Pair.findAll({
+      where: {
+        tournamentId: tId,
+        [Op.or]: [{ '$tournament.ownerId$': user!.id }, { '$tournament.public$': true }],
+      },
+      order: [['id', 'ASC']],
+      include: [Pair.associations.tournament, Pair.associations.player1, Pair.associations.player2],
+    });
+    const modelList = pairsList.map((row, index) => rowToModel(row, index));
+    logProcess(className + 'listInTournament', 'end');
+    return modelList;
+  } catch (error) {
+    logProcess(className + 'listInTournament', 'error');
+    return [];
+  }
+};
 
 export function rowToModel(row: Pair, index: number): PairDTO {
   return {

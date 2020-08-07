@@ -5,9 +5,8 @@ import { isDevMode } from '../core/debug';
 // Models
 import Pair from '../models/sequelize/pair.model';
 import { asyncMiddleware, withAuth } from '../core/middleware';
-import { Op } from 'sequelize';
 import { AppRequest } from 'controller';
-import { rowToModel } from '../manager/pair.manager';
+import { listInTournament, findAlias } from '../manager/pair.manager';
 
 const router = Router();
 
@@ -17,24 +16,37 @@ router.use('/', (req, res, next) => {
 });
 
 router.get(
+  '/alias',
+  withAuth,
+  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
+    try {
+      const {
+        query: { player1Id, player2Id },
+      } = req;
+      if (!player1Id || !player2Id) {
+        return res.status(500).json({ message: 'Missing players' });
+      }
+      const alias = await findAlias(parseInt(player1Id as string), parseInt(player2Id as string));
+      return res.status(200).json(alias);
+    } catch (err) {
+      logger.error('/alias -> error: ', err);
+      return res.sendStatus(300);
+    }
+  })
+);
+
+router.get(
   '/list/',
   withAuth,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     try {
       const { user, query } = req;
-      if (!query.tId) return res.status(500).json({ message: 'Missing tournament' });
+      if (!query.tId) {
+        return res.status(500).json({ message: 'Missing tournament' });
+      }
       const tId = parseInt(query.tId as string);
       logger.info(`Looking for pairs in tournament ${chalk.greenBright(tId.toString())}`);
-      const pairsList = await Pair.findAll({
-        where: {
-          tournamentId: tId,
-          [Op.or]: [{ '$tournament.ownerId$': user!.id }, { '$tournament.public$': true }],
-        },
-        order: [['id', 'ASC']],
-        include: [Pair.associations.tournament, Pair.associations.player1, Pair.associations.player2],
-      });
-      const modelList = pairsList.map((row, index) => rowToModel(row, index));
-      // logger.info('modelList : ', modelList);
+      const modelList = await listInTournament(tId, user!);
       return res.json(modelList);
     } catch (err) {
       logger.error('/list -> error: ', err);
