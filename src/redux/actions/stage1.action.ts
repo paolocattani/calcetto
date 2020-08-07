@@ -1,16 +1,41 @@
 import { createAction, createAsyncAction } from 'typesafe-actions';
-import { Stage1Row, WatchStage1Request, WatchStage1Response } from 'redux/models';
-import { Success, Failure } from './constants';
+import {
+  Stage1Row,
+  WatchStage1Request,
+  WatchStage1Response,
+  FetchStage1Response,
+  FetchStage1Request,
+  UpdateCellRequest,
+  UpdateCellResponse,
+  UpdatePlacementRequest,
+  UpdatePlacementResponse,
+} from 'redux/models';
+import { defaultParams } from './constants';
 
-const ActionName = '[Stage1]';
+const actionName = '[Stage1]';
 
 export const Stage1Action = {
-  // get selected tournament
-  setSelectedPairs: createAction(`${ActionName} Set Selected Pairs`)<{ stageName: string; rows: Stage1Row[] }>(),
+  // Update Selected Pairs
+  setSelectedPairs: createAction(`${actionName} Set Selected Pairs`)<{ stageName: string; rows: Stage1Row[] }>(),
   // watcher
-  stage1Watcher: createAsyncAction(
-    `${ActionName} Watch Stage1 ${Request}`,
-    `${ActionName} Watch Stage1 ${Success}`,
-    `${ActionName} Watch Stage1 ${Failure}`
-  )<WatchStage1Request, WatchStage1Response, Error>(),
+  stage1Watcher: createAsyncAction(...defaultParams(actionName, 'Stage1 Watcher'))<
+    WatchStage1Request,
+    WatchStage1Response,
+    Error
+  >(),
+  fetchStage1: createAsyncAction(...defaultParams(actionName, 'Fetch Stage1'))<
+    FetchStage1Request,
+    FetchStage1Response,
+    Error
+  >(),
+  updateCellStage1: createAsyncAction(...defaultParams(actionName, 'Update Cell Stage1'))<
+    UpdateCellRequest,
+    UpdateCellResponse,
+    Error
+  >(),
+  updatePlacement: createAsyncAction(...defaultParams(actionName, 'Update Placement Watcher'))<
+    UpdatePlacementRequest,
+    UpdatePlacementResponse,
+    Error
+  >(),
 };

@@ -8,26 +8,26 @@ import {
   DeleteStage2Request,
   DeleteStage2Response,
 } from 'redux/models';
-import { Success, Failure } from './constants';
+import { defaultAsyncParams, defaultParam } from './constants';
 
-const ActionName = '[Stage2]';
+const actionName = '[Stage2]';
 
 export const Stage2Action = {
   // get selected tournament
-  fetchStage2: createAsyncAction(
-    `${ActionName} Fetch Stage2 ${Request}`,
-    `${ActionName} Fetch Stage2 ${Success}`,
-    `${ActionName} Fetch Stage2 ${Failure}`
-  )<FetchStage2Request, FetchStage2Response, Error>(),
-  updateCell: createAsyncAction(
-    `${ActionName} Update Stage2 Cell ${Request}`,
-    `${ActionName} Update Stage2 Cell ${Success}`,
-    `${ActionName} Update Stage2 Cell ${Failure}`
-  )<UpdateStage2CellRequest, UpdateStage2CellResponse, Error>(),
-  delete: createAsyncAction(
-    `${ActionName} Delete Stage2 ${Request}`,
-    `${ActionName} Delete Stage2 ${Success}`,
-    `${ActionName} Delete Stage2 ${Failure}`
-  )<DeleteStage2Request, DeleteStage2Response, Error>(),
-  setCells: createAction(`${ActionName} Set Cells`)<ICell[][]>(),
+  fetchStage2: createAsyncAction(...defaultAsyncParams(actionName, 'Fetch Stage2'))<
+    FetchStage2Request,
+    FetchStage2Response,
+    Error
+  >(),
+  updateCell: createAsyncAction(...defaultAsyncParams(actionName, 'Update Cell Stage2'))<
+    UpdateStage2CellRequest,
+    UpdateStage2CellResponse,
+    Error
+  >(),
+  delete: createAsyncAction(...defaultAsyncParams(actionName, 'Delete Stage2'))<
+    DeleteStage2Request,
+    DeleteStage2Response,
+    Error
+  >(),
+  setCells: createAction(...defaultParam(actionName, 'Set Cells'))<ICell[][]>(),
 };

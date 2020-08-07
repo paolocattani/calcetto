@@ -1,5 +1,5 @@
 import { createAsyncAction } from 'typesafe-actions';
-import { Failure, Success, Request } from './constants';
+import { defaultAsyncParams } from './constants';
 import {
   FetchPlayersResponse,
   FetchPlayersRequest,
@@ -9,22 +9,22 @@ import {
   DeletePlayersRequest,
 } from 'redux/models/player.model';
 
-const ActionName = '[Player]';
+const actionName = '[Player]';
 export const PlayerAction = {
   // fetch tournaments
-  getPlayers: createAsyncAction(
-    `${ActionName} Get Player ${Request}`,
-    `${ActionName} Get Player ${Success}`,
-    `${ActionName} Get Player ${Failure}`
-  )<FetchPlayersRequest, FetchPlayersResponse, Error>(),
-  savePlayer: createAsyncAction(
-    `${ActionName} Save Player ${Request}`,
-    `${ActionName} Save Player ${Success}`,
-    `${ActionName} Save Player ${Failure}`
-  )<UpdatePlayerRequest, UpdatePlayerResponse, Error>(),
-  deletePlayers: createAsyncAction(
-    `${ActionName} Delete Players ${Request}`,
-    `${ActionName} Delete Players ${Success}`,
-    `${ActionName} Delete Players ${Failure}`
-  )<DeletePlayersRequest, DeletePlayersResponse, Error>(),
+  fetchPlayers: createAsyncAction(...defaultAsyncParams(actionName, 'Fetch Palyers'))<
+    FetchPlayersRequest,
+    FetchPlayersResponse,
+    Error
+  >(),
+  savePlayer: createAsyncAction(...defaultAsyncParams(actionName, 'Save Player'))<
+    UpdatePlayerRequest,
+    UpdatePlayerResponse,
+    Error
+  >(),
+  deletePlayers: createAsyncAction(...defaultAsyncParams(actionName, 'Delete Player'))<
+    DeletePlayersRequest,
+    DeletePlayersResponse,
+    Error
+  >(),
 };

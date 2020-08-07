@@ -35,7 +35,7 @@ const FTournament = () => {
   useEffect(() => {
     if (!tournamentsList || tournamentsList.length === 0) {
       console.log('useEffect: ', tournamentsList);
-      dispatch(TournamentAction.getTournaments.request({}));
+      dispatch(TournamentAction.fetchTournaments.request({}));
     }
   }, [dispatch, tournamentsList]);
 
@@ -45,7 +45,7 @@ const FTournament = () => {
       if (session.isAdmin) {
         currentHistory.push('/tournament');
       } else {
-        dispatch(PairAction.getPairs.request({ tId: tournament.id! }));
+        dispatch(PairAction.fetchPairs.request({ tId: tournament.id! }));
         currentHistory.push('/stage1');
       }
     } else toast.error('Errore, riprovare piu tardi...');

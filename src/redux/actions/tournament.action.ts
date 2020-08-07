@@ -8,29 +8,29 @@ import {
   UpdateTournamentResponse,
 } from '../models/tournament.model';
 import { createAsyncAction, createAction } from 'typesafe-actions';
-import { Failure, Success, Request } from './constants';
+import { defaultAsyncParams, defaultParam } from './constants';
 
-const ActionName = '[Tournament]';
+const actionName = '[Tournament]';
 
 export const TournamentAction = {
   // fetch tournaments
-  getTournaments: createAsyncAction(
-    `${ActionName} Get Tournament ${Request}`,
-    `${ActionName} Get Tournament ${Success}`,
-    `${ActionName} Get Tournament ${Failure}`
-  )<FetchTournamentsRequest, FetchTournamentsResponse, Error>(),
+  fetchTournaments: createAsyncAction(...defaultAsyncParams(actionName, 'Fetch Tournaments'))<
+    FetchTournamentsRequest,
+    FetchTournamentsResponse,
+    Error
+  >(),
   // set selected tournament
-  setTournament: createAction(`${ActionName} Set Tournament`)<TournamentDTO | null>(),
+  setTournament: createAction(...defaultParam(actionName, 'Set Tournament'))<TournamentDTO | null>(),
   // save a new tournament
-  saveTournament: createAsyncAction(
-    `${ActionName} Save Tournament ${Request}`,
-    `${ActionName} Save Tournament ${Success}`,
-    `${ActionName} Save Tournament ${Failure}`
-  )<PostTournamentRequest, PostTournamentResponse, Error>(),
+  saveTournament: createAsyncAction(...defaultAsyncParams(actionName, 'Save Tournament'))<
+    PostTournamentRequest,
+    PostTournamentResponse,
+    Error
+  >(),
   // save a new tournament
-  updateTournament: createAsyncAction(
-    `${ActionName} Update Tournament Progress ${Request}`,
-    `${ActionName} Update Tournament Progress ${Success}`,
-    `${ActionName} Update Tournament Progress ${Failure}`
-  )<UpdateTournamentRequest, UpdateTournamentResponse, Error>(),
+  updateTournament: createAsyncAction(...defaultAsyncParams(actionName, 'Update Tournament'))<
+    UpdateTournamentRequest,
+    UpdateTournamentResponse,
+    Error
+  >(),
 };

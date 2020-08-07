@@ -275,7 +275,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
       dispatch(TournamentAction.updateTournament.request({ model: tournament }));
     }
     // Go to Stage1
-    dispatch(PairAction.getPairs.request({ tId: tournament.id! }));
+    dispatch(PairAction.fetchPairs.request({ tId: tournament.id! }));
     currentHistory.push('/stage1');
   };
 

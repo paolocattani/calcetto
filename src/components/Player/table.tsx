@@ -30,7 +30,7 @@ const PlayerTable: React.FC<PlayerProps> = () => {
 
   // Effetcs
   useEffect(() => {
-    dispatch(PlayerAction.getPlayers.request({}));
+    dispatch(PlayerAction.fetchPlayers.request({}));
   }, [dispatch]);
 
   const toolsBar = () => (

@@ -5,13 +5,13 @@ import { TournamentAction } from 'redux/actions/tournament.action';
 
 // https://medium.com/swlh/asynchronous-with-redux-sagas-b43c9630f218
 function* getTournamentsSaga(
-  action: ReturnType<typeof TournamentAction.getTournaments.request>
+  action: ReturnType<typeof TournamentAction.fetchTournaments.request>
 ): Generator<StrictEffect, void, any> {
   try {
     const response: FetchTournamentsResponse = yield call(fetchTournaments, action.payload);
-    yield put(TournamentAction.getTournaments.success(response));
+    yield put(TournamentAction.fetchTournaments.success(response));
   } catch (err) {
-    yield put(TournamentAction.getTournaments.failure(err));
+    yield put(TournamentAction.fetchTournaments.failure(err));
   }
 }
 
@@ -38,7 +38,7 @@ function* updateTournamentSaga(
 }
 
 export const TournamentsSagas = [
-  takeEvery(TournamentAction.getTournaments.request, getTournamentsSaga),
+  takeEvery(TournamentAction.fetchTournaments.request, getTournamentsSaga),
   takeEvery(TournamentAction.saveTournament.request, saveTournamentSaga),
   takeEvery(TournamentAction.updateTournament.request, updateTournamentSaga),
 ];

@@ -5,16 +5,16 @@ import { fetchPlayers, deletePlayers, savePlayer } from 'redux/services/player.s
 import { toast } from 'react-toastify';
 
 function* getPlayersSaga(
-  action: ReturnType<typeof PlayerAction.getPlayers.request>
+  action: ReturnType<typeof PlayerAction.fetchPlayers.request>
 ): Generator<StrictEffect, void, any> {
   try {
     console.log('getPlayersSaga');
 
     const { results }: FetchPlayersResponse = yield call(fetchPlayers, action.payload);
     console.log('getPlayersSaga: ', results);
-    yield put(PlayerAction.getPlayers.success({ results }));
+    yield put(PlayerAction.fetchPlayers.success({ results }));
   } catch (err) {
-    yield put(PlayerAction.getPlayers.failure(err));
+    yield put(PlayerAction.fetchPlayers.failure(err));
   }
 }
 
@@ -44,7 +44,7 @@ function* savePlayerSaga(
 }
 
 export const PlayersSagas = [
-  takeEvery(PlayerAction.getPlayers.request, getPlayersSaga),
+  takeEvery(PlayerAction.fetchPlayers.request, getPlayersSaga),
   takeEvery(PlayerAction.deletePlayers.request, deletePlayersSaga),
   takeEvery(PlayerAction.savePlayer.request, savePlayerSaga),
 ];

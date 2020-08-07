@@ -1,14 +1,14 @@
 import { createAsyncAction } from 'typesafe-actions';
-import { Failure, Success, Request } from './constants';
+import { defaultAsyncParams } from './constants';
 import { FetchPairsRequest, FetchPairsResponse } from 'redux/models';
 
-const ActionName = '[Pair]';
+const actionName = '[Pair]';
 
 export const PairAction = {
-  // fetch tournaments
-  getPairs: createAsyncAction(
-    `${ActionName} Get Pair ${Request}`,
-    `${ActionName} Get Pair ${Success}`,
-    `${ActionName} Get Pair ${Failure}`
-  )<FetchPairsRequest, FetchPairsResponse, Error>(),
+  // Fetch Pairs
+  fetchPairs: createAsyncAction(...defaultAsyncParams(actionName, 'Fetch Pairs'))<
+    FetchPairsRequest,
+    FetchPairsResponse,
+    Error
+  >(),
 };
