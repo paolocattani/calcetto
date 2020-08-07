@@ -301,7 +301,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
       });
       await response.json();
       // Update tournament progress
-      if (isAdmin && tournament.progress < TournamentProgress.Stage1) {
+      if (isAdmin) {
         tournament.progress = TournamentProgress.PairsSelection;
         dispatch(TournamentAction.updateTournament.request({ model: tournament }));
       }
@@ -378,13 +378,6 @@ const PairsTable: React.FC<PairTableProps> = () => {
 
   const deleteDisabled = !(selectedRows.length > 0) || tournament.progress > TournamentProgress.PairsSelection;
 
-  /*
-  let deleteTooltipMessage = '';
-  if (!(selectedRows.length > 0)) deleteTooltipMessage = 'Seleziona almeno una riga';
-  else if (tournament.progress === 'Stage1' || tournament.progress === 'Stage2')
-    deleteTooltipMessage = 'Devi prima resettare i gironi per poter cancellare delle coppie';
-  else deleteTooltipMessage = 'Cancella le coppie selezionate';
-*/
   //console.log('render table : ', players, pairs);
 
   const assignMatches = () => (
@@ -403,7 +396,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
         step={1}
         min={0}
         max={Math.floor(data.rows.length / 4)}
-        value={stage1Number}
+        value={stage1Number !== 0 ? stage1Number : undefined}
         onChange={(event: React.FormEvent<FormEventType>) => setStage1Number(Number(event.currentTarget.value))}
         disabled={
           data.rows.length < 4 ||
@@ -484,11 +477,13 @@ const PairsTable: React.FC<PairTableProps> = () => {
             </Button>
           </Col>
         )}
-        <Col>
-          <Button variant="danger" className="align-middle" onClick={deleteStage1} disabled={!isAdmin}>
-            Reset gironi
-          </Button>
-        </Col>
+        {tournament.progress > TournamentProgress.Stage1 ? null : (
+          <Col>
+            <Button variant="danger" className="align-middle" onClick={deleteStage1} disabled={!isAdmin}>
+              Reset gironi
+            </Button>
+          </Col>
+        )}
         <Col>
           <Button
             variant="outline-warning"
