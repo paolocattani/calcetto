@@ -16,7 +16,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "sed -i 's,'\"^CLIENT_COMMIT_HASH=.*$\"','CLIENT_COMMIT_HASH=\"$(git rev-parse --short HEAD)\"',g' .env && lint-staged"
+      "pre-commit": "sed -i 's,'\"^CLIENT_COMMIT_HASH=.*$\"','CLIENT_COMMIT_HASH=\"$(git rev-parse --short HEAD)\"',g' .env "
     }
   },
   "lint-staged": {
