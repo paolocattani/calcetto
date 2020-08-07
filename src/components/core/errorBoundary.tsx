@@ -21,6 +21,7 @@ class ErrorBoundary extends React.Component<IErrorBoundaryProps, IErrorBoundaryS
 
   render() {
     const { error, errorInfo } = this.state;
+    const { children } = this.props;
     if (errorInfo) {
       const errorDetails =
         process.env.NODE_ENV === 'development' ? (
@@ -37,7 +38,7 @@ class ErrorBoundary extends React.Component<IErrorBoundaryProps, IErrorBoundaryS
         </div>
       );
     }
-    return this.props.children;
+    return children;
   }
 }
 

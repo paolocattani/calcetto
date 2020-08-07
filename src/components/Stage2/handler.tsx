@@ -12,7 +12,7 @@ import commonStyle from '../../common.module.css';
 import { Stage2Selector } from 'redux/selectors';
 import { Stage2Action } from 'redux/actions';
 import { LoadingModal } from 'components/core/generic/Commons';
-import { LeftArrowIcon } from 'components/core/iconsx';
+import { LeftArrowIcon } from 'components/core/icons';
 
 // import template from './template';
 

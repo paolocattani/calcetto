@@ -5,7 +5,7 @@ import Select, { Styles, ValueType } from 'react-select';
 import { Form, Button, Card, Col } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 // Core
-import { RightArrowIcon } from '../core/iconsx';
+import { RightArrowIcon } from '../core/icons';
 // Helper
 import { cardStyle, IndicatorSeparator } from './helper';
 import { formatDate, translateTournamentProgress } from '../core/utils';

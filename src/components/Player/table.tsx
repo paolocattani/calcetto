@@ -15,7 +15,7 @@ import { PlayerDTO } from 'redux/models';
 import { PlayerAction } from 'redux/actions';
 import { getEmptyPlayer } from 'redux/services/player.service';
 import { PlayerSelector, SessionSelector } from 'redux/selectors';
-import { TrashIcon, PlusIcon, BroomIcon, HomeIcon } from '../core/iconsx';
+import { TrashIcon, PlusIcon, BroomIcon, HomeIcon } from '../core/icons';
 
 interface PlayerProps {}
 const PlayerTable: React.FC<PlayerProps> = () => {

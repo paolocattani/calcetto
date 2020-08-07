@@ -1,7 +1,7 @@
 import React from 'react';
 import style from './style.module.css';
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
-import { DoubleRightIcon, BanIcon, TrophyIcon } from 'components/core/iconsx';
+import { DoubleRightIcon, BanIcon, TrophyIcon } from 'components/core/icons';
 import { ICell } from 'redux/models/stage2.model';
 import { PairDTO } from 'redux/models';
 

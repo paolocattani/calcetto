@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { PairDTO, TournamentProgress } from 'redux/models';
 // Style
 import commonStyle from '../../common.module.css';
-import { RightArrowIcon, TrashIcon, LeftArrowIcon } from '../core/iconsx';
+import { RightArrowIcon, TrashIcon, LeftArrowIcon } from '../core/icons';
 import { Button, Col, Row } from 'react-bootstrap';
 // Actions, Selectors
 import { Stage2Action, TournamentAction } from 'redux/actions';
