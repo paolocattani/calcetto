@@ -12,8 +12,7 @@ import { Button, Col, Row } from 'react-bootstrap';
 // Actions, Selectors
 import { Stage2Action, TournamentAction } from 'redux/actions';
 import { SessionSelector, TournamentSelector, Stage1Selector, PairSelector } from 'redux/selectors';
-//
-import Stage1Handler from './handler';
+import Stage1Table from './table';
 
 interface ModalProps {
   show: boolean;
@@ -122,14 +121,14 @@ function renderTables(pairsList: PairDTO[], autoOrder: boolean): JSX.Element[] {
       // A rottura di stage1Name
       if (stageName === '') stageName = element.stage1Name;
       if (stageName !== element.stage1Name) {
-        stageList.push(<Stage1Handler key={`Stage1-${stageName}`} pairsList={stage} autoOrder={autoOrder} />);
+        stageList.push(<Stage1Table key={`Stage1-${stageName}`} pairsList={stage} />);
         stageName = element.stage1Name;
         stage = [];
       }
       stage.push(element);
     });
   if (stage.length > 0) {
-    stageList.push(<Stage1Handler key={`Stage1-${stageName}`} pairsList={stage} autoOrder={autoOrder} />);
+    stageList.push(<Stage1Table key={`Stage1-${stageName}`} pairsList={stage} />);
     // console.log(`stages ${stageName} :`, stage);
   }
 

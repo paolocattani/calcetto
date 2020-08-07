@@ -10,7 +10,7 @@ import {
   UpdatePlacementRequest,
   UpdatePlacementResponse,
 } from 'redux/models';
-import { defaultParams } from './constants';
+import { defaultAsyncParams } from './constants';
 
 const actionName = '[Stage1]';
 
@@ -18,22 +18,22 @@ export const Stage1Action = {
   // Update Selected Pairs
   setSelectedPairs: createAction(`${actionName} Set Selected Pairs`)<{ stageName: string; rows: Stage1Row[] }>(),
   // watcher
-  stage1Watcher: createAsyncAction(...defaultParams(actionName, 'Stage1 Watcher'))<
+  stage1Watcher: createAsyncAction(...defaultAsyncParams(actionName, 'Stage1 Watcher'))<
     WatchStage1Request,
     WatchStage1Response,
     Error
   >(),
-  fetchStage1: createAsyncAction(...defaultParams(actionName, 'Fetch Stage1'))<
+  fetchStage1: createAsyncAction(...defaultAsyncParams(actionName, 'Fetch Stage1'))<
     FetchStage1Request,
     FetchStage1Response,
     Error
   >(),
-  updateCellStage1: createAsyncAction(...defaultParams(actionName, 'Update Cell Stage1'))<
+  updateCellStage1: createAsyncAction(...defaultAsyncParams(actionName, 'Update Cell Stage1'))<
     UpdateCellRequest,
     UpdateCellResponse,
     Error
   >(),
-  updatePlacement: createAsyncAction(...defaultParams(actionName, 'Update Placement Watcher'))<
+  updatePlacement: createAsyncAction(...defaultAsyncParams(actionName, 'Update Placement Watcher'))<
     UpdatePlacementRequest,
     UpdatePlacementResponse,
     Error
