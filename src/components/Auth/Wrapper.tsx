@@ -1,6 +1,6 @@
 import React, { useState, CSSProperties, lazy } from 'react';
 import { Button, Container, Alert, Card, Col } from 'react-bootstrap';
-import { ToggleOn, ToggleOff } from '../core/icons';
+import { ToggleOn, ToggleOff } from '../core/iconsx';
 
 const Login = lazy(() => import('./Login'));
 const Register = lazy(() => import('./Register'));

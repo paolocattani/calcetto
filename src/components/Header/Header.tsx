@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { SessionSelector } from 'redux/selectors/session.selector';
 import { SessionAction } from 'redux/actions';
-import { HomeIcon } from 'components/core/icons';
+import { HomeIcon } from 'components/core/iconsx';
 import { toast } from 'react-toastify';
 
 const applicationName = 'Calcetto C.S.M';
