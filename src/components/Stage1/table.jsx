@@ -24,10 +24,10 @@ const Stage1Table = ({ pairsList }) => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [saved, setIsSaved] = useState(false);
-  const [autoOrder, setAutoOrder] = useState(false);
+  const [autoOrder /*, setAutoOrder*/] = useState(true);
   const [rows, setRows] = useState(rowsGenerator(pairsList));
   // Const
-  const tableName = pairsList[0].stage1Name;
+  const stageName = pairsList[0].stage1Name;
 
   // Effects
   useEffect(
@@ -37,7 +37,7 @@ const Stage1Table = ({ pairsList }) => {
         const response = await fetch('/api/v1/stage1', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ rows, stageName: tableName }),
+          body: JSON.stringify({ rows, stageName }),
         });
         const result = await response.json();
         // FIXME: Ordinamento : gestire ordinamento personalizzato
@@ -66,6 +66,7 @@ const Stage1Table = ({ pairsList }) => {
         }
       },
       afterSaveCell: async (oldValue, newValue, row, column) => {
+        const newRows = [...rows];
         if (column.id.startsWith('col')) {
           // Aggiorno dati sul Db
           const response = await fetch('/api/v1/stage1/cell', {
@@ -73,7 +74,7 @@ const Stage1Table = ({ pairsList }) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               tId: row.pair.tId,
-              tableName,
+              tableName: stageName,
               score: newValue,
               pair1Id: row.pair.id,
               pair2Id: rows[parseInt(column.text) - 1].pair.id,
@@ -88,22 +89,30 @@ const Stage1Table = ({ pairsList }) => {
           // Ricalcolo totali riga
           let acc = 0;
           for (let key in row) if (key.startsWith('col') && row[key]) acc += parseInt(row[key]);
-          rows[row.rowNumber - 1]['total'] = acc ? acc : 0;
-          console.log('Row : ', rows[row.rowNumber - 1]);
+          const thisRowIndex = row.rowNumber - 1;
+          const thisRow = newRows[thisRowIndex];
+          thisRow.total = acc ? acc : 0;
+
           //... e riga opposta
           acc = 0;
-          for (let key in rows[parseInt(column.text) - 1])
-            if (key.startsWith('col') && rows[parseInt(column.text) - 1][key])
-              acc += parseInt(rows[parseInt(column.text) - 1][key]);
-          rows[parseInt(column.text) - 1]['total'] = acc ? acc : 0;
-          console.log('Opposite : ', rows[parseInt(column.text) - 1]);
+          const oppositeRowIndex = parseInt(column.text) - 1;
+          for (let key in newRows[oppositeRowIndex])
+            if (key.startsWith('col') && newRows[oppositeRowIndex][key])
+              acc += parseInt(newRows[oppositeRowIndex][key]);
+          const oppositeRow = newRows[oppositeRowIndex];
+          oppositeRow.total = acc ? acc : 0;
+
+          newRows.splice(thisRowIndex, 1, thisRow);
+          newRows.splice(oppositeRowIndex, 1, oppositeRow);
         }
         // Aggiorno posizione relativa
         if (autoOrder)
-          [...rows]
+          [...newRows]
             .sort((e1, e2) => comparator(e1, e2))
-            .forEach((row, index) => (rows[row.rowNumber - 1]['placement'] = index + 1));
-        // Aggiornamento posizione
+            .forEach((row, index) => (newRows[row.rowNumber - 1]['placement'] = index + 1));
+
+        // Aggiornamento
+        setRows(newRows);
         dispatch(
           Stage1Action.updatePlacement.request({ rows: rows.map((e) => ({ id: e.pair.id, placement: e.placement })) })
         );
@@ -111,7 +120,6 @@ const Stage1Table = ({ pairsList }) => {
     });
 
   const handleOnSelect = (row, isSelected) => {
-    console.log('handleOnSelect : ', row);
     const found = selectedRows.find((e) => e.rowNumber === row.rowNumber) ? true : false;
     let selected;
     if (isSelected) {
@@ -119,12 +127,11 @@ const Stage1Table = ({ pairsList }) => {
     } else {
       selected = found ? selectedRows.filter((e) => e.rowNumber !== row.rowNumber) : selectedRows;
     }
-    console.log('Selected : ', selected);
 
     setSelectedRows(selected);
     dispatch(
       Stage1Action.setSelectedPairs({
-        stageName: tableName,
+        stageName,
         rows: selected,
       })
     );
@@ -135,7 +142,7 @@ const Stage1Table = ({ pairsList }) => {
     setSelectedRows(isSelected ? rows : []);
     dispatch(
       Stage1Action.setSelectedPairs({
-        stageName: tableName,
+        stageName,
         rows: isSelected ? rows : [],
       })
     );
@@ -149,15 +156,15 @@ const Stage1Table = ({ pairsList }) => {
     hideSelectColumn: !isAdmin || tournament.progress >= TournamentProgress.Stage2,
   };
 
-  console.log(' render : ', tableName, rows);
+  console.log(' render : ', stageName, rows);
 
   return isLoading ? (
     <h3>
-      Caricamento girone <b>{tableName}</b> in corso....
+      Caricamento girone <b>{stageName}</b> in corso....
     </h3>
   ) : (
     <BootstrapTable
-      key={`Stege1-${tableName}`}
+      key={`Stege1-${stageName}`}
       bootstrap4
       keyField="id"
       data={rows}
@@ -166,7 +173,7 @@ const Stage1Table = ({ pairsList }) => {
       cellEdit={cellEditProps(isAdmin)}
       noDataIndication="Nessun dato reperito"
       headerClasses="default-background default-color-yellow"
-      caption={<TableHeader title={tableName} saved={saved} />}
+      caption={<TableHeader title={stageName} saved={saved} />}
       striped
       hover
     />

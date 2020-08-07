@@ -20,15 +20,12 @@ export const Stage1Reducer = createReducer<Stage1State, Action>(initialState)
   .handleAction([Stage1Action.fetchStage1.request], (state) => ({ ...state, isLoading: true }))
   .handleAction([Stage1Action.fetchStage1.failure], (state) => ({ ...state, isLoading: false }))
   // Aggiornamento valore cella/posizionamento
-  .handleAction(
-    [Stage1Action.updateCellStage1.success, Stage1Action.updatePlacement.success],
-    (state, { payload: {} }) => {
-      // FIXME:
-      return {
-        ...state,
-      };
-    }
-  )
+  .handleAction([Stage1Action.updateCellStage1.success, Stage1Action.updatePlacement.success], (state) => {
+    // FIXME:
+    return {
+      ...state,
+    };
+  })
   // Reperimento dati
   .handleAction([Stage1Action.fetchStage1.success], (state, { payload: { stageName, rows, pairsList } }) => {
     const currentStage = state.stages.filter((s) => s.stageName === stageName);
