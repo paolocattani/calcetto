@@ -1,9 +1,13 @@
 import React from 'react';
-import { headerPropsType } from './type';
 
-const tableHeader: React.FC<headerPropsType> = ({ title, saved }: headerPropsType) => {
+interface Stage1HeaderProps {
+  title: string;
+  saved: boolean;
+}
+
+const tableHeader: React.FC<Stage1HeaderProps> = ({ title, saved }) => {
   const divStyle = {
-    color: saved ? '#4feb34' : undefined
+    color: saved ? '#4feb34' : undefined,
   };
   return (
     <h3>

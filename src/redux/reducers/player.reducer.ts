@@ -9,14 +9,14 @@ const initialState: PlayerState = {
 
 export const PlayerReducer = createReducer<PlayerState, Action>(initialState)
   // Request
-  .handleAction([PlayerAction.getPlayers.request, PlayerAction.savePlayer.request], (state) => ({
+  .handleAction([PlayerAction.fetchPlayers.request, PlayerAction.savePlayer.request], (state) => ({
     ...state,
     isLoading: true,
     errorMessage: undefined,
   }))
   // Failure
   .handleAction(
-    [PlayerAction.getPlayers.failure, PlayerAction.savePlayer.failure],
+    [PlayerAction.fetchPlayers.failure, PlayerAction.savePlayer.failure],
     (state, { payload: { message } }) => ({
       ...state,
       errorMessage: message,
@@ -32,7 +32,7 @@ export const PlayerReducer = createReducer<PlayerState, Action>(initialState)
     isLoading: false,
   }))
   // Fetch Tournament
-  .handleAction(PlayerAction.getPlayers.success, (state, { payload: { results } }) => ({
+  .handleAction(PlayerAction.fetchPlayers.success, (state, { payload: { results } }) => ({
     playersList: results.map((e, i) => ({ ...e, rowNumber: i + 1 })),
     isLoading: false,
   }));

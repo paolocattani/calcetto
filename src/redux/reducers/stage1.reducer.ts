@@ -7,6 +7,7 @@ const initialState: Stage1State = {
   needRefresh: false,
   selectedPairs: [getEmptyRowModel('placeholder')],
   isLoading: false,
+  stages: [],
 };
 
 export const Stage1Reducer = createReducer<Stage1State, Action>(initialState)
@@ -16,6 +17,36 @@ export const Stage1Reducer = createReducer<Stage1State, Action>(initialState)
   .handleAction([Stage1Action.stage1Watcher.failure], (state) => ({ ...state }))
   .handleAction([Stage1Action.stage1Watcher.success], (state) => ({ ...state, needRefresh: true }))
   //
+  .handleAction([Stage1Action.fetchStage1.request], (state) => ({ ...state, isLoading: true }))
+  .handleAction([Stage1Action.fetchStage1.failure], (state) => ({ ...state, isLoading: false }))
+  // Aggiornamento valore cella/posizionamento
+  .handleAction(
+    [Stage1Action.updateCellStage1.success, Stage1Action.updatePlacement.success],
+    (state, { payload: {} }) => {
+      // FIXME:
+      return {
+        ...state,
+      };
+    }
+  )
+  // Reperimento dati
+  .handleAction([Stage1Action.fetchStage1.success], (state, { payload: { stageName, rows, pairsList } }) => {
+    const currentStage = state.stages.filter((s) => s.stageName === stageName);
+    const newStage =
+      currentStage && currentStage.length > 0
+        ? { ...currentStage[0], rows }
+        : { pairsList, stageName, rows, autoOrder: false, isLoading: false };
+    const res1 = [...state.stages, newStage];
+    const res2 = state.stages.filter((s) => s.stageName !== stageName).push(newStage);
+    const res3 = [...state.stages.filter((s) => s.stageName !== stageName), newStage];
+    console.log('Stage1Action.fetchStage1.success : ', res1, res2, res3);
+    return {
+      ...state,
+      stages: res3,
+      isLoading: false,
+    };
+  })
+  // Aggiornamento coppie selezionate dati vari gironi
   .handleAction([Stage1Action.setSelectedPairs], (state, { payload: { stageName, rows } }) => {
     const selected = state.selectedRows ? state.selectedRows : new Map<string, Stage1Row[]>();
     selected.set(stageName, rows);

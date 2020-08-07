@@ -8,19 +8,19 @@ const initialState: PairState = {
 
 export const PairReducer = createReducer<PairState, Action>(initialState)
   // Request
-  .handleAction([PairAction.getPairs.request], (state) => ({
+  .handleAction([PairAction.fetchPairs.request], (state) => ({
     ...state,
     isLoading: true,
     errorMessage: undefined,
   }))
   // Failure
-  .handleAction([PairAction.getPairs.failure], (state, { payload: { message } }) => ({
+  .handleAction([PairAction.fetchPairs.failure], (state, { payload: { message } }) => ({
     ...state,
     errorMessage: message,
     isLoading: false,
   }))
   // Fetch Tournament
-  .handleAction(PairAction.getPairs.success, (state, { payload: { results } }) => ({
+  .handleAction(PairAction.fetchPairs.success, (state, { payload: { results } }) => ({
     ...state,
     pairList: results,
     isLoading: false,

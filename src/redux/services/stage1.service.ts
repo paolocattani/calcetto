@@ -1,6 +1,61 @@
 import { eventChannel, END, buffers } from 'redux-saga';
 import { SessionStatus, Message } from './session.service';
+import {
+  FetchStage1Request,
+  FetchStage1Response,
+  UpdateCellRequest,
+  UpdateCellResponse,
+  UpdatePlacementRequest,
+  UpdatePlacementResponse,
+} from 'redux/models';
+import { handleError } from './common';
+import { rowsGenerator } from 'components/Stage1/helper';
 
+export const fetchStage1 = async ({ pairsList, stageName }: FetchStage1Request): Promise<FetchStage1Response> => {
+  try {
+    const template = rowsGenerator(pairsList);
+    const response = await fetch('/api/v1/stage1', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ rows: template, stageName }),
+    });
+    const rows = await response.json();
+    return { pairsList, stageName, rows };
+  } catch (e) {
+    handleError(e, 'Error stage1 fetch');
+    return { pairsList, stageName, rows: [] };
+  }
+};
+
+export const updatePlacement = async (rows: UpdatePlacementRequest): Promise<UpdatePlacementResponse> => {
+  try {
+    const response = await fetch('/api/v1/stage1/placement', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ rows }),
+    });
+    await response.json();
+    return {};
+  } catch (e) {
+    handleError(e, 'Error stage1 fetch');
+    return {};
+  }
+};
+
+export const updateCellStage1 = async (model: UpdateCellRequest): Promise<UpdateCellResponse> => {
+  try {
+    const response = await fetch('/api/v1/stage1/cell', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(model),
+    });
+    await response.json();
+    return {};
+  } catch (e) {
+    handleError(e, 'Error stage1 fetch');
+    return {};
+  }
+};
 export const createStage1Channel = (channel: EventSource) =>
   eventChannel<Message>((emitter) => {
     // Listen for open channel

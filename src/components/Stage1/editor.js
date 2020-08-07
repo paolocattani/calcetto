@@ -4,6 +4,9 @@ import { Type } from 'react-bootstrap-table2-editor';
   non esistono i tipi per react-bootstrap-table2-editor
   quindi lascio tutto quello che riguarda l'edit come .js
 */
+
+const headerAlign = { headerAlign: 'center' };
+const align = { align: 'center' };
 const newColumn = (index, rowNumber) => {
   return {
     id: `col${index}`,
@@ -11,9 +14,9 @@ const newColumn = (index, rowNumber) => {
     text: index.toString(),
     //type: 'number',
     headerStyle: (column, colIndex) => ({ width: `${75 / rowNumber}%` }),
-    headerAlign: (column, colIndex) => 'center',
+    ...headerAlign,
     editable: (content, row, rowIndex, columnIndex) => rowIndex !== columnIndex - 2,
-    align: (cell, row, rowIndex, colIndex) => 'center',
+    ...align,
     style: (content, row, rowIndex, columnIndex) => {
       if (rowIndex === columnIndex - 2) return { backgroundColor: '#343a40' };
       if (parseInt(content, 10) === 3 || parseInt(content, 10) === 2) return { backgroundColor: 'rgb(196, 247, 160)' };
@@ -47,8 +50,8 @@ export const columns = (pairsList) => {
       text: 'Nome Coppia',
       editable: false,
       headerStyle: (column, colIndex) => ({ width: '15%' }),
-      align: (cell, row, rowIndex, colIndex) => 'center',
-      headerAlign: (column, colIndex) => 'center',
+      ...align,
+      ...headerAlign,
     },
     {
       // Numbero riga per riferimento visivo
@@ -58,7 +61,7 @@ export const columns = (pairsList) => {
       editable: false,
       type: 'number',
       headerStyle: (column, colIndex) => ({ width: '5%' }),
-      headerAlign: (column, colIndex) => 'center',
+      ...headerAlign,
       style: (content, row, rowIndex, columnIndex) => {
         return { backgroundColor: '#343a40', color: '#ffc107' };
       },
@@ -77,7 +80,7 @@ export const columns = (pairsList) => {
       editable: false,
       type: 'number',
       headerStyle: (column, colIndex) => ({ width: '5%' }),
-      headerAlign: (column, colIndex) => 'center',
+      ...headerAlign,
     },
     {
       // Posizionamento coppia
@@ -87,7 +90,7 @@ export const columns = (pairsList) => {
       editable: true,
       type: 'number',
       headerStyle: (column, colIndex) => ({ width: '5%' }),
-      headerAlign: (column, colIndex) => 'center',
+      ...headerAlign,
     }
   );
   return baseColumns;

@@ -1,7 +1,6 @@
 import { CheckAuthenticationRequest, AuthenticationResponse } from 'redux/models';
 import { UserDTO } from 'redux/models/user.model';
 import { eventChannel, buffers, END } from 'redux-saga';
-import { handleError } from './common';
 
 export enum SessionStatus {
   // Sessione scaduta, reindirizza l'utente alla login
