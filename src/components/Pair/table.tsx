@@ -22,11 +22,11 @@ import { getEmptyPlayer } from 'redux/services/player.service';
 import { SessionSelector } from 'redux/selectors/session.selector';
 import { TournamentSelector } from 'redux/selectors/tournament.selector';
 // Models
-import { PairDTO, PlayerDTO } from 'redux/models';
-import { TournamentProgress } from 'redux/models/tournament.model';
+import { PairDTO, PlayerDTO } from '../../redux/models';
+import { TournamentProgress } from '../../redux/models/tournament.model';
 // Action
-import { TournamentAction, PairAction } from 'redux/actions';
-import TournamentBadge from 'components/Tournament/badge';
+import { TournamentAction, PairAction } from '../../redux/actions';
+import TournamentBadge from '../Tournament/badge';
 
 const hideAskUser = {
   message: '',

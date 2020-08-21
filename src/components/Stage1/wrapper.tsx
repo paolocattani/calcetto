@@ -4,17 +4,16 @@ import { withRouter } from 'react-router-dom';
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // Models
-import { PairDTO, TournamentProgress } from 'redux/models';
+import { PairDTO, TournamentProgress } from '../../redux/models';
 // Style
 import commonStyle from '../../common.module.css';
 import { RightArrowIcon, TrashIcon, LeftArrowIcon } from '../core/icons';
-import { Button, Col, Row, Badge } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 // Actions, Selectors
-import { Stage2Action, TournamentAction } from 'redux/actions';
+import { Stage2Action, TournamentAction } from '../../redux/actions';
 import { SessionSelector, TournamentSelector, Stage1Selector, PairSelector } from 'redux/selectors';
 import Stage1Table from './table';
-import { formatDate } from 'components/core/utils';
-import TournamentBadge from 'components/Tournament/badge';
+import TournamentBadge from '../Tournament/badge';
 
 interface ModalProps {
   show: boolean;
