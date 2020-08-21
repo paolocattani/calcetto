@@ -55,7 +55,7 @@
     "@types/react-select": "^3.0.16",
     "@types/umzug": "^2.2.3",
     "bcrypt": "^4.0.1",
-    "bootstrap": "^4.5.1",
+    "bootstrap": "^4.5.2",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "glob": "^7.1.6",
