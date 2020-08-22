@@ -54,7 +54,7 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/react-select": "^3.0.16",
     "@types/umzug": "^2.2.3",
-    "bcrypt": "^4.0.1",
+    "bcrypt": "^5.0.0",
     "bootstrap": "^4.5.2",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
