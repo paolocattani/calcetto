@@ -23,8 +23,12 @@ router.post(
   withAuth,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     try {
-      const { tournamentId, structure } = req.body;
-      const model = await generateStage2Rows(tournamentId, structure, req.user!);
+      const { tournamentId, rowsNumber } = req.body;
+      let count = rowsNumber;
+      if (rowsNumber === 0) {
+        count = await countStage2(tournamentId);
+      }
+      const model = await generateStage2Rows(tournamentId, rowsNumber, req.user!);
       return res.status(200).json(model);
     } catch (err) {
       logger.error(chalk.redBright('Error while fetching Stage2 ! : ', err));
