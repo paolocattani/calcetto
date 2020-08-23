@@ -52,7 +52,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/react-facebook-login": "^4.1.2",
     "@types/react-router-dom": "^5.1.5",
-    "@types/react-select": "^3.0.16",
+    "@types/react-select": "^3.0.19",
     "@types/umzug": "^2.2.3",
     "bcrypt": "^5.0.0",
     "bootstrap": "^4.5.2",
