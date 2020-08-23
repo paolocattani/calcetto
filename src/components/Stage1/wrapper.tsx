@@ -53,11 +53,12 @@ const Wrapper: React.FC = (): JSX.Element => {
       dispatch(TournamentAction.updateTournament.request({ model: tournament }));
     }
 
-    let count = 0;
-    if (pairsList && pairsList.length > 4) {
-      count = pairsList.length - 1;
+    let count = 8;
+    if (selected && selected.length >= 4) {
+      count = selected.length - 1;
       while (count % 8 !== 0) count++;
     }
+    console.log('goToStage2 : ', count);
     dispatch(Stage2Action.fetchStage2.request({ tournamentId: tournament.id!, count }));
     currentHistory.push('/stage2');
   }

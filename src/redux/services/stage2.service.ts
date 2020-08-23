@@ -39,7 +39,6 @@ export const fetchStage2 = async ({
       body: JSON.stringify({ tournamentId, structure }),
     });
     const cells = await response.json();
-    // console.log('response : ', cells);
     return { cells, rowsNumber };
   } catch (e) {
     handleError(e, 'Error stage2 fetch');
@@ -47,7 +46,7 @@ export const fetchStage2 = async ({
   }
 };
 
-const countStage2Step0 = async (tournamentId: number) => {
+const countStage2Step0 = async (tournamentId: number): Promise<number> => {
   let count = 0;
   try {
     const response = await fetch('/api/v1/stage2/count', {
@@ -55,8 +54,8 @@ const countStage2Step0 = async (tournamentId: number) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ tournamentId }),
     });
-    count = await response.json();
-    // console.log('response : ', cells);
+    const result = await response.json();
+    return result.count;
   } catch (e) {
     handleError(e, 'Error stage2 count');
   } finally {
