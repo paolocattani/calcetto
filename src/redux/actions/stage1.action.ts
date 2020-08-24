@@ -39,7 +39,7 @@ export const Stage1Action = {
     UpdateCellResponse,
     Error
   >(),
-  updatePlacement: createAsyncAction(...defaultAsyncParams(actionName, 'Update Placement Watcher'))<
+  updatePlacement: createAsyncAction(...defaultAsyncParams(actionName, 'Update Placement Stage1'))<
     UpdatePlacementRequest,
     UpdatePlacementResponse,
     Error

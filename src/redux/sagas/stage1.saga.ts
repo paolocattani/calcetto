@@ -41,8 +41,8 @@ function* updateCellSaga(
   action: ReturnType<typeof Stage1Action.updateCellStage1.request>
 ): Generator<StrictEffect, void, any> {
   try {
-    const response = yield call(updateCellStage1, action.payload);
-    yield put(Stage1Action.updateCellStage1.success(response));
+    yield fork(updateCellStage1, action.payload);
+    yield put(Stage1Action.updateCellStage1.success({}));
   } catch (err) {
     yield put(Stage1Action.updateCellStage1.failure(err));
     toast.error('Error while fetching Stage2');
@@ -53,8 +53,8 @@ function* updatePlacementSaga(
   action: ReturnType<typeof Stage1Action.updatePlacement.request>
 ): Generator<StrictEffect, void, any> {
   try {
-    const response = yield call(updatePlacement, action.payload);
-    yield put(Stage1Action.updatePlacement.success(response));
+    yield fork(updatePlacement, action.payload);
+    yield put(Stage1Action.updatePlacement.success({}));
   } catch (err) {
     yield put(Stage1Action.updatePlacement.failure(err));
     toast.error('Error while fetching Stage2');

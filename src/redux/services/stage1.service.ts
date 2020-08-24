@@ -28,7 +28,7 @@ export const fetchStage1 = async ({ pairsList, stageName }: FetchStage1Request):
   }
 };
 
-export const updatePlacement = async (rows: UpdatePlacementRequest): Promise<UpdatePlacementResponse> => {
+export const updatePlacement = async ({ rows }: UpdatePlacementRequest): Promise<void> => {
   try {
     const response = await fetch('/api/v1/stage1/placement', {
       method: 'POST',
@@ -36,23 +36,19 @@ export const updatePlacement = async (rows: UpdatePlacementRequest): Promise<Upd
       body: JSON.stringify({ rows }),
     });
     await response.json();
-    return {};
   } catch (e) {
     handleError(e, 'Error stage1 fetch');
-    return {};
   }
 };
 
 export const updateSelectedPairs = async ({ rows, stageName }: UpdateSelectedPairsRequest): Promise<void> => {
   try {
-    console.log('updateSelectedPairs before : ', rows, stageName);
     const response = await fetch('/api/v1/pair/selected', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ pairs: rows.map((e) => e.pair), stage1Name: stageName }),
     });
     await response.json();
-    console.log('updateSelectedPairs after');
   } catch (e) {
     handleError(e, 'Error stage1 fetch');
   }
