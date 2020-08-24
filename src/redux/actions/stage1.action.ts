@@ -1,6 +1,5 @@
-import { createAction, createAsyncAction } from 'typesafe-actions';
+import { createAsyncAction } from 'typesafe-actions';
 import {
-  Stage1Row,
   WatchStage1Request,
   WatchStage1Response,
   FetchStage1Response,
@@ -9,6 +8,8 @@ import {
   UpdateCellResponse,
   UpdatePlacementRequest,
   UpdatePlacementResponse,
+  UpdateSelectedPairsRequest,
+  UpdateSelectedPairsResponse,
 } from 'redux/models';
 import { defaultAsyncParams } from './constants';
 
@@ -16,7 +17,12 @@ const actionName = '[Stage1]';
 
 export const Stage1Action = {
   // Update Selected Pairs
-  setSelectedPairs: createAction(`${actionName} Set Selected Pairs`)<{ stageName: string; rows: Stage1Row[] }>(),
+  updateSelectedPairs: createAsyncAction(...defaultAsyncParams(actionName, 'Update Selected Pairs Stage1'))<
+    UpdateSelectedPairsRequest,
+    UpdateSelectedPairsResponse,
+    Error
+  >(),
+
   // watcher
   stage1Watcher: createAsyncAction(...defaultAsyncParams(actionName, 'Stage1 Watcher'))<
     WatchStage1Request,

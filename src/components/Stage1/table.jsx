@@ -128,9 +128,10 @@ const Stage1Table = ({ pairsList }) => {
       selected = found ? selectedRows.filter((e) => e.rowNumber !== row.rowNumber) : selectedRows;
     }
 
+    console.log('handleOnSelect : ');
     setSelectedRows(selected);
     dispatch(
-      Stage1Action.setSelectedPairs({
+      Stage1Action.updateSelectedPairs.request({
         stageName,
         rows: selected,
       })
@@ -139,9 +140,10 @@ const Stage1Table = ({ pairsList }) => {
   };
 
   const handleOnSelectAll = (isSelected, rows) => {
+    console.log('handleOnSelectAll : ');
     setSelectedRows(isSelected ? rows : []);
     dispatch(
-      Stage1Action.setSelectedPairs({
+      Stage1Action.updateSelectedPairs.request({
         stageName,
         rows: isSelected ? rows : [],
       })

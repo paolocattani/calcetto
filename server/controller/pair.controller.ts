@@ -2,11 +2,14 @@ import { Router, Request, Response, NextFunction } from 'express';
 import chalk from 'chalk';
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
+import { dbConnection } from '../models/server/AppServer';
 // Models
 import Pair from '../models/sequelize/pair.model';
 import { asyncMiddleware, withAuth } from '../core/middleware';
 import { AppRequest } from 'controller';
 import { listInTournament, findAlias } from '../manager/pair.manager';
+import { PairDTO } from 'models/dto';
+import { missingParamsResponse } from './common';
 
 const router = Router();
 
@@ -35,6 +38,36 @@ router.get(
   })
 );
 
+router.put(
+  '/selected',
+  withAuth,
+  asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
+    const { body } = req;
+    const rows = body.pairs as PairDTO[];
+    const stage1Name = body.stage1Name;
+    if (rows.length === 0) {
+      return missingParamsResponse(res);
+    }
+    const transaction = await dbConnection.transaction();
+    try {
+      // Reset selection
+      await Pair.update({ stage2Selected: false }, { where: { tournamentId: rows[0].tId, stage1Name }, transaction });
+      // Update selection
+      await Pair.update(
+        { stage2Selected: true },
+        {
+          where: { tournamentId: rows[0].tId, stage1Name, id: rows.map((e) => e.id!) },
+          transaction,
+        }
+      );
+      await transaction.commit();
+    } catch (err) {
+      await transaction.rollback();
+    }
+    return res.status(200).json({ code: 200 });
+  })
+);
+
 router.get(
   '/list/',
   withAuth,
@@ -59,8 +92,9 @@ router.post(
   '/',
   withAuth,
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
-    const { body } = req;
-    const { player1, player2, id, tId, alias, stage1Name, paid1, paid2 } = body;
+    const {
+      body: { stage2Selected, player1, player2, id, tId, alias, stage1Name, paid1, paid2 },
+    } = req;
     try {
       let pair: Pair | null = null;
       const model = {
@@ -69,7 +103,9 @@ router.post(
         alias,
         player1Id: player1?.id ?? null,
         player2Id: player2?.id ?? null,
+        stage2Selected: !!stage2Selected,
         stage1Name,
+        // TODO:
         paid1: paid1 === 'Si' ? true : false,
         paid2: paid2 === 'Si' ? true : false,
       };

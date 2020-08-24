@@ -148,14 +148,14 @@ export const generateStage1Rows = async (rows: Stage1Row[], stageName: string, u
         }
       }
     });
-    transaction.commit();
+    await transaction.commit();
+    logProcess(className + 'generateStage1Rows', 'end');
     return rows;
   } catch (error) {
     logProcess(className + 'generateStage1Rows', error);
     logger.error('generateStage1Rows : ', error);
     throw new Error(`generateStage1Rows  : ${error}`);
   }
-  logProcess(className + 'generateStage1Rows', 'end');
 };
 
 const updateRow = (

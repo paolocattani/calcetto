@@ -44,9 +44,12 @@ export interface UpdateCellRequest {
   pair1Id: number;
   pair2Id: number;
 }
-
 export interface UpdatePlacementRequest {
   rows: Array<{ id: number; placement: number }>;
+}
+export interface UpdateSelectedPairsRequest {
+  stageName: string;
+  rows: Stage1Row[];
 }
 
 export interface WatchStage1Response {
@@ -59,3 +62,7 @@ export interface FetchStage1Response {
 }
 export interface UpdateCellResponse {}
 export interface UpdatePlacementResponse {}
+export interface UpdateSelectedPairsResponse {
+  stageName: string;
+  rows: Stage1Row[];
+}

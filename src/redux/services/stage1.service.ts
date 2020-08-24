@@ -7,6 +7,7 @@ import {
   UpdateCellResponse,
   UpdatePlacementRequest,
   UpdatePlacementResponse,
+  UpdateSelectedPairsRequest,
 } from 'redux/models';
 import { handleError } from './common';
 import { rowsGenerator } from 'components/Stage1/helper';
@@ -39,6 +40,21 @@ export const updatePlacement = async (rows: UpdatePlacementRequest): Promise<Upd
   } catch (e) {
     handleError(e, 'Error stage1 fetch');
     return {};
+  }
+};
+
+export const updateSelectedPairs = async ({ rows, stageName }: UpdateSelectedPairsRequest): Promise<void> => {
+  try {
+    console.log('updateSelectedPairs before : ', rows, stageName);
+    const response = await fetch('/api/v1/pair/selected', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pairs: rows.map((e) => e.pair), stage1Name: stageName }),
+    });
+    await response.json();
+    console.log('updateSelectedPairs after');
+  } catch (e) {
+    handleError(e, 'Error stage1 fetch');
   }
 };
 

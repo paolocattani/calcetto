@@ -27,6 +27,9 @@ export const asyncMiddleware = (fn: any) => (req: Request, res: Response, next: 
   Promise.resolve(fn(req, res, next)).catch(next);
 };
 
+// TODO:
+export const typeControl = <T extends Request>(req: T, res: Response, next: NextFunction) => {};
+
 // Controllo autenticazione. Da utilizzare per tutte le API che richiedono autenticazione
 export const withAuth = async (req: AppRequest, res: Response, next: NextFunction) => {
   const token = req.cookies.token;

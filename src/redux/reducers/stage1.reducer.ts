@@ -17,15 +17,19 @@ export const Stage1Reducer = createReducer<Stage1State, Action>(initialState)
   .handleAction([Stage1Action.stage1Watcher.failure], (state) => ({ ...state }))
   .handleAction([Stage1Action.stage1Watcher.success], (state) => ({ ...state, needRefresh: true }))
   //
-  .handleAction([Stage1Action.fetchStage1.request], (state) => ({ ...state, isLoading: true }))
-  .handleAction([Stage1Action.fetchStage1.failure], (state) => ({ ...state, isLoading: false }))
+  .handleAction([Stage1Action.fetchStage1.request, Stage1Action.updateSelectedPairs.request], (state) => ({
+    ...state,
+    isLoading: true,
+  }))
+  .handleAction([Stage1Action.fetchStage1.failure, Stage1Action.updateSelectedPairs.failure], (state) => ({
+    ...state,
+    isLoading: false,
+  }))
   // Aggiornamento valore cella/posizionamento
-  .handleAction([Stage1Action.updateCellStage1.success, Stage1Action.updatePlacement.success], (state) => {
-    // FIXME:
-    return {
-      ...state,
-    };
-  })
+  .handleAction([Stage1Action.updateCellStage1.success, Stage1Action.updatePlacement.success], (state) => ({
+    ...state,
+    isLoading: false,
+  }))
   // Reperimento dati
   .handleAction([Stage1Action.fetchStage1.success], (state, { payload: { stageName, rows, pairsList } }) => {
     const currentStage = state.stages.filter((s) => s.stageName === stageName);
@@ -44,7 +48,8 @@ export const Stage1Reducer = createReducer<Stage1State, Action>(initialState)
     };
   })
   // Aggiornamento coppie selezionate dati vari gironi
-  .handleAction([Stage1Action.setSelectedPairs], (state, { payload: { stageName, rows } }) => {
+  .handleAction([Stage1Action.updateSelectedPairs.success], (state, { payload: { stageName, rows } }) => {
+    console.log('[Stage1Action.updateSelectedPairs.success, Stage1Action.updateSelectedPairs.failure] : ');
     const selected = state.selectedRows ? state.selectedRows : new Map<string, Stage1Row[]>();
     selected.set(stageName, rows);
 
@@ -62,6 +67,6 @@ export const Stage1Reducer = createReducer<Stage1State, Action>(initialState)
       ...state,
       selectedRows: selected,
       selectedPairs,
-      isLoading: true,
+      isLoading: false,
     };
   });
