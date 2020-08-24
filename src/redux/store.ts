@@ -10,8 +10,7 @@ import {
   Stage1Reducer,
   Stage2Reducer,
 } from 'redux/reducers';
-import { TournamentsSagas, PlayersSagas, PairsSagas, SessionSagas } from 'redux/sagas';
-import { Stage2Sagas } from 'redux/sagas/stage2.saga';
+import { TournamentsSagas, PlayersSagas, PairsSagas, SessionSagas, Stage2Sagas, Stage1Sagas } from 'redux/sagas';
 
 // TODO: https://manukyan.dev/posts/2019-04-15-code-splitting-for-redux-and-optional-redux-saga/#:~:text=Redux%20Saga%20Code%20Splitting,whenever%20those%20actions%20are%20dispatched.
 
@@ -41,7 +40,7 @@ export const store = createStore(combineReducers(commonReducers), composeEnhance
 
 // Exec all sagas
 function* rootSagas() {
-  yield all([...TournamentsSagas, ...PlayersSagas, ...PairsSagas, ...SessionSagas, ...Stage2Sagas]);
+  yield all([...TournamentsSagas, ...PlayersSagas, ...PairsSagas, ...SessionSagas, ...Stage2Sagas, ...Stage1Sagas]);
 }
 
 sagaMiddleware.run(rootSagas);

@@ -1,4 +1,4 @@
-import { put, call, StrictEffect, takeEvery, take, takeLatest, select } from 'redux-saga/effects';
+import { put, call, StrictEffect, takeEvery, take, takeLatest } from 'redux-saga/effects';
 import { SessionAction } from 'redux/actions/session.action';
 import { AuthenticationResponse } from 'redux/models';
 import { CheckAuthentication, createSessionChannel, Message } from 'redux/services/session.service';
@@ -44,11 +44,16 @@ function* watchSessionSaga(
     console.log('watchSessionSaga.err : ', err);
   }
 }
-
+/*
 function* logger(action: Action<any>) {
   const state = yield select();
   console.log('action', action);
-  //console.log('state after', state);
+  console.log('state after', state);
+}
+*/
+
+function logger(action: Action<any>) {
+  console.log('Action : ', action);
 }
 
 export const SessionSagas = [
