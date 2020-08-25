@@ -8,7 +8,7 @@ const initialState: Stage2State = {
 
 export const Stage2Reducer = createReducer<Stage2State, Action>(initialState)
   // Request
-  .handleAction([Stage2Action.fetchStage2.request], (state) => ({
+  .handleAction([Stage2Action.fetchStage2.request, Stage2Action.delete.request], (state) => ({
     ...state,
     isLoading: true,
   }))
@@ -19,15 +19,16 @@ export const Stage2Reducer = createReducer<Stage2State, Action>(initialState)
     isLoading: false,
   }))
   // Success
-  .handleAction([Stage2Action.fetchStage2.success], (state, { payload: { cells, rowsNumber } }) => {
-    console.log('Stage2Action.fetchStage2.success :', { cells, rowsNumber });
-
-    return {
-      cells,
-      rowsNumber,
-      isLoading: false,
-    };
-  })
+  .handleAction([Stage2Action.fetchStage2.success], (state, { payload: { cells, rowsNumber } }) => ({
+    cells,
+    rowsNumber,
+    isLoading: false,
+  }))
+  .handleAction([Stage2Action.delete.success], () => ({
+    cells: undefined,
+    rowsNumber: 0,
+    isLoading: false,
+  }))
   .handleAction([Stage2Action.setCells], (state, { payload }) => ({
     ...state,
     cells: payload,

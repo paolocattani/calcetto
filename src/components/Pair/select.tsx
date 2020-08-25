@@ -15,12 +15,13 @@ interface PairSelectProps {
   // Callback onChange
   onChange?: (value: ValueType<PairDTO>, rowIndex: number, actionMeta?: ActionMeta<PairDTO>) => void;
   components?: Partial<SelectComponents<PairDTO>>;
+  defaultValue?: PairDTO;
 }
 
 // Probabilmente il componente Select usa Ref.... Lascio cosi..
 // TODO: Si potrebbe generalizzare questo componente tramite i generics
 const PairsSelect: React.FC<PairSelectProps> = React.forwardRef(
-  ({ getOptionLabel, styles, rowIndex, options, onChange }, ref) => {
+  ({ getOptionLabel, styles, rowIndex, options, onChange, defaultValue }, ref) => {
     const [selectedOption, setSelectedOption] = useState<PairDTO>();
 
     const handleChange = (value: ValueType<PairDTO>, actionMeta: ActionMeta<PairDTO>) => {
@@ -30,6 +31,7 @@ const PairsSelect: React.FC<PairSelectProps> = React.forwardRef(
 
     return (
       <Select
+        defaultValue={defaultValue}
         components={components}
         styles={styles}
         options={options}

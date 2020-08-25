@@ -140,7 +140,6 @@ const Stage1Table = ({ pairsList }) => {
   };
 
   const handleOnSelectAll = (isSelected, rows) => {
-    console.log('handleOnSelectAll : ');
     setSelectedRows(isSelected ? rows : []);
     dispatch(
       Stage1Action.updateSelectedPairs.request({
@@ -158,7 +157,7 @@ const Stage1Table = ({ pairsList }) => {
     hideSelectColumn: !isAdmin || tournament.progress >= TournamentProgress.Stage2,
   };
 
-  console.log(' render : ', stageName, rows);
+  // console.log(' render : ', stageName, rows);
 
   return isLoading ? (
     <h3>

@@ -1,4 +1,4 @@
-import { put, call, StrictEffect, takeEvery, select } from 'redux-saga/effects';
+import { put, call, StrictEffect, takeEvery, select, fork } from 'redux-saga/effects';
 import { Stage2Action, TournamentAction } from 'redux/actions';
 import { fetchStage2, updateCells, deleteStage2 } from 'redux/services/stage2.service';
 import { FetchStage2Response, TournamentProgress, DeleteStage2Response } from 'redux/models';
@@ -11,7 +11,6 @@ function* deleteStage2Saga(action: ReturnType<typeof Stage2Action.delete.request
     yield put(Stage2Action.delete.success(response));
     const tournament = yield select(TournamentSelector.getTournament);
     tournament!.progress = TournamentProgress.Stage1;
-    console.log('deleteStage2Saga : ', tournament);
     toast.success('Fase 2 eiminata...');
     yield put(TournamentAction.updateTournament.request({ model: tournament }));
   } catch (err) {
@@ -36,7 +35,7 @@ function* updateCellsSaga({
   payload: { cell1, cell2 },
 }: ReturnType<typeof Stage2Action.updateCell.request>): Generator<StrictEffect, void, any> {
   try {
-    yield call(updateCells, cell1, cell2);
+    yield fork(updateCells, cell1, cell2);
     yield put(Stage2Action.updateCell.success({}));
   } catch (err) {
     yield put(Stage2Action.updateCell.failure(err));

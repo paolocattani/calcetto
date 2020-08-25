@@ -8,12 +8,14 @@ import { IStage2FE, ICell } from '../models/dto/stage2.dto';
 import { isAdmin } from './auth.manager';
 import { rowToModel } from './pair.manager';
 import { PairDTO } from 'models/dto/pair.dto';
-import { Op } from 'sequelize';
+import { logEntity } from '../core/utils';
+import { WhereOptions } from 'sequelize';
 
 const className = 'Stage2 Manager : ';
 
 export const updateCells = async (cell1: ICell, cell2: ICell): Promise<boolean> => {
   logProcess(className + 'updateCells', 'start');
+  logger.info('updateCells : ', cell1, cell2);
   try {
     // Cella 1
     if (cell1.pair && cell1.pair.id)
@@ -59,7 +61,7 @@ export const updateSingleCell = async (
     // Reperisco la cella corrente e aggiorno
     const record = await Stage2.findOne({ where: { tournamentId, step, order: rowIndex } });
     if (record) {
-      await record.update({ pair });
+      await record.update({ pairId: pair.id });
       if (isWinner) await updateSingleCell(tournamentId, step, matchId, 0, pair, false);
       result = true;
     }
@@ -86,6 +88,7 @@ export const countStage2 = async (tournamentId: number): Promise<number> => {
   }
 };
 
+// FIXME:
 export const generateStage2Rows = async (
   tournamentId: number,
   rowsNumber: number,
@@ -98,17 +101,33 @@ export const generateStage2Rows = async (
   try {
     for (let ii = 0; ii < structure.length; ii++) {
       for (let jj = 0; jj < structure[ii].length; jj++) {
-        const options = {
-          transaction,
-          where: { tournamentId, order: jj, step: ii },
-          associations: [Stage2.associations.pair],
-        };
         let record: Stage2 | null;
-        let created: boolean;
-        if (isAdmin(user)) [record, created] = await Stage2.findOrCreate(options);
-        else record = await Stage2.findOne(options);
+        const where: WhereOptions = { tournamentId, order: jj, step: ii };
+        if (isAdmin(user)) {
+          [record] = await Stage2.findOrCreate({
+            transaction,
+            where,
+            defaults: { tournamentId, order: jj, step: ii },
+          });
+          if (record.pairId) {
+            const pair = await Pair.findOne({
+              where: { id: record.pairId },
+              include: [Pair.associations.tournament, Pair.associations.player1, Pair.associations.player2],
+            });
+            record.pair = pair!;
+          }
+        } else
+          record = await Stage2.findOne({
+            where,
+            include: [
+              Stage2.associations.pair,
+              Pair.associations.tournament,
+              Pair.associations.player1,
+              Pair.associations.player2,
+            ],
+          });
         if (record?.pair) structure[ii][jj].pair = rowToModel(record.pair, 0);
-        if (ii === 0) logger.info(`Pushing ${ii} , ${jj} : `, structure[ii][jj].pair);
+        // if (ii === 0) logger.info(`Pushing ${ii} , ${jj} : `, structure[ii][jj].pair);
         cells[ii].push(structure[ii][jj]);
       }
     }

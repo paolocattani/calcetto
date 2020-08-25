@@ -64,7 +64,7 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
       current2 = elements![colIndex - 1][rowIndex - 2];
     }
     next = elements![colIndex][current1.matchId - 1];
-    // console.log(' onClick : ', current1, current2, next);
+    console.log(' onClick : ', current1, current2, next);
 
     current1.isWinner = isWinner;
     current2.isWinner = !isWinner;
@@ -94,9 +94,15 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
     setPairsList(pairs);
     elements[0][rowIndex - 1].pair = newPair;
     dispatch(Stage2Action.setCells(elements));
+    dispatch(
+      Stage2Action.updateCell.request({
+        cell1: elements[0][rowIndex - 1],
+        cell2: elements[0][rowIndex % 2 !== 0 ? rowIndex : rowIndex - 2],
+      })
+    );
   };
 
-  console.log('render stage2 :', cells, pairsList, rowNumber);
+  //console.log('render stage2 :', cells, pairsList, rowNumber);
   return cells && pairsList && rowNumber ? (
     <>
       <Col className={commonStyle.toolsBarContainer}>

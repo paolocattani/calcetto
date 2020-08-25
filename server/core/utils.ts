@@ -1,4 +1,4 @@
-import { WhereOptions, Sequelize, Op } from 'sequelize';
+import { WhereOptions, Sequelize, Op, Model } from 'sequelize';
 
 //## Math
 export const getRandomIntInclusive = (min: number, max: number): number =>
@@ -19,7 +19,7 @@ export async function asyncForEach<T>(
 }
 
 //## Sequelize utils
-export const logEntity = (entity: any) => JSON.stringify(entity, null, 2);
+export const logEntity = <T extends Model<any, any>>(entity: T) => JSON.stringify(entity, null, 2);
 
 export const getWhereFromMap = (parameters: Map<string, WhereOptions | Object>): WhereOptions =>
   [...parameters.entries()].reduce<WhereOptions>(

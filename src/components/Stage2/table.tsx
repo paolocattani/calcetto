@@ -109,11 +109,12 @@ function getTableBodyRows(
       </div>
     );
     */
-    // console.log('Render stage2 select :', pairsSelect);
+    console.log('Render stage2 select :', rowIndex, colIndex, isLast, pair);
     return (
       <PairsSelect
         //components={{ Option: CustomOption }}
         styles={styles}
+        defaultValue={pair}
         options={pairsSelect}
         rowIndex={rowIndex}
         onChange={onSelectPair}
