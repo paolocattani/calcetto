@@ -1,5 +1,6 @@
 import { FetchStage2Response, FetchStage2Request, ICell, PairDTO } from 'redux/models';
 import { handleError } from './common';
+import { getEmptyRowModel } from 'components/Pair/helper';
 
 export const deleteStage2 = async (tId: number) => {
   const response = await fetch('/api/v1/stage2', {
@@ -23,11 +24,11 @@ export const updateCells = async (cell1: ICell, cell2: ICell) => {
   }
 };
 
-export const fetchPairsStage2 = async (tId: number): Promise<{ pairs: PairDTO[] }> => {
+export const fetchPairsStage2 = async (tId: number) => {
   try {
     const response = await fetch(`/api/v1/stage2/pairs/${tId}`);
-    const pairs = await response.json();
-    return pairs;
+    const result = await response.json();
+    return { pairs: [getEmptyRowModel('-'), ...result.pairs] };
   } catch (e) {
     handleError(e, 'Error stage2 fetching pairs');
   }
