@@ -1,19 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withRouter, RouteComponentProps, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-// import { TournamentSelector } from 'selectors';
-import { Stage1Selector } from 'redux/selectors/stage1.selector';
 import Stage2 from './table';
 // FIXME:
 import { ICell, PairDTO } from 'redux/models';
 import { ValueType, ActionMeta } from 'react-select';
 import { Button, Col, Row } from 'react-bootstrap';
 import commonStyle from '../../common.module.css';
-import { Stage2Selector } from 'redux/selectors';
+import { Stage2Selector, TournamentSelector } from 'redux/selectors';
 import { Stage2Action } from 'redux/actions';
 import { LoadingModal } from 'components/core/generic/Commons';
 import { LeftArrowIcon } from 'components/core/icons';
 import TournamentBadge from 'components/Tournament/badge';
+import { fetchPairsStage2 } from 'redux/services/stage2.service';
 
 // import template from './template';
 
@@ -26,12 +25,23 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
   const cells = useSelector(Stage2Selector.getCells);
   const rowNumber = useSelector(Stage2Selector.getRowsNumber);
   const isLoading = useSelector(Stage2Selector.isLoading);
-  const pairsListFromStore = useSelector(Stage1Selector.getSelectedPairs);
-  const [pairsList, setPairsList] = useState<PairDTO[]>(pairsListFromStore);
+  const tournament = useSelector(TournamentSelector.getTournament)!;
+  // const pairsListFromStore = useSelector(Stage1Selector.getSelectedPairs);
+  const [pairsList, setPairsList] = useState<PairDTO[]>();
 
   function goBack() {
     currentHistory.push('/stage1');
   }
+
+  useEffect(() => {
+    (async () => {
+      dispatch(Stage2Action.setLoading(true));
+      const result = await fetchPairsStage2(tournament.id!);
+      setPairsList(result.pairs);
+      dispatch(Stage2Action.setLoading(false));
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tournament.id]);
 
   // Callback tasto vittoria/sconfitta coppia : Sposta la coppia alla fase successiva
   const onClick = (
@@ -54,7 +64,7 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
       current2 = elements![colIndex - 1][rowIndex - 2];
     }
     next = elements![colIndex][current1.matchId - 1];
-    console.log(' onClick : ', current1, current2, next);
+    // console.log(' onClick : ', current1, current2, next);
 
     current1.isWinner = isWinner;
     current2.isWinner = !isWinner;
@@ -65,6 +75,9 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
 
   // Questa funzione viene richiamata quando viene selezionata una coppia nella prima colonna
   const onSelectPair = (value: ValueType<PairDTO>, rowIndex: number, actionMeta?: ActionMeta<PairDTO>) => {
+    if (!pairsList) {
+      return;
+    }
     const elements = [...cells!];
     const newPair = value as PairDTO;
     const prevPair = elements[0][rowIndex - 1].pair;
@@ -83,7 +96,7 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
     dispatch(Stage2Action.setCells(elements));
   };
 
-  // console.log('render stage2 :', cells, pairsList, rowNumber);
+  console.log('render stage2 :', cells, pairsList, rowNumber);
   return cells && pairsList && rowNumber ? (
     <>
       <Col className={commonStyle.toolsBarContainer}>
@@ -98,7 +111,6 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
       <TournamentBadge />
 
       <Stage2
-        pairs={pairsListFromStore}
         pairsSelect={pairsList}
         onClick={onClick}
         rowNumber={rowNumber}

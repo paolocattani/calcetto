@@ -1,7 +1,7 @@
-import Pair from '../models/sequelize/pair.model';
 import { PairDTO, UserDTO } from '../models/dto/';
-import { logProcess } from '../core/logger';
-import { Op } from 'sequelize';
+import { logProcess, logger } from '../core/logger';
+import { Op, Sequelize } from 'sequelize';
+import { Stage2, Pair } from '../models/sequelize';
 
 const className = 'Pairs Manager';
 
@@ -13,7 +13,7 @@ export const findAlias = async (player1Id: number, player2Id: number): Promise<s
         player1Id,
         player2Id,
         alias: {
-          [Op.ne]: '',
+          [Op.not]: '',
           [Op.not]: null,
         },
       },
@@ -44,6 +44,37 @@ export const listInTournament = async (tId: number, user: UserDTO): Promise<Pair
     logProcess(className + 'listInTournament', 'error');
     return [];
   }
+};
+
+export const fetchPairsStage2 = async (tournamentId: number): Promise<PairDTO[]> => {
+  logProcess(className + '.fetchPairsStage2', 'start');
+  let result: PairDTO[] = [];
+  try {
+    const selectedStage2 = ((await Stage2.findAll({
+      attributes: ['pairId'],
+      where: { tournamentId, pairId: { [Op.not]: null } },
+      group: ['pairId'],
+    })) as unknown) as number[];
+    const selectedPairs = await Pair.findAll({
+      where: {
+        tournamentId,
+        stage2Selected: true,
+        placement: { [Op.not]: null },
+        id: { [Op.notIn]: selectedStage2 },
+      },
+      include: [Pair.associations.tournament, Pair.associations.player1, Pair.associations.player2],
+      order: [
+        ['stage1Name', 'ASC'],
+        ['placement', 'ASC'],
+      ],
+    });
+    result = selectedPairs.map((p, i) => rowToModel(p, i));
+  } catch (error) {
+    logProcess(className + '.fetchPairsStage2', 'error');
+    logger.error('fetchPairsStage2 : ', error);
+  }
+  logProcess(className + '.fetchPairsStage2', `end (${result.length})`);
+  return result;
 };
 
 export function rowToModel(row: Pair, index: number): PairDTO {

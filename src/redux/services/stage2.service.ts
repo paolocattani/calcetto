@@ -1,4 +1,4 @@
-import { FetchStage2Response, FetchStage2Request, ICell } from 'redux/models';
+import { FetchStage2Response, FetchStage2Request, ICell, PairDTO } from 'redux/models';
 import { handleError } from './common';
 
 export const deleteStage2 = async (tId: number) => {
@@ -21,6 +21,17 @@ export const updateCells = async (cell1: ICell, cell2: ICell) => {
   } catch (e) {
     handleError(e, 'Error stage2 update');
   }
+};
+
+export const fetchPairsStage2 = async (tId: number): Promise<{ pairs: PairDTO[] }> => {
+  try {
+    const response = await fetch(`/api/v1/stage2/pairs/${tId}`);
+    const pairs = await response.json();
+    return pairs;
+  } catch (e) {
+    handleError(e, 'Error stage2 fetching pairs');
+  }
+  return { pairs: [] };
 };
 
 export const fetchStage2 = async ({

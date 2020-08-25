@@ -9,6 +9,7 @@ import { asyncMiddleware, withAuth, withAdminRights } from '../core/middleware';
 import { generateStage2Rows, countStage2, updateCells, deleteStage2 } from '../manager/stage2.manager';
 // Models
 import { AppRequest } from './index';
+import { fetchPairsStage2 } from '../manager/pair.manager';
 
 // all API path must be relative to /api/v1/tournament
 const router = Router();
@@ -32,6 +33,21 @@ router.post(
       return res.status(200).json(model);
     } catch (err) {
       logger.error(chalk.redBright('Error while fetching Stage2 ! : ', err));
+      return res.status(500).json({ message: 'Internal Error' });
+    }
+  })
+);
+
+router.get(
+  '/pairs/:tournamentId',
+  withAuth,
+  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
+    try {
+      const { tournamentId } = req.params;
+      const pairs = await fetchPairsStage2(parseInt(tournamentId));
+      return res.status(200).json({ pairs });
+    } catch (err) {
+      logger.error(chalk.redBright('Error while fetching stage2 pairs ! : ', err));
       return res.status(500).json({ message: 'Internal Error' });
     }
   })

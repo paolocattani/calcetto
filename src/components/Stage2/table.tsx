@@ -11,7 +11,6 @@ import { ValueType, ActionMeta, Styles /*, OptionProps */ } from 'react-select';
 // https://www.kodbiro.com/blog/rorgchart-react-module-for-displaying-and-editing-data-in-org-chart/
 
 interface Stage2Props {
-  pairs: PairDTO[];
   pairsSelect: PairDTO[];
   elements: ICell[][];
   rowNumber: number;
@@ -24,13 +23,13 @@ interface Stage2Props {
   onSelectPair: (value: ValueType<PairDTO>, rowIndex: number, actionMeta?: ActionMeta<PairDTO>) => void;
 }
 
-const Stage2: React.FC<Stage2Props> = ({ onClick, elements, pairsSelect, rowNumber = 64, pairs, onSelectPair }) => {
+const Stage2: React.FC<Stage2Props> = ({ onClick, elements, pairsSelect, rowNumber = 64, onSelectPair }) => {
   /*
    * Calcolo il numero di colonne in funzione del numero di righe
    * in quanto l'oggetto che ricevo protrebbe essere solo un parziale
    */
   const colNumber = getBaseLog(2, rowNumber) + 1;
-  const bRows = getTableBodyRows(elements, rowNumber, colNumber, onClick, pairs, pairsSelect, onSelectPair);
+  const bRows = getTableBodyRows(elements, rowNumber, colNumber, onClick, pairsSelect, onSelectPair);
   const hElem = getTableHeaderElements(colNumber);
 
   return (
@@ -73,7 +72,6 @@ function getTableBodyRows(
     colIndex: number,
     winner: boolean
   ) => void,
-  pairs: PairDTO[],
   pairsSelect: PairDTO[],
   onSelectPair: (value: ValueType<PairDTO>, rowIndex: number, actionMeta?: ActionMeta<PairDTO>) => void
 ): JSX.Element[] {
@@ -111,6 +109,7 @@ function getTableBodyRows(
       </div>
     );
     */
+    // console.log('Render stage2 select :', pairsSelect);
     return (
       <PairsSelect
         //components={{ Option: CustomOption }}

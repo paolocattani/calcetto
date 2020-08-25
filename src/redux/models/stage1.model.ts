@@ -6,8 +6,11 @@ export interface Stage1State {
   // TODO:
   needRefresh: boolean;
   isLoading: boolean;
+  //Righe Stage1 selezionate nella forma di Mappa <Nome Girone, Lista Righe Selezionate>
   selectedRows?: Map<string, Stage1Row[]>;
+  //Righe Stage1 selezionate, unite tali da essere usate poi su Stage2
   selectedPairs: PairDTO[];
+  // idea ( abbandonata per ora ) : creare un array contente gli stati di ogni girone.
   stages: SingleStageState[];
 }
 

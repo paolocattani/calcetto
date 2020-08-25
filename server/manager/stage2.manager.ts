@@ -3,11 +3,12 @@ import { logProcess, logger } from '../core/logger';
 import { dbConnection } from '../models/server/AppServer';
 // Models
 import { UserDTO } from '../models/dto/user.dto';
-import Stage2Model from '../models/sequelize/stage2.model';
+import { Stage2, Pair } from '../models/sequelize/index';
 import { IStage2FE, ICell } from '../models/dto/stage2.dto';
 import { isAdmin } from './auth.manager';
 import { rowToModel } from './pair.manager';
 import { PairDTO } from 'models/dto/pair.dto';
+import { Op } from 'sequelize';
 
 const className = 'Stage2 Manager : ';
 
@@ -56,7 +57,7 @@ export const updateSingleCell = async (
   let result = false;
   try {
     // Reperisco la cella corrente e aggiorno
-    const record = await Stage2Model.findOne({ where: { tournamentId, step, order: rowIndex } });
+    const record = await Stage2.findOne({ where: { tournamentId, step, order: rowIndex } });
     if (record) {
       await record.update({ pair });
       if (isWinner) await updateSingleCell(tournamentId, step, matchId, 0, pair, false);
@@ -75,7 +76,7 @@ export const countStage2 = async (tournamentId: number): Promise<number> => {
   logProcess(className + 'countStage2', 'start');
   if (!tournamentId) logger.info('Missing tournamentId...');
   try {
-    const count = await Stage2Model.count({ where: { tournamentId, step: 0 } });
+    const count = await Stage2.count({ where: { tournamentId, step: 0 } });
     logProcess(className + 'countStage2', `end (${count})`);
     return count;
   } catch (error) {
@@ -100,12 +101,12 @@ export const generateStage2Rows = async (
         const options = {
           transaction,
           where: { tournamentId, order: jj, step: ii },
-          associations: [Stage2Model.associations.pair],
+          associations: [Stage2.associations.pair],
         };
-        let record: Stage2Model | null;
+        let record: Stage2 | null;
         let created: boolean;
-        if (isAdmin(user)) [record, created] = await Stage2Model.findOrCreate(options);
-        else record = await Stage2Model.findOne(options);
+        if (isAdmin(user)) [record, created] = await Stage2.findOrCreate(options);
+        else record = await Stage2.findOne(options);
         if (record?.pair) structure[ii][jj].pair = rowToModel(record.pair, 0);
         if (ii === 0) logger.info(`Pushing ${ii} , ${jj} : `, structure[ii][jj].pair);
         cells[ii].push(structure[ii][jj]);
@@ -126,7 +127,7 @@ export const generateStage2Rows = async (
 export const deleteStage2 = async (tournamentId: number) => {
   logProcess(className + 'deleteStage2', 'start');
   try {
-    await Stage2Model.destroy({ where: { tournamentId } });
+    await Stage2.destroy({ where: { tournamentId } });
   } catch (error) {
     logProcess(className + 'deleteStage2', 'error');
     logger.error('deleteStage2 : ', error);

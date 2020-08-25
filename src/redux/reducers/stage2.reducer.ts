@@ -31,4 +31,8 @@ export const Stage2Reducer = createReducer<Stage2State, Action>(initialState)
   .handleAction([Stage2Action.setCells], (state, { payload }) => ({
     ...state,
     cells: payload,
+  }))
+  .handleAction([Stage2Action.setLoading], (state, { payload }) => ({
+    ...state,
+    isLoading: payload,
   }));

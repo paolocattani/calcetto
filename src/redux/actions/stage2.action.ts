@@ -30,4 +30,5 @@ export const Stage2Action = {
     Error
   >(),
   setCells: createAction(...defaultParam(actionName, 'Set Cells'))<ICell[][]>(),
+  setLoading: createAction(...defaultParam(actionName, 'Stage2 is Loading'))<boolean>(),
 };
