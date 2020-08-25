@@ -6,7 +6,6 @@ import {
   UpdateCellRequest,
   UpdateCellResponse,
   UpdatePlacementRequest,
-  UpdatePlacementResponse,
   UpdateSelectedPairsRequest,
 } from 'redux/models';
 import { handleError } from './common';

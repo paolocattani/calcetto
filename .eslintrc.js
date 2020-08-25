@@ -11,7 +11,7 @@ module.exports = {
     //'plugin:react/recommended', // Uses the recommended rules from @eslint-plugin-react
     //'plugin:@typescript-eslint/recommended' // Uses the recommended rules from @typescript-eslint/eslint-plugin
     //'plugin:prettier/recommended', // Enables eslint-plugin-prettier and eslint-config-prettier. This will display prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
-    'prettier/@typescript-eslint' // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
+    'prettier/@typescript-eslint', // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
     //'prettier/react'
   ],
   plugins: ['react', 'react-hooks'],
@@ -27,8 +27,8 @@ module.exports = {
       // impliedStrict, // enable global strict mode (if ecmaVersion is 5 or greater)
       jsx: true, // Allows for the parsing of JSX
       modules: true,
-      experimentalObjectRestSpread: true
-    }
+      experimentalObjectRestSpread: true,
+    },
   },
   rules: {
     'react/no-array-index-key': 'warn',
@@ -47,18 +47,18 @@ module.exports = {
     //'comma-dangle': ['error', 'always'],
     'no-cond-assign': ['error', 'always'],
     // disable rules from base configurations
-    'no-console': 'off'
+    'no-console': 'off',
   },
   settings: {
     react: { version: 'detect' }, // Tells eslint-plugin-react to automatically detect the version of React to use
     'import/resolver': {
-      node: { extensions: ['.js', '.jsx', '.ts', '.tsx', 'html'] }
-    }
+      node: { extensions: ['.js', '.jsx', '.ts', '.tsx', 'html'] },
+    },
   },
   env: {
     browser: true,
     commonjs: true,
     es6: true,
-    node: true
-  }
+    node: true,
+  },
 };

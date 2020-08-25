@@ -1,4 +1,4 @@
-import { FetchStage2Response, FetchStage2Request, ICell, PairDTO } from 'redux/models';
+import { FetchStage2Response, FetchStage2Request, ICell } from 'redux/models';
 import { handleError } from './common';
 import { getEmptyRowModel } from 'components/Pair/helper';
 
