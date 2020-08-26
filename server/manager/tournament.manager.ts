@@ -1,9 +1,9 @@
-import { logProcess, logger } from '../core/logger';
+import { logProcess } from '../core/logger';
 import { TournamentDTO, TournamentProgress } from '../models/dto/tournament.dto';
 import Tournament from '../models/sequelize/tournament.model';
-import { Op, WhereAttributeHash, Sequelize, WhereOptions } from 'sequelize';
+import { Op, WhereOptions } from 'sequelize';
 import { UserDTO, UserRole } from '../models/dto/user.dto';
-import { getWhereFromMap, justADate, castWrapper, lowerWrapper, dateInRageWrapper } from '../core/utils';
+import { getWhereFromMap, lowerWrapper, dateInRageWrapper } from '../core/utils';
 
 const className = 'Tournament Manager : ';
 const defaultFilter = (user: UserDTO) => ({ [Op.or]: [{ ownerId: user.id }, { public: true }] });
@@ -48,7 +48,10 @@ export const update = async (user: UserDTO, model: TournamentDTO): Promise<Tourn
       logProcess(className + 'update', 'end : Tournament not found');
       return model;
     }
-    const result = await t.update({ progress: model.progress });
+    const result = await t.update({
+      progress: model.progress,
+      autoOrder: model.autoOrder,
+    });
     logProcess(className + 'update', 'end');
     return convertEntityToDTO(result);
   } catch (error) {
@@ -117,6 +120,7 @@ export const convertEntityToDTO = (t: Tournament | null): TournamentDTO | null =
         date: t?.date ?? new Date(),
         progress: t?.progress ?? TournamentProgress.New,
         public: t?.public ?? false,
+        autoOrder: t?.autoOrder ?? true,
         label: t?.label ?? '',
         ownerId: t?.ownerId,
       }
@@ -129,6 +133,7 @@ export const parseBody = (body: any) =>
     date: body.date ?? null,
     progress: body.progress ?? null,
     public: body.public ?? null,
+    autoOrder: body.autoOrder ?? null,
     label: body.label ?? null,
     ownerId: body?.ownerId,
   } as TournamentDTO);

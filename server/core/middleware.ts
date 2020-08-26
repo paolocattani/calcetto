@@ -52,7 +52,7 @@ export const withAuth = async (req: AppRequest, res: Response, next: NextFunctio
 // Controllo se l'utente ha le autorizzazioni di amminstratore, altrimenti picche
 export const withAdminRights = (req: AppRequest, res: Response, next: NextFunction) => {
   if (!isAdmin(req.user)) {
-    return res.status(401).send('Unauthorized');
+    return res.status(401).send('!!! Unauthorized !!! :D');
   } else next();
 };
 

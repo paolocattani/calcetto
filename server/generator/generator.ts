@@ -5,6 +5,7 @@ import Tournament from '../models/sequelize/tournament.model';
 import { logger } from '../core/logger';
 import { isProductionMode } from '../core/debug';
 import chalk from 'chalk';
+import { TournamentProgress } from '../models/dto';
 
 const TOURNAMENT_RECORDS = 10;
 
@@ -50,7 +51,8 @@ async function tournamentGenerator(): Promise<void> {
       name: ii,
       date: new Date(),
       ownerId: null,
-      progress: 'New',
+      progress: TournamentProgress.New,
+      autOrder: ii % 2 == 0,
       public: true,
     };
     await Tournament.create(model);

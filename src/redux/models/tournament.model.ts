@@ -43,6 +43,7 @@ export interface TournamentDTO {
   date: Date;
   progress: TournamentProgress;
   public: boolean;
+  autoOrder: boolean;
   label: string;
   ownerId: number | null;
 }

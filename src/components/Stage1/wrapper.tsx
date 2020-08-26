@@ -8,7 +8,7 @@ import { PairDTO, TournamentProgress } from '../../redux/models';
 // Style
 import commonStyle from '../../common.module.css';
 import { RightArrowIcon, TrashIcon, LeftArrowIcon } from '../core/icons';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Row, ButtonGroup, ToggleButton } from 'react-bootstrap';
 // Actions, Selectors
 import { Stage2Action, TournamentAction } from '../../redux/actions';
 import { SessionSelector, TournamentSelector, Stage1Selector, PairSelector } from 'redux/selectors';
@@ -36,8 +36,6 @@ const Wrapper: React.FC = (): JSX.Element => {
   const selected = useSelector(Stage1Selector.getSelectedPairs);
   // Lista coppie
   const pairsList = useSelector(PairSelector.getPairsList);
-  // TODO:
-  const [autoOrder /*, setAutoOrder*/] = useState<boolean>(true);
 
   function goBack() {
     currentHistory.push(session.isAdmin ? '/tournament' : '/');
@@ -92,13 +90,34 @@ const Wrapper: React.FC = (): JSX.Element => {
           </Button>
         </Col>
       </Row>
+      <Row>
+        <Col>
+          <ButtonGroup toggle className="mb-2">
+            <ToggleButton
+              type="checkbox"
+              variant={!!tournament.autoOrder ? 'success' : 'danger'}
+              checked={tournament.autoOrder}
+              value="1"
+              onChange={(e) =>
+                dispatch(
+                  TournamentAction.updateTournament.request({
+                    model: { ...tournament, autoOrder: e.currentTarget.checked },
+                  })
+                )
+              }
+            >
+              {`Ordinamento automatico : ${!!tournament.autoOrder ? 'Attivato ' : ' Disattivato'}`}
+            </ToggleButton>
+          </ButtonGroup>
+        </Col>
+      </Row>
     </div>
   );
   return (
     <>
       {toolsBar}
       <TournamentBadge />
-      {pairsList ? renderTables(pairsList, autoOrder) : null}
+      {pairsList ? renderTables(pairsList, tournament.autoOrder) : null}
     </>
   );
 };

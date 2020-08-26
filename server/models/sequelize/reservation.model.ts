@@ -3,7 +3,7 @@ import Player from './player.model';
 import { User } from '.';
 
 /**
- *
+ * Gestione prenotazione
  */
 @Table({ tableName: 'reservation', freezeTableName: true, version: false })
 export default class Resevation extends Model<Resevation> {

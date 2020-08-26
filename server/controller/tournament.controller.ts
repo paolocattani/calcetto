@@ -4,14 +4,13 @@ import chalk from 'chalk';
 // Core
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
-import { asyncMiddleware, withAuth } from '../core/middleware';
+import { asyncMiddleware, withAuth, withAdminRights } from '../core/middleware';
 // Managers
 import { listAll, findById, findByNameAndDate, parseBody, update } from '../manager/tournament.manager';
 // Models
 import Tournament from '../models/sequelize/tournament.model';
 import { TournamentDTO } from '../models/dto/tournament.dto';
 import { AppRequest } from './index';
-import { isAdmin } from '../manager/auth.manager';
 
 // all API path must be relative to /api/v1/tournament
 const router = Router();
@@ -65,6 +64,7 @@ router.put(
 router.post(
   '/isValid',
   withAuth,
+  withAdminRights,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     const {
       body: { name, date },
@@ -80,6 +80,7 @@ router.post(
 router.post(
   '/',
   withAuth,
+  withAdminRights,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     const model = parseBody(req.body);
     const user = req.user!;
@@ -89,16 +90,10 @@ router.post(
         logger.info(`Tournament ${model.name} already exists....`);
         return res.json(t);
       }
-      if (isAdmin(user)) {
-        model.ownerId = user.id;
-        t = await Tournament.create(model);
-        logger.info(`tournament controller : created Tournament => ${t}`);
-        res.status(200);
-      } else {
-        logger.info('tournament controller : Torneo non creato in quanto utente non possiede i permessi necessari');
-        res.status(401).json({ message: 'Non autorizzato. Permessi insufficienti' });
-      }
-      return res.json(t);
+      model.ownerId = user.id;
+      t = await Tournament.create(model);
+      logger.info(`Created Tournament => ${t}`);
+      return res.status(200).json(t);
     } catch (err) {
       return next(err);
     }

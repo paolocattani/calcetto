@@ -37,7 +37,8 @@ const FTournament = () => {
       console.log('useEffect: ', tournamentsList);
       dispatch(TournamentAction.fetchTournaments.request({}));
     }
-  }, [dispatch, tournamentsList]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLElement>): Promise<void> => {
     event.preventDefault();

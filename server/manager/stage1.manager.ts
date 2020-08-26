@@ -120,15 +120,16 @@ export const generateStage1Rows = async (rows: Stage1Row[], stageName: string, u
               const include = [Stage1Model.associations.pair1, Stage1Model.associations.pair2];
               let record = null;
               let created = false;
-              isEditable
-                ? ([record, created] = await Stage1Model.findOrCreate({
-                    where,
-                    defaults: model,
-                    transaction,
-                    // @ts-ignore
-                    include,
-                  }))
-                : (record = await Stage1Model.findOne({ where, transaction, include }));
+              if (isEditable) {
+                [record, created] = await Stage1Model.findOrCreate({
+                  where,
+                  defaults: model,
+                  transaction,
+                  // @ts-ignore
+                  // FIXME:
+                  include,
+                });
+              } else record = await Stage1Model.findOne({ where, transaction, include });
 
               // if (stageName === '1') logger.info('model : ', created, record);
               if (!created && record) {

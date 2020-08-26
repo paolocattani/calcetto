@@ -18,6 +18,7 @@ export function getEmptyTournament(name: string): TournamentDTO {
     date: new Date(),
     progress: TournamentProgress.New,
     public: true,
+    autoOrder: true,
     label: name || '',
   };
 }

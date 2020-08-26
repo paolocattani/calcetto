@@ -40,7 +40,7 @@ const Stage1Table = ({ pairsList, autoOrder }) => {
         });
         const result = await response.json();
         // FIXME: Ordinamento : gestire ordinamento personalizzato
-        if (autoOrder)
+        if (!!autoOrder)
           [...result]
             .sort((e1, e2) => comparator(e1, e2))
             .forEach((row, index) => (result[row.rowNumber - 1]['placement'] = index + 1));
