@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import Stage2 from './table';
 // FIXME:
 import { ICell, PairDTO } from 'redux/models';
-import { ValueType, ActionMeta } from 'react-select';
 import { Button, Col, Row } from 'react-bootstrap';
 import commonStyle from '../../common.module.css';
 import { Stage2Selector, TournamentSelector } from 'redux/selectors';
@@ -13,6 +12,7 @@ import { LoadingModal } from 'components/core/generic/Commons';
 import { LeftArrowIcon } from 'components/core/icons';
 import TournamentBadge from 'components/Tournament/badge';
 import { fetchPairsStage2 } from 'redux/services/stage2.service';
+import { onClickCallback, onSelectCallback } from './helper';
 
 // import template from './template';
 
@@ -44,12 +44,7 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
   }, [tournament.id]);
 
   // Callback tasto vittoria/sconfitta coppia : Sposta la coppia alla fase successiva
-  const onClick = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    rowIndex: number,
-    colIndex: number,
-    isWinner: boolean
-  ) => {
+  const onClick: onClickCallback = (event, rowIndex, colIndex, isWinner) => {
     const elements = [...cells!];
     // Coppia 1 e 2 dell'incontro corrente
     let current1: ICell | null = null;
@@ -57,13 +52,13 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
     // Element Incontro successivo
     let next: ICell | null = null;
     if (rowIndex % 2 !== 0) {
-      current1 = elements![colIndex - 1][rowIndex - 1];
-      current2 = elements![colIndex - 1][rowIndex];
+      current1 = elements[colIndex - 1][rowIndex - 1];
+      current2 = elements[colIndex - 1][rowIndex];
     } else {
-      current1 = elements![colIndex - 1][rowIndex - 1];
-      current2 = elements![colIndex - 1][rowIndex - 2];
+      current1 = elements[colIndex - 1][rowIndex - 1];
+      current2 = elements[colIndex - 1][rowIndex - 2];
     }
-    next = elements![colIndex][current1.matchId - 1];
+    next = elements[colIndex][current1.matchId - 1];
     console.log(' onClick : ', current1, current2, next);
 
     current1.isWinner = isWinner;
@@ -71,10 +66,13 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
     if (next) next.pair = isWinner ? current1.pair : current2.pair;
     dispatch(Stage2Action.updateCell.request({ cell1: current1, cell2: current2 }));
     dispatch(Stage2Action.setCells(elements));
+    if (elements[colIndex].length === 1) {
+      dispatch(Stage2Action.updateCell.request({ cell1: next, cell2: null }));
+    }
   };
 
   // Questa funzione viene richiamata quando viene selezionata una coppia nella prima colonna
-  const onSelectPair = (value: ValueType<PairDTO>, rowIndex: number, actionMeta?: ActionMeta<PairDTO>) => {
+  const onSelectPair: onSelectCallback = (value, rowIndex, actionMeta) => {
     if (!pairsList) {
       return;
     }
@@ -94,12 +92,7 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
     setPairsList(pairs);
     elements[0][rowIndex - 1].pair = newPair;
     dispatch(Stage2Action.setCells(elements));
-    dispatch(
-      Stage2Action.updateCell.request({
-        cell1: elements[0][rowIndex - 1],
-        cell2: elements[0][rowIndex % 2 !== 0 ? rowIndex : rowIndex - 2],
-      })
-    );
+    dispatch(Stage2Action.updateCell.request({ cell1: elements[0][rowIndex - 1], cell2: null }));
   };
 
   //console.log('render stage2 :', cells, pairsList, rowNumber);

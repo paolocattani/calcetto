@@ -1,6 +1,16 @@
 import { getBaseLog } from '../core/utils';
 import { ICell } from 'redux/models/stage2.model';
+import { ValueType, ActionMeta } from 'react-select';
+import { PairDTO } from 'redux/models';
 
+export type onClickCallback = (
+  event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  rowIndex: number,
+  colIndex: number,
+  isWinner: boolean
+) => void;
+
+export type onSelectCallback = (value: ValueType<PairDTO>, rowIndex: number, actionMeta?: ActionMeta<PairDTO>) => void;
 export const getIndexes = (pairsNumber: number): number[] => {
   const N = getBaseLog(2, pairsNumber) + 1; // Numero massimo di elementi td
   /*

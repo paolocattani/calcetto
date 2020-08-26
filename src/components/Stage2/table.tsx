@@ -1,11 +1,11 @@
 import React from 'react';
 import style from './style.module.css';
-import { getIndexes, getEmptyCell } from './helper';
+import { getIndexes, getEmptyCell, onClickCallback, onSelectCallback } from './helper';
 import Cell from './cell';
 import { getBaseLog } from 'components/core/utils';
 import { ICell, PairDTO } from 'redux/models';
 import PairsSelect from 'components/Pair/select';
-import { ValueType, ActionMeta, Styles /*, OptionProps */ } from 'react-select';
+import { Styles } from 'react-select';
 // import { valueFormatter } from 'components/Pair/helper';
 
 // https://www.kodbiro.com/blog/rorgchart-react-module-for-displaying-and-editing-data-in-org-chart/
@@ -14,13 +14,8 @@ interface Stage2Props {
   pairsSelect: PairDTO[];
   elements: ICell[][];
   rowNumber: number;
-  onClick: (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    rowIndex: number,
-    colIndex: number,
-    winner: boolean
-  ) => void;
-  onSelectPair: (value: ValueType<PairDTO>, rowIndex: number, actionMeta?: ActionMeta<PairDTO>) => void;
+  onClick: onClickCallback;
+  onSelectPair: onSelectCallback;
 }
 
 const Stage2: React.FC<Stage2Props> = ({ onClick, elements, pairsSelect, rowNumber = 64, onSelectPair }) => {
@@ -66,14 +61,9 @@ function getTableBodyRows(
   elements: ICell[][],
   rowNumber: number,
   colNumber: number,
-  onClick: (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    rowIndex: number,
-    colIndex: number,
-    winner: boolean
-  ) => void,
+  onClick: onClickCallback,
   pairsSelect: PairDTO[],
-  onSelectPair: (value: ValueType<PairDTO>, rowIndex: number, actionMeta?: ActionMeta<PairDTO>) => void
+  onSelectPair: onSelectCallback
 ): JSX.Element[] {
   // Conterrà tutte le righe della tabella
   const rows: JSX.Element[] = [];

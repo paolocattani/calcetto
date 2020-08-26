@@ -29,7 +29,7 @@ export interface FetchStage2Response {
 
 export interface UpdateStage2CellRequest {
   cell1: ICell;
-  cell2: ICell;
+  cell2: ICell | null;
 }
 export interface UpdateStage2CellResponse {}
 

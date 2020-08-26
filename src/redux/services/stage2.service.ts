@@ -11,7 +11,7 @@ export const deleteStage2 = async (tId: number) => {
   await response.json();
 };
 
-export const updateCells = async (cell1: ICell, cell2: ICell) => {
+export const updateCells = async (cell1: ICell, cell2: ICell | null) => {
   try {
     const response = await fetch('/api/v1/stage2/cells', {
       method: 'POST',
