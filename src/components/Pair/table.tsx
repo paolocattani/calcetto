@@ -477,7 +477,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
             </Button>
           </Col>
         )}
-        {tournament.progress > TournamentProgress.Stage1 ? null : (
+        {tournament.progress !== TournamentProgress.Stage1 ? null : (
           <Col>
             <Button variant="danger" className="align-middle" onClick={deleteStage1} disabled={!isAdmin}>
               Reset gironi
@@ -495,7 +495,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
           </Button>
         </Col>
       </Row>
-      {isAdmin ? (
+      {isAdmin && tournament.progress < TournamentProgress.PairsSelection ? (
         <>
           {assignMatches()}
           {addPairs()}
@@ -504,6 +504,12 @@ const PairsTable: React.FC<PairTableProps> = () => {
     </div>
   );
 
+  console.log(
+    'Pairs : ',
+    tournament.progress > TournamentProgress.PairsSelection,
+    tournament.progress,
+    TournamentProgress.PairsSelection
+  );
   return (
     <div>
       <YesNoModal message={askUser.message} title={askUser.title} onClick={askUser.onClick} show={askUser.show} />
@@ -518,7 +524,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
                 keyField="id"
                 data={data.rows}
                 columns={columns(onSelect, data.players) as ColumnDescription<PairDTO, PairDTO>[]}
-                cellEdit={cellEditProps(isAdmin)}
+                cellEdit={cellEditProps(isAdmin && tournament.progress < TournamentProgress.Stage1)}
                 selectRow={selectRow}
                 noDataIndication={() => (
                   <NoData isEditable={isAdmin || false} addRow={() => addRow()} optionsLength={data.players.length} />

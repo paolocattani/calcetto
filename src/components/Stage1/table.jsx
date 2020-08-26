@@ -15,7 +15,7 @@ import { TournamentSelector } from 'redux/selectors';
 import { TournamentProgress } from 'redux/models';
 
 // TODO: convert this component to ts
-const Stage1Table = ({ pairsList }) => {
+const Stage1Table = ({ pairsList, autoOrder }) => {
   const dispatch = useDispatch();
   // From store
   const isAdmin = useSelector(SessionSelector.isAdmin);
@@ -24,7 +24,6 @@ const Stage1Table = ({ pairsList }) => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [saved, setIsSaved] = useState(false);
-  const [autoOrder /*, setAutoOrder*/] = useState(true);
   const [rows, setRows] = useState(rowsGenerator(pairsList));
   // Const
   const stageName = pairsList[0].stage1Name;
@@ -171,7 +170,7 @@ const Stage1Table = ({ pairsList }) => {
       data={rows}
       columns={columns(pairsList)}
       selectRow={selectRow}
-      cellEdit={cellEditProps(isAdmin)}
+      cellEdit={cellEditProps(isAdmin && tournament.progress < TournamentProgress.Stage2)}
       noDataIndication="Nessun dato reperito"
       headerClasses="default-background default-color-yellow"
       caption={<TableHeader title={stageName} saved={saved} />}

@@ -36,7 +36,6 @@ const Wrapper: React.FC = (): JSX.Element => {
   const selected = useSelector(Stage1Selector.getSelectedPairs);
   // Lista coppie
   const pairsList = useSelector(PairSelector.getPairsList);
-
   // TODO:
   const [autoOrder /*, setAutoOrder*/] = useState<boolean>(true);
 
@@ -71,15 +70,17 @@ const Wrapper: React.FC = (): JSX.Element => {
             <LeftArrowIcon /> Indietro
           </Button>
         </Col>
-        <Col>
-          <Button
-            variant="danger"
-            onClick={() => dispatch(Stage2Action.delete.request({ tId: tournament.id! }))}
-            disabled={!session.isAdmin || (session.isAdmin && tournament.progress < TournamentProgress.Stage2)}
-          >
-            <TrashIcon /> Reset Fase 2
-          </Button>
-        </Col>
+        {tournament.progress > TournamentProgress.Stage1 ? (
+          <Col>
+            <Button
+              variant="danger"
+              onClick={() => dispatch(Stage2Action.delete.request({ tId: tournament.id! }))}
+              disabled={!session.isAdmin || (session.isAdmin && tournament.progress < TournamentProgress.Stage2)}
+            >
+              <TrashIcon /> Reset Fase 2
+            </Button>
+          </Col>
+        ) : null}
         <Col>
           <Button
             variant="outline-warning"
@@ -116,14 +117,14 @@ function renderTables(pairsList: PairDTO[], autoOrder: boolean): JSX.Element[] {
       // A rottura di stage1Name
       if (stageName === '') stageName = element.stage1Name;
       if (stageName !== element.stage1Name) {
-        stageList.push(<Stage1Table key={`Stage1-${stageName}`} pairsList={stage} />);
+        stageList.push(<Stage1Table key={`Stage1-${stageName}`} pairsList={stage} autoOrder={autoOrder} />);
         stageName = element.stage1Name;
         stage = [];
       }
       stage.push(element);
     });
   if (stage.length > 0) {
-    stageList.push(<Stage1Table key={`Stage1-${stageName}`} pairsList={stage} />);
+    stageList.push(<Stage1Table key={`Stage1-${stageName}`} pairsList={stage} autoOrder={autoOrder} />);
     // console.log(`stages ${stageName} :`, stage);
   }
 
