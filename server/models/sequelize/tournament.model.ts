@@ -19,9 +19,10 @@ import { TournamentProgress } from '../dto/tournament.dto';
 /**
  * Rapprenta un Torneo :
  * @name string nome del torneo
- * @ownerId number riferimento al proprietario ( TODO: )
+ * @ownerId number riferimento al proprietario
  * @progress string stato avanzamento
- * @public boolean visibile ad utenti non loggati ( TODO: )
+ * @public boolean visibile ad altri utenti
+ * @autoOrder attiva/disattiva ordinamento automatico su Stage1
  * @pairs Pairs[] coppie associate a questo torneo
  * @Stage1 Stage1[] stage1
  *
@@ -51,6 +52,11 @@ export default class Tournament extends Model<Tournament> {
   @Comment('Visibile ad utenti non loggati')
   @Column(DataType.BOOLEAN)
   public public!: boolean;
+
+  @Comment('Ordinamento automatico')
+  @Default(false)
+  @Column(DataType.BOOLEAN)
+  public autoOrder!: boolean;
 
   // Virtual columns
   @Comment('Label')
