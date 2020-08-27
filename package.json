@@ -1,7 +1,7 @@
 {
   "name": "calcetto",
   "private": true,
-  "version": "2.3.1",
+  "version": "2.4.0",
   "description": "Table Soccer Manager",
   "keywords": [
     "react",
