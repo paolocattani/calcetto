@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import Select, { Styles, ValueType, ActionMeta } from 'react-select';
-import { valueFormatter } from './helper';
-// FIXME: import makeAnimated from 'react-select/animated';
 import { PlayerDTO } from 'redux/models';
 
 export interface PlayerSelectProps {
