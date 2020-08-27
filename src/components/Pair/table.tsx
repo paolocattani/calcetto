@@ -141,7 +141,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
   }
 
   // update players list when a player is selected
-  function updateOptions(player: PlayerDTO, selected: PlayerDTO) {
+  function updateOptions(player: PlayerDTO | undefined, selected: PlayerDTO) {
     if (player && player.id)
       if (selected.id)
         setData((current) => ({
@@ -162,38 +162,54 @@ const PairsTable: React.FC<PairTableProps> = () => {
       }));
   }
   // Aggiorno la colonna con il giocatore selezionato
-  const onSelect = (selectedElement: PlayerDTO, rowIndex: number, columnIndex: number) => {
-    const newRowsElement = data.rows.map((rowElement: { id: any }) => {
-      if (rowElement.id === rowIndex) {
-        let row: any = rowElement;
-        if (columnIndex === 1) {
-          if (selectedElement.id && row.player2 && row.player2.id === selectedElement.id) {
-            // Devo salvare l'elemnto che sto per sostituire
-            row.player1 = getEmptyPlayer();
-            showErrorMessage('Attenzione : Non puoi selezionare lo stesso giocare ! ');
+  const onSelect = async (selectedElement: PlayerDTO, rowIndex: number, columnIndex: number) => {
+    const newRowsElement = await Promise.all(
+      data.rows.map<Promise<PairDTO>>(async (rowElement) => {
+        if (rowElement.id === rowIndex) {
+          let row = rowElement;
+          if (columnIndex === 1) {
+            if (selectedElement.id && row.player2 && row.player2.id === selectedElement.id) {
+              // Devo salvare l'elemnto che sto per sostituire
+              row.player1 = getEmptyPlayer();
+              showErrorMessage('Attenzione : Non puoi selezionare lo stesso giocare ! ');
+            } else {
+              // Aggiorno la lista dei giocatori disponibili prima di aggiornare i dati
+              updateOptions(row.player1, selectedElement);
+              row.player1 = selectedElement;
+            }
           } else {
-            // Aggiorno la lista dei giocatori disponibili prima di aggiornare i dati
-            updateOptions(row.player1, selectedElement);
-            row.player1 = selectedElement;
+            if (selectedElement.id && row.player1 && row.player1.id === selectedElement.id) {
+              row.player2 = getEmptyPlayer();
+              showErrorMessage('Attenzione : Non puoi selezionare lo stesso giocare ! ');
+            } else {
+              updateOptions(row.player2, selectedElement);
+              row.player2 = selectedElement;
+            }
           }
-        } else {
-          if (selectedElement.id && row.player1 && row.player1.id === selectedElement.id) {
-            row.player2 = getEmptyPlayer();
-            showErrorMessage('Attenzione : Non puoi selezionare lo stesso giocare ! ');
-          } else {
-            updateOptions(row.player2, selectedElement);
-            row.player2 = selectedElement;
+          //
+          if (!row.alias && row.player1 && row.player1.id && row.player2 && row.player2.id) {
+            const response = await fetch(
+              `/api/v1/pair/alias?player1Id=${encodeURIComponent(row.player1.id)}&player2Id=${encodeURIComponent(
+                row.player2.id
+              )}`
+            );
+            const result = await response.json();
+            if (response.ok && result.alias) {
+              row.alias = result.alias;
+            } else {
+              row.alias = '';
+            }
           }
-        }
-        // update Db. Non aspetto la risposta...
-        fetch('/api/v1/pair', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(row),
-        });
-        return row;
-      } else return rowElement;
-    });
+          // update Db. Non aspetto la risposta...
+          fetch('/api/v1/pair', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(row),
+          });
+          return row;
+        } else return rowElement;
+      })
+    );
     setData((current) => ({
       rows: newRowsElement,
       players: current.players,
@@ -302,8 +318,11 @@ const PairsTable: React.FC<PairTableProps> = () => {
       await response.json();
       // Update tournament progress
       if (isAdmin) {
-        tournament.progress = TournamentProgress.PairsSelection;
-        dispatch(TournamentAction.updateTournament.request({ model: tournament }));
+        dispatch(
+          TournamentAction.updateTournament.request({
+            model: { ...tournament, progress: TournamentProgress.PairsSelection },
+          })
+        );
       }
       showSuccessMessage('Cancellazione completata');
       setAskUser(hideAskUser);

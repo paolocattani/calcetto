@@ -19,7 +19,6 @@ export const fetchPairs = (setterFunction: React.Dispatch<React.SetStateAction<P
   (async () => {
     const response = await fetch(`/api/v1/pair/list/?tId=${tId}`, {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
     });
     const result = await response.json();
     setterFunction(result);
@@ -30,7 +29,6 @@ export const valueFormatter = (selectedOption: PairDTO) =>
   selectedOption.alias ? `${selectedOption.alias}` : createAlias(selectedOption);
 
 export function createAlias(selectedOption: PairDTO) {
-  console.log('createAlias : ', selectedOption);
   let value = `${selectedOption.rowNumber} : `;
   const { player1, player2 } = selectedOption;
   value += player1!.alias ? player1!.alias : player1!.name;

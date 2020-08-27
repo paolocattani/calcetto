@@ -32,7 +32,7 @@ const FTournament = () => {
   // State definition
   const [newTournament, setNewTournament] = useState(false);
   useEffect(() => {
-    if (!tournamentsList) {
+    if (!tournamentsList || tournamentsList.length === 0) {
       dispatch(TournamentAction.fetchTournaments.request({}));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

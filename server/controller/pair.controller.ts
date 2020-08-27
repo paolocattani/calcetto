@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router, Request, Response, NextFunction, query } from 'express';
 import chalk from 'chalk';
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
@@ -26,11 +26,12 @@ router.get(
       const {
         query: { player1Id, player2Id },
       } = req;
+      logger.info('/alias : ', player1Id, player2Id, query);
       if (!player1Id || !player2Id) {
         return res.status(500).json({ message: 'Missing players' });
       }
       const alias = await findAlias(parseInt(player1Id as string), parseInt(player2Id as string));
-      return res.status(200).json(alias);
+      return res.status(200).json({ alias });
     } catch (err) {
       logger.error('/alias -> error: ', err);
       return res.sendStatus(300);

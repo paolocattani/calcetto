@@ -19,10 +19,7 @@ const PlayerSelection: React.FC<PlayerSelectProps> = React.forwardRef(
     const [selectedOption, setSelectedOption] = useState<PlayerDTO>();
 
     const handleChange = (selectedOption: ValueType<PlayerDTO>, actionMeta: ActionMeta<PlayerDTO>) => {
-      // selectedOption.pairId = id;
       setSelectedOption(selectedOption as PlayerDTO);
-      const value = valueFormatter(selectedOption);
-      onUpdate(value);
       onSelect(selectedOption, row.id, columnIndex);
     };
 
@@ -31,6 +28,8 @@ const PlayerSelection: React.FC<PlayerSelectProps> = React.forwardRef(
         styles={styles}
         options={options}
         onChange={handleChange}
+        getOptionLabel={(option) => option.alias}
+        getOptionValue={(option) => option.id?.toString(10)!}
         value={selectedOption}
         placeholder="Cerca..."
         isSearchable
