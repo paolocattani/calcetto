@@ -46,7 +46,7 @@ const PlayerTable: React.FC<PlayerProps> = () => {
             <span> Aggiungi giocatore</span>
           </Button>
         ) : null}
-        <Button variant="dark" onClick={clearAllFilter}>
+        <Button variant="dark" onClick={() => clearAllFilter(isAdmin)}>
           <BroomIcon />
           <span> Pulisci Filtri</span>
         </Button>
@@ -79,6 +79,7 @@ const PlayerTable: React.FC<PlayerProps> = () => {
     onSelectAll: (isSelected, rows) => rows.forEach((row) => handleOnSelect(row, isSelected)),
     style: { backgroundColor: '#c8e6c9' },
     hideSelectAll: !playersList.find((e) => e.editable),
+    hideSelectColumn: !isAdmin,
     selectColumnStyle: ({ checked, disabled, rowIndex, rowKey }) =>
       playersList[rowIndex].editable ? {} : { backgroundColor: '#dc3545' },
   };

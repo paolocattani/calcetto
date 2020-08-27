@@ -14,13 +14,15 @@ let roleFilter;
 let emailFilter;
 let phoneFilter;
 
-export function clearAllFilter() {
+export function clearAllFilter(isAdmin) {
   nameFilter('');
   surnameFilter('');
   aliasFilter('');
   roleFilter('');
-  emailFilter('');
-  phoneFilter('');
+  if (isAdmin) {
+    emailFilter('');
+    phoneFilter('');
+  }
 }
 
 export const filterFactory = filterTableFactory();
