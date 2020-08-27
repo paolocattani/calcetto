@@ -2,13 +2,13 @@ import { createReducer, Action } from 'typesafe-actions';
 import { TournamentAction } from '../actions/tournament.action';
 import { TournamentState } from 'redux/models/tournament.model';
 
-const initialState: TournamentState = {
+export const tournamentState: TournamentState = {
   tournament: null,
   tournamentsList: [],
   isLoading: false,
 };
 
-export const TournamentReducer = createReducer<TournamentState, Action>(initialState)
+export const TournamentReducer = createReducer<TournamentState, Action>(tournamentState)
   // Request
   .handleAction(
     [
@@ -38,8 +38,7 @@ export const TournamentReducer = createReducer<TournamentState, Action>(initialS
   // SUCCESS
   // Fetch Tournament
   .handleAction(TournamentAction.fetchTournaments.success, (state, { payload: { results } }) => ({
-    ...state,
-    tournament: results && results.length > 0 ? results[0] : state.tournament,
+    tournament: results && results.length > 0 ? results[0] : null,
     tournamentsList: results,
     isLoading: false,
   }))

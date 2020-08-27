@@ -2,11 +2,11 @@ import { createReducer, Action } from 'typesafe-actions';
 import { Stage2State } from 'redux/models';
 import { Stage2Action } from 'redux/actions';
 
-const initialState: Stage2State = {
+export const stage2State: Stage2State = {
   isLoading: false,
 };
 
-export const Stage2Reducer = createReducer<Stage2State, Action>(initialState)
+export const Stage2Reducer = createReducer<Stage2State, Action>(stage2State)
   // Request
   .handleAction([Stage2Action.fetchStage2.request, Stage2Action.delete.request], (state) => ({
     ...state,

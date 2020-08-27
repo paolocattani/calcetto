@@ -2,12 +2,12 @@ import { createReducer, Action } from 'typesafe-actions';
 import { PlayerState } from 'redux/models/player.model';
 import { PlayerAction } from 'redux/actions/player.action';
 
-const initialState: PlayerState = {
+export const playerState: PlayerState = {
   isLoading: false,
   playersList: [],
 };
 
-export const PlayerReducer = createReducer<PlayerState, Action>(initialState)
+export const PlayerReducer = createReducer<PlayerState, Action>(playerState)
   // Request
   .handleAction([PlayerAction.fetchPlayers.request, PlayerAction.savePlayer.request], (state) => ({
     ...state,

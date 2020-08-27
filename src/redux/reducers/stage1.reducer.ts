@@ -3,14 +3,14 @@ import { Stage1State, Stage1Row } from 'redux/models';
 import { Stage1Action } from 'redux/actions';
 import { getEmptyRowModel } from 'components/Pair/helper';
 
-const initialState: Stage1State = {
+export const stage1State: Stage1State = {
   needRefresh: false,
   selectedPairs: [getEmptyRowModel('-')],
   isLoading: false,
   stages: [],
 };
 
-export const Stage1Reducer = createReducer<Stage1State, Action>(initialState)
+export const Stage1Reducer = createReducer<Stage1State, Action>(stage1State)
   // Gestione Watcher
   // All'avvio del watcher reimposto needRefresh
   .handleAction([Stage1Action.stage1Watcher.request], (state) => ({ ...state, needRefresh: false }))

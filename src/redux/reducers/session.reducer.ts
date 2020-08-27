@@ -3,13 +3,13 @@ import { SessionState } from 'redux/models/session.model';
 import { SessionAction } from 'redux/actions/session.action';
 import { UserRole } from 'redux/models/user.model';
 
-const initialState: SessionState = {
+export const sessionState: SessionState = {
   isAuthenticated: false,
   isAdmin: false,
   isLoading: false,
 };
 
-export const SessionReducer = createReducer<SessionState, Action>(initialState)
+export const SessionReducer = createReducer<SessionState, Action>(sessionState)
   // Request
   .handleAction([SessionAction.checkAuthentication.request], (state) => ({
     ...state,
