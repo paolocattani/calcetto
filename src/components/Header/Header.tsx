@@ -5,9 +5,9 @@ import routes from '../core/routing/Routes';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { SessionSelector } from 'redux/selectors/session.selector';
-import { SessionAction } from 'redux/actions';
 import { HomeIcon } from 'components/core/icons';
 import { toast } from 'react-toastify';
+import { RootAction, SessionAction } from 'redux/actions';
 
 const applicationName = 'Calcetto C.S.M';
 
@@ -21,6 +21,7 @@ export const Header: React.FC = () => {
     if (response.ok) {
       toast.success('Alla prossima....');
       dispatch(SessionAction.updateSession({ user: undefined }));
+      dispatch(RootAction.logout());
     } else {
       toast.error('Qualcosa non ha funzionato...');
     }

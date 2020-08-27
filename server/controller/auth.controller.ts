@@ -1,6 +1,6 @@
 import '../core/env';
 import { logger } from '../core/logger';
-import { isDevMode } from '../core/debug';
+import { isDevMode, isProductionMode } from '../core/debug';
 
 import { Router, Request, Response, NextFunction } from 'express';
 import User from '../models/sequelize/user.model';
@@ -43,7 +43,15 @@ router.get(
   '/logout',
   withAuth,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
-    res.cookie('token', { expires: new Date(Date.now()), httpOnly: true });
+    res.cookie('token', {
+      expires: new Date(Date.now()),
+      ...(isProductionMode()
+        ? {
+            secure: true,
+            sameSite: 'none',
+          }
+        : { httpOnly: true }),
+    });
     return res.status(200).json({ message: 'logout complete' });
   })
 );

@@ -2,7 +2,7 @@ import { useInput } from '../core/hooks/InputHook';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import React from 'react';
 import { useHistory, RouteComponentProps, withRouter } from 'react-router-dom';
-import { SessionAction } from 'redux/actions';
+import { SessionAction, TournamentAction } from 'redux/actions';
 import { useDispatch } from 'react-redux';
 import { UserDTO } from 'redux/models/user.model';
 import { UserMessage } from 'redux/models';
@@ -42,6 +42,7 @@ const Login: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
         const message: UserMessage = { type: 'success', message: `Bentornato ${result.username} !` };
         toast.success(message.message);
         dispatch(SessionAction.updateSession({ user: result, message, showMessage: true }));
+        dispatch(TournamentAction.fetchTournaments.request({}));
         dispatch(
           SessionAction.sessionControl.request({
             history: currentHistory,

@@ -23,7 +23,7 @@ const FTournament = () => {
   // Redux
   const dispatch = useDispatch();
   const currentHistory = useHistory();
-  const session = useSelector(SessionSelector.getSession);
+  const isAdmin = useSelector(SessionSelector.isAdmin);
 
   // Tournament list from Db
   const tournamentsList = useSelector(TournamentSelector.getTournamentsList);
@@ -31,19 +31,17 @@ const FTournament = () => {
 
   // State definition
   const [newTournament, setNewTournament] = useState(false);
-
   useEffect(() => {
-    if (!tournamentsList || tournamentsList.length === 0) {
-      console.log('useEffect: ', tournamentsList);
+    if (!tournamentsList) {
       dispatch(TournamentAction.fetchTournaments.request({}));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [tournamentsList]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLElement>): Promise<void> => {
     event.preventDefault();
     if (tournament) {
-      if (session.isAdmin) {
+      if (isAdmin) {
         currentHistory.push('/tournament');
       } else {
         dispatch(PairAction.fetchPairs.request({ tId: tournament.id! }));
@@ -59,71 +57,84 @@ const FTournament = () => {
 
   // console.log('render tournament :', tournament, tournamentsList);
 
+  const cardBody = () => {
+    // Nessun torneo presente
+    if ((!tournamentsList || tournamentsList.length === 0) && !isAdmin) {
+      return (
+        <p className="text-white text-justify font-italic lead">
+          <strong>Nessun torneo presente. Riprova piu tardi o contatta un amminstratore.</strong>
+        </p>
+      );
+    }
+    if (isAdmin && newTournament) {
+      return <NewTournament />;
+    } else {
+      return (
+        <Form onSubmit={handleSubmit}>
+          <label htmlFor="tournamentSelect">Selezione Torneo</label>
+          <Select
+            id="tournamentSelect"
+            components={{ IndicatorSeparator }}
+            styles={customStyles}
+            value={tournament}
+            options={tournamentsList}
+            placeholder="Cerca un torneo"
+            isSearchable
+            getOptionLabel={getOptionLabel}
+            isClearable
+            onChange={(tournament: ValueType<TournamentDTO>) =>
+              dispatch(TournamentAction.setTournament(tournament as TournamentDTO))
+            }
+          />
+          <Button
+            type="submit"
+            size="lg"
+            variant="outline-warning"
+            className="float-right default-color-white"
+            disabled={!tournament}
+          >
+            <span style={{ fontSize: 'larger', fontWeight: 'bolder', padding: '1vw' }}>Prosegui</span>
+            <RightArrowIcon size="lg" />
+          </Button>
+        </Form>
+      );
+    }
+  };
+
+  const cardFooter = () =>
+    isAdmin ? (
+      newTournament ? (
+        <Button
+          type="button"
+          size="lg"
+          variant="outline-warning"
+          className="float-left default-color-white"
+          onClick={() => onNewTournament(false)}
+        >
+          Seleziona un torneo
+        </Button>
+      ) : (
+        <Button
+          type="button"
+          size="lg"
+          variant="outline-warning"
+          className="float-left default-color-white"
+          onClick={() => onNewTournament(true)}
+        >
+          Crea un nuovo torneo
+        </Button>
+      )
+    ) : null;
+
   return (
     <>
       <Col md={{ span: '6', offset: '3' }} sm="12">
         <Card style={cardStyle}>
           <Card.Header as="h2">Torneo</Card.Header>
           <Card.Body>
-            <Col>
-              {session.isAdmin && newTournament ? (
-                <NewTournament />
-              ) : (
-                <Form onSubmit={handleSubmit}>
-                  <label htmlFor="tournamentSelect">Selezione Torneo</label>
-                  <Select
-                    id="tournamentSelect"
-                    components={{ IndicatorSeparator }}
-                    styles={customStyles}
-                    value={tournament}
-                    options={tournamentsList}
-                    placeholder="Cerca un torneo"
-                    isSearchable
-                    getOptionLabel={getOptionLabel}
-                    isClearable
-                    onChange={(tournament: ValueType<TournamentDTO>) =>
-                      dispatch(TournamentAction.setTournament(tournament as TournamentDTO))
-                    }
-                  />
-                  <Button
-                    type="submit"
-                    size="lg"
-                    variant="outline-warning"
-                    className="float-right default-color-white"
-                    disabled={!tournament}
-                  >
-                    <span style={{ fontSize: 'larger', fontWeight: 'bolder', padding: '1vw' }}>Prosegui</span>
-                    <RightArrowIcon size="lg" />
-                  </Button>
-                </Form>
-              )}
-            </Col>
+            <Col>{cardBody()}</Col>
           </Card.Body>
-          <Card.Footer>
-            {session.isAdmin ? (
-              newTournament ? (
-                <Button
-                  type="button"
-                  size="lg"
-                  variant="outline-warning"
-                  className="float-left default-color-white"
-                  onClick={() => onNewTournament(false)}
-                >
-                  Seleziona un torneo
-                </Button>
-              ) : (
-                <Button
-                  type="button"
-                  size="lg"
-                  variant="outline-warning"
-                  className="float-left default-color-white"
-                  onClick={() => onNewTournament(true)}
-                >
-                  Crea un nuovo torneo
-                </Button>
-              )
-            ) : null}
-          </Card.Footer>
+          <Card.Footer>{cardFooter()}</Card.Footer>
         </Card>
       </Col>
     </>

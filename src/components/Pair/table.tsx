@@ -496,10 +496,10 @@ const PairsTable: React.FC<PairTableProps> = () => {
         </Col>
       </Row>
       {isAdmin && tournament.progress < TournamentProgress.PairsSelection ? (
-        <Row>
+        <>
           {assignMatches()}
           {addPairs()}
-        </Row>
+        </>
       ) : null}
     </div>
   );

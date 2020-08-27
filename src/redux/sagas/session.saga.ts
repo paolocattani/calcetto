@@ -1,4 +1,4 @@
-import { put, call, StrictEffect, takeEvery, take, takeLatest } from 'redux-saga/effects';
+import { put, call, StrictEffect, takeEvery, take, takeLatest, fork } from 'redux-saga/effects';
 import { SessionAction } from 'redux/actions/session.action';
 import { AuthenticationResponse } from 'redux/models';
 import { CheckAuthentication, createSessionChannel, Message } from 'redux/services/session.service';
@@ -11,7 +11,7 @@ function* checkAuthenticationSaga({
   try {
     const response: AuthenticationResponse = yield call(CheckAuthentication, payload);
     yield put(SessionAction.checkAuthentication.success(response));
-    yield put(SessionAction.sessionControl.request({ history: payload.history }));
+    yield fork(SessionAction.sessionControl.request, { history: payload.history });
   } catch (err) {
     yield put(SessionAction.checkAuthentication.failure(err));
   }

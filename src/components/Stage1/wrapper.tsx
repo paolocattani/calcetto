@@ -1,7 +1,7 @@
 // React, Router, Redux
 import { useHistory } from 'react-router';
 import { withRouter } from 'react-router-dom';
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // Models
 import { PairDTO, TournamentProgress } from '../../redux/models';
