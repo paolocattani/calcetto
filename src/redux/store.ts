@@ -17,7 +17,8 @@ import { TournamentsSagas, PlayersSagas, PairsSagas, SessionSagas, Stage2Sagas, 
 // https://redux-saga.js.org/docs/introduction/BeginnerTutorial.html
 // custom compose for the redux devtool extension
 const composeEnhancers =
-  ((window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
+  (process.env.NODE_ENV !== 'production' &&
+    (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
     (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
       trace: true,
       traceLimit: 25,

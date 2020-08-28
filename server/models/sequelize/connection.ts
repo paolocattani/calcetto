@@ -25,6 +25,14 @@ export default async function syncDb(Options?: SyncOptions): Promise<Sequelize> 
   const connectionOptions: SequelizeOptions = {
     logging: envConfig.logging,
     dialect: 'postgres',
+    dialectOptions: isProductionMode()
+      ? {
+          ssl: {
+            require: true,
+            rejectUnauthorized: false,
+          },
+        }
+      : undefined,
     models: [__dirname + '/*.model.ts'],
     modelMatch: (filename: string, member: string) =>
       filename.substring(0, filename.indexOf('.model')) === member.toLowerCase(),
