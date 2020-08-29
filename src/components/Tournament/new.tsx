@@ -32,8 +32,7 @@ const NewTournament: React.FC<newTProps> = (_) => {
     model.public = visible;
     const { isValid, errorMessage } = await isValidTournament({ model });
     if (isValid) {
-      dispatch(TournamentAction.saveTournament.request({ model }));
-      currentHistory.push('/tournament');
+      dispatch(TournamentAction.saveTournament.request({ model, history: currentHistory }));
     } else {
       toast.error(errorMessage);
     }

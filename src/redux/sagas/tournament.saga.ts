@@ -21,6 +21,7 @@ function* saveTournamentSaga(
   try {
     const response: PostTournamentResponse = yield call(postTournament, action.payload);
     yield put(TournamentAction.saveTournament.success(response));
+    action.payload.history.push('/tournament');
   } catch (err) {
     yield put(TournamentAction.saveTournament.failure(err));
   }

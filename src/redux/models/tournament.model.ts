@@ -1,3 +1,5 @@
+import * as H from 'history';
+
 // Requests
 export interface FetchTournamentsRequest {
   tId?: number;
@@ -5,6 +7,7 @@ export interface FetchTournamentsRequest {
 
 export interface PostTournamentRequest {
   model: TournamentDTO;
+  history: H.History<unknown>;
 }
 
 export interface UpdateTournamentRequest {
