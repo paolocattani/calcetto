@@ -1,5 +1,5 @@
 import React, { CSSProperties } from 'react';
-import { Row, Col, Badge } from 'react-bootstrap';
+import { Badge } from 'react-bootstrap';
 
 interface AppBadgeProps {}
 const AppBadge: React.FC<AppBadgeProps> = () => {
