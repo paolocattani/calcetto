@@ -1,7 +1,7 @@
 {
   "name": "calcetto",
   "private": true,
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "Table Soccer Manager",
   "keywords": [
     "react",
@@ -104,6 +104,7 @@
     "prod:heroku:server": "./node_modules/.bin/ts-node --project ./server/tsconfig.json ./server/server.ts  server.js --optimize_for_size --max_old_space_size=460 --gc_interval=100",
     "prod:heroku:client": "node --optimize_for_size --max_old_space_size=460 -gc_interval=100 node_modules/.bin/react-scripts build",
     "start": "npm run prod:heroku:server",
+    "build":"./build.sh",
     "CRA:start": "react-scripts start",
     "CRA:build": "react-scripts build",
     "CRA:test": "react-scripts test",

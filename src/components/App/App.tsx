@@ -20,6 +20,7 @@ import { SessionAction } from 'redux/actions';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './toast.css';
+import AppBadge from './badge';
 
 library.add(fas, far);
 
@@ -48,6 +49,7 @@ const App: React.FC = (_) => {
               ))}
             </Switch>
           </Suspense>
+          <AppBadge />
         </Container>
       </ErrorBoundary>
     </div>
