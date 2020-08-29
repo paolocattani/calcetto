@@ -31,7 +31,7 @@ jobs:
         run: npm ci
       # Build client
       - name: Build client
-        run: npm run CRA:build
+        run: sh ./build.sh
       # Build server
       - name: Build server
         run: npm run prod:build:server
