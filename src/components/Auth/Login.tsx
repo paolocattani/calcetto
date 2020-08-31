@@ -8,12 +8,10 @@ import { UserDTO } from 'redux/models/user.model';
 import { UserMessage } from 'redux/models';
 import { toast } from 'react-toastify';
 
-interface PropsType extends RouteComponentProps {
-  setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
-}
+interface PropsType extends RouteComponentProps {}
 
 // https://medium.com/@faizanv/authentication-for-your-react-and-express-application-w-json-web-tokens-923515826e0#6563
-const Login: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
+const Login: React.FC<PropsType> = (): JSX.Element => {
   const dispatch = useDispatch();
   const currentHistory = useHistory();
 
