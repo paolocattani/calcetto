@@ -1,9 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import App from '../components/App/App';
-
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<App />, div);
-  ReactDOM.unmountComponentAtNode(div);
+import { shallow } from 'enzyme';
+import Entry from 'components/App/Entry';
+test('renders the component', () => {
+  const component = shallow(<Entry />);
+  expect(component).toMatchSnapshot();
 });

@@ -1,29 +1,20 @@
-import React, { StrictMode } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'typeface-roboto';
-import App from './components/App/App';
+
 import * as serviceWorker from './serviceWorker';
-import { BrowserRouter } from 'react-router-dom';
+
 import it from 'date-fns/locale/it';
 import { setDefaultLocale, registerLocale } from 'react-datepicker';
-import { store } from './redux/store';
-import { Provider } from 'react-redux';
+
+import Entry from './components/App/Entry';
 
 setDefaultLocale('it');
 registerLocale('it', it);
 
-ReactDOM.render(
-  <StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </Provider>
-  </StrictMode>,
-  document.getElementById('root')
-);
+ReactDOM.render(<Entry />, document.getElementById('root'));
 
 // Learn more about service workers: https://bit.ly/CRA-PWA
 process.env.NODE_ENV !== 'production' ? serviceWorker.unregister() : serviceWorker.register();
