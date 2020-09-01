@@ -5,7 +5,6 @@ import { useHistory, RouteComponentProps, withRouter } from 'react-router-dom';
 import { SessionAction, TournamentAction } from 'redux/actions';
 import { useDispatch } from 'react-redux';
 import { UserDTO } from 'redux/models/user.model';
-import { UserMessage } from 'redux/models';
 import { toast } from 'react-toastify';
 
 interface PropsType extends RouteComponentProps {}
@@ -36,9 +35,8 @@ const Login: React.FC<PropsType> = (): JSX.Element => {
       const result: UserDTO = await response.json();
       if (response.ok && result) {
         // Messaggio di benvenuto
-        const message: UserMessage = { type: 'success', message: `Bentornato ${result.username} !` };
-        toast.success(message.message);
-        dispatch(SessionAction.updateSession({ user: result, message, showMessage: true }));
+        toast.success(`Bentornato ${result.username} !`);
+        dispatch(SessionAction.updateSession({ user: result }));
         dispatch(TournamentAction.fetchTournaments.request({}));
         dispatch(
           SessionAction.sessionControl.request({

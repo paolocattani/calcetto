@@ -9,12 +9,10 @@ import { UserDTO } from 'redux/models/user.model';
 import { SessionAction } from 'redux/actions';
 import { useDispatch } from 'react-redux';
 import { withRouter, RouteComponentProps, useHistory } from 'react-router-dom';
-import { PlayerRole, UserMessage } from 'redux/models';
+import { PlayerRole } from 'redux/models';
 import { toast } from 'react-toastify';
 
-interface PropsType extends RouteComponentProps {
-  setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
-}
+interface PropsType extends RouteComponentProps {}
 
 type PlayerRoleType = {
   value: PlayerRole;
@@ -28,7 +26,7 @@ const playerRoles: ReadonlyArray<PlayerRoleType> = [
 ];
 
 // https://medium.com/@faizanv/authentication-for-your-react-and-express-application-w-json-web-tokens-923515826e0#6563
-const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
+const Register: React.FC<PropsType> = (): JSX.Element => {
   const dispatch = useDispatch();
   const currentHistory = useHistory();
   const { value: username, bind: bindUsername, reset: resetUsername } = useInput<string>('');
@@ -128,8 +126,7 @@ const Register: React.FC<PropsType> = ({ setErrorMessage }): JSX.Element => {
       const result: UserDTO = await response.json();
       if (response.ok && result) {
         // Messaggio di benvenuto
-        const message: UserMessage = { type: 'success', message: `Benvenuto ${result.username} !` };
-        toast.success(message.message);
+        toast.success(`Benvenuto ${result.username} !`);
         dispatch(SessionAction.updateSession({ user: result }));
         dispatch(SessionAction.sessionControl.request({ history: currentHistory }));
       } else {

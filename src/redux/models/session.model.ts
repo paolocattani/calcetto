@@ -1,5 +1,5 @@
 import { UserDTO } from './user.model';
-import { PlayerRole, UserMessage } from 'redux/models';
+import { PlayerRole } from 'redux/models';
 import * as H from 'history';
 
 export interface SessionState {
@@ -35,8 +35,6 @@ export interface RegisterRequest {}
 // Response
 export interface AuthenticationResponse {
   user?: UserDTO;
-  message?: UserMessage;
-  showMessage?: boolean;
 }
 
 // Error

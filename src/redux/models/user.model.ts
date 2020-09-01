@@ -12,7 +12,7 @@ export interface UserDTO {
   role: UserRole;
   birthday: Date;
   label: string;
-  player: PlayerDTO;
+  player?: PlayerDTO;
 }
 export enum UserRole {
   Admin = 'Admin',

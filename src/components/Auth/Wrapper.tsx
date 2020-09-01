@@ -1,5 +1,5 @@
 import React, { useState, CSSProperties, lazy } from 'react';
-import { Button, Container, Alert, Card, Col } from 'react-bootstrap';
+import { Button, Container, Card, Col } from 'react-bootstrap';
 import { ToggleOn, ToggleOff } from '../core/icons';
 
 const Login = lazy(() => import('./Login'));
@@ -8,23 +8,10 @@ const Register = lazy(() => import('./Register'));
 const AuthWrapper: React.FC = (): JSX.Element => {
   // State
   const [register, setRegister] = useState(false); // Mostra form registrazione/login
-  const [errorMessage, setErrorMessage] = useState('');
 
-  const [title, body, buttonString] = register
-    ? [
-        'Registrati',
-        <Register setErrorMessage={setErrorMessage} />,
-        <>
-          <ToggleOn /> <strong>Login</strong>
-        </>,
-      ]
-    : [
-        'Login',
-        <Login setErrorMessage={setErrorMessage} />,
-        <>
-          <ToggleOff /> <strong>Registrati</strong>
-        </>,
-      ];
+  const [title, body, icon, text] = register
+    ? ['Registrati', <Register />, <ToggleOn />, 'Login']
+    : ['Login', <Login />, <ToggleOff />, 'Registrati'];
 
   const modalStyle: CSSProperties = {
     textAlign: 'left',
@@ -36,18 +23,12 @@ const AuthWrapper: React.FC = (): JSX.Element => {
       <Card style={modalStyle} className="default-background">
         <Card.Header as="h2">{title}</Card.Header>
         <Card.Body>
-          <Container>
-            {errorMessage ? (
-              <Alert key={'auth-alert'} variant={'danger'}>
-                {errorMessage}
-              </Alert>
-            ) : null}
-            {body}
-          </Container>
+          <Container>{body}</Container>
         </Card.Body>
         <Card.Footer>
           <Button size="lg" variant="outline-warning" onClick={() => setRegister(!register)}>
-            {buttonString}
+            {icon}
+            <strong>{text}</strong>
           </Button>
         </Card.Footer>
       </Card>
