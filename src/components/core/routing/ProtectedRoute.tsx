@@ -26,7 +26,7 @@ export const ProtectedRoute: React.FC<routeType> = (props) => {
         // Se non è una rotta protetta
         if (!props.private) {
           console.log('ProtectedRoute => public route : ', { ...props });
-          return <props.ComponentToRender {...props} />;
+          return <props.componentToRender {...props} />;
         }
 
         // Se è una rotta privata e non sono autenticato devo andare alla login
@@ -39,7 +39,7 @@ export const ProtectedRoute: React.FC<routeType> = (props) => {
          * e che non sto chiedendo di andare alla login. Quindi direi che posso andare dove voglio...
          */
         console.log('ProtectedRoute => render component : ', getLabelByPathname(location.pathname));
-        return <props.ComponentToRender {...props} />;
+        return <props.componentToRender {...props} />;
       }}
     />
   );

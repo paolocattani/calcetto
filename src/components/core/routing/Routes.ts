@@ -15,7 +15,7 @@ export interface routeType {
   path: string;
   label: string;
   exact: boolean;
-  ComponentToRender: React.ComponentType;
+  componentToRender: React.ComponentType;
   visible: boolean;
   index: number;
   private: boolean;
@@ -27,7 +27,7 @@ export const routes: routeType[] = [
     path: '/login',
     label: 'Login',
     exact: true,
-    ComponentToRender: lazyLogin,
+    componentToRender: lazyLogin,
     visible: false,
     private: false,
     index: 0,
@@ -36,7 +36,7 @@ export const routes: routeType[] = [
     path: '/',
     label: 'Home',
     exact: true,
-    ComponentToRender: lazyTournament,
+    componentToRender: lazyTournament,
     visible: false,
     private: true,
     index: 10,
@@ -45,7 +45,7 @@ export const routes: routeType[] = [
     path: '/tournament',
     label: 'Selezione Coppie',
     exact: true,
-    ComponentToRender: lazyPairs,
+    componentToRender: lazyPairs,
     visible: false,
     private: true,
     index: 20,
@@ -54,7 +54,7 @@ export const routes: routeType[] = [
     path: '/stage1',
     label: 'Torneo fase 1',
     exact: true,
-    ComponentToRender: lazyStage1,
+    componentToRender: lazyStage1,
     visible: false,
     private: true,
     index: 30,
@@ -63,7 +63,7 @@ export const routes: routeType[] = [
     path: '/player',
     label: 'Gestione Giocatori',
     exact: true,
-    ComponentToRender: lazyPlayer,
+    componentToRender: lazyPlayer,
     visible: true,
     private: true,
     index: 40,
@@ -72,7 +72,7 @@ export const routes: routeType[] = [
     path: '/user',
     label: 'Gestione Utente',
     exact: true,
-    ComponentToRender: lazyUser,
+    componentToRender: lazyUser,
     visible: false,
     private: true,
     index: 50,
@@ -81,7 +81,7 @@ export const routes: routeType[] = [
     path: '/stage2',
     label: 'Torneo fase 2',
     exact: true,
-    ComponentToRender: lazyStage2 as any,
+    componentToRender: lazyStage2 as any,
     visible: false,
     private: true,
     index: 100,
@@ -91,7 +91,7 @@ export const routes: routeType[] = [
     path: '*',
     label: 'Not Found',
     exact: false,
-    ComponentToRender: lazyRedirectionControl,
+    componentToRender: lazyRedirectionControl,
     visible: false,
     private: true,
     index: 1000,
