@@ -19,6 +19,7 @@
     "isolatedModules": true,
     "strict": true,
     "noImplicitAny": true,
+    "downlevelIteration": true,
     "plugins": [
       {
         "name": "typescript-tslint-plugin"

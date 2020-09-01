@@ -1,4 +1,4 @@
-import { Application as ExpressApplication, Request } from 'express';
+import { Application as ExpressApplication, Response, Request, NextFunction } from 'express';
 
 // Models
 import { UserDTO } from '../models/dto/user.dto';
@@ -16,6 +16,7 @@ export interface AppRequest extends Request {
   user?: UserDTO;
 }
 export default (application: ExpressApplication): void => {
+  // Endpoints
   application.use('/api/v1/tournament', tournamentRouter);
   application.use('/api/v1/player', playerRouter);
   application.use('/api/v1/stage1', stage1Router);
@@ -23,5 +24,12 @@ export default (application: ExpressApplication): void => {
   application.use('/api/v1/pair', pairRouter);
   application.use('/api/v1/auth', authRouter);
 
+  // SSE
   application.get('/sse/v1/session', sessionControl);
+
+  // Test
+  application.get('/status', (req: Request, res: Response, next: NextFunction) =>
+    // eslint-disable-next-line quotes
+    res.status(200).json({ code: 200, message: `What's up? I was sleeping...` })
+  );
 };

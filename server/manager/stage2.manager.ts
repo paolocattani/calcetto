@@ -2,13 +2,10 @@ import { logProcess, logger } from '../core/logger';
 // Db
 import { dbConnection } from '../models/server/AppServer';
 // Models
-import { UserDTO } from '../models/dto/user.dto';
-import { Stage2, Pair } from '../models/sequelize/index';
-import { IStage2FE, ICell } from '../models/dto/stage2.dto';
+import { Stage2, Pair } from '../models/sequelize';
+import { IStage2FE, ICell, PairDTO, UserDTO } from '../models/dto';
 import { isAdmin } from './auth.manager';
 import { rowToModel } from './pair.manager';
-import { PairDTO } from 'models/dto/pair.dto';
-import { logEntity } from '../core/utils';
 import { WhereOptions } from 'sequelize';
 
 const className = 'Stage2 Manager : ';

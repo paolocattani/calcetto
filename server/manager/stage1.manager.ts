@@ -1,15 +1,13 @@
 // Models
-import Pair from '../models/sequelize/pair.model';
-import Stage1Model from '../models/sequelize/stage1.model';
+import { Pair, Stage1 } from '../models/sequelize';
+import { Stage1Row, UserDTO } from '../models/dto';
 // Core
 import { logProcess, logger } from '../core/logger';
 import { asyncForEach } from '../core/utils';
-import { Stage1Row } from 'models/dto/stage1.dto';
 //
 import { dbConnection } from '../models/server/AppServer';
 import { isAdmin } from '../manager/auth.manager';
 //
-import { UserDTO } from 'models/dto/user.dto';
 import { Op } from 'sequelize';
 
 const className = 'Stage1 Manager : ';
@@ -31,7 +29,7 @@ export const updatePlacement = async (mapper: { id: number; placement: number }[
 export const deleteStage1 = async (tournamentId: number) => {
   logProcess(className + 'deleteStage1', 'start');
   try {
-    await Stage1Model.destroy({ where: { tournamentId } });
+    await Stage1.destroy({ where: { tournamentId } });
   } catch (error) {
     logProcess(className + 'deleteStage1', 'error');
     logger.error('deleteStage1 : ', error);
@@ -49,7 +47,7 @@ export const updateCell = async (
   logProcess(className + 'updateCell', 'start');
   try {
     logger.info('updateCell : ', tournamentId, name, pair1Id, pair2Id, score);
-    const record = await Stage1Model.findOne({
+    const record = await Stage1.findOne({
       where: {
         [Op.or]: [{ [Op.and]: { pair1Id, pair2Id } }, { [Op.and]: { pair1Id: pair2Id, pair2Id: pair1Id } }],
         name,
@@ -117,11 +115,11 @@ export const generateStage1Rows = async (rows: Stage1Row[], stageName: string, u
                 name: stageName,
                 tournamentId,
               };
-              const include = [Stage1Model.associations.pair1, Stage1Model.associations.pair2];
+              const include = [Stage1.associations.pair1, Stage1.associations.pair2];
               let record = null;
               let created = false;
               if (isEditable) {
-                [record, created] = await Stage1Model.findOrCreate({
+                [record, created] = await Stage1.findOrCreate({
                   where,
                   defaults: model,
                   transaction,
@@ -129,7 +127,7 @@ export const generateStage1Rows = async (rows: Stage1Row[], stageName: string, u
                   // FIXME:
                   include,
                 });
-              } else record = await Stage1Model.findOne({ where, transaction, include });
+              } else record = await Stage1.findOne({ where, transaction, include });
 
               // if (stageName === '1') logger.info('model : ', created, record);
               if (!created && record) {

@@ -1,9 +1,8 @@
 // Session
 import { Response } from 'express';
 // Models/Types
-import Player from 'models/sequelize/player.model';
-import { UserDTO, UserRole } from '../models/dto/user.dto';
-import User from '../models/sequelize/user.model';
+import { Player, User } from '../models/sequelize';
+import { UserDTO, UserRole, PlayerRole } from '../models/dto';
 // Logger utils
 import { logProcess, logger } from '../core/logger';
 // Password
@@ -12,7 +11,6 @@ import bcrypt from 'bcrypt';
 // managers
 import * as playerManager from './player.manager';
 import { Op } from 'sequelize';
-import { PlayerRole } from 'models/dto/player.dto';
 import { lowerWrapper } from '../core/utils';
 import { isProductionMode } from '../core/debug';
 

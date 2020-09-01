@@ -1,6 +1,6 @@
 import { Response, NextFunction } from 'express';
 // Controllers
-import { AppRequest } from 'controller';
+import { AppRequest } from '../controller';
 // Core
 import { logger } from '../core/logger';
 import { asyncMiddleware, safeVerifyToken } from '../core/middleware';
@@ -26,6 +26,7 @@ export const sessionControl = asyncMiddleware(async (req: AppRequest, res: Respo
   logger.info(`New User connected . Total connected : ${connectedClients.length}`);
   // Controllo ogni 5 secondi
   // https://gist.github.com/akirattii/257d7efc8430c7e3fd0b4ec60fc7a768
+  //@ts-ignore
   intervalId = setInterval(() => {
     // Serve per evitare il timeout
     res.write(`:${EOM}`, CHAR_SET);

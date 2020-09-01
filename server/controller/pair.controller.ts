@@ -4,11 +4,11 @@ import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 import { dbConnection } from '../models/server/AppServer';
 // Models
-import Pair from '../models/sequelize/pair.model';
+import { Pair } from '../models/sequelize';
+import { PairDTO } from '../models/dto';
 import { asyncMiddleware, withAuth } from '../core/middleware';
-import { AppRequest } from 'controller';
+import { AppRequest } from './index';
 import { listInTournament, findAlias } from '../manager/pair.manager';
-import { PairDTO } from 'models/dto';
 import { missingParamsResponse } from './common';
 
 const router = Router();
