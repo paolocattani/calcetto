@@ -13,16 +13,27 @@
   - Style :
     - Framework : [Bootstrap 4](https://getbootstrap.com/)
     - Icons : [Fontawesome 5](https://github.com/FortAwesome/react-fontawesome)
+    - Notifications : [React Toastify](https://github.com/fkhadra/react-toastify#readme)
+    - Tables : [React Bootstrap Table](https://github.com/react-bootstrap-table/react-bootstrap-table2#readme)
   - State Managment : [Redux]()
     - Middleware : [Saga](https://redux-saga.js.org/)
     - Persistance : [Redux Persist](https://github.com/rt2zz/redux-persist#readme)
       - Storage : [Localforage](https://github.com/localForage/localForage)
   - Misc :
     - [Jokes](https://sv443.net/jokeapi/v2/)
-    -
+  - Test :
+    - TODO:
+
 ### Backend
   - [Express](https://expressjs.com/)
+    - [cookie parser](https://github.com/expressjs/cookie-parser#readme)
+    - [helmet](https://helmetjs.github.io/)
+    - [web token](https://github.com/auth0/node-jsonwebtoken#readme)
+    - [nodemon](http://nodemon.io)
+    - [concurrently](https://github.com/kimmobrunfeldt/concurrently#readme)
+    - [bcrypt](https://github.com/kelektiv/node.bcrypt.js#readme)
   - ORM : [Sequelize](https://sequelize.org/)
+    - [Sequelize typescript](https://github.com/RobinBuschmann/sequelize-typescript#readme)
   - Db : [Postgres](https://www.postgresql.org/)
   - Logger : [Log4js](https://log4js-node.github.io/log4js-node/)
 
