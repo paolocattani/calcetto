@@ -5,29 +5,41 @@ import { useSelector } from 'react-redux';
 import { SessionSelector } from 'redux/selectors/session.selector';
 import './style.css';
 
+const modalStyle: CSSProperties = { color: 'whitesmoke', backgroundColor: '#343a40', borderColor: '#ffc107' };
+const fancyModalFooter = (
+  <>
+    <Spinner animation="border" variant="light" />
+    <Spinner animation="border" variant="primary" />
+    <Spinner animation="border" variant="secondary" />
+    <Spinner animation="border" variant="success" />
+    <Spinner animation="border" variant="danger" />
+    <Spinner animation="border" variant="warning" />
+    <Spinner animation="border" variant="info" />
+    <Spinner animation="border" variant="dark" />
+  </>
+);
 // Loading Modal
-type loadingModalPropsType = {
+interface LoadingModalPropsType {
   show: boolean;
+  title?: string;
   message?: string;
   onHide?: () => void;
-};
+}
 
-export const LoadingModal: React.FC<loadingModalPropsType> = ({ message, show, onHide = () => (show = false) }) => (
-  <Modal show={show} onHide={onHide} size="xl" centered>
-    <Modal.Header closeButton>
-      <Modal.Title>Caricamento....</Modal.Title>
+export const LoadingModal: React.FC<LoadingModalPropsType> = ({
+  title = 'Caricamento....',
+  message = 'Caricamento....',
+  show,
+  onHide = () => (show = false),
+}) => (
+  <Modal show={show} onHide={onHide} size="lg" centered style={{ borderColor: '#ffc107', borderWidth: '3px' }}>
+    <Modal.Header closeButton style={modalStyle}>
+      <Modal.Title>{title}</Modal.Title>
     </Modal.Header>
-    <Modal.Body>{message ? message : 'Caricamento....'}</Modal.Body>
-    <Modal.Footer>
-      <Spinner animation="border" variant="light" />
-      <Spinner animation="border" variant="primary" />
-      <Spinner animation="border" variant="secondary" />
-      <Spinner animation="border" variant="success" />
-      <Spinner animation="border" variant="danger" />
-      <Spinner animation="border" variant="warning" />
-      <Spinner animation="border" variant="info" />
-      <Spinner animation="border" variant="dark" />
-    </Modal.Footer>
+    <Modal.Body className="text-center font-weight-bold" style={modalStyle}>
+      {message}
+    </Modal.Body>
+    <Modal.Footer style={modalStyle}>{fancyModalFooter}</Modal.Footer>
   </Modal>
 );
 
@@ -39,7 +51,6 @@ export interface YesNoModalProps {
   onClick: () => void;
 }
 
-const modalStyle: CSSProperties = { color: 'whitesmoke', backgroundColor: '#343a40', borderColor: '#ffc107' };
 export const YesNoModal: React.FC<YesNoModalProps> = ({
   title,
   message,
@@ -74,16 +85,7 @@ export const YesNoModal: React.FC<YesNoModalProps> = ({
         </Row>
       </Container>
     </Modal.Body>
-    <Modal.Footer style={modalStyle}>
-      <Spinner animation="border" variant="light" />
-      <Spinner animation="border" variant="primary" />
-      <Spinner animation="border" variant="secondary" />
-      <Spinner animation="border" variant="success" />
-      <Spinner animation="border" variant="danger" />
-      <Spinner animation="border" variant="warning" />
-      <Spinner animation="border" variant="info" />
-      <Spinner animation="border" variant="dark" />
-    </Modal.Footer>
+    <Modal.Footer style={modalStyle}>{fancyModalFooter}</Modal.Footer>
   </Modal>
 );
 
