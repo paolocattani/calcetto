@@ -5,6 +5,28 @@
 ![Code Quality](https://www.code-inspector.com/project/11107/score/svg)
 ![Code Grade](https://www.code-inspector.com/project/11107/status/svg)
 
+## Technologies in this project
+### Frontend
+  - [Reactjs](https://reactjs.org/)
+  - [Typescript](https://www.typescriptlang.org/)
+  - Routing : [React Router](https://github.com/ReactTraining/react-router#readme)
+  - Style :
+    - Framework : [Bootstrap 4](https://getbootstrap.com/)
+    - Icons : [Fontawesome 5](https://github.com/FortAwesome/react-fontawesome)
+  - State Managment : [Redux]()
+    - Middleware : [Saga](https://redux-saga.js.org/)
+    - Persistance : [Redux Persist](https://github.com/rt2zz/redux-persist#readme)
+      - Storage : [Localforage](https://github.com/localForage/localForage)
+  - Misc :
+    - [Jokes](https://sv443.net/jokeapi/v2/)
+    -
+### Backend
+  - [Express](https://expressjs.com/)
+  - ORM : [Sequelize](https://sequelize.org/)
+  - Db : [Postgres](https://www.postgresql.org/)
+  - Logger : [Log4js](https://log4js-node.github.io/log4js-node/)
+
+
 ## Development
 
   Backend runs with [nodemon](https://www.npmjs.com/package/nodemon) and [ts-node](https://www.npmjs.com/package/ts-node) to enable live reload along with typescript compilations.
@@ -32,6 +54,7 @@
 ## Production
   ```bash
   # Build client
+  # This script update versions on .env file before they are bundled in build
   sh ./build.sh
 
   # Build server
@@ -46,3 +69,5 @@
   -----
   - Test : E2E - [jest-test-express-react](https://spin.atomicobject.com/2020/04/22/jest-test-express-react/)
   - Test : Redux - [Test connected component](https://www.robinwieruch.de/react-connected-component-test)
+  -----
+  - Shell : sed - [Substitute variable using sed](https://zhu45.org/posts/2016/Dec/21/environment-variable-substitution-using-sed/)
