@@ -13,9 +13,31 @@ exports[`Application  should render correctly 1`] = `
       }
     }
   >
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <PersistGate
+      loading={
+        <Unknown
+          message="....Caricamento"
+          show={true}
+        />
+      }
+      persistor={
+        Object {
+          "dispatch": [Function],
+          "flush": [Function],
+          "getState": [Function],
+          "pause": [Function],
+          "persist": [Function],
+          "purge": [Function],
+          "replaceReducer": [Function],
+          "subscribe": [Function],
+          Symbol(observable): [Function],
+        }
+      }
+    >
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </PersistGate>
   </Provider>
 </StrictMode>
 `;

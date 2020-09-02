@@ -1,12 +1,12 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import Login from '../components/Auth/Login';
 import { shallowToJson } from 'enzyme-to-json';
 import configureStore from 'redux-mock-store';
-import renderer from 'react-test-renderer';
 
 import { initialState } from './commons';
 import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
 
 const mockStore = configureStore([]);
 describe('<Login />', () => {
@@ -14,9 +14,11 @@ describe('<Login />', () => {
   let component: any;
   beforeEach(() => {
     store = mockStore(initialState);
-    component = renderer.create(
+    component = shallow(
       <Provider store={store}>
-        <Login />
+        <MemoryRouter initialEntries={['/']}>
+          <Login />
+        </MemoryRouter>
       </Provider>
     );
   });

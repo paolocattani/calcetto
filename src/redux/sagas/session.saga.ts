@@ -53,7 +53,9 @@ function* logger(action: Action<any>) {
 */
 
 function logger(action: Action<any>) {
-  console.log('Action : ', action);
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Action : ', action);
+  }
 }
 
 export const SessionSagas = [
