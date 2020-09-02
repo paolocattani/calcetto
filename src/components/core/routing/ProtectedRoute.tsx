@@ -4,19 +4,21 @@ import * as React from 'react';
 import { Route } from 'react-router';
 import { routeType, getLabelByPathname } from './Routes';
 import { Redirect } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, connect } from 'react-redux';
 import { SessionSelector } from 'redux/selectors/session.selector';
+import { TournamentSelector } from 'redux/selectors';
 
 // HOC gestisce la visibilità dei componenti ed eventualmente reindirizza alla login
 export const ProtectedRoute: React.FC<routeType> = (props) => {
   const isAuthenticated = useSelector(SessionSelector.isAuthenticated);
   const session = useSelector(SessionSelector.getSession);
-
+  const tournament = useSelector(TournamentSelector.getTournament);
   return (
     <Route
       {...props}
       render={(innerProps) => {
         const { location } = innerProps;
+        console.log('ProtectedRoute : ', session, tournament, location);
         // Se sono gia autenticato e sto chiedendo la login, reindirizzo alla home
         if (isAuthenticated && location.pathname === '/login') {
           console.log('ProtectedRoute => redirect to Home');
@@ -44,4 +46,4 @@ export const ProtectedRoute: React.FC<routeType> = (props) => {
     />
   );
 };
-export default ProtectedRoute;
+export default connect(ProtectedRoute);

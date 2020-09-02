@@ -6,7 +6,7 @@ import { UserRole } from 'redux/models/user.model';
 export const sessionState: SessionState = {
   isAuthenticated: false,
   isAdmin: false,
-  isLoading: false,
+  isLoading: true,
 };
 
 export const SessionReducer = createReducer<SessionState, Action>(sessionState)

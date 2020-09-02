@@ -1,15 +1,19 @@
 import React, { StrictMode } from 'react';
-import { store } from '../../redux/store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from '../../redux/store';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
+import { LoadingModal } from 'components/core/generic/Commons';
 
 const Entry: React.FC = () => (
   <StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <PersistGate loading={<LoadingModal show={true} message={'....Caricamento'} />} persistor={persistor}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </PersistGate>
     </Provider>
   </StrictMode>
 );

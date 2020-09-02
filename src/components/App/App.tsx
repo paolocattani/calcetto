@@ -14,19 +14,21 @@ import { Container } from 'react-bootstrap';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SessionAction } from 'redux/actions';
 // Toasts
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './toast.css';
 import AppBadge from './badge';
+import { SessionSelector } from 'redux/selectors';
 
 library.add(fas, far);
 
 const App: React.FC = (_) => {
   const dispatch = useDispatch();
   const currentHistory = useHistory();
+  const isLoading = useSelector(SessionSelector.isLoading);
 
   // Check if user is already logged
   useEffect(() => {
@@ -42,13 +44,17 @@ const App: React.FC = (_) => {
           {/*<RedirectionControl />*/}
           <ToastContainer autoClose={2000} />
 
-          <Suspense fallback={<LoadingModal show={true} message={'....Caricamento'} />}>
-            <Switch>
-              {routes.map((route) => (
-                <ProtectedRoute {...route} key={route.index} />
-              ))}
-            </Switch>
-          </Suspense>
+          {isLoading ? (
+            <LoadingModal show={true} message={'....Caricamento'} />
+          ) : (
+            <Suspense fallback={<LoadingModal show={true} message={'....Caricamento'} />}>
+              <Switch>
+                {routes.map((route) => (
+                  <ProtectedRoute {...route} key={route.index} />
+                ))}
+              </Switch>
+            </Suspense>
+          )}
           <AppBadge />
         </Container>
       </ErrorBoundary>
