@@ -1,15 +1,15 @@
 import { useInput } from '../core/hooks/InputHook';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import React from 'react';
-import { useHistory, RouteComponentProps, withRouter } from 'react-router-dom';
+import { useHistory, withRouter } from 'react-router-dom';
 import { SessionAction, TournamentAction } from 'redux/actions';
 import { useDispatch } from 'react-redux';
 import { UserDTO } from 'redux/models/user.model';
 import { toast } from 'react-toastify';
 
-interface PropsType extends RouteComponentProps {}
+export interface LoginProps {}
 // https://medium.com/@faizanv/authentication-for-your-react-and-express-application-w-json-web-tokens-923515826e0#6563
-const Login: React.FC<PropsType> = (): JSX.Element => {
+const Login: React.FC<LoginProps> = (): JSX.Element => {
   const dispatch = useDispatch();
   const currentHistory = useHistory();
 
@@ -67,7 +67,7 @@ const Login: React.FC<PropsType> = (): JSX.Element => {
       </Form.Group>
       <Row>
         <Col>
-          <Button size="lg" variant="outline-success" className="float-right" type="submit">
+          <Button id="loginButton" size="lg" variant="outline-success" className="float-right" type="submit">
             Conferma
           </Button>
         </Col>

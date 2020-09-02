@@ -224,6 +224,7 @@ const Register: React.FC<PropsType> = (): JSX.Element => {
           <Form.Group controlId="birthday">
             <Form.Label>Data di nascita</Form.Label>
             <DatePicker
+              id="birthday"
               className="datepicker"
               dateFormat="dd/MM/yyyy"
               required
@@ -236,6 +237,7 @@ const Register: React.FC<PropsType> = (): JSX.Element => {
           <Form.Group>
             <Form.Label>Ruolo</Form.Label>
             <Select
+              id="playerRole"
               value={playerRole}
               onChange={(newValue) => onSelectPlayerRole(newValue)}
               options={playerRoles}
@@ -248,11 +250,11 @@ const Register: React.FC<PropsType> = (): JSX.Element => {
         </Col>
       </Form.Row>
 
-      <Button variant="outline-success" className="float-right" type="submit" size="lg">
+      <Button id="registerButton" variant="outline-success" className="float-right" type="submit" size="lg">
         Conferma
       </Button>
 
-      <Button variant="outline-danger" className="float-left" onClick={reset} type="submit">
+      <Button id="resetButton" variant="outline-danger" className="float-left" onClick={reset} type="submit">
         Reset
       </Button>
     </Form>
