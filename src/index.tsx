@@ -17,7 +17,8 @@ registerLocale('it', it);
 ReactDOM.render(<Entry />, document.getElementById('root'));
 
 // Learn more about service workers: https://bit.ly/CRA-PWA
-process.env.NODE_ENV !== 'production' ? serviceWorker.unregister() : serviceWorker.register();
+//process.env.NODE_ENV !== 'production' ? serviceWorker.unregister() : serviceWorker.register();
+serviceWorker.unregister();
 
 // Redefine console so it does not in production env
 if (process.env.NODE_ENV === 'production') {
