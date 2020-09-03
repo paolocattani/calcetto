@@ -15,7 +15,7 @@ interface CustomRenderOtions extends Omit<RenderOptions, 'queries'> {
 const customRender = (ui: React.ReactElement, { initialState, ...options }: CustomRenderOtions) =>
   render(ui, {
     wrapper: ({ children }) => (
-      <Provider store={defaultStore(initialState)}>
+      <Provider store={defaultStore}>
         <PersistGate loading={<LoadingModal show={true} message={'....Caricamento'} />} persistor={persistor}>
           <BrowserRouter>{children}</BrowserRouter>
         </PersistGate>

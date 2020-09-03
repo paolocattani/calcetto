@@ -29,7 +29,6 @@ function* watchSessionSaga(
   action: ReturnType<typeof SessionAction.sessionControl.request>
 ): Generator<StrictEffect, void, any> {
   try {
-    console.log('watchSessionSaga : start');
     const eventChannel = new EventSource('/sse/v1/session');
     const channel = yield call(createSessionChannel, eventChannel);
     while (true) {

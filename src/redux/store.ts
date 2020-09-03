@@ -55,18 +55,16 @@ export const initialStoreState: RootState = {
 };
 
 // Meet the Store
-export const store = (state = initialStoreState) =>
-  createStore(
-    persistReducer(
-      {
-        key: 'app',
-        storage: localForage,
-      },
-      combineReducers(rootReducers)
-    ),
-    state,
-    composeEnhancers(applyMiddleware(sagaMiddleware))
-  );
+export const store = createStore(
+  persistReducer(
+    {
+      key: 'app',
+      storage: localForage,
+    },
+    combineReducers(rootReducers)
+  ),
+  composeEnhancers(applyMiddleware(sagaMiddleware))
+);
 
 export const persistor = persistStore(store);
 
