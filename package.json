@@ -115,7 +115,9 @@
     "CRA:test": "react-scripts test",
     "CRA:eject": "react-scripts eject",
     "lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
-    "test:coverage": "react-scripts test --coverage --runInBand --watchAll=false"
+    "test:coverage": "react-scripts test --coverage --runInBand --watchAll=false",
+    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache"
+
   },
   "browserslist": {
     "production": [
@@ -130,6 +132,7 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.0.1",
     "@types/dotenv": "^8.2.0",
     "@types/react-bootstrap-table-next": "^4.0.6",
@@ -177,10 +180,6 @@
         "functions": 95
       }
     },
-    "setupFilesAfterEnv": [
-      "@testing-library/react/cleanup-after-each",
-      "@testing-library/jest-dom/extend-expect"
-    ],
     "transform": {
       "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/ts-jest"
     },

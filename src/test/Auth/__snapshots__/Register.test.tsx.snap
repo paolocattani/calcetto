@@ -1,0 +1,149 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Register /> should render correctly and match snapshot 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body
+    class="modal-open"
+    style="padding-right: 0px;"
+  >
+    <div
+      aria-hidden="true"
+    />
+    <div
+      class="fade modal-backdrop show"
+    />
+    <div
+      aria-modal="true"
+      class="fade modal show"
+      role="dialog"
+      style="border-color: #ffc107; border-width: 3px; display: block;"
+      tabindex="-1"
+    >
+      <div
+        class="modal-dialog modal-lg modal-dialog-centered"
+        role="document"
+      >
+        <div
+          class="modal-content"
+        >
+          <div
+            class="modal-header"
+            style="color: whitesmoke; background-color: rgb(52, 58, 64); border-color: #ffc107;"
+          >
+            <div
+              class="modal-title h4"
+            >
+              Caricamento....
+            </div>
+            <button
+              class="close"
+              type="button"
+            >
+              <span
+                aria-hidden="true"
+              >
+                ×
+              </span>
+              <span
+                class="sr-only"
+              >
+                Close
+              </span>
+            </button>
+          </div>
+          <div
+            class="text-center font-weight-bold modal-body"
+            style="color: whitesmoke; background-color: rgb(52, 58, 64); border-color: #ffc107;"
+          >
+            ....Caricamento
+          </div>
+          <div
+            class="modal-footer"
+            style="color: whitesmoke; background-color: rgb(52, 58, 64); border-color: #ffc107;"
+          >
+            <div
+              class="spinner-border text-light"
+            />
+            <div
+              class="spinner-border text-primary"
+            />
+            <div
+              class="spinner-border text-secondary"
+            />
+            <div
+              class="spinner-border text-success"
+            />
+            <div
+              class="spinner-border text-danger"
+            />
+            <div
+              class="spinner-border text-warning"
+            />
+            <div
+              class="spinner-border text-info"
+            />
+            <div
+              class="spinner-border text-dark"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>,
+  "container": <div
+    aria-hidden="true"
+  />,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

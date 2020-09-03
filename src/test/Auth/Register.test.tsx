@@ -1,13 +1,15 @@
 import React from 'react';
 import configureStore from 'redux-mock-store';
-
-import { initialState } from '../commons';
-import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router-dom';
 import Register from 'components/Auth/Register';
+import { render } from '../test-utils';
 
 const mockStore = configureStore([]);
-describe('<Login />', () => {
+describe('<Register />', () => {
+  it('should render correctly and match snapshot', () => {
+    const component = render(<Register />);
+    expect(component).toMatchSnapshot();
+  });
+
   /* let store;
   let component;
 

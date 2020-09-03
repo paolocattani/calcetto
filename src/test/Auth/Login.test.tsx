@@ -1,41 +1,11 @@
 import React from 'react';
 import Login from '../../components/Auth/Login';
-import configureStore from 'redux-mock-store';
+import { render } from '../test-utils';
 
-import { initialState } from '../commons';
-import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router-dom';
-import { Store, AnyAction } from 'redux';
-
-import { render } from '@testing-library/react';
-
-const mockStore = configureStore([]);
 describe('<Login />', () => {
-  let store: Store<any, AnyAction>;
-  /*let component: ShallowWrapper<{}, {}, React.Component<{}, {}, any>>;
-  let usernameField: ShallowWrapper<HTMLAttributes, any, React.Component<{}, {}, any>>;
-  let passwordField: ShallowWrapper<HTMLAttributes, any, React.Component<{}, {}, any>>;
-
-  beforeEach(() => {
-    store = mockStore(initialState);
-    component = (mount(
-      <Provider store={store}>
-        <MemoryRouter>
-          <Login />
-        </MemoryRouter>
-      </Provider>
-    ) as unknown) as ShallowWrapper;
-  });
-*/
-  it('Should render with initial store state', () => {
-    render(
-      <Provider store={store}>
-        <MemoryRouter>
-          <Login />
-        </MemoryRouter>
-      </Provider>
-    );
-    //expect(shallowToJson(staticComponent)).toMatchSnapshot();
+  it('should render correctly and match snapshot', () => {
+    const component = render(<Login />);
+    expect(component).toMatchSnapshot();
   });
 
   /*
