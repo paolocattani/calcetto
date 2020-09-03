@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`<Login /> Should render with initial store state 1`] = `null`;

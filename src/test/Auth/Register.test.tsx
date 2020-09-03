@@ -1,6 +1,4 @@
 import React from 'react';
-import { shallow, mount, ShallowWrapper, render } from 'enzyme';
-import { shallowToJson } from 'enzyme-to-json';
 import configureStore from 'redux-mock-store';
 
 import { initialState } from '../commons';
@@ -10,8 +8,8 @@ import Register from 'components/Auth/Register';
 
 const mockStore = configureStore([]);
 describe('<Login />', () => {
-  let store;
-  let component: ShallowWrapper<{}, {}, React.Component<{}, {}, any>>;
+  /* let store;
+  let component;
 
   beforeEach(() => {
     store = mockStore(initialState);
@@ -44,4 +42,5 @@ describe('<Login />', () => {
       expect(component.find(`#${f}`).length).toEqual(1);
     });
   });
+  */
 });

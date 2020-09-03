@@ -80,6 +80,9 @@
   -----
   - Test : E2E - [jest-test-express-react](https://spin.atomicobject.com/2020/04/22/jest-test-express-react/)
   - Test : Redux - [Test connected component](https://www.robinwieruch.de/react-connected-component-test)
+  - Test : [React Testing library](https://www.robinwieruch.de/react-testing-library)
+
+  - Test : [Redux + Router](https://stackoverflow.com/questions/50285084/how-to-test-a-react-component-that-has-router-redux-and-two-hocs-with-jest-a)
   - Test : Enzyme - [Shallow/Mount/Render](https://gist.github.com/fokusferit/e4558d384e4e9cab95d04e5f35d4f913#:~:text=Always%20begin%20with%20shallow,in%20lifecycle%20methods%2C%20use%20render)
   - Test : Enzyme [Testing FC](https://medium.com/@acesmndr/testing-react-functional-components-with-hooks-using-enzyme-f732124d320a)
   -----
