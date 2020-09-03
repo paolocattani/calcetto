@@ -3,13 +3,13 @@ import { SessionState } from 'redux/models/session.model';
 import { SessionAction } from 'redux/actions/session.action';
 import { UserRole } from 'redux/models/user.model';
 
-export const sessionState: SessionState = {
+export const initialSessionState: SessionState = {
   isAuthenticated: false,
   isAdmin: false,
   isLoading: true,
 };
 
-export const SessionReducer = createReducer<SessionState, Action>(sessionState)
+export const SessionReducer = createReducer<SessionState, Action>(initialSessionState)
   // Request
   .handleAction(
     [SessionAction.checkAuthentication.request, SessionAction.login.request, SessionAction.logout.request],
@@ -42,4 +42,5 @@ export const SessionReducer = createReducer<SessionState, Action>(sessionState)
       isAdmin: user ? user.role === UserRole.Admin : false,
       isLoading: false,
     })
-  );
+  )
+  .handleAction(SessionAction.purge, () => initialSessionState);

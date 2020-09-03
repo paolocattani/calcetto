@@ -12,11 +12,11 @@ import {
   Stage1Reducer,
   Stage2Reducer,
   initialTournamentState,
-  pairState,
-  playerState,
-  stage1State,
-  stage2State,
-  sessionState,
+  initialPairState,
+  initialPlayerState,
+  initialStage1State,
+  initialStage2State,
+  initialSessionState,
 } from 'redux/reducers';
 import { TournamentsSagas, PlayersSagas, PairsSagas, SessionSagas, Stage2Sagas, Stage1Sagas } from 'redux/sagas';
 
@@ -47,11 +47,11 @@ export const rootReducers: ReducersMapObject<RootState> = {
 
 export const initialStoreState: RootState = {
   tournamentState: initialTournamentState,
-  pairState: pairState,
-  playerState: playerState,
-  stage1State: stage1State,
-  stage2State: stage2State,
-  sessionState: sessionState,
+  pairState: initialPairState,
+  playerState: initialPlayerState,
+  stage1State: initialStage1State,
+  stage2State: initialStage2State,
+  sessionState: initialSessionState,
 };
 
 // Meet the Store

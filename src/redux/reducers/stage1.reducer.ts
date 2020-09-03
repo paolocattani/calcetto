@@ -3,14 +3,14 @@ import { Stage1State, Stage1Row } from 'redux/models';
 import { Stage1Action } from 'redux/actions';
 import { getEmptyRowModel } from 'components/Pair/helper';
 
-export const stage1State: Stage1State = {
+export const initialStage1State: Stage1State = {
   needRefresh: false,
   selectedPairs: [getEmptyRowModel('-')],
   isLoading: false,
   stages: [],
 };
 
-export const Stage1Reducer = createReducer<Stage1State, Action>(stage1State)
+export const Stage1Reducer = createReducer<Stage1State, Action>(initialStage1State)
   // Gestione Watcher
   // All'avvio del watcher reimposto needRefresh
   .handleAction([Stage1Action.stage1Watcher.request], (state) => ({ ...state, needRefresh: false }))
@@ -37,13 +37,9 @@ export const Stage1Reducer = createReducer<Stage1State, Action>(stage1State)
       currentStage && currentStage.length > 0
         ? { ...currentStage[0], rows }
         : { pairsList, stageName, rows, autoOrder: false, isLoading: false };
-    const res1 = [...state.stages, newStage];
-    const res2 = state.stages.filter((s) => s.stageName !== stageName).push(newStage);
-    const res3 = [...state.stages.filter((s) => s.stageName !== stageName), newStage];
-    console.log('Stage1Action.fetchStage1.success : ', res1, res2, res3);
     return {
       ...state,
-      stages: res3,
+      stages: [...state.stages.filter((s) => s.stageName !== stageName), newStage],
       isLoading: false,
     };
   })
@@ -68,4 +64,5 @@ export const Stage1Reducer = createReducer<Stage1State, Action>(stage1State)
       selectedPairs,
       isLoading: false,
     };
-  });
+  })
+  .handleAction(Stage1Action.purge, () => initialStage1State);

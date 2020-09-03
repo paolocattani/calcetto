@@ -1,5 +1,5 @@
 import { createAsyncAction, createAction } from 'typesafe-actions';
-import { defaultParam, defaultAsyncParams } from './constants';
+import { defaultParam, defaultAsyncParams, PurgeResponse } from './constants';
 import {
   CheckAuthenticationRequest,
   WatchSessionRequest,
@@ -19,7 +19,7 @@ export const SessionAction = {
     AuthenticationResponse,
     AuthenticationError
   >(),
-  // TODO: Login
+  // Login
   login: createAsyncAction(...defaultAsyncParams(actionName, 'Login User'))<
     LoginRequest,
     AuthenticationResponse,
@@ -45,4 +45,5 @@ export const SessionAction = {
 
   // set selected tournament
   updateSession: createAction(...defaultParam(actionName, 'Set Session'))<AuthenticationResponse>(),
+  purge: createAction('persist/PURGE')<PurgeResponse>(),
 };

@@ -2,12 +2,12 @@ import { createReducer, Action } from 'typesafe-actions';
 import { PlayerState } from 'redux/models/player.model';
 import { PlayerAction } from 'redux/actions/player.action';
 
-export const playerState: PlayerState = {
+export const initialPlayerState: PlayerState = {
   isLoading: false,
   playersList: [],
 };
 
-export const PlayerReducer = createReducer<PlayerState, Action>(playerState)
+export const PlayerReducer = createReducer<PlayerState, Action>(initialPlayerState)
   // Request
   .handleAction([PlayerAction.fetchPlayers.request, PlayerAction.savePlayer.request], (state) => ({
     ...state,
@@ -35,4 +35,5 @@ export const PlayerReducer = createReducer<PlayerState, Action>(playerState)
   .handleAction(PlayerAction.fetchPlayers.success, (state, { payload: { results } }) => ({
     playersList: results.map((e, i) => ({ ...e, rowNumber: i + 1 })),
     isLoading: false,
-  }));
+  }))
+  .handleAction(PlayerAction.purge, () => initialPlayerState);

@@ -2,11 +2,11 @@ import { createReducer, Action } from 'typesafe-actions';
 import { PairState } from 'redux/models';
 import { PairAction } from 'redux/actions';
 
-export const pairState: PairState = {
+export const initialPairState: PairState = {
   isLoading: false,
 };
 
-export const PairReducer = createReducer<PairState, Action>(pairState)
+export const PairReducer = createReducer<PairState, Action>(initialPairState)
   // Request
   .handleAction([PairAction.fetchPairs.request], (state) => ({
     ...state,
@@ -24,4 +24,5 @@ export const PairReducer = createReducer<PairState, Action>(pairState)
     ...state,
     pairList: results,
     isLoading: false,
-  }));
+  }))
+  .handleAction(PairAction.purge, () => initialPairState);

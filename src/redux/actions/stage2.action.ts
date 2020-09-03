@@ -8,7 +8,7 @@ import {
   DeleteStage2Request,
   DeleteStage2Response,
 } from 'redux/models';
-import { defaultAsyncParams, defaultParam } from './constants';
+import { defaultAsyncParams, defaultParam, PurgeResponse } from './constants';
 
 const actionName = '[Stage2]';
 
@@ -31,4 +31,5 @@ export const Stage2Action = {
   >(),
   setCells: createAction(...defaultParam(actionName, 'Set Cells'))<ICell[][]>(),
   setLoading: createAction(...defaultParam(actionName, 'Stage2 is Loading'))<boolean>(),
+  purge: createAction('persist/PURGE')<PurgeResponse>(),
 };

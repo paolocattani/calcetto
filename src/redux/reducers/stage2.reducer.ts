@@ -2,11 +2,11 @@ import { createReducer, Action } from 'typesafe-actions';
 import { Stage2State } from 'redux/models';
 import { Stage2Action } from 'redux/actions';
 
-export const stage2State: Stage2State = {
+export const initialStage2State: Stage2State = {
   isLoading: false,
 };
 
-export const Stage2Reducer = createReducer<Stage2State, Action>(stage2State)
+export const Stage2Reducer = createReducer<Stage2State, Action>(initialStage2State)
   // Request
   .handleAction([Stage2Action.fetchStage2.request, Stage2Action.delete.request], (state) => ({
     ...state,
@@ -36,4 +36,5 @@ export const Stage2Reducer = createReducer<Stage2State, Action>(stage2State)
   .handleAction([Stage2Action.setLoading], (state, { payload }) => ({
     ...state,
     isLoading: payload,
-  }));
+  }))
+  .handleAction(Stage2Action.purge, () => initialStage2State);

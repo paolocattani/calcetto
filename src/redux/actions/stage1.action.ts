@@ -1,4 +1,4 @@
-import { createAsyncAction } from 'typesafe-actions';
+import { createAsyncAction, createAction } from 'typesafe-actions';
 import {
   WatchStage1Request,
   WatchStage1Response,
@@ -11,7 +11,7 @@ import {
   UpdateSelectedPairsRequest,
   UpdateSelectedPairsResponse,
 } from 'redux/models';
-import { defaultAsyncParams } from './constants';
+import { defaultAsyncParams, PurgeResponse } from './constants';
 
 const actionName = '[Stage1]';
 
@@ -44,4 +44,5 @@ export const Stage1Action = {
     UpdatePlacementResponse,
     Error
   >(),
+  purge: createAction('persist/PURGE')<PurgeResponse>(),
 };
