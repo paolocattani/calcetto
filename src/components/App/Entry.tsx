@@ -8,7 +8,7 @@ import { LoadingModal } from 'components/core/generic/Commons';
 
 const Entry: React.FC = () => (
   <StrictMode>
-    <Provider store={store}>
+    <Provider store={store()}>
       <PersistGate loading={<LoadingModal show={true} message={'....Caricamento'} />} persistor={persistor}>
         <BrowserRouter>
           <App />

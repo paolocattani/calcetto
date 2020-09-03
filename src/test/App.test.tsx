@@ -4,7 +4,11 @@ import { render } from '@testing-library/react';
 
 // https://spin.atomicobject.com/2020/04/22/jest-test-express-react/
 describe('<Entry />', () => {
-  it('should render correctly', () => {
-    render(<Entry />);
+  it('should render correctly and match snapshot', () => {
+    const entry = render(<Entry />);
+    expect(entry).toMatchSnapshot();
   });
 });
+
+// https://www.pluralsight.com/guides/how-to-test-react-components-in-typescript
+// https://github.com/puppeteer/puppeteer
