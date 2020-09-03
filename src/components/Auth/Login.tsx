@@ -67,7 +67,14 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
       </Form.Group>
       <Row>
         <Col>
-          <Button id="loginButton" size="lg" variant="outline-success" className="float-right" type="submit">
+          <Button
+            id="loginButton"
+            size="lg"
+            variant="outline-success"
+            className="float-right"
+            type="submit"
+            disabled={!username || !password}
+          >
             Conferma
           </Button>
         </Col>
