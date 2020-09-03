@@ -4,6 +4,7 @@ import { AuthenticationResponse } from 'redux/models';
 import { CheckAuthentication, createSessionChannel, Message } from 'redux/services/session.service';
 import { toast } from 'react-toastify';
 import { Action } from 'typesafe-actions';
+import { persistor } from 'redux/store';
 
 function* checkAuthenticationSaga({
   payload,
@@ -44,6 +45,18 @@ function* watchSessionSaga(
     console.log('watchSessionSaga.err : ', err);
   }
 }
+
+// Logout
+function* logoutSaga(action: ReturnType<typeof SessionAction.logout.request>): Generator<StrictEffect, void, any> {
+  persistor.purge();
+  yield put(SessionAction.logout.success({}));
+}
+
+// Login
+function* loginSaga(action: ReturnType<typeof SessionAction.logout.request>): Generator<StrictEffect, void, any> {
+  yield put(SessionAction.login.success(action.payload));
+}
+
 /*
 function* logger(action: Action<any>) {
   const state = yield select();
@@ -59,6 +72,8 @@ function logger(action: Action<any>) {
 }
 
 export const SessionSagas = [
+  takeEvery(SessionAction.logout.request, logoutSaga),
+  takeEvery(SessionAction.login.request, loginSaga),
   takeEvery(SessionAction.checkAuthentication.request, checkAuthenticationSaga),
   takeLatest(SessionAction.sessionControl.request, watchSessionSaga),
   takeEvery('*', logger),

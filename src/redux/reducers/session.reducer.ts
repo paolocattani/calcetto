@@ -11,22 +11,29 @@ export const sessionState: SessionState = {
 
 export const SessionReducer = createReducer<SessionState, Action>(sessionState)
   // Request
-  .handleAction([SessionAction.checkAuthentication.request], (state) => ({
-    ...state,
-    isLoading: true,
-    errorMessage: undefined,
-  }))
+  .handleAction(
+    [SessionAction.checkAuthentication.request, SessionAction.login.request, SessionAction.logout.request],
+    (state) => ({
+      ...state,
+      isLoading: true,
+      errorMessage: undefined,
+    })
+  )
   // Failure
-  .handleAction([SessionAction.checkAuthentication.failure], (state, { payload: { message } }) => ({
-    ...state,
-    errorMessage: message,
-    isLoading: false,
-  }))
+  .handleAction(
+    [SessionAction.checkAuthentication.failure, SessionAction.login.failure, SessionAction.logout.failure],
+    (state, { payload: { message } }) => ({
+      ...state,
+      errorMessage: message,
+      isLoading: false,
+    })
+  )
   .handleAction(
     [
       SessionAction.checkAuthentication.success,
       SessionAction.register.success,
       SessionAction.login.success,
+      SessionAction.logout.success,
       SessionAction.updateSession,
     ],
     (state, { payload: { user } }) => ({

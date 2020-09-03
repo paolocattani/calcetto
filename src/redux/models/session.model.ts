@@ -29,7 +29,11 @@ export interface CheckAuthenticationRequest {
 export interface WatchSessionRequest {
   history: H.History<unknown>;
 }
-export interface LoginRequest {}
+export interface LoginRequest {
+  user?: UserDTO;
+}
+export interface LogoutRequest {}
+
 export interface RegisterRequest {}
 
 // Response

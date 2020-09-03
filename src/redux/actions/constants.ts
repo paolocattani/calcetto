@@ -11,3 +11,5 @@ export const defaultAsyncParams = (actionName: string, name: string): [TypeConst
 ];
 
 export const defaultParam = (actionName: string, name: string): [TypeConstant] => [`${actionName} ${name}`];
+
+export interface PurgeResponse {}

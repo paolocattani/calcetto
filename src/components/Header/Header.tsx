@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SessionSelector } from 'redux/selectors/session.selector';
 import { HomeIcon } from 'components/core/icons';
 import { toast } from 'react-toastify';
-import { RootAction, SessionAction } from 'redux/actions';
+import { SessionAction } from 'redux/actions';
 
 const applicationName = 'Calcetto C.S.M';
 
@@ -20,8 +20,7 @@ export const Header: React.FC = () => {
     const response = await fetch('/api/v1/auth/logout');
     if (response.ok) {
       toast.success('Alla prossima....');
-      dispatch(SessionAction.updateSession({ user: undefined }));
-      dispatch(RootAction.logout());
+      dispatch(SessionAction.logout.request({}));
     } else {
       toast.error('Qualcosa non ha funzionato...');
     }

@@ -2,13 +2,13 @@ import { createReducer, Action } from 'typesafe-actions';
 import { TournamentAction } from '../actions/tournament.action';
 import { TournamentState } from 'redux/models/tournament.model';
 
-export const tournamentState: TournamentState = {
+export const initialTournamentState: TournamentState = {
   tournament: null,
   tournamentsList: [],
   isLoading: false,
 };
 
-export const TournamentReducer = createReducer<TournamentState, Action>(tournamentState)
+export const TournamentReducer = createReducer<TournamentState, Action>(initialTournamentState)
   // Request
   .handleAction(
     [
@@ -56,4 +56,5 @@ export const TournamentReducer = createReducer<TournamentState, Action>(tourname
       tournament: result,
       isLoading: false,
     })
-  );
+  )
+  .handleAction(TournamentAction.purge, () => initialTournamentState);

@@ -36,7 +36,7 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
       if (response.ok && result) {
         // Messaggio di benvenuto
         toast.success(`Bentornato ${result.username} !`);
-        dispatch(SessionAction.updateSession({ user: result }));
+        dispatch(SessionAction.login.request({ user: result }));
         dispatch(TournamentAction.fetchTournaments.request({}));
         dispatch(
           SessionAction.sessionControl.request({

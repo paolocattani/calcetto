@@ -7,6 +7,7 @@ import {
   AuthenticationResponse,
   LoginRequest,
   RegisterRequest,
+  LogoutRequest,
 } from 'redux/models/session.model';
 
 const actionName = '[Session]';
@@ -18,9 +19,14 @@ export const SessionAction = {
     AuthenticationResponse,
     AuthenticationError
   >(),
-  // Login
+  // TODO: Login
   login: createAsyncAction(...defaultAsyncParams(actionName, 'Login User'))<
     LoginRequest,
+    AuthenticationResponse,
+    AuthenticationError
+  >(),
+  logout: createAsyncAction(...defaultAsyncParams(actionName, 'Logout User'))<
+    LogoutRequest,
     AuthenticationResponse,
     AuthenticationError
   >(),
@@ -36,6 +42,7 @@ export const SessionAction = {
     AuthenticationResponse,
     AuthenticationError
   >(),
+
   // set selected tournament
   updateSession: createAction(...defaultParam(actionName, 'Set Session'))<AuthenticationResponse>(),
 };

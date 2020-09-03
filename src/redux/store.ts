@@ -11,6 +11,12 @@ import {
   SessionReducer,
   Stage1Reducer,
   Stage2Reducer,
+  initialTournamentState,
+  pairState,
+  playerState,
+  stage1State,
+  stage2State,
+  sessionState,
 } from 'redux/reducers';
 import { TournamentsSagas, PlayersSagas, PairsSagas, SessionSagas, Stage2Sagas, Stage1Sagas } from 'redux/sagas';
 
@@ -30,13 +36,22 @@ const composeEnhancers =
 
 const sagaMiddleware = createSagaMiddleware();
 
-const commonReducers: ReducersMapObject<RootState> = {
+export const rootReducers: ReducersMapObject<RootState> = {
   tournamentState: TournamentReducer,
   playerState: PlayerReducer,
   pairState: PairReducer,
   sessionState: SessionReducer,
   stage1State: Stage1Reducer,
   stage2State: Stage2Reducer,
+};
+
+export const initialStoreState: RootState = {
+  tournamentState: initialTournamentState,
+  pairState: pairState,
+  playerState: playerState,
+  stage1State: stage1State,
+  stage2State: stage2State,
+  sessionState: sessionState,
 };
 
 // Meet the Store
@@ -46,8 +61,9 @@ export const store = createStore(
       key: 'app',
       storage: localForage,
     },
-    combineReducers(commonReducers)
+    combineReducers(rootReducers)
   ),
+  initialStoreState,
   composeEnhancers(applyMiddleware(sagaMiddleware))
 );
 
