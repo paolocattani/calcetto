@@ -10,7 +10,7 @@ describe('<Login />.render', () => {
     component = render(<Login />);
   });
 
-  it('should match snapshot', () => {
+  it('should render correctly should match snapshot', () => {
     expect(component).toMatchSnapshot();
   });
   it('should contains all elements', () => {
@@ -30,7 +30,6 @@ describe('<Login />.render', () => {
 
 // GREAT : https://jkettmann.com/beginners-guide-to-testing-react/
 describe('<Login /> tests ', () => {
-  let component: RenderResult;
   let usernameField: HTMLElement;
   let passwordField: HTMLElement;
   let loginButton: HTMLElement;
@@ -40,7 +39,7 @@ describe('<Login /> tests ', () => {
   const user = { username: 'michelle', password: 'smith' };
 
   beforeEach(() => {
-    component = render(<Login />);
+    render(<Login />);
     usernameField = screen.getByLabelText(/username/i);
     passwordField = screen.getByLabelText(/password/i);
     loginButton = screen.getByRole('button', { name: 'Conferma' });
