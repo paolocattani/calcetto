@@ -1,11 +1,12 @@
 import { useInput } from '../core/hooks/InputHook';
 import { Form, Button, Row, Col } from 'react-bootstrap';
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory, withRouter } from 'react-router-dom';
 import { SessionAction, TournamentAction } from 'redux/actions';
 import { useDispatch } from 'react-redux';
 import { UserDTO } from 'redux/models/user.model';
 import { toast } from 'react-toastify';
+import { InputField } from '../core/generic/Input';
 
 export interface LoginProps {}
 // https://medium.com/@faizanv/authentication-for-your-react-and-express-application-w-json-web-tokens-923515826e0#6563
@@ -13,6 +14,7 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
   const dispatch = useDispatch();
   const currentHistory = useHistory();
 
+  const [validated, setValidated] = useState<boolean>(false);
   const { value: username, bind: bindUsername } = useInput<string>('');
   const { value: password, bind: bindPassword } = useInput<string>('');
 
@@ -26,7 +28,17 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
       toast.error('Inserire la password');
       return;
     }
+    setValidated(true);
     try {
+      /*
+        FIXME: create a better action flow
+        - Set is loading
+        - Try to authenticate
+          - If error -> show message
+        - Fetch Tournament List
+        - Navigate to home
+        - set is loading false
+      */
       const response = await fetch('/api/v1/auth/authenticate', {
         method: 'POST',
         body: JSON.stringify({ username, password }),
@@ -49,22 +61,31 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
         else toast.error('Errore server. Riprovare piu tardi');
       }
     } catch (error) {
-      console.log('onSubmitLogin : ', error);
+      // console.log('onSubmitLogin : ', error);
       toast.error('Errore durante il processo di registrazione. Riprovare piu tardi');
     }
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Form.Group controlId="username">
-        <Form.Label>Username o Email</Form.Label>
-        <Form.Control required={true} type="text" placeholder="username o email" {...bindUsername} />
-      </Form.Group>
+    <Form onSubmit={handleSubmit} noValidate validated={validated}>
+      <InputField
+        controlId="username"
+        label="Username o Email"
+        required={true}
+        type="text"
+        placeholder="username o email"
+        {...bindUsername}
+      />
 
-      <Form.Group controlId="password">
-        <Form.Label>Password</Form.Label>
-        <Form.Control required={true} type="password" placeholder="Password" {...bindPassword} />
-      </Form.Group>
+      <InputField
+        controlId="password"
+        label="Password"
+        required={true}
+        type="password"
+        placeholder="Password"
+        invalidFeedback="Inserire la password"
+        {...bindPassword}
+      />
       <Row>
         <Col>
           <Button

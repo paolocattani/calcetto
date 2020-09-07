@@ -238,6 +238,9 @@ const Register: React.FC<PropsType> = (): JSX.Element => {
             <Form.Label>Ruolo</Form.Label>
             <Select
               id="playerRole"
+              textFieldProps={{
+                label: 'Ruolo',
+              }}
               value={playerRole}
               onChange={(newValue) => onSelectPlayerRole(newValue)}
               options={playerRoles}
