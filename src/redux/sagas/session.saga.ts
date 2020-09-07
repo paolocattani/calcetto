@@ -74,12 +74,12 @@ function* logoutSaga(action: ReturnType<typeof SessionAction.logout.request>): G
 function* loginSaga(action: ReturnType<typeof SessionAction.login.request>): Generator<StrictEffect, void, any> {
   // Validate Login
   const loginReponse: AuthenticationResponse = yield call(login, action.payload);
-  console.log('LoginSaga : ', loginReponse);
   if (loginReponse.code === HTTPStatusCode.Accepted) {
     yield put(SessionAction.login.success(loginReponse));
     yield fork(TournamentAction.fetchTournaments.request, {});
     action.payload.history.push('/');
   } else {
+    toast.error(loginReponse.userMessage.message);
     yield put(SessionAction.login.failure(loginReponse));
   }
 }
