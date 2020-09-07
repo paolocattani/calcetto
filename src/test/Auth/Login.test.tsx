@@ -76,7 +76,6 @@ describe('<Login /> tests ', () => {
       userEvent.type(passwordField, user.password);
       expect(usernameField.getAttribute('value')).toEqual(user.username);
       expect(passwordField.getAttribute('value')).toEqual(user.password);
-      screen.debug();
     });
 
     describe('when the submit button is clicked', () => {
@@ -87,10 +86,12 @@ describe('<Login /> tests ', () => {
         userEvent.click(loginButton);
         fetchMock.once(JSON.stringify(loginResponse));
 
-        expect(fetchMock).toHaveBeenCalledWith('https://www.reddit.com/r/reactjs/top.json');
-
-        // expect(clickLogin).toHaveBeenCalledTimes(1);
-        //expect(clickLogin).toHaveBeenCalledWith(user);
+        expect(fetch).toHaveBeenCalledTimes(1);
+        expect(fetch).toHaveBeenCalledWith('/api/v1/auth/authenticate', {
+          method: 'POST',
+          body: JSON.stringify({ username: user.username, password: user.password }),
+          headers: { 'Content-Type': 'application/json' },
+        });
       });
     });
   });
