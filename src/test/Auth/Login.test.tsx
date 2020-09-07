@@ -2,6 +2,7 @@ import React from 'react';
 import Login from '../../components/Auth/Login';
 import { render, RenderResult, fireEvent, screen } from '../test-utils';
 import userEvent from '@testing-library/user-event';
+import loginResponse from '../_mocks_/Auth/login_response.json';
 
 describe('<Login />.render', () => {
   let component: RenderResult;
@@ -13,15 +14,21 @@ describe('<Login />.render', () => {
     expect(component).toMatchSnapshot();
   });
   it('should contains all elements', () => {
-    expect(component.getByLabelText(/username/i)).not.toBe(null);
-    expect(component.getByLabelText(/password/i)).not.toBe(null);
-    expect(component.getByRole('button', { name: 'Conferma' })).not.toBe(null);
+    expect(screen.getByLabelText(/username/i)).not.toBe(null);
+    expect(screen.getByLabelText(/password/i)).not.toBe(null);
+    expect(screen.getByRole('button', { name: 'Conferma' })).not.toBe(null);
+  });
+  it('input elements should have "required" attritbute', () => {
+    expect(screen.getByLabelText(/username/i)).toBeRequired();
+    expect(screen.getByLabelText(/password/i)).toBeRequired();
   });
 });
 
 //https://kentcdodds.com/blog/avoid-nesting-when-youre-testing?fbclid=IwAR2snxztWxnzUQGzIG42DrmqedSrzmmdfYgBWva7_Vzb3bgj6QR8UazP5_4
 // https://www.robinwieruch.de/react-testing-library
 // https://kentcdodds.com/blog/common-mistakes-with-react-testing-library
+
+// GREAT : https://jkettmann.com/beginners-guide-to-testing-react/
 describe('<Login /> tests ', () => {
   let component: RenderResult;
   let usernameField: HTMLElement;
@@ -57,25 +64,32 @@ describe('<Login /> tests ', () => {
     });
 
     it('should have changed field value', () => {
-      expect(usernameField.getAttribute('value')).toEqual('michelle');
-      expect(passwordField.getAttribute('value')).toEqual('smith');
+      expect(usernameField.getAttribute('value')).toEqual(user.username);
+      expect(passwordField.getAttribute('value')).toEqual(user.password);
+      expect(loginButton).not.toBeDisabled();
     });
 
     it('should type value', () => {
       userEvent.clear(usernameField);
       userEvent.clear(passwordField);
-      userEvent.type(usernameField, 'michelle');
-      userEvent.type(passwordField, 'smith');
-      expect(usernameField.getAttribute('value')).toEqual('michelle');
-      expect(passwordField.getAttribute('value')).toEqual('smith');
+      userEvent.type(usernameField, user.username);
+      userEvent.type(passwordField, user.password);
+      expect(usernameField.getAttribute('value')).toEqual(user.username);
+      expect(passwordField.getAttribute('value')).toEqual(user.password);
+      screen.debug();
     });
 
     describe('when the submit button is clicked', () => {
       beforeEach(() => {
-        clickLogin();
+        fetchMock.resetMocks();
       });
       it('should call onSubmit with the username and password', () => {
-        //  expect(clickLogin).toHaveBeenCalledTimes(1);
+        userEvent.click(loginButton);
+        fetchMock.once(JSON.stringify(loginResponse));
+
+        expect(fetchMock).toHaveBeenCalledWith('https://www.reddit.com/r/reactjs/top.json');
+
+        // expect(clickLogin).toHaveBeenCalledTimes(1);
         //expect(clickLogin).toHaveBeenCalledWith(user);
       });
     });

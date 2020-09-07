@@ -58,12 +58,12 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
     <Form onSubmit={handleSubmit}>
       <Form.Group controlId="username">
         <Form.Label>Username o Email</Form.Label>
-        <Form.Control required type="text" placeholder="username o email" {...bindUsername} />
+        <Form.Control required={true} type="text" placeholder="username o email" {...bindUsername} />
       </Form.Group>
 
       <Form.Group controlId="password">
         <Form.Label>Password</Form.Label>
-        <Form.Control required type="password" placeholder="Password" {...bindPassword} />
+        <Form.Control required={true} type="password" placeholder="Password" {...bindPassword} />
       </Form.Group>
       <Row>
         <Col>
