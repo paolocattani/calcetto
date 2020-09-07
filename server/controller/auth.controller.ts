@@ -20,8 +20,21 @@ import {
   isValidRegister,
 } from '../manager/auth.manager';
 import { AppRequest } from './index';
+import { HTTPStatusCode } from '../core/HttpStatusCode';
+import { AuthenticationResponse } from 'models/client/auth.models';
+import { UserMessageType } from '../models/client/common.models';
+import { UnexpectedServerError, MissingParamsResponse } from './common';
 const router = Router();
 
+const wrongCredentials = {
+  user: undefined,
+  code: HTTPStatusCode.Unauthorized,
+  message: 'Wrong credentials',
+  userMessage: {
+    type: UserMessageType.Danger,
+    message: 'Credenziali errate',
+  },
+};
 router.use('/', (req: Request, res: Response, next: NextFunction) => {
   if (isDevMode()) logger.info(`Auth Controller : ${req.method} ${req.originalUrl.replace('/api/v1/auth', '')} `);
   next();
@@ -97,7 +110,7 @@ router.post(
       return res.status(200).json(user);
     } catch (error) {
       logger.error('/update error : ', error);
-      return res.status(500).json({ error: 'Internal error please try again' });
+      return UnexpectedServerError(res);
     }
   })
 );
@@ -106,25 +119,39 @@ router.post(
   '/authenticate',
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     const { username, password } = req.body;
+    let response: AuthenticationResponse;
     try {
       logger.info('/authenticate start ');
-      if (!username || !password) return res.status(401).json({ error: 'Missing email or password' });
-
+      if (!username || !password) {
+        return MissingParamsResponse(res, { user: undefined });
+      }
       const user = await findUserByEmailOrUsername(username);
 
       // utente non trovato
-      if (!user) return res.status(401).json({ error: 'Incorrect email or password' });
-
-      if (!(await comparePasswords(user.email, password, user.password)))
-        return res.status(401).json({ error: 'Incorrect email or password' });
+      if (!user) {
+        return res.status(HTTPStatusCode.Unauthorized).json(wrongCredentials);
+      }
+      const isValid = await comparePasswords(user.email, password, user.password);
+      if (!isValid) {
+        return res.status(HTTPStatusCode.Unauthorized).json(wrongCredentials);
+      }
 
       const userDTO = convertEntityToDTO(user);
       addUserCookies(userDTO, res);
       logger.info('/authenticate end ');
-      return res.status(200).json(userDTO);
+      response = {
+        user: userDTO,
+        code: HTTPStatusCode.Accepted,
+        message: 'Login complete',
+        userMessage: {
+          type: UserMessageType.Success,
+          message: `Benvenuto ${userDTO.name}`,
+        },
+      };
+      return res.status(HTTPStatusCode.Accepted).json(response);
     } catch (error) {
       logger.error('/authenticate error : ', error);
-      return res.status(500).json({ error: 'Internal error please try again' });
+      return UnexpectedServerError(res);
     }
   })
 );
@@ -138,22 +165,30 @@ router.delete(
     try {
       logger.info('/delete start ');
       const user = await findUserByEmailAndUsername(email, username);
-      if (!user) return res.status(500).json({ message: 'Utente non trovato' });
+      if (!user) return res.status(HTTPStatusCode.BadRequest).json(wrongCredentials);
 
       if (!(await comparePasswords(email, password, user.password)))
-        return res.status(401).json({ error: 'Incorrect email or password' });
+        return res.status(HTTPStatusCode.BadRequest).json(wrongCredentials);
 
       await deleteUser(user);
       logger.info('/delete end ');
+      // FIXME: fix cookie erase
       res.cookie('token', { expires: new Date(Date.now()), httpOnly: true });
-      return res.status(200).json({ message: 'Utente eliminato' });
+      return res.status(HTTPStatusCode.Accepted).json({
+        code: HTTPStatusCode.Accepted,
+        message: 'User deleted',
+        userMessage: {
+          type: UserMessageType.Success,
+          message: `Utente "${user.name}" eliminato `,
+        },
+      });
     } catch (error) {
       logger.error('/delete error : ', error);
-      return res.status(500).json({ message: 'Errore durante fase di cancellazione' });
+      return UnexpectedServerError(res);
     }
   })
 );
 
-router.get('/checkToken', withAuth, (req, res) => res.sendStatus(200));
+router.get('/checkToken', withAuth, (req, res) => res.sendStatus(HTTPStatusCode.Accepted));
 
 export default router;

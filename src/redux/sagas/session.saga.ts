@@ -1,10 +1,12 @@
 import { put, call, StrictEffect, takeEvery, take, takeLatest, fork } from 'redux-saga/effects';
 import { SessionAction } from 'redux/actions/session.action';
-import { AuthenticationResponse } from 'redux/models';
-import { CheckAuthentication, createSessionChannel, Message } from 'redux/services/session.service';
+import { AuthenticationResponse, UserMessageType } from 'redux/models';
+import { CheckAuthentication, createSessionChannel, Message, login } from 'redux/services/session.service';
 import { toast } from 'react-toastify';
 import { Action } from 'typesafe-actions';
 import { persistor } from 'redux/store';
+import { HTTPStatusCode } from 'redux/models/HttpStatusCode';
+import { TournamentAction } from 'redux/actions';
 
 function* checkAuthenticationSaga({
   payload,
@@ -36,7 +38,15 @@ function* watchSessionSaga(
       if (message) {
         console.log('Message from queue : ', message);
         toast.error('La tua sessione è scaduta');
-        yield put(SessionAction.updateSession({ user: undefined }));
+        // FIXME:
+        yield put(
+          SessionAction.updateSession({
+            user: undefined,
+            code: HTTPStatusCode.Unauthorized,
+            message: 'Unauthorized!',
+            userMessage: { message: 'Sessione scaduta', type: UserMessageType.Danger },
+          })
+        );
         action.payload.history.push('/login');
       }
     }
@@ -48,12 +58,30 @@ function* watchSessionSaga(
 // Logout
 function* logoutSaga(action: ReturnType<typeof SessionAction.logout.request>): Generator<StrictEffect, void, any> {
   persistor.purge();
-  yield put(SessionAction.logout.success({}));
+  yield put(
+    SessionAction.logout.success({
+      code: HTTPStatusCode.Accepted,
+      message: 'Logout complete',
+      userMessage: {
+        type: UserMessageType.Success,
+        message: 'Logout ',
+      },
+    })
+  );
 }
 
 // Login
-function* loginSaga(action: ReturnType<typeof SessionAction.logout.request>): Generator<StrictEffect, void, any> {
-  yield put(SessionAction.login.success(action.payload));
+function* loginSaga(action: ReturnType<typeof SessionAction.login.request>): Generator<StrictEffect, void, any> {
+  // Validate Login
+  const loginReponse: AuthenticationResponse = yield call(login, action.payload);
+  console.log('LoginSaga : ', loginReponse);
+  if (loginReponse.code === HTTPStatusCode.Accepted) {
+    yield put(SessionAction.login.success(loginReponse));
+    yield fork(TournamentAction.fetchTournaments.request, {});
+    action.payload.history.push('/');
+  } else {
+    yield put(SessionAction.login.failure(loginReponse));
+  }
 }
 
 /*

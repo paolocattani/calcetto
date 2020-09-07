@@ -127,7 +127,8 @@ const Register: React.FC<PropsType> = (): JSX.Element => {
       if (response.ok && result) {
         // Messaggio di benvenuto
         toast.success(`Benvenuto ${result.username} !`);
-        dispatch(SessionAction.login.request({ user: result }));
+        // FIXME:
+        //dispatch(SessionAction.login.request({ username,password }));
         dispatch(SessionAction.sessionControl.request({ history: currentHistory }));
       } else {
         switch (response.status) {

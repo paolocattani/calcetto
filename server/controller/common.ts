@@ -1,4 +1,26 @@
 import { Response } from 'express';
+import { HTTPStatusCode } from '../core/HttpStatusCode';
+import { UserMessageType } from '../models/client/common.models';
 
-export const missingParamsResponse = (res: Response) =>
-  res.status(400).json({ code: 400, message: 'Missing parameters' });
+export const MissingParamsResponse = (res: Response, additionalInfo?: Object) =>
+  res.status(HTTPStatusCode.BadRequest).json({
+    ...additionalInfo,
+    code: HTTPStatusCode.BadRequest,
+    message: 'Missing parameters',
+    userMessage: {
+      type: UserMessageType.Danger,
+      // eslint-disable-next-line quotes
+      message: "Errore server. Questo l'ho previsto...",
+    },
+  });
+
+export const UnexpectedServerError = (res: Response) =>
+  res.status(HTTPStatusCode.InternalServerError).json({
+    code: HTTPStatusCode.InternalServerError,
+    message: 'Unexpected Server Error',
+    userMessage: {
+      type: UserMessageType.Danger,
+      // eslint-disable-next-line quotes
+      message: "Errore server non previsto. E' stata avviata la procedura di autodistruzione.",
+    },
+  });

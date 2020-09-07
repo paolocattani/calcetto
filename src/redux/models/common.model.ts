@@ -1,4 +1,5 @@
 import { PlayerState, TournamentState, PairState, SessionState, Stage1State, Stage2State } from 'redux/models';
+import { HTTPStatusCode } from './HttpStatusCode';
 
 export interface RootState {
   tournamentState: TournamentState;
@@ -9,7 +10,18 @@ export interface RootState {
   sessionState: SessionState;
 }
 
+export enum UserMessageType {
+  Success = 'success',
+  Warning = 'warning',
+  Danger = 'danger',
+}
 export interface UserMessage {
-  type: 'success' | 'warning' | 'danger';
+  type: UserMessageType;
   message: string;
+}
+
+export interface GenericReponse {
+  code: HTTPStatusCode;
+  message: string;
+  userMessage: UserMessage;
 }

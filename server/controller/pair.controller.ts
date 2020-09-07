@@ -9,7 +9,7 @@ import { PairDTO } from '../models/dto';
 import { asyncMiddleware, withAuth } from '../core/middleware';
 import { AppRequest } from './index';
 import { listInTournament, findAlias } from '../manager/pair.manager';
-import { missingParamsResponse } from './common';
+import { MissingParamsResponse } from './common';
 
 const router = Router();
 
@@ -47,7 +47,7 @@ router.put(
     const rows = body.pairs as PairDTO[];
     const stage1Name = body.stage1Name;
     if (rows.length === 0) {
-      return missingParamsResponse(res);
+      return MissingParamsResponse(res);
     }
     const transaction = await dbConnection.transaction();
     try {

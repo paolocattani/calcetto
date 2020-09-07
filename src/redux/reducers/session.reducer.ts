@@ -16,16 +16,15 @@ export const SessionReducer = createReducer<SessionState, Action>(initialSession
     (state) => ({
       ...state,
       isLoading: true,
-      errorMessage: undefined,
     })
   )
   // Failure
   .handleAction(
     [SessionAction.checkAuthentication.failure, SessionAction.login.failure, SessionAction.logout.failure],
-    (state, { payload: { message } }) => ({
+    (state, { payload: { userMessage } }) => ({
       ...state,
-      errorMessage: message,
       isLoading: false,
+      message: userMessage,
     })
   )
   .handleAction(

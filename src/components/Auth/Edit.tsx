@@ -4,13 +4,12 @@ import { useInput } from '../core/hooks/InputHook';
 import DatePicker from 'react-datepicker';
 import { TrashIcon, SaveIcon, TimesIcon } from '../core/icons';
 import { SessionSelector } from 'redux/selectors/session.selector';
-import { SessionAction } from 'redux/actions';
 import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 const Delete = lazy(() => import('./Delete'));
 
 const EditUser: React.FC<{}> = (): JSX.Element => {
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
   const history = useHistory();
   const session = useSelector(SessionSelector.getSession);
   const [showModalDelete, setShowModalDelete] = useState(false);
@@ -50,7 +49,8 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
       });
       await response.json();
       if (response.ok) {
-        dispatch(SessionAction.login.request({ user: model }));
+        // FIXME:
+        ///dispatch(SessionAction.login.request({ user: model }));
         showSuccess('Aggiornamento effettuato ... ');
         setTimeout(() => history.push('/'), 3000);
       } else showError('Errore durante aggiornamento dati');

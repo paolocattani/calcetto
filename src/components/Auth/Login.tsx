@@ -2,9 +2,8 @@ import { useInput } from '../core/hooks/InputHook';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import React, { useState } from 'react';
 import { useHistory, withRouter } from 'react-router-dom';
-import { SessionAction, TournamentAction } from 'redux/actions';
+import { SessionAction } from 'redux/actions';
 import { useDispatch } from 'react-redux';
-import { UserDTO } from 'redux/models/user.model';
 import { toast } from 'react-toastify';
 import { InputField } from '../core/generic/Input';
 
@@ -29,8 +28,9 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
       return;
     }
     setValidated(true);
-    try {
-      /*
+    dispatch(SessionAction.login.request({ username, password, history: currentHistory }));
+    /*
+
         FIXME: create a better action flow
         - Set is loading
         - Try to authenticate
@@ -38,7 +38,8 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
         - Fetch Tournament List
         - Navigate to home
         - set is loading false
-      */
+
+    try {
       const response = await fetch('/api/v1/auth/authenticate', {
         method: 'POST',
         body: JSON.stringify({ username, password }),
@@ -48,7 +49,7 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
       if (response.ok && result) {
         // Messaggio di benvenuto
         toast.success(`Bentornato ${result.username} !`);
-        dispatch(SessionAction.login.request({ user: result }));
+        dispatch(SessionAction.login.request({ username, password, history: currentHistory }));
         dispatch(TournamentAction.fetchTournaments.request({}));
         dispatch(
           SessionAction.sessionControl.request({
@@ -64,6 +65,7 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
       // console.log('onSubmitLogin : ', error);
       toast.error('Errore durante il processo di registrazione. Riprovare piu tardi');
     }
+      */
   };
 
   return (
