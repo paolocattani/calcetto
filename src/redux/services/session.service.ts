@@ -1,8 +1,14 @@
-import { CheckAuthenticationRequest, AuthenticationResponse, LoginRequest, UserMessageType } from 'redux/models';
-import { UserDTO } from 'redux/models/user.model';
+import {
+  CheckAuthenticationRequest,
+  AuthenticationResponse,
+  LoginRequest,
+  UserMessageType,
+  RegistrationRequest,
+  RegistrationResponse,
+} from 'redux/models';
 import { eventChannel, buffers, END } from 'redux-saga';
 import { HTTPStatusCode } from 'redux/models/HttpStatusCode';
-import { handleError, handleGenericError, UnexpectedServerError } from './common';
+import { handleGenericError, UnexpectedServerError } from './common';
 
 export enum SessionStatus {
   // Sessione scaduta, reindirizza l'utente alla login
@@ -16,6 +22,7 @@ export interface Message {
   message?: string;
 }
 
+// Login
 export const login = async ({ username, password }: LoginRequest): Promise<AuthenticationResponse> => {
   try {
     const response = await fetch('/api/v1/auth/authenticate', {
@@ -33,22 +40,43 @@ export const login = async ({ username, password }: LoginRequest): Promise<Authe
   }
 };
 
+// Registration
+export const registration = async ({
+  history,
+  ...registrationInfo
+}: RegistrationRequest): Promise<RegistrationResponse> => {
+  try {
+    const response = await fetch('/api/v1/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(registrationInfo),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const result: RegistrationResponse = await response.json();
+    return result;
+  } catch (error) {
+    return {
+      user: undefined,
+      ...UnexpectedServerError,
+    };
+  }
+};
+
 // eslint-disable-next-line no-empty-pattern
 export const CheckAuthentication = async ({}: CheckAuthenticationRequest): Promise<AuthenticationResponse> => {
+  let response;
   try {
-    const response = await fetch('/api/v1/auth/');
-    const user: UserDTO | null = await response.json();
-    // FIXME:
-    return {
-      user: user && response.ok ? user : undefined,
-      code: HTTPStatusCode.Accepted,
-      message: '',
-      userMessage: {
-        type: UserMessageType.Success,
-        message: '',
-      },
-    };
+    response = await fetch('/api/v1/auth/');
+    const result = await response.json();
+    return result;
   } catch (error) {
+    if (response?.status === HTTPStatusCode.Unauthorized) {
+      return {
+        user: undefined,
+        code: HTTPStatusCode.Accepted,
+        message: '',
+        userMessage: { type: UserMessageType.Success, message: '' },
+      };
+    }
     const result = {
       user: undefined,
       ...UnexpectedServerError,

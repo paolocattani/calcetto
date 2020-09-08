@@ -5,19 +5,14 @@ import DatePicker from 'react-datepicker';
 import Select, { StylesConfig, ValueType } from 'react-select';
 import './style.css';
 import { emailRegExp, passwordRegExp } from '../core/utils';
-import { UserDTO } from 'redux/models/user.model';
 import { SessionAction } from 'redux/actions';
 import { useDispatch } from 'react-redux';
-import { withRouter, RouteComponentProps, useHistory } from 'react-router-dom';
-import { PlayerRole } from 'redux/models';
+import { withRouter, useHistory } from 'react-router-dom';
+import { PlayerRole, PlayerRoleType } from 'redux/models';
 import { toast } from 'react-toastify';
 
-interface PropsType extends RouteComponentProps {}
+interface RegisterProps {}
 
-type PlayerRoleType = {
-  value: PlayerRole;
-  label: PlayerRole;
-};
 const playerRoles: ReadonlyArray<PlayerRoleType> = [
   { value: PlayerRole.NotAPlayer, label: PlayerRole.NotAPlayer },
   { value: PlayerRole.GoalKeeper, label: PlayerRole.GoalKeeper },
@@ -26,7 +21,7 @@ const playerRoles: ReadonlyArray<PlayerRoleType> = [
 ];
 
 // https://medium.com/@faizanv/authentication-for-your-react-and-express-application-w-json-web-tokens-923515826e0#6563
-const Register: React.FC<PropsType> = (): JSX.Element => {
+const Register: React.FC<RegisterProps> = (): JSX.Element => {
   const dispatch = useDispatch();
   const currentHistory = useHistory();
   const { value: username, bind: bindUsername, reset: resetUsername } = useInput<string>('');
@@ -117,35 +112,21 @@ const Register: React.FC<PropsType> = (): JSX.Element => {
     evt.preventDefault();
     if (!isValid()) return;
 
-    try {
-      const response = await fetch('/api/v1/auth/register', {
-        method: 'POST',
-        body: JSON.stringify({ username, name, surname, email, password, phone, birthday, playerRole }),
-        headers: { 'Content-Type': 'application/json' },
-      });
-      const result: UserDTO = await response.json();
-      if (response.ok && result) {
-        // Messaggio di benvenuto
-        toast.success(`Benvenuto ${result.username} !`);
-        // FIXME:
-        //dispatch(SessionAction.login.request({ username,password }));
-        dispatch(SessionAction.sessionControl.request({ history: currentHistory }));
-      } else {
-        switch (response.status) {
-          case 401:
-            toast.error('Utente o Password errata');
-            break;
-          case 403:
-            toast.error('Utente o Email gia registrati');
-            break;
-          default:
-            break;
-        }
-      }
-    } catch (error) {
-      console.error('onSubmitLogin : ', error);
-      toast.error('Errore durante il processo di registrazione. Riprovare piu tardi');
-    }
+    dispatch(
+      SessionAction.registration.request({
+        username,
+        name,
+        surname,
+        email,
+        cEmail,
+        password,
+        cPassword,
+        phone,
+        birthday,
+        playerRole,
+        history: currentHistory,
+      })
+    );
   };
 
   const onSelectPlayerRole = (newRole: ValueType<PlayerRoleType>) => {

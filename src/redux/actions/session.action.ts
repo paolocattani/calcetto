@@ -6,7 +6,7 @@ import {
   AuthenticationError,
   AuthenticationResponse,
   LoginRequest,
-  RegisterRequest,
+  RegistrationRequest,
   LogoutRequest,
 } from 'redux/models/session.model';
 
@@ -14,8 +14,8 @@ const actionName = '[Session]';
 
 export const SessionAction = {
   // Register new user
-  register: createAsyncAction(...defaultAsyncParams(actionName, 'Register User'))<
-    RegisterRequest,
+  registration: createAsyncAction(...defaultAsyncParams(actionName, 'Register User'))<
+    RegistrationRequest,
     AuthenticationResponse,
     AuthenticationError
   >(),

@@ -13,6 +13,7 @@ import * as playerManager from './player.manager';
 import { Op } from 'sequelize';
 import { lowerWrapper } from '../core/utils';
 import { isProductionMode } from '../core/debug';
+import { RegistrationRequest } from 'models/client/auth.models';
 
 // Const
 const className = 'Authentication Manager : ';
@@ -197,28 +198,34 @@ export async function checkIfExist(user: User) {
   }
 }
 
-export const isValidRegister = (user: User): string => {
-  let result = '';
+export const isValidRegister = (user: RegistrationRequest): Array<string> => {
+  let result = [];
   if (!user.username) {
-    result = 'Scegli uno username';
+    result.push('Scegli uno username');
   }
   if (!user.name) {
-    result = 'Inserire il nome';
+    result.push('Inserire il nome');
   }
   if (!user.surname) {
-    result = 'Inserire il cognome';
+    result.push('Inserire il cognome');
   }
   if (!user.email) {
-    result = 'Inserire una email';
+    result.push('Inserire una email');
+  }
+  if (user.email !== user.cEmail) {
+    result.push('Le email non corrispondono');
   }
   if (!emailRegExp.test(user.email)) {
-    result = 'Inserire una email valida';
+    result.push('Inserire una email valida');
   }
   if (!user.password) {
-    result = 'Inserire una password';
+    result.push('Inserire una password');
+  }
+  if (user.password !== user.cPassword) {
+    result.push('Le password non corrispondono');
   }
   if (!passwordRegExp.test(user.password)) {
-    result = 'La password non rispetta i criteri';
+    result.push('La password non rispetta i criteri');
   }
   return result;
 };

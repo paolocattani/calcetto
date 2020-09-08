@@ -1,8 +1,6 @@
 import React, { useState, CSSProperties, lazy } from 'react';
 import { Button, Container, Card, Col } from 'react-bootstrap';
 import { ToggleOn, ToggleOff } from '../core/icons';
-import { useSelector } from 'react-redux';
-import { SessionSelector } from 'redux/selectors';
 
 const Login = lazy(() => import('./Login'));
 const Register = lazy(() => import('./Register'));
@@ -10,8 +8,6 @@ const Register = lazy(() => import('./Register'));
 const AuthWrapper: React.FC = (): JSX.Element => {
   // State
   const [register, setRegister] = useState(false); // Mostra form registrazione/login
-  const message = useSelector(SessionSelector.getMessage);
-
   const [title, body, icon, text] = register
     ? ['Registrati', <Register />, <ToggleOn />, 'Login']
     : ['Login', <Login />, <ToggleOff />, 'Registrati'];

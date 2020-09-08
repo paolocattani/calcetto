@@ -8,7 +8,7 @@ export interface SessionState {
   isAuthenticated: boolean;
   isAdmin: boolean;
   isLoading: boolean;
-  message?: UserMessage;
+  message?: UserMessage; // FIXME: unsed
 }
 
 export interface UserRegistration {
@@ -38,10 +38,32 @@ export interface LoginRequest {
 }
 export interface LogoutRequest {}
 
-export interface RegisterRequest {}
+export interface RegistrationRequest {
+  username: string;
+  name: string;
+  surname: string;
+  email: string;
+  cEmail: string;
+  password: string;
+  cPassword: string;
+  phone: string;
+  birthday: Date | null;
+  playerRole: PlayerRoleType;
+  history: H.History<unknown>;
+}
+
+export type PlayerRoleType = {
+  value: PlayerRole;
+  label: PlayerRole;
+};
 
 // Response
 export interface AuthenticationResponse extends GenericReponse {
+  user?: UserDTO;
+}
+
+export interface RegistrationResponse extends GenericReponse {
+  errors?: Array<string>;
   user?: UserDTO;
 }
 

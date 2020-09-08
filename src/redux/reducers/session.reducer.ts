@@ -30,7 +30,7 @@ export const SessionReducer = createReducer<SessionState, Action>(initialSession
   .handleAction(
     [
       SessionAction.checkAuthentication.success,
-      SessionAction.register.success,
+      SessionAction.registration.success,
       SessionAction.login.success,
       SessionAction.logout.success,
       SessionAction.updateSession,

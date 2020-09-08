@@ -21,7 +21,7 @@ import {
 } from '../manager/auth.manager';
 import { AppRequest } from './index';
 import { HTTPStatusCode } from '../core/HttpStatusCode';
-import { AuthenticationResponse } from 'models/client/auth.models';
+import { AuthenticationResponse, LoginRequest } from 'models/client/auth.models';
 import { UserMessageType } from '../models/client/common.models';
 import { UnexpectedServerError, MissingParamsResponse } from './common';
 const router = Router();
@@ -49,7 +49,17 @@ router.get(
 router.get(
   '/',
   withAuth,
-  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => res.status(200).json(req.user))
+  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) =>
+    res.status(HTTPStatusCode.Accepted).json({
+      user: req.user,
+      code: HTTPStatusCode.Accepted,
+      message: 'User is already authenticated',
+      userMessage: {
+        type: UserMessageType.Success,
+        message: `Bentornato ${req.user!.name}`,
+      },
+    })
+  )
 );
 
 router.get(
@@ -74,23 +84,53 @@ router.post(
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     logger.info('/register start ');
     const { body } = req;
-    let model: User = parseBody(body);
+
     // Ripeto i controlli di validità sui dati anche qui in caso siano in qualche modo stati
     // bypassati quelli a FE.
-    const isValidMessage = isValidRegister(model);
-    if (isValidMessage !== '') {
-      res.status(403).json({ message: isValidMessage });
+    const errors = isValidRegister(body);
+    if (errors.length !== 0) {
+      res.status(HTTPStatusCode.BadRequest).json({
+        user: undefined,
+        errors,
+        code: HTTPStatusCode.BadRequest,
+        message: 'Registration data is not valid',
+        userMessage: {
+          type: UserMessageType.Danger,
+          message: 'Correggi gli errori per procedere con la registrazione',
+        },
+      });
     }
+    const model: User = parseBody(body);
     const user = await checkIfExist(model);
     if (user) {
-      return res.status(403).json({ message: 'Email o Username gia utilizzati. ' });
+      return res.status(HTTPStatusCode.BadRequest).json({
+        user: undefined,
+        code: HTTPStatusCode.BadRequest,
+        errors: ['Email o Username gia utilizzati.'],
+        message: 'Email or Username alrealdy exists.',
+        userMessage: {
+          type: UserMessageType.Danger,
+          message: 'Email o Username gia utilizzati.',
+        },
+      });
     }
     const record = await registerUser(model, body.playerRole);
     if (record) {
       addUserCookies(record, res);
-      res.status(200).json(record);
+      res.status(HTTPStatusCode.Accepted).json({
+        user: record,
+        code: HTTPStatusCode.Accepted,
+        message: 'Registration complete.',
+        userMessage: {
+          type: UserMessageType.Success,
+          message: `Benvenuto ${record.name}`,
+        },
+      });
     } else {
-      res.status(500).json({ message: 'Internal error' });
+      return UnexpectedServerError(res, {
+        // eslint-disable-next-line quotes
+        errors: ["Errore server non previsto. E' stata avviata la procedura di autodistruzione."],
+      });
     }
     logger.info('/register end ');
     return;
@@ -118,7 +158,7 @@ router.post(
 router.post(
   '/authenticate',
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
-    const { username, password } = req.body;
+    const { username, password } = req.body as LoginRequest;
     let response: AuthenticationResponse;
     try {
       logger.info('/authenticate start ');
@@ -142,7 +182,7 @@ router.post(
       response = {
         user: userDTO,
         code: HTTPStatusCode.Accepted,
-        message: 'Login complete',
+        message: 'Login complete.',
         userMessage: {
           type: UserMessageType.Success,
           message: `Benvenuto ${userDTO.name}`,

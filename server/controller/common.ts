@@ -14,8 +14,9 @@ export const MissingParamsResponse = (res: Response, additionalInfo?: Object) =>
     },
   });
 
-export const UnexpectedServerError = (res: Response) =>
+export const UnexpectedServerError = (res: Response, additionalInfo?: Object) =>
   res.status(HTTPStatusCode.InternalServerError).json({
+    ...additionalInfo,
     code: HTTPStatusCode.InternalServerError,
     message: 'Unexpected Server Error',
     userMessage: {
