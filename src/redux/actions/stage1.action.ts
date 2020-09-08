@@ -11,7 +11,7 @@ import {
   UpdateSelectedPairsRequest,
   UpdateSelectedPairsResponse,
 } from 'redux/models';
-import { defaultAsyncParams, PurgeResponse } from './constants';
+import { defaultAsyncParams, PurgeResponse, PURGE_STORE_ACTION } from './constants';
 
 const actionName = '[Stage1]';
 
@@ -44,5 +44,5 @@ export const Stage1Action = {
     UpdatePlacementResponse,
     Error
   >(),
-  purge: createAction('persist/PURGE')<PurgeResponse>(),
+  purge: createAction(PURGE_STORE_ACTION)<PurgeResponse>(),
 };

@@ -1,5 +1,5 @@
 import { createAsyncAction, createAction } from 'typesafe-actions';
-import { defaultAsyncParams, PurgeResponse } from './constants';
+import { defaultAsyncParams, PurgeResponse, PURGE_STORE_ACTION } from './constants';
 import { FetchPairsRequest, FetchPairsResponse } from 'redux/models';
 
 const actionName = '[Pair]';
@@ -11,5 +11,5 @@ export const PairAction = {
     FetchPairsResponse,
     Error
   >(),
-  purge: createAction('persist/PURGE')<PurgeResponse>(),
+  purge: createAction(PURGE_STORE_ACTION)<PurgeResponse>(),
 };

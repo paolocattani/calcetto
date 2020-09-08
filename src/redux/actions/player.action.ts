@@ -1,5 +1,5 @@
 import { createAsyncAction, createAction } from 'typesafe-actions';
-import { defaultAsyncParams, PurgeResponse } from './constants';
+import { defaultAsyncParams, PurgeResponse, PURGE_STORE_ACTION } from './constants';
 import {
   FetchPlayersResponse,
   FetchPlayersRequest,
@@ -27,5 +27,5 @@ export const PlayerAction = {
     DeletePlayersResponse,
     Error
   >(),
-  purge: createAction('persist/PURGE')<PurgeResponse>(),
+  purge: createAction(PURGE_STORE_ACTION)<PurgeResponse>(),
 };

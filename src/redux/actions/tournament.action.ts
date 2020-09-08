@@ -8,7 +8,7 @@ import {
   UpdateTournamentResponse,
 } from '../models/tournament.model';
 import { createAsyncAction, createAction } from 'typesafe-actions';
-import { defaultAsyncParams, defaultParam, PurgeResponse } from './constants';
+import { defaultAsyncParams, defaultParam, PurgeResponse, PURGE_STORE_ACTION } from './constants';
 
 const actionName = '[Tournament]';
 
@@ -33,5 +33,5 @@ export const TournamentAction = {
     UpdateTournamentResponse,
     Error
   >(),
-  purge: createAction('persist/PURGE')<PurgeResponse>(),
+  purge: createAction(PURGE_STORE_ACTION)<PurgeResponse>(),
 };
