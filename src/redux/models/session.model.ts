@@ -25,32 +25,27 @@ export interface UserRegistration {
 export interface SessionDTO {}
 
 // Request
-export interface CheckAuthenticationRequest {
+export interface AuthenticationRequest {
   history: H.History<unknown>;
 }
-export interface WatchSessionRequest {
-  history: H.History<unknown>;
-}
-export interface LoginRequest {
+export interface CheckAuthenticationRequest extends AuthenticationRequest {}
+export interface WatchSessionRequest extends AuthenticationRequest {}
+export interface LogoutRequest extends AuthenticationRequest {}
+export interface LoginRequest extends AuthenticationRequest {
   username: string;
   password: string;
-  history: H.History<unknown>;
 }
-export interface DeleteUserRequest {
+export interface DeleteUserRequest extends AuthenticationRequest {
   username: string;
   email: string;
   password: string;
-  history: H.History<unknown>;
 }
 
-export interface UpdateUserRequest {
+export interface UpdateUserRequest extends AuthenticationRequest {
   user: UserDTO;
-  history: H.History<unknown>;
 }
 
-export interface LogoutRequest {}
-
-export interface RegistrationRequest {
+export interface RegistrationRequest extends AuthenticationRequest {
   username: string;
   name: string;
   surname: string;
@@ -61,7 +56,6 @@ export interface RegistrationRequest {
   phone: string;
   birthday: Date | null;
   playerRole: PlayerRoleType;
-  history: H.History<unknown>;
 }
 
 export type PlayerRoleType = {

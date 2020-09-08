@@ -9,6 +9,7 @@ import {
   registration,
   updateUser,
   deleteUser,
+  logout,
 } from 'redux/services/session.service';
 import { toast } from 'react-toastify';
 import { Action } from 'typesafe-actions';
@@ -20,12 +21,10 @@ function* checkAuthenticationSaga({
   payload,
 }: ReturnType<typeof SessionAction.checkAuthentication.request>): Generator<StrictEffect, void, any> {
   try {
-    console.log('checkAuthenticationSaga : ');
     const response: AuthenticationResponse = yield call(CheckAuthentication, payload);
     yield put(SessionAction.checkAuthentication.success(response));
     yield fork(SessionAction.sessionControl.request, { history: payload.history });
   } catch (err) {
-    console.log('checkAuthenticationSaga : error => ', err);
     yield put(SessionAction.checkAuthentication.failure(err));
   }
 }
@@ -67,6 +66,15 @@ function* watchSessionSaga(
 
 // Logout
 function* logoutSaga(action: ReturnType<typeof SessionAction.logout.request>): Generator<StrictEffect, void, any> {
+  const logoutReponse: AuthenticationResponse = yield call(logout);
+  if (logoutReponse.code === HTTPStatusCode.Accepted) {
+    yield put(SessionAction.logout.success(logoutReponse));
+    action.payload.history.push('/');
+    toast.success(logoutReponse.userMessage.message);
+  } else {
+    toast.error(logoutReponse.userMessage.message);
+    yield put(SessionAction.logout.failure(logoutReponse));
+  }
   persistor.purge();
   yield put(
     SessionAction.logout.success({
@@ -136,8 +144,7 @@ function* deleteUserSaga(action: ReturnType<typeof SessionAction.delete.request>
   const deleteReponse: AuthenticationResponse = yield call(deleteUser, action.payload);
   if (deleteReponse.code === HTTPStatusCode.Accepted) {
     yield put(SessionAction.delete.success(deleteReponse));
-    yield put(SessionAction.logout.request({}));
-    action.payload.history.push('/');
+    yield put(SessionAction.logout.request({ history: action.payload.history }));
     toast.success(deleteReponse.userMessage.message);
   } else {
     toast.error(deleteReponse.userMessage.message);

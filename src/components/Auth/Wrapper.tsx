@@ -9,8 +9,8 @@ const AuthWrapper: React.FC = (): JSX.Element => {
   // State
   const [register, setRegister] = useState(false); // Mostra form registrazione/login
   const [title, body, icon, text] = register
-    ? ['Registrati', <Register />, <ToggleOn />, 'Login']
-    : ['Login', <Login />, <ToggleOff />, 'Registrati'];
+    ? [' Registrati', <Register />, <ToggleOn />, 'Login']
+    : [' Login', <Login />, <ToggleOff />, 'Registrati'];
 
   const modalStyle: CSSProperties = {
     textAlign: 'left',
@@ -27,7 +27,7 @@ const AuthWrapper: React.FC = (): JSX.Element => {
         <Card.Footer>
           <Button size="lg" variant="outline-warning" onClick={() => setRegister(!register)}>
             {icon}
-            <strong>{text}</strong>
+            <strong> {text}</strong>
           </Button>
         </Card.Footer>
       </Card>

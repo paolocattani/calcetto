@@ -66,6 +66,7 @@ router.get(
   '/logout',
   withAuth,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
+    //FIXME:
     res.cookie('token', {
       expires: new Date(Date.now()),
       ...(isProductionMode()
@@ -75,7 +76,15 @@ router.get(
           }
         : { httpOnly: true }),
     });
-    return res.status(200).json({ message: 'logout complete' });
+    return res.status(HTTPStatusCode.Accepted).json({
+      user: undefined,
+      code: HTTPStatusCode.Accepted,
+      message: 'Logout complete.',
+      userMessage: {
+        type: UserMessageType.Success,
+        message: 'A presto...',
+      },
+    });
   })
 );
 

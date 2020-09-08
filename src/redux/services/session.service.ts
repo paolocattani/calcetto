@@ -78,6 +78,20 @@ export const login = async ({ username, password }: LoginRequest): Promise<Authe
   }
 };
 
+// Login
+export const logout = async (): Promise<AuthenticationResponse> => {
+  try {
+    const response = await fetch('/api/v1/auth/logout');
+    const result: AuthenticationResponse = await response.json();
+    return result;
+  } catch (error) {
+    return {
+      user: undefined,
+      ...UnexpectedServerError,
+    };
+  }
+};
+
 // Registration
 export const registration = async ({
   history,

@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect } from 'react';
 // Components
-import { Header } from '../Header/Header';
+import Header from '../Header/Header';
 import { LoadingModal } from '../core/generic/Commons';
 // Routing
 import { Switch, useHistory } from 'react-router';

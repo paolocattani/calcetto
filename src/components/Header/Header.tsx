@@ -2,29 +2,21 @@ import React, { CSSProperties } from 'react';
 import backgroundImage from '../../assets/header.jpg';
 import { Jumbotron, Navbar, Nav, Button, Dropdown, ButtonGroup } from 'react-bootstrap';
 import routes from '../core/routing/Routes';
-import { Link } from 'react-router-dom';
+import { Link, useHistory, withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { SessionSelector } from 'redux/selectors/session.selector';
 import { HomeIcon } from 'components/core/icons';
-import { toast } from 'react-toastify';
 import { SessionAction } from 'redux/actions';
 
 const applicationName = 'Calcetto C.S.M';
 
 // Header applicazione, include navbar
-export const Header: React.FC = () => {
+const Header: React.FC = () => {
   const dispatch = useDispatch();
-  const session = useSelector(SessionSelector.getSession);
+  const currentHistory = useHistory();
+  const { user, isAuthenticated } = useSelector(SessionSelector.getSession);
 
-  const logout = async () => {
-    const response = await fetch('/api/v1/auth/logout');
-    if (response.ok) {
-      toast.success('Alla prossima....');
-      dispatch(SessionAction.logout.request({}));
-    } else {
-      toast.error('Qualcosa non ha funzionato...');
-    }
-  };
+  const logout = () => dispatch(SessionAction.logout.request({ history: currentHistory }));
 
   // const yellow = '#ffc107';
   const jumboStyle: CSSProperties = {
@@ -44,7 +36,7 @@ export const Header: React.FC = () => {
         <h1 style={{ margin: '5vh' }}>
           <strong style={titleStyle}>{applicationName}</strong>
         </h1>
-        {session.isAuthenticated ? (
+        {isAuthenticated ? (
           <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Navbar.Brand as={Link} to="/">
               <HomeIcon />
@@ -55,7 +47,7 @@ export const Header: React.FC = () => {
               <Nav className="mr-auto">
                 {routes.map((route) =>
                   route.visible ? (
-                    route.private && !session.isAuthenticated ? null : (
+                    route.private && !isAuthenticated ? null : (
                       <Nav.Link as={Link} key={route.index} to={route.path} className="text-white">
                         {route.label}
                       </Nav.Link>
@@ -63,11 +55,11 @@ export const Header: React.FC = () => {
                   ) : null
                 )}
               </Nav>
-              {session.user ? (
+              {user ? (
                 <>
                   <Dropdown alignRight as={ButtonGroup}>
                     <Button style={{ opacity: 1 }} variant="outline-warning" size="lg" disabled>
-                      <strong style={{ color: '#64bd9c', fontSize: 'larger' }}>{session.user.username}</strong>
+                      <strong style={{ color: '#64bd9c', fontSize: 'larger' }}>{user.username}</strong>
                     </Button>
                     <Dropdown.Toggle split variant="outline-warning" id="dropdown-custom-2" />
                     <Dropdown.Menu className="default-background default-border-yellow">
@@ -100,3 +92,5 @@ export const Header: React.FC = () => {
     </header>
   );
 };
+
+export default withRouter(Header);
