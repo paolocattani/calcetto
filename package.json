@@ -1,7 +1,7 @@
 {
   "name": "calcetto",
   "private": true,
-  "version": "2.5.1",
+  "version": "2.6.0",
   "description": "Table Soccer Manager",
   "engines": {
     "node": "12.x",
