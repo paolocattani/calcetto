@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { withRouter, useHistory } from 'react-router-dom';
 import { PlayerRole, PlayerRoleType } from 'redux/models';
 import { toast } from 'react-toastify';
+import { InputField } from 'components/core/generic/Input';
 
 interface RegisterProps {}
 
@@ -140,50 +141,64 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
       {/* Username - Name - Surname */}
       <Form.Row>
         <Col>
-          <Form.Group controlId="username">
-            <Form.Label>Username</Form.Label>
-            <Form.Control required type="text" placeholder="username" {...bindUsername} />
-          </Form.Group>
+          <InputField
+            controlId="username"
+            label="Username"
+            required={true}
+            type="text"
+            placeholder="username"
+            {...bindUsername}
+          />
         </Col>
         <Col>
-          <Form.Group controlId="name">
-            <Form.Label>Nome</Form.Label>
-            <Form.Control required type="text" placeholder="Nome" {...bindName} />
-          </Form.Group>
+          <InputField controlId="name" label="Nome" required={true} type="text" placeholder="Nome" {...bindName} />
         </Col>
         <Col>
-          <Form.Group controlId="surname">
-            <Form.Label>Cognome</Form.Label>
-            <Form.Control required type="text" placeholder="Cognome" {...bindSurname} />
-          </Form.Group>
+          <InputField
+            controlId="surname"
+            label="Cognome"
+            required={true}
+            type="text"
+            placeholder="Cognome"
+            {...bindSurname}
+          />
         </Col>
       </Form.Row>
       {/* Email - Conferma Email */}
       <Form.Row>
         <Col>
-          <Form.Group controlId="email">
-            <Form.Label>Email</Form.Label>
-            <Form.Control required type="email" placeholder="Email" {...bindEmail} />
-          </Form.Group>
+          <InputField controlId="email" label="Email" required={true} type="email" placeholder="Email" {...bindEmail} />
         </Col>
         <Col>
-          <Form.Group controlId="cemail">
-            <Form.Label>Conferma Email</Form.Label>
-            <Form.Control required type="email" placeholder="Conferma Email" {...bindCEmail} />
-          </Form.Group>
+          <InputField
+            controlId="cemail"
+            label="Conferma Email"
+            required={true}
+            type="email"
+            placeholder="Conferma Email"
+            {...bindCEmail}
+          />
         </Col>
       </Form.Row>
       {/* Password - Conferma Password */}
       <Form.Row>
         <Col>
-          <Form.Group controlId="password">
-            <Form.Label>Password</Form.Label>
-            <Form.Control required type="password" placeholder="Password" {...bindPassword} />
-          </Form.Group>
-          <Form.Group controlId="cpassword">
-            <Form.Label>Conferma Password</Form.Label>
-            <Form.Control required type="password" placeholder="Conferma Password" {...bindCPassword} />
-          </Form.Group>
+          <InputField
+            controlId="password"
+            label="Password"
+            required={true}
+            type="password"
+            placeholder="Password"
+            {...bindPassword}
+          />
+          <InputField
+            controlId="cpassword"
+            label="Conferma Password"
+            required={true}
+            type="password"
+            placeholder="Conferma Password"
+            {...bindCPassword}
+          />
         </Col>
         <Col md={6} style={{ display: 'flex', alignItems: 'center' }}>
           <ul>
@@ -197,10 +212,7 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
       </Form.Row>
       <Form.Row>
         <Col md={3}>
-          <Form.Group controlId="phone">
-            <Form.Label>Telefono</Form.Label>
-            <Form.Control type="text" placeholder="Telefono" {...bindPhone} />
-          </Form.Group>
+          <InputField controlId="phone" label="Telefono" type="text" placeholder="Telefono" {...bindPhone} />
         </Col>
         <Col md={3}>
           <Form.Group controlId="birthday">
@@ -209,7 +221,7 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
               id="birthday"
               className="datepicker"
               dateFormat="dd/MM/yyyy"
-              required
+              required={true}
               selected={birthday}
               onChange={(val) => setBirthday(val)}
             />

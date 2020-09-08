@@ -2,8 +2,9 @@ name: Node.js CI
 on: [push, pull_request]
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
+    name: Build
     strategy:
       matrix:
         node-version: [ 8.x, 10.x, 12.x]
@@ -35,6 +36,16 @@ jobs:
       # Build server
       - name: Build server
         run: npm run prod:build:server
+  test:
+    runs-on: ubuntu-latest
+    name: Build
+    steps:
+    # unit
+      - name: Unit Tests
+        run: npm run test
+    # e2e
+    # - name: End to end tests
+    #   run: npm run test
 
   # Code Quality
   check-quality:
