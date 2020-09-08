@@ -1,62 +1,39 @@
-import React, { FormEvent, SetStateAction, useState, CSSProperties, lazy } from 'react';
-import { Card, Container, Alert, Form, Button, Col, Row } from 'react-bootstrap';
+import React, { FormEvent, useState, CSSProperties, lazy } from 'react';
+import { Card, Container, Form, Button, Col, Row } from 'react-bootstrap';
 import { useInput } from '../core/hooks/InputHook';
 import DatePicker from 'react-datepicker';
 import { TrashIcon, SaveIcon, TimesIcon } from '../core/icons';
 import { SessionSelector } from 'redux/selectors/session.selector';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { SessionAction } from 'redux/actions';
 const Delete = lazy(() => import('./Delete'));
 
-const EditUser: React.FC<{}> = (): JSX.Element => {
-  //const dispatch = useDispatch();
-  const history = useHistory();
-  const session = useSelector(SessionSelector.getSession);
+const EditUser: React.FC<{}> = () => {
+  const dispatch = useDispatch();
+  const currentHistory = useHistory();
+  const user = useSelector(SessionSelector.getUser)!;
   const [showModalDelete, setShowModalDelete] = useState(false);
 
-  const { value: name, bind: bindName } = useInput<string>(session.user!.name);
-  const { value: surname, bind: bindSurname } = useInput<string>(session.user!.surname);
-  const { value: phone, bind: bindPhone } = useInput<string>(session.user!.phone);
-  const { value: birthday, setValue: setBirthday } = useInput<Date>(session.user!.birthday);
-
-  const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
-
-  const showError = (message: SetStateAction<string>) => {
-    setErrorMessage(message);
-    setTimeout(() => setErrorMessage(''), 3000);
-  };
-  const showSuccess = (message: SetStateAction<string>) => {
-    setSuccessMessage(message);
-    setTimeout(() => setSuccessMessage(''), 3000);
-  };
+  const { value: name, bind: bindName } = useInput<string>(user.name);
+  const { value: surname, bind: bindSurname } = useInput<string>(user.surname);
+  const { value: phone, bind: bindPhone } = useInput<string>(user.phone);
+  const { value: birthday, setValue: setBirthday } = useInput<Date>(user.birthday);
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      const { user } = session;
-      const model = {
-        ...user!,
-        name,
-        surname,
-        phone,
-        birthday,
-      };
-      const response = await fetch('/api/v1/auth/update', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(model),
-      });
-      await response.json();
-      if (response.ok) {
-        // FIXME:
-        ///dispatch(SessionAction.login.request({ user: model }));
-        showSuccess('Aggiornamento effettuato ... ');
-        setTimeout(() => history.push('/'), 3000);
-      } else showError('Errore durante aggiornamento dati');
-    } catch (error) {
-      showError('Errore durante aggiornamento dati');
-    }
+    dispatch(
+      SessionAction.update.request({
+        user: {
+          ...user!,
+          name: name.trim(),
+          surname: surname.trim(),
+          phone: phone.trim(),
+          birthday,
+        },
+        history: currentHistory,
+      })
+    );
   };
 
   const modalStyle: CSSProperties = {
@@ -75,7 +52,7 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
             <Row>
               <Col md="9">Gestione dati utente</Col>
               <Col md="3">
-                <Button variant="outline-warning" className="float-right" onClick={() => history.push('/')}>
+                <Button variant="outline-warning" className="float-right" onClick={() => currentHistory.push('/')}>
                   <TimesIcon /> Chiudi
                 </Button>
               </Col>
@@ -83,22 +60,12 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
           </Card.Header>
           <Card.Body>
             <Container>
-              {errorMessage ? (
-                <Alert key={'auth-alert-error'} variant={'danger'}>
-                  {errorMessage}
-                </Alert>
-              ) : null}
-              {successMessage ? (
-                <Alert key={'auth-alert-success'} variant={'success'}>
-                  {successMessage}
-                </Alert>
-              ) : null}
               <Form.Group as={Row} controlId="username">
                 <Form.Label column>Username</Form.Label>
                 <Col sm="9">
                   <Form.Control
                     plaintext
-                    value={session.user!.username!}
+                    value={user.username!}
                     readOnly
                     style={{ fontSize: 'larger', fontWeight: 'bolder' }}
                     className="default-color-white "
@@ -110,7 +77,7 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
                 <Col sm="9">
                   <Form.Control
                     plaintext
-                    value={session.user!.email!}
+                    value={user.email!}
                     readOnly
                     style={{ fontSize: 'larger', fontWeight: 'bolder' }}
                     className="default-color-white"
@@ -122,7 +89,7 @@ const EditUser: React.FC<{}> = (): JSX.Element => {
                 <Col sm="9">
                   <Form.Control
                     plaintext
-                    value={session.user!.role}
+                    value={user.role}
                     readOnly
                     style={{ fontSize: 'larger', fontWeight: 'bolder' }}
                     className="default-color-white"

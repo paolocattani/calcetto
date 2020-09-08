@@ -7,6 +7,8 @@ import {
   Message,
   login,
   registration,
+  updateUser,
+  deleteUser,
 } from 'redux/services/session.service';
 import { toast } from 'react-toastify';
 import { Action } from 'typesafe-actions';
@@ -48,7 +50,7 @@ function* watchSessionSaga(
         toast.error('La tua sessione è scaduta');
         // FIXME:
         yield put(
-          SessionAction.updateSession({
+          SessionAction.logout.success({
             user: undefined,
             code: HTTPStatusCode.Unauthorized,
             message: 'Unauthorized!',
@@ -113,6 +115,36 @@ function* regitrationSaga(
   }
 }
 
+// Update user
+function* updateUserSaga(action: ReturnType<typeof SessionAction.update.request>): Generator<StrictEffect, void, any> {
+  // Validate Login
+  const updateReponse: AuthenticationResponse = yield call(updateUser, action.payload);
+  console.log('updateReponse : ', updateReponse);
+  if (updateReponse.code === HTTPStatusCode.Accepted) {
+    yield put(SessionAction.update.success(updateReponse));
+    action.payload.history.push('/');
+    toast.success(updateReponse.userMessage.message);
+  } else {
+    toast.error(updateReponse.userMessage.message);
+    yield put(SessionAction.update.failure(updateReponse));
+  }
+}
+
+// Delete user
+function* deleteUserSaga(action: ReturnType<typeof SessionAction.delete.request>): Generator<StrictEffect, void, any> {
+  // Validate Login
+  const deleteReponse: AuthenticationResponse = yield call(deleteUser, action.payload);
+  if (deleteReponse.code === HTTPStatusCode.Accepted) {
+    yield put(SessionAction.delete.success(deleteReponse));
+    yield put(SessionAction.logout.request({}));
+    action.payload.history.push('/');
+    toast.success(deleteReponse.userMessage.message);
+  } else {
+    toast.error(deleteReponse.userMessage.message);
+    yield put(SessionAction.delete.failure(deleteReponse));
+  }
+}
+
 /*
 function* logger(action: Action<any>) {
   const state = yield select();
@@ -130,6 +162,8 @@ function logger(action: Action<any>) {
 export const SessionSagas = [
   takeEvery(SessionAction.logout.request, logoutSaga),
   takeEvery(SessionAction.login.request, loginSaga),
+  takeEvery(SessionAction.update.request, updateUserSaga),
+  takeEvery(SessionAction.delete.request, deleteUserSaga),
   takeEvery(SessionAction.registration.request, regitrationSaga),
   takeEvery(SessionAction.checkAuthentication.request, checkAuthenticationSaga),
   takeLatest(SessionAction.sessionControl.request, watchSessionSaga),

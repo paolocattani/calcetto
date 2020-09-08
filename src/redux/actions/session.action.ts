@@ -8,6 +8,8 @@ import {
   LoginRequest,
   RegistrationRequest,
   LogoutRequest,
+  DeleteUserRequest,
+  UpdateUserRequest,
 } from 'redux/models/session.model';
 
 const actionName = '[Session]';
@@ -27,6 +29,16 @@ export const SessionAction = {
   >(),
   logout: createAsyncAction(...defaultAsyncParams(actionName, 'Logout User'))<
     LogoutRequest,
+    AuthenticationResponse,
+    AuthenticationError
+  >(),
+  delete: createAsyncAction(...defaultAsyncParams(actionName, 'Delete User'))<
+    DeleteUserRequest,
+    AuthenticationResponse,
+    AuthenticationError
+  >(),
+  update: createAsyncAction(...defaultAsyncParams(actionName, 'Update User'))<
+    UpdateUserRequest,
     AuthenticationResponse,
     AuthenticationError
   >(),

@@ -28,44 +28,13 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
       return;
     }
     setValidated(true);
-    dispatch(SessionAction.login.request({ username, password, history: currentHistory }));
-    /*
-
-        FIXME: create a better action flow
-        - Set is loading
-        - Try to authenticate
-          - If error -> show message
-        - Fetch Tournament List
-        - Navigate to home
-        - set is loading false
-
-    try {
-      const response = await fetch('/api/v1/auth/authenticate', {
-        method: 'POST',
-        body: JSON.stringify({ username, password }),
-        headers: { 'Content-Type': 'application/json' },
-      });
-      const result: UserDTO = await response.json();
-      if (response.ok && result) {
-        // Messaggio di benvenuto
-        toast.success(`Bentornato ${result.username} !`);
-        dispatch(SessionAction.login.request({ username, password, history: currentHistory }));
-        dispatch(TournamentAction.fetchTournaments.request({}));
-        dispatch(
-          SessionAction.sessionControl.request({
-            history: currentHistory,
-          })
-        );
-        currentHistory.push('/');
-      } else {
-        if (response.status === 401) toast.error('Utente o Password errata');
-        else toast.error('Errore server. Riprovare piu tardi');
-      }
-    } catch (error) {
-      // console.log('onSubmitLogin : ', error);
-      toast.error('Errore durante il processo di registrazione. Riprovare piu tardi');
-    }
-      */
+    dispatch(
+      SessionAction.login.request({
+        username: username.trim(),
+        password: password.trim(),
+        history: currentHistory,
+      })
+    );
   };
 
   return (

@@ -12,7 +12,13 @@ export const initialSessionState: SessionState = {
 export const SessionReducer = createReducer<SessionState, Action>(initialSessionState)
   // Request
   .handleAction(
-    [SessionAction.checkAuthentication.request, SessionAction.login.request, SessionAction.logout.request],
+    [
+      SessionAction.checkAuthentication.request,
+      SessionAction.login.request,
+      SessionAction.logout.request,
+      SessionAction.update.request,
+      SessionAction.delete.request,
+    ],
     (state) => ({
       ...state,
       isLoading: true,
@@ -20,7 +26,13 @@ export const SessionReducer = createReducer<SessionState, Action>(initialSession
   )
   // Failure
   .handleAction(
-    [SessionAction.checkAuthentication.failure, SessionAction.login.failure, SessionAction.logout.failure],
+    [
+      SessionAction.checkAuthentication.failure,
+      SessionAction.login.failure,
+      SessionAction.logout.failure,
+      SessionAction.update.failure,
+      SessionAction.delete.failure,
+    ],
     (state, { payload: { userMessage } }) => ({
       ...state,
       isLoading: false,
@@ -33,6 +45,8 @@ export const SessionReducer = createReducer<SessionState, Action>(initialSession
       SessionAction.registration.success,
       SessionAction.login.success,
       SessionAction.logout.success,
+      SessionAction.update.success,
+      SessionAction.delete.success,
       SessionAction.updateSession,
     ],
     (state, { payload: { user } }) => ({

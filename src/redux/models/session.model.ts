@@ -36,6 +36,18 @@ export interface LoginRequest {
   password: string;
   history: H.History<unknown>;
 }
+export interface DeleteUserRequest {
+  username: string;
+  email: string;
+  password: string;
+  history: H.History<unknown>;
+}
+
+export interface UpdateUserRequest {
+  user: UserDTO;
+  history: H.History<unknown>;
+}
+
 export interface LogoutRequest {}
 
 export interface RegistrationRequest {

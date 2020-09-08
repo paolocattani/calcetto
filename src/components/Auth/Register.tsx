@@ -114,15 +114,15 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
 
     dispatch(
       SessionAction.registration.request({
-        username,
-        name,
-        surname,
-        email,
-        cEmail,
-        password,
-        cPassword,
-        phone,
-        birthday,
+        username: username.trim(),
+        name: name.trim(),
+        surname: surname.trim(),
+        email: email.trim(),
+        cEmail: cEmail.trim(),
+        password: password.trim(),
+        cPassword: cPassword.trim(),
+        phone: phone.trim(),
+        birthday: birthday,
         playerRole,
         history: currentHistory,
       })

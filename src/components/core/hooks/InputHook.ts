@@ -11,7 +11,7 @@ export const useInput = <T extends any>(initialValue: T) => {
     reset: () => setValue(initialValue),
     bind: {
       value,
-      onChange: (event: React.ChangeEvent<FormEventType>) => setValue(event.currentTarget.value.trim() as T),
+      onChange: (event: React.ChangeEvent<FormEventType>) => setValue(event.currentTarget.value as T),
     },
   };
 };

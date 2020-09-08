@@ -136,18 +136,35 @@ router.post(
     return;
   })
 );
-router.post(
+router.put(
   '/update',
   withAuth,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     try {
       let model = parseBody(req.body);
+      logger.info('/update : ', model);
       const user = await findUserByEmailAndUsername(model.email, model.username);
       if (!user) {
-        return res.status(500).json({ error: 'Utente non trovato' });
+        return res.status(HTTPStatusCode.BadRequest).json({
+          user: undefined,
+          code: HTTPStatusCode.BadRequest,
+          message: 'User not found',
+          userMessage: {
+            type: UserMessageType.Danger,
+            message: 'Utente non trovato',
+          },
+        });
       }
       await user.update(model);
-      return res.status(200).json(user);
+      return res.status(HTTPStatusCode.Accepted).json({
+        user: convertEntityToDTO(user),
+        code: HTTPStatusCode.Accepted,
+        message: 'Update complete',
+        userMessage: {
+          type: UserMessageType.Success,
+          message: 'Aggiornamento effettuato',
+        },
+      });
     } catch (error) {
       logger.error('/update error : ', error);
       return UnexpectedServerError(res);
@@ -215,6 +232,7 @@ router.delete(
       // FIXME: fix cookie erase
       res.cookie('token', { expires: new Date(Date.now()), httpOnly: true });
       return res.status(HTTPStatusCode.Accepted).json({
+        user: undefined,
         code: HTTPStatusCode.Accepted,
         message: 'User deleted',
         userMessage: {

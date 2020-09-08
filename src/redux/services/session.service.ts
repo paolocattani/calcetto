@@ -5,6 +5,8 @@ import {
   UserMessageType,
   RegistrationRequest,
   RegistrationResponse,
+  UpdateUserRequest,
+  DeleteUserRequest,
 } from 'redux/models';
 import { eventChannel, buffers, END } from 'redux-saga';
 import { HTTPStatusCode } from 'redux/models/HttpStatusCode';
@@ -21,6 +23,42 @@ export interface Message {
   status: SessionStatus;
   message?: string;
 }
+
+// Update
+export const updateUser = async (params: UpdateUserRequest): Promise<AuthenticationResponse> => {
+  try {
+    const response = await fetch('/api/v1/auth/update', {
+      method: 'PUT',
+      body: JSON.stringify(params.user),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const result: AuthenticationResponse = await response.json();
+    return result;
+  } catch (error) {
+    return {
+      user: undefined,
+      ...UnexpectedServerError,
+    };
+  }
+};
+
+// Delete
+export const deleteUser = async (params: DeleteUserRequest): Promise<AuthenticationResponse> => {
+  try {
+    const response = await fetch('/api/v1/auth/', {
+      method: 'DELETE',
+      body: JSON.stringify(params),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const result: AuthenticationResponse = await response.json();
+    return result;
+  } catch (error) {
+    return {
+      user: undefined,
+      ...UnexpectedServerError,
+    };
+  }
+};
 
 // Login
 export const login = async ({ username, password }: LoginRequest): Promise<AuthenticationResponse> => {
