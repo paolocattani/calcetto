@@ -1,0 +1,15 @@
+{
+    "tournament":"Tournament",
+    "select":"Select tournament",
+    "new":"New tournament",
+    "search":"Search",
+    "name":"Name",
+    "date":"Date",
+    "public":"Public",
+    "private":"Private",
+    "visibility":"Visibility",
+    "error":{
+        "none":"No tournament found. Try again later or contact an administrator."
+    }
+
+}

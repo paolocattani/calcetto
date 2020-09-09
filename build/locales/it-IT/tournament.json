@@ -1,0 +1,15 @@
+{
+    "tournament":"Torneo",
+    "select":"Selezione Torneo",
+    "new":"Nuovo torneo",
+    "search":"Ricerca",
+    "name":"Nome",
+    "date":"Data",
+    "public":"Pubblico",
+    "private":"Privato",
+    "visibility":"Visibilità",
+    "error":{
+        "none":"Nessun torneo presente. Riprova piu tardi o contatta un amminstratore.",
+        "name":"Inserire un nome per il torneo"
+    }
+}
