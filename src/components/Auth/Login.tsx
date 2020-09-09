@@ -12,7 +12,7 @@ export interface LoginProps {}
 // https://medium.com/@faizanv/authentication-for-your-react-and-express-application-w-json-web-tokens-923515826e0#6563
 const Login: React.FC<LoginProps> = (): JSX.Element => {
   const dispatch = useDispatch();
-  const { t } = useTranslation('common');
+  const { t } = useTranslation(['common', 'auth']);
   const currentHistory = useHistory();
 
   const [validated, setValidated] = useState<boolean>(false);
@@ -22,11 +22,11 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
   const handleSubmit = async (evt: React.SyntheticEvent) => {
     evt.preventDefault();
     if (!username || username === '') {
-      toast.error('Inserire username o password');
+      toast.error(t('error.username'));
       return;
     }
     if (!password || password === '') {
-      toast.error('Inserire la password');
+      toast.error(t('error.password'));
       return;
     }
     setValidated(true);
@@ -44,20 +44,19 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
     <Form onSubmit={handleSubmit} noValidate validated={validated}>
       <InputField
         controlId="username"
-        label={t('username')}
+        label={t('usernameEmail')}
         required={true}
         type="text"
-        placeholder={t('username')}
+        placeholder={t('usernameEmail')}
         {...bindUsername}
       />
 
       <InputField
         controlId="password"
-        label="Password"
+        label={t('password')}
         required={true}
         type="password"
-        placeholder="Password"
-        invalidFeedback="Inserire la password"
+        placeholder={t('password')}
         {...bindPassword}
       />
       <Row>
@@ -70,7 +69,7 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
             type="submit"
             disabled={!username || !password}
           >
-            {t('common:confim')}
+            {t('confim')}
           </Button>
         </Col>
       </Row>

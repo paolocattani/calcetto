@@ -14,15 +14,17 @@ import NewTournament from './new';
 import { useDispatch, useSelector } from 'react-redux';
 import { TournamentSelector } from 'redux/selectors/tournament.selector';
 import { TournamentAction, PairAction } from 'redux/actions';
-import { withRouter } from 'react-router-dom';
 import { TournamentDTO } from 'redux/models/tournament.model';
 import { SessionSelector } from 'redux/selectors/session.selector';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 const FTournament = () => {
   // Redux
   const dispatch = useDispatch();
   const currentHistory = useHistory();
+  const { t } = useTranslation(['common']);
+
   const isAdmin = useSelector(SessionSelector.isAdmin);
 
   // Tournament list from Db
@@ -93,7 +95,7 @@ const FTournament = () => {
             className="float-right default-color-white"
             disabled={!tournament}
           >
-            <span style={{ fontSize: 'larger', fontWeight: 'bolder', padding: '1vw' }}>Prosegui</span>
+            <span style={{ fontSize: 'larger', fontWeight: 'bolder', padding: '1vw' }}>{t('continue')}</span>
             <RightArrowIcon size="lg" />
           </Button>
         </Form>
@@ -141,7 +143,7 @@ const FTournament = () => {
   );
 };
 
-export default withRouter(FTournament);
+export default FTournament;
 
 const getOptionLabel = ({ name, date, progress }: TournamentDTO) =>
   name + ' - ' + formatDate(date) + '@' + translateTournamentProgress(progress);

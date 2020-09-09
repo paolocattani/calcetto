@@ -2,12 +2,14 @@ import React, { CSSProperties } from 'react';
 import backgroundImage from '../../assets/header.jpg';
 import { Jumbotron, Navbar, Nav, Button, Dropdown, ButtonGroup } from 'react-bootstrap';
 import routes from '../core/routing/Routes';
-import { Link, useHistory, withRouter } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { SessionSelector } from 'redux/selectors/session.selector';
-import { HomeIcon } from 'components/core/icons';
+import { HomeIcon, LanguageIcon, UserIcon, LogoutIcon } from '../core/icons';
 import { SessionAction } from 'redux/actions';
 import i18n from 'i18n/i18n';
+import { useTranslation } from 'react-i18next';
+import { getOtherLang } from '../core/utils';
 
 const applicationName = 'Calcetto C.S.M';
 
@@ -15,6 +17,7 @@ const applicationName = 'Calcetto C.S.M';
 const Header: React.FC = () => {
   const dispatch = useDispatch();
   const currentHistory = useHistory();
+  const { t } = useTranslation(['common']);
   const changeLanguage = (language: string) => i18n.changeLanguage(language);
 
   const { user, isAuthenticated } = useSelector(SessionSelector.getSession);
@@ -33,6 +36,7 @@ const Header: React.FC = () => {
     color: 'white',
   };
 
+  const otherLang = getOtherLang();
   return (
     <header>
       <Jumbotron style={jumboStyle}>
@@ -42,8 +46,9 @@ const Header: React.FC = () => {
         {isAuthenticated ? (
           <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Navbar.Brand as={Link} to="/">
-              <HomeIcon />
-              <span> Home</span>
+              <span>
+                <HomeIcon /> {t('route_home')}
+              </span>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
@@ -52,7 +57,13 @@ const Header: React.FC = () => {
                   route.visible ? (
                     route.private && !isAuthenticated ? null : (
                       <Nav.Link as={Link} key={route.index} to={route.path} className="text-white">
-                        {route.label}
+                        {route.icon ? (
+                          <span>
+                            <route.icon /> {t(route.label)}
+                          </span>
+                        ) : (
+                          t(route.label)
+                        )}
                       </Nav.Link>
                     )
                   ) : null
@@ -62,27 +73,40 @@ const Header: React.FC = () => {
                 <>
                   <Dropdown alignRight as={ButtonGroup}>
                     <Button style={{ opacity: 1 }} variant="outline-warning" size="lg" disabled>
-                      <strong style={{ color: '#64bd9c', fontSize: 'larger' }}>{user.username}</strong>
+                      <strong style={{ color: '#64bd9c', fontSize: 'larger' }}>
+                        {user.username} <UserIcon />
+                      </strong>
                     </Button>
                     <Dropdown.Toggle split variant="outline-warning" id="dropdown-custom-2" />
                     <Dropdown.Menu className="default-background default-border-yellow">
                       <Dropdown.Item
                         className="default-color-white default-hover-green"
-                        as="button"
-                        // FIXME: variant="warning"
-                        onClick={logout}
+                        as={Link}
+                        to={'/user'}
                         eventKey="1"
                       >
-                        Log out
+                        <span>{t('route_user')}</span>
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        className="default-color-white default-hover-green"
+                        onClick={() => changeLanguage(otherLang)}
+                        as="button"
+                        eventKey="2"
+                      >
+                        <span>
+                          <LanguageIcon /> {t(otherLang)}
+                        </span>
                       </Dropdown.Item>
                       <Dropdown.Divider style={{ borderTopColor: '#ffc107' }} />
                       <Dropdown.Item
                         className="default-color-white default-hover-green"
-                        as={Link}
-                        to={'/user'}
-                        eventKey="2"
+                        as="button"
+                        onClick={logout}
+                        eventKey="3"
                       >
-                        Gestione Utente
+                        <span>
+                          <LogoutIcon /> <strong>{t('logout')} </strong>
+                        </span>
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
@@ -96,4 +120,4 @@ const Header: React.FC = () => {
   );
 };
 
-export default withRouter(Header);
+export default Header;

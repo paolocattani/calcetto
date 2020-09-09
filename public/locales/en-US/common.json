@@ -1,4 +1,16 @@
 {
     "confim":"Confirm",
-    "username":"Username or Email"
+    "select":"Select",
+    "continue":"Continue",
+    "route_home":"Home",
+    "route_tournament":"Tournament Selection",
+    "route_stage1":"Stage 1",
+    "route_stage2":"Stage 2",
+    "route_user":"User Managment",
+    "route_player":"Player Managment",
+    "route_login":"Login",
+    "route_notFound":"Not found",
+    "logout":"Logut",
+    "en-US":"English",
+    "it-IT":"Italiano"
 }

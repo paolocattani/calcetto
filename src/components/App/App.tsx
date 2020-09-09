@@ -40,16 +40,19 @@ const App: React.FC = (_) => {
   return (
     <div className="App">
       <ErrorBoundary>
-        <Header />
+        {/* Loading translations */}
+        <Suspense fallback={<LoadingModal />}>
+          <Header />
+        </Suspense>
         <Container fluid style={{ marginBottom: '20vh' }}>
-          {/*<LogSessionContext /> */}
           {/*<RedirectionControl />*/}
           <ToastContainer autoClose={2000} />
-
           {isLoading ? (
-            <LoadingModal show={true} message={'....Caricamento'} />
+            // Loading store
+            <LoadingModal />
           ) : (
-            <Suspense fallback={<LoadingModal show={true} message={'....Caricamento'} />}>
+            // Loading lazy components
+            <Suspense fallback={<LoadingModal />}>
               <Switch>
                 {routes.map((route) => (
                   <ProtectedRoute {...route} key={route.index} />

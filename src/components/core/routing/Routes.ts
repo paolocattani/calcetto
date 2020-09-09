@@ -1,4 +1,5 @@
 import React, { lazy } from 'react';
+import { MaleIcon } from '../icons';
 
 const lazyPlayer = lazy(() => import('../../Player/table'));
 const lazyTournament = lazy(() => import('../../Tournament/select'));
@@ -16,6 +17,7 @@ export interface routeType {
   label: string;
   exact: boolean;
   componentToRender: React.ComponentType;
+  icon?: React.ComponentType;
   visible: boolean;
   index: number;
   private: boolean;
@@ -25,7 +27,7 @@ export interface routeType {
 export const routes: routeType[] = [
   {
     path: '/login',
-    label: 'Login',
+    label: 'route_login',
     exact: true,
     componentToRender: lazyLogin,
     visible: false,
@@ -34,7 +36,7 @@ export const routes: routeType[] = [
   },
   {
     path: '/',
-    label: 'Home',
+    label: 'route_home',
     exact: true,
     componentToRender: lazyTournament,
     visible: false,
@@ -43,7 +45,7 @@ export const routes: routeType[] = [
   },
   {
     path: '/tournament',
-    label: 'Selezione Coppie',
+    label: 'route_tournament',
     exact: true,
     componentToRender: lazyPairs,
     visible: false,
@@ -52,7 +54,7 @@ export const routes: routeType[] = [
   },
   {
     path: '/stage1',
-    label: 'Torneo fase 1',
+    label: 'route_stage1',
     exact: true,
     componentToRender: lazyStage1,
     visible: false,
@@ -61,16 +63,17 @@ export const routes: routeType[] = [
   },
   {
     path: '/player',
-    label: 'Gestione Giocatori',
+    label: 'route_player',
     exact: true,
     componentToRender: lazyPlayer,
+    icon: MaleIcon,
     visible: true,
     private: true,
     index: 40,
   },
   {
     path: '/user',
-    label: 'Gestione Utente',
+    label: 'route_user',
     exact: true,
     componentToRender: lazyUser,
     visible: false,
@@ -79,7 +82,7 @@ export const routes: routeType[] = [
   },
   {
     path: '/stage2',
-    label: 'Torneo fase 2',
+    label: 'route_stage2',
     exact: true,
     componentToRender: lazyStage2 as any,
     visible: false,
@@ -89,7 +92,7 @@ export const routes: routeType[] = [
   // TODO: creare pagina per route not found
   {
     path: '*',
-    label: 'Not Found',
+    label: 'route_notFound',
     exact: false,
     componentToRender: lazyRedirectionControl,
     visible: false,

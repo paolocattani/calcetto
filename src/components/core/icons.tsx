@@ -29,6 +29,18 @@ export const SaveIcon: React.FC<IconProps> = ({ size, color }) => (
 );
 
 // Solid
+export const LogoutIcon: React.FC<IconProps> = ({ size, color }) => (
+  <Icon size={size} color={color} prefix={SOLID} iconName="sign-out-alt" />
+);
+export const UserIcon: React.FC<IconProps> = ({ size, color }) => (
+  <Icon size={size} color={color} prefix={SOLID} iconName="user" />
+);
+export const MaleIcon: React.FC<IconProps> = ({ size, color }) => (
+  <Icon size={size} color={color} prefix={SOLID} iconName="male" />
+);
+export const LanguageIcon: React.FC<IconProps> = ({ size, color }) => (
+  <Icon size={size} color={color} prefix={SOLID} iconName="language" />
+);
 export const HomeIcon: React.FC<IconProps> = ({ size, color }) => (
   <Icon size={size} color={color} prefix={SOLID} iconName="home" />
 );

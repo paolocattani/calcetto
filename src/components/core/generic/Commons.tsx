@@ -20,7 +20,7 @@ const fancyModalFooter = (
 );
 // Loading Modal
 interface LoadingModalPropsType {
-  show: boolean;
+  show?: boolean;
   title?: string;
   message?: string;
   onHide?: () => void;
@@ -29,7 +29,7 @@ interface LoadingModalPropsType {
 export const LoadingModal: React.FC<LoadingModalPropsType> = ({
   title = 'Caricamento....',
   message = 'Caricamento....',
-  show,
+  show = true,
   onHide = () => (show = false),
 }) => (
   <Modal show={show} onHide={onHide} size="lg" centered style={{ borderColor: '#ffc107', borderWidth: '3px' }}>
