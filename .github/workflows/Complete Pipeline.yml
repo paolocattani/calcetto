@@ -61,8 +61,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
       # unit test
-      - name: Unit Tests
-        run: npm run test
+      #- name: Unit Tests
+      #  run: npm run test
       # e2e
       # - name: End to end tests
       #   run: npm run test
