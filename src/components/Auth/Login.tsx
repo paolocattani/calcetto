@@ -12,7 +12,7 @@ export interface LoginProps {}
 // https://medium.com/@faizanv/authentication-for-your-react-and-express-application-w-json-web-tokens-923515826e0#6563
 const Login: React.FC<LoginProps> = (): JSX.Element => {
   const dispatch = useDispatch();
-  const { t, i18n } = useTranslation('common');
+  const { t } = useTranslation('common');
   const currentHistory = useHistory();
 
   const [validated, setValidated] = useState<boolean>(false);
@@ -39,7 +39,7 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
     );
   };
 
-  i18n.changeLanguage('it');
+  // i18n.changeLanguage('it');
   return (
     <Form onSubmit={handleSubmit} noValidate validated={validated}>
       <InputField
@@ -47,7 +47,7 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
         label={t('username')}
         required={true}
         type="text"
-        placeholder="username o email"
+        placeholder={t('username')}
         {...bindUsername}
       />
 

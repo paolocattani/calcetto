@@ -28,8 +28,8 @@ export default (application: ExpressApplication): void => {
   // SSE
   application.get('/sse/v1/session', sessionControl);
 
-  // Locales
-  application.use('/locales', express.static('../locales'));
+  // Locales : Moved to FE
+  // application.use('/locales', express.static('../locales'));
 
   // Test
   application.get('/status', (req: Request, res: Response, next: NextFunction) =>

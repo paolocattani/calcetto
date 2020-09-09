@@ -161,7 +161,7 @@ router.post(
       const userDTO = convertEntityToDTO(user);
       addUserCookies(userDTO, res);
       logger.info('/authenticate end ');
-      return success(res, `Benvenuto ${userDTO.name}`, 'Login complete.');
+      return success(res, `Benvenuto ${userDTO.name}`, 'Login complete.', { user: userDTO });
     } catch (error) {
       logger.error('/authenticate error : ', error);
       return unexpectedServerError(res);
