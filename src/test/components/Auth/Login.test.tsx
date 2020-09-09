@@ -1,8 +1,8 @@
 import React from 'react';
-import Login from '../../components/Auth/Login';
-import { render, RenderResult, fireEvent, screen } from '../test-utils';
+import Login from '../../../components/Auth/Login';
+import { render, RenderResult, fireEvent, screen } from '../../test-utils';
 import userEvent from '@testing-library/user-event';
-import loginResponse from '../_mocks_/Auth/login_response.json';
+import loginResponse from '../../_mocks_/Auth/login_response.json';
 
 describe('<Login />.render', () => {
   let component: RenderResult;

@@ -1,7 +1,6 @@
 import React from 'react';
-import configureStore from 'redux-mock-store';
 import Register from 'components/Auth/Register';
-import { render, RenderResult, screen } from '../test-utils';
+import { render, RenderResult, screen } from '../../test-utils';
 
 describe('<Register />.render', () => {
   let component: RenderResult;
