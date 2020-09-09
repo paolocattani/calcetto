@@ -120,7 +120,8 @@
     "test": "react-scripts test",
     "test:coverage": "react-scripts test --coverage --runInBand --watchAll=false",
     "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",
-    "lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix"
+    "lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+    "analyze": "source-map-explorer build/static/js/*.js --html build-analysis.html"
   },
   "browserslist": {
     "production": [
@@ -158,7 +159,8 @@
     "jest-fetch-mock": "3.0.3",
     "prettier": "^2.1.1",
     "redux-mock-store": "^1.5.4",
-    "ts-jest": "^26.3.0"
+    "source-map-explorer": "^2.5.0",
+    "ts-jest": "^24.3.0"
   },
   "jest": {
     "collectCoverageFrom": [
