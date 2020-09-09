@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SessionSelector } from 'redux/selectors/session.selector';
 import { HomeIcon } from 'components/core/icons';
 import { SessionAction } from 'redux/actions';
+import i18n from 'i18n/i18n';
 
 const applicationName = 'Calcetto C.S.M';
 
@@ -14,6 +15,8 @@ const applicationName = 'Calcetto C.S.M';
 const Header: React.FC = () => {
   const dispatch = useDispatch();
   const currentHistory = useHistory();
+  const changeLanguage = (language: string) => i18n.changeLanguage(language);
+
   const { user, isAuthenticated } = useSelector(SessionSelector.getSession);
 
   const logout = () => dispatch(SessionAction.logout.request({ history: currentHistory }));

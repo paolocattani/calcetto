@@ -6,11 +6,13 @@ import { SessionAction } from 'redux/actions';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { InputField } from '../core/generic/Input';
+import { useTranslation } from 'react-i18next';
 
 export interface LoginProps {}
 // https://medium.com/@faizanv/authentication-for-your-react-and-express-application-w-json-web-tokens-923515826e0#6563
 const Login: React.FC<LoginProps> = (): JSX.Element => {
   const dispatch = useDispatch();
+  const { t, i18n } = useTranslation('common');
   const currentHistory = useHistory();
 
   const [validated, setValidated] = useState<boolean>(false);
@@ -37,11 +39,12 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
     );
   };
 
+  i18n.changeLanguage('it');
   return (
     <Form onSubmit={handleSubmit} noValidate validated={validated}>
       <InputField
         controlId="username"
-        label="Username o Email"
+        label={t('username')}
         required={true}
         type="text"
         placeholder="username o email"
@@ -67,7 +70,7 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
             type="submit"
             disabled={!username || !password}
           >
-            Conferma
+            {t('common:confim')}
           </Button>
         </Col>
       </Row>

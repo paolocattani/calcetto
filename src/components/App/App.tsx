@@ -22,6 +22,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import './toast.css';
 import AppBadge from './badge';
 import { SessionSelector } from 'redux/selectors';
+// i18n
+import '../../i18n/i18n';
 
 library.add(fas, far);
 

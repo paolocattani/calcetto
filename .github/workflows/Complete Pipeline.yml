@@ -2,6 +2,7 @@ name: Node.js CI
 on: [push, pull_request]
 
 jobs:
+  ### Build
   build:
     runs-on: ubuntu-latest
     name: Build
@@ -37,6 +38,8 @@ jobs:
       # Build server
       - name: Build server
         run: npm run prod:build:server
+
+  ### Test
   test:
     runs-on: ubuntu-latest
     name: Tests
@@ -64,7 +67,7 @@ jobs:
       # - name: End to end tests
       #   run: npm run test
 
-  # Code Quality
+  ### Code Qualitys
   check-quality:
     runs-on: ubuntu-latest
     name: Code Quality
