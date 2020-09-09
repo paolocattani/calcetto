@@ -23,7 +23,7 @@ const FTournament = () => {
   // Redux
   const dispatch = useDispatch();
   const currentHistory = useHistory();
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation(['common', 'tournament']);
 
   const isAdmin = useSelector(SessionSelector.isAdmin);
 
@@ -49,7 +49,7 @@ const FTournament = () => {
         dispatch(PairAction.fetchPairs.request({ tId: tournament.id! }));
         currentHistory.push('/stage1');
       }
-    } else toast.error('Errore, riprovare piu tardi...');
+    } else toast.error(t('common:error.generic'));
   };
 
   const onNewTournament = (value: React.SetStateAction<boolean>) => {
@@ -64,7 +64,7 @@ const FTournament = () => {
     if ((!tournamentsList || tournamentsList.length === 0) && !isAdmin) {
       return (
         <p className="text-white text-justify font-italic lead">
-          <strong>Nessun torneo presente. Riprova piu tardi o contatta un amminstratore.</strong>
+          <strong> {t('tournament:error.none')}</strong>
         </p>
       );
     }
@@ -73,14 +73,14 @@ const FTournament = () => {
     } else {
       return (
         <Form onSubmit={handleSubmit}>
-          <label htmlFor="tournamentSelect">Selezione Torneo</label>
+          <label htmlFor="tournamentSelect">{t('tournament:select')}</label>
           <Select
             id="tournamentSelect"
             components={{ IndicatorSeparator }}
             styles={customStyles}
             value={tournament}
             options={tournamentsList}
-            placeholder="Cerca un torneo"
+            placeholder={t('tournament:search')}
             isSearchable
             getOptionLabel={getOptionLabel}
             isClearable
@@ -113,7 +113,7 @@ const FTournament = () => {
           className="float-left default-color-white"
           onClick={() => onNewTournament(false)}
         >
-          Seleziona un torneo
+          {t('tournament:select')}
         </Button>
       ) : (
         <Button
@@ -123,7 +123,7 @@ const FTournament = () => {
           className="float-left default-color-white"
           onClick={() => onNewTournament(true)}
         >
-          Crea un nuovo torneo
+          {t('tournament:new')}
         </Button>
       )
     ) : null;
@@ -132,7 +132,7 @@ const FTournament = () => {
     <>
       <Col md={{ span: '6', offset: '3' }} sm="12">
         <Card style={cardStyle}>
-          <Card.Header as="h2">Torneo</Card.Header>
+          <Card.Header as="h2">{t('tournament:tournament')}</Card.Header>
           <Card.Body>
             <Col>{cardBody()}</Col>
           </Card.Body>

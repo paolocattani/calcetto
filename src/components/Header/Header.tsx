@@ -7,9 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SessionSelector } from 'redux/selectors/session.selector';
 import { HomeIcon, LanguageIcon, UserIcon, LogoutIcon } from '../core/icons';
 import { SessionAction } from 'redux/actions';
-import i18n from 'i18n/i18n';
+import i18n, { getOtherLang } from 'i18n/i18n';
 import { useTranslation } from 'react-i18next';
-import { getOtherLang } from '../core/utils';
 
 const applicationName = 'Calcetto C.S.M';
 
@@ -47,7 +46,7 @@ const Header: React.FC = () => {
           <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Navbar.Brand as={Link} to="/">
               <span>
-                <HomeIcon /> {t('route_home')}
+                <HomeIcon /> {t('route.home')}
               </span>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -85,7 +84,7 @@ const Header: React.FC = () => {
                         to={'/user'}
                         eventKey="1"
                       >
-                        <span>{t('route_user')}</span>
+                        <span>{t('route.user')}</span>
                       </Dropdown.Item>
                       <Dropdown.Item
                         className="default-color-white default-hover-green"

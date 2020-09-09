@@ -27,7 +27,7 @@ export interface routeType {
 export const routes: routeType[] = [
   {
     path: '/login',
-    label: 'route_login',
+    label: 'route.login',
     exact: true,
     componentToRender: lazyLogin,
     visible: false,
@@ -36,7 +36,7 @@ export const routes: routeType[] = [
   },
   {
     path: '/',
-    label: 'route_home',
+    label: 'route.home',
     exact: true,
     componentToRender: lazyTournament,
     visible: false,
@@ -45,7 +45,7 @@ export const routes: routeType[] = [
   },
   {
     path: '/tournament',
-    label: 'route_tournament',
+    label: 'route.tournament',
     exact: true,
     componentToRender: lazyPairs,
     visible: false,
@@ -54,7 +54,7 @@ export const routes: routeType[] = [
   },
   {
     path: '/stage1',
-    label: 'route_stage1',
+    label: 'route.stage1',
     exact: true,
     componentToRender: lazyStage1,
     visible: false,
@@ -63,7 +63,7 @@ export const routes: routeType[] = [
   },
   {
     path: '/player',
-    label: 'route_player',
+    label: 'route.player',
     exact: true,
     componentToRender: lazyPlayer,
     icon: MaleIcon,
@@ -73,7 +73,7 @@ export const routes: routeType[] = [
   },
   {
     path: '/user',
-    label: 'route_user',
+    label: 'route.user',
     exact: true,
     componentToRender: lazyUser,
     visible: false,
@@ -82,7 +82,7 @@ export const routes: routeType[] = [
   },
   {
     path: '/stage2',
-    label: 'route_stage2',
+    label: 'route.stage2',
     exact: true,
     componentToRender: lazyStage2 as any,
     visible: false,
@@ -92,7 +92,7 @@ export const routes: routeType[] = [
   // TODO: creare pagina per route not found
   {
     path: '*',
-    label: 'route_notFound',
+    label: 'route.notFound',
     exact: false,
     componentToRender: lazyRedirectionControl,
     visible: false,

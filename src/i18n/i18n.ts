@@ -20,7 +20,7 @@ i18n
 
     //## Namespaces
     // String or array of namespaces to load
-    ns: ['common'],
+    ns: ['common', 'auth', 'tournament'],
     // Default namespace used if not passed to translation function
     defaultNS: 'common',
     // String or array of namespaces to lookup key if not found in given namespace.
@@ -46,3 +46,5 @@ i18n
   });
 
 export default i18n;
+
+export const getOtherLang = () => (i18n.language === 'it-IT' ? 'lang.en-US' : 'lang.it-IT');

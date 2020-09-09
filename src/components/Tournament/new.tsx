@@ -10,12 +10,15 @@ import { TournamentAction } from 'redux/actions/tournament.action';
 import { toast } from 'react-toastify';
 import { FormEventType } from 'components/core/generic/CommonTypes';
 import { isValidTournament } from 'redux/services/tournament.service';
+import { useTranslation } from 'react-i18next';
 
 type newTProps = {};
 
 const NewTournament: React.FC<newTProps> = (_) => {
   let currentHistory = useHistory();
   const dispatch = useDispatch();
+  const { t } = useTranslation(['common', 'tournament']);
+
   const [name, setName] = useState<string>('');
   const [date, setDate] = useState<Date>(new Date());
   const [visible, setVisible] = useState<boolean>(true);
@@ -23,7 +26,7 @@ const NewTournament: React.FC<newTProps> = (_) => {
   const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>): Promise<void> => {
     evt.preventDefault();
     if (!name) {
-      toast.error('Inserire un nome per il torneo');
+      toast.error(t('tournament:error.name'));
       return;
     }
 
@@ -42,12 +45,13 @@ const NewTournament: React.FC<newTProps> = (_) => {
     <Form onSubmit={handleSubmit}>
       <Form.Row>
         <Col md={6}>
+          {/* FIXME: use <Input /> element */}
           <Form.Group controlId="formBasicEmail">
-            <Form.Label>Nome</Form.Label>
+            <Form.Label>{t('tournament:name')}</Form.Label>
             <Form.Control
               type="text"
               required
-              placeholder="Nome Torneo"
+              placeholder={t('tournament:name')}
               maxLength={30}
               value={name}
               onChange={(event: React.FormEvent<FormEventType>) => setName(event.currentTarget.value)}
@@ -56,7 +60,7 @@ const NewTournament: React.FC<newTProps> = (_) => {
         </Col>
         <Col md={3}>
           <Form.Group>
-            <Form.Label>Data</Form.Label>
+            <Form.Label>{t('tournament:date')}</Form.Label>
             <Form.Control
               as={() => (
                 <DatePicker
@@ -73,10 +77,10 @@ const NewTournament: React.FC<newTProps> = (_) => {
 
         <Col md={3}>
           <Form.Group controlId="visible">
-            <Form.Label>Visibilità </Form.Label>
+            <Form.Label>{t('tournament:visibility')} </Form.Label>
             <Form.Control as="select" onChange={() => setVisible(!visible)}>
-              <option>Pubblico</option>
-              <option>Privato</option>
+              <option>{t('tournament:public')}</option>
+              <option>{t('tournament:private')}</option>
             </Form.Control>
           </Form.Group>
         </Col>
@@ -84,7 +88,7 @@ const NewTournament: React.FC<newTProps> = (_) => {
       <Form.Row>
         <Col>
           <Button type="submit" size="lg" variant="outline-warning" className="float-right default-color-white">
-            <span style={{ fontSize: 'larger', fontWeight: 'bolder' }}>Prosegui</span>
+            <span style={{ fontSize: 'larger', fontWeight: 'bolder' }}>{t('common:continue')}</span>
           </Button>
         </Col>
       </Form.Row>

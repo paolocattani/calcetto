@@ -1,8 +1,6 @@
 import { TournamentProgress } from '../../redux/models/tournament.model';
-import i18n from 'i18n/i18n';
 
 export const getTodayDate = () => formatDate(new Date());
-export const getOtherLang = () => (i18n.language === 'it-IT' ? 'en-US' : 'it-IT');
 
 export function translateTournamentProgress(value: string) {
   switch (value) {
