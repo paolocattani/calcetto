@@ -1,0 +1,17 @@
+{
+    "confim":"Conferma",
+    "select":"Seleziona",
+    "continue":"Prosegui",
+    "route_home":"Home",
+    "route_tournament":"Selezione Torneo",
+    "route_stage1":"Fase 1",
+    "route_stage2":"Fase 2",
+    "route_user":"Gestione Utente",
+    "route_player":"Gestione Giocatori",
+    "route_login":"Login",
+    "route_notFound":"Non trovato",
+    "logout":"Logut",
+    "en-US":"English",
+    "it-IT":"Italiano"
+
+}

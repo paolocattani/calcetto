@@ -13,3 +13,6 @@ sed -i 's|^REACT_APP_CLIENT_COMMIT_HASH=.*$|REACT_APP_CLIENT_COMMIT_HASH='$REACT
 
 echo '--> Run Build'
 npm run CRA:build
+
+echo '--> Run Analysis'
+npm run analyze
