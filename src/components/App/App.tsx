@@ -10,12 +10,9 @@ import ErrorBoundary from '../core/errorBoundary';
 // Style
 import './App.css';
 import { Container } from 'react-bootstrap';
-// FontAwesome 5
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-import { far } from '@fortawesome/free-regular-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { SessionAction } from 'redux/actions';
+import { loadIcons } from '../core/icons';
 // Toasts
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -25,8 +22,7 @@ import { SessionSelector } from 'redux/selectors';
 // i18n
 import '../../i18n/i18n';
 
-library.add(fas, far);
-
+loadIcons();
 const App: React.FC = (_) => {
   const dispatch = useDispatch();
   const currentHistory = useHistory();

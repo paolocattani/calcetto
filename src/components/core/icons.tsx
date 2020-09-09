@@ -1,6 +1,50 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { findIconDefinition, SizeProp, IconPrefix, IconName } from '@fortawesome/fontawesome-svg-core';
+// FontAwesome 5
+import { library } from '@fortawesome/fontawesome-svg-core';
+import {
+  faSignOutAlt,
+  faUser,
+  faMale,
+  faLanguage,
+  faHome,
+  faBroom,
+  faArrowAltCircleRight,
+  faArrowAltCircleLeft,
+  faTimes,
+  faToggleOff,
+  faToggleOn,
+  faPlus,
+  faTrophy,
+  faAngleDoubleRight,
+  faBan,
+} from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt, faSave } from '@fortawesome/free-regular-svg-icons';
+
+export const loadIcons = () => {
+  library.add(
+    // Regular
+    faTrashAlt,
+    faSave,
+    // Solid
+    faSignOutAlt,
+    faUser,
+    faMale,
+    faLanguage,
+    faHome,
+    faBroom,
+    faArrowAltCircleRight,
+    faArrowAltCircleLeft,
+    faTimes,
+    faToggleOff,
+    faToggleOn,
+    faPlus,
+    faTrophy,
+    faAngleDoubleRight,
+    faBan
+  );
+};
 
 interface IconProps {
   color?: string;
