@@ -4,7 +4,7 @@ import chalk from 'chalk';
 // Core
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
-import { asyncMiddleware, withAuth, withAdminRights } from '../core/middleware';
+import { asyncMiddleware, withAuth, withAdminRights, logController } from '../core/middleware';
 // Managers
 import { listAll, findById, findByNameAndDate, parseBody, update } from '../manager/tournament.manager';
 // Models
@@ -14,11 +14,9 @@ import { AppRequest } from './index';
 
 // all API path must be relative to /api/v1/tournament
 const router = Router();
-router.use('/', (req, res, next) => {
-  if (isDevMode())
-    logger.info(`Tournament Controller : ${req.method} ${req.originalUrl.replace('/api/v1/tournament', '')} `);
-  next();
-});
+router.use('/', (req: Request, res: Response, next: NextFunction) =>
+  logController(req, next, 'Tournament Controller', '/api/v1/tournament')
+);
 
 // GET
 router.get(

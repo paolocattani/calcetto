@@ -1,10 +1,10 @@
 import '../core/env';
 import { logger } from '../core/logger';
-import { isDevMode, isProductionMode } from '../core/debug';
+import { isProductionMode } from '../core/debug';
 
 import { Router, Request, Response, NextFunction } from 'express';
 import User from '../models/sequelize/user.model';
-import { withAuth, asyncMiddleware } from '../core/middleware';
+import { withAuth, asyncMiddleware, logController } from '../core/middleware';
 
 import {
   convertEntityToDTO,
@@ -23,22 +23,15 @@ import { AppRequest } from './index';
 import { HTTPStatusCode } from '../core/HttpStatusCode';
 import { AuthenticationResponse, LoginRequest } from 'models/client/auth.models';
 import { UserMessageType } from '../models/client/common.models';
-import { UnexpectedServerError, MissingParamsResponse } from './common';
+import { unexpectedServerError, missingParameters, success, failure } from './common';
 const router = Router();
 
-const wrongCredentials = {
-  user: undefined,
-  code: HTTPStatusCode.Unauthorized,
-  message: 'Wrong credentials',
-  userMessage: {
-    type: UserMessageType.Danger,
-    message: 'Credenziali errate',
-  },
-};
-router.use('/', (req: Request, res: Response, next: NextFunction) => {
-  if (isDevMode()) logger.info(`Auth Controller : ${req.method} ${req.originalUrl.replace('/api/v1/auth', '')} `);
-  next();
-});
+const wrongCredentials = (res: Response) =>
+  failure(res, 'Credenziali errate', 'Wrong credentials', HTTPStatusCode.Unauthorized, { user: undefined });
+
+router.use('/', (req: Request, res: Response, next: NextFunction) =>
+  logController(req, next, 'Auth Controller', '/api/v1/auth')
+);
 
 router.get(
   '/list',
@@ -50,15 +43,7 @@ router.get(
   '/',
   withAuth,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) =>
-    res.status(HTTPStatusCode.Accepted).json({
-      user: req.user,
-      code: HTTPStatusCode.Accepted,
-      message: 'User is already authenticated',
-      userMessage: {
-        type: UserMessageType.Success,
-        message: `Bentornato ${req.user!.name}`,
-      },
-    })
+    success(res, `Bentornato ${req.user!.name}`, 'User is already authenticated', { user: req.user })
   )
 );
 
@@ -76,15 +61,7 @@ router.get(
           }
         : { httpOnly: true }),
     });
-    return res.status(HTTPStatusCode.Accepted).json({
-      user: undefined,
-      code: HTTPStatusCode.Accepted,
-      message: 'Logout complete.',
-      userMessage: {
-        type: UserMessageType.Success,
-        message: 'A presto...',
-      },
-    });
+    return success(res, 'A presto...', 'Logout complete.', { user: undefined });
   })
 );
 
@@ -98,51 +75,39 @@ router.post(
     // bypassati quelli a FE.
     const errors = isValidRegister(body);
     if (errors.length !== 0) {
-      res.status(HTTPStatusCode.BadRequest).json({
-        user: undefined,
-        errors,
-        code: HTTPStatusCode.BadRequest,
-        message: 'Registration data is not valid',
-        userMessage: {
-          type: UserMessageType.Danger,
-          message: 'Correggi gli errori per procedere con la registrazione',
-        },
-      });
+      return failure(
+        res,
+        'Correggi gli errori per procedere con la registrazione',
+        'Registration data is not valid',
+        HTTPStatusCode.BadRequest,
+        { user: undefined, errors }
+      );
     }
     const model: User = parseBody(body);
     const user = await checkIfExist(model);
     if (user) {
-      return res.status(HTTPStatusCode.BadRequest).json({
-        user: undefined,
-        code: HTTPStatusCode.BadRequest,
-        errors: ['Email o Username gia utilizzati.'],
-        message: 'Email or Username alrealdy exists.',
-        userMessage: {
-          type: UserMessageType.Danger,
-          message: 'Email o Username gia utilizzati.',
-        },
-      });
+      return failure(
+        res,
+        'Email o Username gia utilizzati.',
+        'Email or Username alrealdy exists.',
+        HTTPStatusCode.BadRequest,
+        {
+          user: undefined,
+          errors: ['Email o Username gia utilizzati.'],
+        }
+      );
     }
     const record = await registerUser(model, body.playerRole);
     if (record) {
       addUserCookies(record, res);
-      res.status(HTTPStatusCode.Accepted).json({
-        user: record,
-        code: HTTPStatusCode.Accepted,
-        message: 'Registration complete.',
-        userMessage: {
-          type: UserMessageType.Success,
-          message: `Benvenuto ${record.name}`,
-        },
-      });
+      logger.info('/register end ');
+      return success(res, `Benvenuto ${record.name}`, 'Registration complete.');
     } else {
-      return UnexpectedServerError(res, {
+      return unexpectedServerError(res, {
         // eslint-disable-next-line quotes
         errors: ["Errore server non previsto. E' stata avviata la procedura di autodistruzione."],
       });
     }
-    logger.info('/register end ');
-    return;
   })
 );
 router.put(
@@ -165,18 +130,10 @@ router.put(
         });
       }
       await user.update(model);
-      return res.status(HTTPStatusCode.Accepted).json({
-        user: convertEntityToDTO(user),
-        code: HTTPStatusCode.Accepted,
-        message: 'Update complete',
-        userMessage: {
-          type: UserMessageType.Success,
-          message: 'Aggiornamento effettuato',
-        },
-      });
+      return success(res, 'Aggiornamento effettuato', 'Update complete.', { user: convertEntityToDTO(user) });
     } catch (error) {
       logger.error('/update error : ', error);
-      return UnexpectedServerError(res);
+      return unexpectedServerError(res);
     }
   })
 );
@@ -185,39 +142,29 @@ router.post(
   '/authenticate',
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     const { username, password } = req.body as LoginRequest;
-    let response: AuthenticationResponse;
     try {
       logger.info('/authenticate start ');
       if (!username || !password) {
-        return MissingParamsResponse(res, { user: undefined });
+        return missingParameters(res, { user: undefined });
       }
       const user = await findUserByEmailOrUsername(username);
 
       // utente non trovato
       if (!user) {
-        return res.status(HTTPStatusCode.Unauthorized).json(wrongCredentials);
+        return wrongCredentials(res);
       }
       const isValid = await comparePasswords(user.email, password, user.password);
       if (!isValid) {
-        return res.status(HTTPStatusCode.Unauthorized).json(wrongCredentials);
+        return wrongCredentials(res);
       }
 
       const userDTO = convertEntityToDTO(user);
       addUserCookies(userDTO, res);
       logger.info('/authenticate end ');
-      response = {
-        user: userDTO,
-        code: HTTPStatusCode.Accepted,
-        message: 'Login complete.',
-        userMessage: {
-          type: UserMessageType.Success,
-          message: `Benvenuto ${userDTO.name}`,
-        },
-      };
-      return res.status(HTTPStatusCode.Accepted).json(response);
+      return success(res, `Benvenuto ${userDTO.name}`, 'Login complete.');
     } catch (error) {
       logger.error('/authenticate error : ', error);
-      return UnexpectedServerError(res);
+      return unexpectedServerError(res);
     }
   })
 );
@@ -240,18 +187,10 @@ router.delete(
       logger.info('/delete end ');
       // FIXME: fix cookie erase
       res.cookie('token', { expires: new Date(Date.now()), httpOnly: true });
-      return res.status(HTTPStatusCode.Accepted).json({
-        user: undefined,
-        code: HTTPStatusCode.Accepted,
-        message: 'User deleted',
-        userMessage: {
-          type: UserMessageType.Success,
-          message: `Utente "${user.name}" eliminato `,
-        },
-      });
+      return success(res, `Utente "${user.name}" eliminato `, 'User deleted', { user: undefined });
     } catch (error) {
       logger.error('/delete error : ', error);
-      return UnexpectedServerError(res);
+      return unexpectedServerError(res);
     }
   })
 );

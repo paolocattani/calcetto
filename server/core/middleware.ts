@@ -71,3 +71,8 @@ export const safeVerifyToken = (token: any): [UserDTO | null, boolean] => {
 export const auditControl = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
+
+export const logController = (req: Request, next: NextFunction, controller: string, path: string) => {
+  if (isDevMode()) logger.info(`${controller} : ${req.method} ${req.originalUrl.replace(path, '')} `);
+  next();
+};

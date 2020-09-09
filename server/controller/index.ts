@@ -1,4 +1,4 @@
-import { Application as ExpressApplication, Response, Request, NextFunction } from 'express';
+import express, { Application as ExpressApplication, Response, Request, NextFunction } from 'express';
 
 // Models
 import { UserDTO } from '../models/dto/user.dto';
@@ -11,6 +11,7 @@ import stage2Router from './stage2.controller';
 import authRouter from './auth.controller';
 // SSE
 import { sessionControl } from '../events/events';
+import { HTTPStatusCode } from '../core/HttpStatusCode';
 
 export interface AppRequest extends Request {
   user?: UserDTO;
@@ -27,9 +28,12 @@ export default (application: ExpressApplication): void => {
   // SSE
   application.get('/sse/v1/session', sessionControl);
 
+  // Locales
+  application.use('/locales', express.static('../locales'));
+
   // Test
   application.get('/status', (req: Request, res: Response, next: NextFunction) =>
     // eslint-disable-next-line quotes
-    res.status(200).json({ code: 200, message: `What's up? I was sleeping...` })
+    res.status(HTTPStatusCode.Accepted).json({ code: HTTPStatusCode.Accepted, message: `What's up? I was sleeping...` })
   );
 };

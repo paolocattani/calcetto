@@ -1,22 +1,20 @@
-import { Router, NextFunction, Response } from 'express';
+import { Router, NextFunction, Response, Request } from 'express';
 // Utils
 import chalk from 'chalk';
 // Core
 import { logger } from '../core/logger';
-import { isDevMode } from '../core/debug';
-import { asyncMiddleware, withAuth, withAdminRights } from '../core/middleware';
+import { asyncMiddleware, withAuth, withAdminRights, logController } from '../core/middleware';
 // Managers
 import { generateStage2Rows, countStage2, updateCells, deleteStage2 } from '../manager/stage2.manager';
 // Models
 import { AppRequest } from './index';
 import { fetchPairsStage2 } from '../manager/pair.manager';
 
-// all API path must be relative to /api/v1/tournament
+// all API path must be relative to /api/v1/stage2
 const router = Router();
-router.use('/', (req, res, next) => {
-  if (isDevMode()) logger.info(`Stage2 Controller : ${req.method} ${req.originalUrl.replace('/api/v1/stage2', '')} `);
-  next();
-});
+router.use('/', (req: Request, res: Response, next: NextFunction) =>
+  logController(req, next, 'Stage2 Controller', '/api/v1/stage2')
+);
 
 // Generazione struttura / reperimento dati
 router.post(

@@ -1,22 +1,19 @@
 import { Router, Request, Response, NextFunction, query } from 'express';
 import chalk from 'chalk';
 import { logger } from '../core/logger';
-import { isDevMode } from '../core/debug';
 import { dbConnection } from '../models/server/AppServer';
 // Models
 import { Pair } from '../models/sequelize';
 import { PairDTO } from '../models/dto';
-import { asyncMiddleware, withAuth } from '../core/middleware';
+import { asyncMiddleware, withAuth, logController } from '../core/middleware';
 import { AppRequest } from './index';
 import { listInTournament, findAlias } from '../manager/pair.manager';
-import { MissingParamsResponse } from './common';
+import { missingParameters } from './common';
 
 const router = Router();
-
-router.use('/', (req, res, next) => {
-  if (isDevMode()) logger.info(`Pair Controller : ${req.method} ${req.originalUrl.replace('/api/v1/pair', '')} `);
-  next();
-});
+router.use('/', (req: Request, res: Response, next: NextFunction) =>
+  logController(req, next, 'Pair Controller', '/api/v1/pair')
+);
 
 router.get(
   '/alias',
@@ -47,7 +44,7 @@ router.put(
     const rows = body.pairs as PairDTO[];
     const stage1Name = body.stage1Name;
     if (rows.length === 0) {
-      return MissingParamsResponse(res);
+      return missingParameters(res);
     }
     const transaction = await dbConnection.transaction();
     try {

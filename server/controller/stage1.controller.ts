@@ -1,19 +1,16 @@
-import { Router, Response, NextFunction } from 'express';
+import { Router, Response, NextFunction, Request } from 'express';
 
 // Core
-
 import { logger } from '../core/logger';
-import { isDevMode } from '../core/debug';
-import { asyncMiddleware, withAuth, withAdminRights } from '../core/middleware';
+import { asyncMiddleware, withAuth, withAdminRights, logController } from '../core/middleware';
 
 import { AppRequest } from './index';
-import { deleteStage1, updatePlacement, generateStage1Rows, getOpposite, updateCell } from '../manager/stage1.manager';
+import { deleteStage1, updatePlacement, generateStage1Rows, updateCell } from '../manager/stage1.manager';
 
 const router = Router();
-router.use('/', (req, res, next) => {
-  if (isDevMode()) logger.info(`Stage1 Controller : ${req.method} ${req.originalUrl.replace('/api/v1/stage1', '')} `);
-  next();
-});
+router.use('/', (req: Request, res: Response, next: NextFunction) =>
+  logController(req, next, 'Stage1 Controller', '/api/v1/stage1')
+);
 
 router.post(
   '/placement',

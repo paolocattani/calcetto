@@ -1,14 +1,12 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { logger } from '../core/logger';
-import { isDevMode } from '../core/debug';
-import { withAuth, asyncMiddleware } from '../core/middleware';
+import { withAuth, asyncMiddleware, logController } from '../core/middleware';
 import { create, deletePlayer, parseBody, listAll, listAllInTournament } from '../manager/player.manager';
 
 const router = Router();
-router.use('/', (req, res, next) => {
-  if (isDevMode()) logger.info(`Player Controller : ${req.method} ${req.originalUrl.replace('/api/v1/player', '')} `);
-  next();
-});
+router.use('/', (req: Request, res: Response, next: NextFunction) =>
+  logController(req, next, 'Player Controller', '/api/v1/player')
+);
 
 router.get(
   '/list/:tId',
