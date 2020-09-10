@@ -8,6 +8,12 @@
     "public":"Pubblico",
     "private":"Privato",
     "visibility":"Visibilità",
+    "progress":{
+        "new":"Nuovo",
+        "pairsSelection":"Selezione Coppie",
+        "Stage1" : "Fase 1",
+        "Stage2" : "Fase 2"
+    },
     "error":{
         "none":"Nessun torneo presente. Riprova piu tardi o contatta un amminstratore.",
         "name":"Inserire un nome per il torneo",

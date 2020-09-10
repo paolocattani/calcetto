@@ -6,7 +6,7 @@ const actionName = '[Pair]';
 
 export const PairAction = {
   // Fetch Pairs
-  fetchPairs: createAsyncAction(...defaultAsyncParams(actionName, 'Fetch Pairs'))<
+  fetch: createAsyncAction(...defaultAsyncParams(actionName, 'Fetch Pairs'))<
     FetchPairsRequest,
     FetchPairsResponse,
     Error

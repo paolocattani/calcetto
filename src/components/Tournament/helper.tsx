@@ -1,15 +1,6 @@
 import React, { CSSProperties } from 'react';
 import { TournamentDTO, TournamentProgress } from 'redux/models/tournament.model';
 
-export async function getTournament(tId: number): Promise<TournamentDTO | null> {
-  const response = await fetch(`/api/v1/tournament/${tId}`, {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
-  });
-  const result: TournamentDTO = await response.json();
-  return response.ok ? result : null;
-}
-
 export function getEmptyTournament(name: string): TournamentDTO {
   return {
     id: null,

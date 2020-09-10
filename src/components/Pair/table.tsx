@@ -27,6 +27,7 @@ import { TournamentProgress } from '../../redux/models/tournament.model';
 // Action
 import { TournamentAction, PairAction } from '../../redux/actions';
 import TournamentBadge from '../Tournament/badge';
+import { useTranslation } from 'react-i18next';
 
 const hideAskUser = {
   message: '',
@@ -39,6 +40,8 @@ const PairsTable: React.FC<PairTableProps> = () => {
   // Navigation
   const currentHistory = useHistory();
   const dispatch = useDispatch();
+  const { t } = useTranslation(['common', 'pair']);
+
   const isAdmin = useSelector(SessionSelector.isAdmin);
   const tournament = useSelector(TournamentSelector.getTournament)!;
 
@@ -292,7 +295,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
       dispatch(TournamentAction.update.request({ model: tournament }));
     }
     // Go to Stage1
-    dispatch(PairAction.fetchPairs.request({ tId: tournament.id! }));
+    dispatch(PairAction.fetch.request({ tId: tournament.id! }));
     currentHistory.push('/stage1');
   };
 
@@ -461,20 +464,21 @@ const PairsTable: React.FC<PairTableProps> = () => {
           onClick={(e: any) => setNewRowsNumber(availableRows)}
           disabled={newRowsNumber > availableRows}
         >
-          Max
+          {t('common:max')}
         </Button>
         <Button variant="primary" onClick={addMultipleRows} disabled={!newRowsNumber || newRowsNumber > availableRows}>
-          Esegui
+          {t('common:exec')}
         </Button>
       </InputGroup.Append>
     </InputGroup>
   );
+
   const toolsBar = () => (
     <div className={commonStyle.toolsBarContainer}>
       <Row className={commonStyle.toolsBar}>
         <Col>
           <Button variant="secondary" className="float-left align-middle" onClick={goBack}>
-            <HomeIcon /> Home
+            <HomeIcon /> {t('common:route.home')}
           </Button>
         </Col>
 
@@ -486,21 +490,21 @@ const PairsTable: React.FC<PairTableProps> = () => {
               onClick={() => addRow()}
               disabled={availableRows <= 0 || !isAdmin}
             >
-              <PlusIcon /> Aggiungi Coppia
+              <PlusIcon /> {t('pair:add')}
             </Button>
           </Col>
         )}
         {tournament.progress > TournamentProgress.PairsSelection ? null : (
           <Col>
             <Button variant="danger" className="align-middle" onClick={deleteRow} disabled={deleteDisabled || !isAdmin}>
-              <TrashIcon /> {selectedRows.length === 1 ? 'Elimina coppia' : 'Elimina coppie'}
+              <TrashIcon /> {selectedRows.length === 1 ? t('pair:delete.one') : t('pair:delete.multi')}
             </Button>
           </Col>
         )}
         {tournament.progress !== TournamentProgress.Stage1 ? null : (
           <Col>
             <Button variant="danger" className="align-middle" onClick={deleteStage1} disabled={!isAdmin}>
-              Reset gironi
+              {t('stage1:reset')}
             </Button>
           </Col>
         )}
@@ -511,7 +515,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
             onClick={confirmPairs}
             disabled={!isAdmin}
           >
-            <b>Prosegui </b> <RightArrowIcon />
+            <b>{t('common:continue')} </b> <RightArrowIcon />
           </Button>
         </Col>
       </Row>
@@ -524,12 +528,15 @@ const PairsTable: React.FC<PairTableProps> = () => {
     </div>
   );
 
-  console.log(
-    'Pairs : ',
-    tournament.progress > TournamentProgress.PairsSelection,
-    tournament.progress,
-    TournamentProgress.PairsSelection
-  );
+  const labels = {
+    player1: t('pair:field.player1'),
+    player2: t('pair:field.player2'),
+    alias: t('pair:field.alias'),
+    stage1: t('pair:field.stage1'),
+    paid1: t('pair:field.paid1'),
+    paid2: t('pair:field.paid2'),
+  };
+
   return (
     <div>
       <YesNoModal message={askUser.message} title={askUser.title} onClick={askUser.onClick} show={askUser.show} />
@@ -543,7 +550,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
                 bootstrap4
                 keyField="id"
                 data={data.rows}
-                columns={columns(onSelect, data.players) as ColumnDescription<PairDTO, PairDTO>[]}
+                columns={columns(onSelect, data.players, labels) as ColumnDescription<PairDTO, PairDTO>[]}
                 cellEdit={cellEditProps(isAdmin && tournament.progress < TournamentProgress.Stage1)}
                 selectRow={selectRow}
                 noDataIndication={() => (

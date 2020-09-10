@@ -1,21 +1,4 @@
-import { TournamentProgress } from '../../redux/models/tournament.model';
-
 export const getTodayDate = () => formatDate(new Date());
-
-export function translateTournamentProgress(value: string) {
-  switch (value) {
-    case TournamentProgress.New:
-      return 'Nuovo';
-    case TournamentProgress.PairsSelection:
-      return 'Selezione Coppie';
-    case TournamentProgress.Stage1:
-      return 'Fase 1';
-    case TournamentProgress.Stage2:
-      return 'Fase 2';
-    default:
-      return '';
-  }
-}
 
 export function formatDate(date: Date) {
   var d = new Date(date),

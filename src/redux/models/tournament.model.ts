@@ -56,8 +56,8 @@ export interface TournamentDTO {
 }
 
 export enum TournamentProgress {
-  New = 'New',
-  PairsSelection = 'PairsSelection',
-  Stage1 = 'Stage1',
-  Stage2 = 'Stage2',
+  New = 'new',
+  PairsSelection = 'pairsSelection',
+  Stage1 = 'stage1',
+  Stage2 = 'stage2',
 }

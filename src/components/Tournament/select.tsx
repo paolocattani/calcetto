@@ -8,7 +8,7 @@ import { useHistory } from 'react-router';
 import { RightArrowIcon } from '../core/icons';
 // Helper
 import { cardStyle, IndicatorSeparator } from './helper';
-import { formatDate, translateTournamentProgress } from '../core/utils';
+import { formatDate } from '../core/utils';
 import NewTournament from './new';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -46,7 +46,7 @@ const FTournament = () => {
       if (isAdmin) {
         currentHistory.push('/tournament');
       } else {
-        dispatch(PairAction.fetchPairs.request({ tId: tournament.id! }));
+        dispatch(PairAction.fetch.request({ tId: tournament.id! }));
         currentHistory.push('/stage1');
       }
     } else toast.error(t('common:error.generic'));
@@ -82,7 +82,9 @@ const FTournament = () => {
             options={tournamentsList}
             placeholder={t('tournament:search')}
             isSearchable
-            getOptionLabel={getOptionLabel}
+            getOptionLabel={({ name, date, progress }) =>
+              `${name} - ${formatDate(date)} @ ${t(`tournament:progress.${progress}`)}`
+            }
             isClearable
             onChange={(tournament: ValueType<TournamentDTO>) =>
               dispatch(TournamentAction.setTournament(tournament as TournamentDTO))
@@ -144,9 +146,6 @@ const FTournament = () => {
 };
 
 export default FTournament;
-
-const getOptionLabel = ({ name, date, progress }: TournamentDTO) =>
-  name + ' - ' + formatDate(date) + '@' + translateTournamentProgress(progress);
 
 const customStyles: Partial<Styles> | undefined = {
   // menuList: (provided, state) => ({ ...provided, border: '1px solid #ffc107' }),

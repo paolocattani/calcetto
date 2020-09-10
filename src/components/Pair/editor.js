@@ -31,12 +31,12 @@ const checkBoxProps = {
   style: (content, row, rowIndex, columnIndex) => (content !== NO ? { backgroundColor: '#ffbf47' } : null),
 };
 
-export const columns = (onSelect, options) => [
+export const columns = (onSelect, options, labels) => [
   { dataField: 'id', text: 'ID', editable: false, hidden: true, align: () => ALIGN_CENTER },
   { dataField: 'rowNumber', text: 'ID', editable: false, align: () => ALIGN_CENTER },
   {
     dataField: 'player1.alias',
-    text: 'Giocatore 1',
+    text: labels.player1,
     align: () => ALIGN_CENTER,
     editorRenderer: (editorProps, value, row, column, rowIndex, columnIndex) =>
       playerSelection(editorProps, value, row, rowIndex, columnIndex, onSelect, options),
@@ -44,16 +44,16 @@ export const columns = (onSelect, options) => [
   },
   {
     dataField: 'player2.alias',
-    text: 'Giocatore 2',
+    text: labels.player1,
     align: () => ALIGN_CENTER,
     editorRenderer: (editorProps, value, row, column, rowIndex, columnIndex) =>
       playerSelection(editorProps, value, row, rowIndex, columnIndex, onSelect, options),
     headerStyle: (column, colIndex) => ({ width: '20%' }),
   },
-  { dataField: 'alias', text: 'Alias Coppia', headerStyle: (column, colIndex) => ({ width: '25%' }) },
+  { dataField: 'alias', text: labels.alias, headerStyle: (column, colIndex) => ({ width: '25%' }) },
   {
     dataField: 'stage1Name',
-    text: 'Nome girone',
+    text: labels.stage1,
     align: () => ALIGN_CENTER,
     headerStyle: (column, colIndex) => ({ width: '10%' }),
     editor: {

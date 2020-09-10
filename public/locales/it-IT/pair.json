@@ -1,0 +1,21 @@
+{
+    "add":"Aggiungi coppia",
+    "missing":{
+        "1":"Aggiungi le coppie per questo torneo",
+        "2":"Ci sono solo {{current}} giocatori definiti ma devono essercene almeno {{min}} per poter formare un torneo.",
+        "3":"Devi creare un altro giocatore",
+        "4":"Devi creare almeno altri {{diff}}"
+    },
+    "field": {
+        "player1":"Giocatore 1",
+        "player2":"Giocatore 2",
+        "alias":"Alias coppia",
+        "stage1":"Nome girone",
+        "paid1":"Pagato 1",
+        "paid2":"Pagato 2"
+    },
+    "delete":{
+        "one":"Elimina coppia",
+        "multi":"Elimina coppie"
+    }
+}
