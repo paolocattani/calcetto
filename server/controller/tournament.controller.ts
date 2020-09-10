@@ -56,8 +56,8 @@ router.put(
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     try {
       const tournament = await update(req.user!, parseBody(req.body));
-      return success(res,'Torneo salvato',"Save complete",{tournament});
-    }catch(err){
+      return success(res, 'Torneo salvato', 'Save complete', { tournament });
+    } catch (err) {
       return unexpectedServerError(res);
     }
   })
@@ -75,12 +75,12 @@ router.post(
       let t: Tournament | TournamentDTO | null = await findByNameAndDate(model.name, model.date, user);
       if (t) {
         logger.info(`Tournament ${model.name} already exists....`);
-        return failure(res,"Torneo gia presente",`Tournament ${model.name} already exists`);
+        return failure(res, 'Torneo gia presente', `Tournament ${model.name} already exists`);
       }
       model.ownerId = user.id;
       t = await Tournament.create(model);
       logger.info(`Created Tournament => ${t}`);
-      return success(res,'Torneo salvato',"Save complete",{tournament:t});
+      return success(res, 'Torneo salvato', 'Save complete', { tournament: t });
     } catch (err) {
       return unexpectedServerError(res);
     }

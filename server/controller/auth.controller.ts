@@ -22,7 +22,6 @@ import {
 import { AppRequest } from './index';
 import { HTTPStatusCode } from '../core/HttpStatusCode';
 import { LoginRequest } from 'models/client/auth.models';
-import { UserMessageType } from '../models/client/common.models';
 import { unexpectedServerError, missingParameters, success, failure } from './common';
 const router = Router();
 
@@ -119,7 +118,7 @@ router.put(
       logger.info('/update : ', model);
       const user = await findUserByEmailAndUsername(model.email, model.username);
       if (!user) {
-        return failure(res,'Utente non trovato','User not found');
+        return failure(res, 'Utente non trovato', 'User not found');
       }
       await user.update(model);
       return success(res, 'Aggiornamento effettuato', 'Update complete.', { user: convertEntityToDTO(user) });
