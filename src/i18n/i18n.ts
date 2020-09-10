@@ -20,7 +20,7 @@ i18n
 
     //## Namespaces
     // String or array of namespaces to load
-    ns: ['common', 'auth', 'tournament'],
+    ns: ['common', 'auth', 'tournament', 'pair'],
     // Default namespace used if not passed to translation function
     defaultNS: 'common',
     // String or array of namespaces to lookup key if not found in given namespace.
@@ -41,10 +41,10 @@ i18n
       escapeValue: false,
     },
     backend: {
-      loadPath: '../locales/{{lng}}/{{ns}}.json',
+      loadPath: './locales/{{lng}}/{{ns}}.json',
     },
   });
 
 export default i18n;
 
-export const getOtherLang = () => (i18n.language === 'it-IT' ? 'lang.en-US' : 'lang.it-IT');
+export const getOtherLang = () => (i18n.language === 'it-IT' ? 'en-US' : 'it-IT');

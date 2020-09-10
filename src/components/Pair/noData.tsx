@@ -20,7 +20,7 @@ const NoData: React.FC<NoDataProps> = ({ addRow, optionsLength, isEditable }) =>
     <>
       <p>{`${t('pair:missing.1')}...`}</p>
       <Button variant="success" onClick={addRow} disabled={!isEditable}>
-        {t('pair:add')}
+        {t('pair:add.one')}
       </Button>
     </>
   ) : (

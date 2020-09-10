@@ -17,7 +17,6 @@ const Header: React.FC = () => {
   const dispatch = useDispatch();
   const currentHistory = useHistory();
   const { t } = useTranslation(['common']);
-  const changeLanguage = (language: string) => i18n.changeLanguage(language);
 
   const { user, isAuthenticated } = useSelector(SessionSelector.getSession);
 
@@ -88,7 +87,7 @@ const Header: React.FC = () => {
                       </Dropdown.Item>
                       <Dropdown.Item
                         className="default-color-white default-hover-green"
-                        onClick={() => changeLanguage(otherLang)}
+                        onClick={() => i18n.changeLanguage(otherLang)}
                         as="button"
                         eventKey="2"
                       >

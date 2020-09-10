@@ -47,7 +47,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 
   // States
   // User messages
-  const [isLoading, setIsLoading] = useState({ state: false, message: 'Caricamento' });
+  const [isLoading, setIsLoading] = useState({ state: false, message: t('common:loading') });
   const [askUser, setAskUser] = useState<YesNoModalProps>(hideAskUser);
 
   // Data
@@ -75,7 +75,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 
   async function addRow(index?: number) {
     try {
-      setIsLoading({ state: true, message: 'Aggiunta riga in corso' });
+      setIsLoading({ state: true, message: t('common:loading') });
       const emptyRow = getEmptyRowModel();
       emptyRow.tId = tournament.id || 0;
       const response = await fetch('/api/v1/pair', {
@@ -90,9 +90,9 @@ const PairsTable: React.FC<PairTableProps> = () => {
         rows: [emptyRow, ...current.rows],
         players: current.players,
       }));
-      showSuccessMessage('Riga aggiunta');
+      showSuccessMessage(t('pair:success.add'));
     } catch (error) {
-      showErrorMessage('Errore aggiunta riga');
+      showErrorMessage(t('pair:error.19'));
     }
   }
 
@@ -107,10 +107,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 
   async function deleteRow() {
     try {
-      setIsLoading({
-        state: true,
-        message: selectedRows.length > 1 ? 'Cancellazione righe in corso' : 'Cancellazione riga in corso',
-      });
+      setIsLoading({ state: true, message: t('common:loading') });
       // Devo ripristinare i giocatori eliminati
       let players: PlayerDTO[] = [];
       selectedRows.forEach((e) => {
@@ -135,9 +132,9 @@ const PairsTable: React.FC<PairTableProps> = () => {
         players: current.players,
       }));
 
-      showSuccessMessage(selectedRows.length > 1 ? 'Righe cancellate' : 'Riga cancellata');
+      showSuccessMessage(t(`pair:success.${selectedRows.length > 1 ? 'deleteMulti' : 'deleteOne'}`));
     } catch (error) {
-      showErrorMessage('Errore cancellazione riga');
+      showErrorMessage(t('pair:error.18'));
     }
 
     setSelectedRows([]);
@@ -174,7 +171,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
             if (selectedElement.id && row.player2 && row.player2.id === selectedElement.id) {
               // Devo salvare l'elemnto che sto per sostituire
               row.player1 = getEmptyPlayer();
-              showErrorMessage('Attenzione : Non puoi selezionare lo stesso giocare ! ');
+              showErrorMessage(t('pair:error.17'));
             } else {
               // Aggiorno la lista dei giocatori disponibili prima di aggiornare i dati
               updateOptions(row.player1, selectedElement);
@@ -183,7 +180,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
           } else {
             if (selectedElement.id && row.player1 && row.player1.id === selectedElement.id) {
               row.player2 = getEmptyPlayer();
-              showErrorMessage('Attenzione : Non puoi selezionare lo stesso giocare ! ');
+              showErrorMessage(t('pair:error.17'));
             } else {
               updateOptions(row.player2, selectedElement);
               row.player2 = selectedElement;
@@ -233,13 +230,13 @@ const PairsTable: React.FC<PairTableProps> = () => {
 
   const confirmPairs = async () => {
     if (!tournament.id) {
-      showErrorMessage('Id torneo mancante. Verrai inviato alla Home tra 5 secondi....');
+      showErrorMessage(`${t('pair:error.16')}...`);
       setTimeout(() => currentHistory.push('/'), 5000);
     }
 
     // Controllo che sia presente almeno una coppia
     if (data.rows.length < 4) {
-      showErrorMessage('Numero di coppie insufficente. Devi formare almeno 4 coppie');
+      showErrorMessage(t('pair:error.15'));
       return;
     }
     // Controllo gironi non assegnati
@@ -247,11 +244,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
       .filter((e: { stage1Name: string }) => !e.stage1Name || e.stage1Name === '')
       .map((e) => e.rowNumber);
     if (missingStage1Name.length !== 0) {
-      showErrorMessage(
-        `Assegna  ${
-          missingStage1Name.length === 1 ? 'la riga ' : 'le righe '
-        } ${missingStage1Name} ad un girone per procedere `
-      );
+      showErrorMessage(t(`pair:error.${missingStage1Name.length === 1 ? '13' : '14'}`, { missingStage1Name }));
       return;
     }
 
@@ -260,11 +253,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
       .filter((e) => !e.player1 || !e.player1.id || !e.player2 || !e.player2.id)
       .map((e) => e.rowNumber);
     if (missingPairs.length !== 0) {
-      showErrorMessage(
-        `Assegna  i giocatori ${
-          missingPairs.length === 1 ? 'alla riga ' : 'alle righe '
-        } ${missingPairs} per procedere `
-      );
+      showErrorMessage(t(`pair:error.${missingPairs.length === 1 ? '11' : '12'}`, { missingPairs }));
       return;
     }
 
@@ -281,9 +270,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
     }
     if (invalidStage.length > 0) {
       showErrorMessage(
-        invalidStage.length === 1
-          ? `Il torneo ${invalidStage} deve contenere almeno ${MIN_PAIR_PER_STAGE + 1} coppie`
-          : `I torneI ${invalidStage} devono contenere almeno ${MIN_PAIR_PER_STAGE + 1} coppie`
+        t(`pair:error.${invalidStage.length === 1 ? '9' : '10'}`, { invalidStage, min: MIN_PAIR_PER_STAGE + 1 })
       );
       return;
     }
@@ -313,7 +300,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 
   const processDeleteStage1 = async () => {
     try {
-      setIsLoading({ state: true, message: 'Cancellazione in corso' });
+      setIsLoading({ state: true, message: t('common:loading') });
       const response = await fetch('/api/v1/stage1', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
@@ -328,40 +315,40 @@ const PairsTable: React.FC<PairTableProps> = () => {
           })
         );
       }
-      showSuccessMessage('Cancellazione completata');
+      showSuccessMessage(t('pair:success.delete'));
       setAskUser(hideAskUser);
     } catch (error) {
-      showErrorMessage('Errore cancellazione Fase 1');
+      showErrorMessage(t('pair:error.8'));
     }
   };
 
   function deleteStage1() {
     if (tournament.progress > TournamentProgress.Stage1) {
-      showErrorMessage('Non è possibile cancellare in quanto il torneo è gia alla fase 2');
+      showErrorMessage(t('pair:error.7'));
       return;
     }
     // Chiedo conferma all'utente
     setAskUser({
-      message: 'Vuoi resettare i gironi ? ',
+      message: `${t('pair:stage1.resetConfirm')} ?`,
       onClick: () => processDeleteStage1(),
       onHide: () => setAskUser(hideAskUser),
       show: true,
-      title: 'Reset Gironi',
+      title: t('pair:stage1.reset'),
     });
   }
 
   async function setStage1Name() {
     if (!stage1Number) {
-      showErrorMessage('Specificare il numero di gironi da assegnare');
+      showErrorMessage(t('pair:error.6'));
       return;
     }
 
     if (tournament.progress > TournamentProgress.PairsSelection) {
-      showErrorMessage('Non riassegnare i gironi in quanto le coppie sono gia state confermate per la fase successiva');
+      showErrorMessage(t('pair:error.5'));
       return;
     }
 
-    setIsLoading({ state: true, message: 'Aggiornamento in corso ' });
+    setIsLoading({ state: true, message: t('common:loading') });
     let current = 0;
     const names = 'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('');
     let newRows: any[] = [];
@@ -384,7 +371,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
         newRows.push(row);
       }
     }
-    showSuccessMessage('Gironi assegnati correttamente');
+    showSuccessMessage(t('pair:success.stage1Name'));
     setData((current) => ({ rows: newRows, players: current.players }));
   }
 
@@ -406,15 +393,12 @@ const PairsTable: React.FC<PairTableProps> = () => {
   const assignMatches = () => (
     <InputGroup>
       <InputGroup.Prepend>
-        <InputGroup.Text>Assegna gironi</InputGroup.Text>
+        <InputGroup.Text>{t('pair:stage1.set')}</InputGroup.Text>
       </InputGroup.Prepend>
       <FormControl
         placeholder={
-          data.rows.length < 4
-            ? 'Inserisci almeno 4 coppie'
-            : `Numero di gironi ( max ${Math.floor(data.rows.length / 4)} )`
+          data.rows.length < 4 ? t('pair:error.3') : t('pair:error.4', { max: Math.floor(data.rows.length / 4) })
         }
-        aria-label="Numero di gironi"
         type="number"
         step={1}
         min={0}
@@ -433,7 +417,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
           onClick={setStage1Name}
           disabled={!stage1Number || stage1Number > Math.floor(data.rows.length / 4) || data.rows.length < 4}
         >
-          Esegui
+          {t('common:exec')}
         </Button>
       </InputGroup.Append>
     </InputGroup>
@@ -441,7 +425,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
   const addPairs = () => (
     <InputGroup>
       <InputGroup.Prepend>
-        <InputGroup.Text>Aggiungi coppie</InputGroup.Text>
+        <InputGroup.Text>{t('pair:add.multi')}</InputGroup.Text>
       </InputGroup.Prepend>
       <FormControl
         disabled={availableRows <= 0}
@@ -449,12 +433,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
         step={1}
         min={1}
         max={availableRows}
-        placeholder={
-          availableRows <= 0
-            ? 'Numero massimo di coppie gia creato'
-            : `Numero di coppie da aggiungere ( max ${availableRows} )`
-        }
-        aria-label="Numero di coppie"
+        placeholder={availableRows <= 0 ? t('pair:error.1') : t('pair:error.2', { max: availableRows })}
         onChange={(event: React.FormEvent<FormEventType>) => setNewRowsNumber(Number(event.currentTarget.value))}
         value={newRowsNumber || ''}
       />
@@ -490,7 +469,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
               onClick={() => addRow()}
               disabled={availableRows <= 0 || !isAdmin}
             >
-              <PlusIcon /> {t('pair:add')}
+              <PlusIcon /> {t('pair:add.one')}
             </Button>
           </Col>
         )}

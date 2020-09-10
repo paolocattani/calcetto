@@ -8,6 +8,7 @@
     "public":"Pubblico",
     "private":"Privato",
     "visibility":"Visibilità",
+    "test":"test",
     "progress":{
         "new":"Nuovo",
         "pairsSelection":"Selezione Coppie",

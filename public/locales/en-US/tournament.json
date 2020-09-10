@@ -8,6 +8,7 @@
     "public":"Public",
     "private":"Private",
     "visibility":"Visibility",
+    "test":"test",
     "progress":{
         "new":"New",
         "pairsSelection":"Pairs selection",
@@ -15,7 +16,9 @@
         "stage2" : "Stage 2"
     },
     "error":{
-        "none":"No tournament found. Try again later or contact an administrator."
+        "none":"No tournament found. Try again later or contact an administrator.",
+        "name":"Inserire un nome per il torneo",
+        "duplicate":"Il torneo {{name}} è gia presente"
     }
 
 }
