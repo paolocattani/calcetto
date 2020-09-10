@@ -7,6 +7,7 @@ import { SessionSelector } from 'redux/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { SessionAction } from 'redux/actions';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 interface DeleteProps {
   show: boolean;
   onHide: () => void;
@@ -16,6 +17,8 @@ interface DeleteProps {
 const Delete: React.FC<DeleteProps> = ({ show, onHide }) => {
   const dispatch = useDispatch();
   const currentHistory = useHistory();
+  const { t } = useTranslation(['common', 'auth']);
+
   // Dati utente
   const user = useSelector(SessionSelector.getUser)!;
   // Hook gestione campo password
@@ -30,7 +33,7 @@ const Delete: React.FC<DeleteProps> = ({ show, onHide }) => {
     if (email && username && password) {
       dispatch(SessionAction.delete.request({ email, username, password, history: currentHistory }));
     } else {
-      toast.error('Inserire la password');
+      toast.error(t('auth:error.password'));
     }
   };
 
@@ -43,7 +46,7 @@ const Delete: React.FC<DeleteProps> = ({ show, onHide }) => {
         }}
         closeButton
       >
-        <Modal.Title className="default-color-red">Elimina Utente</Modal.Title>
+        <Modal.Title className="default-color-red">{t('auth:delete')}</Modal.Title>
       </Modal.Header>
       <Modal.Body
         style={{
@@ -55,7 +58,7 @@ const Delete: React.FC<DeleteProps> = ({ show, onHide }) => {
           <Form onSubmit={(e: React.SyntheticEvent<Element, Event>) => handleSubmit(e, user.email, user.username)}>
             <Form.Group as={Row} controlId="emailDelete">
               <Form.Label column sm="2">
-                Email
+                {t('auth:email')}
               </Form.Label>
               <Col sm="10">
                 <Form.Control
@@ -69,7 +72,7 @@ const Delete: React.FC<DeleteProps> = ({ show, onHide }) => {
             </Form.Group>
             <Form.Group as={Row} controlId="usernameDelete">
               <Form.Label column sm="2">
-                Username
+                {t('auth:username')}
               </Form.Label>
               <Col sm="10">
                 <Form.Control
@@ -83,17 +86,17 @@ const Delete: React.FC<DeleteProps> = ({ show, onHide }) => {
             </Form.Group>
             <Form.Group as={Row} controlId="password">
               <Form.Label column sm="2">
-                Password
+                {t('common:password')}
               </Form.Label>
               <Col sm="10">
                 <Form.Control type="password" placeholder="Password" {...bindPassword} />
               </Col>
             </Form.Group>
             <Button size="lg" className="float-left" onClick={onHide} variant="outline-success" type="button">
-              Annulla
+              {t('common:cancel')}
             </Button>
             <Button size="lg" className="float-right" variant="outline-danger" type="submit">
-              <TrashIcon /> Conferma
+              <TrashIcon /> {t('common:confirm')}
             </Button>
           </Form>
         </Container>

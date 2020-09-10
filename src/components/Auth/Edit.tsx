@@ -7,11 +7,14 @@ import { SessionSelector } from 'redux/selectors/session.selector';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { SessionAction } from 'redux/actions';
+import { useTranslation } from 'react-i18next';
 const Delete = lazy(() => import('./Delete'));
 
 const EditUser: React.FC<{}> = () => {
   const dispatch = useDispatch();
   const currentHistory = useHistory();
+  const { t } = useTranslation(['common', 'auth', 'player']);
+
   const user = useSelector(SessionSelector.getUser)!;
   const [showModalDelete, setShowModalDelete] = useState(false);
 
@@ -50,10 +53,10 @@ const EditUser: React.FC<{}> = () => {
         <Form onSubmit={onSubmit}>
           <Card.Header as="h2">
             <Row>
-              <Col md="9">Gestione dati utente</Col>
+              <Col md="9">{t('auth:manage')}</Col>
               <Col md="3">
                 <Button variant="outline-warning" className="float-right" onClick={() => currentHistory.push('/')}>
-                  <TimesIcon /> Chiudi
+                  <TimesIcon /> {t('auth:close')}
                 </Button>
               </Col>
             </Row>
@@ -61,7 +64,7 @@ const EditUser: React.FC<{}> = () => {
           <Card.Body>
             <Container>
               <Form.Group as={Row} controlId="username">
-                <Form.Label column>Username</Form.Label>
+                <Form.Label column>{t('auth:username')}</Form.Label>
                 <Col sm="9">
                   <Form.Control
                     plaintext
@@ -73,7 +76,7 @@ const EditUser: React.FC<{}> = () => {
                 </Col>
               </Form.Group>
               <Form.Group as={Row} controlId="email">
-                <Form.Label column>Email</Form.Label>
+                <Form.Label column>{t('auth:email.email')}</Form.Label>
                 <Col sm="9">
                   <Form.Control
                     plaintext
@@ -85,7 +88,7 @@ const EditUser: React.FC<{}> = () => {
                 </Col>
               </Form.Group>
               <Form.Group as={Row} controlId="role">
-                <Form.Label column>Ruolo</Form.Label>
+                <Form.Label column>{t('player:role.role')}</Form.Label>
                 <Col sm="9">
                   <Form.Control
                     plaintext
@@ -99,27 +102,27 @@ const EditUser: React.FC<{}> = () => {
               <Form.Row>
                 <Col>
                   <Form.Group controlId="name">
-                    <Form.Label>Nome</Form.Label>
-                    <Form.Control required type="text" placeholder="Nome" {...bindName} />
+                    <Form.Label>{t('auth:name')}</Form.Label>
+                    <Form.Control required type="text" placeholder={t('auth:name')} {...bindName} />
                   </Form.Group>
                 </Col>
                 <Col>
                   <Form.Group controlId="surname">
-                    <Form.Label>Cognome</Form.Label>
-                    <Form.Control required type="text" placeholder="Cognome" {...bindSurname} />
+                    <Form.Label>{t('auth:surname')}</Form.Label>
+                    <Form.Control required type="text" placeholder={t('auth:surname')} {...bindSurname} />
                   </Form.Group>
                 </Col>
               </Form.Row>
               <Form.Row>
                 <Col>
                   <Form.Group controlId="phone">
-                    <Form.Label>Telefono</Form.Label>
-                    <Form.Control required type="text" placeholder="Telefono" {...bindPhone} />
+                    <Form.Label>{t('auth:mobile')}</Form.Label>
+                    <Form.Control required type="text" placeholder={t('auth:mobile')} {...bindPhone} />
                   </Form.Group>
                 </Col>
                 <Col>
                   <Form.Group controlId="birthday">
-                    <Form.Label>Data di Nascita</Form.Label>
+                    <Form.Label>{t('auth:birthday')}</Form.Label>
                     <Form.Control
                       as={() => (
                         <DatePicker
@@ -137,10 +140,10 @@ const EditUser: React.FC<{}> = () => {
           </Card.Body>
           <Card.Footer style={{ height: '10vh' }}>
             <Button variant="outline-success" type="submit" className="float-right">
-              <SaveIcon /> Salva
+              <SaveIcon /> {t('common:save')}
             </Button>
             <Button variant="outline-danger" className="float-left" onClick={() => setShowModalDelete(true)}>
-              <TrashIcon /> Elimina Utente
+              <TrashIcon /> {t('auth:delete')}
             </Button>
           </Card.Footer>
         </Form>

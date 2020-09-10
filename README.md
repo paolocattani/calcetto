@@ -19,10 +19,16 @@
     - Middleware : [Saga](https://redux-saga.js.org/)
     - Persistance : [Redux Persist](https://github.com/rt2zz/redux-persist#readme)
       - Storage : [Localforage](https://github.com/localForage/localForage)
+  - Internationalization : [i18next](http://i18next.com)
+      - [React implementation](https://github.com/i18next/react-i18next)
+      - [Language Detector](https://github.com/i18next/i18next-browser-languageDetector)
+      - [Load Resources](https://github.com/i18next/i18next-http-backend)
   - Misc :
     - [Jokes](https://sv443.net/jokeapi/v2/)
   - Test :
-    - TODO:
+    - [Jest](https://jestjs.io/)
+    - [Ts-Jest](https://kulshekhar.github.io/ts-jest)
+    - [React Testing Library](https://github.com/testing-library)
 
 ### Backend
   - [Express](https://expressjs.com/)
@@ -61,11 +67,12 @@
   npm run test:coverage
   ```
 
-
 ## Production
   ```bash
   # Build client
-  # This script update versions on .env file before they are bundled in build
+  # - Update app version
+  # - Build
+  # - Analyze
   sh ./build.sh
 
   # Build server

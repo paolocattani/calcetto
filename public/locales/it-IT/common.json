@@ -1,7 +1,11 @@
 {
-    "confim":"Conferma",
+    "confirm":"Conferma",
     "select":"Seleziona",
     "continue":"Prosegui",
+    "cancel":"Annulla",
+    "save":"Salva",
+    "reset":"Reset",
+    "close":"Chiudi",
     "logout":"Logut",
     "route":{
         "home":"Home",

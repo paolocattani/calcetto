@@ -1,0 +1,10 @@
+{
+
+    "role":{
+        "role":"Role",
+        "none":"I'm not a player",
+        "goalKeeper":"GoalKeeper",
+        "striker":"Striker",
+        "master":"Master"
+    }
+}

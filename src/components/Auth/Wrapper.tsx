@@ -1,16 +1,18 @@
 import React, { useState, CSSProperties, lazy } from 'react';
 import { Button, Container, Card, Col } from 'react-bootstrap';
 import { ToggleOn, ToggleOff } from '../core/icons';
+import { useTranslation } from 'react-i18next';
 
 const Login = lazy(() => import('./Login'));
 const Register = lazy(() => import('./Register'));
 
 const AuthWrapper: React.FC = (): JSX.Element => {
+  const { t } = useTranslation(['auth']);
   // State
   const [register, setRegister] = useState(false); // Mostra form registrazione/login
   const [title, body, icon, text] = register
-    ? [' Registrati', <Register />, <ToggleOn />, 'Login']
-    : [' Login', <Login />, <ToggleOff />, 'Registrati'];
+    ? [t('auth:register'), <Register />, <ToggleOn />, t('auth:login')]
+    : [t('auth:login'), <Login />, <ToggleOff />, t('auth:register')];
 
   const modalStyle: CSSProperties = {
     textAlign: 'left',

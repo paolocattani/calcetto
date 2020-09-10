@@ -1,7 +1,7 @@
 import { useInput } from '../core/hooks/InputHook';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import React, { useState } from 'react';
-import { useHistory, withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { SessionAction } from 'redux/actions';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -22,11 +22,11 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
   const handleSubmit = async (evt: React.SyntheticEvent) => {
     evt.preventDefault();
     if (!username || username === '') {
-      toast.error(t('error.username'));
+      toast.error(t('auth:error.username'));
       return;
     }
     if (!password || password === '') {
-      toast.error(t('error.password'));
+      toast.error(t('auth:error.password.password'));
       return;
     }
     setValidated(true);
@@ -44,19 +44,19 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
     <Form onSubmit={handleSubmit} noValidate validated={validated}>
       <InputField
         controlId="username"
-        label={t('usernameEmail')}
+        label={t('auth:usernameEmail')}
         required={true}
         type="text"
-        placeholder={t('usernameEmail')}
+        placeholder={t('auth:usernameEmail')}
         {...bindUsername}
       />
 
       <InputField
         controlId="password"
-        label={t('password')}
+        label={t('auth:password.password')}
         required={true}
         type="password"
-        placeholder={t('password')}
+        placeholder={t('auth:password.password')}
         {...bindPassword}
       />
       <Row>
@@ -69,7 +69,7 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
             type="submit"
             disabled={!username || !password}
           >
-            {t('confim')}
+            {t('common:confirm')}
           </Button>
         </Col>
       </Row>
@@ -77,4 +77,4 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
   );
 };
 
-export default withRouter(Login);
+export default Login;

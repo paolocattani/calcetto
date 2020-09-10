@@ -1,0 +1,10 @@
+{
+
+    "role":{
+        "role":"Ruolo",
+        "none":"Non sono un giocatore",
+        "goalKeeper":"Portiere",
+        "striker":"Attaccante",
+        "master":"Master"
+    }
+}

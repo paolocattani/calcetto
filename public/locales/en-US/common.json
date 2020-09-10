@@ -1,7 +1,11 @@
 {
-    "confim":"Confirm",
+    "confirm":"Confirm",
     "select":"Select",
     "continue":"Continue",
+    "cancel":"Cancel",
+    "save":"Save",
+    "reset":"Reset",
+    "close":"Close",
     "logout":"Logut",
     "route":{
         "home":"Home",
