@@ -9,8 +9,6 @@ interface TournamentBadgeProps {}
 const TournamentBadge: React.FC<TournamentBadgeProps> = () => {
   const tournament = useSelector(TournamentSelector.getTournament)!;
   const { t } = useTranslation(['tournament']);
-
-  const labels = {};
   return (
     <Row>
       <Col>

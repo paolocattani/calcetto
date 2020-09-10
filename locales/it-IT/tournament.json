@@ -11,8 +11,8 @@
     "progress":{
         "new":"Nuovo",
         "pairsSelection":"Selezione Coppie",
-        "Stage1" : "Fase 1",
-        "Stage2" : "Fase 2"
+        "stage1" : "Fase 1",
+        "stage2" : "Fase 2"
     },
     "error":{
         "none":"Nessun torneo presente. Riprova piu tardi o contatta un amminstratore.",
