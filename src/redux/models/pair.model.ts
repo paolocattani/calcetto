@@ -1,7 +1,9 @@
 import { PlayerDTO } from './player.model';
 
 export interface PairState {
+  // Pairs selected for stage1
   pairList?: PairDTO[];
+  // Loading
   isLoading: boolean;
 }
 

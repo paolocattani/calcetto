@@ -3,6 +3,7 @@ import { PlayerRole } from 'redux/models';
 import * as H from 'history';
 import { UserMessage, GenericReponse } from './common.model';
 
+//## STATE
 export interface SessionState {
   user?: UserDTO;
   isAuthenticated: boolean;
@@ -11,19 +12,14 @@ export interface SessionState {
   message?: UserMessage; // FIXME: unsed
 }
 
-export interface UserRegistration {
-  username: string;
-  name: string;
-  surname: string;
-  password: string;
-  email: string;
-  phone: string;
-  birthday: string;
-  playerRole: PlayerRole;
-}
-
+//## OTHER
 export interface SessionDTO {}
+export type PlayerRoleType = {
+  value: PlayerRole;
+  label: PlayerRole;
+};
 
+//## REQUEST - RESPONSE - ERROR
 // Request
 export interface AuthenticationRequest {
   history: H.History<unknown>;
@@ -57,11 +53,6 @@ export interface RegistrationRequest extends AuthenticationRequest {
   birthday: Date | null;
   playerRole: PlayerRoleType;
 }
-
-export type PlayerRoleType = {
-  value: PlayerRole;
-  label: PlayerRole;
-};
 
 // Response
 export interface AuthenticationResponse extends GenericReponse {

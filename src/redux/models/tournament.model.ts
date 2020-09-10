@@ -1,6 +1,33 @@
 import * as H from 'history';
 import { GenericReponse } from './common.model';
 
+//## STATE
+export interface TournamentState {
+  tournament: TournamentDTO | null;
+  tournamentsList: TournamentDTO[] | [];
+  isLoading: boolean;
+}
+
+//## OTHER
+export interface TournamentDTO {
+  id: number | null;
+  name: string;
+  date: Date;
+  progress: TournamentProgress;
+  public: boolean;
+  autoOrder: boolean;
+  label: string;
+  ownerId: number | null;
+}
+
+export enum TournamentProgress {
+  New = 'new',
+  PairsSelection = 'pairsSelection',
+  Stage1 = 'stage1',
+  Stage2 = 'stage2',
+}
+
+//## REQUEST - RESPONSE - ERROR
 // Requests
 export interface FetchTournamentsRequest {
   tId?: number;
@@ -37,27 +64,3 @@ export interface IsValidTournamentResponse {
 //
 // Error
 export interface TournamentError extends GenericReponse {}
-
-export interface TournamentState {
-  tournament: TournamentDTO | null;
-  tournamentsList: TournamentDTO[] | [];
-  isLoading: boolean;
-}
-
-export interface TournamentDTO {
-  id: number | null;
-  name: string;
-  date: Date;
-  progress: TournamentProgress;
-  public: boolean;
-  autoOrder: boolean;
-  label: string;
-  ownerId: number | null;
-}
-
-export enum TournamentProgress {
-  New = 'new',
-  PairsSelection = 'pairsSelection',
-  Stage1 = 'stage1',
-  Stage2 = 'stage2',
-}
