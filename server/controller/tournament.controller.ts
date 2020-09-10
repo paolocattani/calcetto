@@ -11,6 +11,7 @@ import { listAll, findById, findByNameAndDate, parseBody, update } from '../mana
 import Tournament from '../models/sequelize/tournament.model';
 import { TournamentDTO } from '../models/dto/tournament.dto';
 import { AppRequest } from './index';
+import { failure, success, unexpectedServerError } from './common';
 
 // all API path must be relative to /api/v1/tournament
 const router = Router();
@@ -27,7 +28,7 @@ router.get(
       return res.status(200).json(await listAll(req.user!));
     } catch (err) {
       logger.error(chalk.redBright('Error while fetching tournament ! : ', err));
-      return res.status(500).json({ message: 'Internal Error' });
+      return unexpectedServerError(res);
     }
   })
 );
@@ -43,7 +44,7 @@ router.get(
       return res.status(200).json(await findById(req.user!, parseInt(req.params.tId)));
     } catch (err) {
       logger.error(chalk.redBright('Error while fetching tournament ! : ', err));
-      return res.status(500).json({ message: 'Internal Error' });
+      return unexpectedServerError(res);
     }
   })
 );
@@ -53,28 +54,16 @@ router.put(
   '/',
   withAuth,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
-    const result = await update(req.user!, parseBody(req.body));
-    return res.status(200).json(result);
+    try {
+      const tournament = await update(req.user!, parseBody(req.body));
+      return success(res,'Torneo salvato',"Save complete",{tournament});
+    }catch(err){
+      return unexpectedServerError(res);
+    }
   })
 );
 
 // POST
-router.post(
-  '/isValid',
-  withAuth,
-  withAdminRights,
-  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
-    const {
-      body: { name, date },
-      user,
-    } = req;
-    const tournament = await findByNameAndDate(name, date, user!);
-    const isValid = !tournament;
-    const errorMessage = !isValid ? 'Torneo gia presente' : '';
-    return res.status(200).json({ isValid, errorMessage });
-  })
-);
-
 router.post(
   '/',
   withAuth,
@@ -86,14 +75,14 @@ router.post(
       let t: Tournament | TournamentDTO | null = await findByNameAndDate(model.name, model.date, user);
       if (t) {
         logger.info(`Tournament ${model.name} already exists....`);
-        return res.json(t);
+        return failure(res,"Torneo gia presente",`Tournament ${model.name} already exists`);
       }
       model.ownerId = user.id;
       t = await Tournament.create(model);
       logger.info(`Created Tournament => ${t}`);
-      return res.status(200).json(t);
+      return success(res,'Torneo salvato',"Save complete",{tournament:t});
     } catch (err) {
-      return next(err);
+      return unexpectedServerError(res);
     }
   })
 );

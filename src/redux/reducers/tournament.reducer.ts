@@ -11,33 +11,20 @@ export const initialTournamentState: TournamentState = {
 export const TournamentReducer = createReducer<TournamentState, Action>(initialTournamentState)
   // Request
   .handleAction(
-    [
-      TournamentAction.fetchTournaments.request,
-      TournamentAction.saveTournament.request,
-      TournamentAction.updateTournament.request,
-    ],
+    [TournamentAction.fetch.request, TournamentAction.save.request, TournamentAction.update.request],
     (state) => ({
       ...state,
       isLoading: true,
-      errorMessage: undefined,
     })
   )
   // Failure
   .handleAction(
-    [
-      TournamentAction.fetchTournaments.failure,
-      TournamentAction.saveTournament.failure,
-      TournamentAction.updateTournament.failure,
-    ],
-    (state, { payload: { message } }) => ({
-      ...state,
-      errorMessage: message,
-      isLoading: false,
-    })
+    [TournamentAction.fetch.failure, TournamentAction.save.failure, TournamentAction.update.failure],
+    (state) => ({ ...state, isLoading: false })
   )
   // SUCCESS
   // Fetch Tournament
-  .handleAction(TournamentAction.fetchTournaments.success, (state, { payload: { results } }) => ({
+  .handleAction(TournamentAction.fetch.success, (state, { payload: { results } }) => ({
     tournament: results && results.length > 0 ? results[0] : null,
     tournamentsList: results,
     isLoading: false,
@@ -50,10 +37,10 @@ export const TournamentReducer = createReducer<TournamentState, Action>(initialT
   }))
   // Create/Update a new tournament
   .handleAction(
-    [TournamentAction.saveTournament.success, TournamentAction.updateTournament.success],
-    (state, { payload: { result } }) => ({
+    [TournamentAction.save.success, TournamentAction.update.success],
+    (state, { payload: { tournament } }) => ({
       ...state,
-      tournament: result,
+      tournament,
       isLoading: false,
     })
   )

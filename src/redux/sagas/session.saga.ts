@@ -94,7 +94,7 @@ function* loginSaga(action: ReturnType<typeof SessionAction.login.request>): Gen
   const loginReponse: AuthenticationResponse = yield call(login, action.payload);
   if (loginReponse.code === HTTPStatusCode.Accepted) {
     yield put(SessionAction.login.success(loginReponse));
-    yield fork(TournamentAction.fetchTournaments.request, {});
+    yield fork(TournamentAction.fetch.request, {});
     action.payload.history.push('/');
     toast.success(loginReponse.userMessage.message);
   } else {
@@ -104,7 +104,7 @@ function* loginSaga(action: ReturnType<typeof SessionAction.login.request>): Gen
 }
 
 // Registration
-function* regitrationSaga(
+function* registrationSaga(
   action: ReturnType<typeof SessionAction.registration.request>
 ): Generator<StrictEffect, void, any> {
   // Validate Login
@@ -112,7 +112,7 @@ function* regitrationSaga(
   console.log('regitrationSaga : ', registrationReponse);
   if (registrationReponse.code === HTTPStatusCode.Accepted) {
     yield put(SessionAction.registration.success(registrationReponse));
-    yield fork(TournamentAction.fetchTournaments.request, {});
+    yield fork(TournamentAction.fetch.request, {});
     action.payload.history.push('/');
     toast.success(registrationReponse.userMessage.message);
   } else {
@@ -171,7 +171,7 @@ export const SessionSagas = [
   takeEvery(SessionAction.login.request, loginSaga),
   takeEvery(SessionAction.update.request, updateUserSaga),
   takeEvery(SessionAction.delete.request, deleteUserSaga),
-  takeEvery(SessionAction.registration.request, regitrationSaga),
+  takeEvery(SessionAction.registration.request, registrationSaga),
   takeEvery(SessionAction.checkAuthentication.request, checkAuthenticationSaga),
   takeLatest(SessionAction.sessionControl.request, watchSessionSaga),
   takeEvery('*', logger),

@@ -1,11 +1,12 @@
 import * as H from 'history';
+import { GenericReponse } from './common.model';
 
 // Requests
 export interface FetchTournamentsRequest {
   tId?: number;
 }
 
-export interface PostTournamentRequest {
+export interface SaveTournamentRequest {
   model: TournamentDTO;
   history: H.History<unknown>;
 }
@@ -22,11 +23,11 @@ export interface IsValidTournamentRequest {
 export interface FetchTournamentsResponse {
   results: TournamentDTO[];
 }
-export interface PostTournamentResponse {
-  result: TournamentDTO | null;
+export interface SaveTournamentResponse extends GenericReponse {
+  tournament: TournamentDTO | null;
 }
-export interface UpdateTournamentResponse {
-  result: TournamentDTO;
+export interface UpdateTournamentResponse extends GenericReponse {
+  tournament: TournamentDTO;
 }
 export interface IsValidTournamentResponse {
   isValid: boolean;
@@ -34,6 +35,9 @@ export interface IsValidTournamentResponse {
 }
 
 //
+// Error
+export interface TournamentError extends GenericReponse {}
+
 export interface TournamentState {
   tournament: TournamentDTO | null;
   tournamentsList: TournamentDTO[] | [];

@@ -2,14 +2,12 @@ import {
   FetchTournamentsRequest,
   FetchTournamentsResponse,
   TournamentDTO,
-  PostTournamentRequest,
-  PostTournamentResponse,
+  SaveTournamentRequest,
+  SaveTournamentResponse,
   UpdateTournamentRequest,
   UpdateTournamentResponse,
-  IsValidTournamentRequest,
-  IsValidTournamentResponse,
 } from '../models/tournament.model';
-import { handleError } from './common';
+import { handleError, UnexpectedServerError } from './common';
 
 export const fetchTournaments = async (request: FetchTournamentsRequest): Promise<FetchTournamentsResponse> => {
   try {
@@ -25,20 +23,20 @@ export const fetchTournaments = async (request: FetchTournamentsRequest): Promis
   }
 };
 
-export const postTournament = async ({ model }: PostTournamentRequest): Promise<PostTournamentResponse> => {
+export const postTournament = async ({ model }: SaveTournamentRequest): Promise<SaveTournamentResponse> => {
   try {
     const response = await fetch('/api/v1/tournament', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(model),
     });
-    const result: TournamentDTO = await response.json();
-    console.log('postTournament : ', result);
-
-    return { result };
+    const result: SaveTournamentResponse = await response.json();
+    return result;
   } catch (e) {
-    handleError(e, 'Error updating Tournament');
-    return { result: null };
+    return {
+      tournament: null,
+      ...UnexpectedServerError,
+    };
   }
 };
 
@@ -49,25 +47,9 @@ export const updateTournament = async ({ model }: UpdateTournamentRequest): Prom
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(model),
     });
-    const result: TournamentDTO = await response.json();
-    return { result };
+    const result: UpdateTournamentResponse = await response.json();
+    return result;
   } catch (e) {
-    handleError(e, 'Error updating Tournament');
-    return { result: model };
-  }
-};
-
-export const isValidTournament = async ({ model }: IsValidTournamentRequest): Promise<IsValidTournamentResponse> => {
-  try {
-    const response = await fetch('/api/v1/tournament/isValid', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(model),
-    });
-    const { isValid, errorMessage }: IsValidTournamentResponse = await response.json();
-    return { isValid, errorMessage };
-  } catch (e) {
-    handleError(e, 'Error validating Tournament');
-    return { isValid: false, errorMessage: '' };
+    return { tournament: model, ...UnexpectedServerError };
   }
 };

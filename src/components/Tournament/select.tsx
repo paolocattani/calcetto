@@ -35,7 +35,7 @@ const FTournament = () => {
   const [newTournament, setNewTournament] = useState(false);
   useEffect(() => {
     if (!tournamentsList || tournamentsList.length === 0) {
-      dispatch(TournamentAction.fetchTournaments.request({}));
+      dispatch(TournamentAction.fetch.request({}));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tournamentsList]);
