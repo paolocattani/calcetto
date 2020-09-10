@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 // React-Select
-import Select, { Styles, ValueType } from 'react-select';
+import Select, { Styles } from 'react-select';
 // Bootstrap
 import { Form, Button, Card, Col } from 'react-bootstrap';
 import { useHistory } from 'react-router';
