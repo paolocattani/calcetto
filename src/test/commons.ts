@@ -10,6 +10,7 @@ export const initialState: RootState = {
   playerState: {
     isLoading: false,
     playersList: [],
+    isSaving: false,
   },
   pairState: {
     isLoading: false,
@@ -210,6 +211,7 @@ export const afterLoginStata: RootState = {
   playerState: {
     isLoading: false,
     playersList: [],
+    isSaving: false,
   },
   pairState: {
     isLoading: false,

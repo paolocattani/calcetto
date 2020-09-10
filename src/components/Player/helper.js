@@ -2,7 +2,6 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import filterTableFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
 import { Type } from 'react-bootstrap-table2-editor';
-import { getEmptyPlayer } from 'redux/services/player.service';
 import { PlayerRole } from '../../redux/models/player.model';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 
@@ -14,7 +13,7 @@ let roleFilter;
 let emailFilter;
 let phoneFilter;
 
-export function clearAllFilter(isAdmin) {
+export function clearAllFilter(isAdmin, labels) {
   nameFilter('');
   surnameFilter('');
   aliasFilter('');
@@ -35,87 +34,87 @@ export const cellEditProps = (isAdmin, dispatch) =>
   });
 
 // Columns default
-const playerColumns = (isAdmin) => [
+const playerColumns = (isAdmin, labels) => [
   { dataField: 'rowNumber', text: 'ID', editable: false, headerStyle: (column, colIndex) => ({ width: '3%' }) },
   {
     dataField: 'name',
-    text: 'Nome',
+    text: labels.name,
     headerClasses: 'player-table-header-element',
     autoSelectText: true,
     headerStyle: (column, colIndex) => ({ width: isAdmin ? '16%' : '25%' }),
     filter: textFilter({
-      placeholder: 'Filtra...',
+      placeholder: `${labels.filter}...`,
       getFilter: (filter) => (nameFilter = filter),
     }),
   },
   {
     dataField: 'surname',
-    text: 'Cognome',
+    text: labels.surname,
     headerClasses: 'player-table-header-element',
     autoSelectText: true,
     headerStyle: (column, colIndex) => ({ width: isAdmin ? '16%' : '25%' }),
     filter: textFilter({
-      placeholder: 'Filtra...',
+      placeholder: `${labels.filter}...`,
       getFilter: (filter) => (surnameFilter = filter),
     }),
   },
   {
     dataField: 'alias',
-    text: 'Alias',
+    text: labels.alias,
     headerClasses: 'player-table-header-element',
     headerStyle: (column, colIndex) => ({ width: isAdmin ? '17%' : '25%' }),
     autoSelectText: true,
     filter: textFilter({
-      placeholder: 'Filtra...',
+      placeholder: `${labels.filter}...`,
       getFilter: (filter) => (aliasFilter = filter),
     }),
   },
   {
     dataField: 'role',
-    text: 'Roulo',
+    text: labels.role,
     headerClasses: 'player-table-header-element',
     headerStyle: (column, colIndex) => ({ width: `${isAdmin ? '11' : '15'}%` }),
     filter: selectFilter({
-      placeholder: 'Filtra...',
+      placeholder: `${labels.filter}...`,
       options: {
-        [PlayerRole.GoalKeeper]: PlayerRole.GoalKeeper,
-        [PlayerRole.Striker]: PlayerRole.Striker,
-        [PlayerRole.Master]: PlayerRole.Master,
+        [PlayerRole.GoalKeeper]: labels.goalKeeper,
+        [PlayerRole.Striker]: labels.striker,
+        [PlayerRole.Master]: labels.master,
       },
       getFilter: (filter) => (roleFilter = filter),
     }),
     editor: {
       type: Type.SELECT,
-      getOptions: (_) => {
+      getOptions: () => {
         return [
-          { value: PlayerRole.GoalKeeper, label: PlayerRole.GoalKeeper },
-          { value: PlayerRole.Striker, label: PlayerRole.Striker },
-          { value: PlayerRole.Master, label: PlayerRole.Master },
+          { value: PlayerRole.GoalKeeper, label: labels.goalKeeper },
+          { value: PlayerRole.Striker, label: labels.striker },
+          { value: PlayerRole.Master, label: labels.master },
         ];
       },
     },
   },
   {
     dataField: 'email',
-    text: 'Email',
+    text: labels.email,
     headerStyle: (column, colIndex) => ({ width: '20%' }),
     headerClasses: 'player-table-header-element',
     autoSelectText: true,
     hidden: !isAdmin,
     filter: textFilter({
-      placeholder: 'Filtra...',
+      placeholder: `${labels.filter}...`,
       getFilter: (filter) => (emailFilter = filter),
     }),
   },
   {
     dataField: 'phone',
     headerStyle: (column, colIndex) => ({ width: '10%' }),
-    text: 'Telefono',
+    text: labels.phone,
     headerClasses: 'player-table-header-element',
     autoSelectText: true,
     hidden: !isAdmin,
     filter: textFilter({
-      placeholder: 'Filtra...',
+      placeholder: `${labels.filter}...`,
       getFilter: (filter) => (phoneFilter = filter),
     }),
   },
@@ -132,20 +131,6 @@ export const ExportCSVButton = (props) => (
     Esporta in CSV
   </Button>
 );
-
-export const fetchPlayers = (setterFunction, tId) => {
-  (async () => {
-    const response = await fetch(tId ? `/api/v1/player/list/${tId}` : '/api/v1/player/list', {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
-    const result = await response.json();
-    const model = [...result, getEmptyPlayer('Nessun Giocatore')];
-    console.log('fetchPlayers.result : ', model);
-    setterFunction(model);
-  })();
-};
-
 export function valueFormatter(selectedOption) {
   let value = '';
   if (!selectedOption) return '';

@@ -2,6 +2,7 @@ import { RootState } from 'redux/models';
 
 // Get state from store
 export const PlayerSelector = {
-  isLoading: ({ pairState: { isLoading } }: RootState) => isLoading,
+  isLoading: ({ playerState: { isLoading } }: RootState) => isLoading,
+  isSaving: ({ playerState: { isSaving } }: RootState) => isSaving,
   getPlayersList: ({ playerState: { playersList } }: RootState) => playersList,
 };

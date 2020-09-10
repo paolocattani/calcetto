@@ -89,7 +89,7 @@ const Delete: React.FC<DeleteProps> = ({ show, onHide }) => {
                 {t('common:password')}
               </Form.Label>
               <Col sm="10">
-                <Form.Control type="password" placeholder="Password" {...bindPassword} />
+                <Form.Control type="password" placeholder={t('auth:password')} {...bindPassword} />
               </Col>
             </Form.Group>
             <Button size="lg" className="float-left" onClick={onHide} variant="outline-success" type="button">

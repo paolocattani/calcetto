@@ -4,9 +4,11 @@
     "continue":"Continue",
     "cancel":"Cancel",
     "save":"Save",
+    "saving":"Saving",
     "reset":"Reset",
     "close":"Close",
     "logout":"Logut",
+    "loading":"Loading",
     "route":{
         "home":"Home",
         "tournament":"Tournament Selection",

@@ -1,8 +1,6 @@
 import React, { CSSProperties } from 'react';
 import { Modal, Spinner, Toast, Alert, Row, Button, Container, Col } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { SessionSelector } from 'redux/selectors/session.selector';
 import './style.css';
 
 const modalStyle: CSSProperties = { color: 'whitesmoke', backgroundColor: '#343a40', borderColor: '#ffc107' };
@@ -108,21 +106,6 @@ export const GenericToast: React.FC<IToastProps> = ({ message, type }) =>
       </Toast.Body>
     </Toast>
   ) : null;
-
-// Util per loggare i dati utente in sessione
-export const LogSessionContext: React.FC<{}> = () => {
-  const session = useSelector(SessionSelector.getSession);
-
-  return (
-    <>
-      {Object.entries(session).map(([key, value]) => (
-        <p>
-          {key} : {value}
-        </p>
-      ))}
-    </>
-  );
-};
 
 // TODO: Componente fallback se route non trovata
 export function RedirectionControl(props: any): JSX.Element {

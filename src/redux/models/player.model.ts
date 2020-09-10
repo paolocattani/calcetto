@@ -25,6 +25,7 @@ export interface PlayerState {
   player?: PlayerDTO;
   playersList: PlayerDTO[];
   isLoading: boolean;
+  isSaving: boolean;
 }
 
 export interface PlayerDTO {

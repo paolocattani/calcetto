@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
-import { FormEventType } from './CommonTypes';
+import { FormEventType } from '../types';
 
 interface InputFieldProps {
   controlId: string;

@@ -1,5 +1,20 @@
 {
-
+    "data":"Nessun dato reperito",
+    "add":"Aggiungi giocatore",
+    "filter":"Pulisci filtri",
+    "field": {
+        "name":"Nome",
+        "surname":"Cognome",
+        "alias":"Alias",
+        "role":"Ruolo",
+        "email":"Email",
+        "phone":"Cellulare",
+        "filter":"Filtra"
+    },
+    "delete":{
+        "one":"Elimina giocatore",
+        "multi":"Elimina giocatori"
+    },
     "role":{
         "role":"Ruolo",
         "none":"Non sono un giocatore",

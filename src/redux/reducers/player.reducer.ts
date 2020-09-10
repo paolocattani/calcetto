@@ -4,14 +4,21 @@ import { PlayerAction } from 'redux/actions/player.action';
 
 export const initialPlayerState: PlayerState = {
   isLoading: false,
+  isSaving: false,
   playersList: [],
 };
 
 export const PlayerReducer = createReducer<PlayerState, Action>(initialPlayerState)
   // Request
-  .handleAction([PlayerAction.fetchPlayers.request, PlayerAction.savePlayer.request], (state) => ({
+  .handleAction([PlayerAction.fetchPlayers.request], (state) => ({
     ...state,
     isLoading: true,
+    errorMessage: undefined,
+  }))
+  .handleAction([PlayerAction.savePlayer.request, PlayerAction.deletePlayers.request], (state) => ({
+    ...state,
+    isLoading: true,
+    isSaving: true,
     errorMessage: undefined,
   }))
   // Failure
@@ -26,14 +33,17 @@ export const PlayerReducer = createReducer<PlayerState, Action>(initialPlayerSta
   .handleAction([PlayerAction.savePlayer.success], (state, { payload: { player } }) => ({
     playersList: [player, ...state.playersList],
     isLoading: false,
+    isSaving: false,
   }))
   .handleAction([PlayerAction.deletePlayers.success], (state, { payload: { players } }) => ({
     playersList: state.playersList.filter((row) => !players.find((selectedRow) => selectedRow.id === row.id)),
     isLoading: false,
+    isSaving: false,
   }))
   // Fetch Tournament
   .handleAction(PlayerAction.fetchPlayers.success, (state, { payload: { results } }) => ({
     playersList: results.map((e, i) => ({ ...e, rowNumber: i + 1 })),
     isLoading: false,
+    isSaving: false,
   }))
   .handleAction(PlayerAction.purge, () => initialPlayerState);

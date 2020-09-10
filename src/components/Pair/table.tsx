@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import NoData from './noData';
 // Core / Helper / Editor
 import { LoadingModal, YesNoModal, YesNoModalProps } from '../core/generic/Commons';
-import { FormEventType } from '../core/generic/CommonTypes';
+import { FormEventType } from '../core/types';
 import { RightArrowIcon, TrashIcon, PlusIcon, HomeIcon } from '../core/icons';
 import { cellEditProps, columns } from './editor';
 import { fetchData, getEmptyRowModel } from './helper';
@@ -225,6 +225,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
         return found ? selectedRows.filter((e) => e.id !== row.id) : selectedRows;
       }
     });
+    return true;
   };
 
   const confirmPairs = async () => {

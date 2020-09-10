@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FormEventType } from '../generic/CommonTypes';
+import { FormEventType } from '../types';
 
 // Hook per facilitare la gestione dei campi di una form nei componenti funzionali
 // https://rangle.io/blog/simplifying-controlled-inputs-with-hooks/

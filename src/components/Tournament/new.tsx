@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { TournamentAction } from 'redux/actions/tournament.action';
 import { toast } from 'react-toastify';
-import { FormEventType } from 'components/core/generic/CommonTypes';
+import { FormEventType } from '../core/types';
 import { isValidTournament } from 'redux/services/tournament.service';
 import { useTranslation } from 'react-i18next';
 

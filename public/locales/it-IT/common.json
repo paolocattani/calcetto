@@ -4,9 +4,11 @@
     "continue":"Prosegui",
     "cancel":"Annulla",
     "save":"Salva",
+    "saving":"Salvataggio in corso",
     "reset":"Reset",
     "close":"Chiudi",
     "logout":"Logut",
+    "loading":"Caricamento",
     "route":{
         "home":"Home",
         "tournament":"Selezione Torneo",
