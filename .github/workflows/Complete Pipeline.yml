@@ -84,7 +84,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       # Generate report
-      # - name: Lint report
+      - name: Lint report
         run: eslint -f json -o ./analysis/report.json .
       # https://github.com/marketplace/actions/sonarcloud-scan
       - name: SonarCloud Scan
