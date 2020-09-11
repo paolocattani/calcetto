@@ -1,5 +1,7 @@
-name: Node.js CI
+
+
 on: [push, pull_request]
+name: Pipeline ( Build/Test/Analyze )
 
 jobs:
   ### Build
@@ -68,19 +70,34 @@ jobs:
       #   run: npm run test
 
   ### Code Qualitys
-  check-quality:
+  analyze:
     runs-on: ubuntu-latest
     name: Code Quality
     steps:
-    - name: Check code meets quality standards
-      id: code-inspector
-      uses: codeinspectorio/github-action@master
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        code_inspector_access_key: ${{ secrets.CODE_INSPECTOR_ACCESS_KEY }}
-        code_inspector_secret_key: ${{ secrets.CODE_INSPECTOR_SECRET_KEY }}
-        min_quality_grade: 'GOOD'
-        min_quality_score: '80'
-        max_defects_rate: 0.05
-        project_name: 'calcetto'
-        max_timeout_sec: '600'
+      - uses: actions/checkout@v2
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+      # Generate report
+      - name: Lint report
+        run: npm run lint:report
+      # https://github.com/marketplace/actions/sonarcloud-scan
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+
+      ### Code inspector : Suspended
+      # id: code-inspector
+      # uses: codeinspectorio/github-action@master
+      # with:
+      #   repo_token: ${{ secrets.GITHUB_TOKEN }}
+      #   code_inspector_access_key: ${{ secrets.CODE_INSPECTOR_ACCESS_KEY }}
+      #   code_inspector_secret_key: ${{ secrets.CODE_INSPECTOR_SECRET_KEY }}
+      #   min_quality_grade: 'GOOD'
+      #   min_quality_score: '80'
+      #   max_defects_rate: 0.05
+      #   project_name: 'calcetto'
+      #   max_timeout_sec: '600'

@@ -7,5 +7,4 @@ export const SessionSelector = {
   isAuthenticated: ({ sessionState: { isAuthenticated } }: RootState) => isAuthenticated,
   getUser: ({ sessionState: { user } }: RootState) => user,
   getSession: ({ sessionState }: RootState) => sessionState,
-  getMessage: ({ sessionState: { message } }: RootState) => message,
 };

@@ -14,6 +14,7 @@ module.exports = {
     'prettier/@typescript-eslint', // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
     'plugin:testing-library/react',
     //'prettier/react'
+    'plugin:sonarjs/recommended',
   ],
   plugins: ['react', 'react-hooks', 'testing-library'],
   parserOptions: {

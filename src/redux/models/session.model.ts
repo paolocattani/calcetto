@@ -1,7 +1,7 @@
 import { UserDTO } from './user.model';
 import { PlayerRole } from 'redux/models';
 import * as H from 'history';
-import { UserMessage, GenericReponse } from './common.model';
+import { GenericReponse } from './common.model';
 
 //## STATE
 export interface SessionState {
@@ -9,7 +9,6 @@ export interface SessionState {
   isAuthenticated: boolean;
   isAdmin: boolean;
   isLoading: boolean;
-  message?: UserMessage; // FIXME: unsed
 }
 
 //## OTHER
