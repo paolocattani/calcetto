@@ -1,9 +1,22 @@
 
 # Calcetto : Table football app manager
 
-![Node.js CI](https://github.com/paolocattani/calcetto/workflows/Node.js%20CI/badge.svg?branch=develop&event=push)
-![Code Quality](https://www.code-inspector.com/project/11107/score/svg)
-![Code Grade](https://www.code-inspector.com/project/11107/status/svg)
+![Build/Test/Analyze ](https://github.com/paolocattani/calcetto/workflows/Pipeline%20(%20Build/Test/Analyze%20)/badge.svg)
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=alert_status)](https://sonarcloud.io/dashboard?id=paolocattani_calcetto)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=paolocattani_calcetto)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=security_rating)](https://sonarcloud.io/dashboard?id=paolocattani_calcetto)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=paolocattani_calcetto)
+
+
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=ncloc)](https://sonarcloud.io/dashboard?id=paolocattani_calcetto)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=paolocattani_calcetto)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=bugs)](https://sonarcloud.io/dashboard?id=paolocattani_calcetto)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=paolocattani_calcetto)
+
+
+
+
 
 ## Technologies in this project
 ### Frontend
