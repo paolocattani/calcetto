@@ -27,7 +27,7 @@ router.post(
       if (rowsNumber === 0) {
         count = await countStage2(tournamentId);
       }
-      const model = await generateStage2Rows(tournamentId, rowsNumber, req.user!);
+      const model = await generateStage2Rows(tournamentId, count, req.user!);
       return res.status(200).json(model);
     } catch (err) {
       logger.error(chalk.redBright('Error while fetching Stage2 ! : ', err));

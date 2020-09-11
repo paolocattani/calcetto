@@ -16,9 +16,9 @@ const PlayerSelection: React.FC<PlayerSelectProps> = React.forwardRef(
   ({ styles, row, columnIndex, /*id,*/ onUpdate, onSelect, options }, ref) => {
     const [selectedOption, setSelectedOption] = useState<PlayerDTO>();
 
-    const handleChange = (selectedOption: ValueType<PlayerDTO>, actionMeta: ActionMeta<PlayerDTO>) => {
-      setSelectedOption(selectedOption as PlayerDTO);
-      onSelect(selectedOption, row.id, columnIndex);
+    const handleChange = (option: ValueType<PlayerDTO>, actionMeta: ActionMeta<PlayerDTO>) => {
+      setSelectedOption(option as PlayerDTO);
+      onSelect(option, row.id, columnIndex);
     };
 
     return (

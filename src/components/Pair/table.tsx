@@ -217,12 +217,12 @@ const PairsTable: React.FC<PairTableProps> = () => {
   };
 
   const handleSelect = (row: PairDTO, isSelected: boolean) => {
-    setSelectedRows((selectedRows) => {
-      const found = selectedRows.find((e) => e.id === row.id) ? true : false;
+    setSelectedRows((rows) => {
+      const found = rows.find((e) => e.id === row.id) ? true : false;
       if (isSelected) {
-        return found ? selectedRows : [row, ...selectedRows];
+        return found ? rows : [row, ...rows];
       } else {
-        return found ? selectedRows.filter((e) => e.id !== row.id) : selectedRows;
+        return found ? rows.filter((e) => e.id !== row.id) : rows;
       }
     });
     return true;
@@ -372,7 +372,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
       }
     }
     showSuccessMessage(t('pair:success.stage1Name'));
-    setData((current) => ({ rows: newRows, players: current.players }));
+    setData((prevData) => ({ rows: newRows, players: prevData.players }));
   }
 
   const availableRows = Math.floor(
@@ -386,7 +386,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
           }, 0))
   );
 
-  const deleteDisabled = !(selectedRows.length > 0) || tournament.progress > TournamentProgress.PairsSelection;
+  const deleteDisabled = selectedRows.length <= 0 || tournament.progress > TournamentProgress.PairsSelection;
 
   //console.log('render table : ', players, pairs);
 

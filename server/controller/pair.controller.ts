@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction, query } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import chalk from 'chalk';
 import { logger } from '../core/logger';
 import { dbConnection } from '../models/server/AppServer';
@@ -23,7 +23,7 @@ router.get(
       const {
         query: { player1Id, player2Id },
       } = req;
-      logger.info('/alias : ', player1Id, player2Id, query);
+      logger.info('/alias : ', player1Id, player2Id);
       if (!player1Id || !player2Id) {
         return res.status(500).json({ message: 'Missing players' });
       }

@@ -86,11 +86,7 @@ const FTournament = () => {
               `${name} - ${formatDate(date)} @ ${t(`tournament:progress.${progress}`)}`
             }
             isClearable
-            onChange={(tournament) => {
-              const to = tournament as TournamentDTO;
-              console.log('tournament : ', tournament, `tournament:progress.${to!.progress}`);
-              dispatch(TournamentAction.setTournament(tournament as TournamentDTO));
-            }}
+            onChange={(selected) => dispatch(TournamentAction.setTournament(selected as TournamentDTO))}
           />
           <Button
             type="submit"

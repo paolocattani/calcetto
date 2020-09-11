@@ -63,12 +63,12 @@ const PlayerTable: React.FC<PlayerProps> = () => {
   );
 
   const handleOnSelect = (row: PlayerDTO, isSelected: boolean) => {
-    setSelectedRows((selectedRows) => {
-      const found = !!selectedRows.find((e) => e.id === row.id);
+    setSelectedRows((rows) => {
+      const found = !!rows.find((e) => e.id === row.id);
       if (isSelected) {
-        return found ? selectedRows : [row, ...selectedRows];
+        return found ? rows : [row, ...rows];
       } else {
-        return found ? selectedRows.filter((e) => e.id !== row.id) : selectedRows;
+        return found ? rows.filter((e) => e.id !== row.id) : rows;
       }
     });
     return true;

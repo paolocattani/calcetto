@@ -16,7 +16,7 @@ import config from '../../config/config';
 import util from 'util';
 import chalk from 'chalk';
 
-export default async function syncDb(Options?: SyncOptions): Promise<Sequelize> {
+export default async function syncDb(options?: SyncOptions): Promise<Sequelize> {
   const envConfig: any | string | SequelizeOptions | Options = isProductionMode()
     ? config.production
     : config.development;
@@ -42,8 +42,8 @@ export default async function syncDb(Options?: SyncOptions): Promise<Sequelize> 
     ? new Sequelize(uri, connectionOptions)
     : new Sequelize(envConfig.database, envConfig.username, envConfig.password, connectionOptions);
 
-  const syncDb = Options ? await sequelizeconnection.sync(Options) : await sequelizeconnection.sync();
-  // const syncDb = Options ? await sequelizeconnection.authenticate(Options) : await sequelizeconnection.authenticate();
+  const dbConnection = options ? await sequelizeconnection.sync(options) : await sequelizeconnection.sync();
+  // const dbConnection = options ? await sequelizeconnection.authenticate(options) : await sequelizeconnection.authenticate();
   logger.info(chalk.cyan.bold('Database synchronization complete!'));
-  return syncDb;
+  return dbConnection;
 }

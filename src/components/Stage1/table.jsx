@@ -39,7 +39,6 @@ const Stage1Table = ({ pairsList, autoOrder }) => {
           body: JSON.stringify({ rows, stageName }),
         });
         const result = await response.json();
-        // FIXME: Ordinamento : gestire ordinamento personalizzato
         if (!!autoOrder)
           [...result]
             .sort((e1, e2) => comparator(e1, e2))
@@ -108,7 +107,7 @@ const Stage1Table = ({ pairsList, autoOrder }) => {
         if (autoOrder)
           [...newRows]
             .sort((e1, e2) => comparator(e1, e2))
-            .forEach((row, index) => (newRows[row.rowNumber - 1]['placement'] = index + 1));
+            .forEach((s1Row, index) => (newRows[s1Row.rowNumber - 1]['placement'] = index + 1));
 
         // Aggiornamento
         setRows(newRows);
@@ -138,12 +137,12 @@ const Stage1Table = ({ pairsList, autoOrder }) => {
     return true;
   };
 
-  const handleOnSelectAll = (isSelected, rows) => {
-    setSelectedRows(isSelected ? rows : []);
+  const handleOnSelectAll = (isSelected, s1Rows) => {
+    setSelectedRows(isSelected ? s1Rows : []);
     dispatch(
       Stage1Action.updateSelectedPairs.request({
         stageName,
-        rows: isSelected ? rows : [],
+        rows: isSelected ? s1Rows : [],
       })
     );
   };
@@ -155,8 +154,6 @@ const Stage1Table = ({ pairsList, autoOrder }) => {
     style: { backgroundColor: '#c8e6c9' },
     hideSelectColumn: !isAdmin || tournament.progress >= TournamentProgress.Stage2,
   };
-
-  // console.log(' render : ', stageName, rows);
 
   return isLoading ? (
     <h3>

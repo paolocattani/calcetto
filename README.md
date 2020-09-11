@@ -107,3 +107,9 @@
   - Test : Enzyme [Testing FC](https://medium.com/@acesmndr/testing-react-functional-components-with-hooks-using-enzyme-f732124d320a)
   -----
   - Shell : sed - [Substitute variable using sed](https://zhu45.org/posts/2016/Dec/21/environment-variable-substitution-using-sed/)
+
+
+## Topic to explore
+- [Sonar typescript:S4784](https://github.com/uhop/node-re2/)
+-
+

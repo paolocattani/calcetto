@@ -129,7 +129,7 @@ function renderTables(pairsList: PairDTO[], autoOrder: boolean): JSX.Element[] {
   let stage: PairDTO[] = [];
   let stageList: Array<JSX.Element> = [];
   // sort pairs by stage1Name
-  pairsList
+  [...pairsList]
     .sort((obj1, obj2) => obj1.stage1Name.localeCompare(obj2.stage1Name))
     // FIXME: use .reduce  ?
     .forEach((element, index) => {
