@@ -108,8 +108,7 @@ export const registration = async ({
   }
 };
 
-// eslint-disable-next-line no-empty-pattern
-export const CheckAuthentication = async ({}: CheckAuthenticationRequest): Promise<AuthenticationResponse> => {
+export const CheckAuthentication = async (): Promise<AuthenticationResponse> => {
   let response;
   try {
     response = await fetch('/api/v1/auth/');

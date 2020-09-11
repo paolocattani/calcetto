@@ -21,7 +21,7 @@ function* checkAuthenticationSaga({
   payload,
 }: ReturnType<typeof SessionAction.checkAuthentication.request>): Generator<StrictEffect, void, any> {
   try {
-    const response: AuthenticationResponse = yield call(CheckAuthentication, payload);
+    const response: AuthenticationResponse = yield call(CheckAuthentication);
     yield put(SessionAction.checkAuthentication.success(response));
     yield fork(SessionAction.sessionControl.request, { history: payload.history });
   } catch (err) {

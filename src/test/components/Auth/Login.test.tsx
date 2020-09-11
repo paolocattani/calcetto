@@ -45,7 +45,6 @@ describe('<Login /> tests ', () => {
     loginButton = screen.getByRole('button', { name: 'Conferma' });
     changeUsernameInput = (value: string) => fireEvent.change(usernameField, { target: { value } });
     changePasswordInput = (value: string) => fireEvent.change(passwordField, { target: { value } });
-    clickLogin = () => fireEvent.click(loginButton);
   });
 
   describe('when username and password is not provided', () => {
