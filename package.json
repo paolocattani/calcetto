@@ -121,7 +121,7 @@
     "test:coverage": "react-scripts test --coverage --runInBand --watchAll=false",
     "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",
     "lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
-    "lint:report": "eslint -f json -o analysis/report.json .",
+    "lint:report": "eslint -f json -o report.json .",
     "analyze": "source-map-explorer build/static/js/*.js --html analysis/build-analysis.html"
   },
   "browserslist": {
