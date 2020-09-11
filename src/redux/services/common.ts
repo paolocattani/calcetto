@@ -26,3 +26,5 @@ export const UnexpectedServerError = {
     message: "Errore server non previsto. E' stata avviata la procedura di autodistruzione.",
   },
 };
+
+export const DEFAULT_HEADERS = { headers: { 'Content-Type': 'application/json' } };

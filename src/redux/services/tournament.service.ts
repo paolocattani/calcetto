@@ -7,13 +7,13 @@ import {
   UpdateTournamentRequest,
   UpdateTournamentResponse,
 } from '../models/tournament.model';
-import { handleError, UnexpectedServerError } from './common';
+import { handleError, UnexpectedServerError, DEFAULT_HEADERS } from './common';
 
 export const fetchTournaments = async (request: FetchTournamentsRequest): Promise<FetchTournamentsResponse> => {
   try {
     const response = await fetch(request?.tId ? `/api/v1/tournament/${request.tId}` : '/api/v1/tournament/list', {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
+      ...DEFAULT_HEADERS,
     });
     const results: TournamentDTO[] = await response.json();
     return { results };
@@ -27,11 +27,10 @@ export const postTournament = async ({ model }: SaveTournamentRequest): Promise<
   try {
     const response = await fetch('/api/v1/tournament', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      ...DEFAULT_HEADERS,
       body: JSON.stringify(model),
     });
-    const result: SaveTournamentResponse = await response.json();
-    return result;
+    return await response.json();
   } catch (e) {
     return {
       tournament: null,
@@ -44,11 +43,10 @@ export const updateTournament = async ({ model }: UpdateTournamentRequest): Prom
   try {
     const response = await fetch('/api/v1/tournament', {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      ...DEFAULT_HEADERS,
       body: JSON.stringify(model),
     });
-    const result: UpdateTournamentResponse = await response.json();
-    return result;
+    return await response.json();
   } catch (e) {
     return { tournament: model, ...UnexpectedServerError };
   }

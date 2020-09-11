@@ -8,13 +8,13 @@ import {
   UpdatePlayerResponse,
   UpdatePlayerRequest,
 } from 'redux/models';
-import { handleError } from './common';
+import { handleError, DEFAULT_HEADERS } from './common';
 
 export const fetchPlayers = async ({ tId, addEmpty }: FetchPlayersRequest): Promise<FetchPlayersResponse> => {
   try {
     const response = await fetch(tId ? `/api/v1/player/list/${tId}` : '/api/v1/player/list', {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
+      ...DEFAULT_HEADERS,
     });
     const result = await response.json();
     return { results: addEmpty ? [...result, getEmptyPlayer('Nessun Giocatore')] : result };
@@ -28,13 +28,13 @@ export const deletePlayers = async ({ players }: DeletePlayersRequest): Promise<
   try {
     const response = await fetch('/api/v1/player', {
       method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
+      ...DEFAULT_HEADERS,
       body: JSON.stringify(players),
     });
     await response.json();
     return { players: response.ok ? players : [] };
   } catch (e) {
-    handleError(e, 'Error players fetch');
+    handleError(e, 'Error players delete');
     return { players: [] };
   }
 };
@@ -43,13 +43,13 @@ export const savePlayer = async ({ player }: UpdatePlayerRequest): Promise<Updat
   try {
     const response = await fetch('/api/v1/player', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      ...DEFAULT_HEADERS,
       body: JSON.stringify(player),
     });
     const result = await response.json();
     return { player: result };
   } catch (e) {
-    handleError(e, 'Error players fetch');
+    handleError(e, 'Error players save');
     return { player };
   }
 };

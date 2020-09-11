@@ -53,22 +53,19 @@ export const updateSingleCell = async (
   isWinner: boolean
 ): Promise<boolean> => {
   logProcess(className + 'updateSingleCell', 'start');
-  let result = false;
   try {
     // Reperisco la cella corrente e aggiorno
     const record = await Stage2.findOne({ where: { tournamentId, step, order: rowIndex } });
     if (record) {
       await record.update({ pairId: pair.id });
       if (isWinner) await updateSingleCell(tournamentId, step, matchId, 0, pair, false);
-      result = true;
+      logProcess(className + 'updateSingleCell', 'end');
+      return true;
     }
   } catch (error) {
     logger.error('updateSingleCell. Error : ', error);
-    result = false;
-  } finally {
-    logProcess(className + 'updateSingleCell', 'end');
-    return result;
   }
+  return false;
 };
 
 export const countStage2 = async (tournamentId: number): Promise<number> => {
@@ -210,7 +207,7 @@ export function getBaseLog(x: number, y: number) {
 export const generateStructure = (rowNumber: number): ICell[][] => {
   const N = getBaseLog(2, rowNumber) + 1;
   let counter = rowNumber * 2;
-  const result = new Array(N).fill([]).map((e, ii) => {
+  return new Array(N).fill([]).map((e, ii) => {
     counter /= 2;
     let bounce = true;
     let index = 0;
@@ -230,7 +227,4 @@ export const generateStructure = (rowNumber: number): ICell[][] => {
     }
     return [...temp];
   });
-  // console.log('generateStructure : ', result);
-
-  return result;
 };

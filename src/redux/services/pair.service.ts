@@ -1,12 +1,12 @@
 import { FetchPairsRequest, FetchPairsResponse, PostPairsResponse, PostPairsRequest } from 'redux/models';
-import { handleError } from './common';
+import { handleError, DEFAULT_HEADERS } from './common';
 
 export const fetchPairs = async ({ tId }: FetchPairsRequest): Promise<FetchPairsResponse> => {
   try {
     console.log('fetchPairs : ', tId);
     const response = await fetch(`/api/v1/pair/list/?tId=${tId}`, {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
+      ...DEFAULT_HEADERS,
     });
     const results = await response.json();
     console.log('fetchPairs : ', tId, results);
@@ -21,7 +21,7 @@ export const postPair = async ({ models }: PostPairsRequest): Promise<PostPairsR
   try {
     const response = await fetch('/api/v1/pair', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      ...DEFAULT_HEADERS,
       body: JSON.stringify(models),
     });
     const results = await response.json();

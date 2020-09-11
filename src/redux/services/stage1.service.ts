@@ -8,7 +8,7 @@ import {
   UpdatePlacementRequest,
   UpdateSelectedPairsRequest,
 } from 'redux/models';
-import { handleError } from './common';
+import { handleError, DEFAULT_HEADERS } from './common';
 import { rowsGenerator } from 'components/Stage1/helper';
 
 export const fetchStage1 = async ({ pairsList, stageName }: FetchStage1Request): Promise<FetchStage1Response> => {
@@ -16,7 +16,7 @@ export const fetchStage1 = async ({ pairsList, stageName }: FetchStage1Request):
     const template = rowsGenerator(pairsList);
     const response = await fetch('/api/v1/stage1', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      ...DEFAULT_HEADERS,
       body: JSON.stringify({ rows: template, stageName }),
     });
     const rows = await response.json();
@@ -31,12 +31,12 @@ export const updatePlacement = async ({ rows }: UpdatePlacementRequest): Promise
   try {
     const response = await fetch('/api/v1/stage1/placement', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      ...DEFAULT_HEADERS,
       body: JSON.stringify({ rows }),
     });
     await response.json();
   } catch (e) {
-    handleError(e, 'Error stage1 fetch');
+    handleError(e, 'Error stage1 update placement');
   }
 };
 
@@ -44,12 +44,12 @@ export const updateSelectedPairs = async ({ rows, stageName }: UpdateSelectedPai
   try {
     const response = await fetch('/api/v1/pair/selected', {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      ...DEFAULT_HEADERS,
       body: JSON.stringify({ pairs: rows.map((e) => e.pair), stage1Name: stageName }),
     });
     await response.json();
   } catch (e) {
-    handleError(e, 'Error stage1 fetch');
+    handleError(e, 'Error stage1 update selections');
   }
 };
 
@@ -57,13 +57,13 @@ export const updateCellStage1 = async (model: UpdateCellRequest): Promise<Update
   try {
     const response = await fetch('/api/v1/stage1/cell', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      ...DEFAULT_HEADERS,
       body: JSON.stringify(model),
     });
     await response.json();
     return {};
   } catch (e) {
-    handleError(e, 'Error stage1 fetch');
+    handleError(e, 'Error stage1 update cell');
     return {};
   }
 };

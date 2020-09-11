@@ -10,7 +10,7 @@ import {
 } from 'redux/models';
 import { eventChannel, buffers, END } from 'redux-saga';
 import { HTTPStatusCode } from 'redux/models/HttpStatusCode';
-import { handleGenericError, UnexpectedServerError } from './common';
+import { handleGenericError, UnexpectedServerError, DEFAULT_HEADERS } from './common';
 
 export enum SessionStatus {
   // Sessione scaduta, reindirizza l'utente alla login
@@ -30,10 +30,9 @@ export const updateUser = async (params: UpdateUserRequest): Promise<Authenticat
     const response = await fetch('/api/v1/auth/update', {
       method: 'PUT',
       body: JSON.stringify(params.user),
-      headers: { 'Content-Type': 'application/json' },
+      ...DEFAULT_HEADERS,
     });
-    const result: AuthenticationResponse = await response.json();
-    return result;
+    return await response.json();
   } catch (error) {
     return {
       user: undefined,
@@ -48,10 +47,9 @@ export const deleteUser = async (params: DeleteUserRequest): Promise<Authenticat
     const response = await fetch('/api/v1/auth/', {
       method: 'DELETE',
       body: JSON.stringify(params),
-      headers: { 'Content-Type': 'application/json' },
+      ...DEFAULT_HEADERS,
     });
-    const result: AuthenticationResponse = await response.json();
-    return result;
+    return await response.json();
   } catch (error) {
     return {
       user: undefined,
@@ -66,10 +64,9 @@ export const login = async ({ username, password }: LoginRequest): Promise<Authe
     const response = await fetch('/api/v1/auth/authenticate', {
       method: 'POST',
       body: JSON.stringify({ username, password }),
-      headers: { 'Content-Type': 'application/json' },
+      ...DEFAULT_HEADERS,
     });
-    const result: AuthenticationResponse = await response.json();
-    return result;
+    return await response.json();
   } catch (error) {
     return {
       user: undefined,
@@ -82,8 +79,7 @@ export const login = async ({ username, password }: LoginRequest): Promise<Authe
 export const logout = async (): Promise<AuthenticationResponse> => {
   try {
     const response = await fetch('/api/v1/auth/logout');
-    const result: AuthenticationResponse = await response.json();
-    return result;
+    return await response.json();
   } catch (error) {
     return {
       user: undefined,
@@ -101,10 +97,9 @@ export const registration = async ({
     const response = await fetch('/api/v1/auth/register', {
       method: 'POST',
       body: JSON.stringify(registrationInfo),
-      headers: { 'Content-Type': 'application/json' },
+      ...DEFAULT_HEADERS,
     });
-    const result: RegistrationResponse = await response.json();
-    return result;
+    return await response.json();
   } catch (error) {
     return {
       user: undefined,
@@ -118,8 +113,7 @@ export const CheckAuthentication = async ({}: CheckAuthenticationRequest): Promi
   let response;
   try {
     response = await fetch('/api/v1/auth/');
-    const result = await response.json();
-    return result;
+    return await response.json();
   } catch (error) {
     if (response?.status === HTTPStatusCode.Unauthorized) {
       return {
