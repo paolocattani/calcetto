@@ -1,4 +1,4 @@
-import { put, call, StrictEffect, takeEvery, take, takeLatest, fork } from 'redux-saga/effects';
+import { put, call, StrictEffect, takeEvery, take, takeLatest, delay } from 'redux-saga/effects';
 import { SessionAction } from 'redux/actions/session.action';
 import { AuthenticationResponse, RegistrationResponse } from 'redux/models';
 import {
@@ -10,6 +10,7 @@ import {
   updateUser,
   deleteUser,
   logout,
+  SessionStatus,
 } from 'redux/services/session.service';
 import { toast } from 'react-toastify';
 import { Action } from 'typesafe-actions';
@@ -23,8 +24,18 @@ function* checkAuthenticationSaga({
 }: ReturnType<typeof SessionAction.checkAuthentication.request>): Generator<StrictEffect, void, any> {
   try {
     const response: AuthenticationResponse = yield call(CheckAuthentication);
-    yield put(SessionAction.checkAuthentication.success(response));
-    yield fork(SessionAction.sessionControl.request, { history: payload.history });
+    if (response.code === HTTPStatusCode.Accepted) {
+      yield put(SessionAction.checkAuthentication.success(response));
+      yield put(SessionAction.sessionControl.request({ history: payload.history }));
+    } else {
+      yield put(
+        SessionAction.checkAuthentication.failure({
+          code: response.code,
+          message: response.message,
+          userMessage: response.userMessage,
+        })
+      );
+    }
   } catch (err) {
     yield put(SessionAction.checkAuthentication.failure(err));
   }
@@ -37,27 +48,26 @@ https://github.com/redux-saga/redux-saga/blob/master/docs/advanced/Channels.md#u
 https://github.com/redux-saga/redux-saga/issues/940#issuecomment-298170212
 */
 
-function* watchSessionSaga(
-  action: ReturnType<typeof SessionAction.sessionControl.request>
-): Generator<StrictEffect, void, any> {
+function* watchSessionSaga({
+  payload: { history },
+}: ReturnType<typeof SessionAction.sessionControl.request>): Generator<StrictEffect, void, any> {
   try {
     const eventChannel = new EventSource('/sse/v1/session');
     const channel = yield call(createSessionChannel, eventChannel);
     while (true) {
       const message: Message = yield take(channel);
-      if (message) {
-        console.log('Message from queue : ', message);
-        toast.error('La tua sessione è scaduta');
-        // FIXME:
+      if (message && message.status === SessionStatus.SESSION_EXPIRED) {
+        toast.error('La tua sessione è scaduta. Stai per essere reindirizzato alla login...');
+        yield delay(3000);
         yield put(
           SessionAction.logout.success({
             user: undefined,
             code: HTTPStatusCode.Unauthorized,
             message: 'Unauthorized!',
-            userMessage: { message: 'Sessione scaduta', type: UserMessageType.Danger },
+            userMessage: { message: 'Sessione scaduta...', type: UserMessageType.Danger },
           })
         );
-        action.payload.history.push('/login');
+        history.push('/login');
       }
     }
   } catch (err) {
@@ -90,13 +100,16 @@ function* logoutSaga(action: ReturnType<typeof SessionAction.logout.request>): G
 }
 
 // Login
-function* loginSaga(action: ReturnType<typeof SessionAction.login.request>): Generator<StrictEffect, void, any> {
+function* loginSaga({ payload }: ReturnType<typeof SessionAction.login.request>): Generator<StrictEffect, void, any> {
   // Validate Login
-  const loginReponse: AuthenticationResponse = yield call(login, action.payload);
+  const loginReponse: AuthenticationResponse = yield call(login, payload);
   if (loginReponse.code === HTTPStatusCode.Accepted) {
     yield put(SessionAction.login.success(loginReponse));
-    yield fork(TournamentAction.fetch.request, {});
-    action.payload.history.push('/');
+    // Session control
+    yield put(SessionAction.sessionControl.request({ history: payload.history }));
+    // Fetch tournament
+    yield put(TournamentAction.fetch.request({}));
+    payload.history.push('/');
     toast.success(loginReponse.userMessage.message);
   } else {
     toast.error(loginReponse.userMessage.message);
@@ -105,16 +118,18 @@ function* loginSaga(action: ReturnType<typeof SessionAction.login.request>): Gen
 }
 
 // Registration
-function* registrationSaga(
-  action: ReturnType<typeof SessionAction.registration.request>
-): Generator<StrictEffect, void, any> {
-  // Validate Login
-  const registrationReponse: RegistrationResponse = yield call(registration, action.payload);
-  console.log('regitrationSaga : ', registrationReponse);
+function* registrationSaga({
+  payload,
+}: ReturnType<typeof SessionAction.registration.request>): Generator<StrictEffect, void, any> {
+  // Validate Registration
+  const registrationReponse: RegistrationResponse = yield call(registration, payload);
   if (registrationReponse.code === HTTPStatusCode.Accepted) {
     yield put(SessionAction.registration.success(registrationReponse));
-    yield fork(TournamentAction.fetch.request, {});
-    action.payload.history.push('/');
+    // Session control
+    yield put(SessionAction.sessionControl.request({ history: payload.history }));
+    // Fetch tournament
+    yield put(TournamentAction.fetch.request({}));
+    payload.history.push('/');
     toast.success(registrationReponse.userMessage.message);
   } else {
     if (registrationReponse.errors) {
@@ -128,7 +143,6 @@ function* registrationSaga(
 function* updateUserSaga(action: ReturnType<typeof SessionAction.update.request>): Generator<StrictEffect, void, any> {
   // Validate Login
   const updateReponse: AuthenticationResponse = yield call(updateUser, action.payload);
-  console.log('updateReponse : ', updateReponse);
   if (updateReponse.code === HTTPStatusCode.Accepted) {
     yield put(SessionAction.update.success(updateReponse));
     action.payload.history.push('/');
@@ -152,14 +166,6 @@ function* deleteUserSaga(action: ReturnType<typeof SessionAction.delete.request>
     yield put(SessionAction.delete.failure(deleteReponse));
   }
 }
-
-/*
-function* logger(action: Action<any>) {
-  const state = yield select();
-  console.log('action', action);
-  console.log('state after', state);
-}
-*/
 
 function logger(action: Action<any>) {
   if (process.env.NODE_ENV === 'development') {

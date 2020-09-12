@@ -9,16 +9,11 @@ import { UserDTO } from '../../src/@common/dto';
 // Core
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
+import { unauthorized } from '../controller/common';
 
 // dev logger
 export const routeLogger = (req: Request, res: Response, next: NextFunction) => {
   if (isDevMode()) logger.info(`Serving route : ${chalk.greenBright.bold(req.originalUrl)}`);
-  next();
-};
-
-// FIXME: Route Not found
-export const routeNotFound = (req: Request, res: Response, next: NextFunction) => {
-  if (isDevMode()) logger.info(`Requested route ${chalk.redBright.bold(req.originalUrl)} could not be found`);
   next();
 };
 
@@ -39,20 +34,19 @@ export const withAuth = async (req: AppRequest, res: Response, next: NextFunctio
     // Controllo se l'utente esiste ancora a db
     const userDb = await User.findByPk(user.id);
     if (userDb) {
-      // logger.info('withAuth : ', decoded);
       req.user = user;
       next();
     }
   } else {
-    logger.error('Unauthorized:  Token Expired ');
-    return res.status(401).send('Unauthorized: Invalid token');
+    logger.error(chalk.redBright('Unauthorized:  Token Expired '));
+    return unauthorized(res, 'Sessione scaduta ...');
   }
 };
 
 // Controllo se l'utente ha le autorizzazioni di amminstratore, altrimenti picche
 export const withAdminRights = (req: AppRequest, res: Response, next: NextFunction) => {
   if (!isAdmin(req.user)) {
-    return res.status(401).send('!!! Unauthorized !!! :D');
+    return unauthorized(res, 'Non hai i permessi necessari per accedere a questa funzionalità...');
   } else next();
 };
 

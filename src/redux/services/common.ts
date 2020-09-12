@@ -13,8 +13,7 @@ export const handleGenericError = <T extends GenericReponse>(error: any, result:
   console.error('Error', error);
   console.error('Details : ', { ...result });
   console.groupEnd();
-  toast.error('Whops...Something went wrong...');
-  throw new Error(`Something went wrong : ${error}`);
+  toast.error('Whoooops...Something went wrong...');
 };
 
 export const UnexpectedServerError = {
