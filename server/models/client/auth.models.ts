@@ -1,5 +1,5 @@
 import { GenericReponse } from './common.models';
-import { UserDTO, PlayerRole } from 'models/dto';
+import { UserDTO, PlayerRole } from '../dto';
 
 export interface LoginRequest {
   username: string;

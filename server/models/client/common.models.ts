@@ -1,4 +1,4 @@
-import { HTTPStatusCode } from '../../core/HttpStatusCode';
+import { HTTPStatusCode } from '../../../src/@common/models/HttpStatusCode';
 
 export interface GenericReponse {
   code: HTTPStatusCode;

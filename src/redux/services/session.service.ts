@@ -1,5 +1,4 @@
 import {
-  CheckAuthenticationRequest,
   AuthenticationResponse,
   LoginRequest,
   UserMessageType,
@@ -9,7 +8,7 @@ import {
   DeleteUserRequest,
 } from 'redux/models';
 import { eventChannel, buffers, END } from 'redux-saga';
-import { HTTPStatusCode } from 'redux/models/HttpStatusCode';
+import { HTTPStatusCode } from '@common/models/HttpStatusCode';
 import { handleGenericError, UnexpectedServerError, DEFAULT_HEADERS } from './common';
 
 export enum SessionStatus {

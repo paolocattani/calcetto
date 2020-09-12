@@ -3,7 +3,6 @@ import { Router, NextFunction, Response, Request } from 'express';
 import chalk from 'chalk';
 // Core
 import { logger } from '../core/logger';
-import { isDevMode } from '../core/debug';
 import { asyncMiddleware, withAuth, withAdminRights, logController } from '../core/middleware';
 // Managers
 import { listAll, findById, findByNameAndDate, parseBody, update } from '../manager/tournament.manager';

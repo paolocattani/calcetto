@@ -1,6 +1,6 @@
 import { PairDTO, UserDTO } from '../models/dto/';
 import { logProcess, logger } from '../core/logger';
-import { Op, Sequelize } from 'sequelize';
+import { Op } from 'sequelize';
 import { Stage2, Pair } from '../models/sequelize';
 
 const className = 'Pairs Manager';
@@ -124,9 +124,5 @@ export function valueFormatter(row: any) {
   const { alias, id, player1, player2 } = row;
   if (alias && alias !== '') return `${alias} ( ${id} )`;
   if (!player1 || !player2) return '';
-  const value = `${player1.alias ? player1.alias : player1.name} - ${
-    player2.alias ? player2.alias : player2.name
-  } ( ${id} )`;
-
-  return value;
+  return `${player1.alias ? player1.alias : player1.name} - ${player2.alias ? player2.alias : player2.name} ( ${id} )`;
 }

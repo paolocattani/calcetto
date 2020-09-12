@@ -20,8 +20,8 @@ import {
   isValidRegister,
 } from '../manager/auth.manager';
 import { AppRequest } from './index';
-import { HTTPStatusCode } from '../core/HttpStatusCode';
-import { LoginRequest } from 'models/client/auth.models';
+import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
+import { LoginRequest } from '../models/client/auth.models';
 import { unexpectedServerError, missingParameters, success, failure } from './common';
 const router = Router();
 

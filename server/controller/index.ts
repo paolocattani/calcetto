@@ -11,7 +11,7 @@ import stage2Router from './stage2.controller';
 import authRouter from './auth.controller';
 // SSE
 import { sessionControl } from '../events/events';
-import { HTTPStatusCode } from '../core/HttpStatusCode';
+import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
 
 export interface AppRequest extends Request {
   user?: UserDTO;

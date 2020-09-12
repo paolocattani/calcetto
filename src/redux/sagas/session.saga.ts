@@ -14,7 +14,7 @@ import {
 import { toast } from 'react-toastify';
 import { Action } from 'typesafe-actions';
 import { persistor } from 'redux/store';
-import { HTTPStatusCode } from 'redux/models/HttpStatusCode';
+import { HTTPStatusCode } from '@common/models/HttpStatusCode';
 import { TournamentAction } from 'redux/actions';
 
 function* checkAuthenticationSaga({

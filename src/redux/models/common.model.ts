@@ -1,5 +1,5 @@
 import { PlayerState, TournamentState, PairState, SessionState, Stage1State, Stage2State } from 'redux/models';
-import { HTTPStatusCode } from './HttpStatusCode';
+import { HTTPStatusCode } from '@common/models/HttpStatusCode';
 
 export interface RootState {
   tournamentState: TournamentState;

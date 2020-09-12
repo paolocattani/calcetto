@@ -13,7 +13,7 @@ import * as playerManager from './player.manager';
 import { Op } from 'sequelize';
 import { lowerWrapper } from '../core/utils';
 import { isProductionMode } from '../core/debug';
-import { RegistrationRequest } from 'models/client/auth.models';
+import { RegistrationRequest } from '../models/client/auth.models';
 
 // Const
 const className = 'Authentication Manager : ';

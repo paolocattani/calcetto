@@ -6,7 +6,7 @@ import {
   UpdateTournamentResponse,
 } from 'redux/models/tournament.model';
 import { TournamentAction } from 'redux/actions/tournament.action';
-import { HTTPStatusCode } from 'redux/models/HttpStatusCode';
+import { HTTPStatusCode } from '@common/models/HttpStatusCode';
 import { UnexpectedServerError } from 'redux/services/common';
 import { toast } from 'react-toastify';
 
