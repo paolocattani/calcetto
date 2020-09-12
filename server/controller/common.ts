@@ -1,6 +1,6 @@
 import { Response } from 'express';
 import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
-import { UserMessageType } from '../models/client/common.models';
+import { UserMessageType } from '../../src/@common/models/common.models';
 
 export const ComposeReponse = (
   res: Response,

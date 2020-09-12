@@ -1,8 +1,7 @@
+import { PlayerDTO, PlayerRole } from '@common/dto';
 import {
   FetchPlayersRequest,
   FetchPlayersResponse,
-  PlayerRole,
-  PlayerDTO,
   DeletePlayersRequest,
   DeletePlayersResponse,
   UpdatePlayerResponse,

@@ -1,7 +1,7 @@
 import express, { Application as ExpressApplication, Response, Request, NextFunction } from 'express';
 
 // Models
-import { UserDTO } from '../models/dto/user.dto';
+import { UserDTO } from '../../src/@common/dto';
 // Controllers
 import playerRouter from './player.controller';
 import pairRouter from './pair.controller';

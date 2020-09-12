@@ -3,7 +3,8 @@ import { logProcess, logger } from '../core/logger';
 import { dbConnection } from '../models/server/AppServer';
 // Models
 import { Stage2, Pair } from '../models/sequelize';
-import { IStage2FE, ICell, PairDTO, UserDTO } from '../models/dto';
+import { IStage2FE, ICell, PairDTO, UserDTO } from '../../src/@common/dto';
+
 import { isAdmin } from './auth.manager';
 import { rowToModel } from './pair.manager';
 import { WhereOptions } from 'sequelize';

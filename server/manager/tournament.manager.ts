@@ -1,8 +1,7 @@
 import { logProcess } from '../core/logger';
-import { TournamentDTO, TournamentProgress } from '../models/dto/tournament.dto';
+import { TournamentDTO, TournamentProgress, UserDTO, UserRole } from '../../src/@common/dto';
 import Tournament from '../models/sequelize/tournament.model';
 import { Op, WhereOptions } from 'sequelize';
-import { UserDTO, UserRole } from '../models/dto/user.dto';
 import { getWhereFromMap, lowerWrapper, dateInRageWrapper } from '../core/utils';
 
 const className = 'Tournament Manager : ';
@@ -41,8 +40,8 @@ export const listAll = async (user: UserDTO): Promise<TournamentDTO[]> => {
 export const update = async (user: UserDTO, model: TournamentDTO): Promise<TournamentDTO | null> => {
   logProcess(className + 'update', 'start');
   try {
-    const params = new Map<string, WhereOptions | Object>();
-    params.set('id', model.id);
+    const params = new Map<string, WhereOptions | Object | number>();
+    params.set('id', model.id!);
     const t = await findByParams(params, user);
     if (!t) {
       logProcess(className + 'update', 'end : Tournament not found');
@@ -122,7 +121,7 @@ export const convertEntityToDTO = (t: Tournament | null): TournamentDTO | null =
         public: t?.public ?? false,
         autoOrder: t?.autoOrder ?? true,
         label: t?.label ?? '',
-        ownerId: t?.ownerId,
+        ownerId: t?.ownerId ?? 0,
       }
     : null;
 

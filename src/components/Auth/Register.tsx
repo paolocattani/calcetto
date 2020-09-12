@@ -8,10 +8,11 @@ import { emailRegExp, passwordRegExp } from '../core/utils';
 import { SessionAction } from 'redux/actions';
 import { useDispatch } from 'react-redux';
 import { withRouter, useHistory } from 'react-router-dom';
-import { PlayerRole, PlayerRoleType } from 'redux/models';
 import { toast } from 'react-toastify';
 import { InputField } from 'components/core/generic/Input';
 import { useTranslation } from 'react-i18next';
+import { PlayerRoleType } from 'redux/models';
+import { PlayerRole } from '@common/dto';
 
 interface RegisterProps {}
 

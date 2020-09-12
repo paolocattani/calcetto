@@ -1,4 +1,4 @@
-import { RootState } from 'redux/models/common.model';
+import { RootState } from 'redux/models/root.model';
 
 // Get state from store
 export const TournamentSelector = {

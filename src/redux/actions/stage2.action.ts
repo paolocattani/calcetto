@@ -4,11 +4,11 @@ import {
   FetchStage2Request,
   UpdateStage2CellResponse,
   UpdateStage2CellRequest,
-  ICell,
   DeleteStage2Request,
   DeleteStage2Response,
 } from 'redux/models';
 import { defaultAsyncParams, defaultParam, PurgeResponse, PURGE_STORE_ACTION } from './constants';
+import { ICell } from '@common/dto';
 
 const actionName = '[Stage2]';
 

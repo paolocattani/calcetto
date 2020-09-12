@@ -12,7 +12,7 @@ import {
 } from 'sequelize-typescript';
 import Pair from './pair.model';
 import User from './user.model';
-import { PlayerRole } from '../dto/player.dto';
+import { PlayerRole } from '../../../src/@common/dto';
 
 @Table({ tableName: 'player', freezeTableName: true, version: false })
 export default class Player extends Model<Player> {

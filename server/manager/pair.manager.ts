@@ -1,4 +1,4 @@
-import { PairDTO, UserDTO } from '../models/dto/';
+import { PairDTO, UserDTO } from '../../src/@common/dto';
 import { logProcess, logger } from '../core/logger';
 import { Op } from 'sequelize';
 import { Stage2, Pair } from '../models/sequelize';
@@ -90,6 +90,7 @@ export function rowToModel(row: Pair, index: number): PairDTO {
     placement: row.placement,
     label: valueFormatter(row),
     player1: {
+      rowNumber: index + 2,
       id: row.player1?.id ?? null,
       name: row.player1?.name ?? '',
       surname: row.player1?.surname ?? '',
@@ -104,6 +105,7 @@ export function rowToModel(row: Pair, index: number): PairDTO {
       editable: row.player1?.editable ?? false,
     },
     player2: {
+      rowNumber: index + 3,
       id: row.player2?.id ?? null,
       name: row.player2?.name ?? '',
       surname: row.player2?.surname ?? '',

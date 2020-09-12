@@ -1,6 +1,5 @@
-import { GenericReponse } from './common.models';
 import { UserDTO, PlayerRole } from '../dto';
-
+import { GenericReponse } from '../../../src/@common/models/common.models';
 export interface LoginRequest {
   username: string;
   password: string;

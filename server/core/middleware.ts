@@ -5,7 +5,7 @@ import { getSecret, isAdmin } from '../manager/auth.manager';
 import { AppRequest } from '../controller';
 // Models
 import User from '../models/sequelize/user.model';
-import { UserDTO } from '../models/dto/user.dto';
+import { UserDTO } from '../../src/@common/dto';
 // Core
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';

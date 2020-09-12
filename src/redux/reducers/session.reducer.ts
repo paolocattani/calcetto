@@ -1,7 +1,7 @@
 import { createReducer, Action } from 'typesafe-actions';
 import { SessionState } from 'redux/models/session.model';
 import { SessionAction } from 'redux/actions/session.action';
-import { UserRole } from 'redux/models/user.model';
+import { UserRole } from '@common/dto';
 
 export const initialSessionState: SessionState = {
   isAuthenticated: false,

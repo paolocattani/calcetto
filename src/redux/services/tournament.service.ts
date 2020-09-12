@@ -1,7 +1,7 @@
+import { TournamentDTO } from '@common/dto';
 import {
   FetchTournamentsRequest,
   FetchTournamentsResponse,
-  TournamentDTO,
   SaveTournamentRequest,
   SaveTournamentResponse,
   UpdateTournamentRequest,

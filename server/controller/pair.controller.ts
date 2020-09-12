@@ -4,7 +4,7 @@ import { logger } from '../core/logger';
 import { dbConnection } from '../models/server/AppServer';
 // Models
 import { Pair } from '../models/sequelize';
-import { PairDTO } from '../models/dto';
+import { PairDTO } from '../../src/@common/dto';
 import { asyncMiddleware, withAuth, logController } from '../core/middleware';
 import { AppRequest } from './index';
 import { listInTournament, findAlias } from '../manager/pair.manager';

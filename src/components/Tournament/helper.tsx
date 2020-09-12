@@ -1,5 +1,5 @@
+import { TournamentDTO, TournamentProgress } from '@common/dto';
 import React, { CSSProperties } from 'react';
-import { TournamentDTO, TournamentProgress } from 'redux/models/tournament.model';
 
 export function getEmptyTournament(name: string): TournamentDTO {
   return {

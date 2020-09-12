@@ -1,20 +1,9 @@
-import { PairDTO } from './pair.model';
+import { ICell } from '@common/dto';
 
 export interface Stage2State {
   isLoading: boolean;
   rowsNumber?: number;
   cells?: ICell[][];
-}
-
-export interface ICell {
-  matchId: number;
-  cellRowIndex: number;
-  cellColIndex: number;
-  parentId: number;
-  pair?: PairDTO;
-  name?: string;
-  isWinner: boolean;
-  placement?: number;
 }
 
 // Request / Response

@@ -1,6 +1,7 @@
-import { FetchStage2Response, FetchStage2Request, ICell } from 'redux/models';
+import { FetchStage2Response, FetchStage2Request } from 'redux/models';
 import { handleError, DEFAULT_HEADERS } from './common';
 import { getEmptyRowModel } from 'components/Pair/helper';
+import { ICell } from '@common/dto';
 
 export const deleteStage2 = async (tId: number) => {
   const response = await fetch('/api/v1/stage2', {

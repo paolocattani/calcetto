@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { GenericReponse, UserMessageType } from '../models/common.model';
+import { GenericReponse, UserMessageType } from '@common/models/common.models';
 import { HTTPStatusCode } from '@common/models/HttpStatusCode';
 
 export const handleError = (error: any, message: string): void => {

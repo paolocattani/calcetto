@@ -1,6 +1,6 @@
+import { PlayerDTO } from '@common/dto';
 import React, { useState } from 'react';
 import Select, { Styles, ValueType, ActionMeta } from 'react-select';
-import { PlayerDTO } from 'redux/models';
 
 export interface PlayerSelectProps {
   styles?: Partial<Styles>;

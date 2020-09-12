@@ -1,7 +1,6 @@
 import {
   AuthenticationResponse,
   LoginRequest,
-  UserMessageType,
   RegistrationRequest,
   RegistrationResponse,
   UpdateUserRequest,
@@ -10,6 +9,7 @@ import {
 import { eventChannel, buffers, END } from 'redux-saga';
 import { HTTPStatusCode } from '@common/models/HttpStatusCode';
 import { handleGenericError, UnexpectedServerError, DEFAULT_HEADERS } from './common';
+import { UserMessageType } from '@common/models/common.models';
 
 export enum SessionStatus {
   // Sessione scaduta, reindirizza l'utente alla login

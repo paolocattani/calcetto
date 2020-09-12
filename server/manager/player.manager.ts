@@ -1,5 +1,5 @@
 // Models/Types
-import { PlayerDTO, PlayerRole } from '../models/dto/player.dto';
+import { PlayerDTO, PlayerRole } from '../../src/@common/dto';
 import Player from '../models/sequelize/player.model';
 // Logger utils
 import { logProcess } from '../core/logger';
@@ -39,7 +39,7 @@ export const listAllInTournament = async (tId: number): Promise<PlayerDTO[]> => 
         else return true;
       })
       // Rimappo per escludere le associazioni
-      .map((player) => convertEntityToDTO(player));
+      .map((player, ii) => convertEntityToDTO(player, ii));
     logProcess(className + 'listAllInTournament', 'end');
     return result;
   } catch (error) {
@@ -56,7 +56,7 @@ export const listAll = async (): Promise<PlayerDTO[]> => {
       include: [Player.associations.pair1, Player.associations.pair2],
     });
     logProcess(className + 'listAll', 'end');
-    return users.map((player) => convertEntityToDTO(player));
+    return users.map((player, ii) => convertEntityToDTO(player, ii));
   } catch (error) {
     logProcess(className + 'listAll', ` Error : ${error}`);
     return [];
@@ -109,8 +109,9 @@ export const parseBody = (body: any): Player =>
  *
  * @param player  Player entity
  */
-export const convertEntityToDTO = (player: Player): PlayerDTO => ({
+export const convertEntityToDTO = (player: Player, index: number): PlayerDTO => ({
   id: player.id,
+  rowNumber: index,
   name: player.name,
   surname: player.surname,
   alias: player.alias,

@@ -1,7 +1,6 @@
 import { getBaseLog } from '../core/utils';
-import { ICell } from 'redux/models/stage2.model';
 import { ValueType, ActionMeta } from 'react-select';
-import { PairDTO } from 'redux/models';
+import { PairDTO, ICell } from '@common/dto';
 
 export type onClickCallback = (
   event: React.MouseEvent<HTMLButtonElement, MouseEvent>,

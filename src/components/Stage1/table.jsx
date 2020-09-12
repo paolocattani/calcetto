@@ -12,7 +12,7 @@ import { SessionSelector } from 'redux/selectors/session.selector';
 // style
 import { Stage1Action } from 'redux/actions';
 import { TournamentSelector } from 'redux/selectors';
-import { TournamentProgress } from 'redux/models';
+import { TournamentProgress } from '@common/dto';
 
 // TODO: convert this component to ts
 const Stage1Table = ({ pairsList, autoOrder }) => {

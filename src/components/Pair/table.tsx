@@ -21,13 +21,12 @@ import { getEmptyPlayer } from 'redux/services/player.service';
 // Selector
 import { SessionSelector } from 'redux/selectors/session.selector';
 import { TournamentSelector } from 'redux/selectors/tournament.selector';
-// Models
-import { PairDTO, PlayerDTO } from '../../redux/models';
-import { TournamentProgress } from '../../redux/models/tournament.model';
 // Action
 import { TournamentAction, PairAction } from '../../redux/actions';
 import TournamentBadge from '../Tournament/badge';
 import { useTranslation } from 'react-i18next';
+// Models
+import { PairDTO, PlayerDTO, TournamentProgress } from '@common/dto';
 
 const hideAskUser = {
   message: '',

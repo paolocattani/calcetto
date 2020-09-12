@@ -3,8 +3,6 @@ import { useHistory } from 'react-router';
 import { withRouter } from 'react-router-dom';
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-// Models
-import { PairDTO, TournamentProgress } from '../../redux/models';
 // Style
 import commonStyle from '../../common.module.css';
 import { RightArrowIcon, TrashIcon, LeftArrowIcon } from '../core/icons';
@@ -14,11 +12,9 @@ import { Stage2Action, TournamentAction } from '../../redux/actions';
 import { SessionSelector, TournamentSelector, Stage1Selector, PairSelector } from 'redux/selectors';
 import Stage1Table from './table';
 import TournamentBadge from '../Tournament/badge';
+// Models
+import { PairDTO, TournamentProgress } from '@common/dto';
 
-interface ModalProps {
-  show: boolean;
-  message: string;
-}
 /**
  * Wraps multiple table components
  */

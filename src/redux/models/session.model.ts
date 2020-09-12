@@ -1,7 +1,6 @@
-import { UserDTO } from './user.model';
-import { PlayerRole } from 'redux/models';
 import * as H from 'history';
-import { GenericReponse } from './common.model';
+import { GenericReponse } from '@common/models/common.models';
+import { PlayerRole, UserDTO } from '@common/dto';
 
 //## STATE
 export interface SessionState {

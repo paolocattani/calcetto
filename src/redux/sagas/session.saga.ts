@@ -1,6 +1,6 @@
 import { put, call, StrictEffect, takeEvery, take, takeLatest, fork } from 'redux-saga/effects';
 import { SessionAction } from 'redux/actions/session.action';
-import { AuthenticationResponse, UserMessageType, RegistrationResponse } from 'redux/models';
+import { AuthenticationResponse, RegistrationResponse } from 'redux/models';
 import {
   CheckAuthentication,
   createSessionChannel,
@@ -16,6 +16,7 @@ import { Action } from 'typesafe-actions';
 import { persistor } from 'redux/store';
 import { HTTPStatusCode } from '@common/models/HttpStatusCode';
 import { TournamentAction } from 'redux/actions';
+import { UserMessageType } from '@common/models/common.models';
 
 function* checkAuthenticationSaga({
   payload,

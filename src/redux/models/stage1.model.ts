@@ -1,4 +1,4 @@
-import { PairDTO } from './pair.model';
+import { PairDTO, Stage1Row } from '@common/dto';
 
 export interface Stage1State {
   // Utilizzato per indicare se è necessario ricaricare i dati dal db
@@ -21,15 +21,6 @@ export interface SingleStageState {
   stageName: string;
   pairsList: PairDTO[];
   rows: Stage1Row[];
-}
-
-export interface Stage1Row {
-  id: string;
-  rowNumber: number;
-  pair: PairDTO;
-  [key: string]: string | number | PairDTO | null;
-  total: number;
-  placement: number;
 }
 
 // Requests/ Responses

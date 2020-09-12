@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { withRouter, RouteComponentProps, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Stage2 from './table';
-// FIXME:
-import { ICell, PairDTO } from 'redux/models';
 import { Button, Col, Row } from 'react-bootstrap';
 import commonStyle from '../../common.module.css';
 import { Stage2Selector, TournamentSelector } from 'redux/selectors';
@@ -13,6 +11,7 @@ import { LeftArrowIcon } from 'components/core/icons';
 import TournamentBadge from 'components/Tournament/badge';
 import { fetchPairsStage2 } from 'redux/services/stage2.service';
 import { onClickCallback, onSelectCallback } from './helper';
+import { PairDTO, ICell } from '@common/dto';
 
 // import template from './template';
 

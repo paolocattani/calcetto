@@ -2,7 +2,7 @@
 import { Response } from 'express';
 // Models/Types
 import { Player, User } from '../models/sequelize';
-import { UserDTO, UserRole, PlayerRole } from '../models/dto';
+import { UserDTO, UserRole, PlayerRole } from '../../src/@common/dto';
 // Logger utils
 import { logProcess, logger } from '../core/logger';
 // Password
@@ -241,7 +241,7 @@ export const convertEntityToDTO = (user: User): UserDTO => ({
   surname: user.surname,
   email: user.email,
   phone: user.phone || '',
-  birthday: user.birthday,
+  birthday: user.birthday!,
   label: user.label,
   role: user.role,
 });
