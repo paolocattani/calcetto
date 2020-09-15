@@ -1,6 +1,6 @@
 import { logProcess, logger } from '../core/logger';
 // Db
-import { dbConnection } from '../models/server/AppServer';
+import { dbConnection } from '../express/AppServer';
 // Models
 import { Stage2, Pair } from '../models/sequelize';
 import { IStage2FE, ICell, PairDTO, UserDTO } from '../../src/@common/dto';

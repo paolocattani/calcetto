@@ -1,3 +1,3 @@
-import { AppServer } from './models/server/AppServer';
+import { AppServer } from './express/AppServer';
 
 const applicationServer = new AppServer();

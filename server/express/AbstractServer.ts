@@ -3,10 +3,10 @@
  */
 
 // Core
-import '../../core/env';
-import { logger } from '../../core/logger';
-import { isProductionMode } from '../../core/debug';
-import { routeLogger, auditControl } from '../../core/middleware';
+import '../core/env';
+import { logger } from '../core/logger';
+import { isProductionMode } from '../core/debug';
+import { routeLogger, auditControl } from '../core/middleware';
 // Express
 import helmet from 'helmet';
 import morgan from 'morgan';

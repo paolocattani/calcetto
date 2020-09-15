@@ -3,17 +3,17 @@ import { CorsOptions } from 'cors';
 import { AbstractServer } from './AbstractServer';
 import { Application as ExpressApplication } from 'express';
 // Db
-import syncDb from '../sequelize/connection';
+import syncDb from '../models/sequelize/connection';
 import { SyncOptions } from 'sequelize/types';
 import { Sequelize } from 'sequelize-typescript';
-import generator from '../../generator/generator';
+import generator from '../generator/generator';
 // Routes
-import routes from '../../controller/index';
+import routes from '../controller/index';
 // Utils
-import '../../core/env';
+import '../core/env';
 import chalk from 'chalk';
-import { logger } from '../../core/logger';
-import { isProductionMode } from '../../core/debug';
+import { logger } from '../core/logger';
+import { isProductionMode } from '../core/debug';
 
 // white list for CORS
 const applicationName: string = 'ApplicationServer Calcetto';

@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import chalk from 'chalk';
 import { logger } from '../core/logger';
-import { dbConnection } from '../models/server/AppServer';
+import { dbConnection } from '../express/AppServer';
 // Models
 import { Pair } from '../models/sequelize';
 import { PairDTO } from '../../src/@common/dto';
