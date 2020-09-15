@@ -5,13 +5,13 @@
 //
 
 // Core
-import '../../core/env';
-import { logger } from '../../core/logger';
-import { isProductionMode } from '../../core/debug';
+import '../core/env';
+import { logger } from '../core/logger';
+import { isProductionMode } from '../core/debug';
 // Sequelize
 import { Options, SyncOptions } from 'sequelize';
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
-import config from '../../config/config';
+import config from '../config/config';
 // Other
 import util from 'util';
 import chalk from 'chalk';

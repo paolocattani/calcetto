@@ -1,4 +1,4 @@
-import { Column, Model, Table, Comment, DataType, ForeignKey, AllowNull, BelongsTo } from 'sequelize-typescript';
+import { Column, Model, Table, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import Player from './player.model';
 import { User } from '.';
 
@@ -6,7 +6,7 @@ import { User } from '.';
  * Gestione prenotazione
  */
 @Table({ tableName: 'reservation', freezeTableName: true, version: false })
-export default class Resevation extends Model<Resevation> {
+export default class Reservation extends Model<Reservation> {
   // Data prenotazione
   @Column(DataType.DATE)
   public reservationDate!: Date;

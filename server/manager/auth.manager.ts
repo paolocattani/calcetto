@@ -1,7 +1,7 @@
 // Session
 import { Response } from 'express';
 // Models/Types
-import { Player, User } from '../models/sequelize';
+import { Player, User } from '../entity';
 import { UserDTO, UserRole, PlayerRole } from '../../src/@common/dto';
 // Logger utils
 import { logProcess, logger } from '../core/logger';
@@ -13,7 +13,7 @@ import * as playerManager from './player.manager';
 import { Op } from 'sequelize';
 import { lowerWrapper } from '../core/utils';
 import { isProductionMode } from '../core/debug';
-import { RegistrationRequest } from '../models/client/auth.models';
+import { RegistrationRequest } from '../../src/@common/models/session.model';
 
 // Const
 const className = 'Authentication Manager : ';
@@ -198,7 +198,7 @@ export async function checkIfExist(user: User) {
   }
 }
 
-export const isValidRegister = (user: RegistrationRequest): Array<string> => {
+export const isValidRegister = (user: Omit<RegistrationRequest, 'history'>): Array<string> => {
   let result = [];
   if (!user.username) {
     result.push('Scegli uno username');

@@ -1,7 +1,7 @@
 import { PairDTO, UserDTO } from '../../src/@common/dto';
 import { logProcess, logger } from '../core/logger';
 import { Op } from 'sequelize';
-import { Stage2, Pair } from '../models/sequelize';
+import { Stage2, Pair } from '../entity';
 
 const className = 'Pairs Manager';
 

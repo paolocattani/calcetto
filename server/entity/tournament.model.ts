@@ -14,7 +14,7 @@ import Pair from './pair.model';
 import Stage1 from './stage1.model';
 import Stage2 from './stage2.model';
 import User from './user.model';
-import { TournamentProgress } from '../../../src/@common/dto';
+import { TournamentProgress } from '../../src/@common/dto';
 
 /**
  * Rapprenta un Torneo :

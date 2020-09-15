@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { getSecret, isAdmin } from '../manager/auth.manager';
 import { AppRequest } from '../controller';
 // Models
-import User from '../models/sequelize/user.model';
+// import User from '../entity/user.model';
 import { UserDTO } from '../../src/@common/dto';
 // Core
 import { logger } from '../core/logger';
@@ -32,7 +32,8 @@ export const withAuth = async (req: AppRequest, res: Response, next: NextFunctio
   const [user, isTokenValid] = safeVerifyToken(token);
   if (isTokenValid && user) {
     // Controllo se l'utente esiste ancora a db
-    const userDb = await User.findByPk(user.id);
+    const userDb = null;
+    //await User.findByPk(user.id);
     if (userDb) {
       req.user = user;
       next();

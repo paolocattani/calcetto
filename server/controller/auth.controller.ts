@@ -3,7 +3,7 @@ import { logger } from '../core/logger';
 import { isProductionMode } from '../core/debug';
 
 import { Router, Request, Response, NextFunction } from 'express';
-import User from '../models/sequelize/user.model';
+import User from '../entity/user.model';
 import { withAuth, asyncMiddleware, logController } from '../core/middleware';
 
 import {
@@ -21,7 +21,7 @@ import {
 } from '../manager/auth.manager';
 import { AppRequest } from './index';
 import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
-import { LoginRequest } from '../models/client/auth.models';
+import { LoginRequest } from '../../src/@common/models/session.model';
 import { unexpectedServerError, missingParameters, success, failure } from './common';
 const router = Router();
 

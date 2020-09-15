@@ -2,7 +2,7 @@ import { logProcess, logger } from '../core/logger';
 // Db
 import { dbConnection } from '../express/AppServer';
 // Models
-import { Stage2, Pair } from '../models/sequelize';
+import { Stage2, Pair } from '../entity';
 import { IStage2FE, ICell, PairDTO, UserDTO } from '../../src/@common/dto';
 
 import { isAdmin } from './auth.manager';

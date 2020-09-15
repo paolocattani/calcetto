@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import { logger } from '../core/logger';
 import { dbConnection } from '../express/AppServer';
 // Models
-import { Pair } from '../models/sequelize';
+import { Pair } from '../entity';
 import { PairDTO } from '../../src/@common/dto';
 import { asyncMiddleware, withAuth, logController } from '../core/middleware';
 import { AppRequest } from './index';

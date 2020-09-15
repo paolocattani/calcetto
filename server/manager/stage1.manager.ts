@@ -1,5 +1,5 @@
 // Models
-import { Pair, Stage1 } from '../models/sequelize';
+import { Pair, Stage1 } from '../entity';
 import { Stage1Row, UserDTO } from '../../src/@common/dto';
 // Core
 import { logProcess, logger } from '../core/logger';

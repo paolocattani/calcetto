@@ -1,5 +1,5 @@
 import Umzug from 'umzug';
-import { dbConnection } from '../models/server/AppServer';
+import { dbConnection } from '../express/AppServer';
 
 const umzug = new Umzug({
   migrations: {

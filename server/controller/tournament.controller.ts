@@ -7,7 +7,7 @@ import { asyncMiddleware, withAuth, withAdminRights, logController } from '../co
 // Managers
 import { listAll, findById, findByNameAndDate, parseBody, update } from '../manager/tournament.manager';
 // Models
-import Tournament from '../models/sequelize/tournament.model';
+import Tournament from '../entity/tournament.model';
 import { TournamentDTO } from '../../src/@common/dto';
 import { AppRequest } from './index';
 import { failure, success, unexpectedServerError } from './common';
