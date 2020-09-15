@@ -6,7 +6,7 @@ import {
   DeletePlayersResponse,
   UpdatePlayerResponse,
   UpdatePlayerRequest,
-} from 'redux/models';
+} from '@common/models';
 import { handleError, DEFAULT_HEADERS } from './common';
 
 export const fetchPlayers = async ({ tId, addEmpty }: FetchPlayersRequest): Promise<FetchPlayersResponse> => {

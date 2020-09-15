@@ -1,5 +1,5 @@
 import { createReducer, Action } from 'typesafe-actions';
-import { Stage1State } from 'redux/models';
+import { Stage1State } from '@common/models';
 import { Stage1Action } from 'redux/actions';
 import { getEmptyRowModel } from 'components/Pair/helper';
 import { Stage1Row } from '@common/dto';

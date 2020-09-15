@@ -6,7 +6,7 @@ import {
   SaveTournamentResponse,
   UpdateTournamentRequest,
   UpdateTournamentResponse,
-} from '../models/tournament.model';
+} from '@common/models/tournament.model';
 import { handleError, UnexpectedServerError, DEFAULT_HEADERS } from './common';
 
 export const fetchTournaments = async (request: FetchTournamentsRequest): Promise<FetchTournamentsResponse> => {

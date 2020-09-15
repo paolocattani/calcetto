@@ -1,5 +1,5 @@
 import { createReducer, Action } from 'typesafe-actions';
-import { SessionState } from 'redux/models/session.model';
+import { SessionState } from '@common/models/session.model';
 import { SessionAction } from 'redux/actions/session.action';
 import { UserRole } from '@common/dto';
 

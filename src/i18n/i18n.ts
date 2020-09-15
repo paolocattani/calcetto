@@ -9,7 +9,7 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
-    debug: true,
+    debug: process.env.NODE_ENV === 'development',
     //## Langs
     // Language to use (overrides language detection)
     // lng: 'it-IT',
@@ -41,7 +41,7 @@ i18n
       escapeValue: false,
     },
     backend: {
-      loadPath: './locales/{{lng}}/{{ns}}.json',
+      loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
   });
 

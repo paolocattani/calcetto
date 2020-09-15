@@ -3,7 +3,7 @@ import { createStore, applyMiddleware, compose, combineReducers, ReducersMapObje
 import { all } from 'redux-saga/effects';
 import { persistStore, persistReducer } from 'redux-persist';
 import localForage from 'localforage';
-import { RootState } from 'redux/models';
+import { RootState } from '@common/models';
 import {
   TournamentReducer,
   PlayerReducer,

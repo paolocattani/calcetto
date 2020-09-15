@@ -4,7 +4,7 @@ import {
   SaveTournamentResponse,
   FetchTournamentsResponse,
   UpdateTournamentResponse,
-} from 'redux/models/tournament.model';
+} from '@common/models/tournament.model';
 import { TournamentAction } from 'redux/actions/tournament.action';
 import { HTTPStatusCode } from '@common/models/HttpStatusCode';
 import { UnexpectedServerError } from 'redux/services/common';

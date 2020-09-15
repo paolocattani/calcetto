@@ -1,6 +1,6 @@
 import { put, call, StrictEffect, takeEvery, take, takeLatest, delay } from 'redux-saga/effects';
 import { SessionAction } from 'redux/actions/session.action';
-import { AuthenticationResponse, RegistrationResponse } from 'redux/models';
+import { AuthenticationResponse, RegistrationResponse } from '@common/models';
 import {
   CheckAuthentication,
   createSessionChannel,

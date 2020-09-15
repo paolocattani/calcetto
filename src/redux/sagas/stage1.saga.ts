@@ -7,7 +7,7 @@ import {
   updatePlacement,
   updateSelectedPairs,
 } from 'redux/services/stage1.service';
-import { FetchStage1Response } from 'redux/models';
+import { FetchStage1Response } from '@common/models';
 import { toast } from 'react-toastify';
 
 // TODO:

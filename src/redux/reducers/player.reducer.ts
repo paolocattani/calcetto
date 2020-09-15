@@ -1,5 +1,5 @@
 import { createReducer, Action } from 'typesafe-actions';
-import { PlayerState } from 'redux/models/player.model';
+import { PlayerState } from '@common/models/player.model';
 import { PlayerAction } from 'redux/actions/player.action';
 
 export const initialPlayerState: PlayerState = {

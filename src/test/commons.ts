@@ -1,5 +1,5 @@
 import { PlayerRole, TournamentProgress, UserRole } from '@common/dto';
-import { RootState } from 'redux/models';
+import { RootState } from '@common/models';
 
 export const initialState: RootState = {
   tournamentState: {

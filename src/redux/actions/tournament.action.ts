@@ -6,7 +6,7 @@ import {
   UpdateTournamentRequest,
   UpdateTournamentResponse,
   TournamentError,
-} from '../models/tournament.model';
+} from '@common/models/tournament.model';
 import { createAsyncAction, createAction } from 'typesafe-actions';
 import { defaultAsyncParams, defaultParam, PurgeResponse, PURGE_STORE_ACTION } from './constants';
 import { TournamentDTO } from '@common/dto';

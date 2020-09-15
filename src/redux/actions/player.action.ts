@@ -7,7 +7,7 @@ import {
   UpdatePlayerResponse,
   DeletePlayersResponse,
   DeletePlayersRequest,
-} from 'redux/models/player.model';
+} from '@common/models/player.model';
 
 const actionName = '[Player]';
 export const PlayerAction = {

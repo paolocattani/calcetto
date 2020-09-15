@@ -1,4 +1,4 @@
-import { PlayerState, TournamentState, PairState, SessionState, Stage1State, Stage2State } from 'redux/models';
+import { PlayerState, TournamentState, PairState, SessionState, Stage1State, Stage2State } from './';
 
 export interface RootState {
   tournamentState: TournamentState;

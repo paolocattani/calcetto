@@ -7,7 +7,7 @@ import {
   UpdateCellResponse,
   UpdatePlacementRequest,
   UpdateSelectedPairsRequest,
-} from 'redux/models';
+} from '@common/models';
 import { handleError, DEFAULT_HEADERS } from './common';
 import { rowsGenerator } from 'components/Stage1/helper';
 

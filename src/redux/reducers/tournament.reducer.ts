@@ -1,6 +1,6 @@
 import { createReducer, Action } from 'typesafe-actions';
 import { TournamentAction } from '../actions/tournament.action';
-import { TournamentState } from 'redux/models/tournament.model';
+import { TournamentState } from '@common/models/tournament.model';
 
 export const initialTournamentState: TournamentState = {
   tournament: null,

@@ -10,7 +10,7 @@ import {
   LogoutRequest,
   DeleteUserRequest,
   UpdateUserRequest,
-} from 'redux/models/session.model';
+} from '@common/models/session.model';
 
 const actionName = '[Session]';
 

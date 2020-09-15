@@ -6,19 +6,21 @@ import loginResponse from './_mocks_/login_response.json';
 
 describe('<Login />.render', () => {
   let component: RenderResult;
-  beforeEach(() => {
+  beforeEach(async () => {
     component = render(<Login />);
   });
 
   it('should render correctly should match snapshot', () => {
     expect(component).toMatchSnapshot();
   });
-  it('should contains all elements', () => {
+  it('should contains all elements', async () => {
+    await screen.findByRole('button', { name: /confirm/ });
     expect(screen.getByLabelText(/username/i)).not.toBe(null);
     expect(screen.getByLabelText(/password/i)).not.toBe(null);
-    expect(screen.getByRole('button', { name: 'Conferma' })).not.toBe(null);
+    expect(screen.getByRole('button', { name: 'confirm' })).not.toBe(null);
   });
-  it('input elements should have "required" attritbute', () => {
+  it('input elements should have "required" attritbute', async () => {
+    await screen.findByRole('button', { name: /confirm/i });
     expect(screen.getByLabelText(/username/i)).toBeRequired();
     expect(screen.getByLabelText(/password/i)).toBeRequired();
   });
@@ -35,20 +37,19 @@ describe('<Login /> tests ', () => {
   let loginButton: HTMLElement;
   let changeUsernameInput: (value: string) => boolean;
   let changePasswordInput: (value: string) => boolean;
-  let clickLogin: () => boolean;
   const user = { username: 'michelle', password: 'smith' };
 
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<Login />);
     usernameField = screen.getByLabelText(/username/i);
     passwordField = screen.getByLabelText(/password/i);
-    loginButton = screen.getByRole('button', { name: 'Conferma' });
+    loginButton = await screen.findByRole('button', { name: /confirm/i });
     changeUsernameInput = (value: string) => fireEvent.change(usernameField, { target: { value } });
     changePasswordInput = (value: string) => fireEvent.change(passwordField, { target: { value } });
   });
 
   describe('when username and password is not provided', () => {
-    it('should have empty fields and button disabled ', () => {
+    it('should have empty fields and button disabled ', async () => {
       expect(usernameField.getAttribute('value')).toEqual('');
       expect(passwordField.getAttribute('value')).toEqual('');
       expect(loginButton).toBeDisabled();

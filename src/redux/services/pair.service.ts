@@ -1,4 +1,4 @@
-import { FetchPairsRequest, FetchPairsResponse, PostPairsResponse, PostPairsRequest } from 'redux/models';
+import { FetchPairsRequest, FetchPairsResponse, PostPairsResponse, PostPairsRequest } from '@common/models';
 import { handleError, DEFAULT_HEADERS } from './common';
 
 export const fetchPairs = async ({ tId }: FetchPairsRequest): Promise<FetchPairsResponse> => {

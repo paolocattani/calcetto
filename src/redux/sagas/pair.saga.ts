@@ -1,7 +1,7 @@
 import { put, call, StrictEffect, takeEvery } from 'redux-saga/effects';
 import { PairAction } from 'redux/actions';
 import { fetchPairs } from 'redux/services/pair.service';
-import { FetchPairsResponse } from 'redux/models';
+import { FetchPairsResponse } from '@common/models';
 
 function* getPairsSaga(action: ReturnType<typeof PairAction.fetch.request>): Generator<StrictEffect, void, any> {
   try {

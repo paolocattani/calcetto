@@ -1,6 +1,6 @@
 import { put, call, StrictEffect, takeEvery } from 'redux-saga/effects';
 import { PlayerAction } from 'redux/actions/player.action';
-import { FetchPlayersResponse, DeletePlayersResponse, UpdatePlayerResponse } from 'redux/models/player.model';
+import { FetchPlayersResponse, DeletePlayersResponse, UpdatePlayerResponse } from '@common/models/player.model';
 import { fetchPlayers, deletePlayers, savePlayer } from 'redux/services/player.service';
 import { toast } from 'react-toastify';
 

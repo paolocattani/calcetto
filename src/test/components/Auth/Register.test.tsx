@@ -12,35 +12,37 @@ describe('<Register />.render', () => {
     expect(component).toMatchSnapshot();
   });
 
-  it('should contains all elements', () => {
+  it('should contains all elements', async () => {
+    await screen.findByRole('button', { name: /confirm/i });
     [
-      'Username',
-      'Nome',
-      'Cognome',
-      'Email',
-      'Conferma Email',
-      'Password',
-      'Conferma Password',
-      'Telefono',
-      'Data di nascita',
+      'username',
+      'name',
+      'surname',
+      'email.email',
+      'email.confirm',
+      'password.password',
+      'password.confirm',
+      'mobile',
+      'birthday',
       //FIXME:
       // 'Ruolo',
     ].forEach((s) => {
-      expect(screen.getByLabelText(s)).not.toBe(null);
+      expect(screen.findByDisplayValue(s)).not.toBe(null);
     });
-    expect(screen.getByRole('button', { name: 'Conferma' })).not.toBe(null);
-    expect(screen.getByRole('button', { name: 'Reset' })).not.toBe(null);
+    expect(screen.getByRole('button', { name: 'confirm' })).not.toBe(null);
+    expect(screen.getByRole('button', { name: 'reset' })).not.toBe(null);
   });
-  it('input elements should have "required" attritbute', () => {
+  it('input elements should have "required" attritbute', async () => {
+    await screen.findByRole('button', { name: /confirm/i });
     [
-      'Username',
-      'Nome',
-      'Cognome',
-      'Email',
-      'Conferma Email',
-      'Password',
-      'Conferma Password',
-      'Data di nascita',
+      'username',
+      'name',
+      'surname',
+      'email.email',
+      'email.confirm',
+      'password.password',
+      'password.confirm',
+      'birthday',
     ].forEach((s) => {
       expect(screen.getByLabelText(s)).toBeRequired();
     });

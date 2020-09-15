@@ -1,5 +1,5 @@
 import { createReducer, Action } from 'typesafe-actions';
-import { PairState } from 'redux/models';
+import { PairState } from '@common/models';
 import { PairAction } from 'redux/actions';
 
 export const initialPairState: PairState = {

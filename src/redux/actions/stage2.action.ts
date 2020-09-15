@@ -6,7 +6,7 @@ import {
   UpdateStage2CellRequest,
   DeleteStage2Request,
   DeleteStage2Response,
-} from 'redux/models';
+} from '@common/models';
 import { defaultAsyncParams, defaultParam, PurgeResponse, PURGE_STORE_ACTION } from './constants';
 import { ICell } from '@common/dto';
 

@@ -1,5 +1,5 @@
 import { createReducer, Action } from 'typesafe-actions';
-import { Stage2State } from 'redux/models';
+import { Stage2State } from '@common/models';
 import { Stage2Action } from 'redux/actions';
 
 export const initialStage2State: Stage2State = {

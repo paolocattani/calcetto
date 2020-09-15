@@ -11,7 +11,7 @@ import { withRouter, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { InputField } from 'components/core/generic/Input';
 import { useTranslation } from 'react-i18next';
-import { PlayerRoleType } from 'redux/models';
+import { PlayerRoleType } from '@common/models';
 import { PlayerRole } from '@common/dto';
 
 interface RegisterProps {}

@@ -5,7 +5,7 @@ import {
   RegistrationResponse,
   UpdateUserRequest,
   DeleteUserRequest,
-} from 'redux/models';
+} from '@common/models';
 import { eventChannel, buffers, END } from 'redux-saga';
 import { HTTPStatusCode } from '@common/models/HttpStatusCode';
 import { handleGenericError, UnexpectedServerError, DEFAULT_HEADERS } from './common';
