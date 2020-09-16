@@ -4,6 +4,7 @@ import express, { Application as ExpressApplication, Response, Request, NextFunc
 import { UserDTO } from '../../src/@common/dto';
 // Controllers
 import playerRouter from './player.controller';
+import playerRouterV2 from './v2/player.controller';
 import pairRouter from './pair.controller';
 import tournamentRouter from './tournament.controller';
 import stage1Router from './stage1.controller';
@@ -20,6 +21,7 @@ export default (application: ExpressApplication): void => {
   // Endpoints
   application.use('/api/v1/tournament', tournamentRouter);
   application.use('/api/v1/player', playerRouter);
+  application.use('/api/v2/player', playerRouterV2);
   application.use('/api/v1/stage1', stage1Router);
   application.use('/api/v1/stage2', stage2Router);
   application.use('/api/v1/pair', pairRouter);

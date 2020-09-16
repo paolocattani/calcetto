@@ -9,7 +9,7 @@ import { UserDTO } from '../../src/@common/dto';
 // Core
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
-import { unauthorized } from '../controller/common';
+import { unauthorized } from '../controller/common.response';
 
 // dev logger
 export const routeLogger = (req: Request, res: Response, next: NextFunction) => {

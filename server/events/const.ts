@@ -1,4 +1,4 @@
-export const CHAR_SET = 'UTF-8';
+export const CHAR_SET = 'utf-8';
 export const DEFAULT_HEADERS = {
   Connection: 'keep-alive',
   'Content-Type': 'text/event-stream',

@@ -1,0 +1,60 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "api server",
+  "main": "server.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/paolocattani/calcetto.git/"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "prod:build": "tsc --pretty",
+    "dev": "nodemon --config \"./nodemon.json\"",
+    "test": "jest -o --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "jest": {
+    "testEnvironment": "node",
+    "globalSetup": "./test/jest.setup.ts",
+    "globalTeardown": "./test/jest.teardown.ts",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text-summary",
+      "clover"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 95,
+        "branches": 95,
+        "lines": 95,
+        "functions": 95
+      }
+    },
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/ts-jest"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
+      "^.+\\.module\\.(css|sass|scss)$"
+    ]
+  },
+  "devDependencies": {
+    "@types/node-fetch": "^2.5.7",
+    "jest": "^26.4.2",
+    "node-fetch": "^2.6.1",
+    "ts-jest": "^26.3.0",
+    "typescript": "^4.0.2"
+  },
+  "dependencies": {
+    "nodemon": "^2.0.4",
+    "ts-node": "^9.0.0"
+  }
+}

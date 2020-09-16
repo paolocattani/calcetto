@@ -2,6 +2,7 @@
     "watch": [
         "./"
     ],
+    "ignore":["./test/**.test.ts"],
     "ext": "ts",
     "exec": "ts-node ./server.ts dev"
 }

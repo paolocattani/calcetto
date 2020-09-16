@@ -8,7 +8,7 @@ import { PairDTO } from '../../src/@common/dto';
 import { asyncMiddleware, withAuth, logController } from '../core/middleware';
 import { AppRequest } from './index';
 import { listInTournament, findAlias } from '../manager/pair.manager';
-import { missingParameters } from './common';
+import { missingParameters } from './common.response';
 
 const router = Router();
 router.use('/', (req: Request, res: Response, next: NextFunction) =>

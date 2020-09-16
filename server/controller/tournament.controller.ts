@@ -10,7 +10,7 @@ import { listAll, findById, findByNameAndDate, parseBody, update } from '../mana
 import Tournament from '../entity/tournament.model';
 import { TournamentDTO } from '../../src/@common/dto';
 import { AppRequest } from './index';
-import { failure, success, unexpectedServerError } from './common';
+import { failure, success, unexpectedServerError } from './common.response';
 
 // all API path must be relative to /api/v1/tournament
 const router = Router();

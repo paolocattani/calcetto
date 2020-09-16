@@ -22,7 +22,7 @@ import {
 import { AppRequest } from './index';
 import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
 import { LoginRequest } from '../../src/@common/models/session.model';
-import { unexpectedServerError, missingParameters, success, failure } from './common';
+import { unexpectedServerError, missingParameters, success, failure } from './common.response';
 const router = Router();
 
 const wrongCredentials = (res: Response) =>

@@ -3,6 +3,8 @@ import { PlayerDTO, PlayerRole } from '../../src/@common/dto';
 import Player from '../entity/player.model';
 // Logger utils
 import { logProcess } from '../core/logger';
+import { WhereOptions } from 'sequelize';
+import { getWhereFromMap } from '../core/utils';
 
 // Const
 const className = 'Player Manager : ';
@@ -31,15 +33,13 @@ export const listAllInTournament = async (tId: number): Promise<PlayerDTO[]> => 
          * che appartiene al torneo che sto analizzando allora lo devo escludere
          * perchè non è piu tra quelli selezionabili
          */
-        if (
+        return !(
           (player.pair1 && player.pair1.find((e) => e.tournamentId === tId)) ||
           (player.pair2 && player.pair2.find((e) => e.tournamentId === tId))
-        )
-          return false;
-        else return true;
+        );
       })
       // Rimappo per escludere le associazioni
-      .map((player, ii) => convertEntityToDTO(player, ii));
+      .map((player, ii) => convertEntityToDTO(player, ii, player.editable, player.label));
     logProcess(className + 'listAllInTournament', 'end');
     return result;
   } catch (error) {
@@ -56,30 +56,73 @@ export const listAll = async (): Promise<PlayerDTO[]> => {
       include: [Player.associations.pair1, Player.associations.pair2],
     });
     logProcess(className + 'listAll', 'end');
-    return users.map((player, ii) => convertEntityToDTO(player, ii));
+    return users.map((player, ii) => convertEntityToDTO(player, ii, player?.editable ?? false, player?.label ?? ''));
   } catch (error) {
     logProcess(className + 'listAll', ` Error : ${error}`);
     return [];
   }
 };
 
-export const create = async (model: any): Promise<Player | null> => {
+export const create = async (model: PlayerDTO): Promise<PlayerDTO> => {
   let player: Player | null = null;
   try {
     logProcess(className + 'create', 'start');
     if (model.id === 0) model.id = null;
-    if (model.id) player = await Player.findOne({ where: { id: model.id } });
+    player = await findByNameSurname(model.name, model.surname);
     if (player) {
-      player.update(model);
-      logProcess(className + 'create', `updated => ${player.toString()}`);
-    } else {
-      player = await Player.create(model);
-      logProcess(className + 'create', `created => ${player.toString()}`);
+      logProcess(className + 'create', ' : Player already exists!');
+      throw new Error('Player already exists!');
     }
+
+    player = await Player.create(model);
+    logProcess(className + 'create', `created => ${player.toString()}`);
   } catch (error) {
-    logProcess(className + 'create', ` Errror : ${error}`);
+    logProcess(className + 'create', ` Error : ${error}`);
   }
   logProcess(className + 'create', 'end');
+  return convertEntityToDTO(player!, model.rowNumber, model.editable, model.label);
+};
+
+export const update = async (model: PlayerDTO): Promise<PlayerDTO> => {
+  let player: Player | null = null;
+  try {
+    logProcess(className + 'update', 'start');
+    if (model.id) player = await Player.findByPk(model.id);
+    if (player) {
+      await player.update(model);
+      logProcess(className + 'update', `updated => ${player.toString()}`);
+    }
+  } catch (error) {
+    logProcess(className + 'update', ` Error : ${error}`);
+  }
+  logProcess(className + 'update', 'end');
+  return convertEntityToDTO(player!, model.rowNumber, model.editable, model.label);
+};
+
+export const findByNameSurname = async (name: string, surname: string): Promise<Player | null> => {
+  let player: Player | null = null;
+  try {
+    logProcess(className + 'findById', 'start');
+    const params = new Map<string, WhereOptions | Object>();
+    params.set('name', name);
+    params.set('surname', surname);
+    player = await findByParams(params);
+  } catch (error) {
+    logProcess(className + 'findById', ` Error : ${error}`);
+  }
+  logProcess(className + 'findById', 'end');
+  return player;
+};
+
+export const findById = async (id: number): Promise<Player | null> => {
+  let player: Player | null = null;
+  try {
+    logProcess(className + 'findById', 'start');
+    player = await Player.findByPk(id);
+  } catch (error) {
+    logProcess(className + 'findById', ` Error : ${error}`);
+  }
+  logProcess(className + 'findById', 'end');
   return player;
 };
 
@@ -87,6 +130,21 @@ export const deletePlayer = async (models: Player[]): Promise<number> =>
   await Player.destroy({ where: { id: models.map((e) => e.id) } });
 
 // Utils
+export const findByParams = async (parameters: Map<string, WhereOptions | Object>): Promise<Player | null> => {
+  try {
+    logProcess(className + 'findByParams', 'start');
+    const result: Player | null = await Player.findOne({
+      where: { ...getWhereFromMap(parameters) },
+      order: [['id', 'DESC']],
+    });
+    logProcess(className + 'findByParams', 'end');
+    return result;
+  } catch (error) {
+    logProcess(className + 'findByParams', ` Error : ${error}`);
+    return null;
+  }
+};
+
 export const parseBody = (body: any): Player =>
   ({
     id: body.id,
@@ -99,28 +157,26 @@ export const parseBody = (body: any): Player =>
     match_played: body.match_played || 0,
     match_won: body.match_won || 0,
     total_score: body.total_score || 0,
+    editable: body.editable,
   } as Player);
 
 /**
  * Converte l'entity in un DTO da passare al FE.
  *
- * TODO: in futuro sarebbe meglio gestire un DTO per ogni entity per disaccopiare
- * i dati tra FE e BE
- *
  * @param player  Player entity
  */
-export const convertEntityToDTO = (player: Player, index: number): PlayerDTO => ({
+export const convertEntityToDTO = (player: Player, index: number, editable: boolean, label: string): PlayerDTO => ({
   id: player.id,
   rowNumber: index,
   name: player.name,
   surname: player.surname,
   alias: player.alias,
-  label: player.label,
+  label: label,
   email: player.email || '',
   phone: player.phone || '',
   role: player.role,
   match_played: player.match_played || 0,
   match_won: player.match_won || 0,
   total_score: player.total_score || 0,
-  editable: player.editable,
+  editable: editable,
 });

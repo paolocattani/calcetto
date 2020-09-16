@@ -2,7 +2,7 @@
 import { Response } from 'express';
 // Models/Types
 import { Player, User } from '../entity';
-import { UserDTO, UserRole, PlayerRole } from '../../src/@common/dto';
+import { UserDTO, UserRole, PlayerRole, PlayerDTO } from '../../src/@common/dto';
 // Logger utils
 import { logProcess, logger } from '../core/logger';
 // Password
@@ -109,7 +109,7 @@ export const registerUser = async (user: User, playerRole?: PlayerRole): Promise
         userId: record.id,
         alias: `${record.name} ${record.surname}`,
         role: playerRole,
-      } as Player;
+      } as PlayerDTO;
       logger.info(`Player : ${JSON.stringify(model)}`);
       const player = await playerManager.create(model);
       if (player) {
