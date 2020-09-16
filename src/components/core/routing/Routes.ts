@@ -1,6 +1,7 @@
 import React, { lazy } from 'react';
 import { MaleIcon } from '../icons';
 
+const lazySwagger = lazy(() => import('../../Swagger/Swagger'));
 const lazyPlayer = lazy(() => import('../../Player/table'));
 const lazyTournament = lazy(() => import('../../Tournament/select'));
 const lazyPairs = lazy(() => import('../../Pair/table'));
@@ -84,10 +85,19 @@ export const routes: routeType[] = [
     path: '/stage2',
     label: 'route.stage2',
     exact: true,
-    componentToRender: lazyStage2 as any,
+    componentToRender: lazyStage2,
     visible: false,
     private: true,
-    index: 100,
+    index: 60,
+  },
+  {
+    path: '/swagger',
+    label: 'route.swagger',
+    exact: true,
+    componentToRender: lazySwagger,
+    visible: true,
+    private: true,
+    index: 70,
   },
   // TODO: creare pagina per route not found
   {

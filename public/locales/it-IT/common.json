@@ -19,6 +19,7 @@
         "user":"Gestione Utente",
         "player":"Gestione Giocatori",
         "login":"Login",
+        "swagger":"Swagger",
         "notFound":"Non trovato"
     },
     "lang":{

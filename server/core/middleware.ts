@@ -10,6 +10,7 @@ import { UserDTO } from '../../src/@common/dto';
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 import { unauthorized } from '../controller/common.response';
+import { User } from '../entity';
 
 // dev logger
 export const routeLogger = (req: Request, res: Response, next: NextFunction) => {
@@ -32,8 +33,7 @@ export const withAuth = async (req: AppRequest, res: Response, next: NextFunctio
   const [user, isTokenValid] = safeVerifyToken(token);
   if (isTokenValid && user) {
     // Controllo se l'utente esiste ancora a db
-    const userDb = null;
-    //await User.findByPk(user.id);
+    const userDb = await User.findByPk(user.id);
     if (userDb) {
       req.user = user;
       next();
