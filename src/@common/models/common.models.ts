@@ -17,3 +17,13 @@ export interface UserMessage {
 }
 
 export type OmitHistory<T> = Omit<T, 'history'>;
+
+export const UnexpectedServerError: GenericReponse = {
+  code: HTTPStatusCode.InternalServerError,
+  message: 'Unexpected Server Error',
+  userMessage: {
+    type: UserMessageType.Danger,
+    // eslint-disable-next-line quotes
+    message: "Errore server non previsto. E' stata avviata la procedura di autodistruzione.",
+  },
+};

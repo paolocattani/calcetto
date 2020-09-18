@@ -1,9 +1,6 @@
 import { AuthenticationResponse, DeleteUserRequest, LoginRequest } from '../../src/@common/models/session.model';
-
-import fetch from 'node-fetch';
-import { RegistrationRequest } from '../../src/@common/models/session.model';
 import { OmitHistory } from '../../src/@common/models/common.models';
-import { deleteWrapper, postWrapper } from '../core/utils';
+import { deleteWrapper, postWrapper } from '../../src/@common/utils/fetch.utils';
 
 export const USER_1 = {
   // https://www.fakenamegenerator.com/gen-male-us-it.php
@@ -35,10 +32,11 @@ export const USER_2 = {
 
 export const registerTestUser = async (
   registrationRequest: OmitHistory<LoginRequest>
-): Promise<AuthenticationResponse> => await postWrapper('auth/register', registrationRequest);
+): Promise<AuthenticationResponse> =>
+  await postWrapper('http://localhost:5001/api/v1/auth/register', registrationRequest);
 
 export const loginTestUser = async (loginRequest: OmitHistory<LoginRequest>): Promise<AuthenticationResponse> =>
-  await postWrapper('auth/login', loginRequest);
+  await postWrapper('http://localhost:5001/api/v1/auth/login', loginRequest);
 
 export const deleteTestUser = async (deleteRequest: OmitHistory<DeleteUserRequest>): Promise<AuthenticationResponse> =>
-  await deleteWrapper('auth/delete', deleteRequest);
+  await deleteWrapper('http://localhost:5001/api/v1/auth/delete', deleteRequest);

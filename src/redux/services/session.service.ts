@@ -5,18 +5,11 @@ import {
   RegistrationResponse,
   UpdateUserRequest,
   DeleteUserRequest,
-} from '@common/models';
+} from '../../@common/models';
 import { eventChannel, buffers, END } from 'redux-saga';
 import { HTTPStatusCode } from '@common/models/HttpStatusCode';
-import {
-  handleGenericError,
-  UnexpectedServerError,
-  postWrapper,
-  putWrapper,
-  deleteWrapper,
-  getWrapper,
-} from './common';
-import { OmitHistory, UserMessageType } from '@common/models/common.models';
+import { OmitHistory, UnexpectedServerError, UserMessageType } from '@common/models/common.models';
+import { putWrapper, deleteWrapper, postWrapper, getWrapper, handleGenericError } from '@common/utils';
 
 export enum SessionStatus {
   // Sessione scaduta, reindirizza l'utente alla login
@@ -32,24 +25,25 @@ export interface Message {
 
 // Update
 export const updateUser = async (updateUserRequest: OmitHistory<UpdateUserRequest>): Promise<AuthenticationResponse> =>
-  await putWrapper<AuthenticationResponse>('auth/update', updateUserRequest);
+  await putWrapper<AuthenticationResponse>('/api/v1/auth/update', updateUserRequest);
 
 // Delete
 export const deleteUser = async (deleteUserRequest: OmitHistory<DeleteUserRequest>): Promise<AuthenticationResponse> =>
-  await deleteWrapper<AuthenticationResponse>('auth/delete', deleteUserRequest);
+  await deleteWrapper<AuthenticationResponse>('/api/v1/auth/delete', deleteUserRequest);
 
 // Login
 export const login = async (loginRequest: OmitHistory<LoginRequest>): Promise<AuthenticationResponse> =>
-  await postWrapper<AuthenticationResponse>('auth/login', loginRequest);
+  await postWrapper<AuthenticationResponse>('/api/v1/auth/login', loginRequest);
 
 // Login
 export const logout = async (): Promise<AuthenticationResponse> =>
-  await getWrapper<AuthenticationResponse>('auth/logout');
+  await getWrapper<AuthenticationResponse>('/api/v1/auth/logout');
 
 // Registration
 export const registration = async (
   registrationRequest: OmitHistory<RegistrationRequest>
-): Promise<RegistrationResponse> => await postWrapper<AuthenticationResponse>('auth/register', registrationRequest);
+): Promise<RegistrationResponse> =>
+  await postWrapper<AuthenticationResponse>('/api/v1/auth/register', registrationRequest);
 
 export const CheckAuthentication = async (): Promise<AuthenticationResponse> => {
   let response;

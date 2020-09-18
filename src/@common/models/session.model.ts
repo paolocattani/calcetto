@@ -1,6 +1,6 @@
 import * as H from 'history';
-import { GenericReponse } from '@common/models/common.models';
-import { PlayerRole, UserDTO } from '@common/dto';
+import { GenericReponse } from '../models/common.models';
+import { PlayerRole, UserDTO } from '../dto';
 
 //## STATE
 export interface SessionState {
