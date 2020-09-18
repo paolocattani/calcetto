@@ -46,7 +46,7 @@ export const failure = (
 export const success = (res: Response, message: string, internalMessage?: string, additionalInfo?: Object) =>
   ComposeReponse(
     res,
-    HTTPStatusCode.Accepted,
+    HTTPStatusCode.OK,
     internalMessage || 'Success.',
     UserMessageType.Success,
     message,

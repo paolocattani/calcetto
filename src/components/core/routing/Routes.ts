@@ -1,5 +1,5 @@
 import React, { lazy } from 'react';
-import { MaleIcon } from '../icons';
+import { MaleIcon, FileMedicalIcon } from '../icons';
 
 const lazySwagger = lazy(() => import('../../Swagger/Swagger'));
 const lazyPlayer = lazy(() => import('../../Player/table'));
@@ -95,6 +95,7 @@ export const routes: routeType[] = [
     label: 'route.swagger',
     exact: true,
     componentToRender: lazySwagger,
+    icon: FileMedicalIcon,
     visible: true,
     private: true,
     index: 70,

@@ -36,6 +36,6 @@ export default (application: ExpressApplication): void => {
   // Test
   application.get('/status', (req: Request, res: Response, next: NextFunction) =>
     // eslint-disable-next-line quotes
-    res.status(HTTPStatusCode.Accepted).json({ code: HTTPStatusCode.Accepted, message: `What's up? I was sleeping...` })
+    res.status(HTTPStatusCode.OK).json({ code: HTTPStatusCode.OK, message: `What's up? I was sleeping...` })
   );
 };

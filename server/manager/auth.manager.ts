@@ -100,7 +100,7 @@ export const registerUser = async (user: User, playerRole?: PlayerRole): Promise
     logger.info(`User : ${JSON.stringify(user, null, 2)}`);
     const record = await User.create(user);
     // Se è stato assegnato un ruolo allora creo anche il giocatore
-    if (playerRole) {
+    if (playerRole && playerRole !== PlayerRole.NotAPlayer) {
       const model = {
         name: record.name,
         surname: record.surname,

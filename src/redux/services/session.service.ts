@@ -116,7 +116,7 @@ export const CheckAuthentication = async (): Promise<AuthenticationResponse> => 
     if (response?.status === HTTPStatusCode.Unauthorized) {
       return {
         user: undefined,
-        code: HTTPStatusCode.Accepted,
+        code: HTTPStatusCode.OK,
         message: '',
         userMessage: { type: UserMessageType.Success, message: '' },
       };

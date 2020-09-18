@@ -18,7 +18,7 @@ const Header: React.FC = () => {
   const currentHistory = useHistory();
   const { t } = useTranslation(['common']);
 
-  const { user, isAuthenticated } = useSelector(SessionSelector.getSession);
+  const { user, isAuthenticated, isAdmin } = useSelector(SessionSelector.getSession);
 
   const logout = () => dispatch(SessionAction.logout.request({ history: currentHistory }));
 
@@ -35,6 +35,7 @@ const Header: React.FC = () => {
   };
 
   const otherLang = getOtherLang();
+
   return (
     <header>
       <Jumbotron style={jumboStyle}>
@@ -52,19 +53,13 @@ const Header: React.FC = () => {
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="mr-auto">
                 {routes.map((route) =>
-                  route.visible ? (
-                    route.private && !isAuthenticated ? null : (
-                      <Nav.Link as={Link} key={route.index} to={route.path} className="text-white">
-                        {route.icon ? (
-                          <span>
-                            <route.icon /> {t(route.label)}
-                          </span>
-                        ) : (
-                          t(route.label)
-                        )}
-                      </Nav.Link>
-                    )
-                  ) : null
+                  !route.visible || (route.path === '/swagger' && !isAdmin) ? null : (
+                    <Nav.Link as={Link} key={route.index} to={route.path} className="text-white">
+                      <span>
+                        {route.icon ? <route.icon /> : null} {t(route.label)}
+                      </span>
+                    </Nav.Link>
+                  )
                 )}
               </Nav>
               {user ? (

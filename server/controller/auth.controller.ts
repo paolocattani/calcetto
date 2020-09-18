@@ -11,7 +11,6 @@ import {
   parseBody,
   deleteUser,
   comparePasswords,
-  listAll,
   registerUser,
   findUserByEmailOrUsername,
   checkIfExist,
@@ -30,12 +29,6 @@ const wrongCredentials = (res: Response) =>
 
 router.use('/', (req: Request, res: Response, next: NextFunction) =>
   logController(req, next, 'Auth Controller', '/api/v1/auth')
-);
-
-router.get(
-  '/list',
-  withAuth,
-  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => res.status(200).json(await listAll()))
 );
 
 router.get(
@@ -132,7 +125,7 @@ router.put(
 router.post(
   '/authenticate',
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
-    const { username, password } = req.body as LoginRequest;
+    const { username, password } = req.body as Omit<LoginRequest, 'history'>;
     try {
       logger.info('/authenticate start ');
       if (!username || !password) {
@@ -186,6 +179,6 @@ router.delete(
   })
 );
 
-router.get('/checkToken', withAuth, (req, res) => res.sendStatus(HTTPStatusCode.Accepted));
+router.get('/checkToken', withAuth, (req, res) => res.sendStatus(HTTPStatusCode.OK));
 
 export default router;

@@ -15,7 +15,7 @@ describe('Authentication Endpoints', () => {
     it('Should register test user', async () => {
       const result: AuthenticationResponse = await registerTestUser();
       console.log('Response: ', result);
-      expect(result.code).toEqual(HTTPStatusCode.Accepted);
+      expect(result.code).toEqual(HTTPStatusCode.OK);
     });
   });
 
@@ -27,7 +27,7 @@ describe('Authentication Endpoints', () => {
     it('Should login', async () => {
       const result: AuthenticationResponse = await loginTestUser();
       console.log('Response: ', result);
-      expect(result.code).toEqual(HTTPStatusCode.Accepted);
+      expect(result.code).toEqual(HTTPStatusCode.OK);
     });
   });
 });

@@ -19,6 +19,7 @@ import {
   faTrophy,
   faAngleDoubleRight,
   faBan,
+  faFileMedicalAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt, faSave } from '@fortawesome/free-regular-svg-icons';
 
@@ -42,7 +43,8 @@ export const loadIcons = () => {
     faPlus,
     faTrophy,
     faAngleDoubleRight,
-    faBan
+    faBan,
+    faFileMedicalAlt
   );
 };
 
@@ -73,6 +75,9 @@ export const SaveIcon: React.FC<IconProps> = ({ size, color }) => (
 );
 
 // Solid
+export const FileMedicalIcon: React.FC<IconProps> = ({ size, color }) => (
+  <Icon size={size} color={color} prefix={SOLID} iconName="file-medical-alt" />
+);
 export const LogoutIcon: React.FC<IconProps> = ({ size, color }) => (
   <Icon size={size} color={color} prefix={SOLID} iconName="sign-out-alt" />
 );
