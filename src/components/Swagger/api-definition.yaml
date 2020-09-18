@@ -10,8 +10,13 @@ servers:
 
 # Path
 paths:
+  #-----------------------------------------------------------------------------
+  # Authentication
+  #
   /auth:
     get:
+      tags:
+        - Authentication
       summary: Check if user is already logged.
       responses:
         '200':
@@ -26,6 +31,8 @@ paths:
           $ref: '#/components/responses/ServerError'
     delete:
       summary: Delete user
+      tags:
+        - Authentication
       responses:
         '200':
           description: Success
@@ -44,6 +51,141 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/ServerError'
+
+  /auth/update:
+    put:
+      summary: |
+        Update existing user and related player if exists.
+      tags:
+        - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDTO'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationReponse'
+        '400':
+            $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /auth/authentication:
+    post:
+      summary: Authenticate user
+      tags:
+        - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              example:
+                username: User
+                password: UserPasswordInPlainText
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationReponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /auth/register:
+    post:
+      summary: Register new user
+      tags:
+        - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                name:
+                  type: string
+                surname:
+                  type: string
+                email:
+                  type: string
+                cEmail:
+                  type: string
+                password:
+                  type: string
+                cPassword:
+                  type: string
+                phone:
+                  type: string
+                birthday:
+                  type: string
+                playerRole:
+                  $ref: '#/components/schemas/PlayerRole'
+              example:
+                username: 'username'
+                name: 'name'
+                surname: 'surname'
+                email: 'test@email.com'
+                cEmail: 'test@email.com'
+                password: 'verylongpassword'
+                cPassword: 'verylongpassword'
+                phone: '3331234598'
+                birthday: ''
+                playerRole: 'GoalKeeper'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationReponse'
+        '400':
+          description: Found errors
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BasicResponse'
+                  - type: object
+                    properties:
+                      errors:
+                        type: array
+                        items:
+                          type: string
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /auth/logout:
+    get:
+      summary: Logout.
+      tags:
+        - Authentication
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationReponse'
+
+  #-----------------------------------------------------------------------------
+  # Player
+  #
+
 
 
 #-----------------------------------------------------------------------------
@@ -187,6 +329,12 @@ components:
   # Responses : $ref: '#/components/responses/{name}'
   #
   responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BasicResponse'
     Unauthorized:
       description: Unauthorized
       content:

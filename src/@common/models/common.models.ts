@@ -15,3 +15,5 @@ export interface UserMessage {
   type: UserMessageType;
   message: string;
 }
+
+export type OmitHistory<T> = Omit<T, 'history'>;

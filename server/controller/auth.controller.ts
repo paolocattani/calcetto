@@ -20,12 +20,18 @@ import {
 } from '../manager/auth.manager';
 import { AppRequest } from './index';
 import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
-import { LoginRequest } from '../../src/@common/models/session.model';
+import {
+  DeleteUserRequest,
+  LoginRequest,
+  RegistrationRequest,
+  UpdateUserRequest,
+} from '../../src/@common/models/session.model';
 import { unexpectedServerError, missingParameters, success, failure } from './common.response';
+import { OmitHistory } from '../../src/@common/models/common.models';
 const router = Router();
 
 const wrongCredentials = (res: Response) =>
-  failure(res, 'Credenziali errate', 'Wrong credentials', HTTPStatusCode.Unauthorized, { user: undefined });
+  failure(res, 'Credenziali errate', 'Wrong credentials', HTTPStatusCode.Unauthorized);
 
 router.use('/', (req: Request, res: Response, next: NextFunction) =>
   logController(req, next, 'Auth Controller', '/api/v1/auth')
@@ -53,7 +59,7 @@ router.get(
           }
         : { httpOnly: true }),
     });
-    return success(res, 'A presto...', 'Logout complete.', { user: undefined });
+    return success(res, 'A presto...', 'Logout complete.');
   })
 );
 
@@ -61,21 +67,21 @@ router.post(
   '/register',
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     logger.info('/register start ');
-    const { body } = req;
+    const registrationInfo = req.body as OmitHistory<RegistrationRequest>;
 
     // Ripeto i controlli di validità sui dati anche qui in caso siano in qualche modo stati
     // bypassati quelli a FE.
-    const errors = isValidRegister(body);
+    const errors = isValidRegister(registrationInfo);
     if (errors.length !== 0) {
       return failure(
         res,
         'Correggi gli errori per procedere con la registrazione',
         'Registration data is not valid',
         HTTPStatusCode.BadRequest,
-        { user: undefined, errors }
+        { errors }
       );
     }
-    const model: User = parseBody(body);
+    const model: User = parseBody(registrationInfo);
     const user = await checkIfExist(model);
     if (user) {
       return failure(
@@ -84,12 +90,11 @@ router.post(
         'Email or Username alrealdy exists.',
         HTTPStatusCode.BadRequest,
         {
-          user: undefined,
           errors: ['Email o Username gia utilizzati.'],
         }
       );
     }
-    const record = await registerUser(model, body.playerRole);
+    const record = await registerUser(model, registrationInfo.playerRole);
     if (record) {
       addUserCookies(record, res);
       logger.info('/register end ');
@@ -107,13 +112,14 @@ router.put(
   withAuth,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     try {
-      let model = parseBody(req.body);
+      let model = parseBody(req.body as OmitHistory<UpdateUserRequest>);
       logger.info('/update : ', model);
       const user = await findUserByEmailAndUsername(model.email, model.username);
       if (!user) {
         return failure(res, 'Utente non trovato', 'User not found');
       }
       await user.update(model);
+      // TODO: aggiornare anche il giocare associato con i dati comuni
       return success(res, 'Aggiornamento effettuato', 'Update complete.', { user: convertEntityToDTO(user) });
     } catch (error) {
       logger.error('/update error : ', error);
@@ -125,11 +131,11 @@ router.put(
 router.post(
   '/authenticate',
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
-    const { username, password } = req.body as Omit<LoginRequest, 'history'>;
+    const { username, password } = req.body as OmitHistory<LoginRequest>;
     try {
       logger.info('/authenticate start ');
       if (!username || !password) {
-        return missingParameters(res, { user: undefined });
+        return missingParameters(res);
       }
       const user = await findUserByEmailOrUsername(username);
 
@@ -157,7 +163,7 @@ router.delete(
   '/',
   withAuth,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
-    const { password } = req.body;
+    const { password } = req.body as OmitHistory<DeleteUserRequest>;
     const { email, username } = req.user!;
     try {
       logger.info('/delete start ');
@@ -171,7 +177,7 @@ router.delete(
       logger.info('/delete end ');
       // FIXME: fix cookie erase
       res.cookie('token', { expires: new Date(Date.now()), httpOnly: true });
-      return success(res, `Utente "${user.name}" eliminato `, 'User deleted', { user: undefined });
+      return success(res, `Utente "${user.name}" eliminato `, 'User deleted');
     } catch (error) {
       logger.error('/delete error : ', error);
       return unexpectedServerError(res);

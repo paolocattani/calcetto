@@ -119,7 +119,7 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
         cPassword: cPassword.trim(),
         phone: phone.trim(),
         birthday: birthday,
-        playerRole,
+        playerRole: playerRole.value,
         history: currentHistory,
       })
     );

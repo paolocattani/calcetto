@@ -31,7 +31,7 @@ const Delete: React.FC<DeleteProps> = ({ show, onHide }) => {
   ) => {
     evt.preventDefault();
     if (email && username && password) {
-      dispatch(SessionAction.delete.request({ email, username, password, history: currentHistory }));
+      dispatch(SessionAction.delete.request({ password, history: currentHistory }));
     } else {
       toast.error(t('auth:error.password'));
     }

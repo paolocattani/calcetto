@@ -30,8 +30,6 @@ export interface LoginRequest extends AuthenticationRequest {
   password: string;
 }
 export interface DeleteUserRequest extends AuthenticationRequest {
-  username: string;
-  email: string;
   password: string;
 }
 
@@ -49,7 +47,7 @@ export interface RegistrationRequest extends AuthenticationRequest {
   cPassword: string;
   phone: string;
   birthday: Date | null;
-  playerRole: PlayerRoleType;
+  playerRole: PlayerRole;
 }
 
 // Response
