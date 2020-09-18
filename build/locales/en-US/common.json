@@ -1,8 +1,16 @@
 {
-    "confim":"Confirm",
+    "confirm":"Confirm",
     "select":"Select",
     "continue":"Continue",
+    "cancel":"Cancel",
+    "exec":"Exec",
+    "save":"Save",
+    "max":"Max",
+    "saving":"Saving",
+    "reset":"Reset",
+    "close":"Close",
     "logout":"Logut",
+    "loading":"Loading",
     "route":{
         "home":"Home",
         "tournament":"Tournament Selection",
@@ -11,6 +19,7 @@
         "user":"User Managment",
         "player":"Player Managment",
         "login":"Login",
+        "swagger":"Swagger",
         "notFound":"Not found"
     },
     "lang":{

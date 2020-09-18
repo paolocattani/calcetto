@@ -1,0 +1,2 @@
+(this.webpackJsonpcalcetto=this.webpackJsonpcalcetto||[]).push([[127],{1350:function(t,e){t.exports=function(t){return{name:"Plain text",aliases:["text","txt"],disableAutodetect:!0}}}}]);
+//# sourceMappingURL=react-syntax-highlighter_languages_highlight_plaintext.069aa240.chunk.js.map

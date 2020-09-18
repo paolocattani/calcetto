@@ -1,8 +1,16 @@
 {
-    "confim":"Conferma",
+    "confirm":"Conferma",
     "select":"Seleziona",
     "continue":"Prosegui",
+    "cancel":"Annulla",
+    "exec":"Esegui",
+    "save":"Salva",
+    "max":"Max",
+    "saving":"Salvataggio in corso",
+    "reset":"Reset",
+    "close":"Chiudi",
     "logout":"Logut",
+    "loading":"Caricamento",
     "route":{
         "home":"Home",
         "tournament":"Selezione Torneo",
@@ -11,6 +19,7 @@
         "user":"Gestione Utente",
         "player":"Gestione Giocatori",
         "login":"Login",
+        "swagger":"Swagger",
         "notFound":"Non trovato"
     },
     "lang":{
