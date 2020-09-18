@@ -58,7 +58,7 @@ const Delete: React.FC<DeleteProps> = ({ show, onHide }) => {
           <Form onSubmit={(e: React.SyntheticEvent<Element, Event>) => handleSubmit(e, user.email, user.username)}>
             <Form.Group as={Row} controlId="emailDelete">
               <Form.Label column sm="2">
-                {t('auth:email')}
+                {t('auth:email.email')}
               </Form.Label>
               <Col sm="10">
                 <Form.Control
@@ -86,10 +86,10 @@ const Delete: React.FC<DeleteProps> = ({ show, onHide }) => {
             </Form.Group>
             <Form.Group as={Row} controlId="password">
               <Form.Label column sm="2">
-                {t('common:password')}
+                {t('auth:password.password')}
               </Form.Label>
               <Col sm="10">
-                <Form.Control type="password" placeholder={t('auth:password')} {...bindPassword} />
+                <Form.Control type="password" placeholder={t('auth:password.password')} {...bindPassword} />
               </Col>
             </Form.Group>
             <Button size="lg" className="float-left" onClick={onHide} variant="outline-success" type="button">

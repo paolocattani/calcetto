@@ -12,7 +12,7 @@
     }
   ],
   "paths": {
-    "/auth": {
+    "/auth/check": {
       "get": {
         "tags": [
           "Authentication"
@@ -36,9 +36,11 @@
             "$ref": "#/components/responses/ServerError"
           }
         }
-      },
-      "delete": {
-        "summary": "Delete user",
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "summary": "Logout.",
         "tags": [
           "Authentication"
         ],
@@ -52,22 +54,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "User not found for provided data or invalid credentials\n",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BasicResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "500": {
-            "$ref": "#/components/responses/ServerError"
           }
         }
       }
@@ -107,7 +93,7 @@
         }
       }
     },
-    "/auth/authentication": {
+    "/auth/login": {
       "post": {
         "summary": "Authenticate user",
         "tags": [
@@ -255,9 +241,9 @@
         }
       }
     },
-    "/auth/logout": {
-      "get": {
-        "summary": "Logout.",
+    "/auth/delete": {
+      "delete": {
+        "summary": "Delete user",
         "tags": [
           "Authentication"
         ],
@@ -271,6 +257,22 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "User not found for provided data or invalid credentials\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BasicResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
           }
         }
       }

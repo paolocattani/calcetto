@@ -1,69 +1,44 @@
-import { AuthenticationResponse } from '../models/client/auth.models';
+import { AuthenticationResponse, DeleteUserRequest, LoginRequest } from '../../src/@common/models/session.model';
 
 import fetch from 'node-fetch';
+import { RegistrationRequest } from '../../src/@common/models/session.model';
+import { OmitHistory } from '../../src/@common/models/common.models';
+import { deleteWrapper, postWrapper } from '../core/utils';
 
-export const BASE_URL = `http://${process.env.SERVER_HOST || 'localhost'}:${process.env.PORT || '5001'}`;
-export const DEFAULT_HEADERS = { headers: { 'Content-Type': 'application/json' } };
-
-export const USER_REGISTRATION = {
+export const USER_1 = {
   // https://www.fakenamegenerator.com/gen-male-us-it.php
-  username: 'dummy',
-  name: 'William',
-  surname: 'J. Ayers',
-  email: 'WilliamJAyers@armyspy.com',
-  cEmail: 'WilliamJAyers@armyspy.com',
+  username: 'dummy1',
+  name: 'William1',
+  surname: 'J. Ayers1',
+  email: 'WilliamJAyers@spy1.com',
+  cEmail: 'WilliamJAyers@spy1.com',
   password: 'dummyPassword1',
   cPassword: 'dummyPassword1',
-  phone: '0362 3981900',
+  phone: '0362 3981901',
   birthday: new Date(1939, 0, 16),
   playerRole: 'Master',
 };
 
-export const USER_LOGIN = {
+export const USER_2 = {
   // https://www.fakenamegenerator.com/gen-male-us-it.php
-  username: 'dummy',
-  name: 'William',
-  surname: 'J. Ayers',
-  email: 'WilliamJAyers@armyspy.com',
-  cEmail: 'WilliamJAyers@armyspy.com',
-  password: 'dummyPassword1',
-  cPassword: 'dummyPassword1',
-  phone: '0362 3981900',
+  username: 'dummy2',
+  name: 'William2',
+  surname: 'J. Ayers2',
+  email: 'WilliamJAyers@army2.com',
+  cEmail: 'WilliamJAyers@army2.com',
+  password: 'dummyPassword12',
+  cPassword: 'dummyPassword12',
+  phone: '0362 398190022',
   birthday: new Date(1939, 0, 16),
-  playerRole: 'Master',
-};
-export const registerTestUser = async (user: RegistrationRequest): Promise<AuthenticationResponse> => {
-  const response = await fetch(`${BASE_URL}/api/v1/auth/register`, {
-    method: 'POST',
-    body: JSON.stringify(),
-    ...DEFAULT_HEADERS,
-  });
-  return await response.json();
+  playerRole: 'GoalKeeper',
 };
 
-export const loginTestUser = async (): Promise<AuthenticationResponse> => {
-  const response = await fetch(`${BASE_URL}/api/v1/auth/authenticate`, {
-    method: 'POST',
-    body: JSON.stringify({
-      // https://www.fakenamegenerator.com/gen-male-us-it.php
-      username: 'dummy',
-      password: 'dummyPassword1',
-    }),
-    ...DEFAULT_HEADERS,
-  });
-  return await response.json();
-};
+export const registerTestUser = async (
+  registrationRequest: OmitHistory<LoginRequest>
+): Promise<AuthenticationResponse> => await postWrapper('auth/register', registrationRequest);
 
-export const deleteTestUser = async (): Promise<AuthenticationResponse> => {
-  const response = await fetch(`${BASE_URL}/api/v1/auth/delete`, {
-    method: 'DELETE',
-    body: JSON.stringify({
-      // https://www.fakenamegenerator.com/gen-male-us-it.php
-      username: 'dummy',
-      email: 'WilliamJAyers@armyspy.com',
-      password: 'dummyPassword1',
-    }),
-    ...DEFAULT_HEADERS,
-  });
-  return await response.json();
-};
+export const loginTestUser = async (loginRequest: OmitHistory<LoginRequest>): Promise<AuthenticationResponse> =>
+  await postWrapper('auth/login', loginRequest);
+
+export const deleteTestUser = async (deleteRequest: OmitHistory<DeleteUserRequest>): Promise<AuthenticationResponse> =>
+  await deleteWrapper('auth/delete', deleteRequest);

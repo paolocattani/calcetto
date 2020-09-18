@@ -1,11 +1,12 @@
+// Core
 import '../core/env';
 import { logger } from '../core/logger';
 import { isProductionMode } from '../core/debug';
-
-import { Router, Request, Response, NextFunction } from 'express';
-import User from '../entity/user.model';
 import { withAuth, asyncMiddleware, logController } from '../core/middleware';
-
+// Types
+import { AppRequest } from './index';
+import { Router, Request, Response, NextFunction } from 'express';
+// Auth Manager
 import {
   convertEntityToDTO,
   parseBody,
@@ -18,16 +19,20 @@ import {
   addUserCookies,
   isValidRegister,
 } from '../manager/auth.manager';
-import { AppRequest } from './index';
-import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
+// Models
+import User from '../entity/user.model';
+// Common Responses
+import { unexpectedServerError, missingParameters, success, failure } from './common.response';
+// @Commmon
 import {
   DeleteUserRequest,
   LoginRequest,
   RegistrationRequest,
   UpdateUserRequest,
 } from '../../src/@common/models/session.model';
-import { unexpectedServerError, missingParameters, success, failure } from './common.response';
+import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
 import { OmitHistory } from '../../src/@common/models/common.models';
+
 const router = Router();
 
 const wrongCredentials = (res: Response) =>
@@ -38,7 +43,7 @@ router.use('/', (req: Request, res: Response, next: NextFunction) =>
 );
 
 router.get(
-  '/',
+  '/check',
   withAuth,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) =>
     success(res, `Bentornato ${req.user!.name}`, 'User is already authenticated', { user: req.user })
@@ -98,7 +103,7 @@ router.post(
     if (record) {
       addUserCookies(record, res);
       logger.info('/register end ');
-      return success(res, `Benvenuto ${record.name}`, 'Registration complete.');
+      return success(res, `Benvenuto ${record.name}`, 'Registration complete.', { user: record });
     } else {
       return unexpectedServerError(res, {
         // eslint-disable-next-line quotes
@@ -129,11 +134,11 @@ router.put(
 );
 
 router.post(
-  '/authenticate',
+  '/login',
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     const { username, password } = req.body as OmitHistory<LoginRequest>;
     try {
-      logger.info('/authenticate start ');
+      logger.info('/login start ');
       if (!username || !password) {
         return missingParameters(res);
       }
@@ -150,17 +155,17 @@ router.post(
 
       const userDTO = convertEntityToDTO(user);
       addUserCookies(userDTO, res);
-      logger.info('/authenticate end ');
+      logger.info('/login end ');
       return success(res, `Benvenuto ${userDTO.name}`, 'Login complete.', { user: userDTO });
     } catch (error) {
-      logger.error('/authenticate error : ', error);
+      logger.error('/login error : ', error);
       return unexpectedServerError(res);
     }
   })
 );
 
 router.delete(
-  '/',
+  '/delete',
   withAuth,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     const { password } = req.body as OmitHistory<DeleteUserRequest>;
@@ -184,7 +189,5 @@ router.delete(
     }
   })
 );
-
-router.get('/checkToken', withAuth, (req, res) => res.sendStatus(HTTPStatusCode.OK));
 
 export default router;

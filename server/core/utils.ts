@@ -1,5 +1,9 @@
 import { WhereOptions, Sequelize, Op, Model } from 'sequelize';
-//## Math
+import { logger } from './logger';
+//-----------------------------
+// Math
+//
+
 export const getRandomIntInclusive = (min: number, max: number): number =>
   Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1)) + Math.ceil(min);
 
@@ -7,7 +11,9 @@ export function getBaseLog(x: number, y: number) {
   return Math.log(y) / Math.log(x);
 }
 
+//-----------------------------
 // Async utils
+//
 export async function asyncForEach<T>(
   array: Array<T>,
   callback: (element: T, index: number, array: Array<T>) => Promise<void>
@@ -17,7 +23,9 @@ export async function asyncForEach<T>(
   }
 }
 
-//## Sequelize utils
+//-----------------------------
+// Sequelize utils
+//
 export const logEntity = <T extends Model<any, any>>(entity: T) => JSON.stringify(entity, null, 2);
 
 export const getWhereFromMap = (parameters: Map<string, WhereOptions | Object>): WhereOptions =>
@@ -47,8 +55,11 @@ export const dateInRageWrapper = (colName: string, startDate: string | Date, end
   ],
 });
 
-//## Date utils
+//-----------------------------
+// Date utils
 // https://stackoverflow.com/questions/2698725/comparing-date-part-only-without-comparing-time-in-javascript
+//
+
 export const justADate = (initDate?: Date | string) => {
   let utcMidnightDateObj: Date;
   // if no date supplied, use Now.

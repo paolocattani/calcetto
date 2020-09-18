@@ -100,16 +100,18 @@ function* logoutSaga(action: ReturnType<typeof SessionAction.logout.request>): G
 }
 
 // Login
-function* loginSaga({ payload }: ReturnType<typeof SessionAction.login.request>): Generator<StrictEffect, void, any> {
+function* loginSaga({
+  payload: { history, ...loginRequest },
+}: ReturnType<typeof SessionAction.login.request>): Generator<StrictEffect, void, any> {
   // Validate Login
-  const loginReponse: AuthenticationResponse = yield call(login, payload);
+  const loginReponse: AuthenticationResponse = yield call(login, loginRequest);
   if (loginReponse.code === HTTPStatusCode.OK) {
     yield put(SessionAction.login.success(loginReponse));
     // Session control
-    yield put(SessionAction.sessionControl.request({ history: payload.history }));
+    yield put(SessionAction.sessionControl.request({ history }));
     // Fetch tournament
     yield put(TournamentAction.fetch.request({}));
-    payload.history.push('/');
+    // history.push('/');
     toast.success(loginReponse.userMessage.message);
   } else {
     toast.error(loginReponse.userMessage.message);
@@ -119,17 +121,18 @@ function* loginSaga({ payload }: ReturnType<typeof SessionAction.login.request>)
 
 // Registration
 function* registrationSaga({
-  payload,
+  payload: { history, ...registrationRequest },
 }: ReturnType<typeof SessionAction.registration.request>): Generator<StrictEffect, void, any> {
   // Validate Registration
-  const registrationReponse: RegistrationResponse = yield call(registration, payload);
+  const registrationReponse: RegistrationResponse = yield call(registration, registrationRequest);
+  console.log('registrationReponse : ', registrationReponse);
   if (registrationReponse.code === HTTPStatusCode.OK) {
     yield put(SessionAction.registration.success(registrationReponse));
     // Session control
-    yield put(SessionAction.sessionControl.request({ history: payload.history }));
+    yield put(SessionAction.sessionControl.request({ history }));
     // Fetch tournament
     yield put(TournamentAction.fetch.request({}));
-    payload.history.push('/');
+    history.push('/');
     toast.success(registrationReponse.userMessage.message);
   } else {
     if (registrationReponse.errors) {
@@ -140,12 +143,14 @@ function* registrationSaga({
 }
 
 // Update user
-function* updateUserSaga(action: ReturnType<typeof SessionAction.update.request>): Generator<StrictEffect, void, any> {
+function* updateUserSaga({
+  payload: { history, ...updateUserRequest },
+}: ReturnType<typeof SessionAction.update.request>): Generator<StrictEffect, void, any> {
   // Validate Login
-  const updateReponse: AuthenticationResponse = yield call(updateUser, action.payload);
+  const updateReponse: AuthenticationResponse = yield call(updateUser, updateUserRequest);
   if (updateReponse.code === HTTPStatusCode.OK) {
     yield put(SessionAction.update.success(updateReponse));
-    action.payload.history.push('/');
+    history.push('/');
     toast.success(updateReponse.userMessage.message);
   } else {
     toast.error(updateReponse.userMessage.message);
@@ -154,12 +159,14 @@ function* updateUserSaga(action: ReturnType<typeof SessionAction.update.request>
 }
 
 // Delete user
-function* deleteUserSaga(action: ReturnType<typeof SessionAction.delete.request>): Generator<StrictEffect, void, any> {
+function* deleteUserSaga({
+  payload: { history, ...deleteUserRequest },
+}: ReturnType<typeof SessionAction.delete.request>): Generator<StrictEffect, void, any> {
   // Validate Login
-  const deleteReponse: AuthenticationResponse = yield call(deleteUser, action.payload);
+  const deleteReponse: AuthenticationResponse = yield call(deleteUser, deleteUserRequest);
   if (deleteReponse.code === HTTPStatusCode.OK) {
     yield put(SessionAction.delete.success(deleteReponse));
-    yield put(SessionAction.logout.request({ history: action.payload.history }));
+    yield put(SessionAction.logout.request({ history }));
     toast.success(deleteReponse.userMessage.message);
   } else {
     toast.error(deleteReponse.userMessage.message);

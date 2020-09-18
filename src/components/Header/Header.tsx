@@ -87,7 +87,7 @@ const Header: React.FC = () => {
                         eventKey="2"
                       >
                         <span>
-                          <LanguageIcon /> {t(otherLang)}
+                          <LanguageIcon /> {t(`common:lang.${otherLang}`)}
                         </span>
                       </Dropdown.Item>
                       <Dropdown.Divider style={{ borderTopColor: '#ffc107' }} />

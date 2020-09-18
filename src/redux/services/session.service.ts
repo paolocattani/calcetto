@@ -8,8 +8,15 @@ import {
 } from '@common/models';
 import { eventChannel, buffers, END } from 'redux-saga';
 import { HTTPStatusCode } from '@common/models/HttpStatusCode';
-import { handleGenericError, UnexpectedServerError, DEFAULT_HEADERS } from './common';
-import { UserMessageType } from '@common/models/common.models';
+import {
+  handleGenericError,
+  UnexpectedServerError,
+  postWrapper,
+  putWrapper,
+  deleteWrapper,
+  getWrapper,
+} from './common';
+import { OmitHistory, UserMessageType } from '@common/models/common.models';
 
 export enum SessionStatus {
   // Sessione scaduta, reindirizza l'utente alla login
@@ -24,93 +31,30 @@ export interface Message {
 }
 
 // Update
-export const updateUser = async (params: UpdateUserRequest): Promise<AuthenticationResponse> => {
-  try {
-    const response = await fetch('/api/v1/auth/update', {
-      method: 'PUT',
-      body: JSON.stringify(params.user),
-      ...DEFAULT_HEADERS,
-    });
-    return await response.json();
-  } catch (error) {
-    return {
-      user: undefined,
-      ...UnexpectedServerError,
-    };
-  }
-};
+export const updateUser = async (updateUserRequest: OmitHistory<UpdateUserRequest>): Promise<AuthenticationResponse> =>
+  await putWrapper<AuthenticationResponse>('auth/update', updateUserRequest);
 
 // Delete
-export const deleteUser = async (params: DeleteUserRequest): Promise<AuthenticationResponse> => {
-  try {
-    const response = await fetch('/api/v1/auth/', {
-      method: 'DELETE',
-      body: JSON.stringify(params),
-      ...DEFAULT_HEADERS,
-    });
-    return await response.json();
-  } catch (error) {
-    return {
-      user: undefined,
-      ...UnexpectedServerError,
-    };
-  }
-};
+export const deleteUser = async (deleteUserRequest: OmitHistory<DeleteUserRequest>): Promise<AuthenticationResponse> =>
+  await deleteWrapper<AuthenticationResponse>('auth/delete', deleteUserRequest);
 
 // Login
-export const login = async ({ username, password }: LoginRequest): Promise<AuthenticationResponse> => {
-  try {
-    const response = await fetch('/api/v1/auth/authenticate', {
-      method: 'POST',
-      body: JSON.stringify({ username, password }),
-      ...DEFAULT_HEADERS,
-    });
-    return await response.json();
-  } catch (error) {
-    return {
-      user: undefined,
-      ...UnexpectedServerError,
-    };
-  }
-};
+export const login = async (loginRequest: OmitHistory<LoginRequest>): Promise<AuthenticationResponse> =>
+  await postWrapper<AuthenticationResponse>('auth/login', loginRequest);
 
 // Login
-export const logout = async (): Promise<AuthenticationResponse> => {
-  try {
-    const response = await fetch('/api/v1/auth/logout');
-    return await response.json();
-  } catch (error) {
-    return {
-      user: undefined,
-      ...UnexpectedServerError,
-    };
-  }
-};
+export const logout = async (): Promise<AuthenticationResponse> =>
+  await getWrapper<AuthenticationResponse>('auth/logout');
 
 // Registration
-export const registration = async ({
-  history,
-  ...registrationInfo
-}: RegistrationRequest): Promise<RegistrationResponse> => {
-  try {
-    const response = await fetch('/api/v1/auth/register', {
-      method: 'POST',
-      body: JSON.stringify(registrationInfo),
-      ...DEFAULT_HEADERS,
-    });
-    return await response.json();
-  } catch (error) {
-    return {
-      user: undefined,
-      ...UnexpectedServerError,
-    };
-  }
-};
+export const registration = async (
+  registrationRequest: OmitHistory<RegistrationRequest>
+): Promise<RegistrationResponse> => await postWrapper<AuthenticationResponse>('auth/register', registrationRequest);
 
 export const CheckAuthentication = async (): Promise<AuthenticationResponse> => {
   let response;
   try {
-    response = await fetch('/api/v1/auth/');
+    response = await fetch('/api/v1/auth/check');
     return await response.json();
   } catch (error) {
     if (response?.status === HTTPStatusCode.Unauthorized) {
@@ -125,7 +69,7 @@ export const CheckAuthentication = async (): Promise<AuthenticationResponse> => 
       user: undefined,
       ...UnexpectedServerError,
     };
-    handleGenericError<AuthenticationResponse>(error, result);
+    handleGenericError(error, result);
     return result;
   }
 };
