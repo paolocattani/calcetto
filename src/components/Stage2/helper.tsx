@@ -1,4 +1,4 @@
-import { getBaseLog } from '../core/utils';
+import { getBaseLog } from '../../@common/utils/math.utils';
 import { ValueType, ActionMeta } from 'react-select';
 import { PairDTO, ICell } from '@common/dto';
 

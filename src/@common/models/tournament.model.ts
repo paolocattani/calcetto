@@ -29,18 +29,14 @@ export interface IsValidTournamentRequest {
 }
 
 // Responses
-export interface FetchTournamentsResponse {
-  results: TournamentDTO[];
+export interface FetchTournamentsResponse extends GenericReponse {
+  tournamentsList?: TournamentDTO[];
 }
 export interface SaveTournamentResponse extends GenericReponse {
   tournament: TournamentDTO | null;
 }
 export interface UpdateTournamentResponse extends GenericReponse {
   tournament: TournamentDTO;
-}
-export interface IsValidTournamentResponse {
-  isValid: boolean;
-  errorMessage: string;
 }
 
 //

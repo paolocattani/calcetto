@@ -1,4 +1,3 @@
-import { TournamentDTO } from '@common/dto';
 import {
   FetchTournamentsRequest,
   FetchTournamentsResponse,
@@ -6,48 +5,14 @@ import {
   SaveTournamentResponse,
   UpdateTournamentRequest,
   UpdateTournamentResponse,
-} from '@common/models/tournament.model';
-import { handleError, UnexpectedServerError, DEFAULT_HEADERS } from './common';
+} from '../../@common/models/tournament.model';
+import { postWrapper, putWrapper, getWrapper } from '../../@common/utils/fetch.utils';
 
-export const fetchTournaments = async (request: FetchTournamentsRequest): Promise<FetchTournamentsResponse> => {
-  try {
-    const response = await fetch(request?.tId ? `/api/v1/tournament/${request.tId}` : '/api/v1/tournament/list', {
-      method: 'GET',
-      ...DEFAULT_HEADERS,
-    });
-    const results: TournamentDTO[] = await response.json();
-    return { results };
-  } catch (e) {
-    handleError(e, 'Error fetching Tournaments');
-    return { results: [] };
-  }
-};
+export const fetchTournaments = async (request: FetchTournamentsRequest): Promise<FetchTournamentsResponse> =>
+  getWrapper<FetchTournamentsResponse>(request?.tId ? `/api/v1/tournament/${request.tId}` : '/api/v1/tournament/list');
 
-export const postTournament = async ({ model }: SaveTournamentRequest): Promise<SaveTournamentResponse> => {
-  try {
-    const response = await fetch('/api/v1/tournament', {
-      method: 'POST',
-      ...DEFAULT_HEADERS,
-      body: JSON.stringify(model),
-    });
-    return await response.json();
-  } catch (e) {
-    return {
-      tournament: null,
-      ...UnexpectedServerError,
-    };
-  }
-};
+export const postTournament = async ({ model }: SaveTournamentRequest): Promise<SaveTournamentResponse> =>
+  postWrapper<SaveTournamentResponse>('/api/v1/tournament', model);
 
-export const updateTournament = async ({ model }: UpdateTournamentRequest): Promise<UpdateTournamentResponse> => {
-  try {
-    const response = await fetch('/api/v1/tournament', {
-      method: 'PUT',
-      ...DEFAULT_HEADERS,
-      body: JSON.stringify(model),
-    });
-    return await response.json();
-  } catch (e) {
-    return { tournament: model, ...UnexpectedServerError };
-  }
-};
+export const updateTournament = async ({ model }: UpdateTournamentRequest): Promise<UpdateTournamentResponse> =>
+  putWrapper<UpdateTournamentResponse>('/api/v1/tournament', model);

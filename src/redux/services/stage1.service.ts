@@ -7,9 +7,9 @@ import {
   UpdateCellResponse,
   UpdatePlacementRequest,
   UpdateSelectedPairsRequest,
-} from '@common/models';
-import { handleError, DEFAULT_HEADERS } from './common';
-import { rowsGenerator } from 'components/Stage1/helper';
+} from '../../@common/models';
+import { rowsGenerator } from '../../components/Stage1/helper';
+import { DEFAULT_HEADERS } from '../../@common/utils/fetch.utils';
 
 export const fetchStage1 = async ({ pairsList, stageName }: FetchStage1Request): Promise<FetchStage1Response> => {
   try {
@@ -22,7 +22,6 @@ export const fetchStage1 = async ({ pairsList, stageName }: FetchStage1Request):
     const rows = await response.json();
     return { pairsList, stageName, rows };
   } catch (e) {
-    handleError(e, 'Error stage1 fetch');
     return { pairsList, stageName, rows: [] };
   }
 };
@@ -36,7 +35,7 @@ export const updatePlacement = async ({ rows }: UpdatePlacementRequest): Promise
     });
     await response.json();
   } catch (e) {
-    handleError(e, 'Error stage1 update placement');
+    console.error('Error stage1 update placement');
   }
 };
 
@@ -49,7 +48,7 @@ export const updateSelectedPairs = async ({ rows, stageName }: UpdateSelectedPai
     });
     await response.json();
   } catch (e) {
-    handleError(e, 'Error stage1 update selections');
+    console.error('Error stage1 update selections');
   }
 };
 
@@ -63,7 +62,6 @@ export const updateCellStage1 = async (model: UpdateCellRequest): Promise<Update
     await response.json();
     return {};
   } catch (e) {
-    handleError(e, 'Error stage1 update cell');
     return {};
   }
 };

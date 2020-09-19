@@ -1,7 +1,7 @@
 import { FetchStage2Response, FetchStage2Request } from '@common/models';
-import { handleError, DEFAULT_HEADERS } from './common';
-import { getEmptyRowModel } from 'components/Pair/helper';
-import { ICell } from '@common/dto';
+import { getEmptyRowModel } from '../../components/Pair/helper';
+import { ICell } from '../../@common/dto';
+import { DEFAULT_HEADERS } from '../../@common/utils/fetch.utils';
 
 export const deleteStage2 = async (tId: number) => {
   const response = await fetch('/api/v1/stage2', {
@@ -21,7 +21,7 @@ export const updateCells = async (cell1: ICell, cell2: ICell | null) => {
     });
     await response.json();
   } catch (e) {
-    handleError(e, 'Error stage2 update');
+    console.error('Error stage2 update');
   }
 };
 
@@ -31,7 +31,7 @@ export const fetchPairsStage2 = async (tId: number) => {
     const result = await response.json();
     return { pairs: [getEmptyRowModel('-'), ...result.pairs] };
   } catch (e) {
-    handleError(e, 'Error stage2 fetching pairs');
+    console.error('Error stage2 fetching pairs');
   }
   return { pairs: [] };
 };
@@ -49,7 +49,6 @@ export const fetchStage2 = async ({
     const cells = await response.json();
     return { cells, rowsNumber };
   } catch (e) {
-    handleError(e, 'Error stage2 fetch');
     return { cells: [], rowsNumber };
   }
 };

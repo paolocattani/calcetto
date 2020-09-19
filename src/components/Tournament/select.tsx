@@ -8,7 +8,7 @@ import { useHistory } from 'react-router';
 import { RightArrowIcon } from '../core/icons';
 // Helper
 import { cardStyle, IndicatorSeparator } from './helper';
-import { formatDate } from '../core/utils';
+import { formatDate } from '../../@common/utils/date.utils';
 import NewTournament from './new';
 
 import { useDispatch, useSelector } from 'react-redux';

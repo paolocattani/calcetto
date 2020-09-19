@@ -7,7 +7,7 @@ import {
   UpdatePlayerResponse,
   UpdatePlayerRequest,
 } from '@common/models';
-import { handleError, DEFAULT_HEADERS } from './common';
+import { DEFAULT_HEADERS } from '../../@common/utils/fetch.utils';
 
 export const fetchPlayers = async ({ tId, addEmpty }: FetchPlayersRequest): Promise<FetchPlayersResponse> => {
   try {
@@ -18,7 +18,6 @@ export const fetchPlayers = async ({ tId, addEmpty }: FetchPlayersRequest): Prom
     const result = await response.json();
     return { results: addEmpty ? [...result, getEmptyPlayer('Nessun Giocatore')] : result };
   } catch (e) {
-    handleError(e, 'Error players fetch');
     return { results: [] };
   }
 };
@@ -33,7 +32,6 @@ export const deletePlayers = async ({ players }: DeletePlayersRequest): Promise<
     await response.json();
     return { players: response.ok ? players : [] };
   } catch (e) {
-    handleError(e, 'Error players delete');
     return { players: [] };
   }
 };
@@ -48,7 +46,6 @@ export const savePlayer = async ({ player }: UpdatePlayerRequest): Promise<Updat
     const result = await response.json();
     return { player: result };
   } catch (e) {
-    handleError(e, 'Error players save');
     return { player };
   }
 };

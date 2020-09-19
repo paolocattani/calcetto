@@ -24,7 +24,8 @@ router.get(
   withAuth,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     try {
-      return res.status(200).json(await listAll(req.user!));
+      const tournamentsList = await listAll(req.user!);
+      return success(res, 'Tornei caricati...', 'Fetch complete.', { tournamentsList });
     } catch (err) {
       logger.error(chalk.redBright('Error while fetching tournament ! : ', err));
       return unexpectedServerError(res);

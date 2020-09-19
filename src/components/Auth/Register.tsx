@@ -4,7 +4,7 @@ import React from 'react';
 import DatePicker from 'react-datepicker';
 import Select, { StylesConfig, ValueType } from 'react-select';
 import './style.css';
-import { emailRegExp, passwordRegExp } from '../core/utils';
+import { emailRegExp, passwordRegExp } from '../../@common/utils/math.utils';
 import { SessionAction } from 'redux/actions';
 import { useDispatch } from 'react-redux';
 import { withRouter, useHistory } from 'react-router-dom';

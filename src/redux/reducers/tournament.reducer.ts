@@ -1,6 +1,6 @@
 import { createReducer, Action } from 'typesafe-actions';
 import { TournamentAction } from '../actions/tournament.action';
-import { TournamentState } from '@common/models/tournament.model';
+import { TournamentState } from '../../@common/models/tournament.model';
 
 export const initialTournamentState: TournamentState = {
   tournament: null,
@@ -24,9 +24,9 @@ export const TournamentReducer = createReducer<TournamentState, Action>(initialT
   )
   // SUCCESS
   // Fetch Tournament
-  .handleAction(TournamentAction.fetch.success, (state, { payload: { results } }) => ({
-    tournament: results && results.length > 0 ? results[0] : null,
-    tournamentsList: results,
+  .handleAction(TournamentAction.fetch.success, (state, { payload: { tournamentsList } }) => ({
+    tournament: tournamentsList && tournamentsList.length > 0 ? tournamentsList[0] : null,
+    tournamentsList: tournamentsList || [],
     isLoading: false,
   }))
   // Set selected tournament

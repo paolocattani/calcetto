@@ -1,5 +1,5 @@
 import { FetchPairsRequest, FetchPairsResponse, PostPairsResponse, PostPairsRequest } from '@common/models';
-import { handleError, DEFAULT_HEADERS } from './common';
+import { DEFAULT_HEADERS } from '../../@common/utils/fetch.utils';
 
 export const fetchPairs = async ({ tId }: FetchPairsRequest): Promise<FetchPairsResponse> => {
   try {
@@ -12,7 +12,6 @@ export const fetchPairs = async ({ tId }: FetchPairsRequest): Promise<FetchPairs
     console.log('fetchPairs : ', tId, results);
     return { results };
   } catch (e) {
-    handleError(e, 'Error pairs fetch');
     return { results: [] };
   }
 };
@@ -27,7 +26,6 @@ export const postPair = async ({ models }: PostPairsRequest): Promise<PostPairsR
     const results = await response.json();
     return { results };
   } catch (e) {
-    handleError(e, 'Error pairs update');
     return { results: [] };
   }
 };

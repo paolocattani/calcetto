@@ -7,8 +7,8 @@ import {
 } from '@common/models/tournament.model';
 import { TournamentAction } from 'redux/actions/tournament.action';
 import { HTTPStatusCode } from '@common/models/HttpStatusCode';
-import { UnexpectedServerError } from 'redux/services/common';
 import { toast } from 'react-toastify';
+import { UnexpectedServerError } from '../../@common/models/common.models';
 
 // https://medium.com/swlh/asynchronous-with-redux-sagas-b43c9630f218
 function* getTournamentsSaga(
