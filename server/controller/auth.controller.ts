@@ -22,16 +22,17 @@ import {
 // Models
 import User from '../entity/user.model';
 // Common Responses
-import { unexpectedServerError, missingParameters, success, failure, entityNotFound } from './common.response';
+import { missingParameters, success, failure, entityNotFound, serverError } from './common.response';
 // @Commmon
 import {
+  AuthenticationResponse,
   DeleteUserRequest,
   LoginRequest,
   RegistrationRequest,
   UpdateUserRequest,
 } from '../../src/@common/models/session.model';
 import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
-import { OmitHistory } from '../../src/@common/models/common.models';
+import { OmitGeneric, OmitHistory } from '../../src/@common/models/common.models';
 
 const router = Router();
 
@@ -39,15 +40,16 @@ const wrongCredentials = (res: Response) =>
   failure(res, 'Credenziali errate', 'Wrong credentials', HTTPStatusCode.Unauthorized);
 
 router.use('/', (req: Request, res: Response, next: NextFunction) =>
-  logController(req, next, 'Auth Controller', '/api/v1/auth')
+  logController(req, next, 'Auth Controller', '/api/v2/auth')
 );
 
 router.get(
   '/check',
   withAuth,
-  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) =>
-    success(res, `Bentornato ${req.user!.name}`, 'User is already authenticated', { user: req.user })
-  )
+  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
+    const additional: OmitGeneric<AuthenticationResponse> = { user: req.user };
+    return success(res, `Bentornato ${req.user!.name}`, 'User is already authenticated', additional);
+  })
 );
 
 router.get(
@@ -72,46 +74,52 @@ router.post(
   '/register',
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     logger.info('/register start ');
-    const registrationInfo = req.body as OmitHistory<RegistrationRequest>;
+    try {
+      const registrationInfo = req.body as OmitHistory<RegistrationRequest>;
 
-    // Ripeto i controlli di validità sui dati anche qui in caso siano in qualche modo stati
-    // bypassati quelli a FE.
-    const errors = isValidRegister(registrationInfo);
-    if (errors.length !== 0) {
-      return failure(
-        res,
-        'Correggi gli errori per procedere con la registrazione',
-        'Registration data is not valid',
-        HTTPStatusCode.BadRequest,
-        { errors }
-      );
-    }
-    const model: User = parseBody(registrationInfo);
-    const user = await checkIfExist(model);
-    if (user) {
-      return failure(
-        res,
-        'Email o Username gia utilizzati.',
-        'Email or Username alrealdy exists.',
-        HTTPStatusCode.BadRequest,
-        {
-          errors: ['Email o Username gia utilizzati.'],
-        }
-      );
-    }
-    const record = await registerUser(model, registrationInfo.playerRole);
-    if (record) {
-      addUserCookies(record, res);
-      logger.info('/register end ');
-      return success(res, `Benvenuto ${record.name}`, 'Registration complete.', { user: record });
-    } else {
-      return unexpectedServerError(res, {
+      // Ripeto i controlli di validità sui dati anche qui in caso siano in qualche modo stati
+      // bypassati quelli a FE.
+      const errors = isValidRegister(registrationInfo);
+      if (errors.length !== 0) {
+        return failure(
+          res,
+          'Correggi gli errori per procedere con la registrazione',
+          'Registration data is not valid',
+          HTTPStatusCode.BadRequest,
+          { errors }
+        );
+      }
+      const model: User = parseBody(registrationInfo);
+      const user = await checkIfExist(model);
+      if (user) {
+        return failure(
+          res,
+          'Email o Username gia utilizzati.',
+          'Email or Username alrealdy exists.',
+          HTTPStatusCode.BadRequest,
+          {
+            errors: ['Email o Username gia utilizzati.'],
+          }
+        );
+      }
+      const record = await registerUser(model, registrationInfo.playerRole);
+      if (record) {
+        addUserCookies(record, res);
+        logger.info('/register end ');
+        const additional: OmitGeneric<AuthenticationResponse> = { user: record };
+        return success(res, `Benvenuto ${record.name}`, 'Registration complete.', additional);
+      } else {
+        throw new Error('Server Error.!');
+      }
+    } catch (error) {
+      return serverError('POST auth/register error ! : ', error, res, {
         // eslint-disable-next-line quotes
         errors: ["Errore server non previsto. E' stata avviata la procedura di autodistruzione."],
       });
     }
   })
 );
+
 router.put(
   '/update',
   withAuth,
@@ -125,10 +133,10 @@ router.put(
       }
       await user.update(model);
       // TODO: aggiornare anche il giocare associato con i dati comuni
-      return success(res, 'Aggiornamento effettuato', 'Update complete.', { user: convertEntityToDTO(user) });
+      const additional: OmitGeneric<AuthenticationResponse> = { user: convertEntityToDTO(user) };
+      return success(res, 'Aggiornamento effettuato', 'Update complete.', additional);
     } catch (error) {
-      logger.error('/update error : ', error);
-      return unexpectedServerError(res);
+      return serverError('PUT auth/update error ! : ', error, res);
     }
   })
 );
@@ -155,10 +163,10 @@ router.post(
       const userDTO = convertEntityToDTO(user);
       addUserCookies(userDTO, res);
       logger.info('/login end ');
-      return success(res, `Benvenuto ${userDTO.name}`, 'Login complete.', { user: userDTO });
+      const additional: OmitGeneric<AuthenticationResponse> = { user: userDTO };
+      return success(res, `Benvenuto ${userDTO.name}`, 'Login complete.', additional);
     } catch (error) {
-      logger.error('/login error : ', error);
-      return unexpectedServerError(res);
+      return serverError('POST auth/login error ! : ', error, res);
     }
   })
 );
@@ -185,8 +193,7 @@ router.delete(
       res.cookie('token', { expires: new Date(Date.now()), httpOnly: true });
       return success(res, `Utente "${user.name}" eliminato `, 'User deleted');
     } catch (error) {
-      logger.error('/delete error : ', error);
-      return unexpectedServerError(res);
+      return serverError('DELETE auth/delete error ! : ', error, res);
     }
   })
 );

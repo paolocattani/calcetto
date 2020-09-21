@@ -62,7 +62,7 @@ export const fetchData = async (tId: number) => {
   });
   const rows = await response.json();
 
-  response = await fetch(tId ? `/api/v1/player/list/${tId}` : '/api/v1/player/list', {
+  response = await fetch(tId ? `/api/v2/player/list/${tId}` : '/api/v2/player/list', {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
   });

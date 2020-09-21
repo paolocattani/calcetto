@@ -2780,7 +2780,7 @@
                           (e.prev = 1),
                           (e.next = 4),
                           fetch(
-                            r ? '/api/v1/player/list/'.concat(r) : '/api/v1/player/list',
+                            r ? '/api/v2/player/list/'.concat(r) : '/api/v2/player/list',
                             Object(o.a)({ method: 'GET' }, i.a)
                           )
                         );
@@ -2827,7 +2827,7 @@
                           (e.prev = 1),
                           (e.next = 4),
                           fetch(
-                            '/api/v1/player',
+                            '/api/v2/player',
                             Object(o.a)(Object(o.a)({ method: 'DELETE' }, i.a), {}, { body: JSON.stringify(r) })
                           )
                         );
@@ -2871,7 +2871,7 @@
                           (e.prev = 1),
                           (e.next = 4),
                           fetch(
-                            '/api/v1/player',
+                            '/api/v2/player',
                             Object(o.a)(Object(o.a)({ method: 'POST' }, i.a), {}, { body: JSON.stringify(r) })
                           )
                         );
@@ -3249,7 +3249,7 @@
                       return (
                         (a = e.sent),
                         (e.next = 8),
-                        fetch(t ? '/api/v1/player/list/'.concat(t) : '/api/v1/player/list', {
+                        fetch(t ? '/api/v2/player/list/'.concat(t) : '/api/v2/player/list', {
                           method: 'GET',
                           headers: { 'Content-Type': 'application/json' },
                         })

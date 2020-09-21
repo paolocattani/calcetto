@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Calcetto API
   description: <strong><i>API definitions for Calcetto API server</i></strong>
-  version: 1.0.0
+  version: 1.0.0-oas3
 # Server
 servers:
   - url: "http://localhost:5001/api/v2/"
@@ -13,16 +13,16 @@ tags:
   - name: Authentication
     description: Manage user, Login, Logout or Check authentication status
   - name: Tournament
-    description: Operations available to regular developers
+    description: Manage tournament
   - name: Players
-    description: Operations available to regular developers
+    description: Manage players
 
 # Path
 paths:
   #-----------------------------------------------------------------------------
   # Authentication
   #
-  /auth/check:
+  "/auth/check":
     get:
       tags:
         - Authentication
@@ -39,7 +39,7 @@ paths:
         "500":
           $ref: "#/components/responses/ServerError"
 
-  /auth/logout:
+  "/auth/logout":
     get:
       summary: Logout.
       tags:
@@ -52,7 +52,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/AuthenticationReponse"
 
-  /auth/update:
+  "/auth/update":
     put:
       summary: |
         Update existing user and related player if exists.
@@ -62,7 +62,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UserDTO"
+              type: object
+              properties:
+                user:
+                  $ref: "#/components/schemas/UserDTO"
       responses:
         "200":
           description: Success
@@ -77,7 +80,7 @@ paths:
         "500":
           $ref: "#/components/responses/ServerError"
 
-  /auth/login:
+  "/auth/login":
     post:
       summary: Authenticate user
       tags:
@@ -109,7 +112,7 @@ paths:
         "500":
           $ref: "#/components/responses/ServerError"
 
-  /auth/register:
+  "/auth/register":
     post:
       summary: Register new user
       tags:
@@ -174,7 +177,7 @@ paths:
         "500":
           $ref: "#/components/responses/ServerError"
 
-  /auth/delete:
+  "/auth/delete":
     delete:
       summary: Delete user
       tags:
@@ -200,9 +203,253 @@ paths:
           $ref: "#/components/responses/ServerError"
 
   #-----------------------------------------------------------------------------
+  # Tournament
+  #
+  "/tournament/list":
+    get:
+      tags:
+        - Tournament
+      summary: List all tournament
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      tournamentsList:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/TournamentDTO"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  "/tournament/{tId}":
+    get:
+      tags:
+        - Tournament
+      summary: List all tournament
+      parameters:
+        - in: path
+          name: tId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the tournament to get
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      tournamentsList:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/TournamentDTO"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  "/tournament/update":
+    put:
+      summary: |
+        Update existing tournament.
+      tags:
+        - Tournament
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tournament:
+                  $ref: "#/components/schemas/TournamentDTO"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      tournament:
+                        $ref: "#/components/schemas/TournamentDTO"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  "/tournament/new":
+    post:
+      summary: |
+        Create new tournament.
+      tags:
+        - Tournament
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                model:
+                  $ref: "#/components/schemas/TournamentDTO"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      tournament:
+                        $ref: "#/components/schemas/TournamentDTO"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  #-----------------------------------------------------------------------------
   # Player
   #
+  "/player/list":
+    get:
+      tags:
+        - Players
+      summary: List all players
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      playersList:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/PlayerDTO"
+        "500":
+          $ref: "#/components/responses/ServerError"
 
+  "/player/list/{tId}":
+    get:
+      tags:
+        - Players
+      summary: List all players in a tournament
+      parameters:
+        - in: path
+          name: tId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the tournament
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      playersList:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/PlayerDTO"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  "/players/update":
+    put:
+      summary: |
+        Update an existing player.
+      tags:
+        - Players
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                player:
+                  $ref: "#/components/schemas/PlayerDTO"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      player:
+                        $ref: "#/components/schemas/PlayerDTO"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  "/players/new":
+    post:
+      summary: |
+        Create new tournament.
+      tags:
+        - Players
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                model:
+                  $ref: "#/components/schemas/PlayerDTO"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      player:
+                        $ref: "#/components/schemas/PlayerDTO"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  "/players/delete":
+    delete:
+      summary: Delete players
+      tags:
+        - Players
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponse"
+        "500":
+          $ref: "#/components/responses/ServerError"
 #-----------------------------------------------------------------------------
 # Components
 #
@@ -213,6 +460,7 @@ components:
   schemas:
     BasicResponse:
       type: object
+      additionalProperties: false
       required:
         - code
         - message
@@ -247,6 +495,7 @@ components:
               $ref: "#/components/schemas/UserDTO"
     UserDTO:
       type: object
+      additionalProperties: false
       required:
         - id
         - username
@@ -286,6 +535,7 @@ components:
         - User
     PlayerDTO:
       type: object
+      additionalProperties: false
       required:
         - id
         - name
@@ -341,6 +591,7 @@ components:
         - Attaccante
     TournamentDTO:
       type: object
+      additionalProperties: false
       required:
         - id
         - name
@@ -404,18 +655,18 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/BasicResponse"
-
   #---------------------------------------------------------------------------
   # Parameters : $ref: '#/components/parameters/{name}'
   #
-  parameters:
-    offsetParam:
-      name: offset
-      in: query
-      description: Number of items to skip before returning the results.
-      required: false
-      schema:
-        type: integer
-        format: int32
-        minimum: 0
-        default: 0
+  # parameters:
+  #  offsetParam:
+  #    name: offset
+  #    in: query
+  #    description: Number of items to skip before returning the results.
+  #    required: false
+  #    schema:
+  #      type: integer
+  #      format: int32
+  #      minimum: 0
+  #      default: 0
+  #

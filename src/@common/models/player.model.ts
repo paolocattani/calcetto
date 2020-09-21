@@ -1,4 +1,11 @@
 import { PlayerDTO } from '@common/dto';
+//
+export interface PlayerState {
+  player?: PlayerDTO;
+  playersList: PlayerDTO[];
+  isLoading: boolean;
+  isSaving: boolean;
+}
 
 // Requests
 export interface FetchPlayersRequest {
@@ -13,19 +20,11 @@ export interface DeletePlayersRequest {
 }
 // Responses
 export interface FetchPlayersResponse {
-  results: PlayerDTO[];
+  playersList: PlayerDTO[];
 }
 export interface UpdatePlayerResponse {
   player: PlayerDTO;
 }
 export interface DeletePlayersResponse {
-  players: PlayerDTO[];
-}
-
-//
-export interface PlayerState {
-  player?: PlayerDTO;
   playersList: PlayerDTO[];
-  isLoading: boolean;
-  isSaving: boolean;
 }

@@ -11,7 +11,7 @@ import { DEFAULT_HEADERS } from '../../@common/utils/fetch.utils';
 
 export const fetchPlayers = async ({ tId, addEmpty }: FetchPlayersRequest): Promise<FetchPlayersResponse> => {
   try {
-    const response = await fetch(tId ? `/api/v1/player/list/${tId}` : '/api/v1/player/list', {
+    const response = await fetch(tId ? `/api/v2/player/list/${tId}` : '/api/v2/player/list', {
       method: 'GET',
       ...DEFAULT_HEADERS,
     });
@@ -24,7 +24,7 @@ export const fetchPlayers = async ({ tId, addEmpty }: FetchPlayersRequest): Prom
 
 export const deletePlayers = async ({ players }: DeletePlayersRequest): Promise<DeletePlayersResponse> => {
   try {
-    const response = await fetch('/api/v1/player', {
+    const response = await fetch('/api/v2/player', {
       method: 'DELETE',
       ...DEFAULT_HEADERS,
       body: JSON.stringify(players),
@@ -38,7 +38,7 @@ export const deletePlayers = async ({ players }: DeletePlayersRequest): Promise<
 
 export const savePlayer = async ({ player }: UpdatePlayerRequest): Promise<UpdatePlayerResponse> => {
   try {
-    const response = await fetch('/api/v1/player', {
+    const response = await fetch('/api/v2/player', {
       method: 'POST',
       ...DEFAULT_HEADERS,
       body: JSON.stringify(player),

@@ -3,7 +3,7 @@
   "info": {
     "title": "Calcetto API",
     "description": "<strong><i>API definitions for Calcetto API server</i></strong>",
-    "version": "1.0.0"
+    "version": "1.0.0-oas3"
   },
   "servers": [
     {
@@ -30,20 +30,34 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BasicResponse"
+                }
+              }
+            }
           },
           "500": {
-            "$ref": "#/components/responses/ServerError"
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BasicResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/auth/logout": {
       "get": {
-        "summary": "Logout.",
         "tags": [
           "Authentication"
         ],
+        "summary": "Logout.",
         "responses": {
           "200": {
             "description": "Success",
@@ -60,10 +74,10 @@
     },
     "/auth/update": {
       "put": {
-        "summary": "Update existing user and related player if exists.\n",
         "tags": [
           "Authentication"
         ],
+        "summary": "Update existing user and related player if exists.\n",
         "requestBody": {
           "content": {
             "application/json": {
@@ -85,20 +99,34 @@
             }
           },
           "400": {
-            "$ref": "#/components/responses/BadRequest"
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BasicResponse"
+                }
+              }
+            }
           },
           "500": {
-            "$ref": "#/components/responses/ServerError"
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BasicResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/auth/login": {
       "post": {
-        "summary": "Authenticate user",
         "tags": [
           "Authentication"
         ],
+        "summary": "Authenticate user",
         "requestBody": {
           "content": {
             "application/json": {
@@ -132,20 +160,34 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BasicResponse"
+                }
+              }
+            }
           },
           "500": {
-            "$ref": "#/components/responses/ServerError"
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BasicResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/auth/register": {
       "post": {
-        "summary": "Register new user",
         "tags": [
           "Authentication"
         ],
+        "summary": "Register new user",
         "requestBody": {
           "content": {
             "application/json": {
@@ -236,17 +278,24 @@
             }
           },
           "500": {
-            "$ref": "#/components/responses/ServerError"
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BasicResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/auth/delete": {
       "delete": {
-        "summary": "Delete user",
         "tags": [
           "Authentication"
         ],
+        "summary": "Delete user",
         "responses": {
           "200": {
             "description": "Success",
@@ -269,10 +318,24 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BasicResponse"
+                }
+              }
+            }
           },
           "500": {
-            "$ref": "#/components/responses/ServerError"
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BasicResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -281,11 +344,11 @@
   "components": {
     "schemas": {
       "BasicResponse": {
-        "type": "object",
         "required": [
           "code",
           "message"
         ],
+        "type": "object",
         "properties": {
           "code": {
             "type": "string",
@@ -300,11 +363,11 @@
         }
       },
       "UserMessage": {
-        "type": "object",
         "required": [
-          "type",
-          "message"
+          "message",
+          "type"
         ],
+        "type": "object",
         "properties": {
           "type": {
             "type": "string",
@@ -335,18 +398,18 @@
         ]
       },
       "UserDTO": {
-        "type": "object",
         "required": [
-          "id",
-          "username",
-          "name",
-          "surname",
+          "birthday",
           "email",
+          "id",
+          "label",
+          "name",
           "phone",
           "role",
-          "birthday",
-          "label"
+          "surname",
+          "username"
         ],
+        "type": "object",
         "properties": {
           "id": {
             "type": "integer"
@@ -389,19 +452,19 @@
         ]
       },
       "PlayerDTO": {
-        "type": "object",
         "required": [
-          "id",
-          "name",
-          "surname",
           "alias",
-          "label",
-          "role",
-          "email",
-          "phone",
           "editable",
-          "rowNumber"
+          "email",
+          "id",
+          "label",
+          "name",
+          "phone",
+          "role",
+          "rowNumber",
+          "surname"
         ],
+        "type": "object",
         "properties": {
           "id": {
             "type": "integer"
@@ -498,10 +561,12 @@
         "in": "query",
         "description": "Number of items to skip before returning the results.",
         "required": false,
+        "style": "form",
+        "explode": true,
         "schema": {
+          "minimum": 0,
           "type": "integer",
           "format": "int32",
-          "minimum": 0,
           "default": 0
         }
       }
