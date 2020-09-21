@@ -17,6 +17,7 @@ export interface UserMessage {
 }
 
 export type OmitHistory<T> = Omit<T, 'history'>;
+export type OmitGeneric<T> = Omit<T, 'code' | 'message' | 'userMessage'>;
 
 export const UnexpectedServerError: GenericReponse = {
   code: HTTPStatusCode.InternalServerError,

@@ -86,7 +86,7 @@ describe('<Login /> tests ', () => {
         fetchMock.once(JSON.stringify(loginResponse));
 
         expect(fetch).toHaveBeenCalledTimes(1);
-        expect(fetch).toHaveBeenCalledWith('/api/v1/auth/login', {
+        expect(fetch).toHaveBeenCalledWith('/api/v2/auth/login', {
           method: 'POST',
           body: JSON.stringify({ username: user.username, password: user.password }),
           headers: { 'Content-Type': 'application/json' },

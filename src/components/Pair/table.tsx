@@ -278,7 +278,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
     // allora aggiorno lo stato del torneo
     if (isAdmin && tournament.progress < TournamentProgress.Stage1) {
       tournament.progress = TournamentProgress.Stage1;
-      dispatch(TournamentAction.update.request({ model: tournament }));
+      dispatch(TournamentAction.update.request({ tournament }));
     }
     // Go to Stage1
     dispatch(PairAction.fetch.request({ tId: tournament.id! }));
@@ -310,7 +310,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
       if (isAdmin) {
         dispatch(
           TournamentAction.update.request({
-            model: { ...tournament, progress: TournamentProgress.PairsSelection },
+            tournament: { ...tournament, progress: TournamentProgress.PairsSelection },
           })
         );
       }

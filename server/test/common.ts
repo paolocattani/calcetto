@@ -33,10 +33,10 @@ export const USER_2 = {
 export const registerTestUser = async (
   registrationRequest: OmitHistory<LoginRequest>
 ): Promise<AuthenticationResponse> =>
-  await postWrapper('http://localhost:5001/api/v1/auth/register', registrationRequest);
+  await postWrapper('http://localhost:5001/api/v2/auth/register', registrationRequest);
 
 export const loginTestUser = async (loginRequest: OmitHistory<LoginRequest>): Promise<AuthenticationResponse> =>
-  await postWrapper('http://localhost:5001/api/v1/auth/login', loginRequest);
+  await postWrapper('http://localhost:5001/api/v2/auth/login', loginRequest);
 
 export const deleteTestUser = async (deleteRequest: OmitHistory<DeleteUserRequest>): Promise<AuthenticationResponse> =>
-  await deleteWrapper('http://localhost:5001/api/v1/auth/delete', deleteRequest);
+  await deleteWrapper('http://localhost:5001/api/v2/auth/delete', deleteRequest);

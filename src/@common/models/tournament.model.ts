@@ -16,16 +16,12 @@ export interface FetchTournamentsRequest {
 }
 
 export interface SaveTournamentRequest {
-  model: TournamentDTO;
+  tournament: TournamentDTO;
   history: H.History<unknown>;
 }
 
 export interface UpdateTournamentRequest {
-  model: TournamentDTO;
-}
-
-export interface IsValidTournamentRequest {
-  model: TournamentDTO;
+  tournament: TournamentDTO;
 }
 
 // Responses

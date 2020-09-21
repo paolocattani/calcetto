@@ -29,10 +29,10 @@ const NewTournament: React.FC<newTProps> = (_) => {
       return;
     }
 
-    let model = getEmptyTournament(name);
-    model.date = date;
-    model.public = visible;
-    dispatch(TournamentAction.save.request({ model, history: currentHistory }));
+    let tournament = getEmptyTournament(name);
+    tournament.date = date;
+    tournament.public = visible;
+    dispatch(TournamentAction.save.request({ tournament, history: currentHistory }));
   };
 
   return (

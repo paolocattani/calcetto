@@ -1,25 +1,34 @@
 //-----------------------------
 // Fetch utils
 
-import { GenericReponse, UnexpectedServerError } from '../models/common.models';
+import { GenericReponse, OmitHistory, UnexpectedServerError } from '../models/common.models';
 import { toast } from 'react-toastify';
 
 //
 export const DEFAULT_HEADERS = { headers: { 'Content-Type': 'application/json' } };
 
-export const getWrapper = async <T extends GenericReponse>(url: string, version?: string): Promise<T> =>
+export const getWrapper = async <B, T extends GenericReponse>(url: string, version?: string): Promise<T> =>
   await fetchWrapper(url, 'GET', undefined, version);
-export const deleteWrapper = async <T extends GenericReponse>(url: string, body?: any, version?: string): Promise<T> =>
-  await fetchWrapper(url, 'DELETE', body, version);
-export const putWrapper = async <T extends GenericReponse>(url: string, body?: any, version?: string): Promise<T> =>
-  await fetchWrapper(url, 'PUT', body, version);
-export const postWrapper = async <T extends GenericReponse>(url: string, body?: any, version?: string): Promise<T> =>
-  await fetchWrapper(url, 'POST', body, version);
+export const deleteWrapper = async <B, T extends GenericReponse>(
+  url: string,
+  body?: OmitHistory<B>,
+  version?: string
+): Promise<T> => await fetchWrapper(url, 'DELETE', body, version);
+export const putWrapper = async <B, T extends GenericReponse>(
+  url: string,
+  body?: OmitHistory<B>,
+  version?: string
+): Promise<T> => await fetchWrapper(url, 'PUT', body, version);
+export const postWrapper = async <B, T extends GenericReponse>(
+  url: string,
+  body?: OmitHistory<B>,
+  version?: string
+): Promise<T> => await fetchWrapper(url, 'POST', body, version);
 
-export const fetchWrapper = async <T extends GenericReponse>(
+export const fetchWrapper = async <B, T extends GenericReponse>(
   url: string,
   method: string,
-  body?: any,
+  body?: OmitHistory<B>,
   version?: string
 ): Promise<T> => {
   let response = null;

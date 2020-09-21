@@ -5,8 +5,17 @@ info:
   version: 1.0.0
 # Server
 servers:
-  - url: 'http://localhost:5001/api/v2/'
+  - url: "http://localhost:5001/api/v2/"
     description: Development server.
+
+# Tags
+tags:
+  - name: Authentication
+    description: Manage user, Login, Logout or Check authentication status
+  - name: Tournament
+    description: Operations available to regular developers
+  - name: Players
+    description: Operations available to regular developers
 
 # Path
 paths:
@@ -19,16 +28,16 @@ paths:
         - Authentication
       summary: Check if user is already logged.
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthenticationReponse'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/ServerError'
+                $ref: "#/components/schemas/AuthenticationReponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/ServerError"
 
   /auth/logout:
     get:
@@ -36,13 +45,12 @@ paths:
       tags:
         - Authentication
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthenticationReponse'
-
+                $ref: "#/components/schemas/AuthenticationReponse"
 
   /auth/update:
     put:
@@ -54,18 +62,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserDTO'
+              $ref: "#/components/schemas/UserDTO"
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthenticationReponse'
-        '400':
-            $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/ServerError'
+                $ref: "#/components/schemas/AuthenticationReponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
 
   /auth/login:
     post:
@@ -86,16 +96,18 @@ paths:
                 username: User
                 password: UserPasswordInPlainText
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthenticationReponse'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/ServerError'
+                $ref: "#/components/schemas/AuthenticationReponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
 
   /auth/register:
     post:
@@ -127,40 +139,40 @@ paths:
                 birthday:
                   type: string
                 playerRole:
-                  $ref: '#/components/schemas/PlayerRole'
+                  $ref: "#/components/schemas/PlayerRole"
               example:
-                username: 'username'
-                name: 'name'
-                surname: 'surname'
-                email: 'test@email.com'
-                cEmail: 'test@email.com'
-                password: 'verylongpassword'
-                cPassword: 'verylongpassword'
-                phone: '3331234598'
-                birthday: ''
-                playerRole: 'GoalKeeper'
+                username: "username"
+                name: "name"
+                surname: "surname"
+                email: "test@email.com"
+                cEmail: "test@email.com"
+                password: "verylongpassword"
+                cPassword: "verylongpassword"
+                phone: "3331234598"
+                birthday: ""
+                playerRole: "GoalKeeper"
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthenticationReponse'
-        '400':
+                $ref: "#/components/schemas/AuthenticationReponse"
+        "400":
           description: Found errors
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/BasicResponse'
+                  - $ref: "#/components/schemas/BasicResponse"
                   - type: object
                     properties:
                       errors:
                         type: array
                         items:
                           type: string
-        '500':
-          $ref: '#/components/responses/ServerError'
+        "500":
+          $ref: "#/components/responses/ServerError"
 
   /auth/delete:
     delete:
@@ -168,29 +180,28 @@ paths:
       tags:
         - Authentication
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthenticationReponse'
-        '400':
-          description: |
-            User not found for provided data or invalid credentials
+                $ref: "#/components/schemas/AuthenticationReponse"
+        "400":
+          description: Invalid credentials
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BasicResponse'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/ServerError'
+                $ref: "#/components/schemas/BasicResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
 
   #-----------------------------------------------------------------------------
   # Player
   #
-
-
 
 #-----------------------------------------------------------------------------
 # Components
@@ -212,7 +223,7 @@ components:
         message:
           type: string
         userMessage:
-          $ref: '#/components/schemas/UserMessage'
+          $ref: "#/components/schemas/UserMessage"
     UserMessage:
       type: object
       required:
@@ -229,11 +240,11 @@ components:
           type: string
     AuthenticationReponse:
       allOf:
-        - $ref: '#/components/schemas/BasicResponse'
+        - $ref: "#/components/schemas/BasicResponse"
         - type: object
           properties:
             user:
-              $ref: '#/components/schemas/UserDTO'
+              $ref: "#/components/schemas/UserDTO"
     UserDTO:
       type: object
       required:
@@ -260,14 +271,14 @@ components:
         phone:
           type: string
         role:
-          $ref: '#/components/schemas/UserRole'
+          $ref: "#/components/schemas/UserRole"
         birthday:
           type: string
           description: It's a javascript Date object
         label:
           type: string
         player:
-          $ref: '#/components/schemas/PlayerDTO'
+          $ref: "#/components/schemas/PlayerDTO"
     UserRole:
       type: string
       enum:
@@ -298,7 +309,7 @@ components:
         label:
           type: string
         role:
-          $ref: '#/components/schemas/PlayerRole'
+          $ref: "#/components/schemas/PlayerRole"
         email:
           type: string
         phone:
@@ -328,6 +339,42 @@ components:
         - Portiere
         - Master
         - Attaccante
+    TournamentDTO:
+      type: object
+      required:
+        - id
+        - name
+        - date
+        - progress
+        - public
+        - autoOrder
+        - label
+        - ownerId
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        date:
+          type: string
+        progress:
+          $ref: "#/components/schemas/TournamentProgress"
+        public:
+          type: boolean
+        autoOrder:
+          type: boolean
+        label:
+          type: string
+        ownerId:
+          type: integer
+
+    TournamentProgress:
+      type: string
+      enum:
+        - new
+        - pairsSelection
+        - stage1
+        - stage2
 
   #---------------------------------------------------------------------------
   # Responses : $ref: '#/components/responses/{name}'
@@ -338,19 +385,25 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/BasicResponse'
+            $ref: "#/components/schemas/BasicResponse"
+    NotFound:
+      description: Entity not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/BasicResponse"
     Unauthorized:
       description: Unauthorized
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/BasicResponse'
+            $ref: "#/components/schemas/BasicResponse"
     ServerError:
       description: Unexpected server error
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/BasicResponse'
+            $ref: "#/components/schemas/BasicResponse"
 
   #---------------------------------------------------------------------------
   # Parameters : $ref: '#/components/parameters/{name}'

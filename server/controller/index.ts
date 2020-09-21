@@ -19,13 +19,13 @@ export interface AppRequest extends Request {
 }
 export default (application: ExpressApplication): void => {
   // Endpoints
-  application.use('/api/v1/tournament', tournamentRouter);
+  application.use('/api/v2/tournament', tournamentRouter);
   application.use('/api/v1/player', playerRouter);
   application.use('/api/v2/player', playerRouterV2);
   application.use('/api/v1/stage1', stage1Router);
   application.use('/api/v1/stage2', stage2Router);
   application.use('/api/v1/pair', pairRouter);
-  application.use('/api/v1/auth', authRouter);
+  application.use('/api/v2/auth', authRouter);
 
   // SSE
   application.get('/sse/v1/session', sessionControl);

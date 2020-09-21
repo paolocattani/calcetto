@@ -22,7 +22,7 @@ import {
 // Models
 import User from '../entity/user.model';
 // Common Responses
-import { unexpectedServerError, missingParameters, success, failure } from './common.response';
+import { unexpectedServerError, missingParameters, success, failure, entityNotFound } from './common.response';
 // @Commmon
 import {
   DeleteUserRequest,
@@ -121,7 +121,7 @@ router.put(
       logger.info('/update : ', model);
       const user = await findUserByEmailAndUsername(model.email, model.username);
       if (!user) {
-        return failure(res, 'Utente non trovato', 'User not found');
+        return entityNotFound(res);
       }
       await user.update(model);
       // TODO: aggiornare anche il giocare associato con i dati comuni
@@ -143,10 +143,9 @@ router.post(
         return missingParameters(res);
       }
       const user = await findUserByEmailOrUsername(username);
-
       // utente non trovato
       if (!user) {
-        return wrongCredentials(res);
+        return entityNotFound(res);
       }
       const isValid = await comparePasswords(user.email, password, user.password);
       if (!isValid) {
@@ -173,7 +172,9 @@ router.delete(
     try {
       logger.info('/delete start ');
       const user = await findUserByEmailAndUsername(email, username);
-      if (!user) return res.status(HTTPStatusCode.BadRequest).json(wrongCredentials);
+      if (!user) {
+        return entityNotFound(res);
+      }
 
       if (!(await comparePasswords(email, password, user.password)))
         return res.status(HTTPStatusCode.BadRequest).json(wrongCredentials);
