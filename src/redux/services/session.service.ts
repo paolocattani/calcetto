@@ -10,7 +10,7 @@ import {
 import { eventChannel, buffers, END } from 'redux-saga';
 import { HTTPStatusCode } from '@common/models/HttpStatusCode';
 import { OmitHistory, UnexpectedServerError, UserMessageType } from '@common/models/common.models';
-import { putWrapper, deleteWrapper, postWrapper, getWrapper, handleGenericError } from '@common/utils';
+import { putWrapper, deleteWrapper, postWrapper, getWrapper } from '@common/utils';
 
 export enum SessionStatus {
   // Sessione scaduta, reindirizza l'utente alla login
@@ -60,12 +60,10 @@ export const CheckAuthentication = async (): Promise<AuthenticationResponse> => 
         userMessage: { type: UserMessageType.Success, message: '' },
       };
     }
-    const result = {
+    return {
       user: undefined,
       ...UnexpectedServerError,
     };
-    handleGenericError(error, result);
-    return result;
   }
 };
 

@@ -1,6 +1,6 @@
 //-----------------------------
 // Fetch utils
-
+//
 import { GenericReponse, OmitHistory, UnexpectedServerError } from '../models/common.models';
 import { toast } from 'react-toastify';
 
@@ -40,9 +40,13 @@ export const fetchWrapper = async <B, T extends GenericReponse>(
     });
     return await response.json();
   } catch (error) {
+    console.group('An error occur : ');
+    console.error('Error', error);
+    console.error('Details : ', response);
+    console.groupEnd();
     // If performing fetch from FE, show errror.
     if (!url.startsWith('http')) {
-      handleGenericError(error, response);
+      toast.error('Whoooops...Something went wrong...');
     }
     /*  FIXME:
       Type 'GenericReponse' is not assignable to type 'T'.
@@ -50,12 +54,4 @@ export const fetchWrapper = async <B, T extends GenericReponse>(
     */
     return UnexpectedServerError as any;
   }
-};
-
-export const handleGenericError = (error: any, response: any): void => {
-  console.group('An error occur : ');
-  console.error('Error', error);
-  console.error('Details : ', response);
-  console.groupEnd();
-  toast.error('Whoooops...Something went wrong...');
 };

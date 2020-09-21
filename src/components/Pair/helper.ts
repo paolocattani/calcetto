@@ -1,6 +1,7 @@
 import { getEmptyPlayer } from 'redux/services/player.service';
 import { Styles } from 'react-select';
 import { PairDTO } from '@common/dto';
+import { FetchPlayersResponse } from '@common/models';
 
 export const getEmptyRowModel = (label?: string): PairDTO => ({
   id: null,
@@ -66,8 +67,8 @@ export const fetchData = async (tId: number) => {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
   });
-  const result = await response.json();
-  const players = [...result, getEmptyPlayer('Nessun Giocatore')];
+  const result: FetchPlayersResponse = await response.json();
+  const players = [...result.playersList, getEmptyPlayer('Nessun Giocatore')];
 
   console.log('rows : ', rows);
   return { rows, players };

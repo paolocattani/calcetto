@@ -35,14 +35,14 @@ export const PlayerReducer = createReducer<PlayerState, Action>(initialPlayerSta
     isLoading: false,
     isSaving: false,
   }))
-  .handleAction([PlayerAction.deletePlayers.success], (state, { payload: { players } }) => ({
-    playersList: state.playersList.filter((row) => !players.find((selectedRow) => selectedRow.id === row.id)),
+  .handleAction([PlayerAction.deletePlayers.success], (state, { payload: { playersList } }) => ({
+    playersList: state.playersList.filter((row) => !playersList.find((selectedRow) => selectedRow.id === row.id)),
     isLoading: false,
     isSaving: false,
   }))
   // Fetch Tournament
-  .handleAction(PlayerAction.fetchPlayers.success, (state, { payload: { results } }) => ({
-    playersList: results.map((e, i) => ({ ...e, rowNumber: i + 1 })),
+  .handleAction(PlayerAction.fetchPlayers.success, (state, { payload: { playersList } }) => ({
+    playersList: playersList.map((e, i) => ({ ...e, rowNumber: i + 1 })),
     isLoading: false,
     isSaving: false,
   }))

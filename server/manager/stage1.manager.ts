@@ -5,7 +5,7 @@ import { Stage1Row, UserDTO } from '../../src/@common/dto';
 import { logProcess, logger } from '../core/logger';
 import { asyncForEach } from '../core/utils';
 //
-import { dbConnection } from '../express/AppServer';
+import { connection } from '../server';
 import { isAdmin } from '../manager/auth.manager';
 //
 import { Op } from 'sequelize';
@@ -71,7 +71,7 @@ export const updateCell = async (
 export const generateStage1Rows = async (rows: Stage1Row[], stageName: string, user: UserDTO) => {
   logProcess(className + 'generateStage1Rows', 'start');
   try {
-    const transaction = await dbConnection.transaction();
+    const transaction = await connection.transaction();
     await asyncForEach<Stage1Row>(rows, async (currentRow, index, rowsRef) => {
       rowsRef[index]['total'] = 0;
       for (let currentRowKey in currentRow) {

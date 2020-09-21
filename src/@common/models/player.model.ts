@@ -1,4 +1,5 @@
 import { PlayerDTO } from '@common/dto';
+import { GenericReponse } from './common.models';
 //
 export interface PlayerState {
   player?: PlayerDTO;
@@ -19,12 +20,12 @@ export interface DeletePlayersRequest {
   players: PlayerDTO[];
 }
 // Responses
-export interface FetchPlayersResponse {
+export interface FetchPlayersResponse extends GenericReponse {
   playersList: PlayerDTO[];
 }
-export interface UpdatePlayerResponse {
+export interface UpdatePlayerResponse extends GenericReponse {
   player: PlayerDTO;
 }
-export interface DeletePlayersResponse {
+export interface DeletePlayersResponse extends GenericReponse {
   playersList: PlayerDTO[];
 }

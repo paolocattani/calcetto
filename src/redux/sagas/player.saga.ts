@@ -10,9 +10,8 @@ function* getPlayersSaga(
   try {
     console.log('getPlayersSaga');
 
-    const { results }: FetchPlayersResponse = yield call(fetchPlayers, action.payload);
-    console.log('getPlayersSaga: ', results);
-    yield put(PlayerAction.fetchPlayers.success({ results }));
+    const result: FetchPlayersResponse = yield call(fetchPlayers, action.payload);
+    yield put(PlayerAction.fetchPlayers.success(result));
   } catch (err) {
     yield put(PlayerAction.fetchPlayers.failure(err));
   }

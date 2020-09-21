@@ -1,6 +1,8 @@
-import { AppServer } from '../models/server/AppServer';
+import { AppServer } from '../express/AppServer';
 
 export default async function () {
-  //const server = new AppServer('Test Server', 5001, 1);
-  //(global as any).__SERVER__ = server;
+  const server = new AppServer('Test Server');
+  const httpServer = server.start();
+
+  (global as any).__SERVER__ = httpServer;
 }
