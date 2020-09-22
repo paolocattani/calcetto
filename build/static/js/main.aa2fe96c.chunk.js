@@ -593,7 +593,7 @@
                           (e.prev = 1),
                           (e.next = 4),
                           fetch(
-                            '/api/v1/tournament',
+                            '/api/v2/tournament',
                             Object(j.a)(Object(j.a)({ method: 'POST' }, G.a), {}, { body: JSON.stringify(r) })
                           )
                         );
@@ -634,7 +634,7 @@
                           (e.prev = 1),
                           (e.next = 4),
                           fetch(
-                            '/api/v1/tournament',
+                            '/api/v2/tournament',
                             Object(j.a)(Object(j.a)({ method: 'PUT' }, G.a), {}, { body: JSON.stringify(r) })
                           )
                         );

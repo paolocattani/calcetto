@@ -1,4 +1,3 @@
-import { logger } from './core/logger';
 import { AppServer } from './express/AppServer';
 
 const applicationServer = new AppServer();

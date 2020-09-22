@@ -18,10 +18,10 @@ import {
   UpdateTournamentResponse,
 } from '../../src/@common/models/tournament.model';
 
-// all API path must be relative to /api/v1/tournament
+// all API path must be relative to /api/v2/tournament
 const router = Router();
 router.use('/', (req: Request, res: Response, next: NextFunction) =>
-  logController(req, next, 'Tournament Controller', '/api/v1/tournament')
+  logController(req, next, 'Tournament Controller', '/api/v2/tournament')
 );
 
 // GET
@@ -70,7 +70,7 @@ router.put(
       const additional: OmitGeneric<UpdateTournamentResponse> = { tournament };
       return success(res, 'Torneo salvato', 'Save complete', additional);
     } catch (err) {
-      return serverError('PUT tournament/{tId} error ! : ', err, res);
+      return serverError('PUT tournament/update error ! : ', err, res);
     }
   })
 );
@@ -81,7 +81,7 @@ router.post(
   withAuth,
   withAdminRights,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
-    const model = parseBody(req.body as OmitHistory<SaveTournamentRequest>);
+    const model = parseBody(req.body.tournament as OmitHistory<SaveTournamentRequest>);
     const user = req.user!;
     try {
       let t: Tournament | TournamentDTO | null = await findByNameAndDate(model.name, model.date, user);
@@ -95,7 +95,7 @@ router.post(
       const additional: OmitGeneric<SaveTournamentResponse> = { tournament: t };
       return success(res, 'Torneo salvato', 'Save complete', additional);
     } catch (err) {
-      return serverError('POST tournament/{tId} error ! : ', err, res);
+      return serverError('POST tournament/new error ! : ', err, res);
     }
   })
 );

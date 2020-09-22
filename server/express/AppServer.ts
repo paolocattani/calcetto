@@ -4,7 +4,6 @@ import { AbstractServer } from './AbstractServer';
 import { Application as ExpressApplication } from 'express';
 // Db
 import { sync, authenticate } from '../entity/connection';
-import { SyncOptions } from 'sequelize/types';
 import { Sequelize } from 'sequelize-typescript';
 import generator from '../generator/generator';
 // Routes
