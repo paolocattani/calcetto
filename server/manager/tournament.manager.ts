@@ -1,6 +1,6 @@
 import { logProcess } from '../core/logger';
 import { TournamentDTO, TournamentProgress, UserDTO, UserRole } from '../../src/@common/dto';
-import Tournament from '../entity/tournament.model';
+import Tournament from '../database/tournament.model';
 import { Op, WhereOptions } from 'sequelize';
 import { getWhereFromMap, lowerWrapper, dateInRageWrapper } from '../core/utils';
 

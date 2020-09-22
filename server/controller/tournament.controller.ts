@@ -5,7 +5,7 @@ import { asyncMiddleware, withAuth, withAdminRights, logController } from '../co
 // Managers
 import { listAll, findById, findByNameAndDate, parseBody, update } from '../manager/tournament.manager';
 // Models
-import Tournament from '../entity/tournament.model';
+import Tournament from '../database/tournament.model';
 import { TournamentDTO } from '../../src/@common/dto';
 import { AppRequest } from './index';
 import { entityNotFound, failure, missingParameters, serverError, success } from './common.response';

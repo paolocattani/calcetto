@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import { logger } from '../core/logger';
 import { connection } from '../server';
 // Models
-import { Pair } from '../entity';
+import { Pair } from '../database';
 import { PairDTO } from '../../src/@common/dto';
 import { asyncMiddleware, withAuth, logController } from '../core/middleware';
 import { AppRequest } from './index';

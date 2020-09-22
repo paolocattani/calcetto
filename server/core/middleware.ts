@@ -4,13 +4,13 @@ import jwt from 'jsonwebtoken';
 import { getSecret, isAdmin } from '../manager/auth.manager';
 import { AppRequest } from '../controller';
 // Models
-// import User from '../entity/user.model';
+// import User from '../database/user.model';
 import { UserDTO } from '../../src/@common/dto';
 // Core
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 import { unauthorized } from '../controller/common.response';
-import { User } from '../entity';
+import { User } from '../database';
 
 // dev logger
 export const routeLogger = (req: Request, res: Response, next: NextFunction) => {

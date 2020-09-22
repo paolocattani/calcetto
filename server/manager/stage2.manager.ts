@@ -2,7 +2,7 @@ import { logProcess, logger } from '../core/logger';
 // Db
 import { connection } from '../server';
 // Models
-import { Stage2, Pair } from '../entity';
+import { Stage2, Pair } from '../database';
 import { IStage2FE, ICell, PairDTO, UserDTO } from '../../src/@common/dto';
 
 import { isAdmin } from './auth.manager';

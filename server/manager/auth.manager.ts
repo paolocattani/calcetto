@@ -1,7 +1,7 @@
 // Session
 import { Response } from 'express';
 // Models/Types
-import { Player, User } from '../entity';
+import { Player, User } from '../database';
 import { UserDTO, UserRole, PlayerRole, PlayerDTO } from '../../src/@common/dto';
 // Logger utils
 import { logProcess, logger } from '../core/logger';
