@@ -25,7 +25,7 @@ const Wrapper: React.FC = (): JSX.Element => {
   // Session
   const session = useSelector(SessionSelector.getSession);
   // Torneo
-  const tournament = useSelector(TournamentSelector.getTournament, (prev, curr) => prev?.progress !== curr?.progress)!;
+  const tournament = useSelector(TournamentSelector.getTournament)!;
   // Sono presenti aggiornamenti
   const needRefresh = useSelector(Stage1Selector.getNeedRefresh);
   // Squadre selezionate

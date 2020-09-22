@@ -19,7 +19,7 @@ const TournamentBadge: React.FC<TournamentBadgeProps> = () => {
             <span>
               <i>
                 {` - ${formatDate(tournament.date)} `}
-                <small> @ {t(`tournament:progress.${tournament!.progress}`)}</small>
+                <small> @ {t(`tournament:progress.${tournament.progress}`)}</small>
               </i>
             </span>
           </Badge>

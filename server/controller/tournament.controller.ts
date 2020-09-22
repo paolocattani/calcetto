@@ -66,7 +66,8 @@ router.put(
   withAuth,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     try {
-      const tournament = await update(req.user!, parseBody(req.body as UpdateTournamentRequest));
+      const request: UpdateTournamentRequest = req.body;
+      const tournament = await update(req.user!, parseBody(request.tournament));
       const additional: OmitGeneric<UpdateTournamentResponse> = { tournament };
       return success(res, 'Torneo salvato', 'Save complete', additional);
     } catch (err) {
@@ -81,7 +82,8 @@ router.post(
   withAuth,
   withAdminRights,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
-    const model = parseBody(req.body.tournament as OmitHistory<SaveTournamentRequest>);
+    const request: OmitHistory<SaveTournamentRequest> = req.body;
+    const model = parseBody(request.tournament);
     const user = req.user!;
     try {
       let t: Tournament | TournamentDTO | null = await findByNameAndDate(model.name, model.date, user);

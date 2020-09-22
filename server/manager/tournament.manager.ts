@@ -1,4 +1,4 @@
-import { logProcess } from '../core/logger';
+import { logger, logProcess } from '../core/logger';
 import { TournamentDTO, TournamentProgress, UserDTO, UserRole } from '../../src/@common/dto';
 import Tournament from '../database/tournament.model';
 import { Op, WhereOptions } from 'sequelize';
