@@ -21,7 +21,7 @@ describe('<Tournament />.render', () => {
       expect(screen.getByLabelText(/select/i)).not.toBeNull();
       // expect(screen.getByLabelText(/select/i).getAttribute('value')).toEqual('hFarm2 - 2020/09/05 @ progress.new');
       expect(screen.getByRole('button', { name: 'continue' })).not.toBeNull();
-      expect(screen.getByRole('button', { name: 'new' })).not.toBeNull();
+      expect(screen.queryByRole('button', { name: 'new' })).not.toBeNull();
     });
   });
 
