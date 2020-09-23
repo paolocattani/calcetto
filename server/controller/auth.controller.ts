@@ -48,7 +48,7 @@ router.get(
   withAuth,
   asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
     const additional: OmitGeneric<AuthenticationResponse> = { user: req.user };
-    return success(res, `Bentornato ${req.user!.name}`, 'User is already authenticated', additional);
+    return success(res, `Bentornato ${req.user!.name}`, additional);
   })
 );
 
@@ -66,7 +66,7 @@ router.get(
           }
         : { httpOnly: true }),
     });
-    return success(res, 'A presto...', 'Logout complete.');
+    return success(res, 'A presto...');
   })
 );
 
@@ -107,7 +107,7 @@ router.post(
         addUserCookies(record, res);
         logger.info('/register end ');
         const additional: OmitGeneric<AuthenticationResponse> = { user: record };
-        return success(res, `Benvenuto ${record.name}`, 'Registration complete.', additional);
+        return success(res, `Benvenuto ${record.name}`, additional);
       } else {
         throw new Error('Server Error.!');
       }
@@ -134,7 +134,7 @@ router.put(
       await user.update(model);
       // TODO: aggiornare anche il giocare associato con i dati comuni
       const additional: OmitGeneric<AuthenticationResponse> = { user: convertEntityToDTO(user) };
-      return success(res, 'Aggiornamento effettuato', 'Update complete.', additional);
+      return success(res, 'Aggiornamento effettuato', additional);
     } catch (error) {
       return serverError('PUT auth/update error ! : ', error, res);
     }
@@ -164,7 +164,7 @@ router.post(
       addUserCookies(userDTO, res);
       logger.info('/login end ');
       const additional: OmitGeneric<AuthenticationResponse> = { user: userDTO };
-      return success(res, `Benvenuto ${userDTO.name}`, 'Login complete.', additional);
+      return success(res, `Benvenuto ${userDTO.name}`, additional);
     } catch (error) {
       return serverError('POST auth/login error ! : ', error, res);
     }
@@ -191,7 +191,7 @@ router.delete(
       logger.info('/delete end ');
       // FIXME: fix cookie erase
       res.cookie('token', { expires: new Date(Date.now()), httpOnly: true });
-      return success(res, `Utente "${user.name}" eliminato `, 'User deleted');
+      return success(res, `Utente "${user.name}" eliminato `);
     } catch (error) {
       return serverError('DELETE auth/delete error ! : ', error, res);
     }

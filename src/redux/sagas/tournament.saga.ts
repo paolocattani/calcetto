@@ -4,22 +4,24 @@ import {
   SaveTournamentResponse,
   FetchTournamentsResponse,
   UpdateTournamentResponse,
+  FetchTournamentsRequest,
+  UpdateTournamentRequest,
 } from '@common/models/tournament.model';
 import { TournamentAction } from 'redux/actions/tournament.action';
 import { HTTPStatusCode } from '@common/models/HttpStatusCode';
 import { toast } from 'react-toastify';
 import { UnexpectedServerError } from '../../@common/models/common.models';
+import { entityLifeCycle } from './utils';
 
 // https://medium.com/swlh/asynchronous-with-redux-sagas-b43c9630f218
-function* getTournamentsSaga(
-  action: ReturnType<typeof TournamentAction.fetch.request>
-): Generator<StrictEffect, void, any> {
-  try {
-    const response: FetchTournamentsResponse = yield call(fetchTournaments, action.payload);
-    yield put(TournamentAction.fetch.success(response));
-  } catch (err) {
-    yield put(TournamentAction.fetch.failure(err));
-  }
+function* getTournamentsSaga({
+  payload,
+}: ReturnType<typeof TournamentAction.fetch.request>): Generator<StrictEffect, void, any> {
+  yield entityLifeCycle<FetchTournamentsRequest, FetchTournamentsResponse>(
+    TournamentAction.fetch,
+    fetchTournaments,
+    payload
+  );
 }
 
 function* saveTournamentSaga(
@@ -43,18 +45,11 @@ function* saveTournamentSaga(
 function* updateTournamentSaga({
   payload,
 }: ReturnType<typeof TournamentAction.update.request>): Generator<StrictEffect, void, any> {
-  try {
-    const response: UpdateTournamentResponse = yield call(updateTournament, payload);
-    if (response.code === HTTPStatusCode.OK) {
-      yield put(TournamentAction.update.success(response));
-      toast.success(response.userMessage.message);
-    } else {
-      toast.error(response.userMessage.message);
-      yield put(TournamentAction.update.failure(response));
-    }
-  } catch (err) {
-    yield put(TournamentAction.update.failure(UnexpectedServerError));
-  }
+  yield entityLifeCycle<UpdateTournamentRequest, UpdateTournamentResponse>(
+    TournamentAction.update,
+    updateTournament,
+    payload
+  );
 }
 
 export const TournamentsSagas = [

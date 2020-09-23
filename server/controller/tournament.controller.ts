@@ -32,7 +32,7 @@ router.get(
     try {
       const tournamentsList = await listAll(req.user!);
       const additional: OmitGeneric<FetchTournamentsResponse> = { tournamentsList };
-      return success(res, 'Tornei caricati...', 'Fetch complete.', additional);
+      return success(res, 'Tornei caricati...', additional);
     } catch (err) {
       return serverError('GET tournament/list error : ', err, res);
     }
@@ -53,7 +53,7 @@ router.get(
       }
       const tournament = await findById(req.user!, parseInt(req.params.tId));
       const additional: OmitGeneric<FetchTournamentsResponse> = { tournamentsList: [tournament] };
-      return success(res, 'Tornei caricati...', 'Fetch complete.', additional);
+      return success(res, 'Torneo caricato...', additional);
     } catch (err) {
       return serverError('GET tournament/{tId} error ! : ', err, res);
     }
@@ -69,7 +69,7 @@ router.put(
       const request: UpdateTournamentRequest = req.body;
       const tournament = await update(req.user!, parseBody(request.tournament));
       const additional: OmitGeneric<UpdateTournamentResponse> = { tournament };
-      return success(res, 'Torneo salvato', 'Save complete', additional);
+      return success(res, 'Torneo salvato...', additional);
     } catch (err) {
       return serverError('PUT tournament/update error ! : ', err, res);
     }
@@ -89,13 +89,13 @@ router.post(
       let t: Tournament | TournamentDTO | null = await findByNameAndDate(model.name, model.date, user);
       if (t) {
         logger.info(`Tournament ${model.name} already exists....`);
-        return failure(res, 'Torneo gia presente', `Tournament ${model.name} already exists`);
+        return failure(res, 'Torneo gia presente.!', `Tournament ${model.name} already exists`);
       }
       model.ownerId = user.id;
       t = await Tournament.create(model);
       logger.info(`Created Tournament => ${t}`);
       const additional: OmitGeneric<SaveTournamentResponse> = { tournament: t };
-      return success(res, 'Torneo salvato', 'Save complete', additional);
+      return success(res, 'Torneo salvato...', additional);
     } catch (err) {
       return serverError('POST tournament/new error ! : ', err, res);
     }
