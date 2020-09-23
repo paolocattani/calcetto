@@ -7,6 +7,7 @@ import {
   UpdatePlayerResponse,
   DeletePlayersResponse,
   DeletePlayersRequest,
+  PlayerError,
 } from '@common/models/player.model';
 
 const actionName = '[Player]';
@@ -15,17 +16,22 @@ export const PlayerAction = {
   fetchPlayers: createAsyncAction(...defaultAsyncParams(actionName, 'Fetch Palyers'))<
     FetchPlayersRequest,
     FetchPlayersResponse,
-    Error
+    PlayerError
   >(),
   savePlayer: createAsyncAction(...defaultAsyncParams(actionName, 'Save Player'))<
     UpdatePlayerRequest,
     UpdatePlayerResponse,
-    Error
+    PlayerError
+  >(),
+  updatePlayer: createAsyncAction(...defaultAsyncParams(actionName, 'Save Player'))<
+    UpdatePlayerRequest,
+    UpdatePlayerResponse,
+    PlayerError
   >(),
   deletePlayers: createAsyncAction(...defaultAsyncParams(actionName, 'Delete Player'))<
     DeletePlayersRequest,
     DeletePlayersResponse,
-    Error
+    PlayerError
   >(),
   purge: createAction(PURGE_STORE_ACTION)<PurgeResponse>(),
 };

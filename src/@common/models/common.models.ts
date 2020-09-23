@@ -17,7 +17,10 @@ export interface UserMessage {
 }
 
 export type OmitHistory<T> = Omit<T, 'history'>;
-export type OmitGeneric<T> = Omit<T, 'code' | 'message' | 'userMessage'>;
+// FIXME:
+export type OmitGeneric<T /*extends GenericReponse*/> = Omit<T, 'code' | 'message' | 'userMessage'>;
+// FIXME: UNUSED
+export type PickGeneric<T extends GenericReponse> = Pick<T, 'code' | 'message' | 'userMessage'>;
 
 export const UnexpectedServerError: GenericReponse = {
   code: HTTPStatusCode.InternalServerError,

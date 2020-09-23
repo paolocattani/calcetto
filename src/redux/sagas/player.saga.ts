@@ -1,49 +1,60 @@
-import { put, call, StrictEffect, takeEvery } from 'redux-saga/effects';
+import { DeletePlayersResponse, FetchPlayersResponse, UpdatePlayerResponse } from '@common/models';
+import { StrictEffect, takeEvery } from 'redux-saga/effects';
 import { PlayerAction } from 'redux/actions/player.action';
-import { FetchPlayersResponse, DeletePlayersResponse, UpdatePlayerResponse } from '@common/models/player.model';
-import { fetchPlayers, deletePlayers, savePlayer } from 'redux/services/player.service';
-import { toast } from 'react-toastify';
+import { fetchPlayers, deletePlayers, savePlayer, updatePlayer } from 'redux/services/player.service';
+import { entityLifeCicle } from './utils';
 
-function* getPlayersSaga(
-  action: ReturnType<typeof PlayerAction.fetchPlayers.request>
-): Generator<StrictEffect, void, any> {
-  try {
-    console.log('getPlayersSaga');
-
-    const result: FetchPlayersResponse = yield call(fetchPlayers, action.payload);
-    yield put(PlayerAction.fetchPlayers.success(result));
-  } catch (err) {
-    yield put(PlayerAction.fetchPlayers.failure(err));
-  }
+function* getPlayersSaga({
+  payload,
+}: ReturnType<typeof PlayerAction.fetchPlayers.request>): Generator<StrictEffect, void, any> {
+  yield entityLifeCicle<FetchPlayersResponse>(
+    PlayerAction.fetchPlayers,
+    fetchPlayers,
+    payload,
+    'Giocatori caricati...',
+    'Errore in fase di caricamento...'
+  );
 }
 
-function* deletePlayersSaga(
-  action: ReturnType<typeof PlayerAction.deletePlayers.request>
-): Generator<StrictEffect, void, any> {
-  try {
-    const response: DeletePlayersResponse = yield call(deletePlayers, action.payload);
-    yield put(PlayerAction.deletePlayers.success(response));
-    toast.success('Giocatore eliminato...');
-  } catch (err) {
-    yield put(PlayerAction.deletePlayers.failure(err));
-    toast.error('Errore...');
-  }
+function* deletePlayersSaga({
+  payload,
+}: ReturnType<typeof PlayerAction.deletePlayers.request>): Generator<StrictEffect, void, any> {
+  yield entityLifeCicle<DeletePlayersResponse>(
+    PlayerAction.deletePlayers,
+    deletePlayers,
+    payload,
+    payload.players.length > 1 ? 'Giocatori creati...' : 'Giocatore creato...',
+    'Errore in fase di eliminazione...'
+  );
 }
 
-function* savePlayerSaga(
-  action: ReturnType<typeof PlayerAction.savePlayer.request>
-): Generator<StrictEffect, void, any> {
-  try {
-    const response: UpdatePlayerResponse = yield call(savePlayer, action.payload);
-    yield put(PlayerAction.savePlayer.success(response));
-    toast.success(action.payload.player.id === null ? 'Giocatore creato...' : 'Giocatore aggiornato...');
-  } catch (err) {
-    yield put(PlayerAction.savePlayer.failure(err));
-  }
+function* savePlayerSaga({
+  payload,
+}: ReturnType<typeof PlayerAction.savePlayer.request>): Generator<StrictEffect, void, any> {
+  yield entityLifeCicle<UpdatePlayerResponse>(
+    PlayerAction.updatePlayer,
+    savePlayer,
+    payload,
+    'Giocatore creato...',
+    'Errore in fase di salvataggio...'
+  );
+}
+
+function* updatePlayerSaga({
+  payload,
+}: ReturnType<typeof PlayerAction.updatePlayer.request>): Generator<StrictEffect, void, any> {
+  yield entityLifeCicle<UpdatePlayerResponse>(
+    PlayerAction.updatePlayer,
+    updatePlayer,
+    payload,
+    'Giocatore aggiornato...',
+    'Errore in fase di salvataggio...'
+  );
 }
 
 export const PlayersSagas = [
   takeEvery(PlayerAction.fetchPlayers.request, getPlayersSaga),
   takeEvery(PlayerAction.deletePlayers.request, deletePlayersSaga),
   takeEvery(PlayerAction.savePlayer.request, savePlayerSaga),
+  takeEvery(PlayerAction.updatePlayer.request, updatePlayerSaga),
 ];

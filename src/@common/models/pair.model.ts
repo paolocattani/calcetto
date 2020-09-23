@@ -1,4 +1,5 @@
 import { PairDTO } from '@common/dto';
+import { GenericReponse } from './common.models';
 
 export interface PairState {
   // Pairs selected for stage1
@@ -11,7 +12,7 @@ export interface PairState {
 export interface FetchPairsRequest {
   tId?: number;
 }
-export interface FetchPairsResponse {
+export interface FetchPairsResponse extends GenericReponse {
   results: PairDTO[];
 }
 

@@ -7,9 +7,8 @@ import {
   UpdatePlayerResponse,
   UpdatePlayerRequest,
 } from '@common/models';
-import { UserMessageType } from '@common/models/common.models';
-import { HTTPStatusCode } from '@common/models/HttpStatusCode';
-import { DEFAULT_HEADERS, deleteWrapper, postWrapper } from '../../@common/utils/fetch.utils';
+import { UnexpectedServerError } from '@common/models/common.models';
+import { DEFAULT_HEADERS, deleteWrapper, postWrapper, putWrapper } from '../../@common/utils/fetch.utils';
 
 export const fetchPlayers = async ({ tId, addEmpty }: FetchPlayersRequest): Promise<FetchPlayersResponse> => {
   try {
@@ -23,20 +22,18 @@ export const fetchPlayers = async ({ tId, addEmpty }: FetchPlayersRequest): Prom
       playersList: addEmpty ? [...result.playersList, getEmptyPlayer('Nessun Giocatore')] : result.playersList,
     };
   } catch (e) {
-    return {
-      code: HTTPStatusCode.InternalServerError,
-      message: '',
-      userMessage: { type: UserMessageType.Danger, message: 'Errore server non previsto' },
-      playersList: [],
-    };
+    return { ...UnexpectedServerError, playersList: [] };
   }
 };
 
 export const deletePlayers = async ({ players }: DeletePlayersRequest): Promise<DeletePlayersResponse> =>
-  deleteWrapper<DeletePlayersRequest, DeletePlayersResponse>('/api/v2/player', { players });
+  deleteWrapper<DeletePlayersRequest, DeletePlayersResponse>('/api/v2/player/delete', { players });
 
 export const savePlayer = async ({ player }: UpdatePlayerRequest): Promise<UpdatePlayerResponse> =>
-  postWrapper<UpdatePlayerRequest, UpdatePlayerResponse>('/api/v2/player', { player });
+  postWrapper<UpdatePlayerRequest, UpdatePlayerResponse>('/api/v2/player/new', { player });
+
+export const updatePlayer = async ({ player }: UpdatePlayerRequest): Promise<UpdatePlayerResponse> =>
+  putWrapper<UpdatePlayerRequest, UpdatePlayerResponse>('/api/v2/player/update', { player });
 
 export const getEmptyPlayer = (label?: string): PlayerDTO => ({
   id: null,

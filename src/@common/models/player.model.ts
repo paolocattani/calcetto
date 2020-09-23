@@ -29,3 +29,5 @@ export interface UpdatePlayerResponse extends GenericReponse {
 export interface DeletePlayersResponse extends GenericReponse {
   playersList: PlayerDTO[];
 }
+
+export interface PlayerError extends GenericReponse {}

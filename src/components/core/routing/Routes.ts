@@ -3,6 +3,7 @@ import { MaleIcon, FileMedicalIcon } from '../icons';
 
 const lazySwagger = lazy(() => import('../../Swagger/Swagger'));
 const lazyPlayer = lazy(() => import('../../Player/table'));
+const lazyPlayerEdit = lazy(() => import('../../Player/edit'));
 const lazyTournament = lazy(() => import('../../Tournament/select'));
 const lazyPairs = lazy(() => import('../../Pair/table'));
 const lazyStage1 = lazy(() => import('../../Stage1/wrapper'));
@@ -17,7 +18,7 @@ export interface routeType {
   path: string;
   label: string;
   exact: boolean;
-  componentToRender: React.ComponentType;
+  componentToRender: React.LazyExoticComponent<React.ComponentType<any>>;
   icon?: React.ComponentType;
   visible: boolean;
   index: number;
@@ -71,6 +72,15 @@ export const routes: routeType[] = [
     visible: true,
     private: true,
     index: 40,
+  },
+  {
+    path: '/player/edit',
+    label: 'route.player',
+    exact: true,
+    componentToRender: lazyPlayerEdit,
+    visible: false,
+    private: true,
+    index: 41,
   },
   {
     path: '/user',

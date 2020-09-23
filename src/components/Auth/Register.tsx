@@ -140,7 +140,6 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
             controlId="username"
             label={t('auth:username')}
             required={true}
-            type="text"
             placeholder={t('auth:username')}
             {...bindUsername}
           />
@@ -150,7 +149,6 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
             controlId="name"
             label={t('auth:name')}
             required={true}
-            type="text"
             placeholder={t('auth:name')}
             {...bindName}
           />
@@ -160,7 +158,6 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
             controlId="surname"
             label={t('auth:surname')}
             required={true}
-            type="text"
             placeholder={t('auth:surname')}
             {...bindSurname}
           />
@@ -221,13 +218,7 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
       </Form.Row>
       <Form.Row>
         <Col md={3}>
-          <InputField
-            controlId="phone"
-            label={t('auth:mobile')}
-            type="text"
-            placeholder={t('auth:mobile')}
-            {...bindPhone}
-          />
+          <InputField controlId="phone" label={t('auth:mobile')} placeholder={t('auth:mobile')} {...bindPhone} />
         </Col>
         <Col md={3}>
           <Form.Group controlId="birthday">
