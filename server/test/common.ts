@@ -1,6 +1,12 @@
-import { AuthenticationResponse, DeleteUserRequest, LoginRequest } from '../../src/@common/models/session.model';
+import {
+  AuthenticationResponse,
+  DeleteUserRequest,
+  LoginRequest,
+  RegistrationRequest,
+} from '../../src/@common/models/session.model';
 import { OmitHistory } from '../../src/@common/models/common.models';
 import { deleteWrapper, postWrapper } from '../../src/@common/utils/fetch.utils';
+import { PlayerRole } from '../../src/@common/dto/player.dto';
 
 export const USER_1 = {
   // https://www.fakenamegenerator.com/gen-male-us-it.php
@@ -13,7 +19,7 @@ export const USER_1 = {
   cPassword: 'dummyPassword1',
   phone: '0362 3981901',
   birthday: new Date(1939, 0, 16),
-  playerRole: 'Master',
+  playerRole: PlayerRole.Master,
 };
 
 export const USER_2 = {
@@ -27,16 +33,22 @@ export const USER_2 = {
   cPassword: 'dummyPassword12',
   phone: '0362 398190022',
   birthday: new Date(1939, 0, 16),
-  playerRole: 'GoalKeeper',
+  playerRole: PlayerRole.GoalKeeper,
 };
 
 export const registerTestUser = async (
-  registrationRequest: OmitHistory<LoginRequest>
+  registrationRequest: OmitHistory<RegistrationRequest>
 ): Promise<AuthenticationResponse> =>
-  await postWrapper('http://localhost:5001/api/v1/auth/register', registrationRequest);
+  await postWrapper<RegistrationRequest, AuthenticationResponse>(
+    'http://localhost:5001/api/v2/auth/register',
+    registrationRequest
+  );
 
 export const loginTestUser = async (loginRequest: OmitHistory<LoginRequest>): Promise<AuthenticationResponse> =>
-  await postWrapper('http://localhost:5001/api/v1/auth/login', loginRequest);
+  await postWrapper<LoginRequest, AuthenticationResponse>('http://localhost:5001/api/v2/auth/login', loginRequest);
 
 export const deleteTestUser = async (deleteRequest: OmitHistory<DeleteUserRequest>): Promise<AuthenticationResponse> =>
-  await deleteWrapper('http://localhost:5001/api/v1/auth/delete', deleteRequest);
+  await deleteWrapper<DeleteUserRequest, AuthenticationResponse>(
+    'http://localhost:5001/api/v2/auth/delete',
+    deleteRequest
+  );

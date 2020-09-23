@@ -1,9 +1,9 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import chalk from 'chalk';
 import { logger } from '../core/logger';
-import { dbConnection } from '../express/AppServer';
+import { connection } from '../server';
 // Models
-import { Pair } from '../entity';
+import { Pair } from '../database';
 import { PairDTO } from '../../src/@common/dto';
 import { asyncMiddleware, withAuth, logController } from '../core/middleware';
 import { AppRequest } from './index';
@@ -46,7 +46,7 @@ router.put(
     if (rows.length === 0) {
       return missingParameters(res);
     }
-    const transaction = await dbConnection.transaction();
+    const transaction = await connection.transaction();
     try {
       // Reset selection
       await Pair.update({ stage2Selected: false }, { where: { tournamentId: rows[0].tId, stage1Name }, transaction });

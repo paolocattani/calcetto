@@ -1,14 +1,16 @@
 import { Response } from 'express';
 import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
-import { UserMessageType } from '../../src/@common/models/common.models';
+import { GenericReponse, OmitGeneric, UserMessageType } from '../../src/@common/models/common.models';
+import { logger } from '../core/logger';
+import chalk from 'chalk';
 
-export const ComposeReponse = (
+export const ComposeReponse = <T extends GenericReponse>(
   res: Response,
   status: HTTPStatusCode,
   internalMessage: string,
   messageType: UserMessageType,
   message: string,
-  additionalInfo?: Object
+  additionalInfo?: OmitGeneric<T>
 ) =>
   res.status(status).json({
     ...additionalInfo,
@@ -17,7 +19,13 @@ export const ComposeReponse = (
     userMessage: { type: messageType, message },
   });
 
-export const unauthorized = (res: Response, message: string, internalMessage?: string, additionalInfo?: Object) =>
+// Unauthorized
+export const unauthorized = <T extends GenericReponse>(
+  res: Response,
+  message: string,
+  internalMessage?: string,
+  additionalInfo?: OmitGeneric<T>
+) =>
   ComposeReponse(
     res,
     HTTPStatusCode.Unauthorized,
@@ -27,12 +35,13 @@ export const unauthorized = (res: Response, message: string, internalMessage?: s
     additionalInfo
   );
 
-export const failure = (
+// Generic error
+export const failure = <T extends GenericReponse>(
   res: Response,
   message: string,
   internalMessage?: string,
   status?: HTTPStatusCode,
-  additionalInfo?: Object
+  additionalInfo?: OmitGeneric<T>
 ) =>
   ComposeReponse(
     res,
@@ -43,7 +52,13 @@ export const failure = (
     additionalInfo
   );
 
-export const success = (res: Response, message: string, internalMessage?: string, additionalInfo?: Object) =>
+// Success
+export const success = <T extends GenericReponse>(
+  res: Response,
+  message: string,
+  internalMessage?: string,
+  additionalInfo?: OmitGeneric<T>
+) =>
   ComposeReponse(
     res,
     HTTPStatusCode.OK,
@@ -53,7 +68,12 @@ export const success = (res: Response, message: string, internalMessage?: string
     additionalInfo
   );
 
-export const missingParameters = (res: Response, additionalInfo?: Object) =>
+// Entity Not Found
+export const entityNotFound = (res: Response) =>
+  failure(res, 'Oggetto non trovato', 'Entity not found', HTTPStatusCode.NotFound);
+
+// Missing parameters / data
+export const missingParameters = <T extends GenericReponse>(res: Response, additionalInfo?: OmitGeneric<T>) =>
   ComposeReponse(
     res,
     HTTPStatusCode.BadRequest,
@@ -64,7 +84,8 @@ export const missingParameters = (res: Response, additionalInfo?: Object) =>
     additionalInfo
   );
 
-export const unexpectedServerError = (res: Response, additionalInfo?: Object) =>
+// Server error
+export const unexpectedServerError = <T extends GenericReponse>(res: Response, additionalInfo?: OmitGeneric<T>) =>
   ComposeReponse(
     res,
     HTTPStatusCode.InternalServerError,
@@ -74,3 +95,14 @@ export const unexpectedServerError = (res: Response, additionalInfo?: Object) =>
     "Errore server non previsto. E' stata avviata la procedura di autodistruzione.",
     additionalInfo
   );
+
+// Handle server error
+export const serverError = <T extends GenericReponse>(
+  message: string,
+  err: any,
+  res: Response,
+  additionalInfo?: OmitGeneric<T>
+) => {
+  logger.error(chalk.redBright(message), err);
+  return unexpectedServerError(res, additionalInfo);
+};

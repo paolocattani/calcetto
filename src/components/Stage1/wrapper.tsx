@@ -25,7 +25,7 @@ const Wrapper: React.FC = (): JSX.Element => {
   // Session
   const session = useSelector(SessionSelector.getSession);
   // Torneo
-  const tournament = useSelector(TournamentSelector.getTournament, (prev, curr) => prev?.progress !== curr?.progress)!;
+  const tournament = useSelector(TournamentSelector.getTournament)!;
   // Sono presenti aggiornamenti
   const needRefresh = useSelector(Stage1Selector.getNeedRefresh);
   // Squadre selezionate
@@ -43,7 +43,7 @@ const Wrapper: React.FC = (): JSX.Element => {
     // allora aggiorno lo stato del torneo
     if (session.isAdmin && tournament.progress < TournamentProgress.Stage2) {
       tournament.progress = TournamentProgress.Stage2;
-      dispatch(TournamentAction.update.request({ model: tournament }));
+      dispatch(TournamentAction.update.request({ tournament }));
     }
 
     let count = 8;
@@ -97,7 +97,7 @@ const Wrapper: React.FC = (): JSX.Element => {
               onChange={(e) =>
                 dispatch(
                   TournamentAction.update.request({
-                    model: { ...tournament, autoOrder: e.currentTarget.checked },
+                    tournament: { ...tournament, autoOrder: e.currentTarget.checked },
                   })
                 )
               }

@@ -16,12 +16,13 @@ import config from '../config/config';
 import util from 'util';
 import chalk from 'chalk';
 
-export default async function syncDb(options?: SyncOptions): Promise<Sequelize> {
+let connection: Sequelize;
+async function loadModels(): Promise<Sequelize> {
   const envConfig: any | string | SequelizeOptions | Options = isProductionMode()
     ? config.production
     : config.development;
   const uri: string = process.env[envConfig.use_env_variable]!;
-  if (!isProductionMode()) logger.info(`sequelize.index : uri ${chalk.red.bold(util.inspect(uri))}`);
+  if (!isProductionMode()) logger.info(`URI : ${chalk.red.bold(util.inspect(uri))}`);
   const connectionOptions: SequelizeOptions = {
     logging: envConfig.logging,
     dialect: 'postgres',
@@ -38,12 +39,25 @@ export default async function syncDb(options?: SyncOptions): Promise<Sequelize> 
       filename.substring(0, filename.indexOf('.model')) === member.toLowerCase(),
     pool: { max: 5, min: 0, acquire: 30000, idle: 10000 },
   };
-  const sequelizeconnection = uri
+  return uri
     ? new Sequelize(uri, connectionOptions)
     : new Sequelize(envConfig.database, envConfig.username, envConfig.password, connectionOptions);
-
-  const dbConnection = options ? await sequelizeconnection.sync(options) : await sequelizeconnection.sync();
-  // const dbConnection = options ? await sequelizeconnection.authenticate(options) : await sequelizeconnection.authenticate();
-  logger.info(chalk.cyan.bold('Database synchronization complete!'));
-  return dbConnection;
 }
+
+export async function authenticate(options?: SyncOptions): Promise<Sequelize> {
+  if (connection) return connection;
+  const sequelizeconnection = await loadModels();
+  await sequelizeconnection.authenticate(options);
+  logger.info(chalk.cyan.bold('Database connected!'));
+  return sequelizeconnection;
+}
+
+export async function sync(options?: SyncOptions): Promise<Sequelize> {
+  if (connection) return connection;
+  const sequelizeconnection = await loadModels();
+  connection = await sequelizeconnection.sync(options);
+  logger.info(chalk.cyan.bold('Database synchronization complete!'));
+  return connection;
+}
+
+export const getDbConnection = async () => (connection ? connection : await authenticate());

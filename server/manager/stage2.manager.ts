@@ -1,8 +1,8 @@
 import { logProcess, logger } from '../core/logger';
 // Db
-import { dbConnection } from '../express/AppServer';
+import { getDbConnection } from '../database/connection';
 // Models
-import { Stage2, Pair } from '../entity';
+import { Stage2, Pair } from '../database';
 import { IStage2FE, ICell, PairDTO, UserDTO } from '../../src/@common/dto';
 
 import { isAdmin } from './auth.manager';
@@ -90,7 +90,8 @@ export const generateStage2Rows = async (
   user: UserDTO
 ): Promise<ICell[][]> => {
   logProcess(className + 'generateStage2Rows', 'start');
-  const transaction = await dbConnection.transaction();
+  const connection = await getDbConnection();
+  const transaction = await connection.transaction();
   const structure = generateStructure(rowsNumber);
   const cells: ICell[][] = new Array(structure.length).fill([]);
   try {

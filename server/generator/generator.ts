@@ -1,7 +1,7 @@
-import Player from '../entity/player.model';
-import Pair from '../entity/pair.model';
+import Player from '../database/player.model';
+import Pair from '../database/pair.model';
 import { getRandomIntInclusive } from '../core/utils';
-import Tournament from '../entity/tournament.model';
+import Tournament from '../database/tournament.model';
 import { logger } from '../core/logger';
 import { isProductionMode } from '../core/debug';
 import chalk from 'chalk';

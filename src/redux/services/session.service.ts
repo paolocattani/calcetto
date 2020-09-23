@@ -5,11 +5,12 @@ import {
   RegistrationResponse,
   UpdateUserRequest,
   DeleteUserRequest,
+  LogoutRequest,
 } from '../../@common/models';
 import { eventChannel, buffers, END } from 'redux-saga';
 import { HTTPStatusCode } from '@common/models/HttpStatusCode';
 import { OmitHistory, UnexpectedServerError, UserMessageType } from '@common/models/common.models';
-import { putWrapper, deleteWrapper, postWrapper, getWrapper, handleGenericError } from '@common/utils';
+import { putWrapper, deleteWrapper, postWrapper, getWrapper } from '@common/utils';
 
 export enum SessionStatus {
   // Sessione scaduta, reindirizza l'utente alla login
@@ -25,30 +26,30 @@ export interface Message {
 
 // Update
 export const updateUser = async (updateUserRequest: OmitHistory<UpdateUserRequest>): Promise<AuthenticationResponse> =>
-  await putWrapper<AuthenticationResponse>('/api/v1/auth/update', updateUserRequest);
+  await putWrapper<UpdateUserRequest, AuthenticationResponse>('/api/v2/auth/update', updateUserRequest);
 
 // Delete
 export const deleteUser = async (deleteUserRequest: OmitHistory<DeleteUserRequest>): Promise<AuthenticationResponse> =>
-  await deleteWrapper<AuthenticationResponse>('/api/v1/auth/delete', deleteUserRequest);
+  await deleteWrapper<DeleteUserRequest, AuthenticationResponse>('/api/v2/auth/delete', deleteUserRequest);
 
 // Login
 export const login = async (loginRequest: OmitHistory<LoginRequest>): Promise<AuthenticationResponse> =>
-  await postWrapper<AuthenticationResponse>('/api/v1/auth/login', loginRequest);
+  await postWrapper<LoginRequest, AuthenticationResponse>('/api/v2/auth/login', loginRequest);
 
 // Login
 export const logout = async (): Promise<AuthenticationResponse> =>
-  await getWrapper<AuthenticationResponse>('/api/v1/auth/logout');
+  await getWrapper<LogoutRequest, AuthenticationResponse>('/api/v2/auth/logout');
 
 // Registration
 export const registration = async (
   registrationRequest: OmitHistory<RegistrationRequest>
 ): Promise<RegistrationResponse> =>
-  await postWrapper<AuthenticationResponse>('/api/v1/auth/register', registrationRequest);
+  await postWrapper<RegistrationRequest, AuthenticationResponse>('/api/v2/auth/register', registrationRequest);
 
 export const CheckAuthentication = async (): Promise<AuthenticationResponse> => {
   let response;
   try {
-    response = await fetch('/api/v1/auth/check');
+    response = await fetch('/api/v2/auth/check');
     return await response.json();
   } catch (error) {
     if (response?.status === HTTPStatusCode.Unauthorized) {
@@ -59,12 +60,10 @@ export const CheckAuthentication = async (): Promise<AuthenticationResponse> => 
         userMessage: { type: UserMessageType.Success, message: '' },
       };
     }
-    const result = {
+    return {
       user: undefined,
       ...UnexpectedServerError,
     };
-    handleGenericError(error, result);
-    return result;
   }
 };
 

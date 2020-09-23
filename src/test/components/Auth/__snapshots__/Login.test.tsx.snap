@@ -56,7 +56,7 @@ Object {
             class="text-center font-weight-bold modal-body"
             style="color: whitesmoke; background-color: rgb(52, 58, 64); border-color: #ffc107;"
           >
-            ....Caricamento
+            Caricamento....
           </div>
           <div
             class="modal-footer"

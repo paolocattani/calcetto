@@ -7,48 +7,36 @@ import {
   UpdatePlayerResponse,
   UpdatePlayerRequest,
 } from '@common/models';
-import { DEFAULT_HEADERS } from '../../@common/utils/fetch.utils';
+import { UserMessageType } from '@common/models/common.models';
+import { HTTPStatusCode } from '@common/models/HttpStatusCode';
+import { DEFAULT_HEADERS, deleteWrapper, postWrapper } from '../../@common/utils/fetch.utils';
 
 export const fetchPlayers = async ({ tId, addEmpty }: FetchPlayersRequest): Promise<FetchPlayersResponse> => {
   try {
-    const response = await fetch(tId ? `/api/v1/player/list/${tId}` : '/api/v1/player/list', {
+    const response = await fetch(tId ? `/api/v2/player/list/${tId}` : '/api/v2/player/list', {
       method: 'GET',
       ...DEFAULT_HEADERS,
     });
-    const result = await response.json();
-    return { results: addEmpty ? [...result, getEmptyPlayer('Nessun Giocatore')] : result };
+    const result: FetchPlayersResponse = await response.json();
+    return {
+      ...result,
+      playersList: addEmpty ? [...result.playersList, getEmptyPlayer('Nessun Giocatore')] : result.playersList,
+    };
   } catch (e) {
-    return { results: [] };
+    return {
+      code: HTTPStatusCode.InternalServerError,
+      message: '',
+      userMessage: { type: UserMessageType.Danger, message: 'Errore server non previsto' },
+      playersList: [],
+    };
   }
 };
 
-export const deletePlayers = async ({ players }: DeletePlayersRequest): Promise<DeletePlayersResponse> => {
-  try {
-    const response = await fetch('/api/v1/player', {
-      method: 'DELETE',
-      ...DEFAULT_HEADERS,
-      body: JSON.stringify(players),
-    });
-    await response.json();
-    return { players: response.ok ? players : [] };
-  } catch (e) {
-    return { players: [] };
-  }
-};
+export const deletePlayers = async ({ players }: DeletePlayersRequest): Promise<DeletePlayersResponse> =>
+  deleteWrapper<DeletePlayersRequest, DeletePlayersResponse>('/api/v2/player', { players });
 
-export const savePlayer = async ({ player }: UpdatePlayerRequest): Promise<UpdatePlayerResponse> => {
-  try {
-    const response = await fetch('/api/v1/player', {
-      method: 'POST',
-      ...DEFAULT_HEADERS,
-      body: JSON.stringify(player),
-    });
-    const result = await response.json();
-    return { player: result };
-  } catch (e) {
-    return { player };
-  }
-};
+export const savePlayer = async ({ player }: UpdatePlayerRequest): Promise<UpdatePlayerResponse> =>
+  postWrapper<UpdatePlayerRequest, UpdatePlayerResponse>('/api/v2/player', { player });
 
 export const getEmptyPlayer = (label?: string): PlayerDTO => ({
   id: null,

@@ -11,9 +11,9 @@ function* deleteStage2Saga(action: ReturnType<typeof Stage2Action.delete.request
     const response: DeleteStage2Response = yield call(deleteStage2, action.payload.tId);
     yield put(Stage2Action.delete.success(response));
     const tournament = yield select(TournamentSelector.getTournament);
-    tournament!.progress = TournamentProgress.Stage1;
+    tournament.progress = TournamentProgress.Stage1;
     toast.success('Fase 2 eiminata...');
-    yield put(TournamentAction.update.request({ model: tournament }));
+    yield put(TournamentAction.update.request({ tournament }));
   } catch (err) {
     yield put(Stage2Action.delete.failure(err));
     toast.error('Error while deleting Stage2');

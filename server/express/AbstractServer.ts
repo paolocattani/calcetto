@@ -7,6 +7,7 @@ import '../core/env';
 import { logger } from '../core/logger';
 import { isProductionMode } from '../core/debug';
 import { routeLogger, auditControl } from '../core/middleware';
+import * as http from 'http';
 // Express
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -19,8 +20,8 @@ import cors from 'cors';
 // Other
 import chalk from 'chalk';
 import path from 'path';
-import cluster from 'cluster';
-import { cpus as osCpus } from 'os';
+//import cluster from 'cluster';
+//import { cpus as osCpus } from 'os';
 
 /* Interface */
 export interface IServer {
@@ -41,18 +42,14 @@ export abstract class AbstractServer implements IServer {
   constructor(name: string, port: number, maxCPUs?: number, corsOptions?: cors.CorsOptions) {
     this.serverName = name;
     this.serverPort = port;
-    this.maxCPUs = maxCPUs ? maxCPUs : Number.parseInt('4');
+    this.maxCPUs = maxCPUs ? maxCPUs : Number.parseInt('1');
     this.application = express();
     this.corsOptions = corsOptions ? corsOptions : { origin: 'http://localhost:3000' };
   }
 
-  public start(): void {
+  public start(): http.Server {
+    /*
     if (cluster.isMaster) {
-      /*
-      if (!process.env.AUTH0_DOMAIN || !process.env.AUTH0_AUDIENCE) {
-        throw 'Make sure you have AUTH0_DOMAIN, and AUTH0_AUDIENCE in your .env file';
-      }
-      */
       logger.info(`Starting server ${chalk.yellow(this.serverName)} as Cluster Mode..`);
       logger.info(`${osCpus().length} current available CPUs but using ${this.maxCPUs}`);
       for (let i = 0; i < this.maxCPUs! - 1; i++) cluster.fork();
@@ -66,66 +63,68 @@ export abstract class AbstractServer implements IServer {
         cluster.fork();
       });
     } else {
-      this.application
-        .options('*', cors(this.corsOptions)) // Preflight Request
-        .use(morgan(isProductionMode() ? 'combined' : 'common'))
-        // Escludo compression per 'text/event-stream'
-        .use(
-          //https://github.com/expressjs/compression/issues/61
-          compression({
-            filter: (req, res) => res.getHeader('Content-Type') != 'text/event-stream',
-          })
-        )
-        .use(helmet({ dnsPrefetchControl: { allow: true } }))
-        //this.application.set('trust proxy', 1);
-        .use(json())
-        .use(urlencoded({ extended: false }))
-        .use(cookieParser())
-        .disable('X-Powered-By')
-        .all('*', auditControl)
-        .all('*', routeLogger);
-
-      this.routes(this.application);
-
-      // public folder path
-      const buildPath = path.join(__dirname, '..', '..', '..', 'build');
-      logger.info(`Serving build forlder from ${chalk.green(buildPath)}`);
-      this.application.use(
-        //
-        express.static(buildPath, {
-          maxAge: process.env.STATIC_CONTENTS_CACHE ? process.env.STATIC_CONTENTS_CACHE : '0',
-          lastModified: true,
-          redirect: true,
+    */
+    this.application
+      .options('*', cors(this.corsOptions)) // Preflight Request
+      .use(morgan(isProductionMode() ? 'combined' : 'common'))
+      // Escludo compression per 'text/event-stream'
+      .use(
+        //https://github.com/expressjs/compression/issues/61
+        compression({
+          filter: (req, res) => res.getHeader('Content-Type') != 'text/event-stream',
         })
+      )
+      .use(helmet({ dnsPrefetchControl: { allow: true } }))
+      //this.application.set('trust proxy', 1);
+      .use(json())
+      .use(urlencoded({ extended: false }))
+      .use(cookieParser())
+      .disable('X-Powered-By')
+      .all('*', auditControl)
+      .all('*', routeLogger);
+
+    this.routes(this.application);
+
+    // public folder path
+    const buildPath = path.join(__dirname, '..', '..', '..', 'build');
+    logger.info(`Serving build forlder from ${chalk.green(buildPath)}`);
+    this.application.use(
+      //
+      express.static(buildPath, {
+        maxAge: process.env.STATIC_CONTENTS_CACHE ? process.env.STATIC_CONTENTS_CACHE : '0',
+        lastModified: true,
+        redirect: true,
+      })
+    );
+
+    const httpServer = this.application.listen(this.serverPort, () => {
+      logger.info(
+        `Process ${chalk.blue(process.pid.toString())} for server ${chalk.yellow(
+          this.serverName
+        )} : listening on port ${chalk.green(this.serverPort.toString())}`
       );
+    });
 
-      this.application.listen(this.serverPort, () => {
+    // Server Status
+    setInterval(() => {
+      logger.info(chalk.bold.redBright(`--- Process@${process.pid} status ---------------- `));
+      logger.info(chalk.greenBright('   Uptime        : '), process.uptime());
+      logger.info(chalk.greenBright('   CPU usage'));
+      const cpu = process.cpuUsage();
+      for (let key in cpu) {
+        logger.info(`     ${key}    : ${cpu[key as keyof NodeJS.CpuUsage]} `);
+      }
+      logger.info(chalk.greenBright('   Memory usage'));
+      const memory = process.memoryUsage();
+      for (let key in memory) {
         logger.info(
-          `Node cluster worker ${chalk.blue(process.pid.toString())} for server ${chalk.yellow(
-            this.serverName
-          )} : listening on port ${chalk.green(this.serverPort.toString())}`
+          `     ${key}    : ${Math.round((memory[key as keyof NodeJS.MemoryUsage] / 1024 / 1024) * 100) / 100} MB`
         );
-      });
+      }
+      logger.info(chalk.bold.redBright('--------------------------------------- '));
+    }, 30 * 60 * 1000);
 
-      // Server Status
-      setInterval(() => {
-        logger.info(chalk.bold.redBright(`--- Worker@${process.pid} status ---------------- `));
-        logger.info(chalk.greenBright('   Uptime        : '), process.uptime());
-        logger.info(chalk.greenBright('   CPU usage'));
-        const cpu = process.cpuUsage();
-        for (let key in cpu) {
-          logger.info(`     ${key}    : ${cpu[key as keyof NodeJS.CpuUsage]} `);
-        }
-        logger.info(chalk.greenBright('   Memory usage'));
-        const memory = process.memoryUsage();
-        for (let key in memory) {
-          logger.info(
-            `     ${key}    : ${Math.round((memory[key as keyof NodeJS.MemoryUsage] / 1024 / 1024) * 100) / 100} MB`
-          );
-        }
-        logger.info(chalk.bold.redBright('--------------------------------------- '));
-      }, 30 * 60 * 1000);
-    }
+    return httpServer;
   }
 
   // Implementation have to handle all other API

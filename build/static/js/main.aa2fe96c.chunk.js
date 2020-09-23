@@ -548,8 +548,8 @@
                           (e.next = 3),
                           fetch(
                             (null === t || void 0 === t ? void 0 : t.tId)
-                              ? '/api/v1/tournament/'.concat(t.tId)
-                              : '/api/v1/tournament/list',
+                              ? '/api/v2/tournament/'.concat(t.tId)
+                              : '/api/v2/tournament/list',
                             Object(j.a)({ method: 'GET' }, G.a)
                           )
                         );
@@ -593,7 +593,7 @@
                           (e.prev = 1),
                           (e.next = 4),
                           fetch(
-                            '/api/v1/tournament',
+                            '/api/v2/tournament',
                             Object(j.a)(Object(j.a)({ method: 'POST' }, G.a), {}, { body: JSON.stringify(r) })
                           )
                         );
@@ -634,7 +634,7 @@
                           (e.prev = 1),
                           (e.next = 4),
                           fetch(
-                            '/api/v1/tournament',
+                            '/api/v2/tournament',
                             Object(j.a)(Object(j.a)({ method: 'PUT' }, G.a), {}, { body: JSON.stringify(r) })
                           )
                         );
@@ -940,7 +940,7 @@
                           (e.prev = 0),
                           (e.next = 3),
                           fetch(
-                            '/api/v1/auth/update',
+                            '/api/v2/auth/update',
                             Object(j.a)({ method: 'PUT', body: JSON.stringify(t.user) }, G.a)
                           )
                         );
@@ -979,7 +979,7 @@
                         return (
                           (e.prev = 0),
                           (e.next = 3),
-                          fetch('/api/v1/auth/', Object(j.a)({ method: 'DELETE', body: JSON.stringify(t) }, G.a))
+                          fetch('/api/v2/auth/', Object(j.a)({ method: 'DELETE', body: JSON.stringify(t) }, G.a))
                         );
                       case 3:
                         return (r = e.sent), (e.next = 6), r.json();
@@ -1019,7 +1019,7 @@
                           (e.prev = 1),
                           (e.next = 4),
                           fetch(
-                            '/api/v1/auth/login',
+                            '/api/v2/auth/login',
                             Object(j.a)({ method: 'POST', body: JSON.stringify({ username: r, password: n }) }, G.a)
                           )
                         );
@@ -1055,7 +1055,7 @@
                   for (;;)
                     switch ((e.prev = e.next)) {
                       case 0:
-                        return (e.prev = 0), (e.next = 3), fetch('/api/v1/auth/logout');
+                        return (e.prev = 0), (e.next = 3), fetch('/api/v2/auth/logout');
                       case 3:
                         return (t = e.sent), (e.next = 6), t.json();
                       case 6:
@@ -1093,7 +1093,7 @@
                           (r = Object(pe.a)(t, ['history'])),
                           (e.prev = 1),
                           (e.next = 4),
-                          fetch('/api/v1/auth/register', Object(j.a)({ method: 'POST', body: JSON.stringify(r) }, G.a))
+                          fetch('/api/v2/auth/register', Object(j.a)({ method: 'POST', body: JSON.stringify(r) }, G.a))
                         );
                       case 4:
                         return (n = e.sent), (e.next = 7), n.json();
@@ -1127,7 +1127,7 @@
                   for (;;)
                     switch ((e.prev = e.next)) {
                       case 0:
-                        return (e.prev = 0), (e.next = 3), fetch('/api/v1/auth/');
+                        return (e.prev = 0), (e.next = 3), fetch('/api/v2/auth/');
                       case 3:
                         return (t = e.sent), (e.next = 6), t.json();
                       case 6:
@@ -2780,7 +2780,7 @@
                           (e.prev = 1),
                           (e.next = 4),
                           fetch(
-                            r ? '/api/v1/player/list/'.concat(r) : '/api/v1/player/list',
+                            r ? '/api/v2/player/list/'.concat(r) : '/api/v2/player/list',
                             Object(o.a)({ method: 'GET' }, i.a)
                           )
                         );
@@ -2827,7 +2827,7 @@
                           (e.prev = 1),
                           (e.next = 4),
                           fetch(
-                            '/api/v1/player',
+                            '/api/v2/player',
                             Object(o.a)(Object(o.a)({ method: 'DELETE' }, i.a), {}, { body: JSON.stringify(r) })
                           )
                         );
@@ -2871,7 +2871,7 @@
                           (e.prev = 1),
                           (e.next = 4),
                           fetch(
-                            '/api/v1/player',
+                            '/api/v2/player',
                             Object(o.a)(Object(o.a)({ method: 'POST' }, i.a), {}, { body: JSON.stringify(r) })
                           )
                         );
@@ -3249,7 +3249,7 @@
                       return (
                         (a = e.sent),
                         (e.next = 8),
-                        fetch(t ? '/api/v1/player/list/'.concat(t) : '/api/v1/player/list', {
+                        fetch(t ? '/api/v2/player/list/'.concat(t) : '/api/v2/player/list', {
                           method: 'GET',
                           headers: { 'Content-Type': 'application/json' },
                         })
