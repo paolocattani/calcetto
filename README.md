@@ -28,7 +28,8 @@
     - Icons : [Fontawesome 5](https://github.com/FortAwesome/react-fontawesome)
     - Notifications : [React Toastify](https://github.com/fkhadra/react-toastify#readme)
     - Tables : [React Bootstrap Table](https://github.com/react-bootstrap-table/react-bootstrap-table2#readme)
-  - State Managment : [Redux]()
+  - State Managment :
+    - [Redux](https://github.com/reduxjs/redux)
     - Middleware : [Saga](https://redux-saga.js.org/)
     - Persistance : [Redux Persist](https://github.com/rt2zz/redux-persist#readme)
       - Storage : [Localforage](https://github.com/localForage/localForage)
@@ -36,6 +37,9 @@
       - [React implementation](https://github.com/i18next/react-i18next)
       - [Language Detector](https://github.com/i18next/i18next-browser-languageDetector)
       - [Load Resources](https://github.com/i18next/i18next-http-backend)
+  - Swagger
+    - [Swagger UI](https://github.com/swagger-api/swagger-ui)
+    - [Open API 3](https://swagger.io/specification/)
   - Misc :
     - [Jokes](https://sv443.net/jokeapi/v2/)
   - Test :
@@ -51,11 +55,20 @@
     - [nodemon](http://nodemon.io)
     - [concurrently](https://github.com/kimmobrunfeldt/concurrently#readme)
     - [bcrypt](https://github.com/kelektiv/node.bcrypt.js#readme)
-  - ORM : [Sequelize](https://sequelize.org/)
+  - ORM :
+    - [Sequelize](https://sequelize.org/)
     - [Sequelize typescript](https://github.com/RobinBuschmann/sequelize-typescript#readme)
-  - Db : [Postgres](https://www.postgresql.org/)
-  - Logger : [Log4js](https://log4js-node.github.io/log4js-node/)
-
+  - Db :
+    - [Postgres](https://www.postgresql.org/)
+  - Logger :
+    - [Log4js](https://log4js-node.github.io/log4js-node/)
+  - Dev
+    - [Nodemon](https://github.com/remy/nodemon)
+  - Test :
+    - [Jest](https://jestjs.io/)
+    - [Ts-Jest](https://kulshekhar.github.io/ts-jest)
+    - [Supertest](https://github.com/visionmedia/supertest#readme)
+    - E2E : [Puppeteer](https://github.com/puppeteer/puppeteer)
 
 ## Development
 
