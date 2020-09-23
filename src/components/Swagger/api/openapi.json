@@ -6,8 +6,8 @@
     "version" : "1.0.0"
   },
   "servers" : [ {
-    "url" : "https://virtserver.swaggerhub.com/Paolo_Cattani/calcetto/1.0.0",
-    "description" : "SwaggerHub API Auto Mocking"
+    "description" : "SwaggerHub API Auto Mocking",
+    "url" : "https://virtserver.swaggerhub.com/Paolo_Cattani/calcetto/1.0.0"
   }, {
     "url" : "http://localhost:5001/api/v2/",
     "description" : "Development server."
@@ -39,32 +39,18 @@
             }
           },
           "401" : {
-            "description" : "Unauthorized",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/Unauthorized"
           },
           "500" : {
-            "description" : "Unexpected server error",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/ServerError"
           }
         }
       }
     },
     "/auth/logout" : {
       "get" : {
-        "tags" : [ "Authentication" ],
         "summary" : "Logout.",
+        "tags" : [ "Authentication" ],
         "responses" : {
           "200" : {
             "description" : "Success",
@@ -81,13 +67,18 @@
     },
     "/auth/update" : {
       "put" : {
-        "tags" : [ "Authentication" ],
         "summary" : "Update existing user and related player if exists.\n",
+        "tags" : [ "Authentication" ],
         "requestBody" : {
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body"
+                "type" : "object",
+                "properties" : {
+                  "user" : {
+                    "$ref" : "#/components/schemas/UserDTO"
+                  }
+                }
               }
             }
           }
@@ -104,47 +95,38 @@
             }
           },
           "400" : {
-            "description" : "Bad Request",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/BadRequest"
           },
           "404" : {
-            "description" : "Entity not found",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/NotFound"
           },
           "500" : {
-            "description" : "Unexpected server error",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/ServerError"
           }
         }
       }
     },
     "/auth/login" : {
       "post" : {
-        "tags" : [ "Authentication" ],
         "summary" : "Authenticate user",
+        "tags" : [ "Authentication" ],
         "requestBody" : {
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body_1"
+                "type" : "object",
+                "properties" : {
+                  "username" : {
+                    "type" : "string"
+                  },
+                  "password" : {
+                    "type" : "string"
+                  }
+                },
+                "example" : {
+                  "username" : "User",
+                  "password" : "UserPasswordInPlainText"
+                }
               }
             }
           }
@@ -161,47 +143,70 @@
             }
           },
           "401" : {
-            "description" : "Unauthorized",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/Unauthorized"
           },
           "404" : {
-            "description" : "Entity not found",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/NotFound"
           },
           "500" : {
-            "description" : "Unexpected server error",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/ServerError"
           }
         }
       }
     },
     "/auth/register" : {
       "post" : {
-        "tags" : [ "Authentication" ],
         "summary" : "Register new user",
+        "tags" : [ "Authentication" ],
         "requestBody" : {
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body_2"
+                "type" : "object",
+                "properties" : {
+                  "username" : {
+                    "type" : "string"
+                  },
+                  "name" : {
+                    "type" : "string"
+                  },
+                  "surname" : {
+                    "type" : "string"
+                  },
+                  "email" : {
+                    "type" : "string"
+                  },
+                  "cEmail" : {
+                    "type" : "string"
+                  },
+                  "password" : {
+                    "type" : "string"
+                  },
+                  "cPassword" : {
+                    "type" : "string"
+                  },
+                  "phone" : {
+                    "type" : "string"
+                  },
+                  "birthday" : {
+                    "type" : "string"
+                  },
+                  "playerRole" : {
+                    "$ref" : "#/components/schemas/PlayerRole"
+                  }
+                },
+                "example" : {
+                  "username" : "username",
+                  "name" : "name",
+                  "surname" : "surname",
+                  "email" : "test@email.com",
+                  "cEmail" : "test@email.com",
+                  "password" : "verylongpassword",
+                  "cPassword" : "verylongpassword",
+                  "phone" : "3331234598",
+                  "birthday" : "",
+                  "playerRole" : "GoalKeeper"
+                }
               }
             }
           }
@@ -222,28 +227,33 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_400"
+                  "allOf" : [ {
+                    "$ref" : "#/components/schemas/BasicResponse"
+                  }, {
+                    "type" : "object",
+                    "properties" : {
+                      "errors" : {
+                        "type" : "array",
+                        "items" : {
+                          "type" : "string"
+                        }
+                      }
+                    }
+                  } ]
                 }
               }
             }
           },
           "500" : {
-            "description" : "Unexpected server error",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/ServerError"
           }
         }
       }
     },
     "/auth/delete" : {
       "delete" : {
-        "tags" : [ "Authentication" ],
         "summary" : "Delete user",
+        "tags" : [ "Authentication" ],
         "responses" : {
           "200" : {
             "description" : "Success",
@@ -266,34 +276,13 @@
             }
           },
           "401" : {
-            "description" : "Unauthorized",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/Unauthorized"
           },
           "404" : {
-            "description" : "Entity not found",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/NotFound"
           },
           "500" : {
-            "description" : "Unexpected server error",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/ServerError"
           }
         }
       }
@@ -308,20 +297,25 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200"
+                  "allOf" : [ {
+                    "$ref" : "#/components/schemas/BasicResponse"
+                  }, {
+                    "type" : "object",
+                    "properties" : {
+                      "tournamentsList" : {
+                        "type" : "array",
+                        "items" : {
+                          "$ref" : "#/components/schemas/TournamentDTO"
+                        }
+                      }
+                    }
+                  } ]
                 }
               }
             }
           },
           "500" : {
-            "description" : "Unexpected server error",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/ServerError"
           }
         }
       }
@@ -331,15 +325,13 @@
         "tags" : [ "Tournament" ],
         "summary" : "List all tournament",
         "parameters" : [ {
-          "name" : "tId",
           "in" : "path",
-          "description" : "Numeric ID of the tournament to get",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
+          "name" : "tId",
           "schema" : {
             "type" : "integer"
-          }
+          },
+          "required" : true,
+          "description" : "Numeric ID of the tournament to get"
         } ],
         "responses" : {
           "200" : {
@@ -347,53 +339,49 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200"
+                  "allOf" : [ {
+                    "$ref" : "#/components/schemas/BasicResponse"
+                  }, {
+                    "type" : "object",
+                    "properties" : {
+                      "tournamentsList" : {
+                        "type" : "array",
+                        "items" : {
+                          "$ref" : "#/components/schemas/TournamentDTO"
+                        }
+                      }
+                    }
+                  } ]
                 }
               }
             }
           },
           "400" : {
-            "description" : "Bad Request",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/BadRequest"
           },
           "404" : {
-            "description" : "Entity not found",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/NotFound"
           },
           "500" : {
-            "description" : "Unexpected server error",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/ServerError"
           }
         }
       }
     },
     "/tournament/update" : {
       "put" : {
-        "tags" : [ "Tournament" ],
         "summary" : "Update existing tournament.\n",
+        "tags" : [ "Tournament" ],
         "requestBody" : {
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body_3"
+                "type" : "object",
+                "properties" : {
+                  "tournament" : {
+                    "$ref" : "#/components/schemas/TournamentDTO"
+                  }
+                }
               }
             }
           }
@@ -404,43 +392,43 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200_1"
+                  "allOf" : [ {
+                    "$ref" : "#/components/schemas/BasicResponse"
+                  }, {
+                    "type" : "object",
+                    "properties" : {
+                      "tournament" : {
+                        "$ref" : "#/components/schemas/TournamentDTO"
+                      }
+                    }
+                  } ]
                 }
               }
             }
           },
           "404" : {
-            "description" : "Entity not found",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/NotFound"
           },
           "500" : {
-            "description" : "Unexpected server error",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/ServerError"
           }
         }
       }
     },
     "/tournament/new" : {
       "post" : {
-        "tags" : [ "Tournament" ],
         "summary" : "Create new tournament.\n",
+        "tags" : [ "Tournament" ],
         "requestBody" : {
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body_4"
+                "type" : "object",
+                "properties" : {
+                  "model" : {
+                    "$ref" : "#/components/schemas/TournamentDTO"
+                  }
+                }
               }
             }
           }
@@ -451,20 +439,22 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200_1"
+                  "allOf" : [ {
+                    "$ref" : "#/components/schemas/BasicResponse"
+                  }, {
+                    "type" : "object",
+                    "properties" : {
+                      "tournament" : {
+                        "$ref" : "#/components/schemas/TournamentDTO"
+                      }
+                    }
+                  } ]
                 }
               }
             }
           },
           "500" : {
-            "description" : "Unexpected server error",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/ServerError"
           }
         }
       }
@@ -479,20 +469,25 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200_2"
+                  "allOf" : [ {
+                    "$ref" : "#/components/schemas/BasicResponse"
+                  }, {
+                    "type" : "object",
+                    "properties" : {
+                      "playersList" : {
+                        "type" : "array",
+                        "items" : {
+                          "$ref" : "#/components/schemas/PlayerDTO"
+                        }
+                      }
+                    }
+                  } ]
                 }
               }
             }
           },
           "500" : {
-            "description" : "Unexpected server error",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/ServerError"
           }
         }
       }
@@ -502,15 +497,13 @@
         "tags" : [ "Players" ],
         "summary" : "List all players in a tournament",
         "parameters" : [ {
-          "name" : "tId",
           "in" : "path",
-          "description" : "Numeric ID of the tournament",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
+          "name" : "tId",
           "schema" : {
             "type" : "integer"
-          }
+          },
+          "required" : true,
+          "description" : "Numeric ID of the tournament"
         } ],
         "responses" : {
           "200" : {
@@ -518,33 +511,43 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200_2"
+                  "allOf" : [ {
+                    "$ref" : "#/components/schemas/BasicResponse"
+                  }, {
+                    "type" : "object",
+                    "properties" : {
+                      "playersList" : {
+                        "type" : "array",
+                        "items" : {
+                          "$ref" : "#/components/schemas/PlayerDTO"
+                        }
+                      }
+                    }
+                  } ]
                 }
               }
             }
           },
           "500" : {
-            "description" : "Unexpected server error",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/ServerError"
           }
         }
       }
     },
     "/players/update" : {
       "put" : {
-        "tags" : [ "Players" ],
         "summary" : "Update an existing player.\n",
+        "tags" : [ "Players" ],
         "requestBody" : {
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body_5"
+                "type" : "object",
+                "properties" : {
+                  "player" : {
+                    "$ref" : "#/components/schemas/PlayerDTO"
+                  }
+                }
               }
             }
           }
@@ -555,43 +558,43 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200_3"
+                  "allOf" : [ {
+                    "$ref" : "#/components/schemas/BasicResponse"
+                  }, {
+                    "type" : "object",
+                    "properties" : {
+                      "player" : {
+                        "$ref" : "#/components/schemas/PlayerDTO"
+                      }
+                    }
+                  } ]
                 }
               }
             }
           },
           "404" : {
-            "description" : "Entity not found",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/NotFound"
           },
           "500" : {
-            "description" : "Unexpected server error",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/ServerError"
           }
         }
       }
     },
     "/players/new" : {
       "post" : {
-        "tags" : [ "Players" ],
         "summary" : "Create new tournament.\n",
+        "tags" : [ "Players" ],
         "requestBody" : {
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/body_6"
+                "type" : "object",
+                "properties" : {
+                  "model" : {
+                    "$ref" : "#/components/schemas/PlayerDTO"
+                  }
+                }
               }
             }
           }
@@ -602,38 +605,33 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200_3"
+                  "allOf" : [ {
+                    "$ref" : "#/components/schemas/BasicResponse"
+                  }, {
+                    "type" : "object",
+                    "properties" : {
+                      "player" : {
+                        "$ref" : "#/components/schemas/PlayerDTO"
+                      }
+                    }
+                  } ]
                 }
               }
             }
           },
           "400" : {
-            "description" : "Bad Request",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/BadRequest"
           },
           "500" : {
-            "description" : "Unexpected server error",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/ServerError"
           }
         }
       }
     },
     "/players/delete" : {
       "delete" : {
-        "tags" : [ "Players" ],
         "summary" : "Delete players",
+        "tags" : [ "Players" ],
         "responses" : {
           "200" : {
             "description" : "Success",
@@ -646,14 +644,7 @@
             }
           },
           "500" : {
-            "description" : "Unexpected server error",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BasicResponse"
-                }
-              }
-            }
+            "$ref" : "#/components/responses/ServerError"
           }
         }
       }
@@ -662,8 +653,9 @@
   "components" : {
     "schemas" : {
       "BasicResponse" : {
-        "required" : [ "code", "message" ],
         "type" : "object",
+        "additionalProperties" : false,
+        "required" : [ "code", "message" ],
         "properties" : {
           "code" : {
             "type" : "string",
@@ -675,12 +667,11 @@
           "userMessage" : {
             "$ref" : "#/components/schemas/UserMessage"
           }
-        },
-        "additionalProperties" : false
+        }
       },
       "UserMessage" : {
-        "required" : [ "message", "type" ],
         "type" : "object",
+        "required" : [ "type", "message" ],
         "properties" : {
           "type" : {
             "type" : "string",
@@ -704,8 +695,9 @@
         } ]
       },
       "UserDTO" : {
-        "required" : [ "birthday", "email", "id", "label", "name", "phone", "role", "surname", "username" ],
         "type" : "object",
+        "additionalProperties" : false,
+        "required" : [ "id", "username", "name", "surname", "email", "phone", "role", "birthday", "label" ],
         "properties" : {
           "id" : {
             "type" : "integer"
@@ -738,16 +730,16 @@
           "player" : {
             "$ref" : "#/components/schemas/PlayerDTO"
           }
-        },
-        "additionalProperties" : false
+        }
       },
       "UserRole" : {
         "type" : "string",
         "enum" : [ "Admin", "User" ]
       },
       "PlayerDTO" : {
-        "required" : [ "alias", "editable", "email", "id", "label", "name", "phone", "role", "rowNumber", "surname" ],
         "type" : "object",
+        "additionalProperties" : false,
+        "required" : [ "id", "name", "surname", "alias", "label", "role", "email", "phone", "editable", "rowNumber" ],
         "properties" : {
           "id" : {
             "type" : "integer"
@@ -794,16 +786,16 @@
             "type" : "integer",
             "description" : "Used by FE to show row number on table"
           }
-        },
-        "additionalProperties" : false
+        }
       },
       "PlayerRole" : {
         "type" : "string",
         "enum" : [ "Non sono un giocatore", "Portiere", "Master", "Attaccante" ]
       },
       "TournamentDTO" : {
-        "required" : [ "autoOrder", "date", "id", "label", "name", "ownerId", "progress", "public" ],
         "type" : "object",
+        "additionalProperties" : false,
+        "required" : [ "id", "name", "date", "progress", "public", "autoOrder", "label", "ownerId" ],
         "properties" : {
           "id" : {
             "type" : "integer"
@@ -829,183 +821,11 @@
           "ownerId" : {
             "type" : "integer"
           }
-        },
-        "additionalProperties" : false
+        }
       },
       "TournamentProgress" : {
         "type" : "string",
         "enum" : [ "new", "pairsSelection", "stage1", "stage2" ]
-      },
-      "body" : {
-        "type" : "object",
-        "properties" : {
-          "user" : {
-            "$ref" : "#/components/schemas/UserDTO"
-          }
-        }
-      },
-      "body_1" : {
-        "type" : "object",
-        "properties" : {
-          "username" : {
-            "type" : "string"
-          },
-          "password" : {
-            "type" : "string"
-          }
-        },
-        "example" : {
-          "username" : "User",
-          "password" : "UserPasswordInPlainText"
-        }
-      },
-      "body_2" : {
-        "type" : "object",
-        "properties" : {
-          "username" : {
-            "type" : "string"
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "surname" : {
-            "type" : "string"
-          },
-          "email" : {
-            "type" : "string"
-          },
-          "cEmail" : {
-            "type" : "string"
-          },
-          "password" : {
-            "type" : "string"
-          },
-          "cPassword" : {
-            "type" : "string"
-          },
-          "phone" : {
-            "type" : "string"
-          },
-          "birthday" : {
-            "type" : "string"
-          },
-          "playerRole" : {
-            "$ref" : "#/components/schemas/PlayerRole"
-          }
-        },
-        "example" : {
-          "username" : "username",
-          "name" : "name",
-          "surname" : "surname",
-          "email" : "test@email.com",
-          "cEmail" : "test@email.com",
-          "password" : "verylongpassword",
-          "cPassword" : "verylongpassword",
-          "phone" : "3331234598",
-          "birthday" : "",
-          "playerRole" : "GoalKeeper"
-        }
-      },
-      "inline_response_400" : {
-        "allOf" : [ {
-          "$ref" : "#/components/schemas/BasicResponse"
-        }, {
-          "type" : "object",
-          "properties" : {
-            "errors" : {
-              "type" : "array",
-              "items" : {
-                "type" : "string"
-              }
-            }
-          }
-        } ]
-      },
-      "inline_response_200" : {
-        "allOf" : [ {
-          "$ref" : "#/components/schemas/BasicResponse"
-        }, {
-          "type" : "object",
-          "properties" : {
-            "tournamentsList" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/components/schemas/TournamentDTO"
-              }
-            }
-          }
-        } ]
-      },
-      "body_3" : {
-        "type" : "object",
-        "properties" : {
-          "tournament" : {
-            "$ref" : "#/components/schemas/TournamentDTO"
-          }
-        }
-      },
-      "inline_response_200_1" : {
-        "allOf" : [ {
-          "$ref" : "#/components/schemas/BasicResponse"
-        }, {
-          "type" : "object",
-          "properties" : {
-            "tournament" : {
-              "$ref" : "#/components/schemas/TournamentDTO"
-            }
-          }
-        } ]
-      },
-      "body_4" : {
-        "type" : "object",
-        "properties" : {
-          "model" : {
-            "$ref" : "#/components/schemas/TournamentDTO"
-          }
-        }
-      },
-      "inline_response_200_2" : {
-        "allOf" : [ {
-          "$ref" : "#/components/schemas/BasicResponse"
-        }, {
-          "type" : "object",
-          "properties" : {
-            "playersList" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/components/schemas/PlayerDTO"
-              }
-            }
-          }
-        } ]
-      },
-      "body_5" : {
-        "type" : "object",
-        "properties" : {
-          "player" : {
-            "$ref" : "#/components/schemas/PlayerDTO"
-          }
-        }
-      },
-      "inline_response_200_3" : {
-        "allOf" : [ {
-          "$ref" : "#/components/schemas/BasicResponse"
-        }, {
-          "type" : "object",
-          "properties" : {
-            "player" : {
-              "$ref" : "#/components/schemas/PlayerDTO"
-            }
-          }
-        } ]
-      },
-      "body_6" : {
-        "type" : "object",
-        "properties" : {
-          "model" : {
-            "$ref" : "#/components/schemas/PlayerDTO"
-          }
-        }
       }
     },
     "responses" : {

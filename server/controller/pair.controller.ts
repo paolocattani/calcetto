@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import chalk from 'chalk';
 import { logger } from '../core/logger';
-import { connection } from '../server';
+import { getDbConnection } from '../database/connection';
 // Models
 import { Pair } from '../database';
 import { PairDTO } from '../../src/@common/dto';
@@ -46,6 +46,7 @@ router.put(
     if (rows.length === 0) {
       return missingParameters(res);
     }
+    const connection = await getDbConnection();
     const transaction = await connection.transaction();
     try {
       // Reset selection
