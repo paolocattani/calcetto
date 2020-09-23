@@ -1,2 +1,0 @@
-(this.webpackJsonpcalcetto=this.webpackJsonpcalcetto||[]).push([[24],{1244:function(e,a){e.exports=function(e){var a=e.requireLanguage("c-like").rawDefinition();return a.name="C",a.aliases=["c","h"],a}}}]);
-//# sourceMappingURL=react-syntax-highlighter_languages_highlight_c.1c2aa0b8.chunk.js.map

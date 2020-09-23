@@ -1,2 +1,0 @@
-(this.webpackJsonpcalcetto=this.webpackJsonpcalcetto||[]).push([[53],{1272:function(a,e){a.exports=function(a){var e=a.COMMENT(/\(\*/,/\*\)/);return{name:"Extended Backus-Naur Form",illegal:/\S/,contains:[e,{className:"attribute",begin:/^[ ]*[a-zA-Z][a-zA-Z-_]*([\s-_]+[a-zA-Z][a-zA-Z]*)*/},{begin:/=/,end:/[.;]/,contains:[e,{className:"meta",begin:/\?.*\?/},{className:"string",variants:[a.APOS_STRING_MODE,a.QUOTE_STRING_MODE,{begin:"`",end:"`"}]}]}]}}}}]);
-//# sourceMappingURL=react-syntax-highlighter_languages_highlight_ebnf.e18cf48a.chunk.js.map

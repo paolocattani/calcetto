@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testExecutions version="1">
+    <file path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/test/components/Auth/Login.test.tsx">
+        <testCase name="&lt;Login /&gt;.render should render correctly should match snapshot" duration="228"/>
+        <testCase name="&lt;Login /&gt;.render should contains all elements" duration="478"/>
+        <testCase name="&lt;Login /&gt;.render input elements should have &quot;required&quot; attritbute" duration="84"/>
+        <testCase name="&lt;Login /&gt; tests  when username and password is not provided should have empty fields and button disabled " duration="101"/>
+        <testCase name="&lt;Login /&gt; tests  when username and password is provided should have changed field value" duration="92"/>
+        <testCase name="&lt;Login /&gt; tests  when username and password is provided should type value" duration="257"/>
+        <testCase name="&lt;Login /&gt; tests  when username and password is provided when the submit button is clicked should call onSubmit with the username and password" duration="193"/>
+    </file>
+    <file path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/test/components/Auth/Register.test.tsx">
+        <testCase name="&lt;Register /&gt;.render should render correctly and match snapshot" duration="232"/>
+        <testCase name="&lt;Register /&gt;.render should contains all elements" duration="951"/>
+        <testCase name="&lt;Register /&gt;.render input elements should have &quot;required&quot; attritbute" duration="394"/>
+    </file>
+    <file path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/test/components/Tournament/tournament.test.tsx">
+        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type Admin should render correctly should match snapshot" duration="217"/>
+        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type Admin should contains all elements" duration="1096"/>
+        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type User should render correctly should match snapshot" duration="123"/>
+        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type User should contains all elements" duration="314"/>
+    </file>
+    <file path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/test/components/App/App.test.tsx">
+        <testCase name="&lt;Entry /&gt; should render correctly and match snapshot" duration="259"/>
+    </file>
+</testExecutions>

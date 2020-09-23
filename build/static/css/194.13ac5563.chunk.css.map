@@ -1,1 +1,0 @@
-{"version":3,"sources":["style.css"],"names":[],"mappings":"AAAA,0BACI,oBACJ,CAEA,YACI,aACJ","file":"194.13ac5563.chunk.css","sourcesContent":[".react-datepicker-wrapper {\r\n    width: 100% !important;\r\n}\r\n\r\n.datepicker {\r\n    width: inherit;\r\n}\r\n"]}
