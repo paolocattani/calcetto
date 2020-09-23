@@ -83,9 +83,10 @@ jobs:
       # Install dependecies
       - name: Install dependencies
         run: npm ci
+      # Need more investigation. Maybe I'll have to eject.....
       # Coverage
-      - name: Coverage
-        run: npm run test:coverage
+      #- name: Coverage
+      #  run: npm run test:coverage
       # Generate report
       - name: Lint report
         run: eslint -f json -o ./analysis/report.json .

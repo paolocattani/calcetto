@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
     <file path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/test/components/App/App.test.tsx">
-        <testCase name="&lt;Entry /&gt; should render correctly and match snapshot" duration="205"/>
+        <testCase name="&lt;Entry /&gt; should render correctly and match snapshot" duration="224"/>
     </file>
     <file path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/test/components/Auth/Login.test.tsx">
-        <testCase name="&lt;Login /&gt;.render should render correctly should match snapshot" duration="279"/>
-        <testCase name="&lt;Login /&gt;.render should contains all elements" duration="511"/>
-        <testCase name="&lt;Login /&gt;.render input elements should have &quot;required&quot; attritbute" duration="97"/>
-        <testCase name="&lt;Login /&gt; tests  when username and password is not provided should have empty fields and button disabled " duration="94"/>
-        <testCase name="&lt;Login /&gt; tests  when username and password is provided should have changed field value" duration="83"/>
-        <testCase name="&lt;Login /&gt; tests  when username and password is provided should type value" duration="268"/>
+        <testCase name="&lt;Login /&gt;.render should render correctly should match snapshot" duration="262"/>
+        <testCase name="&lt;Login /&gt;.render should contains all elements" duration="391"/>
+        <testCase name="&lt;Login /&gt;.render input elements should have &quot;required&quot; attritbute" duration="65"/>
+        <testCase name="&lt;Login /&gt; tests  when username and password is not provided should have empty fields and button disabled " duration="58"/>
+        <testCase name="&lt;Login /&gt; tests  when username and password is provided should have changed field value" duration="61"/>
+        <testCase name="&lt;Login /&gt; tests  when username and password is provided should type value" duration="183"/>
     </file>
     <file path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/test/components/Auth/Register.test.tsx">
-        <testCase name="&lt;Register /&gt;.render should render correctly and match snapshot" duration="273"/>
-        <testCase name="&lt;Register /&gt;.render should contains all elements" duration="918"/>
-        <testCase name="&lt;Register /&gt;.render input elements should have &quot;required&quot; attritbute" duration="420"/>
+        <testCase name="&lt;Register /&gt;.render should render correctly and match snapshot" duration="171"/>
+        <testCase name="&lt;Register /&gt;.render should contains all elements" duration="805"/>
+        <testCase name="&lt;Register /&gt;.render input elements should have &quot;required&quot; attritbute" duration="265"/>
     </file>
     <file path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/test/components/Tournament/tournament.test.tsx">
-        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type Admin should render correctly should match snapshot" duration="282"/>
-        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type Admin should contains all elements" duration="1082"/>
-        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type User should render correctly should match snapshot" duration="136"/>
-        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type User should contains all elements" duration="352"/>
+        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type Admin should render correctly should match snapshot" duration="166"/>
+        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type Admin should contains all elements" duration="914"/>
+        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type User should render correctly should match snapshot" duration="96"/>
+        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type User should contains all elements" duration="237"/>
     </file>
 </testExecutions>
