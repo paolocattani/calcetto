@@ -27,10 +27,10 @@ describe('<Register />.render', () => {
       //FIXME:
       // 'Ruolo',
     ].forEach((s) => {
-      expect(screen.findByDisplayValue(s)).not.toBe(null);
+      expect(screen.findByDisplayValue(s)).not.toBeNull();
     });
-    expect(screen.getByRole('button', { name: 'confirm' })).not.toBe(null);
-    expect(screen.getByRole('button', { name: 'reset' })).not.toBe(null);
+    expect(screen.getByRole('button', { name: 'confirm' })).not.toBeNull();
+    expect(screen.getByRole('button', { name: 'reset' })).not.toBeNull();
   });
   it('input elements should have "required" attritbute', async () => {
     await screen.findByRole('button', { name: /confirm/i });

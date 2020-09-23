@@ -3,6 +3,8 @@ import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import PlayerSelect from '../Player/select';
 import { customStyles } from './helper';
 
+import { ToggleButton, ButtonGroup } from 'react-bootstrap';
+
 const ALIGN_CENTER = 'center';
 const YES = 'Si';
 const NO = 'No';
@@ -28,7 +30,14 @@ const checkBoxProps = {
     type: Type.CHECKBOX,
     value: `${YES}:${NO}`,
   },
-  style: (content, row, rowIndex, columnIndex) => (content !== NO ? { backgroundColor: '#ffbf47' } : null),
+  formatter: (cell, row, rowIndex, formatExtraData) => (
+    <ButtonGroup toggle className="mb-2">
+      <ToggleButton variant={!!cell ? 'success' : 'danger'} checked={cell} value="1" type="checkbox">
+        {!!cell ? 'Pagato' : 'Non Pagato'}
+      </ToggleButton>
+    </ButtonGroup>
+  ),
+  //style: (content, row, rowIndex, columnIndex) => (content !== NO ? { backgroundColor: '#ffbf47' } : null),
 };
 
 export const columns = (onSelect, options, labels) => [
@@ -44,7 +53,7 @@ export const columns = (onSelect, options, labels) => [
   },
   {
     dataField: 'player2.alias',
-    text: labels.player1,
+    text: labels.player2,
     align: () => ALIGN_CENTER,
     editorRenderer: (editorProps, value, row, column, rowIndex, columnIndex) =>
       playerSelection(editorProps, value, row, rowIndex, columnIndex, onSelect, options),

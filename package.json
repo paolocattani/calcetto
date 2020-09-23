@@ -1,7 +1,7 @@
 {
   "name": "calcetto",
   "private": false,
-  "version": "2.8.0",
+  "version": "2.9.0",
   "description": "Table Soccer Manager",
   "engines": {
     "node": "12.x",
@@ -119,8 +119,8 @@
     "CRA:build": "react-scripts build",
     "CRA:eject": "react-scripts eject",
     "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
-    "test:coverage": "react-scripts test --coverage --runInBand --watchAll=false",
-    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",
+    "test:coverage": "react-scripts test --coverage --runInBand --watchAll=false -u --env=jest-environment-jsdom-sixteen",
+    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache --env=jest-environment-jsdom-sixteen",
     "lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
     "lint:report": "eslint -f json -o ./analysis/report.json .",
     "analyze": "source-map-explorer build/static/js/*.js --html analysis/build-analysis.html"

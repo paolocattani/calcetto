@@ -15,9 +15,9 @@ describe('<Login />.render', () => {
   });
   it('should contains all elements', async () => {
     await screen.findByRole('button', { name: /confirm/ });
-    expect(screen.getByLabelText(/username/i)).not.toBe(null);
-    expect(screen.getByLabelText(/password/i)).not.toBe(null);
-    expect(screen.getByRole('button', { name: 'confirm' })).not.toBe(null);
+    expect(screen.getByLabelText(/username/i)).not.toBeNull();
+    expect(screen.getByLabelText(/password/i)).not.toBeNull();
+    expect(screen.getByRole('button', { name: 'confirm' })).not.toBeNull();
   });
   it('input elements should have "required" attritbute', async () => {
     await screen.findByRole('button', { name: /confirm/i });

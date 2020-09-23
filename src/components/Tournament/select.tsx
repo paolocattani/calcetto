@@ -76,6 +76,7 @@ const FTournament = () => {
           <label htmlFor="tournamentSelect">{t('tournament:select')}</label>
           <Select
             id="tournamentSelect"
+            aria-label={t('tournament:select')}
             components={{ IndicatorSeparator }}
             styles={customStyles}
             value={tournament}
