@@ -16,6 +16,7 @@ import config from '../config/config';
 import util from 'util';
 import chalk from 'chalk';
 
+let connection: Sequelize;
 async function loadModels(): Promise<Sequelize> {
   const envConfig: any | string | SequelizeOptions | Options = isProductionMode()
     ? config.production
@@ -43,16 +44,20 @@ async function loadModels(): Promise<Sequelize> {
     : new Sequelize(envConfig.database, envConfig.username, envConfig.password, connectionOptions);
 }
 
-export async function authenticate(options?: SyncOptions) {
+export async function authenticate(options?: SyncOptions): Promise<Sequelize> {
+  if (connection) return connection;
   const sequelizeconnection = await loadModels();
   await sequelizeconnection.authenticate(options);
-  logger.info(chalk.cyan.bold('Database synchronization complete!'));
+  logger.info(chalk.cyan.bold('Database connected!'));
+  return sequelizeconnection;
 }
 
-export async function sync(options?: SyncOptions) {
+export async function sync(options?: SyncOptions): Promise<Sequelize> {
+  if (connection) return connection;
   const sequelizeconnection = await loadModels();
-  let connection: void | Sequelize | PromiseLike<void | Sequelize>;
-  connection = options ? await sequelizeconnection.sync(options) : await sequelizeconnection.sync();
+  connection = await sequelizeconnection.sync(options);
   logger.info(chalk.cyan.bold('Database synchronization complete!'));
   return connection;
 }
+
+export const getDbConnection = async () => (connection ? connection : await authenticate());

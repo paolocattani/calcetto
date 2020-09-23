@@ -145,8 +145,8 @@ function getTableBodyRows(
   Il button per impostare la coppia vincente è abilitato solo se entrambe le cell hanno una coppia assegnata
 */
 const isButtonDisabled = (rowIndex: number, colIndex: number, elements: ICell[][]) =>
-  elements[colIndex].length === 1 ||
+  (elements[colIndex] && elements[colIndex].length === 1) ||
   (rowIndex % 2 !== 0
-    ? !elements[colIndex][rowIndex - 1].pair || (elements[colIndex][rowIndex] && !elements![colIndex][rowIndex].pair)
+    ? !elements[colIndex][rowIndex - 1].pair || (elements[colIndex][rowIndex] && !elements[colIndex][rowIndex].pair)
     : !elements[colIndex][rowIndex - 1].pair ||
       (elements[colIndex][rowIndex - 2] && !elements[colIndex][rowIndex - 2].pair));

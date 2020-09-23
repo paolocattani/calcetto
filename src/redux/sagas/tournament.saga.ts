@@ -40,11 +40,12 @@ function* saveTournamentSaga(
   }
 }
 
-function* updateTournamentSaga(
-  action: ReturnType<typeof TournamentAction.update.request>
-): Generator<StrictEffect, void, any> {
+function* updateTournamentSaga({
+  payload,
+}: ReturnType<typeof TournamentAction.update.request>): Generator<StrictEffect, void, any> {
   try {
-    const response: UpdateTournamentResponse = yield call(updateTournament, action.payload);
+    console.log('updateTournamentSaga : ', payload);
+    const response: UpdateTournamentResponse = yield call(updateTournament, payload);
     if (response.code === HTTPStatusCode.OK) {
       yield put(TournamentAction.update.success(response));
       toast.success(response.userMessage.message);

@@ -13,9 +13,9 @@ export const fetchTournaments = async (request: FetchTournamentsRequest): Promis
     request?.tId ? `/api/v2/tournament/${request.tId}` : '/api/v2/tournament/list'
   );
 
-export const postTournament = async ({ tournament }: SaveTournamentRequest): Promise<SaveTournamentResponse> =>
-  postWrapper<SaveTournamentRequest, SaveTournamentResponse>('/api/v2/tournament/new', { tournament });
+export const postTournament = async (request: SaveTournamentRequest): Promise<SaveTournamentResponse> =>
+  postWrapper<SaveTournamentRequest, SaveTournamentResponse>('/api/v2/tournament/new', request);
 
-export const updateTournament = async ({ tournament }: UpdateTournamentRequest): Promise<UpdateTournamentResponse> =>
-  putWrapper<UpdateTournamentRequest, UpdateTournamentResponse>('/api/v2/tournament/update', { tournament });
+export const updateTournament = async (request: UpdateTournamentRequest): Promise<UpdateTournamentResponse> =>
+  putWrapper<UpdateTournamentRequest, UpdateTournamentResponse>('/api/v2/tournament/update', request);
 // TODO: add DELETE

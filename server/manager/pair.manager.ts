@@ -1,7 +1,7 @@
 import { PairDTO, UserDTO } from '../../src/@common/dto';
 import { logProcess, logger } from '../core/logger';
 import { Op } from 'sequelize';
-import { Stage2, Pair } from '../entity';
+import { Stage2, Pair } from '../database';
 
 const className = 'Pairs Manager';
 
@@ -55,7 +55,10 @@ export const fetchPairsStage2 = async (tournamentId: number): Promise<PairDTO[]>
       where: { tournamentId, pairId: { [Op.not]: null } },
       group: ['pairId'],
     })) as unknown) as { pairId: number }[];
-    logger.info('selectedStage2 : ', selectedStage2);
+    logger.info(
+      'selectedStage2 : ',
+      selectedStage2.map((p) => p.pairId)
+    );
     const selectedPairs = await Pair.findAll({
       where: {
         tournamentId,
