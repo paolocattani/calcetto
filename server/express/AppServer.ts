@@ -31,7 +31,7 @@ const applicationCorsOption: CorsOptions = {
   credentials: true,
 };
 
-export class AppServer extends AbstractServer {
+export default class AppServer extends AbstractServer {
   connection: Sequelize | null;
   constructor(applicationName = defaultName, applicationPort = defaultPort, applicationCPUs = defaultCPUs) {
     super(applicationName, applicationPort, applicationCPUs);

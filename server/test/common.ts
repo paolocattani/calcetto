@@ -7,6 +7,8 @@ import {
 import { OmitHistory } from '../../src/@common/models/common.models';
 import { deleteWrapper, postWrapper } from '../../src/@common/utils/fetch.utils';
 import { PlayerRole } from '../../src/@common/dto/player.dto';
+import { getServers } from 'dns';
+import AppServer from '../express/AppServer';
 
 export const USER_1 = {
   // https://www.fakenamegenerator.com/gen-male-us-it.php
@@ -52,3 +54,10 @@ export const deleteTestUser = async (deleteRequest: OmitHistory<DeleteUserReques
     'http://localhost:5001/api/v2/auth/delete',
     deleteRequest
   );
+
+export async function getServer(): Promise<AppServer> {
+  const server = new AppServer();
+  await server.connect();
+  server.start();
+  return server;
+}
