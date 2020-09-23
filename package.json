@@ -116,13 +116,14 @@
     "prod:heroku:client": "node --optimize_for_size --max_old_space_size=460 -gc_interval=100 node_modules/.bin/react-scripts build",
     "start": "npm run prod:heroku:server",
     "CRA:start": "react-scripts start",
-    "CRA:build": "react-scripts build",
+    "CRA:build": "react-scripts build ",
+    "CRA:build:stats": "react-scripts build -- --stats ",
     "CRA:eject": "react-scripts eject",
     "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
     "test:coverage": "react-scripts test --coverage --env=jest-environment-jsdom-sixteen",
     "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache --env=jest-environment-jsdom-sixteen",
     "lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
-    "lint:report": "eslint -f json -o ./analysis/report.json .",
+    "lint:report": "./node_modules/.bin/eslint -f json -o ./analysis/report.json .",
     "analyze": "source-map-explorer build/static/js/*.js --html analysis/build-analysis.html"
   },
   "browserslist": {
@@ -138,6 +139,8 @@
     ]
   },
   "devDependencies": {
+    "@ljharb/eslint-config": "^17.2.0",
+    "@shinnn/eslint-config": "^7.0.0",
     "@testing-library/dom": "^7.24.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.0.4",
@@ -155,6 +158,10 @@
     "eslint": "^6.8.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^6.11.0",
+    "eslint-config-sinon": "^4.0.0",
+    "eslint-config-strict": "^14.0.1",
+    "eslint-plugin-ie11": "^1.0.0",
+    "eslint-plugin-jsdoc": "^30.5.1",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.20.6",
     "eslint-plugin-sonarjs": "^0.5.0",
