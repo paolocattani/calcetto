@@ -1,9 +1,17 @@
 {
+  "openapi" : "3.0.0",
   "info" : {
     "title" : "Calcetto API",
     "description" : "<strong><i>API definitions for Calcetto API server</i></strong>",
     "version" : "1.0.0"
   },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/Paolo_Cattani/calcetto/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "http://localhost:5001/api/v2/",
+    "description" : "Development server."
+  } ],
   "tags" : [ {
     "name" : "Authentication",
     "description" : "Manage user, Login, Logout or Check authentication status"
