@@ -76,25 +76,36 @@
   Frontend is bootstraped with [CRA](https://github.com/facebook/create-react-app).
 
   ```bash
+
   # Together
   npm run dev:server
 
   # Detached
   npm run dev:server
   npm run dev:client
+
+  # Bundle size
+  npm run analyze
+
+  # Eslint report ( used by Sonarcloud )
+  npm run lint:report
+
   ```
 
 ## Test
   ```bash
+
   # Test
-  npm run CRA:test
+  npm run test
 
   # Coverage
   npm run test:coverage
+
   ```
 
 ## Production
   ```bash
+
   # Build client
   # - Update app version
   # - Build
@@ -103,6 +114,7 @@
 
   # Build server
   npm run prod:build:server
+
   ```
 
 
