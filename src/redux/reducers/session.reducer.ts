@@ -24,16 +24,19 @@ export const SessionReducer = createReducer<SessionState, Action>(initialSession
   )
   // Failure
   .handleAction(
-    [
-      SessionAction.checkAuthentication.failure,
-      SessionAction.registration.failure,
-      SessionAction.login.failure,
-      SessionAction.logout.failure,
-      SessionAction.update.failure,
-      SessionAction.delete.failure,
-    ],
+    [SessionAction.checkAuthentication.failure, SessionAction.registration.failure, SessionAction.login.failure],
+    () => ({
+      isLoading: false,
+      user: undefined,
+      isAdmin: false,
+      isAuthenticated: false,
+    })
+  )
+  .handleAction(
+    [SessionAction.logout.failure, SessionAction.update.failure, SessionAction.delete.failure],
     (state) => ({ ...state, isLoading: false })
   )
+  // Success
   .handleAction(
     [
       SessionAction.checkAuthentication.success,

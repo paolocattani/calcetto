@@ -20,21 +20,15 @@ import { TournamentAction } from 'redux/actions';
 import { UserMessageType } from '@common/models/common.models';
 
 function* checkAuthenticationSaga({
-  payload,
+  payload: { history },
 }: ReturnType<typeof SessionAction.checkAuthentication.request>): Generator<StrictEffect, void, any> {
   try {
     const response: AuthenticationResponse = yield call(CheckAuthentication);
     if (response.code === HTTPStatusCode.OK) {
       yield put(SessionAction.checkAuthentication.success(response));
-      yield put(SessionAction.sessionControl.request({ history: payload.history }));
+      yield put(SessionAction.sessionControl.request({ history }));
     } else {
-      yield put(
-        SessionAction.checkAuthentication.failure({
-          code: response.code,
-          message: response.message,
-          userMessage: response.userMessage,
-        })
-      );
+      yield put(SessionAction.checkAuthentication.failure(response));
     }
   } catch (err) {
     yield put(SessionAction.checkAuthentication.failure(err));
@@ -68,6 +62,7 @@ function* watchSessionSaga({
           })
         );
         history.push('/login');
+        persistor.purge();
       }
     }
   } catch (err) {
@@ -76,11 +71,13 @@ function* watchSessionSaga({
 }
 
 // Logout
-function* logoutSaga(action: ReturnType<typeof SessionAction.logout.request>): Generator<StrictEffect, void, any> {
+function* logoutSaga({
+  payload: { history },
+}: ReturnType<typeof SessionAction.logout.request>): Generator<StrictEffect, void, any> {
   const logoutReponse: AuthenticationResponse = yield call(logout);
   if (logoutReponse.code === HTTPStatusCode.OK) {
     yield put(SessionAction.logout.success(logoutReponse));
-    action.payload.history.push('/');
+    history.push('/');
     toast.success(logoutReponse.userMessage.message);
   } else {
     toast.error(logoutReponse.userMessage.message);
@@ -125,7 +122,6 @@ function* registrationSaga({
 }: ReturnType<typeof SessionAction.registration.request>): Generator<StrictEffect, void, any> {
   // Validate Registration
   const registrationReponse: RegistrationResponse = yield call(registration, registrationRequest);
-  console.log('registrationReponse : ', registrationReponse);
   if (registrationReponse.code === HTTPStatusCode.OK) {
     yield put(SessionAction.registration.success(registrationReponse));
     // Session control
