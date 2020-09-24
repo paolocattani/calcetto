@@ -1,6 +1,7 @@
 {
     "data":"No data found",
     "add":"Add player",
+    "edit":"Edit player",
     "filter":"Clear filters",
     "field": {
         "name":"Name",

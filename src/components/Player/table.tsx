@@ -7,7 +7,7 @@ import { Button, Row, Col } from 'react-bootstrap';
 import './style.css';
 import commonStyle from '../../common.module.css';
 //
-import columns, { clearAllFilter, cellEditProps, filterFactory } from './helper';
+import columns, { clearAllFilter, filterFactory } from './helper';
 import TableHeader from '../core/generic/TableHeader';
 import { LoadingModal } from '../core/generic/Commons';
 
@@ -44,7 +44,7 @@ const PlayerTable: React.FC<PlayerProps> = () => {
           <span> {t('common:route.home')}</span>
         </Button>
         {isAdmin ? (
-          <Button variant="success" onClick={addRow}>
+          <Button variant="success" onClick={() => addEdit(getEmptyPlayer())}>
             <PlusIcon />
             <span>{t('player:add')}</span>
           </Button>
@@ -86,7 +86,12 @@ const PlayerTable: React.FC<PlayerProps> = () => {
       playersList[rowIndex].editable ? {} : { backgroundColor: '#dc3545' },
   };
 
-  const addRow = () => dispatch(PlayerAction.savePlayer.request({ player: getEmptyPlayer() }));
+  const addEdit = (player: PlayerDTO) => {
+    console.log('addEdit : ', player);
+    dispatch(PlayerAction.setPlayer(player));
+    currentHistory.push('/player/edit');
+  };
+
   const deleteRow = () => {
     if (!selectedRows) return;
     dispatch(PlayerAction.deletePlayers.request({ players: selectedRows }));
@@ -108,6 +113,7 @@ const PlayerTable: React.FC<PlayerProps> = () => {
     goalKeeper: t('player:role.goalKeeper'),
     striker: t('player:role.striker'),
     master: t('player:role.master'),
+    edit: t('common:edit'),
   };
   return (
     <>
@@ -120,10 +126,7 @@ const PlayerTable: React.FC<PlayerProps> = () => {
               bootstrap4
               keyField="id"
               data={playersList}
-              columns={columns(isAdmin, fieldLabels) as ColumnDescription<PlayerDTO, PlayerDTO>[]}
-              cellEdit={cellEditProps(isAdmin, (player: PlayerDTO) =>
-                dispatch(PlayerAction.savePlayer.request({ player }))
-              )}
+              columns={columns(isAdmin, fieldLabels, addEdit) as ColumnDescription<PlayerDTO, PlayerDTO>[]}
               selectRow={selectRow}
               caption={<TableHeader title={'common:route.player'} saved={isSaving} />}
               filter={filterFactory}

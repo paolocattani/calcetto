@@ -1,6 +1,7 @@
 {
     "data":"Nessun dato reperito",
     "add":"Aggiungi giocatore",
+    "edit":"Modifica giocatore",
     "filter":"Pulisci filtri",
     "field": {
         "name":"Nome",

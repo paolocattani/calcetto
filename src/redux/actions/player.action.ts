@@ -1,5 +1,5 @@
 import { createAsyncAction, createAction } from 'typesafe-actions';
-import { defaultAsyncParams, PurgeResponse, PURGE_STORE_ACTION } from './constants';
+import { defaultAsyncParams, defaultParam, PurgeResponse, PURGE_STORE_ACTION } from './constants';
 import {
   FetchPlayersResponse,
   FetchPlayersRequest,
@@ -9,9 +9,12 @@ import {
   DeletePlayersRequest,
   PlayerError,
 } from '@common/models/player.model';
+import { PlayerDTO } from '@common/dto';
 
 const actionName = '[Player]';
 export const PlayerAction = {
+  // set selected tournament
+  setPlayer: createAction(...defaultParam(actionName, 'Set Player'))<PlayerDTO>(),
   // fetch tournaments
   fetchPlayers: createAsyncAction(...defaultAsyncParams(actionName, 'Fetch Palyers'))<
     FetchPlayersRequest,

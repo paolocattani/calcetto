@@ -1,6 +1,12 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { OmitGeneric } from '../../src/@common/models/common.models';
-import { FetchPlayersResponse, UpdatePlayerRequest, UpdatePlayerResponse } from '../../src/@common/models/player.model';
+import {
+  DeletePlayersRequest,
+  DeletePlayersResponse,
+  FetchPlayersResponse,
+  UpdatePlayerRequest,
+  UpdatePlayerResponse,
+} from '../../src/@common/models/player.model';
 import { withAuth, asyncMiddleware, logController, withAdminRights } from '../core/middleware';
 import {
   create,
@@ -26,7 +32,7 @@ router.get(
     try {
       const playersList = await listAllInTournament(req.params.tId ? parseInt(req.params.tId) : 0);
       const additional: OmitGeneric<FetchPlayersResponse> = { playersList };
-      return success(res, 'Operazione completata', additional);
+      return success(res, 'Giocatori caricati..', additional);
     } catch (error) {
       return serverError('GET player/list/:tId error ! : ', error, res);
     }
@@ -40,7 +46,7 @@ router.get(
     try {
       const playersList = await listAll();
       const additional: OmitGeneric<FetchPlayersResponse> = { playersList };
-      return success(res, 'Operazione completata', additional);
+      return success(res, 'Giocatori caricati..', additional);
     } catch (error) {
       return serverError('GET player/list/ error ! : ', error, res);
     }
@@ -96,8 +102,10 @@ router.delete(
   withAuth,
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const rowsAffected = await deletePlayer(req.body.map((e: any) => parseBody(e)));
-      return success(res, rowsAffected > 1 ? 'Giocatori eliminati...' : 'Giocatore eliminato...');
+      const request: DeletePlayersRequest = req.body;
+      const rowsAffected = await deletePlayer(request.players.map((e: any) => parseBody(e)));
+      const additional: OmitGeneric<DeletePlayersResponse> = { playersList: request.players };
+      return success(res, rowsAffected > 1 ? 'Giocatori eliminati...' : 'Giocatore eliminato...', additional);
     } catch (error) {
       return serverError('DELETE player/delete error ! : ', error, res);
     }

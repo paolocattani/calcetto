@@ -15,21 +15,28 @@ export const PlayerReducer = createReducer<PlayerState, Action>(initialPlayerSta
     isLoading: true,
     errorMessage: undefined,
   }))
-  .handleAction([PlayerAction.savePlayer.request, PlayerAction.deletePlayers.request], (state) => ({
-    ...state,
-    isLoading: true,
-    isSaving: true,
-    errorMessage: undefined,
-  }))
+  .handleAction(
+    [PlayerAction.savePlayer.request, PlayerAction.updatePlayer.request, PlayerAction.deletePlayers.request],
+    (state) => ({
+      ...state,
+      isLoading: true,
+      isSaving: true,
+    })
+  )
   // Failure
   .handleAction(
-    [PlayerAction.fetchPlayers.failure, PlayerAction.savePlayer.failure],
+    [
+      PlayerAction.fetchPlayers.failure,
+      PlayerAction.savePlayer.failure,
+      PlayerAction.updatePlayer.failure,
+      PlayerAction.deletePlayers.failure,
+    ],
     (state, { payload: { message } }) => ({
       ...state,
-      errorMessage: message,
       isLoading: false,
     })
   )
+  // Success
   .handleAction([PlayerAction.savePlayer.success], (state, { payload: { player } }) => ({
     playersList: [player, ...state.playersList],
     isLoading: false,
@@ -40,10 +47,10 @@ export const PlayerReducer = createReducer<PlayerState, Action>(initialPlayerSta
     isLoading: false,
     isSaving: false,
   }))
-  // Fetch Tournament
   .handleAction(PlayerAction.fetchPlayers.success, (state, { payload: { playersList } }) => ({
     playersList: playersList.map((e, i) => ({ ...e, rowNumber: i + 1 })),
     isLoading: false,
     isSaving: false,
   }))
+  .handleAction(PlayerAction.setPlayer, (state, { payload }) => ({ ...state, player: payload }))
   .handleAction(PlayerAction.purge, () => initialPlayerState);

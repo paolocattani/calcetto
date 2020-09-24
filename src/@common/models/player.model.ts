@@ -1,3 +1,4 @@
+import * as H from 'history';
 import { PlayerDTO } from '@common/dto';
 import { GenericReponse } from './common.models';
 //
@@ -14,9 +15,11 @@ export interface FetchPlayersRequest {
   addEmpty?: boolean;
 }
 export interface UpdatePlayerRequest {
+  history?: H.History<unknown>;
   player: PlayerDTO;
 }
 export interface DeletePlayersRequest {
+  history?: H.History<unknown>;
   players: PlayerDTO[];
 }
 // Responses
