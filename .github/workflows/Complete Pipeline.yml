@@ -89,7 +89,7 @@ jobs:
       #  run: npm run test:coverage
       # Generate report
       - name: Lint report
-        run: eslint -f json -o ./analysis/report.json .
+        run: npm run lint:report
 
         # https://github.com/marketplace/actions/sonarcloud-scan
       - name: SonarCloud Scan
