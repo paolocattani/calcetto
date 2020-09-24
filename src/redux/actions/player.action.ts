@@ -26,7 +26,7 @@ export const PlayerAction = {
     UpdatePlayerResponse,
     PlayerError
   >(),
-  updatePlayer: createAsyncAction(...defaultAsyncParams(actionName, 'Save Player'))<
+  updatePlayer: createAsyncAction(...defaultAsyncParams(actionName, 'Update Player'))<
     UpdatePlayerRequest,
     UpdatePlayerResponse,
     PlayerError

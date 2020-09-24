@@ -15,6 +15,7 @@ export function* entityLifeCycle<Req, Res extends GenericReponse>(
     // Call method with payload
     const response: Res = yield call(method, payload);
     // If success
+    // FIXME: include all 2XX
     if (response.code === HTTPStatusCode.OK) {
       // Show success toast
       if (response.userMessage.message) {

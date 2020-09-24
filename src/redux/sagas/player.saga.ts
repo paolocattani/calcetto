@@ -33,7 +33,7 @@ function* deletePlayersSaga({
 function* savePlayerSaga({
   payload,
 }: ReturnType<typeof PlayerAction.savePlayer.request>): Generator<StrictEffect, void, any> {
-  yield entityLifeCycle<UpdatePlayerRequest, UpdatePlayerResponse>(PlayerAction.updatePlayer, savePlayer, payload, () =>
+  yield entityLifeCycle<UpdatePlayerRequest, UpdatePlayerResponse>(PlayerAction.savePlayer, savePlayer, payload, () =>
     back(payload)
   );
 }

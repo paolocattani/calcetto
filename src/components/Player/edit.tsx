@@ -46,6 +46,7 @@ const EditPlayer: React.FC<{}> = () => {
       history: currentHistory,
     };
     const action = isEdit ? PlayerAction.updatePlayer : PlayerAction.savePlayer;
+    console.log('Dispatching action: ', action, isEdit);
     dispatch(action.request(request));
   };
 

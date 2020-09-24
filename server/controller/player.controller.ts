@@ -16,6 +16,7 @@ import {
   listAllInTournament,
   update,
   findByNameSurname,
+  findById,
 } from '../manager/player.manager';
 import { entityNotFound, failure, missingParameters, serverError, success } from './common.response';
 
@@ -60,9 +61,14 @@ router.put(
   asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
     const { player: dto } = req.body as UpdatePlayerRequest;
     try {
-      let player = await findByNameSurname(dto.name, dto.surname);
+      let player = await findById(dto.id);
       if (!player) {
         return entityNotFound(res);
+      }
+      // Aggiungere controlli
+      let playerTest = await findByNameSurname(dto.name, dto.surname);
+      if (playerTest) {
+        return failure(res, 'Esiste già un giocatore con questi dati.', 'Player already exists');
       }
       await update(dto);
       const additional: OmitGeneric<UpdatePlayerResponse> = { player };
@@ -85,7 +91,7 @@ router.post(
       }
       let player = await findByNameSurname(model.name, model.surname);
       if (player) {
-        return failure(res, 'Esiste già un utente con questi dati.', 'Player already exists');
+        return failure(res, 'Esiste già un giocatore con questi dati.', 'Player already exists');
       }
       const dto = await create(model);
       const additional: OmitGeneric<UpdatePlayerResponse> = { player: dto };
