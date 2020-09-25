@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { InputField } from 'components/core/generic/Input';
 import { PlayerSelector } from 'redux/selectors';
 import { UpdatePlayerRequest } from '@common/models';
+import { YesNoModal } from 'components/core/generic/Commons';
 
 const modalStyle: CSSProperties = {
   textAlign: 'left',
@@ -23,12 +24,12 @@ const EditPlayer: React.FC<{}> = () => {
   const currentHistory = useHistory();
   const { t } = useTranslation(['common', 'player']);
   const player = useSelector(PlayerSelector.getPlayer)!;
-  // const [showModalDelete, setShowModalDelete] = useState(false);
+  const [showModalDelete, setShowModalDelete] = useState(false);
 
   // Fields
   const { value: name, bind: bindName } = useInput<string>(player.name);
   const { value: surname, bind: bindSurname } = useInput<string>(player.surname);
-  const { value: alias, bind: bindAlias } = useInput<string>(player.surname);
+  const { value: alias, bind: bindAlias } = useInput<string>(player.alias);
   const { value: phone, bind: bindPhone } = useInput<string>(player.phone);
   const { value: email, bind: bindEmail } = useInput<string>(player.email);
 
@@ -46,7 +47,6 @@ const EditPlayer: React.FC<{}> = () => {
       history: currentHistory,
     };
     const action = isEdit ? PlayerAction.updatePlayer : PlayerAction.savePlayer;
-    console.log('Dispatching action: ', action, isEdit);
     dispatch(action.request(request));
   };
 
@@ -59,6 +59,13 @@ const EditPlayer: React.FC<{}> = () => {
 
   return (
     <Col md={{ span: '6', offset: '3' }} sm="12">
+      <YesNoModal
+        message={t('player:delete.message')}
+        title={t('player:delete.title')}
+        onClick={() => dispatch(PlayerAction.deletePlayers.request({ players: [player] }))}
+        onHide={() => setShowModalDelete(false)}
+        show={showModalDelete}
+      />
       <Card style={modalStyle} className="default-background">
         <Form onSubmit={onSubmit}>
           <Card.Header as="h2">
@@ -134,9 +141,11 @@ const EditPlayer: React.FC<{}> = () => {
             <Button variant="outline-success" type="submit" className="float-right">
               <SaveIcon /> {t('common:save')}
             </Button>
-            <Button variant="outline-danger" className="float-left">
-              <TrashIcon /> {t('auth:delete')}
-            </Button>
+            {player.editable ? (
+              <Button variant="outline-danger" className="float-left" onClick={() => setShowModalDelete(true)}>
+                <TrashIcon /> {t('player:delete.one')}
+              </Button>
+            ) : null}
           </Card.Footer>
         </Form>
       </Card>

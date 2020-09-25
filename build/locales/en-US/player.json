@@ -13,7 +13,9 @@
     },
     "delete":{
         "one":"Delete player",
-        "multi":"Delete players"
+        "multi":"Delete players",
+        "message":"Vuoi eliminare questo giocatore ?",
+        "title":"Conferma eliminazione"
     },
     "role":{
         "role":"Role",

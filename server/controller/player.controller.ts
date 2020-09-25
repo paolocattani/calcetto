@@ -67,7 +67,7 @@ router.put(
       }
       // Aggiungere controlli
       let playerTest = await findByNameSurname(dto.name, dto.surname);
-      if (playerTest) {
+      if (playerTest && playerTest.id !== player.id) {
         return failure(res, 'Esiste già un giocatore con questi dati.', 'Player already exists');
       }
       await update(dto);

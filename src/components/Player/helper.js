@@ -109,6 +109,7 @@ const playerColumns = (isAdmin, labels, addEdit) => [
     dataField: 'actions',
     isDummyField: true,
     text: 'Azioni',
+    hidden: !isAdmin,
     formatter: (cell, row) => (
       <Button variant="success" onClick={() => addEdit(row)}>
         <EditIcon />
