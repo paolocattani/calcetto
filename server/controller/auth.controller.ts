@@ -30,7 +30,7 @@ import {
   LoginRequest,
   RegistrationRequest,
   UpdateUserRequest,
-} from '../../src/@common/models/session.model';
+} from '../../src/@common/models/auth.model';
 import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
 import { OmitGeneric, OmitHistory } from '../../src/@common/models/common.models';
 

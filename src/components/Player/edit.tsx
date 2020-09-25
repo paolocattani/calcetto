@@ -50,7 +50,6 @@ const EditPlayer: React.FC<{}> = () => {
     dispatch(action.request(request));
   };
 
-  console.log('Rendering player edit: ', player);
   if (!player) {
     setTimeout(() => currentHistory.push('/player'), 3000);
     return <div>Giocatore non trovato</div>;

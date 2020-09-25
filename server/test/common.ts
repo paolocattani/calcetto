@@ -3,7 +3,7 @@ import {
   DeleteUserRequest,
   LoginRequest,
   RegistrationRequest,
-} from '../../src/@common/models/session.model';
+} from '../../src/@common/models/auth.model';
 import { OmitHistory } from '../../src/@common/models/common.models';
 import { deleteWrapper, postWrapper } from '../../src/@common/utils/fetch.utils';
 import { PlayerRole } from '../../src/@common/dto/player.dto';

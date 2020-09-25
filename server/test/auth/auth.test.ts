@@ -1,6 +1,6 @@
 import supertest from 'supertest';
 import { HTTPStatusCode } from '../../../src/@common/models/HttpStatusCode';
-import { AuthenticationResponse } from '../../../src/@common/models/session.model';
+import { AuthenticationResponse } from '../../../src/@common/models/auth.model';
 import AppServer from '../../express/AppServer';
 import { deleteTestUser, getServer, loginTestUser, registerTestUser, USER_1, USER_2 } from '../common';
 

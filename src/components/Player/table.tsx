@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import BootstrapTable, { ColumnDescription, SelectRowProps } from 'react-bootstrap-table-next';
 // style
 import { Button, Row, Col } from 'react-bootstrap';
-import './style.css';
 import commonStyle from '../../common.module.css';
 //
 import columns, { clearAllFilter, filterFactory } from './helper';

@@ -3,12 +3,11 @@
 <p align="center">
     <a href=""><img src="https://github.com/paolocattani/calcetto/workflows/Pipeline%20(%20Build/Test/Analyze%20)/badge.svg" alt="Build/Test/Analyze"></a>
 </p>
-
-<p align="center">   
+<p align="center">
     <a href="https://david-dm.org/paolocattani/calcetto"><img src="https://david-dm.org/paolocattani/calcetto.svg" alt="Dependency Status"></a>
     <a href="https://david-dm.org/paolocattani/calcetto/?type=dev"><img src="https://david-dm.org/paolocattani/calcetto/dev-status.svg" alt="devDependency Status"></a>
 </p>
-<p align="center">   
+<p align="center">
     <a href="https://sonarcloud.io/dashboard?id=paolocattani_calcetto"><img src="https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=alert_status" alt="Quality Gate Status"></a>
 <a href="https://sonarcloud.io/dashboard?id=paolocattani_calcetto"><img src="https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=sqale_rating" alt="Maintainability Rating"></a>
     <a href="https://sonarcloud.io/dashboard?id=paolocattani_calcetto"><img src="https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=security_rating" alt="Security Rating"></a>
@@ -142,5 +141,5 @@
 
 ## Topic to explore
 - [Sonar typescript:S4784](https://github.com/uhop/node-re2/)
--
+- [Memory leak](https://medium.com/tech-tajawal/memory-leaks-in-nodejs-quick-overview-988c23b24dba#:~:text=There're%20many%20tools%20and,that%20the%20leakage%20is%20real.)
 
