@@ -1,18 +1,24 @@
-
 # Calcetto : Table football app manager
 
-![Build/Test/Analyze ](https://github.com/paolocattani/calcetto/workflows/Pipeline%20(%20Build/Test/Analyze%20)/badge.svg)
+<p align="center">
+    <a href=""><img src="https://github.com/paolocattani/calcetto/workflows/Pipeline%20(%20Build/Test/Analyze%20)/badge.svg" alt="Build/Test/Analyze"></a>
+</p>
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=alert_status)](https://sonarcloud.io/dashboard?id=paolocattani_calcetto)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=paolocattani_calcetto)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=security_rating)](https://sonarcloud.io/dashboard?id=paolocattani_calcetto)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=paolocattani_calcetto)
-
-
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=ncloc)](https://sonarcloud.io/dashboard?id=paolocattani_calcetto)
-[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=paolocattani_calcetto)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=bugs)](https://sonarcloud.io/dashboard?id=paolocattani_calcetto)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=paolocattani_calcetto)
+<p align="center">   
+    <a href="https://david-dm.org/paolocattani/calcetto"><img src="https://david-dm.org/paolocattani/calcetto.svg" alt="Dependency Status"></a>
+    <a href="https://david-dm.org/paolocattani/calcetto/?type=dev"><img src="https://david-dm.org/paolocattani/calcetto/dev-status.svg" alt="devDependency Status"></a>
+</p>
+<p align="center">   
+    <a href="https://sonarcloud.io/dashboard?id=paolocattani_calcetto"><img src="https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=alert_status" alt="Quality Gate Status"></a>
+<a href="https://sonarcloud.io/dashboard?id=paolocattani_calcetto"><img src="https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=sqale_rating" alt="Maintainability Rating"></a>
+    <a href="https://sonarcloud.io/dashboard?id=paolocattani_calcetto"><img src="https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=security_rating" alt="Security Rating"></a>
+    <a href="https://sonarcloud.io/dashboard?id=paolocattani_calcetto"><img src="https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=reliability_rating" alt="Reliability Rating"></a>
+    <br />
+    <a href="https://sonarcloud.io/dashboard?id=paolocattani_calcetto"><img src="https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=ncloc" alt="Lines of Code"></a>
+    <a href="https://sonarcloud.io/dashboard?id=paolocattani_calcetto"><img src="https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=duplicated_lines_density" alt="Duplicated Lines (%)"></a>
+    <a href="https://sonarcloud.io/dashboard?id=paolocattani_calcetto"><img src="https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=bugs" alt="Bugs"></a>
+    <a href="https://sonarcloud.io/dashboard?id=paolocattani_calcetto"><img src="https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=vulnerabilities" alt="Vulnerabilities"></a>
+</p>
 
 
 
