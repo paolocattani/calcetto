@@ -19,7 +19,7 @@ npm run analyze
 
 echo '--> Run Coverage...'
 ## Need to push coverato due to this issue https://github.com/facebook/jest/issues/9324
-npm run test:coverage >nul
+npm run test:coverage &>/dev/null
 if [ $? -eq 0 ]
 then
   echo "Success.."
