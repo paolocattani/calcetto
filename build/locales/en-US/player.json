@@ -1,6 +1,7 @@
 {
     "data":"No data found",
     "add":"Add player",
+    "edit":"Edit player",
     "filter":"Clear filters",
     "field": {
         "name":"Name",
@@ -13,9 +14,7 @@
     },
     "delete":{
         "one":"Delete player",
-        "multi":"Delete players",
-        "message":"Vuoi eliminare questo giocatore ?",
-        "title":"Conferma eliminazione"
+        "multi":"Delete players"
     },
     "role":{
         "role":"Role",
