@@ -11,14 +11,14 @@ import ErrorBoundary from '../core/errorBoundary';
 import './App.css';
 import { Container } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { SessionAction } from 'redux/actions';
+import { AuthAction } from 'redux/actions';
 import { loadIcons } from '../core/icons';
 // Toasts
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './toast.css';
 import AppBadge from './badge';
-import { SessionSelector } from 'redux/selectors';
+import { AuthSelector } from 'redux/selectors';
 // i18n
 import '../../i18n/i18n';
 
@@ -26,11 +26,11 @@ loadIcons();
 const App: React.FC = (_) => {
   const dispatch = useDispatch();
   const currentHistory = useHistory();
-  const isLoading = useSelector(SessionSelector.isLoading);
+  const isLoading = useSelector(AuthSelector.isLoading);
 
   // Check if user is already logged
   useEffect(() => {
-    dispatch(SessionAction.checkAuthentication.request({ history: currentHistory }));
+    dispatch(AuthAction.checkAuthentication.request({ history: currentHistory }));
   }, [currentHistory, dispatch]);
 
   return (

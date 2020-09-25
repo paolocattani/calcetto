@@ -15,7 +15,7 @@ export const initialState: RootState = {
   pairState: {
     isLoading: false,
   },
-  sessionState: {
+  authState: {
     isAuthenticated: false,
     isAdmin: false,
     isLoading: false,
@@ -73,7 +73,7 @@ export const initialState: RootState = {
 };
 
 export const performAdminLogin = (): RootState => {
-  initialState.sessionState = adminSession;
+  initialState.authState = adminSession;
   initialState.tournamentState = {
     ...initialState.tournamentState,
     tournament,
@@ -83,7 +83,7 @@ export const performAdminLogin = (): RootState => {
 };
 
 export const performUserLogin = (): RootState => {
-  initialState.sessionState = userSession;
+  initialState.authState = userSession;
   initialState.tournamentState = {
     ...initialState.tournamentState,
     tournament,

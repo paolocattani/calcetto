@@ -3,10 +3,10 @@ import { Card, Container, Form, Button, Col, Row } from 'react-bootstrap';
 import { useInput } from '../core/hooks/InputHook';
 import DatePicker from 'react-datepicker';
 import { TrashIcon, SaveIcon, TimesIcon } from '../core/icons';
-import { SessionSelector } from 'redux/selectors/session.selector';
+import { AuthSelector } from 'redux/selectors/auth.selector';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { SessionAction } from 'redux/actions';
+import { AuthAction } from 'redux/actions';
 import { useTranslation } from 'react-i18next';
 const Delete = lazy(() => import('./Delete'));
 
@@ -15,7 +15,7 @@ const EditUser: React.FC<{}> = () => {
   const currentHistory = useHistory();
   const { t } = useTranslation(['common', 'auth', 'player']);
 
-  const user = useSelector(SessionSelector.getUser)!;
+  const user = useSelector(AuthSelector.getUser)!;
   const [showModalDelete, setShowModalDelete] = useState(false);
 
   const { value: name, bind: bindName } = useInput<string>(user.name);
@@ -26,7 +26,7 @@ const EditUser: React.FC<{}> = () => {
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     dispatch(
-      SessionAction.update.request({
+      AuthAction.update.request({
         user: {
           ...user!,
           name: name.trim(),

@@ -10,11 +10,11 @@ import {
   LogoutRequest,
   DeleteUserRequest,
   UpdateUserRequest,
-} from '@common/models/session.model';
+} from '@common/models/auth.model';
 
 const actionName = '[Session]';
 
-export const SessionAction = {
+export const AuthAction = {
   // Register new user
   registration: createAsyncAction(...defaultAsyncParams(actionName, 'Register User'))<
     RegistrationRequest,

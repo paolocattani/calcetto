@@ -13,7 +13,7 @@ import { LoadingModal } from '../core/generic/Commons';
 
 import { PlayerAction } from 'redux/actions';
 import { getEmptyPlayer } from 'redux/services/player.service';
-import { PlayerSelector, SessionSelector } from 'redux/selectors';
+import { PlayerSelector, AuthSelector } from 'redux/selectors';
 import { TrashIcon, PlusIcon, BroomIcon, HomeIcon } from '../core/icons';
 import { useTranslation } from 'react-i18next';
 import { PlayerDTO } from '@common/dto';
@@ -25,7 +25,7 @@ const PlayerTable: React.FC<PlayerProps> = () => {
   const { t } = useTranslation(['common', 'player']);
   // From Store
   const isLoading = useSelector(PlayerSelector.isLoading);
-  const isAdmin = useSelector(SessionSelector.isAdmin);
+  const isAdmin = useSelector(AuthSelector.isAdmin);
   const playersList = useSelector(PlayerSelector.getPlayersList);
   const isSaving = useSelector(PlayerSelector.isSaving);
   // Component State

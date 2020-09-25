@@ -5,13 +5,13 @@ import { Route } from 'react-router';
 import { routeType, getLabelByPathname } from './Routes';
 import { Redirect } from 'react-router-dom';
 import { useSelector, connect } from 'react-redux';
-import { SessionSelector } from 'redux/selectors/session.selector';
+import { AuthSelector } from 'redux/selectors/auth.selector';
 import { TournamentSelector } from 'redux/selectors';
 
 // HOC gestisce la visibilità dei componenti ed eventualmente reindirizza alla login
 export const ProtectedRoute: React.FC<routeType> = (props) => {
-  const isAuthenticated = useSelector(SessionSelector.isAuthenticated);
-  const session = useSelector(SessionSelector.getSession);
+  const isAuthenticated = useSelector(AuthSelector.isAuthenticated);
+  const session = useSelector(AuthSelector.getSession);
   const tournament = useSelector(TournamentSelector.getTournament);
   return (
     <Route

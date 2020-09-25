@@ -9,7 +9,7 @@ import { RightArrowIcon, TrashIcon, LeftArrowIcon } from '../core/icons';
 import { Button, Col, Row, ButtonGroup, ToggleButton } from 'react-bootstrap';
 // Actions, Selectors
 import { Stage2Action, TournamentAction } from '../../redux/actions';
-import { SessionSelector, TournamentSelector, Stage1Selector, PairSelector } from 'redux/selectors';
+import { AuthSelector, TournamentSelector, Stage1Selector, PairSelector } from 'redux/selectors';
 import Stage1Table from './table';
 import TournamentBadge from '../Tournament/badge';
 // Models
@@ -23,7 +23,7 @@ const Wrapper: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
 
   // Session
-  const session = useSelector(SessionSelector.getSession);
+  const session = useSelector(AuthSelector.getSession);
   // Torneo
   const tournament = useSelector(TournamentSelector.getTournament)!;
   // Sono presenti aggiornamenti

@@ -14,7 +14,7 @@ import NewTournament from './new';
 import { useDispatch, useSelector } from 'react-redux';
 import { TournamentSelector } from 'redux/selectors/tournament.selector';
 import { TournamentAction, PairAction } from 'redux/actions';
-import { SessionSelector } from 'redux/selectors/session.selector';
+import { AuthSelector } from 'redux/selectors/auth.selector';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { TournamentDTO } from '@common/dto';
@@ -25,7 +25,7 @@ const FTournament = () => {
   const currentHistory = useHistory();
   const { t } = useTranslation(['common', 'tournament']);
 
-  const isAdmin = useSelector(SessionSelector.isAdmin);
+  const isAdmin = useSelector(AuthSelector.isAdmin);
 
   // Tournament list from Db
   const tournamentsList = useSelector(TournamentSelector.getTournamentsList);

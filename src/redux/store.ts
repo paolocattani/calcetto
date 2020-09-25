@@ -41,7 +41,7 @@ export const rootReducers: ReducersMapObject<RootState> = {
   tournamentState: TournamentReducer,
   playerState: PlayerReducer,
   pairState: PairReducer,
-  sessionState: SessionReducer,
+  authState: SessionReducer,
   stage1State: Stage1Reducer,
   stage2State: Stage2Reducer,
 };
@@ -52,7 +52,7 @@ export const initialStoreState: RootState = {
   playerState: initialPlayerState,
   stage1State: initialStage1State,
   stage2State: initialStage2State,
-  sessionState: initialSessionState,
+  authState: initialSessionState,
 };
 
 // Meet the Store

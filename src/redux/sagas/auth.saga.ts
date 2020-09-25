@@ -1,5 +1,5 @@
 import { put, call, StrictEffect, takeEvery, take, takeLatest, delay } from 'redux-saga/effects';
-import { SessionAction } from 'redux/actions/session.action';
+import { AuthAction } from 'redux/actions/auth.action';
 import { AuthenticationResponse, RegistrationResponse } from '@common/models';
 import {
   CheckAuthentication,
@@ -11,7 +11,7 @@ import {
   deleteUser,
   logout,
   SessionStatus,
-} from 'redux/services/session.service';
+} from 'redux/services/auth.service';
 import { toast } from 'react-toastify';
 import { Action } from 'typesafe-actions';
 import { persistor } from 'redux/store';
@@ -21,17 +21,17 @@ import { UserMessageType } from '@common/models/common.models';
 
 function* checkAuthenticationSaga({
   payload: { history },
-}: ReturnType<typeof SessionAction.checkAuthentication.request>): Generator<StrictEffect, void, any> {
+}: ReturnType<typeof AuthAction.checkAuthentication.request>): Generator<StrictEffect, void, any> {
   try {
     const response: AuthenticationResponse = yield call(CheckAuthentication);
     if (response.code === HTTPStatusCode.OK) {
-      yield put(SessionAction.checkAuthentication.success(response));
-      yield put(SessionAction.sessionControl.request({ history }));
+      yield put(AuthAction.checkAuthentication.success(response));
+      yield put(AuthAction.sessionControl.request({ history }));
     } else {
-      yield put(SessionAction.checkAuthentication.failure(response));
+      yield put(AuthAction.checkAuthentication.failure(response));
     }
   } catch (err) {
-    yield put(SessionAction.checkAuthentication.failure(err));
+    yield put(AuthAction.checkAuthentication.failure(err));
   }
 }
 
@@ -44,7 +44,7 @@ https://github.com/redux-saga/redux-saga/issues/940#issuecomment-298170212
 
 function* watchSessionSaga({
   payload: { history },
-}: ReturnType<typeof SessionAction.sessionControl.request>): Generator<StrictEffect, void, any> {
+}: ReturnType<typeof AuthAction.sessionControl.request>): Generator<StrictEffect, void, any> {
   try {
     const eventChannel = new EventSource('/sse/v1/session');
     const channel = yield call(createSessionChannel, eventChannel);
@@ -54,7 +54,7 @@ function* watchSessionSaga({
         toast.error('La tua sessione è scaduta. Stai per essere reindirizzato alla login...');
         yield delay(3000);
         yield put(
-          SessionAction.logout.success({
+          AuthAction.logout.success({
             user: undefined,
             code: HTTPStatusCode.Unauthorized,
             message: 'Unauthorized!',
@@ -73,19 +73,19 @@ function* watchSessionSaga({
 // Logout
 function* logoutSaga({
   payload: { history },
-}: ReturnType<typeof SessionAction.logout.request>): Generator<StrictEffect, void, any> {
+}: ReturnType<typeof AuthAction.logout.request>): Generator<StrictEffect, void, any> {
   const logoutReponse: AuthenticationResponse = yield call(logout);
   if (logoutReponse.code === HTTPStatusCode.OK) {
-    yield put(SessionAction.logout.success(logoutReponse));
+    yield put(AuthAction.logout.success(logoutReponse));
     history.push('/');
     toast.success(logoutReponse.userMessage.message);
   } else {
     toast.error(logoutReponse.userMessage.message);
-    yield put(SessionAction.logout.failure(logoutReponse));
+    yield put(AuthAction.logout.failure(logoutReponse));
   }
   persistor.purge();
   yield put(
-    SessionAction.logout.success({
+    AuthAction.logout.success({
       code: HTTPStatusCode.OK,
       message: 'Logout complete',
       userMessage: {
@@ -99,33 +99,33 @@ function* logoutSaga({
 // Login
 function* loginSaga({
   payload: { history, ...loginRequest },
-}: ReturnType<typeof SessionAction.login.request>): Generator<StrictEffect, void, any> {
+}: ReturnType<typeof AuthAction.login.request>): Generator<StrictEffect, void, any> {
   // Validate Login
   const loginReponse: AuthenticationResponse = yield call(login, loginRequest);
   if (loginReponse.code === HTTPStatusCode.OK) {
-    yield put(SessionAction.login.success(loginReponse));
+    yield put(AuthAction.login.success(loginReponse));
     // Session control
-    yield put(SessionAction.sessionControl.request({ history }));
+    yield put(AuthAction.sessionControl.request({ history }));
     // Fetch tournament
     yield put(TournamentAction.fetch.request({}));
     // history.push('/');
     toast.success(loginReponse.userMessage.message);
   } else {
     toast.error(loginReponse.userMessage.message);
-    yield put(SessionAction.login.failure(loginReponse));
+    yield put(AuthAction.login.failure(loginReponse));
   }
 }
 
 // Registration
 function* registrationSaga({
   payload: { history, ...registrationRequest },
-}: ReturnType<typeof SessionAction.registration.request>): Generator<StrictEffect, void, any> {
+}: ReturnType<typeof AuthAction.registration.request>): Generator<StrictEffect, void, any> {
   // Validate Registration
   const registrationReponse: RegistrationResponse = yield call(registration, registrationRequest);
   if (registrationReponse.code === HTTPStatusCode.OK) {
-    yield put(SessionAction.registration.success(registrationReponse));
+    yield put(AuthAction.registration.success(registrationReponse));
     // Session control
-    yield put(SessionAction.sessionControl.request({ history }));
+    yield put(AuthAction.sessionControl.request({ history }));
     // Fetch tournament
     yield put(TournamentAction.fetch.request({}));
     history.push('/');
@@ -134,39 +134,39 @@ function* registrationSaga({
     if (registrationReponse.errors) {
       registrationReponse.errors.forEach((e) => toast.error(e));
     }
-    yield put(SessionAction.registration.failure(registrationReponse));
+    yield put(AuthAction.registration.failure(registrationReponse));
   }
 }
 
 // Update user
 function* updateUserSaga({
   payload: { history, ...updateUserRequest },
-}: ReturnType<typeof SessionAction.update.request>): Generator<StrictEffect, void, any> {
+}: ReturnType<typeof AuthAction.update.request>): Generator<StrictEffect, void, any> {
   // Validate Login
   const updateReponse: AuthenticationResponse = yield call(updateUser, updateUserRequest);
   if (updateReponse.code === HTTPStatusCode.OK) {
-    yield put(SessionAction.update.success(updateReponse));
+    yield put(AuthAction.update.success(updateReponse));
     history.push('/');
     toast.success(updateReponse.userMessage.message);
   } else {
     toast.error(updateReponse.userMessage.message);
-    yield put(SessionAction.update.failure(updateReponse));
+    yield put(AuthAction.update.failure(updateReponse));
   }
 }
 
 // Delete user
 function* deleteUserSaga({
   payload: { history, ...deleteUserRequest },
-}: ReturnType<typeof SessionAction.delete.request>): Generator<StrictEffect, void, any> {
+}: ReturnType<typeof AuthAction.delete.request>): Generator<StrictEffect, void, any> {
   // Validate Login
   const deleteReponse: AuthenticationResponse = yield call(deleteUser, deleteUserRequest);
   if (deleteReponse.code === HTTPStatusCode.OK) {
-    yield put(SessionAction.delete.success(deleteReponse));
-    yield put(SessionAction.logout.request({ history }));
+    yield put(AuthAction.delete.success(deleteReponse));
+    yield put(AuthAction.logout.request({ history }));
     toast.success(deleteReponse.userMessage.message);
   } else {
     toast.error(deleteReponse.userMessage.message);
-    yield put(SessionAction.delete.failure(deleteReponse));
+    yield put(AuthAction.delete.failure(deleteReponse));
   }
 }
 
@@ -177,12 +177,12 @@ function logger(action: Action<any>) {
 }
 
 export const SessionSagas = [
-  takeEvery(SessionAction.logout.request, logoutSaga),
-  takeEvery(SessionAction.login.request, loginSaga),
-  takeEvery(SessionAction.update.request, updateUserSaga),
-  takeEvery(SessionAction.delete.request, deleteUserSaga),
-  takeEvery(SessionAction.registration.request, registrationSaga),
-  takeEvery(SessionAction.checkAuthentication.request, checkAuthenticationSaga),
-  takeLatest(SessionAction.sessionControl.request, watchSessionSaga),
+  takeEvery(AuthAction.logout.request, logoutSaga),
+  takeEvery(AuthAction.login.request, loginSaga),
+  takeEvery(AuthAction.update.request, updateUserSaga),
+  takeEvery(AuthAction.delete.request, deleteUserSaga),
+  takeEvery(AuthAction.registration.request, registrationSaga),
+  takeEvery(AuthAction.checkAuthentication.request, checkAuthenticationSaga),
+  takeLatest(AuthAction.sessionControl.request, watchSessionSaga),
   takeEvery('*', logger),
 ];

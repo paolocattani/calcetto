@@ -1,9 +1,9 @@
 import * as H from 'history';
-import { GenericReponse } from '../models/common.models';
+import { GenericReponse } from './common.models';
 import { PlayerRole, UserDTO } from '../dto';
 
 //## STATE
-export interface SessionState {
+export interface AuthState {
   user?: UserDTO;
   isAuthenticated: boolean;
   isAdmin: boolean;

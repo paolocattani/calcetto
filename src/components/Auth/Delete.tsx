@@ -3,9 +3,9 @@ import { useHistory } from 'react-router-dom';
 import { Modal, Container, Form, Col, Row, Button } from 'react-bootstrap';
 import { useInput } from '../core/hooks/InputHook';
 import { TrashIcon } from '../core/icons';
-import { SessionSelector } from 'redux/selectors';
+import { AuthSelector } from 'redux/selectors';
 import { useDispatch, useSelector } from 'react-redux';
-import { SessionAction } from 'redux/actions';
+import { AuthAction } from 'redux/actions';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 interface DeleteProps {
@@ -20,7 +20,7 @@ const Delete: React.FC<DeleteProps> = ({ show, onHide }) => {
   const { t } = useTranslation(['common', 'auth']);
 
   // Dati utente
-  const user = useSelector(SessionSelector.getUser)!;
+  const user = useSelector(AuthSelector.getUser)!;
   // Hook gestione campo password
   const { value: password, bind: bindPassword } = useInput<string>('');
 
@@ -31,7 +31,7 @@ const Delete: React.FC<DeleteProps> = ({ show, onHide }) => {
   ) => {
     evt.preventDefault();
     if (email && username && password) {
-      dispatch(SessionAction.delete.request({ password, history: currentHistory }));
+      dispatch(AuthAction.delete.request({ password, history: currentHistory }));
     } else {
       toast.error(t('auth:error.password'));
     }

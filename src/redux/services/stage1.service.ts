@@ -1,5 +1,5 @@
 import { eventChannel, END, buffers } from 'redux-saga';
-import { SessionStatus, Message } from './session.service';
+import { SessionStatus, Message } from './auth.service';
 import {
   FetchStage1Request,
   FetchStage1Response,

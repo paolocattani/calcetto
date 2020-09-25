@@ -19,7 +19,7 @@ import commonStyle from '../../common.module.css';
 // Service
 import { getEmptyPlayer } from 'redux/services/player.service';
 // Selector
-import { SessionSelector } from 'redux/selectors/session.selector';
+import { AuthSelector } from 'redux/selectors/auth.selector';
 import { TournamentSelector } from 'redux/selectors/tournament.selector';
 // Action
 import { TournamentAction, PairAction } from '../../redux/actions';
@@ -41,7 +41,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation(['common', 'pair']);
 
-  const isAdmin = useSelector(SessionSelector.isAdmin);
+  const isAdmin = useSelector(AuthSelector.isAdmin);
   const tournament = useSelector(TournamentSelector.getTournament)!;
 
   // States

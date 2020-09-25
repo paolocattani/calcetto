@@ -8,7 +8,7 @@ import { getOpposite, comparator, rowsGenerator } from './helper';
 import { columns } from './editor';
 //
 import { useSelector, useDispatch } from 'react-redux';
-import { SessionSelector } from 'redux/selectors/session.selector';
+import { AuthSelector } from 'redux/selectors/auth.selector';
 // style
 import { Stage1Action } from 'redux/actions';
 import { TournamentSelector } from 'redux/selectors';
@@ -18,7 +18,7 @@ import { TournamentProgress } from '@common/dto';
 const Stage1Table = ({ pairsList, autoOrder }) => {
   const dispatch = useDispatch();
   // From store
-  const isAdmin = useSelector(SessionSelector.isAdmin);
+  const isAdmin = useSelector(AuthSelector.isAdmin);
   const tournament = useSelector(TournamentSelector.getTournament);
   // State
   const [selectedRows, setSelectedRows] = useState([]);
