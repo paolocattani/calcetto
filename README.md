@@ -122,8 +122,6 @@
 
   ```
 
-
-
 ## Guides
   - SSE - Server Sent Events : [express-sse](https://www.npmjs.com/package/express-sse)
   - IIFE : [a trick to use async function inside not async functions](https://medium.com/javascript-in-plain-english/https-medium-com-javascript-in-plain-english-stop-feeling-iffy-about-using-an-iife-7b0292aba174)

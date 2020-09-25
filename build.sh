@@ -11,8 +11,18 @@ echo    '------------------------'
 sed -i 's|^REACT_APP_CLIENT_VERSION=.*$|REACT_APP_CLIENT_VERSION='$REACT_APP_CLIENT_VERSION'|g' .env
 sed -i 's|^REACT_APP_CLIENT_COMMIT_HASH=.*$|REACT_APP_CLIENT_COMMIT_HASH='$REACT_APP_CLIENT_COMMIT_HASH'|g' .env
 
-echo '--> Run Build'
+echo '--> Run Build...'
 npm run CRA:build
 
-echo '--> Run Analysis'
+echo '--> Run Analysis...'
 npm run analyze
+
+echo '--> Run Coverage...'
+## Need to push coverato due to this issue https://github.com/facebook/jest/issues/9324
+npm run test:coverage >nul
+if [ $? -eq 0 ]
+then
+  echo "Success.."
+else
+  echo "Always the same error..."
+fi
