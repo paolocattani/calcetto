@@ -3,9 +3,9 @@
     "compilerOptions": {
         /* Basic Options */
         // Must be "es6" due to sequelize bug. Ref https://github.com/sequelize/sequelize/issues/7840
-         "target": "es6",                            /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */
+        "target": "es6",                            /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */
         // Must be "commonjs" due to ts-node bug
-         "module": "commonjs",                       /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */
+        "module": "commonjs",                       /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */
         "lib": [
             "esnext"                                /* Specify library files to be included in the compilation. */
         ],
@@ -69,7 +69,7 @@
         // "inlineSources": true,                   /* Emit the source alongside the sourcemaps within a single file; requires '--inlineSourceMap' or '--sourceMap' to be set. */
         /* Experimental Options */
         "experimentalDecorators": true,             /* Enables experimental support for ES7 decorators. */
-        "emitDecoratorMetadata": true,              /* Enables experimental support for emitting type metadata for decorators. */
+        "emitDecoratorMetadata": true              /* Enables experimental support for emitting type metadata for decorators. */
     },
     // https://www.typescriptlang.org/docs/handbook/project-references.html
     "references": [
@@ -81,6 +81,6 @@
     ],
     "exclude": [
         "build",
-        "node_modules",
+        "node_modules"
     ]
 }
