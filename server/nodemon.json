@@ -4,5 +4,5 @@
     ],
     "ignore":["./test/**.test.ts"],
     "ext": "ts",
-    "exec": "ts-node ./server.ts dev"
+    "exec": "node -r ts-node/register ./server.ts dev --expose-gc --inspect"
 }

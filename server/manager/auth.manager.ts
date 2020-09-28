@@ -7,7 +7,7 @@ import { UserDTO, UserRole, PlayerRole, PlayerDTO } from '../../src/@common/dto'
 import { logProcess, logger } from '../core/logger';
 // Password
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 // managers
 import * as playerManager from './player.manager';
 import { Op } from 'sequelize';

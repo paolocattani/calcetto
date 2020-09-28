@@ -69,6 +69,9 @@
     - [Log4js](https://log4js-node.github.io/log4js-node/)
   - Dev
     - [Nodemon](https://github.com/remy/nodemon)
+  - Detect memory leak
+    - [MemWatch](https://github.com/airbnb/node-memwatch#readme)
+    - [Node inspector](https://nodejs.org/en/docs/guides/debugging-getting-started/ )
   - Test :
     - [Jest](https://jestjs.io/)
     - [Ts-Jest](https://kulshekhar.github.io/ts-jest)

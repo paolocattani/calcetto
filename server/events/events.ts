@@ -41,6 +41,8 @@ export const sessionControl = asyncMiddleware(async (req: AppRequest, res: Respo
     if (intervalId) {
       clearInterval(intervalId);
     }
+    // Close connection
+    res.end();
   };
 
   // on Connection Close

@@ -12,6 +12,7 @@ import authRouter from './auth.controller';
 // SSE
 import { sessionControl } from '../events/events';
 import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
+import { withAuth } from '../core/middleware';
 
 export interface AppRequest extends Request {
   user?: UserDTO;
@@ -26,14 +27,14 @@ export default (application: ExpressApplication): void => {
   application.use('/api/v2/auth', authRouter);
 
   // SSE
-  application.get('/sse/v1/session', sessionControl);
-
-  // Locales : Moved to FE
-  // application.use('/locales', express.static('../locales'));
+  application.get('/sse/v1/session', withAuth, sessionControl);
 
   // Test
   application.get('/status', (req: Request, res: Response, next: NextFunction) =>
     // eslint-disable-next-line quotes
-    res.status(HTTPStatusCode.OK).json({ code: HTTPStatusCode.OK, message: `What's up? I was sleeping...` })
+    res
+      .status(HTTPStatusCode.OK)
+      // eslint-disable-next-line quotes
+      .json({ code: HTTPStatusCode.ImATeapot, message: `I'm not going to brew coffee, I'm a fucking teapot!` })
   );
 };
