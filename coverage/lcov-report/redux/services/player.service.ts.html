@@ -14,41 +14,41 @@
         }
     </style>
 </head>
-    
+
 <body>
 <div class='wrapper'>
     <div class='pad1'>
         <h1><a href="../../index.html">All files</a> / <a href="index.html">redux/services</a> player.service.ts</h1>
         <div class='clearfix'>
-            
+
             <div class='fl pad1y space-right2'>
                 <span class="strong">39.13% </span>
                 <span class="quiet">Statements</span>
                 <span class='fraction'>9/23</span>
             </div>
-        
-            
+
+
             <div class='fl pad1y space-right2'>
                 <span class="strong">33.33% </span>
                 <span class="quiet">Branches</span>
                 <span class='fraction'>2/6</span>
             </div>
-        
-            
+
+
             <div class='fl pad1y space-right2'>
                 <span class="strong">20% </span>
                 <span class="quiet">Functions</span>
                 <span class='fraction'>1/5</span>
             </div>
-        
-            
+
+
             <div class='fl pad1y space-right2'>
                 <span class="strong">53.33% </span>
                 <span class="quiet">Lines</span>
                 <span class='fraction'>8/15</span>
             </div>
-        
-            
+
+
         </div>
         <p class="quiet">
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
@@ -166,8 +166,8 @@ import {
   FetchPlayersResponse,
   DeletePlayersRequest,
   DeletePlayersResponse,
-  UpdatePlayerResponse,
-  UpdatePlayerRequest,
+  SavePlayerResponse,
+  SavePlayerRequest,
 } from '@common/models';
 import { UnexpectedServerError } from '@common/models/common.models';
 import { DEFAULT_HEADERS, deleteWrapper, postWrapper, putWrapper } from '../../@common/utils/fetch.utils';
@@ -191,11 +191,11 @@ export const fetchPlayers = <span class="fstat-no" title="function not covered" 
 export const deletePlayers = <span class="fstat-no" title="function not covered" >async ({</span> players<span class="cstat-no" title="statement not covered" > }: DeletePlayersRequest)</span>: Promise&lt;DeletePlayersResponse&gt; =&gt;
 <span class="cstat-no" title="statement not covered" >  deleteWrapper&lt;DeletePlayersRequest, DeletePlayersResponse&gt;('/api/v2/player/delete', { players });</span>
 &nbsp;
-export const savePlayer = <span class="fstat-no" title="function not covered" >async ({</span> player<span class="cstat-no" title="statement not covered" > }: UpdatePlayerRequest)</span>: Promise&lt;UpdatePlayerResponse&gt; =&gt;
-<span class="cstat-no" title="statement not covered" >  postWrapper&lt;UpdatePlayerRequest, UpdatePlayerResponse&gt;('/api/v2/player/new', { player });</span>
+export const savePlayer = <span class="fstat-no" title="function not covered" >async ({</span> player<span class="cstat-no" title="statement not covered" > }: SavePlayerRequest)</span>: Promise&lt;SavePlayerResponse&gt; =&gt;
+<span class="cstat-no" title="statement not covered" >  postWrapper&lt;SavePlayerRequest, SavePlayerResponse&gt;('/api/v2/player/new', { player });</span>
 &nbsp;
-export const updatePlayer = <span class="fstat-no" title="function not covered" >async ({</span> player<span class="cstat-no" title="statement not covered" > }: UpdatePlayerRequest)</span>: Promise&lt;UpdatePlayerResponse&gt; =&gt;
-<span class="cstat-no" title="statement not covered" >  putWrapper&lt;UpdatePlayerRequest, UpdatePlayerResponse&gt;('/api/v2/player/update', { player });</span>
+export const updatePlayer = <span class="fstat-no" title="function not covered" >async ({</span> player<span class="cstat-no" title="statement not covered" > }: SavePlayerRequest)</span>: Promise&lt;SavePlayerResponse&gt; =&gt;
+<span class="cstat-no" title="statement not covered" >  putWrapper&lt;SavePlayerRequest, SavePlayerResponse&gt;('/api/v2/player/update', { player });</span>
 &nbsp;
 export const getEmptyPlayer = (label?: string): PlayerDTO =&gt; ({
   id: null,
@@ -232,4 +232,3 @@ export const getEmptyPlayer = (label?: string): PlayerDTO =&gt; ({
         <script src="../../block-navigation.js"></script>
     </body>
 </html>
-    

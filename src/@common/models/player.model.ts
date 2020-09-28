@@ -4,7 +4,7 @@ import { GenericReponse } from './common.models';
 //
 export interface PlayerState {
   player?: PlayerDTO;
-  playersList: PlayerDTO[];
+  playersList: Array<PlayerDTO>;
   isLoading: boolean;
   isSaving: boolean;
 }
@@ -14,23 +14,23 @@ export interface FetchPlayersRequest {
   tId?: number;
   addEmpty?: boolean;
 }
-export interface UpdatePlayerRequest {
+export interface SavePlayerRequest {
   history?: H.History<unknown>;
   player: PlayerDTO;
 }
 export interface DeletePlayersRequest {
   history?: H.History<unknown>;
-  players: PlayerDTO[];
+  players: Array<PlayerDTO>;
 }
 // Responses
 export interface FetchPlayersResponse extends GenericReponse {
-  playersList: PlayerDTO[];
+  playersList: Array<PlayerDTO>;
 }
-export interface UpdatePlayerResponse extends GenericReponse {
+export interface SavePlayerResponse extends GenericReponse {
   player: PlayerDTO;
 }
 export interface DeletePlayersResponse extends GenericReponse {
-  playersList: PlayerDTO[];
+  playersList: Array<PlayerDTO>;
 }
 
 export interface PlayerError extends GenericReponse {}

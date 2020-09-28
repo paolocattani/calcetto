@@ -1,4 +1,6 @@
 import {
+  DeleteTournamentRequest,
+  DeleteTournamentResponse,
   FetchTournamentsRequest,
   FetchTournamentsResponse,
   SaveTournamentRequest,
@@ -6,11 +8,11 @@ import {
   UpdateTournamentRequest,
   UpdateTournamentResponse,
 } from '../../@common/models/tournament.model';
-import { postWrapper, putWrapper, getWrapper } from '../../@common/utils/fetch.utils';
+import { postWrapper, putWrapper, getWrapper, deleteWrapper } from '../../@common/utils/fetch.utils';
 
 export const fetchTournaments = async (request: FetchTournamentsRequest): Promise<FetchTournamentsResponse> =>
-  getWrapper<FetchTournamentsRequest, FetchTournamentsResponse>(
-    request?.tId ? `/api/v2/tournament/${request.tId}` : '/api/v2/tournament/list'
+  getWrapper<FetchTournamentsResponse>(
+    request?.tId ? `/api/v2/tournament/${encodeURIComponent(request.tId)}` : '/api/v2/tournament/list'
   );
 
 export const postTournament = async (request: SaveTournamentRequest): Promise<SaveTournamentResponse> =>
@@ -18,4 +20,6 @@ export const postTournament = async (request: SaveTournamentRequest): Promise<Sa
 
 export const updateTournament = async (request: UpdateTournamentRequest): Promise<UpdateTournamentResponse> =>
   putWrapper<UpdateTournamentRequest, UpdateTournamentResponse>('/api/v2/tournament/update', request);
-// TODO: add DELETE
+
+export const deleteTournament = async (request: DeleteTournamentRequest): Promise<DeleteTournamentResponse> =>
+  deleteWrapper<DeleteTournamentRequest, DeleteTournamentResponse>('/api/v2/tournament/delete', request);

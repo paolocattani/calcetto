@@ -1,11 +1,10 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { OmitGeneric } from '../../src/@common/models/common.models';
 import {
   DeletePlayersRequest,
   DeletePlayersResponse,
   FetchPlayersResponse,
-  UpdatePlayerRequest,
-  UpdatePlayerResponse,
+  SavePlayerRequest,
+  SavePlayerResponse,
 } from '../../src/@common/models/player.model';
 import { withAuth, asyncMiddleware, logController, withAdminRights } from '../core/middleware';
 import {
@@ -29,11 +28,10 @@ router.get(
   '/list/:tId',
   withAuth,
   withAdminRights,
-  asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
+  asyncMiddleware(async (req: Request, res: Response) => {
     try {
       const playersList = await listAllInTournament(req.params.tId ? parseInt(req.params.tId) : 0);
-      const additional: OmitGeneric<FetchPlayersResponse> = { playersList };
-      return success(res, 'Giocatori caricati..', additional);
+      return success<FetchPlayersResponse>(res, 'Giocatori caricati..', { playersList });
     } catch (error) {
       return serverError('GET player/list/:tId error ! : ', error, res);
     }
@@ -43,11 +41,10 @@ router.get(
 router.get(
   '/list',
   withAuth,
-  asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
+  asyncMiddleware(async (req: Request, res: Response) => {
     try {
       const playersList = await listAll();
-      const additional: OmitGeneric<FetchPlayersResponse> = { playersList };
-      return success(res, 'Giocatori caricati..', additional);
+      return success<FetchPlayersResponse>(res, 'Giocatori caricati..', { playersList });
     } catch (error) {
       return serverError('GET player/list/ error ! : ', error, res);
     }
@@ -58,8 +55,8 @@ router.put(
   '/update',
   withAuth,
   withAdminRights,
-  asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
-    const { player: dto } = req.body as UpdatePlayerRequest;
+  asyncMiddleware(async (req: Request, res: Response) => {
+    const { player: dto } = req.body as SavePlayerRequest;
     try {
       let player = await findById(dto.id);
       if (!player) {
@@ -71,8 +68,7 @@ router.put(
         return failure(res, 'Esiste già un giocatore con questi dati.', 'Player already exists');
       }
       await update(dto);
-      const additional: OmitGeneric<UpdatePlayerResponse> = { player };
-      return success(res, 'Giocatore aggiornato...', additional);
+      return success<SavePlayerResponse>(res, 'Giocatore aggiornato...', { player });
     } catch (error) {
       return serverError('PUT player/update error ! : ', error, res);
     }
@@ -83,8 +79,8 @@ router.post(
   '/new',
   withAuth,
   withAdminRights,
-  asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
-    const { player: model } = req.body as UpdatePlayerRequest;
+  asyncMiddleware(async (req: Request, res: Response) => {
+    const { player: model } = req.body as SavePlayerRequest;
     try {
       if (!model.name || !model.surname) {
         return missingParameters(res);
@@ -94,9 +90,7 @@ router.post(
         return failure(res, 'Esiste già un giocatore con questi dati.', 'Player already exists');
       }
       const dto = await create(model);
-      const additional: OmitGeneric<UpdatePlayerResponse> = { player: dto };
-
-      return success(res, 'Giocatore creato...', additional);
+      return success<SavePlayerResponse>(res, 'Giocatore creato...', { player: dto });
     } catch (error) {
       return serverError('POST player/new error ! : ', error, res);
     }
@@ -106,12 +100,16 @@ router.post(
 router.delete(
   '/delete',
   withAuth,
-  asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
+  withAdminRights,
+  asyncMiddleware(async (req: Request, res: Response) => {
     try {
       const request: DeletePlayersRequest = req.body;
-      const rowsAffected = await deletePlayer(request.players.map((e: any) => parseBody(e)));
-      const additional: OmitGeneric<DeletePlayersResponse> = { playersList: request.players };
-      return success(res, rowsAffected > 1 ? 'Giocatori eliminati...' : 'Giocatore eliminato...', additional);
+      const rowsAffected = await deletePlayer(request.players.map((e) => parseBody(e)));
+      return success<DeletePlayersResponse>(
+        res,
+        rowsAffected > 1 ? 'Giocatori eliminati...' : 'Giocatore eliminato...',
+        { playersList: request.players }
+      );
     } catch (error) {
       return serverError('DELETE player/delete error ! : ', error, res);
     }

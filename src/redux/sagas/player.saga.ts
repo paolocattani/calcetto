@@ -3,15 +3,15 @@ import {
   DeletePlayersResponse,
   FetchPlayersRequest,
   FetchPlayersResponse,
-  UpdatePlayerRequest,
-  UpdatePlayerResponse,
+  SavePlayerRequest,
+  SavePlayerResponse,
 } from '@common/models';
 import { StrictEffect, takeEvery } from 'redux-saga/effects';
 import { PlayerAction } from 'redux/actions/player.action';
 import { fetchPlayers, deletePlayers, savePlayer, updatePlayer } from 'redux/services/player.service';
 import { entityLifeCycle } from './utils';
 
-const back = (payload: DeletePlayersRequest | UpdatePlayerRequest) => payload.history?.push('/player');
+const back = (payload: DeletePlayersRequest | SavePlayerRequest) => payload.history?.push('/player');
 
 function* getPlayersSaga({
   payload,
@@ -33,7 +33,7 @@ function* deletePlayersSaga({
 function* savePlayerSaga({
   payload,
 }: ReturnType<typeof PlayerAction.savePlayer.request>): Generator<StrictEffect, void, any> {
-  yield entityLifeCycle<UpdatePlayerRequest, UpdatePlayerResponse>(PlayerAction.savePlayer, savePlayer, payload, () =>
+  yield entityLifeCycle<SavePlayerRequest, SavePlayerResponse>(PlayerAction.savePlayer, savePlayer, payload, () =>
     back(payload)
   );
 }
@@ -41,11 +41,8 @@ function* savePlayerSaga({
 function* updatePlayerSaga({
   payload,
 }: ReturnType<typeof PlayerAction.updatePlayer.request>): Generator<StrictEffect, void, any> {
-  yield entityLifeCycle<UpdatePlayerRequest, UpdatePlayerResponse>(
-    PlayerAction.updatePlayer,
-    updatePlayer,
-    payload,
-    () => back(payload)
+  yield entityLifeCycle<SavePlayerRequest, SavePlayerResponse>(PlayerAction.updatePlayer, updatePlayer, payload, () =>
+    back(payload)
   );
 }
 

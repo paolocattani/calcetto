@@ -3,8 +3,8 @@ import { defaultAsyncParams, defaultParam, PurgeResponse, PURGE_STORE_ACTION } f
 import {
   FetchPlayersResponse,
   FetchPlayersRequest,
-  UpdatePlayerRequest,
-  UpdatePlayerResponse,
+  SavePlayerRequest,
+  SavePlayerResponse,
   DeletePlayersResponse,
   DeletePlayersRequest,
   PlayerError,
@@ -22,13 +22,13 @@ export const PlayerAction = {
     PlayerError
   >(),
   savePlayer: createAsyncAction(...defaultAsyncParams(actionName, 'Save Player'))<
-    UpdatePlayerRequest,
-    UpdatePlayerResponse,
+    SavePlayerRequest,
+    SavePlayerResponse,
     PlayerError
   >(),
   updatePlayer: createAsyncAction(...defaultAsyncParams(actionName, 'Update Player'))<
-    UpdatePlayerRequest,
-    UpdatePlayerResponse,
+    SavePlayerRequest,
+    SavePlayerResponse,
     PlayerError
   >(),
   deletePlayers: createAsyncAction(...defaultAsyncParams(actionName, 'Delete Player'))<

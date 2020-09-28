@@ -1,11 +1,11 @@
 import * as H from 'history';
-import { GenericReponse } from '@common/models/common.models';
+import { GenericReponse } from './common.models';
 import { TournamentDTO } from '@common/dto';
 
 //## STATE
 export interface TournamentState {
   tournament: TournamentDTO | null;
-  tournamentsList: TournamentDTO[] | [];
+  tournamentsList: Array<TournamentDTO>;
   isLoading: boolean;
 }
 
@@ -24,14 +24,21 @@ export interface UpdateTournamentRequest {
   tournament: TournamentDTO;
 }
 
+export interface DeleteTournamentRequest {
+  tournament: TournamentDTO;
+}
+
 // Responses
 export interface FetchTournamentsResponse extends GenericReponse {
-  tournamentsList?: TournamentDTO[];
+  tournamentsList?: Array<TournamentDTO>;
 }
 export interface SaveTournamentResponse extends GenericReponse {
   tournament: TournamentDTO | null;
 }
 export interface UpdateTournamentResponse extends GenericReponse {
+  tournament: TournamentDTO;
+}
+export interface DeleteTournamentResponse extends GenericReponse {
   tournament: TournamentDTO;
 }
 

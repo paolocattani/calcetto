@@ -12,12 +12,12 @@ import { LoadingModal, YesNoModal, YesNoModalProps } from '../core/generic/Commo
 import { FormEventType } from '../core/types';
 import { RightArrowIcon, TrashIcon, PlusIcon, HomeIcon } from '../core/icons';
 import { cellEditProps, columns } from './editor';
-import { fetchData, getEmptyRowModel } from './helper';
+import { getEmptyRowModel } from './helper';
 // Style
 import './style.css';
 import commonStyle from '../../common.module.css';
 // Service
-import { getEmptyPlayer } from 'redux/services/player.service';
+import { fetchPlayers, getEmptyPlayer } from 'redux/services/player.service';
 // Selector
 import { AuthSelector } from 'redux/selectors/auth.selector';
 import { TournamentSelector } from 'redux/selectors/tournament.selector';
@@ -27,6 +27,8 @@ import TournamentBadge from '../Tournament/badge';
 import { useTranslation } from 'react-i18next';
 // Models
 import { PairDTO, PlayerDTO, TournamentProgress } from '@common/dto';
+import { deletePairs, fetchPairs, findAlias, postPair, updatePair } from 'redux/services/pair.service';
+import { HTTPStatusCode } from '@common/models/HttpStatusCode';
 
 const hideAskUser = {
   message: '',
@@ -59,7 +61,11 @@ const PairsTable: React.FC<PairTableProps> = () => {
   // Initial Fetch
   useEffect(() => {
     if (!tournament) return;
-    (async () => setData(await fetchData(tournament.id!)))();
+    (async () => {
+      const { pairsList } = await fetchPairs({ tId: tournament.id! });
+      const { playersList } = await fetchPlayers({ addEmpty: true, tId: tournament.id! });
+      setData({ rows: pairsList, players: playersList });
+    })();
   }, [tournament]);
 
   // User messages
@@ -77,13 +83,8 @@ const PairsTable: React.FC<PairTableProps> = () => {
       setIsLoading({ state: true, message: t('common:loading') });
       const emptyRow = getEmptyRowModel();
       emptyRow.tId = tournament.id || 0;
-      const response = await fetch('/api/v1/pair', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(emptyRow),
-      });
-      const result = await response.json();
-      emptyRow.id = result.id;
+      const result = await postPair({ pair: emptyRow });
+      emptyRow.id = result.pair.id;
       emptyRow.rowNumber = index || data.rows.length + 1;
       setData((current) => ({
         rows: [emptyRow, ...current.rows],
@@ -108,27 +109,18 @@ const PairsTable: React.FC<PairTableProps> = () => {
     try {
       setIsLoading({ state: true, message: t('common:loading') });
       // Devo ripristinare i giocatori eliminati
-      let players: PlayerDTO[] = [];
+      const players: Array<PlayerDTO> = [];
       selectedRows.forEach((e) => {
         if (e.player1 && e.player1.id) players.push(e.player1);
         if (e.player2 && e.player2.id) players.push(e.player2);
       });
-      if (players)
-        setData((current) => ({
-          rows: current.rows,
-          players: [...players, ...current.players].sort((e1, e2) => e1.alias.localeCompare(e2.alias)),
-        }));
 
-      const response = await fetch('/api/v1/pair', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(selectedRows),
-      });
-      await response.json();
-
+      await deletePairs({ pairsList: selectedRows });
       setData((current) => ({
         rows: current.rows.filter((row) => !selectedRows.find((selectedRow) => selectedRow.id === row.id)),
-        players: current.players,
+        players: players
+          ? [...players, ...current.players].sort((e1, e2) => e1.alias.localeCompare(e2.alias))
+          : current.players,
       }));
 
       showSuccessMessage(t(`pair:success.${selectedRows.length > 1 ? 'deleteMulti' : 'deleteOne'}`));
@@ -187,24 +179,11 @@ const PairsTable: React.FC<PairTableProps> = () => {
           }
           //
           if (!row.alias && row.player1 && row.player1.id && row.player2 && row.player2.id) {
-            const response = await fetch(
-              `/api/v1/pair/alias?player1Id=${encodeURIComponent(row.player1.id)}&player2Id=${encodeURIComponent(
-                row.player2.id
-              )}`
-            );
-            const result = await response.json();
-            if (response.ok && result.alias) {
-              row.alias = result.alias;
-            } else {
-              row.alias = '';
-            }
+            const result = await findAlias({ player1Id: row.player1.id, player2Id: row.player2.id });
+            row.alias = result.code === HTTPStatusCode.OK && result.alias ? result.alias : '';
           }
           // update Db. Non aspetto la risposta...
-          fetch('/api/v1/pair', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(row),
-          });
+          updatePair({ pair: row });
           return row;
         } else return rowElement;
       })
@@ -355,7 +334,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
       let row = data.rows[index];
       // FIXME: if (current === stage1Number) QUESTO NON FUNZIONA ===
       // eslint-disable-next-line eqeqeq
-      if (current == stage1Number) current = 0;
+      if (current === stage1Number) current = 0;
       row['stage1Name'] = names[current];
       current++;
       try {
@@ -370,6 +349,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
         newRows.push(row);
       }
     }
+    //const mapper = data.rows.map(p => ({ id: p.id, stage1Name: p.stage1Name }));
     showSuccessMessage(t('pair:success.stage1Name'));
     setData((prevData) => ({ rows: newRows, players: prevData.players }));
   }

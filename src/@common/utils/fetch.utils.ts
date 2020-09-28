@@ -7,29 +7,18 @@ import { toast } from 'react-toastify';
 //
 export const DEFAULT_HEADERS = { headers: { 'Content-Type': 'application/json' } };
 
-export const getWrapper = async <B, T extends GenericReponse>(url: string, version?: string): Promise<T> =>
-  await fetchWrapper(url, 'GET', undefined, version);
-export const deleteWrapper = async <B, T extends GenericReponse>(
-  url: string,
-  body?: OmitHistory<B>,
-  version?: string
-): Promise<T> => await fetchWrapper(url, 'DELETE', body, version);
-export const putWrapper = async <B, T extends GenericReponse>(
-  url: string,
-  body?: OmitHistory<B>,
-  version?: string
-): Promise<T> => await fetchWrapper(url, 'PUT', body, version);
-export const postWrapper = async <B, T extends GenericReponse>(
-  url: string,
-  body?: OmitHistory<B>,
-  version?: string
-): Promise<T> => await fetchWrapper(url, 'POST', body, version);
+export const getWrapper = async <T extends GenericReponse>(url: string): Promise<T> => await fetchWrapper(url, 'GET');
+export const deleteWrapper = async <B, T extends GenericReponse>(url: string, body?: OmitHistory<B>): Promise<T> =>
+  await fetchWrapper(url, 'DELETE', body);
+export const putWrapper = async <B, T extends GenericReponse>(url: string, body?: OmitHistory<B>): Promise<T> =>
+  await fetchWrapper(url, 'PUT', body);
+export const postWrapper = async <B, T extends GenericReponse>(url: string, body?: OmitHistory<B>): Promise<T> =>
+  await fetchWrapper(url, 'POST', body);
 
 export const fetchWrapper = async <B, T extends GenericReponse>(
   url: string,
   method: string,
-  body?: OmitHistory<B>,
-  version?: string
+  body?: OmitHistory<B>
 ): Promise<T> => {
   let response = null;
   try {

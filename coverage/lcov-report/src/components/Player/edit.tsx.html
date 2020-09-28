@@ -14,41 +14,41 @@
         }
     </style>
 </head>
-    
+
 <body>
 <div class='wrapper'>
     <div class='pad1'>
         <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/Player</a> edit.tsx</h1>
         <div class='clearfix'>
-            
+
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
                 <span class='fraction'>0/52</span>
             </div>
-        
-            
+
+
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
                 <span class='fraction'>0/8</span>
             </div>
-        
-            
+
+
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
                 <span class='fraction'>0/8</span>
             </div>
-        
-            
+
+
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
                 <span class='fraction'>0/38</span>
             </div>
-        
-            
+
+
         </div>
         <p class="quiet">
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
@@ -376,7 +376,7 @@
 <span class="cstat-no" title="statement not covered" >import { useTranslation } from 'react-i18next';</span>
 <span class="cstat-no" title="statement not covered" >import { InputField } from 'components/core/generic/Input';</span>
 <span class="cstat-no" title="statement not covered" >import { PlayerSelector } from 'redux/selectors';</span>
-import { UpdatePlayerRequest } from '@common/models';
+import { SavePlayerRequest } from '@common/models';
 <span class="cstat-no" title="statement not covered" >import { YesNoModal } from 'components/core/generic/Commons';</span>
 &nbsp;
 const modalStyle: CSSProperties = <span class="cstat-no" title="statement not covered" >{</span>
@@ -403,7 +403,7 @@ const EditPlayer: React.FC&lt;{}&gt; = <span class="cstat-no" title="statement n
 &nbsp;
   const onSubmit = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async (e</span>vent: FormEvent&lt;HTMLFormElement&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >) =&gt; {</span></span></span>
 <span class="cstat-no" title="statement not covered" >    event.preventDefault();</span>
-    const <span class="cstat-no" title="statement not covered" >request: UpdatePlayerRequest = {</span>
+    const <span class="cstat-no" title="statement not covered" >request: SavePlayerRequest = {</span>
       player: {
         ...player,
         name,
@@ -541,4 +541,3 @@ const EditPlayer: React.FC&lt;{}&gt; = <span class="cstat-no" title="statement n
         <script src="../../../block-navigation.js"></script>
     </body>
 </html>
-    

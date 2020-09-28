@@ -4,6 +4,7 @@ import { PairAction } from 'redux/actions';
 
 export const initialPairState: PairState = {
   isLoading: false,
+  isSaving: false,
 };
 
 export const PairReducer = createReducer<PairState, Action>(initialPairState)
@@ -11,18 +12,16 @@ export const PairReducer = createReducer<PairState, Action>(initialPairState)
   .handleAction([PairAction.fetch.request], (state) => ({
     ...state,
     isLoading: true,
-    errorMessage: undefined,
   }))
   // Failure
-  .handleAction([PairAction.fetch.failure], (state, { payload: { message } }) => ({
+  .handleAction([PairAction.fetch.failure], (state) => ({
     ...state,
-    errorMessage: message,
     isLoading: false,
   }))
   // Fetch Tournament
-  .handleAction(PairAction.fetch.success, (state, { payload: { results } }) => ({
-    ...state,
-    pairList: results,
+  .handleAction(PairAction.fetch.success, (state, { payload: { pairsList } }) => ({
+    pairsList,
     isLoading: false,
+    isSaving: false,
   }))
   .handleAction(PairAction.purge, () => initialPairState);

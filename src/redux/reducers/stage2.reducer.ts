@@ -15,7 +15,6 @@ export const Stage2Reducer = createReducer<Stage2State, Action>(initialStage2Sta
   // Failure
   .handleAction([Stage2Action.fetchStage2.failure], (state, { payload: { message } }) => ({
     ...state,
-    errorMessage: message,
     isLoading: false,
   }))
   // Success

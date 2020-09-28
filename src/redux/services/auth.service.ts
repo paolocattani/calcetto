@@ -5,7 +5,6 @@ import {
   RegistrationResponse,
   UpdateUserRequest,
   DeleteUserRequest,
-  LogoutRequest,
 } from '../../@common/models';
 import { eventChannel, buffers, END } from 'redux-saga';
 import { HTTPStatusCode } from '@common/models/HttpStatusCode';
@@ -38,7 +37,7 @@ export const login = async (loginRequest: OmitHistory<LoginRequest>): Promise<Au
 
 // Login
 export const logout = async (): Promise<AuthenticationResponse> =>
-  await getWrapper<LogoutRequest, AuthenticationResponse>('/api/v2/auth/logout');
+  await getWrapper<AuthenticationResponse>('/api/v2/auth/logout');
 
 // Registration
 export const registration = async (

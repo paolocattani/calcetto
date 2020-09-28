@@ -3,7 +3,7 @@ import { ICell } from '@common/dto';
 export interface Stage2State {
   isLoading: boolean;
   rowsNumber?: number;
-  cells?: ICell[][];
+  cells?: Array<Array<ICell>>;
 }
 
 // Request / Response
@@ -12,7 +12,7 @@ export interface FetchStage2Request {
   count: number;
 }
 export interface FetchStage2Response {
-  cells: ICell[][];
+  cells: Array<Array<ICell>>;
   rowsNumber: number;
 }
 

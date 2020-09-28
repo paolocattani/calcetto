@@ -1,41 +1,30 @@
-import { FetchPairsRequest, FetchPairsResponse, PostPairsResponse, PostPairsRequest } from '@common/models';
-import { UnexpectedServerError, UserMessageType } from '@common/models/common.models';
-import { HTTPStatusCode } from '@common/models/HttpStatusCode';
-import { DEFAULT_HEADERS } from '../../@common/utils/fetch.utils';
+import {
+  FetchPairsRequest,
+  FetchPairsResponse,
+  SavePairResponse,
+  SavePairRequest,
+  DeletePairsRequest,
+  DeletePairsResponse,
+  FindAliasRequest,
+  FindAliasResponse,
+  SelectPairsResponse,
+  SelectPairsRequest,
+} from '@common/models';
+import { deleteWrapper, getWrapper, postWrapper, putWrapper } from '../../@common/utils/fetch.utils';
 
-export const fetchPairs = async ({ tId }: FetchPairsRequest): Promise<FetchPairsResponse> => {
-  try {
-    console.log('fetchPairs : ', tId);
-    const response = await fetch(`/api/v1/pair/list/?tId=${tId}`, {
-      method: 'GET',
-      ...DEFAULT_HEADERS,
-    });
-    const results = await response.json();
-    console.log('fetchPairs : ', tId, results);
-    return {
-      results,
-      code: HTTPStatusCode.OK,
-      message: 'ok',
-      userMessage: {
-        type: UserMessageType.Success,
-        message: 'Caricamento completato',
-      },
-    };
-  } catch (e) {
-    return { results: [], ...UnexpectedServerError };
-  }
-};
+export const fetchPairs = async ({ tId }: FetchPairsRequest): Promise<FetchPairsResponse> =>
+  await getWrapper<FetchPairsResponse>(`/api/v1/pair/list?tId=${encodeURIComponent(tId)}`);
+export const findAlias = async ({ player1Id, player2Id }: FindAliasRequest): Promise<FindAliasResponse> =>
+  await getWrapper<FindAliasResponse>(
+    `/api/v1/pair/alias?player1Id=${encodeURIComponent(player1Id)}&player2Id=${encodeURIComponent(player2Id)}`
+  );
+export const selectPairs = async (request: SelectPairsRequest): Promise<SelectPairsResponse> =>
+  await putWrapper<SelectPairsRequest, SelectPairsResponse>('/api/v1/pair/selected', request);
 
-export const postPair = async ({ models }: PostPairsRequest): Promise<PostPairsResponse> => {
-  try {
-    const response = await fetch('/api/v1/pair', {
-      method: 'POST',
-      ...DEFAULT_HEADERS,
-      body: JSON.stringify(models),
-    });
-    const results = await response.json();
-    return { results };
-  } catch (e) {
-    return { results: [] };
-  }
-};
+export const postPair = async (request: SavePairRequest): Promise<SavePairResponse> =>
+  await postWrapper<SavePairRequest, SavePairResponse>('/api/v1/pair/new', request);
+export const updatePair = async (request: SavePairRequest): Promise<SavePairResponse> =>
+  await putWrapper<SavePairRequest, SavePairResponse>('/api/v1/pair/new', request);
+
+export const deletePairs = async (request: DeletePairsRequest): Promise<DeletePairsResponse> =>
+  await deleteWrapper<DeletePairsRequest, DeletePairsResponse>('/api/v1/delete', request);

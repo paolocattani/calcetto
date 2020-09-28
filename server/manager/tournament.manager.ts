@@ -36,6 +36,10 @@ export const listAll = async (user: UserDTO): Promise<TournamentDTO[]> => {
   }
 };
 
+//
+export const deleteTournament = async (tournament: TournamentDTO): Promise<number> =>
+  await Tournament.destroy({ where: { id: tournament.id } });
+
 // Aggiorna un torneo esistente
 export const update = async (user: UserDTO, model: TournamentDTO): Promise<TournamentDTO | null> => {
   logProcess(className + 'update', 'start');

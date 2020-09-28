@@ -37,6 +37,7 @@
   ],
   "exclude": [
     "*.css",
-    "*.scss"
+    "*.scss",
+    "node_modules"
   ]
 }

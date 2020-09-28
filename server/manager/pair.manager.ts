@@ -26,7 +26,7 @@ export const findAlias = async (player1Id: number, player2Id: number): Promise<s
     return '';
   }
 };
-export const listInTournament = async (tId: number, user: UserDTO): Promise<PairDTO[]> => {
+export const listInTournament = async (tId: number, user: UserDTO): Promise<Array<PairDTO>> => {
   logProcess(className + 'listInTournament', 'start');
   try {
     const pairsList = await Pair.findAll({
@@ -46,7 +46,7 @@ export const listInTournament = async (tId: number, user: UserDTO): Promise<Pair
   }
 };
 
-export const fetchPairsStage2 = async (tournamentId: number): Promise<PairDTO[]> => {
+export const fetchPairsStage2 = async (tournamentId: number): Promise<Array<PairDTO>> => {
   logProcess(className + '.fetchPairsStage2', 'start');
   let result: PairDTO[] = [];
   try {
@@ -125,7 +125,7 @@ export function rowToModel(row: Pair, index: number): PairDTO {
   };
 }
 
-export function valueFormatter(row: any) {
+export function valueFormatter(row: PairDTO | Pair) {
   const { alias, id, player1, player2 } = row;
   if (alias && alias !== '') return `${alias} ( ${id} )`;
   if (!player1 || !player2) return '';

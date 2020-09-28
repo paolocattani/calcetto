@@ -13,7 +13,6 @@ export const PlayerReducer = createReducer<PlayerState, Action>(initialPlayerSta
   .handleAction([PlayerAction.fetchPlayers.request], (state) => ({
     ...state,
     isLoading: true,
-    errorMessage: undefined,
   }))
   .handleAction(
     [PlayerAction.savePlayer.request, PlayerAction.updatePlayer.request, PlayerAction.deletePlayers.request],

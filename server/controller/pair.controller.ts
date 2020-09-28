@@ -4,135 +4,146 @@ import { logger } from '../core/logger';
 import { getDbConnection } from '../database/connection';
 // Models
 import { Pair } from '../database';
-import { PairDTO } from '../../src/@common/dto';
-import { asyncMiddleware, withAuth, logController } from '../core/middleware';
+import { asyncMiddleware, withAuth, logController, withAdminRights } from '../core/middleware';
 import { AppRequest } from './index';
-import { listInTournament, findAlias } from '../manager/pair.manager';
-import { missingParameters } from './common.response';
+import { listInTournament, findAlias, rowToModel } from '../manager/pair.manager';
+import { missingParameters, serverError, success } from './common.response';
+import {
+  DeletePairsRequest,
+  FetchPairsResponse,
+  FindAliasRequest,
+  FindAliasResponse,
+  SavePairRequest,
+  SavePairResponse,
+  SelectPairsRequest,
+  SelectPairsResponse,
+} from '../../src/@common/models';
 
 const router = Router();
 router.use('/', (req: Request, res: Response, next: NextFunction) =>
   logController(req, next, 'Pair Controller', '/api/v1/pair')
 );
 
+// GET
 router.get(
-  '/alias',
+  '/list/',
   withAuth,
-  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
+  withAdminRights,
+  asyncMiddleware(async (req: AppRequest, res: Response) => {
     try {
-      const {
-        query: { player1Id, player2Id },
-      } = req;
-      logger.info('/alias : ', player1Id, player2Id);
-      if (!player1Id || !player2Id) {
-        return res.status(500).json({ message: 'Missing players' });
+      const { user, query } = req;
+      if (!query.tId) {
+        return missingParameters(res);
       }
-      const alias = await findAlias(parseInt(player1Id as string), parseInt(player2Id as string));
-      return res.status(200).json({ alias });
+      const tId = parseInt(query.tId as string);
+      logger.info(`Looking for pairs in tournament ${chalk.greenBright(tId.toString())}`);
+      const pairsList = await listInTournament(tId, user!);
+      return success<FetchPairsResponse>(res, 'Coppie caricate...', { pairsList });
     } catch (err) {
-      logger.error('/alias -> error: ', err);
-      return res.sendStatus(300);
+      return serverError('GET pair/list error : ', err, res);
     }
   })
 );
 
+router.get(
+  '/alias',
+  withAuth,
+  withAdminRights,
+  asyncMiddleware(async (req: AppRequest, res: Response) => {
+    try {
+      // FIXME:
+      const { player1Id, player2Id } = (req.query as unknown) as FindAliasRequest;
+      logger.info('/alias : ', player1Id, player2Id);
+      if (!player1Id || !player2Id) {
+        return missingParameters(res);
+      }
+      const alias = await findAlias(parseInt(player1Id as string), parseInt(player2Id as string));
+      return success<FindAliasResponse>(res, 'Coppie caricate...', { alias });
+    } catch (err) {
+      return serverError('GET pair/alias error : ', err, res);
+    }
+  })
+);
+
+// PUT
 router.put(
   '/selected',
   withAuth,
-  asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
-    const { body } = req;
-    const rows = body.pairs as PairDTO[];
-    const stage1Name = body.stage1Name;
-    if (rows.length === 0) {
+  withAdminRights,
+  asyncMiddleware(async (req: Request, res: Response) => {
+    const request: SelectPairsRequest = req.body;
+    const { pairsList, stage1Name } = request;
+    if (pairsList.length === 0) {
       return missingParameters(res);
     }
     const connection = await getDbConnection();
     const transaction = await connection.transaction();
     try {
       // Reset selection
-      await Pair.update({ stage2Selected: false }, { where: { tournamentId: rows[0].tId, stage1Name }, transaction });
+      await Pair.update(
+        { stage2Selected: false },
+        { where: { tournamentId: pairsList[0].tId, stage1Name }, transaction }
+      );
       // Update selection
       await Pair.update(
         { stage2Selected: true },
         {
-          where: { tournamentId: rows[0].tId, stage1Name, id: rows.map((e) => e.id!) },
+          where: { tournamentId: pairsList[0].tId, stage1Name, id: pairsList.map((e) => e.id!) },
           transaction,
         }
       );
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();
+      return serverError('PUT pair/selected error : ', err, res);
     }
-    return res.status(200).json({ code: 200 });
+    return success<SelectPairsResponse>(res, pairsList.length > 1 ? 'Coppie selezionate...' : 'Coppia selezionata...');
   })
 );
 
-router.get(
-  '/list/',
-  withAuth,
-  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
-    try {
-      const { user, query } = req;
-      if (!query.tId) {
-        return res.status(500).json({ message: 'Missing tournament' });
-      }
-      const tId = parseInt(query.tId as string);
-      logger.info(`Looking for pairs in tournament ${chalk.greenBright(tId.toString())}`);
-      const modelList = await listInTournament(tId, user!);
-      return res.json(modelList);
-    } catch (err) {
-      logger.error('/list -> error: ', err);
-      return next(err);
-    }
-  })
-);
-
+// POST
 router.post(
-  '/',
+  '/new',
   withAuth,
-  asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
-    const {
-      body: { stage2Selected, player1, player2, id, tId, alias, stage1Name, paid1, paid2 },
-    } = req;
+  withAdminRights,
+  asyncMiddleware(async (req: Request, res: Response) => {
+    const { pair: dto }: SavePairRequest = req.body;
     try {
       let pair: Pair | null = null;
-      const model = {
-        id: id ? id : null,
-        tournamentId: parseInt(tId),
-        alias,
-        player1Id: player1?.id ?? null,
-        player2Id: player2?.id ?? null,
-        stage2Selected: !!stage2Selected,
-        stage1Name,
-        // TODO:
-        paid1: paid1 === 'Si' ? true : false,
-        paid2: paid2 === 'Si' ? true : false,
-      };
-      if (model.id) pair = await Pair.findOne({ where: { id: model.id } });
+      if (dto.id) pair = await Pair.findOne({ where: { id: dto.id } });
       // creazione coppia
       if (pair) {
-        await pair.update(model);
+        await pair.update(dto);
         logger.info(`updated => ${pair.toString()}`);
       } else {
-        pair = await Pair.create(model);
+        pair = await Pair.create(dto);
         logger.info(`created => ${pair.toString()}`);
       }
-      return res.status(200).json(pair);
+      return success<SavePairResponse>(res, 'Coppia salvata...', { pair: rowToModel(pair, pair.id) });
     } catch (err) {
-      return next(err);
+      return serverError('POST pair/ error : ', err, res);
     }
   })
 );
 
+// DELETE
 router.delete(
-  '/',
+  '/delete',
   withAuth,
-  asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
-    let models: Array<Pair> = req.body || [];
-    let rowsAffected = 0;
-    const result = await Pair.destroy({ where: { id: models.map((e) => e.id) } });
-    logger.info(result);
-    return res.status(200).json({ message: `Rows deleted : ${rowsAffected}` });
+  withAdminRights,
+  asyncMiddleware(async (req: Request, res: Response) => {
+    try {
+      const request: DeletePairsRequest = req.body;
+      if (request.pairsList.length === 0) {
+        return missingParameters(res);
+      }
+      await Pair.destroy({ where: { id: request.pairsList.map((e) => e.id!) } });
+      return success(res, request.pairsList.length > 1 ? 'Coppie eliminate...' : 'Coppia eliminata...', {
+        pairsList: request.pairsList,
+      });
+    } catch (err) {
+      return serverError('DELETE pair/delete error : ', err, res);
+    }
   })
 );
 

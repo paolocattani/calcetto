@@ -4,15 +4,15 @@ import {
   FetchPlayersResponse,
   DeletePlayersRequest,
   DeletePlayersResponse,
-  UpdatePlayerResponse,
-  UpdatePlayerRequest,
+  SavePlayerResponse,
+  SavePlayerRequest,
 } from '@common/models';
 import { UnexpectedServerError } from '@common/models/common.models';
 import { DEFAULT_HEADERS, deleteWrapper, postWrapper, putWrapper } from '../../@common/utils/fetch.utils';
 
 export const fetchPlayers = async ({ tId, addEmpty }: FetchPlayersRequest): Promise<FetchPlayersResponse> => {
   try {
-    const response = await fetch(tId ? `/api/v2/player/list/${tId}` : '/api/v2/player/list', {
+    const response = await fetch(tId ? `/api/v2/player/list/${encodeURIComponent(tId)}` : '/api/v2/player/list', {
       method: 'GET',
       ...DEFAULT_HEADERS,
     });
@@ -29,11 +29,11 @@ export const fetchPlayers = async ({ tId, addEmpty }: FetchPlayersRequest): Prom
 export const deletePlayers = async ({ players }: DeletePlayersRequest): Promise<DeletePlayersResponse> =>
   deleteWrapper<DeletePlayersRequest, DeletePlayersResponse>('/api/v2/player/delete', { players });
 
-export const savePlayer = async ({ player }: UpdatePlayerRequest): Promise<UpdatePlayerResponse> =>
-  postWrapper<UpdatePlayerRequest, UpdatePlayerResponse>('/api/v2/player/new', { player });
+export const savePlayer = async ({ player }: SavePlayerRequest): Promise<SavePlayerResponse> =>
+  postWrapper<SavePlayerRequest, SavePlayerResponse>('/api/v2/player/new', { player });
 
-export const updatePlayer = async ({ player }: UpdatePlayerRequest): Promise<UpdatePlayerResponse> =>
-  putWrapper<UpdatePlayerRequest, UpdatePlayerResponse>('/api/v2/player/update', { player });
+export const updatePlayer = async ({ player }: SavePlayerRequest): Promise<SavePlayerResponse> =>
+  putWrapper<SavePlayerRequest, SavePlayerResponse>('/api/v2/player/update', { player });
 
 export const getEmptyPlayer = (label?: string): PlayerDTO => ({
   id: null,

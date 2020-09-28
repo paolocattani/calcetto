@@ -8,7 +8,7 @@ import { PlayerAction } from 'redux/actions';
 import { useTranslation } from 'react-i18next';
 import { InputField } from 'components/core/generic/Input';
 import { PlayerSelector } from 'redux/selectors';
-import { UpdatePlayerRequest } from '@common/models';
+import { SavePlayerRequest } from '@common/models';
 import { YesNoModal } from 'components/core/generic/Commons';
 
 const modalStyle: CSSProperties = {
@@ -35,7 +35,7 @@ const EditPlayer: React.FC<{}> = () => {
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const request: UpdatePlayerRequest = {
+    const request: SavePlayerRequest = {
       player: {
         ...player,
         name,
