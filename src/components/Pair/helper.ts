@@ -1,19 +1,5 @@
-import { getEmptyPlayer } from 'redux/services/player.service';
 import { Styles } from 'react-select';
 import { PairDTO } from '@common/dto';
-
-export const getEmptyRowModel = (label?: string): PairDTO => ({
-  id: null,
-  tId: 0,
-  rowNumber: 0,
-  player1: getEmptyPlayer(),
-  player2: getEmptyPlayer(),
-  alias: label || '',
-  stage1Name: '',
-  placement: 0,
-  paid1: false,
-  paid2: false,
-});
 
 export const valueFormatter = (selectedOption: PairDTO) =>
   selectedOption.alias ? `${selectedOption.alias}` : createAlias(selectedOption);

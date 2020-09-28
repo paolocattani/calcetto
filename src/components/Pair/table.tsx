@@ -12,7 +12,6 @@ import { LoadingModal, YesNoModal, YesNoModalProps } from '../core/generic/Commo
 import { FormEventType } from '../core/types';
 import { RightArrowIcon, TrashIcon, PlusIcon, HomeIcon } from '../core/icons';
 import { cellEditProps, columns } from './editor';
-import { getEmptyRowModel } from './helper';
 // Style
 import './style.css';
 import commonStyle from '../../common.module.css';
@@ -27,7 +26,14 @@ import TournamentBadge from '../Tournament/badge';
 import { useTranslation } from 'react-i18next';
 // Models
 import { PairDTO, PlayerDTO, TournamentProgress } from '@common/dto';
-import { deletePairs, fetchPairs, findAlias, postPair, updatePair } from 'redux/services/pair.service';
+import {
+  deletePairs,
+  fetchPairs,
+  findAlias,
+  getEmptyRowModel,
+  postPair,
+  updatePair,
+} from 'redux/services/pair.service';
 import { HTTPStatusCode } from '@common/models/HttpStatusCode';
 
 const hideAskUser = {

@@ -1,8 +1,8 @@
 import { createReducer, Action } from 'typesafe-actions';
 import { Stage1State } from '@common/models';
 import { Stage1Action } from 'redux/actions';
-import { getEmptyRowModel } from 'components/Pair/helper';
 import { Stage1Row } from '@common/dto';
+import { getEmptyRowModel } from 'redux/services/pair.service';
 
 export const initialStage1State: Stage1State = {
   needRefresh: false,

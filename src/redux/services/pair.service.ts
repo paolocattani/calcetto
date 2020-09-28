@@ -1,3 +1,4 @@
+import { PairDTO } from '@common/dto';
 import {
   FetchPairsRequest,
   FetchPairsResponse,
@@ -11,6 +12,7 @@ import {
   SelectPairsRequest,
 } from '@common/models';
 import { deleteWrapper, getWrapper, postWrapper, putWrapper } from '../../@common/utils/fetch.utils';
+import { getEmptyPlayer } from './player.service';
 
 export const fetchPairs = async ({ tId }: FetchPairsRequest): Promise<FetchPairsResponse> =>
   await getWrapper<FetchPairsResponse>(`/api/v1/pair/list?tId=${encodeURIComponent(tId)}`);
@@ -28,3 +30,16 @@ export const updatePair = async (request: SavePairRequest): Promise<SavePairResp
 
 export const deletePairs = async (request: DeletePairsRequest): Promise<DeletePairsResponse> =>
   await deleteWrapper<DeletePairsRequest, DeletePairsResponse>('/api/v1/delete', request);
+
+export const getEmptyRowModel = (label?: string): PairDTO => ({
+  id: null,
+  tId: 0,
+  rowNumber: 0,
+  player1: getEmptyPlayer(),
+  player2: getEmptyPlayer(),
+  alias: label || '',
+  stage1Name: '',
+  placement: 0,
+  paid1: false,
+  paid2: false,
+});

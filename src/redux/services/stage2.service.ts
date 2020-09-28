@@ -1,7 +1,7 @@
 import { FetchStage2Response, FetchStage2Request } from '@common/models';
-import { getEmptyRowModel } from '../../components/Pair/helper';
 import { ICell } from '../../@common/dto';
 import { DEFAULT_HEADERS } from '../../@common/utils/fetch.utils';
+import { getEmptyRowModel } from './pair.service';
 
 export const deleteStage2 = async (tId: number) => {
   const response = await fetch('/api/v1/stage2', {
