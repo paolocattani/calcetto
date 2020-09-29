@@ -2,21 +2,21 @@ import { Router, Response, NextFunction, Request } from 'express';
 
 // Core
 import { logger } from '../core/logger';
-import { asyncMiddleware, withAuth, withAdminRights, logController } from '../core/middleware';
+import { asyncMiddleware, withAuth, withAdminRights, controllerLogger } from '../core/middleware';
 
 import { AppRequest } from './index';
 import { deleteStage1, updatePlacement, generateStage1Rows, updateCell } from '../manager/stage1.manager';
 
 const router = Router();
 router.use('/', (req: Request, res: Response, next: NextFunction) =>
-  logController(req, next, 'Stage1 Controller', '/api/v1/stage1')
+  controllerLogger(req, next, 'Stage1 Controller', '/api/v1/stage1')
 );
 
 router.post(
   '/placement',
   withAuth,
   withAdminRights,
-  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
+  asyncMiddleware(async (req: AppRequest, res: Response) => {
     const { rows } = req.body;
     await updatePlacement(rows);
     return res.status(200).json({ saved: true });
@@ -30,7 +30,7 @@ router.delete(
   '/',
   withAuth,
   withAdminRights,
-  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
+  asyncMiddleware(async (req: AppRequest, res: Response) => {
     const { tId } = req.body;
     await deleteStage1(tId);
     return res.status(200).json({ saved: true });
@@ -44,7 +44,7 @@ router.post(
   '/cell',
   withAuth,
   withAdminRights,
-  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
+  asyncMiddleware(async (req: AppRequest, res: Response) => {
     const { tId, tableName, pair1Id, pair2Id, score } = req.body;
     try {
       await updateCell(tId, tableName, pair1Id, pair2Id, score);
@@ -67,7 +67,7 @@ router.post(
 router.post(
   '/',
   withAuth,
-  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
+  asyncMiddleware(async (req: AppRequest, res: Response) => {
     const { rows, stageName } = req.body;
     const { user } = req;
     try {

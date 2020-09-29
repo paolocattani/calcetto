@@ -6,7 +6,7 @@ import {
   SavePlayerRequest,
   SavePlayerResponse,
 } from '../../src/@common/models/player.model';
-import { withAuth, asyncMiddleware, logController, withAdminRights } from '../core/middleware';
+import { withAuth, asyncMiddleware, controllerLogger, withAdminRights } from '../core/middleware';
 import {
   create,
   deletePlayer,
@@ -21,7 +21,7 @@ import { entityNotFound, failure, missingParameters, serverError, success } from
 
 const router = Router();
 router.use('/', (req: Request, res: Response, next: NextFunction) =>
-  logController(req, next, 'Player Controller', '/api/v2/player')
+  controllerLogger(req, next, 'Player Controller', '/api/v2/player')
 );
 
 router.get(

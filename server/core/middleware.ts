@@ -4,17 +4,21 @@ import jwt from 'jsonwebtoken';
 import { getSecret, isAdmin } from '../manager/auth.manager';
 import { AppRequest } from '../controller';
 // Models
-// import User from '../database/user.model';
+import { User } from '../database';
 import { UserDTO } from '../../src/@common/dto';
 // Core
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 import { unauthorized } from '../controller/common.response';
-import { User } from '../database';
 
 // dev logger
 export const routeLogger = (req: Request, res: Response, next: NextFunction) => {
   if (isDevMode()) logger.info(`Serving route : ${chalk.greenBright.bold(req.originalUrl)}`);
+  next();
+};
+
+export const controllerLogger = (req: Request, next: NextFunction, controller: string, path: string) => {
+  if (isDevMode()) logger.info(`${controller} : ${req.method} ${req.originalUrl.replace(path, '')} `);
   next();
 };
 
@@ -29,7 +33,7 @@ export const typeControl = <T extends Request>(req: T, res: Response, next: Next
 // Controllo autenticazione. Da utilizzare per tutte le API che richiedono autenticazione
 export const withAuth = async (req: AppRequest, res: Response, next: NextFunction) => {
   const token = req.cookies.token;
-  if (!token || typeof token != 'string') return res.status(401).send('Unauthorized: No token provided');
+  if (!token || typeof token != 'string') return unauthorized(res, 'Non autorizzato!');
   const [user, isTokenValid] = safeVerifyToken(token);
   if (isTokenValid && user) {
     // Controllo se l'utente esiste ancora a db
@@ -64,10 +68,5 @@ export const safeVerifyToken = (token: any): [UserDTO | null, boolean] => {
 
 //TODO: Controllo accessi
 export const auditControl = (req: Request, res: Response, next: NextFunction) => {
-  next();
-};
-
-export const logController = (req: Request, next: NextFunction, controller: string, path: string) => {
-  if (isDevMode()) logger.info(`${controller} : ${req.method} ${req.originalUrl.replace(path, '')} `);
   next();
 };

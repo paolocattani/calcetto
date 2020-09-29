@@ -2,7 +2,7 @@
 import '../core/env';
 import { logger } from '../core/logger';
 import { isProductionMode } from '../core/debug';
-import { withAuth, asyncMiddleware, logController } from '../core/middleware';
+import { withAuth, asyncMiddleware, controllerLogger } from '../core/middleware';
 // Types
 import { AppRequest } from './index';
 import { Router, Request, Response, NextFunction } from 'express';
@@ -18,6 +18,7 @@ import {
   findUserByEmailAndUsername,
   addUserCookies,
   isValidRegister,
+  SESSION_TOKEN,
 } from '../manager/auth.manager';
 // Models
 import User from '../database/user.model';
@@ -40,13 +41,13 @@ const wrongCredentials = (res: Response) =>
   failure(res, 'Credenziali errate', 'Wrong credentials', HTTPStatusCode.Unauthorized);
 
 router.use('/', (req: Request, res: Response, next: NextFunction) =>
-  logController(req, next, 'Auth Controller', '/api/v2/auth')
+  controllerLogger(req, next, 'Auth Controller', '/api/v2/auth')
 );
 
 router.get(
   '/check',
   withAuth,
-  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
+  asyncMiddleware(async (req: AppRequest, res: Response) => {
     const additional: OmitGeneric<AuthenticationResponse> = { user: req.user };
     return success(res, `Bentornato ${req.user!.name}`, additional);
   })
@@ -55,9 +56,9 @@ router.get(
 router.get(
   '/logout',
   withAuth,
-  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
+  asyncMiddleware(async (req: AppRequest, res: Response) => {
     //FIXME:
-    res.cookie('token', {
+    res.cookie(SESSION_TOKEN, {
       expires: new Date(Date.now()),
       ...(isProductionMode()
         ? {
@@ -72,7 +73,7 @@ router.get(
 
 router.post(
   '/register',
-  asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
+  asyncMiddleware(async (req: Request, res: Response) => {
     logger.info('/register start ');
     try {
       const registrationInfo = req.body as OmitHistory<RegistrationRequest>;
@@ -123,7 +124,7 @@ router.post(
 router.put(
   '/update',
   withAuth,
-  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
+  asyncMiddleware(async (req: AppRequest, res: Response) => {
     try {
       let model = parseBody(req.body as OmitHistory<UpdateUserRequest>);
       logger.info('/update : ', model);
@@ -143,7 +144,7 @@ router.put(
 
 router.post(
   '/login',
-  asyncMiddleware(async (req: Request, res: Response, next: NextFunction) => {
+  asyncMiddleware(async (req: Request, res: Response) => {
     const { username, password } = req.body as OmitHistory<LoginRequest>;
     try {
       logger.info('/login start ');
@@ -174,7 +175,7 @@ router.post(
 router.delete(
   '/delete',
   withAuth,
-  asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
+  asyncMiddleware(async (req: AppRequest, res: Response) => {
     const { password } = req.body as OmitHistory<DeleteUserRequest>;
     const { email, username } = req.user!;
     try {
@@ -190,7 +191,7 @@ router.delete(
       await deleteUser(user);
       logger.info('/delete end ');
       // FIXME: fix cookie erase
-      res.cookie('token', { expires: new Date(Date.now()), httpOnly: true });
+      res.cookie(SESSION_TOKEN, { expires: new Date(Date.now()), httpOnly: true });
       return success(res, `Utente "${user.name}" eliminato `);
     } catch (error) {
       return serverError('DELETE auth/delete error ! : ', error, res);

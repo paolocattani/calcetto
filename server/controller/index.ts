@@ -1,7 +1,5 @@
-import express, { Application as ExpressApplication, Response, Request, NextFunction } from 'express';
+import { Application as ExpressApplication, Response, Request } from 'express';
 
-// Models
-import { UserDTO } from '../../src/@common/dto';
 // Controllers
 import playerRouter from './player.controller';
 import pairRouter from './pair.controller';
@@ -13,10 +11,12 @@ import authRouter from './auth.controller';
 import { sessionControl } from '../events/events';
 import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
 import { withAuth } from '../core/middleware';
+import { UserDTO } from '../../src/@common/dto';
 
 export interface AppRequest extends Request {
   user?: UserDTO;
 }
+
 export default (application: ExpressApplication): void => {
   // Endpoints
   application.use('/api/v2/tournament', tournamentRouter);
@@ -30,11 +30,11 @@ export default (application: ExpressApplication): void => {
   application.get('/sse/v1/session', withAuth, sessionControl);
 
   // Test
-  application.get('/status', (req: Request, res: Response, next: NextFunction) =>
+  application.get('/status', (req: Request, res: Response) =>
     // eslint-disable-next-line quotes
     res
       .status(HTTPStatusCode.OK)
       // eslint-disable-next-line quotes
-      .json({ code: HTTPStatusCode.ImATeapot, message: `I'm not going to brew coffee, I'm a fucking teapot!` })
+      .json({ code: HTTPStatusCode.ImATeapot, message: `I ain't gonna brew coffee. I'm a fucking teapot!` })
   );
 };

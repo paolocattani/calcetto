@@ -19,6 +19,7 @@ import { RegistrationRequest } from '../../src/@common/models/auth.model';
 const className = 'Authentication Manager : ';
 const DEFAULT_TOKEN_EXPIRATION = '8h';
 const DEFAULT_HASH = 'dummy$Hash';
+export const SESSION_TOKEN = 'session_id';
 export const phoneRegExp = new RegExp('^d{10}$');
 export const passwordRegExp = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,16})');
 export const emailRegExp = new RegExp(
@@ -48,7 +49,7 @@ export const generateToken = (value: UserDTO) =>
 export const addUserCookies = (user: UserDTO, res: Response): void => {
   logProcess(className + 'addUserCookies', ` : ${getExpiration()}`);
   res.cookie(
-    'token',
+    SESSION_TOKEN,
     generateToken(user),
     isProductionMode()
       ? {
