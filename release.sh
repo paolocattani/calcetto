@@ -10,6 +10,7 @@ echo    '------------------------'
 # https://zhu45.org/posts/2016/Dec/21/environment-variable-substitution-using-sed/
 sed -i 's|^REACT_APP_CLIENT_VERSION=.*$|REACT_APP_CLIENT_VERSION='$REACT_APP_CLIENT_VERSION'|g' .env
 sed -i 's|^REACT_APP_CLIENT_COMMIT_HASH=.*$|REACT_APP_CLIENT_COMMIT_HASH='$REACT_APP_CLIENT_COMMIT_HASH'|g' .env
+sed -i 's|^sonar.projectVersion=.*$|sonar.projectVersion='$REACT_APP_CLIENT_VERSION'|g' sonar-project.properties
 
 echo '--> Run Build...'
 npm run CRA:build
