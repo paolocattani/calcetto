@@ -25,25 +25,25 @@ export interface Message {
 
 // Update
 export const updateUser = async (updateUserRequest: OmitHistory<UpdateUserRequest>): Promise<AuthenticationResponse> =>
-  await putWrapper<UpdateUserRequest, AuthenticationResponse>('/api/v2/auth/update', updateUserRequest);
+  putWrapper<UpdateUserRequest, AuthenticationResponse>('/api/v2/auth/update', updateUserRequest);
 
 // Delete
 export const deleteUser = async (deleteUserRequest: OmitHistory<DeleteUserRequest>): Promise<AuthenticationResponse> =>
-  await deleteWrapper<DeleteUserRequest, AuthenticationResponse>('/api/v2/auth/delete', deleteUserRequest);
+  deleteWrapper<DeleteUserRequest, AuthenticationResponse>('/api/v2/auth/delete', deleteUserRequest);
 
 // Login
 export const login = async (loginRequest: OmitHistory<LoginRequest>): Promise<AuthenticationResponse> =>
-  await postWrapper<LoginRequest, AuthenticationResponse>('/api/v2/auth/login', loginRequest);
+  postWrapper<LoginRequest, AuthenticationResponse>('/api/v2/auth/login', loginRequest);
 
 // Login
 export const logout = async (): Promise<AuthenticationResponse> =>
-  await getWrapper<AuthenticationResponse>('/api/v2/auth/logout');
+  getWrapper<AuthenticationResponse>('/api/v2/auth/logout');
 
 // Registration
 export const registration = async (
   registrationRequest: OmitHistory<RegistrationRequest>
 ): Promise<RegistrationResponse> =>
-  await postWrapper<RegistrationRequest, AuthenticationResponse>('/api/v2/auth/register', registrationRequest);
+  postWrapper<RegistrationRequest, AuthenticationResponse>('/api/v2/auth/register', registrationRequest);
 
 export const CheckAuthentication = async (): Promise<AuthenticationResponse> => {
   let response;
