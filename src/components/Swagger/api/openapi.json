@@ -3,7 +3,11 @@
   "info" : {
     "title" : "Calcetto API",
     "description" : "<strong><i>API definitions for Calcetto API server</i></strong>",
-    "version" : "1.0.0"
+    "version" : "1.0.0",
+    "contact" : {
+      "name" : "Paolo Cattani",
+      "email" : "paolocattani0501@gmail.com"
+    }
   },
   "servers" : [ {
     "description" : "SwaggerHub API Auto Mocking",
@@ -21,6 +25,9 @@
   }, {
     "name" : "Players",
     "description" : "Manage players"
+  } ],
+  "security" : [ {
+    "cookieAuth" : [ ]
   } ],
   "paths" : {
     "/auth/check" : {
@@ -110,6 +117,7 @@
       "post" : {
         "summary" : "Authenticate user",
         "tags" : [ "Authentication" ],
+        "security" : [ ],
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -134,6 +142,14 @@
         "responses" : {
           "200" : {
             "description" : "Success",
+            "headers" : {
+              "Set-Cookie" : {
+                "schema" : {
+                  "type" : "string",
+                  "example" : "session_id=abcde12345; Secure=true; SameSite='none'"
+                }
+              }
+            },
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -158,6 +174,7 @@
       "post" : {
         "summary" : "Register new user",
         "tags" : [ "Authentication" ],
+        "security" : [ ],
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -214,6 +231,14 @@
         "responses" : {
           "200" : {
             "description" : "Success",
+            "headers" : {
+              "Set-Cookie" : {
+                "schema" : {
+                  "type" : "string",
+                  "example" : "session_id=abcde12345; Secure=true; SameSite='none'"
+                }
+              }
+            },
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -459,6 +484,43 @@
         }
       }
     },
+    "/tournament/delete" : {
+      "delete" : {
+        "summary" : "Delete tournament",
+        "tags" : [ "Tournament" ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuthenticationReponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid credentials",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BasicResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "$ref" : "#/components/responses/Unauthorized"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
     "/player/list" : {
       "get" : {
         "tags" : [ "Players" ],
@@ -651,6 +713,13 @@
     }
   },
   "components" : {
+    "securitySchemes" : {
+      "cookieAuth" : {
+        "type" : "apiKey",
+        "in" : "cookie",
+        "name" : "session_id"
+      }
+    },
     "schemas" : {
       "BasicResponse" : {
         "type" : "object",
