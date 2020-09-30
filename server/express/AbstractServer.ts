@@ -15,8 +15,6 @@ import compression from 'compression';
 import { json, urlencoded } from 'body-parser';
 import cookieParser from 'cookie-parser';
 import express, { Application as ExpressApplication } from 'express';
-// Memory
-var memwatch = require('@airbnb/node-memwatch');
 // Auth
 import cors from 'cors';
 // Other
@@ -80,7 +78,7 @@ export abstract class AbstractServer implements IServer {
       //this.application.set('trust proxy', 1);
       .use(json())
       .use(urlencoded({ extended: false }))
-      .use(cookieParser())
+      .use(cookieParser(process.env.SERVER_SECRET || 'O<o@cZqCJ-Qmu1-<C<e@R4m0n(nR&Sk'))
       .disable('X-Powered-By')
       .all('*', auditControl)
       .all('*', routeLogger);
@@ -107,9 +105,7 @@ export abstract class AbstractServer implements IServer {
       );
     });
 
-    let hd = new memwatch.HeapDiff();
-    memwatch.on('stats', (info: any) => {
-      var diff = hd.end();
+    setInterval(() => {
       logger.info(chalk.bold.redBright(`--- Process@${process.pid} status ---------------- `));
       logger.info(chalk.greenBright('   Uptime        : '), process.uptime());
       logger.info(chalk.greenBright('   CPU usage'));
@@ -124,16 +120,8 @@ export abstract class AbstractServer implements IServer {
           `     ${key}    : ${Math.round((memory[key as keyof NodeJS.MemoryUsage] / 1024 / 1024) * 100) / 100} MB`
         );
       }
-      if (isProductionMode()) {
-        logger.info(chalk.bold.redBright('--- Memory Usage --- '));
-        logger.info(chalk.bold.redBright('## Info '));
-        logger.error(JSON.stringify(info));
-        logger.info(chalk.bold.redBright('## Diff '));
-        logger.error(JSON.stringify(diff));
-        logger.info(chalk.bold.redBright('--------------------------------------- '));
-      }
-      hd = new memwatch.HeapDiff();
-    });
+      logger.info(chalk.bold.redBright('--------------------------------------- '));
+    }, 30 * 60 * 1000);
 
     return httpServer;
   }

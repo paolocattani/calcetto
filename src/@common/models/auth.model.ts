@@ -59,6 +59,7 @@ export interface RegistrationResponse extends GenericReponse {
   errors?: Array<string>;
   user?: UserDTO;
 }
+export interface DeleteUserResponse extends GenericReponse {}
 
 // Error
 export interface AuthenticationError extends GenericReponse {}

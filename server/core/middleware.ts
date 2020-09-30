@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import chalk from 'chalk';
 import jwt from 'jsonwebtoken';
-import { getSecret, isAdmin } from '../manager/auth.manager';
+import { getSecret, isAdmin, SESSION_TOKEN } from '../manager/auth.manager';
 import { AppRequest } from '../controller';
 // Models
 import { User } from '../database';
@@ -32,8 +32,11 @@ export const typeControl = <T extends Request>(req: T, res: Response, next: Next
 
 // Controllo autenticazione. Da utilizzare per tutte le API che richiedono autenticazione
 export const withAuth = async (req: AppRequest, res: Response, next: NextFunction) => {
-  const token = req.cookies.token;
-  if (!token || typeof token != 'string') return unauthorized(res, 'Non autorizzato!');
+  const token = req.signedCookies[SESSION_TOKEN];
+  if (!token || typeof token != 'string') {
+    logger.error(chalk.redBright('Token not found : '), token);
+    return unauthorized(res, 'Non autorizzato!');
+  }
   const [user, isTokenValid] = safeVerifyToken(token);
   if (isTokenValid && user) {
     // Controllo se l'utente esiste ancora a db

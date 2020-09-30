@@ -28,6 +28,7 @@ import { missingParameters, success, failure, entityNotFound, serverError } from
 import {
   AuthenticationResponse,
   DeleteUserRequest,
+  DeleteUserResponse,
   LoginRequest,
   RegistrationRequest,
   UpdateUserRequest,
@@ -107,8 +108,7 @@ router.post(
       if (record) {
         addUserCookies(record, res);
         logger.info('/register end ');
-        const additional: OmitGeneric<AuthenticationResponse> = { user: record };
-        return success(res, `Benvenuto ${record.name}`, additional);
+        return success<AuthenticationResponse>(res, `Benvenuto ${record.name}`, { user: record });
       } else {
         throw new Error('Server Error.!');
       }
@@ -134,8 +134,7 @@ router.put(
       }
       await user.update(model);
       // TODO: aggiornare anche il giocare associato con i dati comuni
-      const additional: OmitGeneric<AuthenticationResponse> = { user: convertEntityToDTO(user) };
-      return success(res, 'Aggiornamento effettuato', additional);
+      return success<AuthenticationResponse>(res, 'Aggiornamento effettuato', { user: convertEntityToDTO(user) });
     } catch (error) {
       return serverError('PUT auth/update error ! : ', error, res);
     }
@@ -163,9 +162,7 @@ router.post(
 
       const userDTO = convertEntityToDTO(user);
       addUserCookies(userDTO, res);
-      logger.info('/login end ');
-      const additional: OmitGeneric<AuthenticationResponse> = { user: userDTO };
-      return success(res, `Benvenuto ${userDTO.name}`, additional);
+      return success<AuthenticationResponse>(res, `Benvenuto ${userDTO.name}`, { user: userDTO });
     } catch (error) {
       return serverError('POST auth/login error ! : ', error, res);
     }
@@ -192,7 +189,7 @@ router.delete(
       logger.info('/delete end ');
       // FIXME: fix cookie erase
       res.cookie(SESSION_TOKEN, { expires: new Date(Date.now()), httpOnly: true });
-      return success(res, `Utente "${user.name}" eliminato `);
+      return success<DeleteUserResponse>(res, `Utente "${user.name}" eliminato `);
     } catch (error) {
       return serverError('DELETE auth/delete error ! : ', error, res);
     }

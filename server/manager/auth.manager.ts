@@ -1,7 +1,7 @@
 // Session
 import { Response } from 'express';
 // Models/Types
-import { Player, User } from '../database';
+import { User } from '../database';
 import { UserDTO, UserRole, PlayerRole, PlayerDTO } from '../../src/@common/dto';
 // Logger utils
 import { logProcess, logger } from '../core/logger';
@@ -48,16 +48,20 @@ export const generateToken = (value: UserDTO) =>
 // Add token to cookies
 export const addUserCookies = (user: UserDTO, res: Response): void => {
   logProcess(className + 'addUserCookies', ` : ${getExpiration()}`);
-  res.cookie(
-    SESSION_TOKEN,
-    generateToken(user),
-    isProductionMode()
+  res.cookie(SESSION_TOKEN, generateToken(user), {
+    // 8h : Allineare a process.env.SERVER_TOKEN_EXPIRES_IN
+    maxAge: 8 * 60 * 60 * 1000,
+    signed: true,
+    ...(isProductionMode()
       ? {
           secure: true,
           sameSite: 'none',
         }
-      : { httpOnly: true }
-  );
+      : {
+          httpOnly: true,
+          maxAge: 8 * 60 * 60 * 1000,
+        }),
+  });
 };
 
 // List all users

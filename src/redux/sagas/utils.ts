@@ -1,4 +1,4 @@
-import { GenericReponse, UnexpectedServerError } from '@common/models/common.models';
+import { GenericReponse, UnexpectedServerError, UserMessageType } from '@common/models/common.models';
 import { HTTPStatusCode } from '@common/models/HttpStatusCode';
 import { toast } from 'react-toastify';
 import { put, call } from 'redux-saga/effects';
@@ -14,13 +14,24 @@ export function* entityLifeCycle<Req, Res extends GenericReponse>(
   try {
     // Call method with payload
     const response: Res = yield call(method, payload);
+    if (response.userMessage) {
+      switch (response.userMessage.message) {
+        case UserMessageType.Success:
+          toast.success(response.userMessage.message);
+          break;
+        case UserMessageType.Warning:
+          toast.warning(response.userMessage.message);
+          break;
+        case UserMessageType.Danger:
+          toast.error(response.userMessage.message);
+          break;
+      }
+    }
+
     // If success
     // FIXME: include all 2XX
     if (response.code === HTTPStatusCode.OK) {
       // Show success toast
-      if (response.userMessage.message) {
-        toast.success(response.userMessage.message);
-      }
       // Dispatch success action
       yield put(action.success(response));
       // Callback
@@ -28,10 +39,6 @@ export function* entityLifeCycle<Req, Res extends GenericReponse>(
         onSuccess(response);
       }
     } else {
-      // Show warning toast
-      if (response.userMessage.message) {
-        toast.warning(response.userMessage.message);
-      }
       // Dispatch failure action
       yield put(action.failure(response));
       // Callback
