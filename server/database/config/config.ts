@@ -1,4 +1,4 @@
-import { dbLogger as logger } from '../core/logger';
+import { dbLogger as logger } from '../../core/logger';
 // https://github.com/sequelize/sequelize/issues/11371
 
 // Sequelize configuration
