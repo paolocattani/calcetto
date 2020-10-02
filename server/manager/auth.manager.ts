@@ -1,5 +1,5 @@
 // Session
-import { Response } from 'express';
+import { CookieOptions, Response } from 'express';
 // Models/Types
 import { User } from '../database';
 import { UserDTO, UserRole, PlayerRole, PlayerDTO } from '../../src/@common/dto';
@@ -14,12 +14,13 @@ import { Op } from 'sequelize';
 import { lowerWrapper } from '../core/utils';
 import { isProductionMode } from '../core/debug';
 import { RegistrationRequest } from '../../src/@common/models/auth.model';
+import { AppRequest } from '../controller';
 
 // Const
 const className = 'Authentication Manager : ';
 const DEFAULT_TOKEN_EXPIRATION = '8h';
 const DEFAULT_HASH = 'dummy$Hash';
-export const SESSION_TOKEN = 'session_id';
+const SESSION_TOKEN = 'session_id';
 export const phoneRegExp = new RegExp('^d{10}$');
 export const passwordRegExp = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,16})');
 export const emailRegExp = new RegExp(
@@ -34,35 +35,39 @@ export const generatePassword = async (email: string, password: string) =>
 export const comparePasswords = async (email: string, password: string, hash: string): Promise<boolean> =>
   await bcrypt.compare(generateHashSecret(email, password), hash);
 
-export const getSecret = () => process.env.SERVER_HASH || DEFAULT_HASH;
-export const getExpiration = () => process.env.SERVER_TOKEN_EXPIRES_IN || DEFAULT_TOKEN_EXPIRATION;
-export const generateHashSecret = (email: string, password: string) => email + getSecret() + password;
+export const TOKEN_SECRET = process.env.SERVER_HASH || DEFAULT_HASH;
 
+const TOKEN_EXPIRATION = process.env.SERVER_TOKEN_EXPIRES_IN || DEFAULT_TOKEN_EXPIRATION;
+const generateHashSecret = (email: string, password: string) => email + TOKEN_SECRET + password;
+
+export const getToken = (req: AppRequest) => req.signedCookies[SESSION_TOKEN];
 // Generate JWT Token
-export const generateToken = (value: UserDTO) =>
-  jwt.sign({ ...value }, getSecret(), {
-    expiresIn: getExpiration(),
+const generateToken = (value: UserDTO) =>
+  jwt.sign({ ...value }, TOKEN_SECRET, {
+    expiresIn: TOKEN_EXPIRATION,
     algorithm: 'HS256',
   });
 
-// Add token to cookies
-export const addUserCookies = (user: UserDTO, res: Response): void => {
-  logProcess(className + 'addUserCookies', ` : ${getExpiration()}`);
-  res.cookie(SESSION_TOKEN, generateToken(user), {
-    // 8h : Allineare a process.env.SERVER_TOKEN_EXPIRES_IN
-    maxAge: 8 * 60 * 60 * 1000,
-    signed: true,
-    ...(isProductionMode()
-      ? {
-          secure: true,
-          sameSite: 'none',
-        }
-      : {
-          httpOnly: true,
-          maxAge: 8 * 60 * 60 * 1000,
-        }),
-  });
+const cookiesOption: CookieOptions = {
+  // 8h : Allineare a process.env.SERVER_TOKEN_EXPIRES_IN
+  maxAge: 8 * 60 * 60 * 1000,
+  signed: true,
+  ...(isProductionMode()
+    ? {
+        secure: true,
+        sameSite: 'none',
+      }
+    : {
+        httpOnly: true,
+        maxAge: 8 * 60 * 60 * 1000,
+      }),
 };
+
+// http://expressjs.com/en/api.html#res.cookie
+export const addUserCookies = (user: UserDTO, res: Response) =>
+  res.cookie(SESSION_TOKEN, generateToken(user), cookiesOption);
+// http://expressjs.com/en/api.html#res.clearCookie
+export const removeUserCookies = (res: Response) => res.clearCookie(SESSION_TOKEN, cookiesOption);
 
 // List all users
 export const listAll = async (): Promise<UserDTO[]> => {

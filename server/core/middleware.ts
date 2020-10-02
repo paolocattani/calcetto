@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import chalk from 'chalk';
 import jwt from 'jsonwebtoken';
-import { getSecret, isAdmin, SESSION_TOKEN } from '../manager/auth.manager';
+import { TOKEN_SECRET, isAdmin, getToken } from '../manager/auth.manager';
 import { AppRequest } from '../controller';
 // Models
 import { User } from '../database';
@@ -32,7 +32,7 @@ export const typeControl = <T extends Request>(req: T, res: Response, next: Next
 
 // Controllo autenticazione. Da utilizzare per tutte le API che richiedono autenticazione
 export const withAuth = async (req: AppRequest, res: Response, next: NextFunction) => {
-  const token = req.signedCookies[SESSION_TOKEN];
+  const token = getToken(req);
   if (!token || typeof token != 'string') {
     logger.error(chalk.redBright('Token not found : '), token);
     return unauthorized(res, 'Non autorizzato!');
@@ -62,7 +62,7 @@ export const withAdminRights = (req: AppRequest, res: Response, next: NextFuncti
 export const safeVerifyToken = (token: any): [UserDTO | null, boolean] => {
   let decoded = null;
   try {
-    decoded = jwt.verify(token, getSecret()) as UserDTO;
+    decoded = jwt.verify(token, TOKEN_SECRET) as UserDTO;
     return [decoded, true];
   } catch (error) {
     return [null, false];

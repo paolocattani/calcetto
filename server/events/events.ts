@@ -4,7 +4,7 @@ import { AppRequest } from '../controller';
 // Core
 import { logger } from '../core/logger';
 import { asyncMiddleware, safeVerifyToken } from '../core/middleware';
-import { SESSION_TOKEN } from '../manager/auth.manager';
+import { getToken } from '../manager/auth.manager';
 import { DEFAULT_HEADERS, EOM, CHAR_SET } from './const';
 import { SessionStatus, Message, ConnectedClient } from './types';
 
@@ -13,7 +13,7 @@ let ii = 0;
 
 export const sessionControl = asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
   req.socket.setTimeout(10000);
-  const token = req.signedCookies[SESSION_TOKEN];
+  const token = getToken(req);
   let intervalId: NodeJS.Timeout | null = null;
 
   // Apro connessione

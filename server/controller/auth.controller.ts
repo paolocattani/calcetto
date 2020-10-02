@@ -1,7 +1,6 @@
 // Core
 import '../core/env';
 import { logger } from '../core/logger';
-import { isProductionMode } from '../core/debug';
 import { withAuth, asyncMiddleware, controllerLogger } from '../core/middleware';
 // Types
 import { AppRequest } from './index';
@@ -18,7 +17,7 @@ import {
   findUserByEmailAndUsername,
   addUserCookies,
   isValidRegister,
-  SESSION_TOKEN,
+  removeUserCookies,
 } from '../manager/auth.manager';
 // Models
 import User from '../database/user.model';
@@ -58,16 +57,7 @@ router.get(
   '/logout',
   withAuth,
   asyncMiddleware(async (req: AppRequest, res: Response) => {
-    //FIXME:
-    res.cookie(SESSION_TOKEN, {
-      expires: new Date(Date.now()),
-      ...(isProductionMode()
-        ? {
-            secure: true,
-            sameSite: 'none',
-          }
-        : { httpOnly: true }),
-    });
+    removeUserCookies(res);
     return success(res, 'A presto...');
   })
 );
@@ -187,8 +177,7 @@ router.delete(
 
       await deleteUser(user);
       logger.info('/delete end ');
-      // FIXME: fix cookie erase
-      res.cookie(SESSION_TOKEN, { expires: new Date(Date.now()), httpOnly: true });
+      removeUserCookies(res);
       return success<DeleteUserResponse>(res, `Utente "${user.name}" eliminato `);
     } catch (error) {
       return serverError('DELETE auth/delete error ! : ', error, res);
