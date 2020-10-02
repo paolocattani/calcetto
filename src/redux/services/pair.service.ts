@@ -31,7 +31,7 @@ export const updatePair = async (request: SavePairRequest): Promise<SavePairResp
 export const deletePairs = async (request: DeletePairsRequest): Promise<DeletePairsResponse> =>
   deleteWrapper<DeletePairsRequest, DeletePairsResponse>('/api/v1/delete', request);
 
-export const getEmptyRowModel = (label?: string): PairDTO => ({
+export const getEmptyPair = (label?: string): PairDTO => ({
   id: null,
   tId: 0,
   rowNumber: 0,

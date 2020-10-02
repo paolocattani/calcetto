@@ -6,65 +6,25 @@ import {
   UpdateCellRequest,
   UpdateCellResponse,
   UpdatePlacementRequest,
-  UpdateSelectedPairsRequest,
+  UpdatePlacementResponse,
 } from '../../@common/models';
 import { rowsGenerator } from '../../components/Stage1/helper';
-import { DEFAULT_HEADERS } from '../../@common/utils/fetch.utils';
+import { postWrapper, putWrapper } from '../../@common/utils/fetch.utils';
 
-export const fetchStage1 = async ({ pairsList, stageName }: FetchStage1Request): Promise<FetchStage1Response> => {
-  try {
-    const template = rowsGenerator(pairsList);
-    const response = await fetch('/api/v1/stage1', {
-      method: 'POST',
-      ...DEFAULT_HEADERS,
-      body: JSON.stringify({ rows: template, stageName }),
-    });
-    const rows = await response.json();
-    return { pairsList, stageName, rows };
-  } catch (e) {
-    return { pairsList, stageName, rows: [] };
-  }
-};
+export const fetchStage1 = async ({ pairsList, stageName }: FetchStage1Request): Promise<FetchStage1Response> =>
+  postWrapper<FetchStage1Request, FetchStage1Response>('/api/v1/stage1', {
+    // FIXME:
+    rows: rowsGenerator(pairsList),
+    stageName,
+    pairsList,
+  });
 
-export const updatePlacement = async ({ rows }: UpdatePlacementRequest): Promise<void> => {
-  try {
-    const response = await fetch('/api/v1/stage1/placement', {
-      method: 'POST',
-      ...DEFAULT_HEADERS,
-      body: JSON.stringify({ rows }),
-    });
-    await response.json();
-  } catch (e) {
-    console.error('Error stage1 update placement');
-  }
-};
+export const updatePlacement = async (request: UpdatePlacementRequest): Promise<UpdatePlacementResponse> =>
+  putWrapper<UpdatePlacementRequest, UpdatePlacementResponse>('/api/v1/stage1/update/placement', request);
 
-export const updateSelectedPairs = async ({ rows, stageName }: UpdateSelectedPairsRequest): Promise<void> => {
-  try {
-    const response = await fetch('/api/v1/pair/selected', {
-      method: 'PUT',
-      ...DEFAULT_HEADERS,
-      body: JSON.stringify({ pairs: rows.map((e) => e.pair), stage1Name: stageName }),
-    });
-    await response.json();
-  } catch (e) {
-    console.error('Error stage1 update selections');
-  }
-};
+export const updateCellStage1 = async (request: UpdateCellRequest): Promise<UpdateCellResponse> =>
+  putWrapper<UpdateCellRequest, UpdateCellResponse>('/api/v1/stage1/update/cell', request);
 
-export const updateCellStage1 = async (model: UpdateCellRequest): Promise<UpdateCellResponse> => {
-  try {
-    const response = await fetch('/api/v1/stage1/cell', {
-      method: 'POST',
-      ...DEFAULT_HEADERS,
-      body: JSON.stringify(model),
-    });
-    await response.json();
-    return {};
-  } catch (e) {
-    return {};
-  }
-};
 export const createStage1Channel = (channel: EventSource) =>
   eventChannel<Message>((emitter) => {
     // Listen for open channel

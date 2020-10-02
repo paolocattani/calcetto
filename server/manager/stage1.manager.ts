@@ -21,6 +21,7 @@ export const updatePlacement = async (mapper: { id: number; placement: number }[
   } catch (error) {
     logProcess(className + 'updatePlacement', 'error');
     logger.error('updatePlacement : ', error);
+    return false;
   }
   logProcess(className + 'updatePlacement', 'end');
   return true;
@@ -37,6 +38,29 @@ export const deleteStage1 = async (tournamentId: number) => {
   logProcess(className + 'deleteStage1', 'end');
 };
 
+export const findStage1 = async (
+  tournamentId: number,
+  name: string,
+  pair1Id: number,
+  pair2Id: number
+): Promise<Stage1 | null> => {
+  logProcess(className + 'findFromPairs', 'start');
+  let stage: Stage1 | null = null;
+  try {
+    stage = await Stage1.findOne({
+      where: {
+        [Op.or]: [{ [Op.and]: { pair1Id, pair2Id } }, { [Op.and]: { pair1Id: pair2Id, pair2Id: pair1Id } }],
+        name,
+        tournamentId,
+      },
+    });
+  } catch (error) {
+    logProcess(className + 'updateCell', 'error');
+  }
+  logProcess(className + 'findFromPairs', 'end');
+  return stage;
+};
+
 export const updateCell = async (
   tournamentId: number,
   name: string,
@@ -47,23 +71,17 @@ export const updateCell = async (
   logProcess(className + 'updateCell', 'start');
   try {
     logger.info('updateCell : ', tournamentId, name, pair1Id, pair2Id, score);
-    const record = await Stage1.findOne({
-      where: {
-        [Op.or]: [{ [Op.and]: { pair1Id, pair2Id } }, { [Op.and]: { pair1Id: pair2Id, pair2Id: pair1Id } }],
-        name,
-        tournamentId,
-      },
-    });
-    if (!record) throw new Error('updateCell  : Record non trovato!');
-    if (record.pair1Id === pair1Id) {
-      await record.update({ score: score ? score : null });
-    } else {
-      await record.update({ score: getOpposite(score ? parseInt(score) : null) });
+    const record = await findStage1(tournamentId, name, pair1Id, pair2Id);
+    if (record) {
+      if (record.pair1Id === pair1Id) {
+        await record.update({ score: score ? score : null });
+      } else {
+        await record.update({ score: getOpposite(score ? parseInt(score) : null) });
+      }
     }
   } catch (error) {
     logProcess(className + 'updateCell', error);
     logger.error('updateCell : ', error);
-    throw new Error(`updateCell  : ${error}`);
   }
   logProcess(className + 'updateCell', 'end');
 };
@@ -117,8 +135,8 @@ export const generateStage1Rows = async (rows: Stage1Row[], stageName: string, u
                 tournamentId,
               };
               const include = [Stage1.associations.pair1, Stage1.associations.pair2];
-              let record = null;
-              let created = false;
+              let record: Stage1 | null = null;
+              let created: boolean = false;
               if (isEditable) {
                 [record, created] = await Stage1.findOrCreate({
                   where,
@@ -154,7 +172,6 @@ export const generateStage1Rows = async (rows: Stage1Row[], stageName: string, u
   } catch (error) {
     logProcess(className + 'generateStage1Rows', error);
     logger.error('generateStage1Rows : ', error);
-    throw new Error(`generateStage1Rows  : ${error}`);
   }
 };
 

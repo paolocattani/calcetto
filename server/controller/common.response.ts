@@ -11,13 +11,16 @@ export const ComposeReponse = <T extends GenericReponse>(
   messageType: UserMessageType,
   message: string,
   additionalInfo?: OmitGeneric<T>
-) =>
-  res.status(status).json({
+) => {
+  HTTPStatusCode.Success;
+  logger.info(`---->  ${status} : ${internalMessage}`);
+  return res.status(status).json({
     ...additionalInfo,
     code: status,
     message: internalMessage,
     userMessage: { type: messageType, message },
   });
+};
 
 // Unauthorized
 export const unauthorized = <T extends GenericReponse>(
@@ -29,7 +32,21 @@ export const unauthorized = <T extends GenericReponse>(
   ComposeReponse(
     res,
     HTTPStatusCode.Unauthorized,
-    internalMessage || 'Unauthorized!',
+    internalMessage || 'Unauthorized !',
+    UserMessageType.Danger,
+    message,
+    additionalInfo
+  );
+export const forbidden = <T extends GenericReponse>(
+  res: Response,
+  message: string,
+  internalMessage?: string,
+  additionalInfo?: OmitGeneric<T>
+) =>
+  ComposeReponse(
+    res,
+    HTTPStatusCode.Forbidden,
+    internalMessage || 'Forbidden !',
     UserMessageType.Danger,
     message,
     additionalInfo

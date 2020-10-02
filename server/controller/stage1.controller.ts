@@ -6,34 +6,27 @@ import { asyncMiddleware, withAuth, withAdminRights, controllerLogger } from '..
 
 import { AppRequest } from './index';
 import { deleteStage1, updatePlacement, generateStage1Rows, updateCell } from '../manager/stage1.manager';
+import { UpdatePlacementRequest, UpdatePlacementResponse } from '../../src/@common/models';
+import { failure, success } from './common.response';
 
 const router = Router();
 router.use('/', (req: Request, res: Response, next: NextFunction) =>
   controllerLogger(req, next, 'Stage1 Controller', '/api/v1/stage1')
 );
 
-router.post(
-  '/placement',
-  withAuth,
-  withAdminRights,
-  asyncMiddleware(async (req: AppRequest, res: Response) => {
-    const { rows } = req.body;
-    await updatePlacement(rows);
-    return res.status(200).json({ saved: true });
-  })
-);
+// GET
 
-/**
- * Cancellazione record
- */
-router.delete(
-  '/',
+// PUT
+router.put(
+  '/update/placement',
   withAuth,
   withAdminRights,
   asyncMiddleware(async (req: AppRequest, res: Response) => {
-    const { tId } = req.body;
-    await deleteStage1(tId);
-    return res.status(200).json({ saved: true });
+    const { rows }: UpdatePlacementRequest = req.body;
+    const result = await updatePlacement(rows);
+    return result
+      ? success<UpdatePlacementResponse>(res, 'Posizionamento aggiornato...')
+      : failure<UpdatePlacementResponse>(res, 'Posizionamento non aggiornato...');
   })
 );
 
@@ -41,7 +34,7 @@ router.delete(
  * Aggiornamento record specifico
  */
 router.post(
-  '/cell',
+  '/update/cell',
   withAuth,
   withAdminRights,
   asyncMiddleware(async (req: AppRequest, res: Response) => {
@@ -56,6 +49,7 @@ router.post(
   })
 );
 
+// POST
 /**
  *
  * Reperimento e aggiornamento tabella Stage1.
@@ -78,6 +72,18 @@ router.post(
       logger.error('Error while update matrix  : ', error);
       return res.status(500).json({ error });
     }
+  })
+);
+
+// DELETE
+router.delete(
+  '/',
+  withAuth,
+  withAdminRights,
+  asyncMiddleware(async (req: AppRequest, res: Response) => {
+    const { tId } = req.body;
+    await deleteStage1(tId);
+    return res.status(200).json({ saved: true });
   })
 );
 

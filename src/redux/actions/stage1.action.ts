@@ -8,8 +8,8 @@ import {
   UpdateCellResponse,
   UpdatePlacementRequest,
   UpdatePlacementResponse,
-  UpdateSelectedPairsRequest,
-  UpdateSelectedPairsResponse,
+  SelectPairsRequest,
+  SelectPairsResponse,
 } from '@common/models';
 import { defaultAsyncParams, PurgeResponse, PURGE_STORE_ACTION } from './constants';
 
@@ -17,9 +17,9 @@ const actionName = '[Stage1]';
 
 export const Stage1Action = {
   // Update Selected Pairs
-  updateSelectedPairs: createAsyncAction(...defaultAsyncParams(actionName, 'Update Selected Pairs Stage1'))<
-    UpdateSelectedPairsRequest,
-    UpdateSelectedPairsResponse,
+  updateSelectedPairs: createAsyncAction(...defaultAsyncParams(actionName, 'Selected Pairs Stage1'))<
+    SelectPairsRequest,
+    SelectPairsResponse,
     Error
   >(),
 

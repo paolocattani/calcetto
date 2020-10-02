@@ -54,7 +54,7 @@ export function comparator(obj1: Stage1Row, obj2: Stage1Row) {
  * @param pairsList PairDTO[] Lista di coppie
  *
  */
-export const rowsGenerator = (pairsList: PairDTO[]): Stage1Row[] =>
+export const rowsGenerator = (pairsList: Array<PairDTO>): Array<Stage1Row> =>
   pairsList.map((e, ii) => {
     const row: Stage1Row = {
       id: `row-${e.tId}-${ii}`,

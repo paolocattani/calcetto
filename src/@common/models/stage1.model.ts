@@ -1,4 +1,5 @@
 import { PairDTO, Stage1Row } from '@common/dto';
+import { GenericReponse } from './common.models';
 
 export interface Stage1State {
   // Utilizzato per indicare se è necessario ricaricare i dati dal db
@@ -17,17 +18,19 @@ export interface Stage1State {
 // Rappresenta lo stato di un sinsolo girone
 export interface SingleStageState {
   isLoading: boolean;
-  autoOrder: boolean; // TODO:
+  autoOrder: boolean;
   stageName: string;
   pairsList: Array<PairDTO>;
   rows: Array<Stage1Row>;
 }
 
-// Requests/ Responses
+// Requests
 export interface WatchStage1Request {
   tounamentId: number;
 }
 export interface FetchStage1Request {
+  // FIXME:
+  rows?: Array<Stage1Row>;
   stageName: string;
   pairsList: Array<PairDTO>;
 }
@@ -41,22 +44,15 @@ export interface UpdateCellRequest {
 export interface UpdatePlacementRequest {
   rows: Array<{ id: number; placement: number }>;
 }
-export interface UpdateSelectedPairsRequest {
-  stageName: string;
-  rows: Array<Stage1Row>;
-}
 
+// Response
 export interface WatchStage1Response {
   needRefresh: boolean;
 }
-export interface FetchStage1Response {
+export interface FetchStage1Response extends GenericReponse {
   stageName: string;
   pairsList: Array<PairDTO>;
   rows: Array<Stage1Row>;
 }
-export interface UpdateCellResponse {}
-export interface UpdatePlacementResponse {}
-export interface UpdateSelectedPairsResponse {
-  stageName: string;
-  rows: Array<Stage1Row>;
-}
+export interface UpdateCellResponse extends GenericReponse {}
+export interface UpdatePlacementResponse extends GenericReponse {}

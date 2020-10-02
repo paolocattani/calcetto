@@ -1,14 +1,10 @@
 import { Stage1Action } from 'redux/actions';
 import { takeLatest, StrictEffect, call, take, put, takeEvery, fork } from 'redux-saga/effects';
-import {
-  createStage1Channel,
-  fetchStage1,
-  updateCellStage1,
-  updatePlacement,
-  updateSelectedPairs,
-} from 'redux/services/stage1.service';
-import { FetchStage1Response } from '@common/models';
+import { createStage1Channel, fetchStage1, updateCellStage1, updatePlacement } from 'redux/services/stage1.service';
+import { FetchStage1Request, FetchStage1Response, SelectPairsRequest, SelectPairsResponse } from '@common/models';
 import { toast } from 'react-toastify';
+import { entityLifeCycle } from './utils';
+import { selectPairs } from 'redux/services/pair.service';
 
 // TODO:
 function* watchStage1Saga(
@@ -27,15 +23,12 @@ function* watchStage1Saga(
   }
 }
 
-function* fetchSaga(action: ReturnType<typeof Stage1Action.fetchStage1.request>): Generator<StrictEffect, void, any> {
-  try {
-    const response: FetchStage1Response = yield call(fetchStage1, action.payload);
-    yield put(Stage1Action.fetchStage1.success(response));
-  } catch (err) {
-    yield put(Stage1Action.fetchStage1.failure(err));
-    toast.error('Error while fetching Stage2');
-  }
-}
+function* fetchSaga({payload}: ReturnType<typeof Stage1Action.fetchStage1.request>): Generator<StrictEffect, void, any> {
+  yield entityLifeCycle<FetchStage1Request, FetchStage1Response>(
+    Stage1Action.fetchStage1,
+    fetchStage1,
+    payload
+  );
 
 function* updateCellSaga(
   action: ReturnType<typeof Stage1Action.updateCellStage1.request>
@@ -61,17 +54,14 @@ function* updatePlacementSaga(
   }
 }
 
-function* updateSelectedPairsSaga(
-  action: ReturnType<typeof Stage1Action.updateSelectedPairs.request>
-): Generator<StrictEffect, void, any> {
-  try {
-    yield fork(updateSelectedPairs, action.payload);
-    yield put(Stage1Action.updateSelectedPairs.success(action.payload));
-  } catch (err) {
-    console.error('Error updating selected pairs : ', err);
-    yield put(Stage1Action.updateSelectedPairs.success(action.payload));
-    toast.error('Error updating selected pairs');
-  }
+function* updateSelectedPairsSaga({
+  payload,
+}: ReturnType<typeof Stage1Action.updateSelectedPairs.request>): Generator<StrictEffect, void, any> {
+  yield entityLifeCycle<SelectPairsRequest, SelectPairsResponse>(
+    Stage1Action.updateSelectedPairs,
+    selectPairs,
+    payload
+  );
 }
 
 export const Stage1Sagas = [
