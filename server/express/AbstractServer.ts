@@ -86,7 +86,7 @@ export abstract class AbstractServer implements IServer {
     this.routes(this.application);
 
     // public folder path
-    const buildPath = path.join(__dirname, '..', '..', '..', 'build');
+    const buildPath = path.join(__dirname, '..', '..', 'build');
     logger.info(`Serving build forlder from ${chalk.green(buildPath)}`);
     this.application.use(
       //
