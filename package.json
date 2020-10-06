@@ -145,7 +145,7 @@
     "@testing-library/react": "^11.0.4",
     "@testing-library/user-event": "^12.1.6",
     "@types/dotenv": "^8.2.0",
-    "@types/node": "^12.12.62",
+    "@types/node": "^14.11.4",
     "@types/react-bootstrap-table-next": "^4.0.8",
     "@types/react-redux": "^7.1.9",
     "@types/react-test-renderer": "^16.9.3",
