@@ -1,25 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
     <file path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/test/components/App/App.test.tsx">
-        <testCase name="&lt;Entry /&gt; should render correctly and match snapshot" duration="159"/>
     </file>
     <file path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/test/components/Auth/Login.test.tsx">
-        <testCase name="&lt;Login /&gt;.render should render correctly should match snapshot" duration="166"/>
-        <testCase name="&lt;Login /&gt;.render should contains all elements" duration="353"/>
-        <testCase name="&lt;Login /&gt;.render input elements should have &quot;required&quot; attritbute" duration="61"/>
-        <testCase name="&lt;Login /&gt; tests  when username and password is not provided should have empty fields and button disabled " duration="47"/>
-        <testCase name="&lt;Login /&gt; tests  when username and password is provided should have changed field value" duration="42"/>
-        <testCase name="&lt;Login /&gt; tests  when username and password is provided should type value" duration="132"/>
     </file>
     <file path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/test/components/Auth/Register.test.tsx">
-        <testCase name="&lt;Register /&gt;.render should render correctly and match snapshot" duration="107"/>
-        <testCase name="&lt;Register /&gt;.render should contains all elements" duration="350"/>
-        <testCase name="&lt;Register /&gt;.render input elements should have &quot;required&quot; attritbute" duration="157"/>
     </file>
     <file path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/test/components/Tournament/tournament.test.tsx">
-        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type Admin should render correctly should match snapshot" duration="112"/>
-        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type Admin should contains all elements" duration="420"/>
-        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type User should render correctly should match snapshot" duration="52"/>
-        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type User should contains all elements" duration="112"/>
     </file>
 </testExecutions>

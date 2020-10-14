@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>4/10</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/8</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -83,25 +83,18 @@
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">4x</span>
+<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -112,32 +105,36 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createReducer, Action } from 'typesafe-actions';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { createReducer, Action } from 'typesafe-actions';</span>
 import { PairState } from '@common/models';
-import { PairAction } from 'redux/actions';
+<span class="cstat-no" title="statement not covered" >import { PairAction } from 'redux/actions';</span>
 &nbsp;
-export const initialPairState: PairState = {
+export const <span class="cstat-no" title="statement not covered" >initialPairState: PairState = {</span>
   isLoading: false,
+  isSaving: false,
 };
 &nbsp;
-export const PairReducer = createReducer&lt;PairState, Action&gt;(initialPairState)
+export const <span class="cstat-no" title="statement not covered" >PairReducer = createReducer&lt;PairState, Action&gt;(initialPairState)</span>
   // Request
   .handleAction([PairAction.fetch.request], <span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >({</span>
     ...state,
     isLoading: true,
-    errorMessage: undefined,
   }))
   // Failure
-  .handleAction([PairAction.fetch.failure], <span class="fstat-no" title="function not covered" >(s</span>tate, { payload: { message<span class="cstat-no" title="statement not covered" > } })</span> =&gt; <span class="cstat-no" title="statement not covered" >({</span>
+  .handleAction([PairAction.fetch.failure], <span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >({</span>
     ...state,
-    errorMessage: message,
     isLoading: false,
   }))
   // Fetch Tournament
-  .handleAction(PairAction.fetch.success, <span class="fstat-no" title="function not covered" >(s</span>tate, { payload: { results<span class="cstat-no" title="statement not covered" > } })</span> =&gt; <span class="cstat-no" title="statement not covered" >({</span>
-    ...state,
-    pairList: results,
+  .handleAction(PairAction.fetch.success, <span class="fstat-no" title="function not covered" >(s</span>tate, { payload: { pairsList<span class="cstat-no" title="statement not covered" > } })</span> =&gt; <span class="cstat-no" title="statement not covered" >({</span>
+    pairsList,
     isLoading: false,
+    isSaving: false,
   }))
   .handleAction(PairAction.purge, <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >i</span>nitialPairState);</span>
 &nbsp;</pre></td></tr></table></pre>
@@ -147,7 +144,7 @@ export const PairReducer = createReducer&lt;PairState, Action&gt;(initialPairSta
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Sep 25 2020 19:01:16 GMT+0200 (Central European Summer Time)
+                at Fri Oct 02 2020 18:35:25 GMT+0200 (Central European Summer Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
