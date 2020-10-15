@@ -1,11 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 #
 # This is a git hook. Put this file under .git/hooks to enable it.
 #
 
 # Update version
 pwd
-source ../../cli/update_version.sh --patch
+source cli/update_version.sh --patch
 
 sed -i 's|^REACT_APP_CLIENT_VERSION=.*$|REACT_APP_CLIENT_VERSION='$REACT_APP_CLIENT_VERSION'|g' ../.env
 sed -i 's|^sonar.projectVersion=.*$|sonar.projectVersion='$NEW_VERSION'|g' ../sonar-project.properties
