@@ -36,7 +36,7 @@ jobs:
         run: npm ci
       # Build client
       - name: Build client
-        run: sh ./release.sh
+        run: sh ./cli/release.sh
       # Build server
       - name: Build server
         run: npm run prod:build:server
@@ -71,7 +71,7 @@ jobs:
       # - name: End to end tests
       #   run: npm run test
 
-  ### Code Qualitys
+  ### Code Quality
   analyze:
     runs-on: ubuntu-latest
     name: Code Quality
@@ -97,17 +97,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-
-      ### Code inspector : Suspended
-      # id: code-inspector
-      # uses: codeinspectorio/github-action@master
-      # with:
-      #   repo_token: ${{ secrets.GITHUB_TOKEN }}
-      #   code_inspector_access_key: ${{ secrets.CODE_INSPECTOR_ACCESS_KEY }}
-      #   code_inspector_secret_key: ${{ secrets.CODE_INSPECTOR_SECRET_KEY }}
-      #   min_quality_grade: 'GOOD'
-      #   min_quality_score: '80'
-      #   max_defects_rate: 0.05
-      #   project_name: 'calcetto'
-      #   max_timeout_sec: '600'

@@ -1,4 +1,5 @@
 #!/bin/bash
+# TODO: See npm version --help
 source ./update_version.sh --patch
 
 echo '--> Updating versions...'
@@ -6,8 +7,10 @@ echo '--> Updating versions...'
 sed -i 's|^REACT_APP_CLIENT_VERSION=.*$|REACT_APP_CLIENT_VERSION='$REACT_APP_CLIENT_VERSION'|g' ../.env
 sed -i 's|^sonar.projectVersion=.*$|sonar.projectVersion='$NEW_VERSION'|g' ../sonar-project.properties
 sed -i 's|^REACT_APP_CLIENT_COMMIT_HASH=.*$|REACT_APP_CLIENT_COMMIT_HASH='$REACT_APP_CLIENT_COMMIT_HASH'|g' ../.env
+#sed -i 's|\"version\": \".\..\..\"|\"version\": \"'$NEW_VERSION'\"|g' ../package-lock.json
+
 echo '  Done...'
-exit 1
+
 cd ..
 echo '--> Run Build...'
 npm run CRA:build

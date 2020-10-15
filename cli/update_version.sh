@@ -13,6 +13,7 @@ EOF
 }
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+# Pick current version from package.json
 CURRENT_VERSION=$(cat $SCRIPT_DIR/../package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]');
 NEW_VERSION=$CURRENT_VERSION
 
@@ -42,7 +43,7 @@ if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]]; then
         shift 1;
     done
 
-  mapFile -td \. versions < <(printf "%s\0" "$CURRENT_VERSION")
+  mapfile -td \. versions < <(printf "%s\0" "$CURRENT_VERSION")
   if [[ $major -eq 1 ]] ; then
     MESSAGE=' ----> NEW MAJOR RELEASE --->'
     echo '    '$MESSAGE$'\n'
