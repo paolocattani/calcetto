@@ -4,6 +4,7 @@
 # This is a git hook. Imported from .git/hooks/pre-commit as :
 #   source hooks/pre-commit.sh
 #
+echo $NODE_ENV > log.txt
 
 if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]]; then
     # Update version
