@@ -1,7 +1,7 @@
 import { FetchStage2Response, FetchStage2Request } from '@common/models';
 import { ICell } from '../../@common/dto';
 import { DEFAULT_HEADERS } from '../../@common/utils/fetch.utils';
-import { getEmptyRowModel } from './pair.service';
+import { getEmptyPair } from './pair.service';
 
 export const deleteStage2 = async (tId: number) => {
   const response = await fetch('/api/v1/stage2', {
@@ -29,7 +29,7 @@ export const fetchPairsStage2 = async (tId: number) => {
   try {
     const response = await fetch(`/api/v1/stage2/pairs/${tId}`);
     const result = await response.json();
-    return { pairs: [getEmptyRowModel('-'), ...result.pairs] };
+    return { pairs: [getEmptyPair('-'), ...result.pairs] };
   } catch (e) {
     console.error('Error stage2 fetching pairs');
   }

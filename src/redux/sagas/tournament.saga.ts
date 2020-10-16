@@ -52,7 +52,7 @@ function* updateTournamentSaga({
   );
 }
 
-export const TournamentsSagas = [
+export const TournamentSagas = [
   takeEvery(TournamentAction.fetch.request, getTournamentsSaga),
   takeEvery(TournamentAction.save.request, saveTournamentSaga),
   takeEvery(TournamentAction.update.request, updateTournamentSaga),

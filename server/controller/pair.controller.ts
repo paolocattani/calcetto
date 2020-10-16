@@ -98,7 +98,10 @@ router.put(
       await transaction.rollback();
       return serverError('PUT pair/selected error : ', err, res);
     }
-    return success<SelectPairsResponse>(res, pairsList.length > 1 ? 'Coppie selezionate...' : 'Coppia selezionata...');
+    return success<SelectPairsResponse>(res, pairsList.length > 1 ? 'Coppie selezionate...' : 'Coppia selezionata...', {
+      pairsList,
+      stage1Name,
+    });
   })
 );
 

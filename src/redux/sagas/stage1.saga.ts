@@ -1,8 +1,16 @@
 import { Stage1Action } from 'redux/actions';
-import { takeLatest, StrictEffect, call, take, put, takeEvery, fork } from 'redux-saga/effects';
+import { takeLatest, StrictEffect, call, take, takeEvery } from 'redux-saga/effects';
 import { createStage1Channel, fetchStage1, updateCellStage1, updatePlacement } from 'redux/services/stage1.service';
-import { FetchStage1Request, FetchStage1Response, SelectPairsRequest, SelectPairsResponse } from '@common/models';
-import { toast } from 'react-toastify';
+import {
+  FetchStage1Request,
+  FetchStage1Response,
+  SelectPairsRequest,
+  SelectPairsResponse,
+  UpdateCellRequest,
+  UpdateCellResponse,
+  UpdatePlacementRequest,
+  UpdatePlacementResponse,
+} from '@common/models';
 import { entityLifeCycle } from './utils';
 import { selectPairs } from 'redux/services/pair.service';
 
@@ -23,35 +31,30 @@ function* watchStage1Saga(
   }
 }
 
-function* fetchSaga({payload}: ReturnType<typeof Stage1Action.fetchStage1.request>): Generator<StrictEffect, void, any> {
-  yield entityLifeCycle<FetchStage1Request, FetchStage1Response>(
-    Stage1Action.fetchStage1,
-    fetchStage1,
-    payload
-  );
-
-function* updateCellSaga(
-  action: ReturnType<typeof Stage1Action.updateCellStage1.request>
-): Generator<StrictEffect, void, any> {
-  try {
-    yield fork(updateCellStage1, action.payload);
-    yield put(Stage1Action.updateCellStage1.success({}));
-  } catch (err) {
-    yield put(Stage1Action.updateCellStage1.failure(err));
-    toast.error('Error while fetching Stage2');
-  }
+function* fetchSaga({
+  payload,
+}: ReturnType<typeof Stage1Action.fetchStage1.request>): Generator<StrictEffect, void, any> {
+  yield entityLifeCycle<FetchStage1Request, FetchStage1Response>(Stage1Action.fetchStage1, fetchStage1, payload);
 }
 
-function* updatePlacementSaga(
-  action: ReturnType<typeof Stage1Action.updatePlacement.request>
-): Generator<StrictEffect, void, any> {
-  try {
-    yield fork(updatePlacement, action.payload);
-    yield put(Stage1Action.updatePlacement.success({}));
-  } catch (err) {
-    yield put(Stage1Action.updatePlacement.failure(err));
-    toast.error('Error while fetching Stage2');
-  }
+function* updateCellSaga({
+  payload,
+}: ReturnType<typeof Stage1Action.updateCellStage1.request>): Generator<StrictEffect, void, any> {
+  yield entityLifeCycle<UpdateCellRequest, UpdateCellResponse>(
+    Stage1Action.updateCellStage1,
+    updateCellStage1,
+    payload
+  );
+}
+
+function* updatePlacementSaga({
+  payload,
+}: ReturnType<typeof Stage1Action.updatePlacement.request>): Generator<StrictEffect, void, any> {
+  yield entityLifeCycle<UpdatePlacementRequest, UpdatePlacementResponse>(
+    Stage1Action.updateCellStage1,
+    updatePlacement,
+    payload
+  );
 }
 
 function* updateSelectedPairsSaga({

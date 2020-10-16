@@ -30,7 +30,7 @@ import {
   deletePairs,
   fetchPairs,
   findAlias,
-  getEmptyRowModel,
+  getEmptyPair,
   postPair,
   updatePair,
 } from 'redux/services/pair.service';
@@ -87,7 +87,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
   async function addRow(index?: number) {
     try {
       setIsLoading({ state: true, message: t('common:loading') });
-      const emptyRow = getEmptyRowModel();
+      const emptyRow = getEmptyPair();
       emptyRow.tId = tournament.id || 0;
       const result = await postPair({ pair: emptyRow });
       emptyRow.id = result.pair.id;

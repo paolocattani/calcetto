@@ -2,11 +2,11 @@ import { createReducer, Action } from 'typesafe-actions';
 import { Stage1State } from '@common/models';
 import { Stage1Action } from 'redux/actions';
 import { Stage1Row } from '@common/dto';
-import { getEmptyRowModel } from 'redux/services/pair.service';
+import { getEmptyPair } from 'redux/services/pair.service';
 
 export const initialStage1State: Stage1State = {
   needRefresh: false,
-  selectedPairs: [getEmptyRowModel('-')],
+  selectedPairs: [getEmptyPair('-')],
   isLoading: false,
   stages: [],
 };
@@ -45,16 +45,16 @@ export const Stage1Reducer = createReducer<Stage1State, Action>(initialStage1Sta
     };
   })
   // Aggiornamento coppie selezionate dati vari gironi
-  .handleAction([Stage1Action.updateSelectedPairs.success], (state, { payload: { stageName, rows } }) => {
+  .handleAction([Stage1Action.updateSelectedPairs.success], (state, { payload: { stage1Name, rows } }) => {
     const selected = state.selectedRows ? state.selectedRows : new Map<string, Stage1Row[]>();
-    selected.set(stageName, rows);
+    selected.set(stage1Name, rows);
 
     const selectedPairs = state.selectedPairs
       ? [
           // Filtro selectedPairs
           //  e.id === null : mantengo il placeholder
           //  e.stage1Name !== stageName : matengo tutte le coppie che non appartengo al girone attuale
-          ...state.selectedPairs.filter((e) => e.id === null || e.stage1Name !== stageName),
+          ...state.selectedPairs.filter((e) => e.id === null || e.stage1Name !== stage1Name),
           ...rows.map((e) => e.pair),
         ]
       : [...rows.map((e) => e.pair)];

@@ -1,4 +1,4 @@
-import { PairDTO } from '../dto';
+import { PairDTO, Stage1Row } from '../dto';
 import { GenericReponse } from './common.models';
 
 export interface PairState {
@@ -40,4 +40,7 @@ export interface DeletePairsResponse extends GenericReponse {
 export interface SavePairResponse extends GenericReponse {
   pair: PairDTO;
 }
-export interface SelectPairsResponse extends GenericReponse {}
+export interface SelectPairsResponse extends GenericReponse {
+  stage1Name: string;
+  rows: Array<Stage1Row>;
+}
