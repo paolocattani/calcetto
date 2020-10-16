@@ -18,7 +18,6 @@ CURRENT_VERSION=$(cat $SCRIPT_DIR/../package.json | grep version | head -1 | awk
 NEW_VERSION=$CURRENT_VERSION
 
 if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]]; then
-  echo '--> Parsing input '
   ## Defaults
   major=0
   minor=0
@@ -75,6 +74,8 @@ echo '--> Gathering informations'
 export REACT_APP_CLIENT_COMMIT_HASH=$(git rev-parse --short HEAD)
 today=$(date +'%Y.%m.%d')
 export REACT_APP_CLIENT_VERSION=$NEW_VERSION'_v'$today
+
+echo $VERSION_MESSAGE >> hooks/pre-commit.log
 
 cat << EOF
 
