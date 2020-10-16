@@ -4,9 +4,9 @@
 # This is a git hook. Imported from .git/hooks/pre-commit as :
 #   source hooks/pre-commit.sh
 #
-echo $NODE_ENV > log.txt
-
 if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]]; then
+
+    echo "Detected development env.." > hooks/pre-commit.log
     # Update version
     source cli/update_version.sh --patch
 
@@ -16,6 +16,8 @@ if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]]; then
     sed -i 's|^REACT_APP_CLIENT_COMMIT_HASH=.*$|REACT_APP_CLIENT_COMMIT_HASH='$REACT_APP_CLIENT_COMMIT_HASH'|g' ../.env
     sed -i 's|\"version\": \".\..\..\"|\"version\": \"'$NEW_VERSION'\"|g' ../package.json
 
+    echo "Install dependencies..." >> hooks/pre-commit.log
     npm i
+    echo "Add files to commit..." >> hooks/pre-commit.log
     git add .env sonar-project.properties package.json package-lock.json
 fi
