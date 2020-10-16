@@ -3,11 +3,13 @@
 source ./update_version.sh --patch
 
 echo '--> Updating versions...'
-# https://zhu45.org/posts/2016/Dec/21/environment-variable-substitution-using-sed/
-sed -i 's|^REACT_APP_CLIENT_VERSION=.*$|REACT_APP_CLIENT_VERSION='$REACT_APP_CLIENT_VERSION'|g' ../.env
-sed -i 's|^sonar.projectVersion=.*$|sonar.projectVersion='$NEW_VERSION'|g' ../sonar-project.properties
-sed -i 's|^REACT_APP_CLIENT_COMMIT_HASH=.*$|REACT_APP_CLIENT_COMMIT_HASH='$REACT_APP_CLIENT_COMMIT_HASH'|g' ../.env
-#sed -i 's|\"version\": \".\..\..\"|\"version\": \"'$NEW_VERSION'\"|g' ../package-lock.json
+if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]]; then
+  # https://zhu45.org/posts/2016/Dec/21/environment-variable-substitution-using-sed/
+  sed -i 's|^REACT_APP_CLIENT_VERSION=.*$|REACT_APP_CLIENT_VERSION='$REACT_APP_CLIENT_VERSION'|g' ../.env
+  sed -i 's|^sonar.projectVersion=.*$|sonar.projectVersion='$NEW_VERSION'|g' ../sonar-project.properties
+  sed -i 's|^REACT_APP_CLIENT_COMMIT_HASH=.*$|REACT_APP_CLIENT_COMMIT_HASH='$REACT_APP_CLIENT_COMMIT_HASH'|g' ../.env
+  sed -i 's|\"version\": \".\..\..\"|\"version\": \"'$NEW_VERSION'\"|g' ../package.json
+fi
 
 echo '  Done...'
 
