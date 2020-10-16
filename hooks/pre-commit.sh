@@ -17,6 +17,7 @@ if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]]; then
 
     echo "Install dependencies..." >> hooks/pre-commit.log
     npm i
+
     echo "Add files to commit..." >> hooks/pre-commit.log
     git add .env sonar-project.properties package.json package-lock.json
 fi
