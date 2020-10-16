@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">27.59% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/29</span>
+                <span class='fraction'>8/29</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">36.36% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>8/22</span>
             </div>
         
             
@@ -105,21 +105,21 @@
 <a name='L47'></a><a href='#L47'>47</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -151,21 +151,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">//-----------------------------
 // Fetch utils
 //
-<span class="cstat-no" title="statement not covered" >import { GenericReponse, OmitHistory, UnexpectedServerError } from '../models/common.models';</span>
-<span class="cstat-no" title="statement not covered" >import { toast } from 'react-toastify';</span>
+import { GenericReponse, OmitHistory, UnexpectedServerError } from '../models/common.models';
+import { toast } from 'react-toastify';
 &nbsp;
 //
-export const <span class="cstat-no" title="statement not covered" >DEFAULT_HEADERS = { headers: { 'Content-Type': 'application/json' } };</span>
+export const DEFAULT_HEADERS = { headers: { 'Content-Type': 'application/json' } };
 &nbsp;
-export const <span class="cstat-no" title="statement not covered" >getWrapper = <span class="fstat-no" title="function not covered" >async &lt;T extends GenericReponse&gt;(u</span>rl: string<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;T&gt; =&gt; <span class="cstat-no" title="statement not covered" >a</span>wait fetchWrapper(url, 'GET');</span></span></span>
-export const <span class="cstat-no" title="statement not covered" >deleteWrapper = <span class="fstat-no" title="function not covered" >async &lt;B, T extends GenericReponse&gt;(u</span>rl: string, body?: OmitHistory&lt;B&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;T&gt; =&gt;</span></span></span>
+export const getWrapper = <span class="fstat-no" title="function not covered" >async &lt;T extends GenericReponse&gt;(u</span>rl: string<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;T&gt; =&gt; <span class="cstat-no" title="statement not covered" >a</span>wait fetchWrapper(url, 'GET');</span></span>
+export const deleteWrapper = <span class="fstat-no" title="function not covered" >async &lt;B, T extends GenericReponse&gt;(u</span>rl: string, body?: OmitHistory&lt;B&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;T&gt; =&gt;</span></span>
 <span class="cstat-no" title="statement not covered" >  await fetchWrapper(url, 'DELETE', body);</span>
-export const <span class="cstat-no" title="statement not covered" >putWrapper = <span class="fstat-no" title="function not covered" >async &lt;B, T extends GenericReponse&gt;(u</span>rl: string, body?: OmitHistory&lt;B&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;T&gt; =&gt;</span></span></span>
+export const putWrapper = <span class="fstat-no" title="function not covered" >async &lt;B, T extends GenericReponse&gt;(u</span>rl: string, body?: OmitHistory&lt;B&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;T&gt; =&gt;</span></span>
 <span class="cstat-no" title="statement not covered" >  await fetchWrapper(url, 'PUT', body);</span>
-export const <span class="cstat-no" title="statement not covered" >postWrapper = <span class="fstat-no" title="function not covered" >async &lt;B, T extends GenericReponse&gt;(u</span>rl: string, body?: OmitHistory&lt;B&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;T&gt; =&gt;</span></span></span>
+export const postWrapper = <span class="fstat-no" title="function not covered" >async &lt;B, T extends GenericReponse&gt;(u</span>rl: string, body?: OmitHistory&lt;B&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;T&gt; =&gt;</span></span>
 <span class="cstat-no" title="statement not covered" >  await fetchWrapper(url, 'POST', body);</span>
 &nbsp;
-export const <span class="cstat-no" title="statement not covered" >fetchWrapper = <span class="fstat-no" title="function not covered" >async &lt;B, T extends GenericReponse&gt;(</span></span>
+export const fetchWrapper = <span class="fstat-no" title="function not covered" >async &lt;B, T extends GenericReponse&gt;(</span>
   url: string,
   method: string,
   body?: OmitHistory&lt;B&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
@@ -201,7 +201,7 @@ export const <span class="cstat-no" title="statement not covered" >fetchWrapper 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Oct 02 2020 18:35:25 GMT+0200 (Central European Summer Time)
+                at Fri Oct 16 2020 16:24:19 GMT+0200 (Central European Summer Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">43.48% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>10/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>1/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">9.09% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>1/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">60% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>9/15</span>
             </div>
         
             
@@ -114,27 +114,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -159,33 +159,33 @@ import {
   SelectPairsResponse,
   SelectPairsRequest,
 } from '@common/models';
-<span class="cstat-no" title="statement not covered" >import { deleteWrapper, getWrapper, postWrapper, putWrapper } from '../../@common/utils/fetch.utils';</span>
-<span class="cstat-no" title="statement not covered" >import { getEmptyPlayer } from './player.service';</span>
+import { deleteWrapper, getWrapper, postWrapper, putWrapper } from '../../@common/utils/fetch.utils';
+import { getEmptyPlayer } from './player.service';
 &nbsp;
-export const <span class="cstat-no" title="statement not covered" >fetchPairs = <span class="fstat-no" title="function not covered" >async ({</span> tId<span class="cstat-no" title="statement not covered" > }: FetchPairsRequest)</span>: Promise&lt;FetchPairsResponse&gt; =&gt;</span>
+export const fetchPairs = <span class="fstat-no" title="function not covered" >async ({</span> tId<span class="cstat-no" title="statement not covered" > }: FetchPairsRequest)</span>: Promise&lt;FetchPairsResponse&gt; =&gt;
 <span class="cstat-no" title="statement not covered" >  getWrapper&lt;FetchPairsResponse&gt;(`/api/v1/pair/list?tId=${encodeURIComponent(tId)}`);</span>
-export const <span class="cstat-no" title="statement not covered" >findAlias = <span class="fstat-no" title="function not covered" >async ({</span> player1Id<span class="cstat-no" title="statement not covered" >, p</span>layer2Id<span class="cstat-no" title="statement not covered" > }: FindAliasRequest)</span>: Promise&lt;FindAliasResponse&gt; =&gt;</span>
+export const findAlias = <span class="fstat-no" title="function not covered" >async ({</span> player1Id<span class="cstat-no" title="statement not covered" >, p</span>layer2Id<span class="cstat-no" title="statement not covered" > }: FindAliasRequest)</span>: Promise&lt;FindAliasResponse&gt; =&gt;
 <span class="cstat-no" title="statement not covered" >  getWrapper&lt;FindAliasResponse&gt;(</span>
     `/api/v1/pair/alias?player1Id=${encodeURIComponent(player1Id)}&amp;player2Id=${encodeURIComponent(player2Id)}`
   );
-export const <span class="cstat-no" title="statement not covered" >selectPairs = <span class="fstat-no" title="function not covered" >async (r</span>equest: SelectPairsRequest<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;SelectPairsResponse&gt; =&gt;</span></span></span>
+export const selectPairs = <span class="fstat-no" title="function not covered" >async (r</span>equest: SelectPairsRequest<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;SelectPairsResponse&gt; =&gt;</span></span>
 <span class="cstat-no" title="statement not covered" >  putWrapper&lt;SelectPairsRequest, SelectPairsResponse&gt;('/api/v1/pair/selected', request);</span>
 &nbsp;
-export const <span class="cstat-no" title="statement not covered" >postPair = <span class="fstat-no" title="function not covered" >async (r</span>equest: SavePairRequest<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;SavePairResponse&gt; =&gt;</span></span></span>
+export const postPair = <span class="fstat-no" title="function not covered" >async (r</span>equest: SavePairRequest<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;SavePairResponse&gt; =&gt;</span></span>
 <span class="cstat-no" title="statement not covered" >  postWrapper&lt;SavePairRequest, SavePairResponse&gt;('/api/v1/pair/new', request);</span>
-export const <span class="cstat-no" title="statement not covered" >updatePair = <span class="fstat-no" title="function not covered" >async (r</span>equest: SavePairRequest<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;SavePairResponse&gt; =&gt;</span></span></span>
+export const updatePair = <span class="fstat-no" title="function not covered" >async (r</span>equest: SavePairRequest<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;SavePairResponse&gt; =&gt;</span></span>
 <span class="cstat-no" title="statement not covered" >  putWrapper&lt;SavePairRequest, SavePairResponse&gt;('/api/v1/pair/new', request);</span>
 &nbsp;
-export const <span class="cstat-no" title="statement not covered" >deletePairs = <span class="fstat-no" title="function not covered" >async (r</span>equest: DeletePairsRequest<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;DeletePairsResponse&gt; =&gt;</span></span></span>
+export const deletePairs = <span class="fstat-no" title="function not covered" >async (r</span>equest: DeletePairsRequest<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;DeletePairsResponse&gt; =&gt;</span></span>
 <span class="cstat-no" title="statement not covered" >  deleteWrapper&lt;DeletePairsRequest, DeletePairsResponse&gt;('/api/v1/delete', request);</span>
 &nbsp;
-export const <span class="cstat-no" title="statement not covered" >getEmptyPair = <span class="fstat-no" title="function not covered" >(l</span>abel?: string): PairDTO =&gt; <span class="cstat-no" title="statement not covered" >({</span></span>
+export const getEmptyPair = (label?: string): PairDTO =&gt; ({
   id: null,
   tId: 0,
   rowNumber: 0,
   player1: getEmptyPlayer(),
   player2: getEmptyPlayer(),
-  alias: label || '',
+  alias: label || <span class="branch-1 cbranch-no" title="branch not covered" >'',</span>
   stage1Name: '',
   placement: 0,
   paid1: false,
@@ -198,7 +198,7 @@ export const <span class="cstat-no" title="statement not covered" >getEmptyPair 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Oct 02 2020 18:35:25 GMT+0200 (Central European Summer Time)
+                at Fri Oct 16 2020 16:24:19 GMT+0200 (Central European Summer Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

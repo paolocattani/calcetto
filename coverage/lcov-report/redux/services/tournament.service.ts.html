@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">38.46% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>5/13</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">55.56% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>5/9</span>
             </div>
         
             
@@ -91,20 +91,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {
   DeleteTournamentRequest,
@@ -116,20 +116,20 @@
   UpdateTournamentRequest,
   UpdateTournamentResponse,
 } from '../../@common/models/tournament.model';
-<span class="cstat-no" title="statement not covered" >import { postWrapper, putWrapper, getWrapper, deleteWrapper } from '../../@common/utils/fetch.utils';</span>
+import { postWrapper, putWrapper, getWrapper, deleteWrapper } from '../../@common/utils/fetch.utils';
 &nbsp;
-export const <span class="cstat-no" title="statement not covered" >fetchTournaments = <span class="fstat-no" title="function not covered" >async (r</span>equest: FetchTournamentsRequest<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;FetchTournamentsResponse&gt; =&gt;</span></span></span>
+export const fetchTournaments = <span class="fstat-no" title="function not covered" >async (r</span>equest: FetchTournamentsRequest<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;FetchTournamentsResponse&gt; =&gt;</span></span>
 <span class="cstat-no" title="statement not covered" >  getWrapper&lt;FetchTournamentsResponse&gt;(</span>
     request?.tId ? `/api/v2/tournament/${encodeURIComponent(request.tId)}` : '/api/v2/tournament/list'
   );
 &nbsp;
-export const <span class="cstat-no" title="statement not covered" >postTournament = <span class="fstat-no" title="function not covered" >async (r</span>equest: SaveTournamentRequest<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;SaveTournamentResponse&gt; =&gt;</span></span></span>
+export const postTournament = <span class="fstat-no" title="function not covered" >async (r</span>equest: SaveTournamentRequest<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;SaveTournamentResponse&gt; =&gt;</span></span>
 <span class="cstat-no" title="statement not covered" >  postWrapper&lt;SaveTournamentRequest, SaveTournamentResponse&gt;('/api/v2/tournament/new', request);</span>
 &nbsp;
-export const <span class="cstat-no" title="statement not covered" >updateTournament = <span class="fstat-no" title="function not covered" >async (r</span>equest: UpdateTournamentRequest<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;UpdateTournamentResponse&gt; =&gt;</span></span></span>
+export const updateTournament = <span class="fstat-no" title="function not covered" >async (r</span>equest: UpdateTournamentRequest<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;UpdateTournamentResponse&gt; =&gt;</span></span>
 <span class="cstat-no" title="statement not covered" >  putWrapper&lt;UpdateTournamentRequest, UpdateTournamentResponse&gt;('/api/v2/tournament/update', request);</span>
 &nbsp;
-export const <span class="cstat-no" title="statement not covered" >deleteTournament = <span class="fstat-no" title="function not covered" >async (r</span>equest: DeleteTournamentRequest<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;DeleteTournamentResponse&gt; =&gt;</span></span></span>
+export const deleteTournament = <span class="fstat-no" title="function not covered" >async (r</span>equest: DeleteTournamentRequest<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >): Promise&lt;DeleteTournamentResponse&gt; =&gt;</span></span>
 <span class="cstat-no" title="statement not covered" >  deleteWrapper&lt;DeleteTournamentRequest, DeleteTournamentResponse&gt;('/api/v2/tournament/delete', request);</span>
 &nbsp;</pre></td></tr></table></pre>
 
@@ -138,7 +138,7 @@ export const <span class="cstat-no" title="statement not covered" >deleteTournam
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Oct 02 2020 18:35:25 GMT+0200 (Central European Summer Time)
+                at Fri Oct 16 2020 16:24:19 GMT+0200 (Central European Summer Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
