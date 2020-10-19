@@ -36,7 +36,7 @@ jobs:
         run: npm ci
       # Build client
       - name: Build client
-        run: sh ./cli/release.sh
+        run: ./cli/release.sh
       # Build server
       - name: Build server
         run: npm run prod:build:server

@@ -1,9 +1,10 @@
 #!/bin/bash
 
-BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
-echo "On branch : "$BRANCH_NAME
-echo "Enviroment : "$NODE_ENV
+FILE_NAME='../hooks/.hooks'
+SEARCH_STRING='PRE-COMMIT'
+SEARCH_RESULT=$(awk "/$SEARCH_STRING=/ \
+        {
+            p=index($1,\"=\")
+            print substr($1,p+1) ;
+        }" $FILE_NAME)
 
-if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]] && [[ $BRANCH_NAME == "develop" ]]; then
-    echo "test"
-fi

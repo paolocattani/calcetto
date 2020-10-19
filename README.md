@@ -78,6 +78,12 @@
     - [Supertest](https://github.com/visionmedia/supertest#readme)
     - E2E : [Puppeteer](https://github.com/puppeteer/puppeteer)
 
+### Cli
+  - [sed](https://zhu45.org/posts/2016/Dec/21/environment-variable-substitution-using-sed/)
+  - [sed & awk](https://medium.com/faun/https-medium-com-me-sanjeev3d-sed-awk-f25c77ae4d4f)
+  - [grep, awk, sed](https://www-users.york.ac.uk/~mijp1/teaching/2nd_year_Comp_Lab/guides/grep_awk_sed.pdf)
+  - [Git Hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks)
+
 ## Development
 
   Backend runs with [nodemon](https://www.npmjs.com/package/nodemon) and [ts-node](https://www.npmjs.com/package/ts-node) to enable live reload along with typescript compilations.

@@ -24,6 +24,9 @@
 .env.test.local
 .env.production.local
 
+# Enable/Disable hooks
+.hooks
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
