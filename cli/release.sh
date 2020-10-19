@@ -4,7 +4,9 @@
 >release.log
 exec &>release.log
 
-# TODO: See npm version --help
-source ./update_version.sh --patch
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-source ./build.sh
+# TODO: See npm version --help
+source $SCRIPT_DIR/update_version.sh --patch
+
+source $SCRIPT_DIR/build.sh
