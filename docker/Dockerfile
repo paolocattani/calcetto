@@ -18,7 +18,7 @@ COPY package*.json  ./
 
 # Don't want to update package-lock.json
 
-RUN npm ci --only=production
+RUN npm ci
 
 # Copy app source
 # Use .dockerignore to handle exclusions
