@@ -98,8 +98,9 @@ router.put(
       await transaction.rollback();
       return serverError('PUT pair/selected error : ', err, res);
     }
+    // FIXME:
     return success<SelectPairsResponse>(res, pairsList.length > 1 ? 'Coppie selezionate...' : 'Coppia selezionata...', {
-      pairsList,
+      rows: [],
       stage1Name,
     });
   })
