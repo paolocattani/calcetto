@@ -4,9 +4,7 @@
 >release.log
 exec &>release.log
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-
 # TODO: See npm version --help
-source $SCRIPT_DIR/update_version.sh --patch
+source ./update_version.sh --patch
 
-source $SCRIPT_DIR/build.sh
+source ./build.sh
