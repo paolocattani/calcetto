@@ -5,6 +5,6 @@
 exec &>release.log
 
 # TODO: See npm version --help
-source ./update_version.sh --patch
+source cli/update_version.sh --patch
 
-source ./build.sh
+source cli/build.sh
