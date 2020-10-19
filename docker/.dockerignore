@@ -1,0 +1,27 @@
+# node modules
+node_modules
+**/node_modules
+npm-debug.log
+**/.git
+**/.DS_Store
+**/node_modules
+
+# ws configuration
+.github
+.vscode
+
+# Folder
+../analysis
+../build
+../coverage
+../hooks
+
+.editorconfig
+LICENSE
+README.md
+settings.json
+temp.txt
+
+sonar-project.properties
+swagger-config.yaml
+*.gz
