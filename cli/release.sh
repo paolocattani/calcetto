@@ -4,7 +4,10 @@
 >release.log
 exec &>release.log
 
-# TODO: See npm version --help
-source cli/update_version.sh --patch
+cd $( cd $( dirname "${BASH_SOURCE[0]}" ) >/dev/null 2>&1 && pwd )
+cd ..
 
-source cli/build.sh
+# TODO: See npm version --help
+source ./update_version.sh --patch
+
+source ./build.sh

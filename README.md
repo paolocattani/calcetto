@@ -20,9 +20,6 @@
 </p>
 
 
-
-
-
 ## Technologies in this project
 ### Frontend
   - [Reactjs](https://reactjs.org/)
@@ -84,6 +81,11 @@
   - [grep, awk, sed](https://www-users.york.ac.uk/~mijp1/teaching/2nd_year_Comp_Lab/guides/grep_awk_sed.pdf)
   - [Git Hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks)
 
+### Heroku
+  - Plugins :
+    - [heroku-builds](https://github.com/heroku/heroku-builds#cancel-build)
+
+
 ## Development
 
   Backend runs with [nodemon](https://www.npmjs.com/package/nodemon) and [ts-node](https://www.npmjs.com/package/ts-node) to enable live reload along with typescript compilations.
@@ -97,6 +99,10 @@
   # Detached
   npm run dev:server
   npm run dev:client
+
+  # Cli
+  sh ./
+
 
   # Bundle size
   npm run analyze
@@ -130,6 +136,31 @@
   npm run prod:build:server
 
   ```
+
+## Docker
+  ```bash
+
+  # Build image example
+  docker build -t paolocattani/calcetto_v1 -f ./docker/Dockerfile --no-cache .
+
+  ```
+
+## Heroku
+  ```bash
+  # Login
+  heroku login
+
+  # Add Redis
+  # TODO: https://elements.heroku.com/addons/redistogo
+
+  # List builds
+  heroku builds -a $APP_NAME
+
+  # Cancel pending build
+  heroku builds:cancel $ID -a $APP_NAME
+
+  ```
+
 
 ## Guides
   - SSE - Server Sent Events : [express-sse](https://www.npmjs.com/package/express-sse)

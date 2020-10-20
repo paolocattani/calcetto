@@ -12,9 +12,8 @@ cat << EOF
 EOF
 }
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 # Pick current version from package.json
-CURRENT_VERSION=$(cat $SCRIPT_DIR/../package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]');
+CURRENT_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]');
 NEW_VERSION=$CURRENT_VERSION
 
 if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]]; then
@@ -93,10 +92,13 @@ if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]]; then
   echo '--> Updating versions...'
 
   # https://zhu45.org/posts/2016/Dec/21/environment-variable-substitution-using-sed/
-  sed -i 's|^REACT_APP_CLIENT_VERSION=.*$|REACT_APP_CLIENT_VERSION='$REACT_APP_CLIENT_VERSION'|g' $SCRIPT_DIR/../.env
-  sed -i 's|^sonar.projectVersion=.*$|sonar.projectVersion='$NEW_VERSION'|g' $SCRIPT_DIR/../sonar-project.properties
-  sed -i 's|^REACT_APP_CLIENT_COMMIT_HASH=.*$|REACT_APP_CLIENT_COMMIT_HASH='$REACT_APP_CLIENT_COMMIT_HASH'|g' $SCRIPT_DIR/../.env
-  sed -i 's|\"version\": \".\..\..\"|\"version\": \"'$NEW_VERSION'\"|g' $SCRIPT_DIR/../package.json
+  # .env
+  sed -i 's|^REACT_APP_CLIENT_VERSION=.*$|REACT_APP_CLIENT_VERSION='$REACT_APP_CLIENT_VERSION'|g' .env
+  sed -i 's|^REACT_APP_CLIENT_COMMIT_HASH=.*$|REACT_APP_CLIENT_COMMIT_HASH='$REACT_APP_CLIENT_COMMIT_HASH'|g' .env
+  # Sonar
+  sed -i 's|^sonar.projectVersion=.*$|sonar.projectVersion='$NEW_VERSION'|g' sonar-project.properties
+  # Package.json
+  sed -i 's|\"version\": \".\..\..\"|\"version\": \"'$NEW_VERSION'\"|g' package.json
 
   echo '  Done...'
 fi
