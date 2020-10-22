@@ -38,9 +38,9 @@ export default class Tournament extends Model<Tournament> {
   public date!: Date;
 
   @Comment('Stato')
-  @Default('New')
+  @Default(TournamentProgress.New)
   @Column(
-    DataType.ENUM(
+    DataType.ENUM<TournamentProgress>(
       TournamentProgress.New,
       TournamentProgress.PairsSelection,
       TournamentProgress.Stage1,
