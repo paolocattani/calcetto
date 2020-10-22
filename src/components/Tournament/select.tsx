@@ -38,7 +38,7 @@ const FTournament = () => {
       dispatch(TournamentAction.fetch.request({}));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tournamentsList]);
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLElement>): Promise<void> => {
     event.preventDefault();
