@@ -5,7 +5,11 @@ import { GenericReponse, OmitHistory, UnexpectedServerError } from '../models/co
 import { toast } from 'react-toastify';
 
 //
-export const DEFAULT_HEADERS = { headers: { 'Content-Type': 'application/json' } };
+export const DEFAULT_HEADERS: { headers: HeadersInit } = {
+  headers: {
+    'Content-Type': 'application/json',
+  },
+};
 
 export const getWrapper = async <T extends GenericReponse>(url: string): Promise<T> => await fetchWrapper(url, 'GET');
 export const deleteWrapper = async <B, T extends GenericReponse>(url: string, body?: OmitHistory<B>): Promise<T> =>
@@ -20,6 +24,7 @@ export const fetchWrapper = async <B, T extends GenericReponse>(
   method: string,
   body?: OmitHistory<B>
 ): Promise<T> => {
+  console.log('fetchWrapper : ', method, url, body);
   let response = null;
   try {
     response = await fetch(url, {

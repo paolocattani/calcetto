@@ -23,7 +23,7 @@ export default (application: ExpressApplication): void => {
   application.use('/api/v2/player', playerRouter);
   application.use('/api/v1/stage1', stage1Router);
   application.use('/api/v1/stage2', stage2Router);
-  application.use('/api/v1/pair', pairRouter);
+  application.use('/api/v2/pair', pairRouter);
   application.use('/api/v2/auth', authRouter);
 
   // SSE

@@ -59,7 +59,7 @@ export const initialState: RootState = {
     selectedPairs: [
       {
         id: null,
-        tId: 0,
+        tournamentId: 0,
         rowNumber: 0,
         player1: {
           id: null,

@@ -45,9 +45,9 @@ export const Stage1Reducer = createReducer<Stage1State, Action>(initialStage1Sta
     };
   })
   // Aggiornamento coppie selezionate dati vari gironi
-  .handleAction([Stage1Action.updateSelectedPairs.success], (state, { payload: { stage1Name, rows } }) => {
+  .handleAction([Stage1Action.updateSelectedPairs.success], (state, { payload: { stage1Name, stage1Rows } }) => {
     const selected = state.selectedRows ? state.selectedRows : new Map<string, Stage1Row[]>();
-    selected.set(stage1Name, rows);
+    selected.set(stage1Name, stage1Rows);
 
     const selectedPairs = state.selectedPairs
       ? [
@@ -55,9 +55,9 @@ export const Stage1Reducer = createReducer<Stage1State, Action>(initialStage1Sta
           //  e.id === null : mantengo il placeholder
           //  e.stage1Name !== stageName : matengo tutte le coppie che non appartengo al girone attuale
           ...state.selectedPairs.filter((e) => e.id === null || e.stage1Name !== stage1Name),
-          ...rows.map((e) => e.pair),
+          ...stage1Rows.map((e) => e.pair),
         ]
-      : [...rows.map((e) => e.pair)];
+      : [...stage1Rows.map((e) => e.pair)];
 
     return {
       ...state,

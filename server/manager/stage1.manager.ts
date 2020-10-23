@@ -104,7 +104,7 @@ export const generateStage1Rows = async (rows: Stage1Row[], stageName: string, u
           // Coppie e punteggi
           const pair1 = currentRowRef.pair;
           const pair2 = oppositeRow.pair;
-          const { tId: tournamentId } = pair1;
+          const { tournamentId } = pair1;
           if (rowIndex !== colIndex) {
             try {
               /**

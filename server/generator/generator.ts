@@ -46,13 +46,12 @@ export default async function generator(start: boolean): Promise<void> {
 
 async function tournamentGenerator(): Promise<void> {
   for (let ii = 1; ii <= TOURNAMENT_RECORDS; ii++) {
-    const model = {
+    const model: Partial<Tournament> = {
       id: null,
-      name: ii,
+      name: 'Torneo' + ii,
       date: new Date(),
-      ownerId: null,
       progress: TournamentProgress.New,
-      autOrder: ii % 2 == 0,
+      autoOrder: ii % 2 == 0,
       public: true,
     };
     await Tournament.create(model);

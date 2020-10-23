@@ -81,11 +81,25 @@ export const fetchPairsStage2 = async (tournamentId: number): Promise<Array<Pair
   return result;
 };
 
+export const parseBodyToPair = (body: any): Partial<Pair> => ({
+  id: body.id,
+  alias: body.alias,
+  stage1Name: body.stage1Name,
+  placement: body.placement,
+  paid1: body.paid1,
+  paid2: body.paid2,
+  tournamentId: body.tournamentId,
+  player1Id: body.player1?.id ?? body.player1Id,
+  player1: body.player1,
+  player2Id: body.player2?.id ?? body.player2Id,
+  player2: body.player2,
+});
+
 export function rowToModel(row: Pair, index: number): PairDTO {
   return {
     id: row.id,
     rowNumber: index + 1,
-    tId: row.tournamentId,
+    tournamentId: row.tournamentId,
     alias: row.alias,
     stage1Name: row.stage1Name,
     paid1: row.paid1,

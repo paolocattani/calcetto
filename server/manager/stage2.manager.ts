@@ -18,7 +18,7 @@ export const updateCells = async (cell1: ICell, cell2: ICell): Promise<boolean> 
     // Cella 1
     if (cell1.pair && cell1.pair.id)
       await updateSingleCell(
-        cell1.pair.tId,
+        cell1.pair.tournamentId,
         cell1.cellColIndex,
         cell1.cellRowIndex,
         cell1.matchId,
@@ -29,7 +29,7 @@ export const updateCells = async (cell1: ICell, cell2: ICell): Promise<boolean> 
     // Cella 1
     if (cell2.pair && cell2.pair.id)
       await updateSingleCell(
-        cell2.pair.tId,
+        cell2.pair.tournamentId,
         cell2.cellColIndex,
         cell2.cellRowIndex,
         cell2.matchId,

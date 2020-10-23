@@ -87,8 +87,8 @@ const PairsTable: React.FC<PairTableProps> = () => {
   async function addRow(index?: number) {
     try {
       setIsLoading({ state: true, message: t('common:loading') });
-      const emptyRow = getEmptyPair();
-      emptyRow.tId = tournament.id || 0;
+      const emptyRow:PairDTO = getEmptyPair();
+      emptyRow.tournamentId = tournament.id || 0;
       const result = await postPair({ pair: emptyRow });
       emptyRow.id = result.pair.id;
       emptyRow.rowNumber = index || data.rows.length + 1;
@@ -375,7 +375,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 
   //console.log('render table : ', players, pairs);
 
-  const assignMatches = () => (
+  const assignMatches = (
     <InputGroup>
       <InputGroup.Prepend>
         <InputGroup.Text>{t('pair:stage1.set')}</InputGroup.Text>
@@ -407,7 +407,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
       </InputGroup.Append>
     </InputGroup>
   );
-  const addPairs = () => (
+  const addPairs =  (
     <InputGroup>
       <InputGroup.Prepend>
         <InputGroup.Text>{t('pair:add.multi')}</InputGroup.Text>
@@ -437,7 +437,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
     </InputGroup>
   );
 
-  const toolsBar = () => (
+  const toolsBar =  (
     <div className={commonStyle.toolsBarContainer}>
       <Row className={commonStyle.toolsBar}>
         <Col>
@@ -483,10 +483,10 @@ const PairsTable: React.FC<PairTableProps> = () => {
           </Button>
         </Col>
       </Row>
-      {isAdmin && tournament.progress < TournamentProgress.PairsSelection ? (
+      {isAdmin && tournament.progress <= TournamentProgress.PairsSelection ? (
         <>
-          {assignMatches()}
-          {addPairs()}
+          {assignMatches}
+          {addPairs}
         </>
       ) : null}
     </div>
@@ -506,7 +506,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
       <YesNoModal message={askUser.message} title={askUser.title} onClick={askUser.onClick} show={askUser.show} />
       <LoadingModal show={isLoading.state} message={isLoading.message} />
       <Col>
-        {toolsBar()}
+        {toolsBar}
         <Row>
           <Col>
             {data.rows && data.players ? (

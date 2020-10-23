@@ -53,13 +53,13 @@ export default class Pair extends Model<Pair> {
   @BelongsTo(() => Player, 'player2Id')
   public player2!: Player;
 
-  // TODO: Stage 2
+  // Stage2
   @HasMany(() => Stage2)
   public stage2?: Stage2[];
 
   // Model toString
   public toString() {
-    return `[ id=${this.id} , tId=${
+    return `[ id=${this.id} , tournamentId=${
       this.tournamentId
     } , player1=${this.player1?.toString()} , player2=${this.player2?.toString()} , alias=${this.alias} , stage1Name=${
       this.stage1Name

@@ -3,7 +3,7 @@ import { PlayerDTO } from './player.dto';
 export interface PairDTO {
   id: number | null;
   rowNumber?: number;
-  tId: number;
+  tournamentId: number;
   alias?: string;
   stage1Name: string;
   paid1: boolean;

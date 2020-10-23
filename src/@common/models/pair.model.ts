@@ -11,8 +11,8 @@ export interface PairState {
 
 // Requests
 export interface FindAliasRequest {
-  player1Id: number | string;
-  player2Id: number | string;
+  player1Id: number;
+  player2Id: number;
 }
 export interface FetchPairsRequest {
   tId: number;
@@ -42,5 +42,5 @@ export interface SavePairResponse extends GenericReponse {
 }
 export interface SelectPairsResponse extends GenericReponse {
   stage1Name: string;
-  rows: Array<Stage1Row>;
+  stage1Rows: Array<Stage1Row>;
 }

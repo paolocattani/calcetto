@@ -6,7 +6,7 @@ import { getDbConnection } from '../database/connection';
 import { Pair } from '../database';
 import { asyncMiddleware, withAuth, controllerLogger, withAdminRights } from '../core/middleware';
 import { AppRequest } from './index';
-import { listInTournament, findAlias, rowToModel } from '../manager/pair.manager';
+import { listInTournament, findAlias, rowToModel, parseBodyToPair } from '../manager/pair.manager';
 import { missingParameters, serverError, success } from './common.response';
 import {
   DeletePairsRequest,
@@ -57,7 +57,10 @@ router.get(
       if (!player1Id || !player2Id) {
         return missingParameters(res);
       }
-      const alias = await findAlias(parseInt(player1Id as string), parseInt(player2Id as string));
+      const alias = await findAlias(
+        parseInt((player1Id as unknown) as string),
+        parseInt((player2Id as unknown) as string)
+      );
       return success<FindAliasResponse>(res, 'Coppie caricate...', { alias });
     } catch (err) {
       return serverError('GET pair/alias error : ', err, res);
@@ -83,13 +86,13 @@ router.put(
       // Reset selection
       await Pair.update(
         { stage2Selected: false },
-        { where: { tournamentId: pairsList[0].tId, stage1Name }, transaction }
+        { where: { tournamentId: pairsList[0].tournamentId, stage1Name }, transaction }
       );
       // Update selection
       await Pair.update(
         { stage2Selected: true },
         {
-          where: { tournamentId: pairsList[0].tId, stage1Name, id: pairsList.map((e) => e.id!) },
+          where: { tournamentId: pairsList[0].tournamentId, stage1Name, id: pairsList.map((e) => e.id!) },
           transaction,
         }
       );
@@ -100,7 +103,7 @@ router.put(
     }
     // FIXME:
     return success<SelectPairsResponse>(res, pairsList.length > 1 ? 'Coppie selezionate...' : 'Coppia selezionata...', {
-      rows: [],
+      stage1Rows: [],
       stage1Name,
     });
   })
@@ -112,7 +115,7 @@ router.post(
   withAuth,
   withAdminRights,
   asyncMiddleware(async (req: Request, res: Response) => {
-    const { pair: dto }: SavePairRequest = req.body;
+    const dto = parseBodyToPair(req.body.pair);
     try {
       let pair: Pair | null = null;
       if (dto.id) pair = await Pair.findOne({ where: { id: dto.id } });
