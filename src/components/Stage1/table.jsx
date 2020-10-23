@@ -67,11 +67,11 @@ const Stage1Table = ({ pairsList, autoOrder }) => {
         const newRows = [...rows];
         if (column.id.startsWith('col')) {
           // Aggiorno dati sul Db
-          const response = await fetch('/api/v1/stage1/cell', {
-            method: 'POST',
+          const response = await fetch('/api/v1/stage1/update/cell', {
+            method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              tId: row.pair.tId,
+              tId: row.pair.tournamentId,
               tableName: stageName,
               score: newValue,
               pair1Id: row.pair.id,

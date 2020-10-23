@@ -93,7 +93,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
       emptyRow.id = result.pair.id;
       emptyRow.rowNumber = index || data.rows.length + 1;
       setData((current) => ({
-        rows: [emptyRow, ...current.rows],
+        rows: [emptyRow, ...current.rows].map((p, i) => ({...p,rowNumber:i+1})),
         players: current.players,
       }));
       showSuccessMessage(t('pair:success.add'));
@@ -333,28 +333,15 @@ const PairsTable: React.FC<PairTableProps> = () => {
     }
 
     setIsLoading({ state: true, message: t('common:loading') });
-    let current = 0;
     const names = 'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('');
-    let newRows: any[] = [];
-    for (let index in data.rows) {
-      let row = data.rows[index];
-      // FIXME: if (current === stage1Number) QUESTO NON FUNZIONA ===
-      // eslint-disable-next-line eqeqeq
+    let current = 0;
+    let newRows: PairDTO[] = data.rows.map(row => {
       if (current === stage1Number) current = 0;
-      row['stage1Name'] = names[current];
+      row.stage1Name = names[current];
       current++;
-      try {
-        fetch('/api/v1/pair', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(row),
-        });
-        newRows.push(row);
-      } catch (error) {
-        showErrorMessage('Errore');
-        newRows.push(row);
-      }
-    }
+      postPair({ pair: row });
+      return row;
+    });
     //const mapper = data.rows.map(p => ({ id: p.id, stage1Name: p.stage1Name }));
     showSuccessMessage(t('pair:success.stage1Name'));
     setData((prevData) => ({ rows: newRows, players: prevData.players }));

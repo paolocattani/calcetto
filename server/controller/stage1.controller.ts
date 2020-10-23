@@ -5,7 +5,8 @@ import { logger } from '../core/logger';
 import { asyncMiddleware, withAuth, withAdminRights, controllerLogger } from '../core/middleware';
 
 import { AppRequest } from './index';
-import { deleteStage1, updatePlacement, generateStage1Rows, updateCell } from '../manager/stage1.manager';
+import { updatePlacement } from '../manager/pair.manager';
+import { deleteStage1, generateStage1Rows, updateCell } from '../manager/stage1.manager';
 import { UpdatePlacementRequest, UpdatePlacementResponse } from '../../src/@common/models';
 import { failure, success } from './common.response';
 
@@ -33,7 +34,7 @@ router.put(
 /**
  * Aggiornamento record specifico
  */
-router.post(
+router.put(
   '/update/cell',
   withAuth,
   withAdminRights,
@@ -66,7 +67,7 @@ router.post(
     const { user } = req;
     try {
       const result = await generateStage1Rows(rows, stageName, user!);
-      logger.info('STAGE1 RESULT : ', result);
+      // logger.info('STAGE1 RESULT : ', result);
       return res.status(200).json(result);
     } catch (error) {
       logger.error('Error while update matrix  : ', error);

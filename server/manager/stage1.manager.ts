@@ -1,5 +1,5 @@
 // Models
-import { Pair, Stage1 } from '../database';
+import { Stage1 } from '../database';
 import { Stage1Row, UserDTO } from '../../src/@common/dto';
 // Core
 import { logProcess, logger } from '../core/logger';
@@ -11,21 +11,6 @@ import { isAdmin } from '../manager/auth.manager';
 import { Op } from 'sequelize';
 
 const className = 'Stage1 Manager : ';
-
-export const updatePlacement = async (mapper: { id: number; placement: number }[]): Promise<boolean> => {
-  logProcess(className + 'updatePlacement', 'start');
-  try {
-    await asyncForEach(mapper, async (current, index, ref) => {
-      await Pair.update({ placement: current.placement }, { where: { id: current.id } });
-    });
-  } catch (error) {
-    logProcess(className + 'updatePlacement', 'error');
-    logger.error('updatePlacement : ', error);
-    return false;
-  }
-  logProcess(className + 'updatePlacement', 'end');
-  return true;
-};
 
 export const deleteStage1 = async (tournamentId: number) => {
   logProcess(className + 'deleteStage1', 'start');
@@ -74,10 +59,12 @@ export const updateCell = async (
     const record = await findStage1(tournamentId, name, pair1Id, pair2Id);
     if (record) {
       if (record.pair1Id === pair1Id) {
-        await record.update({ score: score ? score : null });
+        await record.update({ score: !!score ? score : null });
       } else {
         await record.update({ score: getOpposite(score ? parseInt(score) : null) });
       }
+    } else {
+      throw new Error('Record not found');
     }
   } catch (error) {
     logProcess(className + 'updateCell', error);

@@ -2,8 +2,24 @@ import { PairDTO, UserDTO } from '../../src/@common/dto';
 import { logProcess, logger } from '../core/logger';
 import { Op } from 'sequelize';
 import { Stage2, Pair } from '../database';
+import { asyncForEach } from '../core/utils';
 
 const className = 'Pairs Manager';
+
+export const updatePlacement = async (mapper: { id: number; placement: number }[]): Promise<boolean> => {
+  logProcess(className + 'updatePlacement', 'start');
+  try {
+    await asyncForEach(mapper, async (current, index, ref) => {
+      await Pair.update({ placement: current.placement }, { where: { id: current.id } });
+    });
+  } catch (error) {
+    logProcess(className + 'updatePlacement', 'error');
+    logger.error('updatePlacement : ', error);
+    return false;
+  }
+  logProcess(className + 'updatePlacement', 'end');
+  return true;
+};
 
 export const findAlias = async (player1Id: number, player2Id: number): Promise<string> => {
   logProcess(className + 'findAlias', 'start');
