@@ -18,7 +18,7 @@ echo "Analysis done..."
 echo '--> Run Coverage...'
 ## Need to push coverato due to this issue https://github.com/facebook/jest/issues/9324
 set -e
-! npm run test:coverage &>/dev/null
+! npm run test:coverage
 if [ $? -eq 0 ]; then
   echo "Coverage done..."
 else

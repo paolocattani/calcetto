@@ -1,0 +1,2 @@
+# Don't convert EOL on .sh files
+*.sh text eol=lf

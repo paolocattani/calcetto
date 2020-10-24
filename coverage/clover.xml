@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1602860318925" clover="3.2.0">
-  <project timestamp="1602860318925" name="All files">
-    <metrics statements="1963" coveredstatements="629" conditionals="735" coveredconditionals="53" methods="538" coveredmethods="46" elements="3236" coveredelements="728" complexity="0" loc="1963" ncloc="1963" packages="24" files="93" classes="93"/>
+<coverage generated="1603528907790" clover="3.2.0">
+  <project timestamp="1603528907790" name="All files">
+    <metrics statements="1967" coveredstatements="635" conditionals="735" coveredconditionals="53" methods="542" coveredmethods="46" elements="3244" coveredelements="734" complexity="0" loc="1967" ncloc="1967" packages="24" files="93" classes="93"/>
     <package name="@common.dto">
       <metrics statements="19" coveredstatements="19" conditionals="6" coveredconditionals="6" methods="3" coveredmethods="3"/>
       <file name="index.ts" path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/@common/dto/index.ts">
@@ -137,7 +137,7 @@
       </file>
     </package>
     <package name="@common.utils">
-      <metrics statements="64" coveredstatements="26" conditionals="32" coveredconditionals="2" methods="26" coveredmethods="1"/>
+      <metrics statements="65" coveredstatements="26" conditionals="32" coveredconditionals="2" methods="26" coveredmethods="1"/>
       <file name="date.utils.ts" path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/@common/utils/date.utils.ts">
         <metrics statements="30" coveredstatements="10" conditionals="16" coveredconditionals="2" methods="14" coveredmethods="1"/>
         <line num="1" count="4" type="stmt"/>
@@ -172,29 +172,30 @@
         <line num="51" count="0" type="stmt"/>
       </file>
       <file name="fetch.utils.ts" path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/@common/utils/fetch.utils.ts">
-        <metrics statements="22" coveredstatements="8" conditionals="16" coveredconditionals="0" methods="10" coveredmethods="0"/>
+        <metrics statements="23" coveredstatements="8" conditionals="16" coveredconditionals="0" methods="10" coveredmethods="0"/>
         <line num="4" count="4" type="stmt"/>
         <line num="5" count="4" type="stmt"/>
         <line num="8" count="4" type="stmt"/>
-        <line num="10" count="4" type="cond" truecount="0" falsecount="2"/>
-        <line num="11" count="4" type="stmt"/>
-        <line num="12" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="13" count="4" type="stmt"/>
-        <line num="14" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="14" count="4" type="cond" truecount="0" falsecount="2"/>
         <line num="15" count="4" type="stmt"/>
         <line num="16" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="18" count="4" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
+        <line num="17" count="4" type="stmt"/>
+        <line num="18" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="19" count="4" type="stmt"/>
+        <line num="20" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="22" count="4" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
-        <line num="30" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="37" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="35" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="37" count="0" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="42" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
       </file>
       <file name="index.ts" path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/@common/utils/index.ts">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -514,7 +515,7 @@
       </file>
     </package>
     <package name="components.Pair">
-      <metrics statements="272" coveredstatements="0" conditionals="199" coveredconditionals="0" methods="87" coveredmethods="0"/>
+      <metrics statements="268" coveredstatements="0" conditionals="199" coveredconditionals="0" methods="86" coveredmethods="0"/>
       <file name="editor.js" path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/components/Pair/editor.js">
         <metrics statements="32" coveredstatements="0" conditionals="11" coveredconditionals="0" methods="20" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
@@ -596,7 +597,7 @@
         <line num="49" count="0" type="stmt"/>
       </file>
       <file name="table.tsx" path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/components/Pair/table.tsx">
-        <metrics statements="204" coveredstatements="0" conditionals="172" coveredconditionals="0" methods="57" coveredmethods="0"/>
+        <metrics statements="200" coveredstatements="0" conditionals="172" coveredconditionals="0" methods="56" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
         <line num="2" count="0" type="stmt"/>
         <line num="3" count="0" type="stmt"/>
@@ -650,6 +651,7 @@
         <line num="93" count="0" type="stmt"/>
         <line num="94" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="95" count="0" type="stmt"/>
+        <line num="96" count="0" type="stmt"/>
         <line num="99" count="0" type="stmt"/>
         <line num="101" count="0" type="stmt"/>
         <line num="106" count="0" type="stmt"/>
@@ -772,35 +774,30 @@
         <line num="336" count="0" type="stmt"/>
         <line num="337" count="0" type="stmt"/>
         <line num="338" count="0" type="stmt"/>
-        <line num="339" count="0" type="stmt"/>
+        <line num="339" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="340" count="0" type="stmt"/>
-        <line num="343" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="344" count="0" type="stmt"/>
-        <line num="345" count="0" type="stmt"/>
+        <line num="341" count="0" type="stmt"/>
+        <line num="342" count="0" type="stmt"/>
+        <line num="343" count="0" type="stmt"/>
         <line num="346" count="0" type="stmt"/>
         <line num="347" count="0" type="stmt"/>
-        <line num="352" count="0" type="stmt"/>
-        <line num="354" count="0" type="stmt"/>
-        <line num="355" count="0" type="stmt"/>
-        <line num="359" count="0" type="stmt"/>
-        <line num="360" count="0" type="stmt"/>
-        <line num="363" count="0" type="stmt"/>
-        <line num="368" count="0" type="cond" truecount="0" falsecount="14"/>
-        <line num="369" count="0" type="cond" truecount="0" falsecount="6"/>
-        <line num="370" count="0" type="stmt"/>
-        <line num="374" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="378" count="0" type="stmt"/>
-        <line num="392" count="0" type="stmt"/>
-        <line num="410" count="0" type="stmt"/>
-        <line num="422" count="0" type="stmt"/>
+        <line num="350" count="0" type="stmt"/>
+        <line num="355" count="0" type="cond" truecount="0" falsecount="14"/>
+        <line num="356" count="0" type="cond" truecount="0" falsecount="6"/>
+        <line num="357" count="0" type="stmt"/>
+        <line num="361" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="366" count="0" type="stmt"/>
+        <line num="379" count="0" type="stmt"/>
+        <line num="398" count="0" type="stmt"/>
+        <line num="409" count="0" type="stmt"/>
+        <line num="415" count="0" type="stmt"/>
         <line num="428" count="0" type="stmt"/>
-        <line num="440" count="0" type="stmt"/>
-        <line num="454" count="0" type="stmt"/>
-        <line num="495" count="0" type="stmt"/>
-        <line num="504" count="0" type="stmt"/>
-        <line num="520" count="0" type="stmt"/>
-        <line num="521" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="536" count="0" type="stmt"/>
+        <line num="441" count="0" type="stmt"/>
+        <line num="482" count="0" type="stmt"/>
+        <line num="491" count="0" type="stmt"/>
+        <line num="507" count="0" type="stmt"/>
+        <line num="508" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="523" count="0" type="stmt"/>
       </file>
     </package>
     <package name="components.Player">
@@ -2119,7 +2116,7 @@
       </file>
     </package>
     <package name="redux.services">
-      <metrics statements="139" coveredstatements="50" conditionals="33" coveredconditionals="5" methods="59" coveredmethods="3"/>
+      <metrics statements="146" coveredstatements="56" conditionals="33" coveredconditionals="5" methods="64" coveredmethods="3"/>
       <file name="auth.service.ts" path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/redux/services/auth.service.ts">
         <metrics statements="46" coveredstatements="14" conditionals="13" coveredconditionals="2" methods="17" coveredmethods="1"/>
         <line num="9" count="4" type="stmt"/>
@@ -2170,22 +2167,29 @@
         <line num="101" count="0" type="stmt"/>
       </file>
       <file name="pair.service.ts" path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/redux/services/pair.service.ts">
-        <metrics statements="15" coveredstatements="9" conditionals="2" coveredconditionals="1" methods="11" coveredmethods="1"/>
+        <metrics statements="22" coveredstatements="15" conditionals="2" coveredconditionals="1" methods="16" coveredmethods="1"/>
         <line num="14" count="4" type="stmt"/>
         <line num="15" count="4" type="stmt"/>
         <line num="17" count="4" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
+        <line num="18" count="4" type="stmt"/>
         <line num="19" count="4" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
+        <line num="21" count="4" type="stmt"/>
+        <line num="22" count="4" type="stmt"/>
         <line num="23" count="4" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="26" count="4" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="28" count="4" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="31" count="4" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="34" count="4" type="stmt"/>
+        <line num="25" count="4" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="27" count="4" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="4" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="32" count="4" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="36" count="4" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="39" count="4" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="42" count="4" type="stmt"/>
       </file>
       <file name="player.service.ts" path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/redux/services/player.service.ts">
         <metrics statements="15" coveredstatements="8" conditionals="6" coveredconditionals="2" methods="5" coveredmethods="1"/>

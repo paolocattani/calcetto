@@ -5,12 +5,10 @@
 #   source hooks/pre-commit.sh
 #
 
-# Clear log
-: > pre-commit.log
-# Redirect stdout and stderr to pre-commit.log
-exec &>pre-commit.log
+SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )
+LOG_FILE="$SCRIPT_DIR/pre-commit.log"
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source cli/redirect_output.sh
 
 SEARCH_STRING='PRE-COMMIT'
 SEARCH_FILE="$SCRIPT_DIR/.hooks"
@@ -19,7 +17,7 @@ source cli/search_string.sh
 BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
 
 # Only on dev enviroment, and branch develop , and if PRE-COMMIT flag is enabled
-if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]] && [[ $BRANCH_NAME == "develop" ]] && [[ $SEARCH_RESULT -eq 1 ]]; then
+if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]] && [[ $BRANCH_NAME == "develop" ]] ; then
 
     echo "Start : "$(date +'%Y.%m.%d - %H:%M:%S')
     echo "On branch : "$BRANCH_NAME

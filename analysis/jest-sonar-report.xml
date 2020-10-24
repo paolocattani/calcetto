@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
-    <file path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/test/components/App/App.test.tsx">
-        <testCase name="&lt;Entry /&gt; should render correctly and match snapshot" duration="143"/>
-    </file>
     <file path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/test/components/Auth/Login.test.tsx">
-        <testCase name="&lt;Login /&gt;.render should render correctly should match snapshot" duration="143"/>
-        <testCase name="&lt;Login /&gt;.render should contains all elements" duration="217"/>
-        <testCase name="&lt;Login /&gt;.render input elements should have &quot;required&quot; attritbute" duration="47"/>
-        <testCase name="&lt;Login /&gt; tests  when username and password is not provided should have empty fields and button disabled " duration="33"/>
-        <testCase name="&lt;Login /&gt; tests  when username and password is provided should have changed field value" duration="43"/>
-        <testCase name="&lt;Login /&gt; tests  when username and password is provided should type value" duration="117"/>
+        <testCase name="&lt;Login /&gt;.render should render correctly should match snapshot" duration="254"/>
+        <testCase name="&lt;Login /&gt;.render should contains all elements" duration="510"/>
+        <testCase name="&lt;Login /&gt;.render input elements should have &quot;required&quot; attritbute" duration="85"/>
+        <testCase name="&lt;Login /&gt; tests  when username and password is not provided should have empty fields and button disabled " duration="68"/>
+        <testCase name="&lt;Login /&gt; tests  when username and password is provided should have changed field value" duration="115"/>
+        <testCase name="&lt;Login /&gt; tests  when username and password is provided should type value" duration="272"/>
     </file>
     <file path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/test/components/Auth/Register.test.tsx">
-        <testCase name="&lt;Register /&gt;.render should render correctly and match snapshot" duration="118"/>
-        <testCase name="&lt;Register /&gt;.render should contains all elements" duration="404"/>
-        <testCase name="&lt;Register /&gt;.render input elements should have &quot;required&quot; attritbute" duration="143"/>
+        <testCase name="&lt;Register /&gt;.render should render correctly and match snapshot" duration="266"/>
+        <testCase name="&lt;Register /&gt;.render should contains all elements" duration="997"/>
+        <testCase name="&lt;Register /&gt;.render input elements should have &quot;required&quot; attritbute" duration="385"/>
     </file>
     <file path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/test/components/Tournament/tournament.test.tsx">
-        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type Admin should render correctly should match snapshot" duration="126"/>
-        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type Admin should contains all elements" duration="442"/>
-        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type User should render correctly should match snapshot" duration="51"/>
-        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type User should contains all elements" duration="120"/>
+        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type Admin should render correctly should match snapshot" duration="265"/>
+        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type Admin should contains all elements" duration="1118"/>
+        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type User should render correctly should match snapshot" duration="124"/>
+        <testCase name="&lt;Tournament /&gt;.render &lt;Tournament /&gt;.render when user is type User should contains all elements" duration="351"/>
+    </file>
+    <file path="/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto/src/test/components/App/App.test.tsx">
+        <testCase name="&lt;Entry /&gt; should render correctly and match snapshot" duration="253"/>
     </file>
 </testExecutions>
