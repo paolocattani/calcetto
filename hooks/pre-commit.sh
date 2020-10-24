@@ -21,7 +21,7 @@ echo "Enviroment : "$NODE_ENV
 echo "Enabled : "$SEARCH_RESULT
 
 # Only on dev enviroment, and branch develop , and if PRE-COMMIT flag is enabled
-if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]] && [[ $BRANCH_NAME == "develop" ]] && [[ $SEARCH_RESULT -eq 1 ]]; then
+if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]] && [[ $BRANCH_NAME == "develop" ]] && [[ $SEARCH_RESULT = 1 ]]; then
 
     echo "Start : "$(date +'%Y.%m.%d - %H:%M:%S')
 
@@ -36,6 +36,7 @@ if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]] && [[ $BRANCH_NAME
     git add ./build/* ./analysis/* ./coverage/*
 
     echo "End : "$(date +'%Y.%m.%d - %H:%M:%S')
-
+else
+    echo "Skipping version update..."
 fi
 
