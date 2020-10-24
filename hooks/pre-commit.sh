@@ -16,12 +16,14 @@ source cli/search_string.sh
 
 BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
 
+echo "On branch : "$BRANCH_NAME
+echo "Enviroment : "$NODE_ENV
+echo "Enabled : "$SEARCH_RESULT
+
 # Only on dev enviroment, and branch develop , and if PRE-COMMIT flag is enabled
 if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]] && [[ $BRANCH_NAME == "develop" ]] && [[ $SEARCH_RESULT -eq 1 ]]; then
 
     echo "Start : "$(date +'%Y.%m.%d - %H:%M:%S')
-    echo "On branch : "$BRANCH_NAME
-    echo "Enviroment : "$NODE_ENV
 
     # Update version
     source cli/update_version.sh --patch
