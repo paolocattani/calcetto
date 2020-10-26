@@ -172,6 +172,7 @@
     "ts-jest": "^26.4.2"
   },
   "jestSonar": {
+    "useRelativePath":true,
     "reportPath": "analysis",
     "reportFile": "jest-sonar-report.xml",
     "indent": 4
