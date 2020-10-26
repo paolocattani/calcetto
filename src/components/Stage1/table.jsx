@@ -15,6 +15,7 @@ import { TournamentSelector } from 'redux/selectors';
 import { TournamentProgress } from '@common/dto';
 
 // TODO: convert this component to ts
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const Stage1Table = ({ pairsList, autoOrder }) => {
   const dispatch = useDispatch();
   // From store

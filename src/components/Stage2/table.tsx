@@ -57,6 +57,7 @@ function getTableHeaderElements(colNumber: number): JSX.Element[] {
   return tds;
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 function getTableBodyRows(
   elements: ICell[][],
   rowNumber: number,

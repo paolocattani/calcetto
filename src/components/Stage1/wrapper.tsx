@@ -18,6 +18,7 @@ import { PairDTO, TournamentProgress } from '@common/dto';
 /**
  * Wraps multiple table components
  */
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const Wrapper: React.FC = (): JSX.Element => {
   const currentHistory = useHistory();
   const dispatch = useDispatch();

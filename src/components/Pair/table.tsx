@@ -35,6 +35,7 @@ import {
   updatePair,
 } from 'redux/services/pair.service';
 import { HTTPStatusCode } from '@common/models/HttpStatusCode';
+import { LABEL_COMMON_LOADING } from '@common/constants/label';
 
 const hideAskUser = {
   message: '',
@@ -43,6 +44,7 @@ const hideAskUser = {
   title: '',
 };
 interface PairTableProps {}
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const PairsTable: React.FC<PairTableProps> = () => {
   // Navigation
   const currentHistory = useHistory();
@@ -54,7 +56,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 
   // States
   // User messages
-  const [isLoading, setIsLoading] = useState({ state: false, message: t('common:loading') });
+  const [isLoading, setIsLoading] = useState({ state: false, message: t(LABEL_COMMON_LOADING) });
   const [askUser, setAskUser] = useState<YesNoModalProps>(hideAskUser);
 
   // Data
@@ -86,7 +88,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 
   async function addRow(index?: number) {
     try {
-      setIsLoading({ state: true, message: t('common:loading') });
+      setIsLoading({ state: true, message: t(LABEL_COMMON_LOADING) });
       const emptyRow:PairDTO = getEmptyPair();
       emptyRow.tournamentId = tournament.id || 0;
       const result = await postPair({ pair: emptyRow });
@@ -113,7 +115,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 
   async function deleteRow() {
     try {
-      setIsLoading({ state: true, message: t('common:loading') });
+      setIsLoading({ state: true, message: t(LABEL_COMMON_LOADING) });
       // Devo ripristinare i giocatori eliminati
       const players: Array<PlayerDTO> = [];
       selectedRows.forEach((e) => {
@@ -284,7 +286,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 
   const processDeleteStage1 = async () => {
     try {
-      setIsLoading({ state: true, message: t('common:loading') });
+      setIsLoading({ state: true, message: t(LABEL_COMMON_LOADING) });
       const response = await fetch('/api/v1/stage1', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
@@ -332,7 +334,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
       return;
     }
 
-    setIsLoading({ state: true, message: t('common:loading') });
+    setIsLoading({ state: true, message: t(LABEL_COMMON_LOADING) });
     const names = 'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('');
     let current = 0;
     let newRows: PairDTO[] = data.rows.map(row => {
