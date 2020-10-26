@@ -17,6 +17,7 @@ import { PairDTO, ICell } from '@common/dto';
 
 interface Stage2HandlerProps extends RouteComponentProps {}
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
   const currentHistory = useHistory();
   const dispatch = useDispatch();

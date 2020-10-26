@@ -13,7 +13,6 @@ jobs:
         node-version: [ 10.x, 12.x, 14.x]
     steps:
       - uses: actions/checkout@v2
-
       # Set up Node
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
@@ -61,12 +60,12 @@ jobs:
     needs: build
     name: Tests
     # For now disable this step
-    if: ${{ 1==2 }}
+    # if: ${{ 1==2 }}
     steps:
-      - name: Download build
-        uses: actions/download-artifact@v2
-        with:
-          name: build
+      - uses: actions/checkout@v2
+      # Install dependecies
+      - name: Install dependencies
+        run: npm ci
       # unit test FE
       - name: Unit Tests
         run: npm run test
@@ -83,11 +82,15 @@ jobs:
     needs: build
     name: Code Quality
     steps:
+      - uses: actions/checkout@v2
       - name: Download build
         uses: actions/download-artifact@v2
         with:
           name: build
-
+      - name: Download Coverage
+        uses: actions/download-artifact@v2
+        with:
+          name: coverage
         # https://github.com/marketplace/actions/sonarcloud-scan
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master

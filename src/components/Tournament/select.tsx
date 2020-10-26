@@ -18,6 +18,7 @@ import { AuthSelector } from 'redux/selectors/auth.selector';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { TournamentDTO } from '@common/dto';
+import { LABEL_TOURNAMENT_SELECT } from '@common/constants/label';
 
 const FTournament = () => {
   // Redux
@@ -73,10 +74,10 @@ const FTournament = () => {
     } else {
       return (
         <Form onSubmit={handleSubmit}>
-          <label htmlFor="tournamentSelect">{t('tournament:select')}</label>
+          <label htmlFor="tournamentSelect">{t(LABEL_TOURNAMENT_SELECT)}</label>
           <Select
             id="tournamentSelect"
-            aria-label={t('tournament:select')}
+            aria-label={t(LABEL_TOURNAMENT_SELECT)}
             components={{ IndicatorSeparator }}
             styles={customStyles}
             value={tournament}
@@ -114,7 +115,7 @@ const FTournament = () => {
           className="float-left default-color-white"
           onClick={() => onNewTournament(false)}
         >
-          {t('tournament:select')}
+          {t(LABEL_TOURNAMENT_SELECT)}
         </Button>
       ) : (
         <Button

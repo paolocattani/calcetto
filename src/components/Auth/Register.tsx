@@ -13,6 +13,8 @@ import { InputField } from 'components/core/generic/Input';
 import { useTranslation } from 'react-i18next';
 import { PlayerRoleType } from '@common/models';
 import { PlayerRole } from '@common/dto';
+import { LABEL_AUTH_PASSWORD } from '@common/constants/label';
+
 
 interface RegisterProps {}
 
@@ -191,10 +193,10 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
         <Col>
           <InputField
             controlId="password"
-            label={t('auth:password.password')}
+            label={t(LABEL_AUTH_PASSWORD)}
             required={true}
             type="password"
-            placeholder={t('auth:password.password')}
+            placeholder={t(LABEL_AUTH_PASSWORD)}
             {...bindPassword}
           />
           <InputField
@@ -202,7 +204,7 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
             label={t('auth:password.confirm')}
             required={true}
             type="password"
-            placeholder={t('auth:password.password')}
+            placeholder={t(LABEL_AUTH_PASSWORD)}
             {...bindCPassword}
           />
         </Col>

@@ -1,6 +1,6 @@
 {
   "compileOnSave": true,
-  "compilerOptions": {
+ "compilerOptions": {
     "target": "es5",
     "module": "esnext",
     "lib": [
@@ -20,6 +20,7 @@
     "strict": true,
     "noImplicitAny": true,
     "downlevelIteration": true,
+    "noFallthroughCasesInSwitch": true,
     "plugins": [
       {
         "name": "typescript-tslint-plugin"

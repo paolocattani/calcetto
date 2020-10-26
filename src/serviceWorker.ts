@@ -63,6 +63,7 @@ export function register(config?: Config) {
 function registerValidSW(swUrl: string, config?: Config) {
   navigator.serviceWorker
     .register(swUrl)
+    // eslint-disable-next-line sonarjs/cognitive-complexity
     .then((registration) => {
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
