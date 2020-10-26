@@ -1,2 +1,2 @@
 # Don't convert EOL on .sh files
-*.sh text eol=lf
+#*.sh text eol=lf
