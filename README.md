@@ -2,6 +2,7 @@
 
 <p align="center">
     <a href=""><img src="https://github.com/paolocattani/calcetto/workflows/Pipeline%20(%20Build/Test/Analyze%20)/badge.svg" alt="Build/Test/Analyze"></a>
+    <a href=""><img src="https://github.com/paolocattani/calcetto/workflows/CodeQL/badge.svg" alt="CodeQL"></a>
 </p>
 <p align="center">
     <a href="https://david-dm.org/paolocattani/calcetto"><img src="https://david-dm.org/paolocattani/calcetto.svg" alt="Dependency Status"></a>
