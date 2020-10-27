@@ -99,7 +99,7 @@
     "test:coverage": "react-scripts test --coverage --watchAll=false --silent --testResultsProcessor ./node_modules/jest-sonar-reporter ",
     "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache --env=jest-environment-jsdom-sixteen",
     "lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
-    "lint:report": "./node_modules/.bin/eslint -f json -o ./analysis/report.json .",
+    "lint:report": "./node_modules/.bin/eslint -f json -o ./analysis/eslint-report.json .",
     "analyze": "source-map-explorer build/static/js/*.js --html analysis/build-analysis.html"
   },
   "browserslist": {
