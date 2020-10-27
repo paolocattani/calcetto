@@ -169,7 +169,7 @@
     "prettier": "^2.1.2",
     "redux-mock-store": "^1.5.4",
     "source-map-explorer": "^2.5.0",
-    "ts-jest": "^26.4.2"
+    "ts-jest": "^26.4.3"
   },
   "jestSonar": {
     "useRelativePath":true,
