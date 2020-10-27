@@ -13,7 +13,8 @@
   "scripts": {
     "prod:build": "tsc --pretty",
     "dev": "nodemon --config \"./nodemon.json\"",
-    "test": "jest -o --watch"
+    "test": "jest -o --watch",
+    "test:coverage": "jest --coverage --detectOpenHandles"
   },
   "author": "",
   "license": "ISC",
