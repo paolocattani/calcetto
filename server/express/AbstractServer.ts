@@ -20,6 +20,7 @@ import cors from 'cors';
 // Other
 import chalk from 'chalk';
 import path from 'path';
+import { Sequelize } from 'sequelize/types';
 //import cluster from 'cluster';
 //import { cpus as osCpus } from 'os';
 
@@ -105,7 +106,7 @@ export abstract class AbstractServer implements IServer {
       );
     });
 
-    setInterval(() => {
+    const interval = setInterval(() => {
       logger.info(chalk.bold.redBright(`--- Process@${process.pid} status ---------------- `));
       logger.info(chalk.greenBright('   Uptime        : '), process.uptime());
       logger.info(chalk.greenBright('   CPU usage'));
@@ -123,9 +124,30 @@ export abstract class AbstractServer implements IServer {
       logger.info(chalk.bold.redBright('--------------------------------------- '));
     }, 30 * 60 * 1000);
 
+    httpServer.on('close', function () {
+      logger.info('Stopping server...');
+      clearInterval(interval);
+      logger.info('Shutdown...');
+    });
+
+    /*
+    const closeServer = (signal: string) => {
+      logger.info(`Detect event ${signal}.`);
+      if (httpServer.listening) {
+        httpServer.close(function () {
+          logger.info('Stopping async processes...');
+          clearInterval(interval);
+          logger.info('Shutdown...');
+          process.exit(0);
+        });
+      }
+    };
+
+    process.on('SIGINT', () => closeServer('SIGINT'));
+    process.on('SIGTERM', () => closeServer('SIGINT'));
+    */
     return httpServer;
   }
-
   // Implementation have to handle all other API
   public abstract routes(application: ExpressApplication): void;
 }

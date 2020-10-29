@@ -45,7 +45,13 @@ async function loadModels(): Promise<Sequelize> {
 }
 
 export async function authenticate(options?: SyncOptions): Promise<Sequelize> {
-  if (connection) return connection;
+  console.log('authenticate');
+  if (connection) {
+    console.log('authenticate. Connection found');
+    logger.info(chalk.cyan.bold('Connection found! Database connected!'));
+    return connection;
+  }
+  console.log('authenticate. Connection not');
   const sequelizeconnection = await loadModels();
   await sequelizeconnection.authenticate(options);
   logger.info(chalk.cyan.bold('Database connected!'));

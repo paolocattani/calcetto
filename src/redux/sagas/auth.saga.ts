@@ -24,7 +24,7 @@ function* checkAuthenticationSaga({
 }: ReturnType<typeof AuthAction.checkAuthentication.request>): Generator<StrictEffect, void, any> {
   try {
     const response: AuthenticationResponse = yield call(CheckAuthentication);
-    if (response.code === HTTPStatusCode.OK) {
+    if (response.code === HTTPStatusCode.Success) {
       yield put(AuthAction.checkAuthentication.success(response));
       yield put(AuthAction.sessionControl.request({ history }));
     } else {
@@ -75,7 +75,7 @@ function* logoutSaga({
   payload: { history },
 }: ReturnType<typeof AuthAction.logout.request>): Generator<StrictEffect, void, any> {
   const logoutReponse: AuthenticationResponse = yield call(logout);
-  if (logoutReponse.code === HTTPStatusCode.OK) {
+  if (logoutReponse.code === HTTPStatusCode.Success) {
     yield put(AuthAction.logout.success(logoutReponse));
     history.push('/');
     toast.success(logoutReponse.userMessage.message);
@@ -86,7 +86,7 @@ function* logoutSaga({
   persistor.purge();
   yield put(
     AuthAction.logout.success({
-      code: HTTPStatusCode.OK,
+      code: HTTPStatusCode.Success,
       message: 'Logout complete',
       userMessage: {
         type: UserMessageType.Success,
@@ -102,7 +102,7 @@ function* loginSaga({
 }: ReturnType<typeof AuthAction.login.request>): Generator<StrictEffect, void, any> {
   // Validate Login
   const loginReponse: AuthenticationResponse = yield call(login, loginRequest);
-  if (loginReponse.code === HTTPStatusCode.OK) {
+  if (loginReponse.code === HTTPStatusCode.OSuccessK) {
     yield put(AuthAction.login.success(loginReponse));
     // Session control
     yield put(AuthAction.sessionControl.request({ history }));
@@ -122,7 +122,7 @@ function* registrationSaga({
 }: ReturnType<typeof AuthAction.registration.request>): Generator<StrictEffect, void, any> {
   // Validate Registration
   const registrationReponse: RegistrationResponse = yield call(registration, registrationRequest);
-  if (registrationReponse.code === HTTPStatusCode.OK) {
+  if (registrationReponse.code === HTTPStatusCode.Success) {
     yield put(AuthAction.registration.success(registrationReponse));
     // Session control
     yield put(AuthAction.sessionControl.request({ history }));
@@ -144,7 +144,7 @@ function* updateUserSaga({
 }: ReturnType<typeof AuthAction.update.request>): Generator<StrictEffect, void, any> {
   // Validate Login
   const updateReponse: AuthenticationResponse = yield call(updateUser, updateUserRequest);
-  if (updateReponse.code === HTTPStatusCode.OK) {
+  if (updateReponse.code === HTTPStatusCode.Success) {
     yield put(AuthAction.update.success(updateReponse));
     history.push('/');
     toast.success(updateReponse.userMessage.message);
@@ -160,7 +160,7 @@ function* deleteUserSaga({
 }: ReturnType<typeof AuthAction.delete.request>): Generator<StrictEffect, void, any> {
   // Validate Login
   const deleteReponse: AuthenticationResponse = yield call(deleteUser, deleteUserRequest);
-  if (deleteReponse.code === HTTPStatusCode.OK) {
+  if (deleteReponse.code === HTTPStatusCode.Success) {
     yield put(AuthAction.delete.success(deleteReponse));
     yield put(AuthAction.logout.request({ history }));
     toast.success(deleteReponse.userMessage.message);

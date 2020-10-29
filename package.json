@@ -86,7 +86,7 @@
   "scripts": {
     "dev": "concurrently -p \"[{name}]\" -n server,client -c \"bgGreen.bold,bgBlue.bold\"  --kill-others-on-fail \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "cd server && nodemon --config \"./nodemon.json\"",
-    "dev:client": "react-scripts start ",
+    "dev:client": "react-scripts -r @cypress/instrument-cra start ",
     "prod:build:server": "tsc --pretty --allowJs --outDir ./build_server -p ./server/tsconfig.json",
     "prod:heroku": "npm i && npm run prod:heroku:server",
     "prod:heroku:server": "./node_modules/.bin/ts-node --project ./server/tsconfig.json ./server/server.ts  server.js --optimize_for_size --max_old_space_size=460 --gc_interval=100",
@@ -115,6 +115,7 @@
     ]
   },
   "devDependencies": {
+    "@cypress/instrument-cra": "^1.4.0",
     "@ljharb/eslint-config": "^17.2.0",
     "@shinnn/eslint-config": "^7.0.0",
     "@testing-library/dom": "^7.26.3",

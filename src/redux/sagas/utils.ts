@@ -30,7 +30,7 @@ export function* entityLifeCycle<Req, Res extends GenericReponse>(
 
     // If success
     // FIXME: include all 2XX
-    if (response.code === HTTPStatusCode.OK) {
+    if (response.code === HTTPStatusCode.Success) {
       // Show success toast
       // Dispatch success action
       yield put(action.success(response));

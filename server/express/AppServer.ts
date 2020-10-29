@@ -38,17 +38,19 @@ export default class AppServer extends AbstractServer {
     this.connection = null;
   }
 
-  public async connect() {
+  public async connect(): Promise<Sequelize> {
     const force = process.env.SERVER_FORCE && process.env.SERVER_FORCE.toLowerCase() === 'true' ? true : false;
+    logger.info(
+      (force ? chalk.redBright.bold(' [ FORCE ] ') : chalk.greenBright.bold(' [ NORMAL ] ')).concat(
+        chalk.cyan.bold('Starting database synchronization...')
+      )
+    );
     if (force) {
-      logger.info(chalk.redBright.bold(' [ FORCE ] ') + chalk.cyan.bold('Starting database synchronization...'));
       this.connection = await sync({ force });
       await generator(true);
       return this.connection;
     }
-    // Sync database model ( async )
-    logger.info(chalk.greenBright.bold(' [ NORMAL ] ') + chalk.cyan.bold('Starting database synchronization...'));
-    await authenticate();
+    return await authenticate();
   }
 
   public routes(application: ExpressApplication): void {
