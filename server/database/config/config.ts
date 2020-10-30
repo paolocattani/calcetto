@@ -24,18 +24,24 @@ const config: EnvList = {
     dialect: 'postgres',
     logging: (sqlString: string) => logger.warn(sqlString),
     pool: { max: 5, min: 0, acquire: 30000, idle: 10000 },
-  },
-  production: {
-    useEnvVar: 'DATABASE_URL', // Default name on Heroku
-    dialect: 'postgres',
-    logging: false,
     dialectOptions: {
       ssl: {
         require: true,
         rejectUnauthorized: false,
       },
     },
+  },
+  production: {
+    useEnvVar: 'DATABASE_URL', // Default name on Heroku
+    dialect: 'postgres',
+    logging: false,
     pool: { max: 5, min: 0, acquire: 30000, idle: 10000 },
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
   },
 };
 
