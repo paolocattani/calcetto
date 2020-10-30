@@ -77,7 +77,8 @@
     ],
     "include": [
         "server",
-        "src"
+        "src",
+        "..src/@common/typings/*.d.ts"
     ],
     "exclude": [
         "build",

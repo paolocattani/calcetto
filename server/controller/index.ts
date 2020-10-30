@@ -6,7 +6,7 @@ import pairRouter from './pair.controller';
 import tournamentRouter from './tournament.controller';
 import stage1Router from './stage1.controller';
 import stage2Router from './stage2.controller';
-import authRouter from './auth.controller';
+import authRouter from './auth/auth.controller';
 // SSE
 import { sessionControl } from '../events/events';
 import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';

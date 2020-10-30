@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "api server",
   "main": "server.ts",
+  "author": "Paolo Cattani",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/paolocattani/calcetto.git/"
@@ -12,15 +14,14 @@
   },
   "scripts": {
     "prod:build": "tsc --pretty",
+    "prod":" ../node_modules/.bin/ts-node server.ts ",
     "dev": "nodemon --config \"./nodemon.json\"",
-    "test": "jest -o --watch",
-    "test:coverage": "jest --coverage --detectOpenHandles",
-    "e2e:test": "jest --detectOpenHandles",
-    "e2e:server":" ../node_modules/.bin/ts-node ./test/serverTest.ts ",
-    "e2e":"start-test e2e:server 5001 e2e:test"
+    "test:unit":"start-test prod 5001 test",
+    "test": "jest",
+    "test:watch": "jest -o --watch",
+    "test:coverage": "jest --coverage",
+    "test:e2e": "\\TODO:"
   },
-  "author": "",
-  "license": "ISC",
   "jest": {
     "testEnvironment": "node",
     "globalSetup": "./test/jest.setup.ts",

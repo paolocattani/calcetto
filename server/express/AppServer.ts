@@ -12,7 +12,7 @@ import routes from '../controller/index';
 import '../core/env';
 import chalk from 'chalk';
 import { logger } from '../core/logger';
-import { isProductionMode } from '../core/debug';
+import { isProductionMode, isTestMode } from '../core/debug';
 
 // white list for CORS
 const defaultName: string = 'ApplicationServer Calcetto';
@@ -45,7 +45,12 @@ export default class AppServer extends AbstractServer {
         chalk.cyan.bold('Starting database synchronization...')
       )
     );
-    if (force) {
+
+    if (isTestMode()) {
+      // Drop and Create Db
+      this.connection = await sync({ force });
+      return this.connection;
+    } else if (force) {
       this.connection = await sync({ force });
       await generator(true);
       return this.connection;

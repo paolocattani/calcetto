@@ -1,5 +1,4 @@
 import { WhereOptions, Sequelize, Op, Model } from 'sequelize';
-import { logger } from './logger';
 //-----------------------------
 // Math
 //
