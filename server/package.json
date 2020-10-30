@@ -14,14 +14,12 @@
   },
   "scripts": {
     "prod:build": "tsc --pretty",
-    "prod":" ../node_modules/.bin/ts-node server.ts ",
+    "prod": " ../node_modules/.bin/ts-node server.ts ",
     "dev": "nodemon --config \"./nodemon.json\"",
-    "test:unit":"NODE_ENV=test start-server-and-test prod 5001 test",
-    "test:unit:coverage":"NODE_ENV=test start-server-and-test prod 5001 test:coverage",
-    "test": "jest  " ,
-    "test:watch": "jest -o --watch --detectOpenHandles",
-    "test:coverage": "jest --coverage --detectOpenHandles",
-    "test:e2e": "\\TODO:"
+    "test:unit": "NODE_ENV=test jest",
+    "test:unit:watch": "NODE_ENV=test jest -o --watch --detectOpenHandles",
+    "test:unit:coverage": "NODE_ENV=test jest --coverage --detectOpenHandles",
+    "test:e2e": "NODE_ENV=test start-server-and-test prod 5001 test:coverage"
   },
   "jest": {
     "testEnvironment": "node",
