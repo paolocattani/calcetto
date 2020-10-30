@@ -16,7 +16,7 @@
     "prod:build": "tsc --pretty",
     "prod":" ../node_modules/.bin/ts-node server.ts ",
     "dev": "nodemon --config \"./nodemon.json\"",
-    "test:unit":"start-server-and-test prod 5001 test",
+    "test:unit":"NODE_ENV=test start-server-and-test prod 5001 test",
     "test": "jest",
     "test:watch": "jest -o --watch",
     "test:coverage": "jest --coverage",

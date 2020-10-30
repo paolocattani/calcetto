@@ -102,7 +102,7 @@ function* loginSaga({
 }: ReturnType<typeof AuthAction.login.request>): Generator<StrictEffect, void, any> {
   // Validate Login
   const loginReponse: AuthenticationResponse = yield call(login, loginRequest);
-  if (loginReponse.code === HTTPStatusCode.OSuccessK) {
+  if (loginReponse.code === HTTPStatusCode.Success) {
     yield put(AuthAction.login.success(loginReponse));
     // Session control
     yield put(AuthAction.sessionControl.request({ history }));
