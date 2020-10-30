@@ -22,6 +22,7 @@
     "test:e2e": "NODE_ENV=test start-server-and-test prod 5001 test:coverage"
   },
   "jest": {
+    "testTimeout": 10000,
     "testEnvironment": "node",
     "globalSetup": "./test/jest.setup.ts",
     "globalTeardown": "./test/jest.teardown.ts",
