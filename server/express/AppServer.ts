@@ -12,7 +12,7 @@ import routes from '../controller/index';
 import '../core/env';
 import chalk from 'chalk';
 import { logger } from '../core/logger';
-import { isProductionMode, isTestMode } from '../core/debug';
+import { isDevMode, isProductionMode, isTestMode } from '../core/debug';
 
 // white list for CORS
 const defaultName: string = 'ApplicationServer Calcetto';
@@ -46,16 +46,19 @@ export default class AppServer extends AbstractServer {
       )
     );
 
-    if (isTestMode()) {
-      // Drop and Create Db
-      this.connection = await sync({ force });
-      return this.connection;
-    } else if (force) {
+    // Dev and Test can use THE FORCE :
+    // “Don’t underestimate the Force.” – Darth Vader
+    if ((isDevMode() || isTestMode()) && force) {
       this.connection = await sync({ force });
       await generator(true);
-      return this.connection;
+      // Always start from clean db on test
+    } else if (isTestMode()) {
+      this.connection = await sync({ force });
+    } else {
+      this.connection = await authenticate();
     }
-    return await authenticate();
+
+    return this.connection;
   }
 
   public routes(application: ExpressApplication): void {
