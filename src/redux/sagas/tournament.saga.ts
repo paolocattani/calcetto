@@ -29,7 +29,7 @@ function* saveTournamentSaga(
 ): Generator<StrictEffect, void, any> {
   try {
     const response: SaveTournamentResponse = yield call(postTournament, action.payload);
-    if (response.code === HTTPStatusCode.OK) {
+    if (response.code === HTTPStatusCode.Success) {
       yield put(TournamentAction.save.success(response));
       action.payload.history.push('/tournament');
       toast.success(response.userMessage.message);

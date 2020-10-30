@@ -25,3 +25,9 @@ if [ $? -eq 0 ]; then
 else
   echo "Always the same error..."
 fi
+! cd server && npm run test:unit:coverage
+if [ $? -eq 0 ]; then
+  echo "Done..."
+else
+  echo "Always the same error..."
+fi

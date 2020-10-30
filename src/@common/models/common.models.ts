@@ -2,6 +2,12 @@ import { PlayerRole } from '../dto';
 import { RootState } from '.';
 import { HTTPStatusCode } from './HttpStatusCode';
 
+export enum Environment {
+  development = 'development',
+  test = 'test',
+  production = 'production',
+}
+
 export interface GenericReponse {
   code: HTTPStatusCode;
   message: string;

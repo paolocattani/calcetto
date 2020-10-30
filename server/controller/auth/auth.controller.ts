@@ -1,9 +1,9 @@
 // Core
-import '../core/env';
-import { logger } from '../core/logger';
-import { withAuth, asyncMiddleware, controllerLogger } from '../core/middleware';
+import '../../core/env';
+import { logger } from '../../core/logger';
+import { withAuth, asyncMiddleware, controllerLogger } from '../../core/middleware';
 // Types
-import { AppRequest } from './index';
+import { AppRequest } from '../index';
 import { Router, Request, Response, NextFunction } from 'express';
 // Auth Manager
 import {
@@ -18,11 +18,11 @@ import {
   addUserCookies,
   isValidRegister,
   removeUserCookies,
-} from '../manager/auth.manager';
+} from '../../manager/auth.manager';
 // Models
-import User from '../database/user.model';
+import User from '../../database/user.model';
 // Common Responses
-import { missingParameters, success, failure, entityNotFound, serverError } from './common.response';
+import { missingParameters, success, failure, entityNotFound, serverError } from '../common.response';
 // @Commmon
 import {
   AuthenticationResponse,
@@ -31,9 +31,9 @@ import {
   LoginRequest,
   RegistrationRequest,
   UpdateUserRequest,
-} from '../../src/@common/models/auth.model';
-import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
-import { OmitGeneric, OmitHistory } from '../../src/@common/models/common.models';
+} from '../../../src/@common/models/auth.model';
+import { HTTPStatusCode } from '../../../src/@common/models/HttpStatusCode';
+import { OmitGeneric, OmitHistory } from '../../../src/@common/models/common.models';
 
 const router = Router();
 

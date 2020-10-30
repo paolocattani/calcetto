@@ -9,8 +9,8 @@
 
 # testing
 # Need to push coverage beacause of this issue ... https://github.com/facebook/jest/issues/9324
-/coverage
-/analysis
+**/coverage
+**/analysis
 
 # production
 # FIXME:

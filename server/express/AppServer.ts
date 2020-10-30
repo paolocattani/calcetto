@@ -12,7 +12,7 @@ import routes from '../controller/index';
 import '../core/env';
 import chalk from 'chalk';
 import { logger } from '../core/logger';
-import { isProductionMode } from '../core/debug';
+import { isDevMode, isProductionMode, isTestMode } from '../core/debug';
 
 // white list for CORS
 const defaultName: string = 'ApplicationServer Calcetto';
@@ -38,17 +38,27 @@ export default class AppServer extends AbstractServer {
     this.connection = null;
   }
 
-  public async connect() {
+  public async connect(): Promise<Sequelize> {
     const force = process.env.SERVER_FORCE && process.env.SERVER_FORCE.toLowerCase() === 'true' ? true : false;
-    if (force) {
-      logger.info(chalk.redBright.bold(' [ FORCE ] ') + chalk.cyan.bold('Starting database synchronization...'));
+    logger.info(
+      (force ? chalk.redBright.bold(' [ FORCE ] ') : chalk.greenBright.bold(' [ NORMAL ] ')).concat(
+        chalk.cyan.bold('Starting database synchronization...')
+      )
+    );
+
+    // Dev and Test can use THE FORCE :
+    // “Don’t underestimate the Force.” – Darth Vader
+    if ((isDevMode() || isTestMode()) && force) {
       this.connection = await sync({ force });
       await generator(true);
-      return this.connection;
+      // Always start from clean db on test
+    } else if (isTestMode()) {
+      this.connection = await sync({ force });
+    } else {
+      this.connection = await authenticate();
     }
-    // Sync database model ( async )
-    logger.info(chalk.greenBright.bold(' [ NORMAL ] ') + chalk.cyan.bold('Starting database synchronization...'));
-    await authenticate();
+
+    return this.connection;
   }
 
   public routes(application: ExpressApplication): void {
