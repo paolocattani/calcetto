@@ -69,9 +69,11 @@ jobs:
       # unit test FE
       - name: Unit Tests
         run: npm run test
-      # TODO: unit test BE
-      #- name: Unit Tests
-      #  run: npm run test
+      # unit test BE
+      - name: Unit Tests
+        run: |
+          cd server
+          npm run test:unit
       # TODO: e2e
       # - name: End to end tests
       #   run: npm run test
