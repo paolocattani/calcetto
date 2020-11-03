@@ -53,7 +53,7 @@ export default class AppServer extends AbstractServer {
       await generator(true);
       // Always start from clean db on test
     } else if (isTestMode()) {
-      this.connection = await sync({ force });
+      this.connection = await sync({ force: true });
     } else {
       this.connection = await authenticate();
     }

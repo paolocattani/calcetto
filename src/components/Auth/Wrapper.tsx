@@ -27,7 +27,7 @@ const AuthWrapper: React.FC = (): JSX.Element => {
           <Container>{body}</Container>
         </Card.Body>
         <Card.Footer>
-          <Button size="lg" variant="outline-warning" onClick={() => setRegister(!register)}>
+          <Button id="swapButton" size="lg" variant="outline-warning" onClick={() => setRegister(!register)}>
             {icon}
             <strong> {text}</strong>
           </Button>

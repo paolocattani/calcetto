@@ -236,8 +236,8 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
           </Form.Group>
         </Col>
         <Col md={6}>
-          <Form.Group>
-            <Form.Label>{t('player:role.role')}</Form.Label>
+          <Form.Group onClick={(e:any) => e.preventDefault()}>
+            <Form.Label onClick={(e:any) => e.preventDefault()}>{t('player:role.role')}</Form.Label>
             <Select
               id="playerRole"
               textFieldProps={{
