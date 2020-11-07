@@ -1,0 +1,24 @@
+{
+  "users":{
+    "admin":{
+      "username":"Admin",
+      "name":"Admin",
+      "surname":"Admin",
+      "email":"admin@gmail.com",
+      "cemail":"admin@gmail.com",
+      "password":"Admin12345!",
+      "cpassword":"Admin12345!",
+      "phone":"3672948995"
+    },
+    "user":{
+      "username":"User",
+      "name":"User",
+      "surname":"User",
+      "email":"user@gmail.com",
+      "cemail":"user@gmail.com",
+      "password":"User12345!",
+      "cpassword":"User12345!",
+      "phone":"3672948006"
+    }
+  }
+}

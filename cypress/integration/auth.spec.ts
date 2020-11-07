@@ -8,9 +8,10 @@ describe('Authentication Test', () => {
     // but for simplicity of this example we just use it here
     // https://on.cypress.io/visit
     cy.visit('/');
+    cy.fixture('auth.fixture').as('authFixture');
   });
 
-  describe('Registration process', () => {
+  describe('Registration process', function () {
     beforeEach(() => {
       // usually we recommend setting baseUrl in cypress.json
       // but for simplicity of this example we just use it here
@@ -18,17 +19,17 @@ describe('Authentication Test', () => {
       cy.visit('/');
       cy.get('#swapButton').click();
     });
-    it('Shold register Admin', () => {
-      cy.get('#username').type('Admin');
-      cy.get('#name').type('[A]Admin');
-      cy.get('#surname').type('Admin');
-      cy.get('#email').type('admin@gmail.com');
-      cy.get('#cemail').type('admin@gmail.com');
-      cy.get('#password').type('Admin12345!');
-      cy.get('#cpassword').type('Admin12345!');
-      cy.get('#phone').type('3472545881');
-      cy.get('#phone').first().focus();
-      //FIXME: change focus
+    it('Shold register Admin', function () {
+      const admin = this.authFixture.users.admin;
+      cy.get('#username').type(admin.username);
+      cy.get('#name').type('[A]' + admin.name);
+      cy.get('#surname').type(admin.surname);
+      cy.get('#email').type(admin.email);
+      cy.get('#cemail').type(admin.cemail);
+      cy.get('#password').type(admin.password);
+      cy.get('#cpassword').type(admin.cpassword);
+      cy.get('#phone').type(admin.phone);
+      //FIXME: cypress bug
       //cy.get('#birthday').type('05/01/1902');
       cy.get('#registerButton').click();
       cy.location().should((loc) => {
@@ -36,16 +37,17 @@ describe('Authentication Test', () => {
       });
     });
 
-    it('Shold register User', () => {
-      cy.get('#username').type('User');
-      cy.get('#name').type('User');
-      cy.get('#surname').type('User');
-      cy.get('#email').type('user@gmail.com');
-      cy.get('#cemail').type('user@gmail.com');
-      cy.get('#password').type('User12345!');
-      cy.get('#cpassword').type('User12345!');
-      cy.get('#phone').type('3472545001');
-      //FIXME: change focus
+    it('Shold register User', function () {
+      const user = this.authFixture.users.user;
+      cy.get('#username').type(user.username);
+      cy.get('#name').type(user.name);
+      cy.get('#surname').type(user.surname);
+      cy.get('#email').type(user.email);
+      cy.get('#cemail').type(user.cemail);
+      cy.get('#password').type(user.password);
+      cy.get('#cpassword').type(user.cpassword);
+      cy.get('#phone').type(user.phone);
+      //FIXME:
       //cy.get('#birthday').type('05/01/1903');
       cy.get('#registerButton').click();
       cy.location().should((loc) => {
@@ -54,19 +56,21 @@ describe('Authentication Test', () => {
     });
   });
 
-  describe('Login process', () => {
-    it('Shold login ad Admin', () => {
-      cy.get('#username').type('Admin');
-      cy.get('#password').type('Admin12345!');
+  describe('Login process', function () {
+    it('Shold login ad Admin', function () {
+      const admin = this.authFixture.users.admin;
+      cy.get('#username').type(admin.username);
+      cy.get('#password').type(admin.password);
       cy.get('#loginButton').click();
       cy.location().should((loc) => {
         expect(loc.pathname).to.eq('/');
       });
     });
 
-    it('Shold login ad User', () => {
-      cy.get('#username').type('User');
-      cy.get('#password').type('User12345!');
+    it('Shold login ad User', function () {
+      const user = this.authFixture.users.user;
+      cy.get('#username').type(user.name);
+      cy.get('#password').type(user.password);
       cy.get('#loginButton').click();
       cy.location().should((loc) => {
         expect(loc.pathname).to.eq('/');
