@@ -19,7 +19,7 @@ echo "Done..."
 echo '--> Run Coverage...'
 ## Need to push coverato due to this issue https://github.com/facebook/jest/issues/9324
 set -e
-! npm run test:coverage
+! npm run test:client:coverage
 if [ $? -eq 0 ]; then
   echo "Done..."
 else

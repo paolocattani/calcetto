@@ -74,7 +74,9 @@
     - [Jest](https://jestjs.io/)
     - [Ts-Jest](https://kulshekhar.github.io/ts-jest)
     - [Supertest](https://github.com/visionmedia/supertest#readme)
-    - E2E : [Puppeteer](https://github.com/puppeteer/puppeteer)
+    - E2E : [Cypress](https://www.cypress.io/)
+      - [Run Cypress on WSL2](https://nickymeuleman.netlify.app/blog/gui-on-wsl2-cypress)
+      - [Ubuntu on WSL2](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
 
 ### Cli
   - [sed](https://zhu45.org/posts/2016/Dec/21/environment-variable-substitution-using-sed/)
@@ -101,16 +103,30 @@
   npm run dev:server
   npm run dev:client
 
-  # Cli
-  sh ./
-
-
   # Bundle size
   npm run analyze
 
   # Eslint report ( used by Sonarcloud )
   npm run lint:report
 
+  ```
+
+## Cli
+  Cli utilities for development
+
+  ```bash
+  # Update app version
+  sh ./cli/update_version.sh [option]
+  # Option : --major, --minor, --patch
+
+  # Build app. Steps :
+  # - Build Fe
+  # - Create eslint report and analyze bundle size
+  # - Run test coverage ( Fe + Be )
+  sh ./cli/build.sh
+
+  # Release : Update version and build
+  sh ./cli/build.sh
   ```
 
 ## Test

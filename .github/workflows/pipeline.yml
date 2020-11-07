@@ -74,7 +74,7 @@ jobs:
           cd server && npm ci
       # unit test FE
       - name: Unit Tests Frontend
-        run: npm run test
+        run: npm run test:client
       # unit test BE
       - name: Unit Tests Backend
         run: |

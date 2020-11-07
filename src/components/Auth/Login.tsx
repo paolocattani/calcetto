@@ -41,7 +41,7 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
 
   // i18n.changeLanguage('it');
   return (
-    <Form onSubmit={handleSubmit} noValidate validated={validated}>
+    <Form id="loginFormId" onSubmit={handleSubmit} noValidate validated={validated}>
       <InputField
         controlId="username"
         label={t('auth:usernameEmail')}

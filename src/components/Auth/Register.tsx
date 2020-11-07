@@ -224,7 +224,7 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
         </Col>
         <Col md={3}>
           <Form.Group controlId="birthday">
-            <Form.Label>{t('auth:birthday')}</Form.Label>
+            <Form.Label onClick={(e: any) => e.preventDefault()}>{t('auth:birthday')}</Form.Label>
             <DatePicker
               id="birthday"
               className="datepicker"
