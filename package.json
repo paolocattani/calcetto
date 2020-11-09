@@ -75,7 +75,7 @@
     "sequelize": "^5.22.3",
     "sequelize-cli": "^5.5.1",
     "sequelize-typescript": "^1.1.0",
-    "swagger-ui-react": "^3.36.0",
+    "swagger-ui-react": "^3.36.2",
     "ts-node": "^9.0.0",
     "typeface-roboto": "^1.1.13",
     "typesafe-actions": "^5.1.0",
