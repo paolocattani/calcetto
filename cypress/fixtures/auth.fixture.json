@@ -5,9 +5,9 @@
       "name":"Admin",
       "surname":"Admin",
       "email":"admin@gmail.com",
-      "cemail":"admin@gmail.com",
+      "confirmEmail":"admin@gmail.com",
       "password":"Admin12345!",
-      "cpassword":"Admin12345!",
+      "confirmPassword":"Admin12345!",
       "phone":"3672948995"
     },
     "user":{
@@ -15,9 +15,9 @@
       "name":"User",
       "surname":"User",
       "email":"user@gmail.com",
-      "cemail":"user@gmail.com",
+      "confirmEmail":"user@gmail.com",
       "password":"User12345!",
-      "cpassword":"User12345!",
+      "confirmPassword":"User12345!",
       "phone":"3672948006"
     }
   }

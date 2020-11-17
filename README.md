@@ -9,6 +9,9 @@
     <a href="https://david-dm.org/paolocattani/calcetto/?type=dev"><img src="https://david-dm.org/paolocattani/calcetto/dev-status.svg" alt="devDependency Status"></a>
 </p>
 <p align="center">
+    <a href="https://dashboard.cypress.io/projects/sxebxi/analytics/runs-over-time"><img src="https://img.shields.io/endpoint?url=https://dashboard.cypress.io/badge/detailed/sxebxi/develop&style=flat&logo=cypress" alt="Integration"></a>
+</p>
+<p align="center">
     <a href="https://sonarcloud.io/dashboard?id=paolocattani_calcetto"><img src="https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=alert_status" alt="Quality Gate Status"></a>
 <a href="https://sonarcloud.io/dashboard?id=paolocattani_calcetto"><img src="https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=sqale_rating" alt="Maintainability Rating"></a>
     <a href="https://sonarcloud.io/dashboard?id=paolocattani_calcetto"><img src="https://sonarcloud.io/api/project_badges/measure?project=paolocattani_calcetto&metric=security_rating" alt="Security Rating"></a>
@@ -69,14 +72,18 @@
     - [Nodemon](https://github.com/remy/nodemon)
   - Detect memory leak
     - [MemWatch](https://github.com/airbnb/node-memwatch#readme)
-    - [Node inspector](https://nodejs.org/en/docs/guides/debugging-getting-started/ )
-  - Test :
-    - [Jest](https://jestjs.io/)
-    - [Ts-Jest](https://kulshekhar.github.io/ts-jest)
-    - [Supertest](https://github.com/visionmedia/supertest#readme)
-    - E2E : [Cypress](https://www.cypress.io/)
-      - [Run Cypress on WSL2](https://nickymeuleman.netlify.app/blog/gui-on-wsl2-cypress)
-      - [Ubuntu on WSL2](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
+    - [Node inspector](https://nodejs.org/en/docs/guides/debugging-getting-started/)
+
+### Test
+  - [Jest](https://jestjs.io/)
+  - [Ts-Jest](https://kulshekhar.github.io/ts-jest)
+  - [Supertest](https://github.com/visionmedia/supertest#readme)
+  - E2E : [Cypress](https://www.cypress.io/)
+    - [Run Cypress on WSL2](https://nickymeuleman.netlify.app/blog/gui-on-wsl2-cypress)
+    - [Ubuntu on WSL2](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
+    - [Cucumber](https://cucumber.io/) :
+      - [Integrate Cypress and Cucumber](https://github.com/TheBrainFamily/cypress-cucumber-preprocessor)
+    - [UI Testing Best pratictices](https://github.com/NoriSte/ui-testing-best-practices/blob/master/sections/server-communication-testing/test-request-and-response-payload.md)
 
 ### Cli
   - [sed](https://zhu45.org/posts/2016/Dec/21/environment-variable-substitution-using-sed/)

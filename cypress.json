@@ -1,9 +1,14 @@
 {
+		"projectId": "sxebxi",
     "baseUrl": "http://localhost:5000",
     "fixturesFolder": "cypress/fixtures",
     "integrationFolder": "cypress/integration",
     "screenshotsFolder": "cypress/screenshots",
     "videosFolder": "cypress/videos",
-    "supportFile": false,
-    "pluginsFile": false
+    "cypress-watch-and-reload": {
+       "watch": "src/*, server/* , cypress/*"
+    },
+		"viewportWidth": 1280,
+		"viewportHeight": 768
+
 }
