@@ -35,8 +35,7 @@
     },
     "include": [
         "src",
-        "src/@common/typings/*.d.ts",
-				"cypress"
+        "src/@common/typings/*.d.ts"
     ],
     "exclude": [
         "*.css",

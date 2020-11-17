@@ -2,7 +2,7 @@
 // https://on.cypress.io/intelligent-code-completion
 
 describe('Authentication Test', () => {
-  beforeEach(() => {
+  beforeEach(function() {
     cy.fixture('auth.fixture','utf-8').as('authFixture');
   });
 
