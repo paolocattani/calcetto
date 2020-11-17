@@ -17,7 +17,7 @@ source cli/search_string.sh
 BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
 
 echo "On branch : "$BRANCH_NAME
-echo "Enviroment : "$NODE_ENV
+echo "Environment : "$NODE_ENV
 echo "Enabled : "$SEARCH_RESULT
 
 # Only on dev enviroment, and branch develop , and if PRE-COMMIT flag is enabled
