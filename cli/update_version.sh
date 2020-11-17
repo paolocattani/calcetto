@@ -12,6 +12,11 @@ cat << EOF
 EOF
 }
 
+if [ ! -f "package.json" ]; then
+		echo package.json not found in $( pwd )
+    exit 0;
+fi
+
 # Pick current version from package.json
 CURRENT_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]');
 NEW_VERSION=$CURRENT_VERSION

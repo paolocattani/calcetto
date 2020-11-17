@@ -5,9 +5,9 @@ cd $SCRIPT_DIR
 cd ..
 
 LOG_FILE="$SCRIPT_DIR/release.log"
-source ./redirect_output.sh
+source ./cli/redirect_output.sh
 
 # TODO: See npm version --help
-source ./update_version.sh --patch
+source ./cli/update_version.sh --patch
 
-source ./build.sh
+source ./cli/build.sh
