@@ -11,7 +11,9 @@ describe('Authentication Test', () => {
     it('Should register Admin', function () {
       const admin = this.authFixture.users.admin;
         cy.registerWithUi(admin, true);
-    });
+			// cy.url().should('match', /fuel-savings$/)
+
+		});
 
     it('Should register User', function () {
         const user = this.authFixture.users.user;

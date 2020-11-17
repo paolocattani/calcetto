@@ -1,10 +1,13 @@
 require('cypress-watch-and-reload/plugins')
+// Preprocessor
 const webpack = require('@cypress/webpack-preprocessor');
-const skipAndOnly = require('cypress-skip-and-only-ui/task')
 
-// const allTask = Object.assign({}, otherTask, task)
+// Task
+const skipAndOnlyTask = require('cypress-skip-and-only-ui/task')
+const coverageTask = require('@cypress/code-coverage/task');
+const allTask = Object.assign({}, coverageTask, skipAndOnlyTask)
 
 module.exports = (on: any) => {
     on('file:preprocessor', webpack({webpackOptions : require('./webpack.config.js')}));
-    on('task', skipAndOnly);
+    on('task', allTask);
 };
