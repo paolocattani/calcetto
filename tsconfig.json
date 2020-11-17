@@ -1,45 +1,45 @@
 {
-  "compileOnSave": true,
- "compilerOptions": {
-    "target": "es5",
-    "module": "esnext",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
+    "compileOnSave": true,
+    "compilerOptions": {
+        "target": "es5",
+        "module": "esnext",
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
+        "allowJs": true,
+        "jsx": "react",
+        "sourceMap": true,
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "strict": true,
+        "noImplicitAny": true,
+        "downlevelIteration": true,
+        "noFallthroughCasesInSwitch": true,
+        "plugins": [
+            {
+                "name": "typescript-tslint-plugin"
+            }
+        ],
+        "moduleResolution": "node",
+        "baseUrl": "./src",
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "noEmit": true
+    },
+    "include": [
+        "src",
+        "src/@common/typings/*.d.ts"
     ],
-    "allowJs": true,
-    "jsx": "react",
-    "sourceMap": true,
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "strict": true,
-    "noImplicitAny": true,
-    "downlevelIteration": true,
-    "noFallthroughCasesInSwitch": true,
-    "plugins": [
-      {
-        "name": "typescript-tslint-plugin"
-      }
-    ],
-    "moduleResolution": "node",
-    "baseUrl": "./src",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "noEmit": true
-  },
-  "include": [
-    "src",
-    "src/@common/typings/*.d.ts"
-  ],
-  "exclude": [
-    "*.css",
-    "*.scss",
-    "node_modules"
-  ]
+    "exclude": [
+        "*.css",
+        "*.scss",
+        "node_modules"
+    ]
 }

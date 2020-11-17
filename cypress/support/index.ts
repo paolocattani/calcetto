@@ -12,3 +12,11 @@
 // You can read more here:
 // https://on.cypress.io/configuration
 // ***********************************************************
+
+import './commands'
+
+// https://github.com/NoriSte/ui-testing-best-practices/blob/master/sections/generic-best-practices/use-your-testing-tool-as-your-primary-development-tool.md
+require('cypress-skip-and-only-ui/support');
+require('cypress-watch-and-reload/support');
+
+

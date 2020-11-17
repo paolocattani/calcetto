@@ -69,14 +69,18 @@
     - [Nodemon](https://github.com/remy/nodemon)
   - Detect memory leak
     - [MemWatch](https://github.com/airbnb/node-memwatch#readme)
-    - [Node inspector](https://nodejs.org/en/docs/guides/debugging-getting-started/ )
-  - Test :
-    - [Jest](https://jestjs.io/)
-    - [Ts-Jest](https://kulshekhar.github.io/ts-jest)
-    - [Supertest](https://github.com/visionmedia/supertest#readme)
-    - E2E : [Cypress](https://www.cypress.io/)
-      - [Run Cypress on WSL2](https://nickymeuleman.netlify.app/blog/gui-on-wsl2-cypress)
-      - [Ubuntu on WSL2](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
+    - [Node inspector](https://nodejs.org/en/docs/guides/debugging-getting-started/)
+
+### Test
+  - [Jest](https://jestjs.io/)
+  - [Ts-Jest](https://kulshekhar.github.io/ts-jest)
+  - [Supertest](https://github.com/visionmedia/supertest#readme)
+  - E2E : [Cypress](https://www.cypress.io/)
+    - [Run Cypress on WSL2](https://nickymeuleman.netlify.app/blog/gui-on-wsl2-cypress)
+    - [Ubuntu on WSL2](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
+    - [Cucumber](https://cucumber.io/) :
+      - [Integrate Cypress and Cucumber](https://github.com/TheBrainFamily/cypress-cucumber-preprocessor)
+    - [UI Testing Best pratictices](https://github.com/NoriSte/ui-testing-best-practices/blob/master/sections/server-communication-testing/test-request-and-response-payload.md)
 
 ### Cli
   - [sed](https://zhu45.org/posts/2016/Dec/21/environment-variable-substitution-using-sed/)

@@ -16,7 +16,7 @@ const Application: React.FC = () => (
   </Provider>
 );
 const Entry: React.FC = () =>
-  process.env.NODE_ENV === 'development' ? (
+  process.env.NODE_ENV !== 'production' ? (
     <StrictMode>
       <Application />
     </StrictMode>
