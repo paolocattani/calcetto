@@ -16,10 +16,10 @@
     "prod:build": "tsc --pretty",
     "prod": " ../node_modules/.bin/ts-node server.ts ",
     "dev": "nodemon --config \"./nodemon.json\"",
-    "test:unit": "NODE_ENV=test jest",
-    "test:unit:watch": "NODE_ENV=test jest -o --watch --detectOpenHandles",
-    "test:unit:coverage": "NODE_ENV=test jest --coverage --detectOpenHandles",
-    "test:e2e": "NODE_ENV=test start-server-and-test prod 5001 test:coverage"
+    "test:unit": "cross-env NODE_ENV=test jest",
+    "test:unit:watch": "cross-env NODE_ENV=test jest -o --watch --detectOpenHandles",
+    "test:unit:coverage": "cross-env NODE_ENV=test --coverage --detectOpenHandles",
+    "test:e2e": "cross-env NODE_ENV=test start-server-and-test prod 5001 test:coverage"
   },
   "jest": {
     "testTimeout": 10000,
@@ -52,6 +52,7 @@
     ]
   },
   "devDependencies": {
+    "@types/jest": "^26.0.15",
     "@types/node-fetch": "^2.5.7",
     "@types/supertest": "^2.0.10",
     "jest": "^26.4.2",
