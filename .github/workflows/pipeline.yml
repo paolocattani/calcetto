@@ -137,7 +137,7 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: test
-          TEST_URL: postgres://postgres:postgres@localhost:5432/test_${{ matrix.browser }}_${{ matrix.containers }}
+          TEST_URL: postgres://postgres:postgres@localhost:5432/postgres
           TEST_SCHEMA: test_${{ matrix.browser }}_${{ matrix.containers }}
         # if tests fails save screenshots
       - name: Save screenshots on failure

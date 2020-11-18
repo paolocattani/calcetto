@@ -19,7 +19,7 @@ export function isProductionMode() {
  * @returns boolean (if env is 'development' then returns true or not)
  */
 export function isDevMode() {
-  return process.env.NODE_ENV == undefined || process.env.NODE_ENV == 'development' ? true : false;
+  return process.env.NODE_ENV == undefined || process.env.NODE_ENV == 'development';
 }
 
 /**
@@ -28,7 +28,7 @@ export function isDevMode() {
  * @returns boolean (if env is 'test' then returns true or not)
  */
 export function isTestMode() {
-  return process.env.NODE_ENV == 'test' ? true : false;
+  return process.env.NODE_ENV == 'test';
 }
 
 /**
