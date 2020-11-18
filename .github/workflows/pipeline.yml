@@ -45,13 +45,13 @@ jobs:
       - name: Upload build
         uses: actions/upload-artifact@v2
         with:
-          name: build
+          name: build-${{ matrix.node-version }}
           path: |
             build
       - name: Upload coverage and analysis
         uses: actions/upload-artifact@v2
         with:
-          name: coverage
+          name: coverage-${{ matrix.node-version }}
           path: |
             coverage
             analysis
@@ -121,11 +121,11 @@ jobs:
       - name: Download build
         uses: actions/download-artifact@v2
         with:
-          name: build
+          name: build-12.x
       - name: Download Coverage
         uses: actions/download-artifact@v2
         with:
-          name: coverage
+          name: coverage-12.x
       # https://github.com/marketplace/actions/sonarcloud-scan
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
