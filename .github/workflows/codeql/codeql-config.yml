@@ -1,0 +1,16 @@
+name: "CodeQL config"
+paths:
+  - cli
+  - cypress
+  - docker
+  - hooks
+  - public
+  - server
+  - src
+- paths-ignore:
+  - node_modules
+  - build
+  - .idea
+  - .vscode
+  - server/node_modules
+  - '**/*.test.ts'

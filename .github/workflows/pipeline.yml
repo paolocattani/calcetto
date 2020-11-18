@@ -1,7 +1,6 @@
 
-
 name: Build/Test/Analyze
-on: [push, pull_request]
+on: [push]
 
 jobs:
   #-----------------------------------------
@@ -82,7 +81,33 @@ jobs:
           npm run test:unit
       # e2e
       - name: e2e
-        run: npm run test:e2e
+        uses: cypress-io/github-action@v2
+        with:
+          # Start server and wait for response
+          start: NODE_ENV=test npm prod:heroku:server
+          wait-on: 'http://localhost:5001'
+          # Test options
+          config: baseUrl=http://localhost:5001
+          browser: chrome
+          headless: true
+          record: true
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # if tests fails save screenshots
+      - name: Save screenshots on failure
+        uses: actions/upload-artifact@v1
+          if: failure()
+          with:
+            name: cypress-screenshots
+            path: cypress/screenshots
+        # if tests success save videos
+      - name: Save videos
+        uses: actions/upload-artifact@v1
+          if: always()
+          with:
+            name: cypress-videos
+            path: cypress/videos
 
   #-----------------------------------------
   # Code Quality ( Sonarcloud )
