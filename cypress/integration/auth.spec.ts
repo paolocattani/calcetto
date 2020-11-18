@@ -1,6 +1,8 @@
 // enables intelligent code completion for Cypress commands
 // https://on.cypress.io/intelligent-code-completion
 
+import {logout} from "../support/utils";
+
 describe('Authentication Test', () => {
   beforeEach(function() {
     cy.fixture('auth.fixture','utf-8').as('authFixture');
@@ -21,15 +23,17 @@ describe('Authentication Test', () => {
     });
   });
 
-  describe('Login process', function () {
-    it('Should login as Admin', function () {
+  describe('Login process', async function () {
+    it('Should login as Admin', async function () {
         const admin = this.authFixture.users.admin;
         cy.loginWithUi(admin);
+        await logout();
     });
 
-    it('Should login as User', function () {
+    it('Should login as User', async function () {
         const user = this.authFixture.users.user;
         cy.loginWithUi(user);
+				await logout();
     });
   });
 
