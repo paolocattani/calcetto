@@ -13,6 +13,7 @@ jobs:
       matrix:
         # node-version: [ 10.x, 12.x, 14.x]
         node-version: [ 14.x]
+    if: ${{ 1==2 }}
     steps:
       - uses: actions/checkout@v2
       # Set up Node
@@ -86,7 +87,7 @@ jobs:
     container:
       image: cypress/browsers:node14.15.0-chrome86-ff82
       options: --user 1001 --shm-size=2g
-    needs: build
+    #needs: build
     name: e2e test
     # Service containers to run with `container-job`
     services:
