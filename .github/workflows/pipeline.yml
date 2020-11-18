@@ -134,7 +134,7 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: test
-          TEST_SCHEMA: test-${{ matrix.browser }}-${{ matrix.containers }}
+          TEST_SCHEMA: test_${{ matrix.browser }}_${{ matrix.containers }}
       - name: where am i ?
         run: |
           pwd
