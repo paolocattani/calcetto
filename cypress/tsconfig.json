@@ -8,6 +8,7 @@
 		"skipLibCheck": true,
 		"types": ["cypress", "node"],
 		"rootDir": ".",
+		"baseUrl": ".",
 		"isolatedModules": false
 	},
 	"include": ["*/*.ts"]
