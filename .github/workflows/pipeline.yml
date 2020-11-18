@@ -80,13 +80,18 @@ jobs:
           cd server
           npm run test:unit
       # e2e
-      - name: where am i ?
+      - name: Install dependencies
+        uses: cypress-io/github-action@v2
         run: |
           pwd
           ls -l
+        with:
+          runTests: false
       - name: e2e
         uses: cypress-io/github-action@v2
         with:
+          install: false
+          working-directory: /home/runner/work/calcetto/calcetto
           # Start server and wait for response
           start: npm run prod:heroku:server
           wait-on: 'http://localhost:5001'
