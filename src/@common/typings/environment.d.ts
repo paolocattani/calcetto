@@ -30,6 +30,7 @@ declare namespace NodeJS {
     //Dbs
     DEV_URL: string;
     TEST_URL: string;
+		TEST_SCHEMA?:string;
     DATABASE_URL: string;
 
     // max age for static contents

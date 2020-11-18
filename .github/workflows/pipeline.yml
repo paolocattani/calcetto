@@ -82,8 +82,24 @@ jobs:
 
   e2e-test:
     runs-on: ubuntu-latest
+    container: node:10.18-jessie
     needs: build
     name: e2e test
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     strategy:
       matrix:
         browser: [ 'chrome','firefox' ]
@@ -99,7 +115,6 @@ jobs:
         run: |
           pwd
           ls -l
-          echo ${{ matrix.browser }}
       # e2e
       - name: e2e
         uses: cypress-io/github-action@v2
@@ -119,6 +134,7 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: test
+          TEST_SCHEMA: test-${{ matrix.browser }}-${{ matrix.containers }}
       - name: where am i ?
         run: |
           pwd

@@ -9,6 +9,8 @@ export type EnvList = {
 
 export interface SequelizeConfiguration extends SequelizeOptions {
   useEnvVar: string;
+	databaseVersion?:string;
+	schema?:string;
 }
 
 // Sequelize configuration
@@ -22,6 +24,8 @@ const config: EnvList = {
   test: {
     useEnvVar: 'TEST_URL',
     dialect: 'postgres',
+		schema: process.env.TEST_SCHEMA,
+		databaseVersion: '11.5.0',
     logging: (sqlString: string) => logger.warn(sqlString),
     pool: { max: 5, min: 0, acquire: 30000, idle: 10000 },
     dialectOptions: {

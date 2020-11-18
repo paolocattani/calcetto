@@ -3,7 +3,7 @@ import { CorsOptions } from 'cors';
 import { AbstractServer } from './AbstractServer';
 import { Application as ExpressApplication } from 'express';
 // Db
-import { sync, authenticate } from '../database/connection';
+import {sync, authenticate, createSchemaAndSync} from '../database/connection';
 import { Sequelize } from 'sequelize-typescript';
 import generator from '../generator/generator';
 // Routes
@@ -53,7 +53,9 @@ export default class AppServer extends AbstractServer {
       await generator(true);
       // Always start from clean db on test
     } else if (isTestMode()) {
-      this.connection = await sync({ force: true });
+    		this.connection = process.env.TEST_SCHEMA ?
+						await createSchemaAndSync(process.env.TEST_SCHEMA, { force: true }) :
+						await sync({ force: true });
     } else {
       this.connection = await authenticate();
     }

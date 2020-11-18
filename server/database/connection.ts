@@ -38,18 +38,27 @@ export async function authenticate(options?: SyncOptions): Promise<Sequelize> {
     logger.info(chalk.cyan.bold('Connection found! Database connected!'));
     return connection;
   }
-  const sequelizeconnection = await loadModels();
-  await sequelizeconnection.authenticate(options);
+  const sequelizeConnection = await loadModels();
+  await sequelizeConnection.authenticate(options);
   logger.info(chalk.cyan.bold('Database connected!'));
-  return sequelizeconnection;
+  return sequelizeConnection;
 }
 
 export async function sync(options?: SyncOptions): Promise<Sequelize> {
   if (connection) return connection;
-  const sequelizeconnection = await loadModels();
-  connection = await sequelizeconnection.sync(options);
+  const sequelizeConnection = await loadModels();
+  connection = await sequelizeConnection.sync(options);
   logger.info(chalk.cyan.bold('Database synchronization complete!'));
   return connection;
+}
+
+export async function createSchemaAndSync(schema:string, options?: SyncOptions): Promise<Sequelize> {
+	if (connection) return connection;
+	const sequelizeConnection = await loadModels();
+	await sequelizeConnection.createSchema(schema, {});
+	connection = await sequelizeConnection.sync(options);
+	logger.info(chalk.cyan.bold('Database synchronization complete!'));
+	return connection;
 }
 
 export const getDbConnection = async () => (connection ? connection : await authenticate());
