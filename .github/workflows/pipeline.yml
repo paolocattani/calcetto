@@ -82,11 +82,11 @@ jobs:
       # e2e
       - name: Install dependencies
         uses: cypress-io/github-action@v2
-        run: |
-          pwd
-          ls -l
         with:
           runTests: false
+      - run: |
+          pwd
+          ls -l
       - name: e2e
         uses: cypress-io/github-action@v2
         with:
