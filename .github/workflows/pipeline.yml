@@ -102,7 +102,7 @@ jobs:
           --health-retries 5
     strategy:
       matrix:
-        browser: [ 'chrome','firefox' ]
+        browser: [ chrome, firefox ]
         containers: [1, 2, 3]
     steps:
       - uses: actions/checkout@v2
