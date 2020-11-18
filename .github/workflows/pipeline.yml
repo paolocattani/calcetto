@@ -82,7 +82,9 @@ jobs:
 
   e2e-test:
     runs-on: ubuntu-latest
-    container: cypress/browsers:node14.15.0-chrome86-ff82
+    container:
+      image: cypress/browsers:node14.15.0-chrome86-ff82
+      options: --user 1001 --shm-size=2g
     needs: build
     name: e2e test
     # Service containers to run with `container-job`
