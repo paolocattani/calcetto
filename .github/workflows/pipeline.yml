@@ -84,7 +84,7 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           # Start server and wait for response
-          start: npm prod:heroku:server
+          start: npm run prod:heroku:server
           wait-on: 'http://localhost:5001'
           # Test options
           config: baseUrl=http://localhost:5001
