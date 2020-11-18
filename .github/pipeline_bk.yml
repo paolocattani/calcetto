@@ -11,8 +11,7 @@ jobs:
     name: Build
     strategy:
       matrix:
-        # node-version: [ 10.x, 12.x, 14.x]
-        node-version: [ 14.x]
+        node-version: [ 10.x, 12.x, 14.x]
     steps:
       - uses: actions/checkout@v2
       # Set up Node
@@ -64,22 +63,22 @@ jobs:
     needs: build
     name: unit tests
     # For now disable this step
-    if: ${{ 1==2 }}
-      steps:
-        - uses: actions/checkout@v2
-        # Install dependencies
-        - name: Install dependencies
-          run: |
-            npm ci
-            cd server && npm ci
-        # unit test FE
-        - name: Unit Tests Frontend
-          run: npm run test:client
-        # unit test BE
-        - name: Unit Tests Backend
-          run: |
-            cd server
-            npm run test:unit
+    # if: ${{ 1==2 }}
+    steps:
+      - uses: actions/checkout@v2
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd server && npm ci
+      # unit test FE
+      - name: Unit Tests Frontend
+        run: npm run test:client
+      # unit test BE
+      - name: Unit Tests Backend
+        run: |
+          cd server
+          npm run test:unit
 
   e2e-test:
     runs-on: ubuntu-latest
@@ -103,9 +102,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        ports:
-          # Maps tcp port 5432 on service container to the host
-          - 5432:5432
     strategy:
       matrix:
         browser: [ chrome, firefox ]
@@ -136,7 +132,6 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: test
-          TEST_URL: postgres://postgres:postgres@localhost:5432/test_${{ matrix.browser }}_${{ matrix.containers }}
           TEST_SCHEMA: test_${{ matrix.browser }}_${{ matrix.containers }}
         # if tests fails save screenshots
       - name: Save screenshots on failure
@@ -160,22 +155,21 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     name: Code Quality
-    if: ${{ 1==2 }}
-      steps:
-        - uses: actions/checkout@v2
-        - name: Download build
-          uses: actions/download-artifact@v2
-          with:
-            name: build-12.x
-        - name: Download Coverage
-          uses: actions/download-artifact@v2
-          with:
-            name: coverage-12.x
-        # https://github.com/marketplace/actions/sonarcloud-scan
-        - name: SonarCloud Scan
-          uses: sonarsource/sonarcloud-github-action@master
-          with:
-            projectBaseDir: /home/runner/work/calcetto/calcetto
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download build
+        uses: actions/download-artifact@v2
+        with:
+          name: build-12.x
+      - name: Download Coverage
+        uses: actions/download-artifact@v2
+        with:
+          name: coverage-12.x
+      # https://github.com/marketplace/actions/sonarcloud-scan
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: /home/runner/work/calcetto/calcetto
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
