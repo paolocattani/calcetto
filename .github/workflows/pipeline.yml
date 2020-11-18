@@ -84,7 +84,7 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           # Start server and wait for response
-          start: NODE_ENV=test npm prod:heroku:server
+          start: npm prod:heroku:server
           wait-on: 'http://localhost:5001'
           # Test options
           config: baseUrl=http://localhost:5001
@@ -94,6 +94,11 @@ jobs:
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_ENV: test
+      - name: where am i ?
+        run: |
+          pwd
+          ls -l
         # if tests fails save screenshots
       - name: Save screenshots on failure
         uses: actions/upload-artifact@v1
