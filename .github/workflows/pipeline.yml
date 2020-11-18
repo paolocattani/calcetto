@@ -80,6 +80,10 @@ jobs:
           cd server
           npm run test:unit
       # e2e
+      - name: where am i ?
+        run: |
+          pwd
+          ls -l
       - name: e2e
         uses: cypress-io/github-action@v2
         with:
