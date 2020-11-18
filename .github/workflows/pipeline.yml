@@ -82,7 +82,7 @@ jobs:
 
   e2e-test:
     runs-on: ubuntu-latest
-    container: node:10.18-jessie
+    container: cypress/browsers:node12.13.0-chrome78-ff70
     needs: build
     name: e2e test
     # Service containers to run with `container-job`
