@@ -97,10 +97,10 @@ jobs:
         # if tests fails save screenshots
       - name: Save screenshots on failure
         uses: actions/upload-artifact@v1
-          if: failure()
-          with:
-            name: cypress-screenshots
-            path: cypress/screenshots
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
         # if tests success save videos
       - name: Save videos
         uses: actions/upload-artifact@v1
