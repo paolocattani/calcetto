@@ -28,12 +28,14 @@ const config: EnvList = {
 		databaseVersion: '11.5.0',
     logging: (sqlString: string) => logger.warn(sqlString),
     pool: { max: 5, min: 0, acquire: 30000, idle: 10000 },
-    dialectOptions: {
+    /*
+		dialectOptions: {
       ssl: {
         require: true,
         rejectUnauthorized: false,
       },
     },
+     */
   },
   production: {
     useEnvVar: 'DATABASE_URL', // Default name on Heroku
