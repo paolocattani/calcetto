@@ -1,5 +1,5 @@
 import * as H from 'history';
-import { PlayerDTO } from '@common/dto';
+import { PlayerDTO } from '../dto';
 import { GenericReponse } from './common.models';
 //
 export interface PlayerState {

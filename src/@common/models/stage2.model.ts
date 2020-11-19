@@ -1,4 +1,4 @@
-import { ICell } from '@common/dto';
+import { ICell } from '../dto';
 
 export interface Stage2State {
   isLoading: boolean;

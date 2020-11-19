@@ -1,6 +1,6 @@
 import * as H from 'history';
 import { GenericReponse } from './common.models';
-import { TournamentDTO } from '@common/dto';
+import { TournamentDTO } from '../dto';
 
 //## STATE
 export interface TournamentState {

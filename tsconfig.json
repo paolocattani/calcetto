@@ -30,8 +30,8 @@
         "noEmit": true
     },
     "include": [
-        "src",
-        "src/@common/typings/*.d.ts"
+			"src",
+			"src/@common/typings/*.d.ts"
     ],
     "exclude": [
 			"*.css",
