@@ -1,16 +1,21 @@
 {
-	"extends": "../tsconfig",
 	"compilerOptions": {
+		"baseUrl": "../node_modules",
 		"isolatedModules": false,
+		"lib": [
+			"es5",
+			"dom"
+		],
+		"module": "CommonJS",
 		"noEmit": false,
 		"strict": true,
-		"target": "es5",
-		"lib": ["es5", "dom"],
-		"types": ["cypress","node"],
-		"typeRoots": ["./support"]
+		"target": "ES2015",
+		"types": [
+			"cypress","node"
+		],
+		"sourceMap": true
 	},
 	"include": [
-		"../node_modules/cypress",
 		"./**/*.ts"
 	]
 }
