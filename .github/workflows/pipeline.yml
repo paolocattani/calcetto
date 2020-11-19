@@ -92,7 +92,7 @@ jobs:
     # Service containers to run with `container-job`
     services:
       # Label used to access the service container
-      postgres-service:
+      postgres:
         # Docker Hub image
         image: postgres
         # Provide the password for postgres
@@ -100,6 +100,9 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: strong$password
           POSTGRES_DB: postgres
+          # use postgres for the host here because we have specified a container for the job.
+          # If we were running the job on the VM this would be localhost
+          POSTGRES_HOST: postgres
         # Set health checks to wait until postgres has started
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
         # Maps tcp port 5432 on service container to the host
@@ -110,11 +113,11 @@ jobs:
         containers: [1, 2, 3]
     steps:
       - uses: actions/checkout@v2
-      # Set db port env var from postgres-service
+      # Set db port env var from postgres
       - name: Set DB Port
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-          POSTGRES_PORT: ${{ job.services.postgres-service.ports[5432] }}
+          POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
         run: echo "::set-env name=POSTGRES_PORT::$POSTGRES_PORT"
       # Install dependencies
       - name: Install dependencies
