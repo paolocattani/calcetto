@@ -129,9 +129,9 @@
     ]
   },
   "devDependencies": {
-    "@bahmutov/add-typescript-to-cypress": "^2.1.2",
     "@cypress/code-coverage": "^3.8.3",
     "@cypress/instrument-cra": "^1.4.0",
+    "@cypress/webpack-preprocessor": "^5.4.11",
     "@ljharb/eslint-config": "^17.2.0",
     "@shinnn/eslint-config": "^7.0.0",
     "@testing-library/dom": "^7.26.3",
@@ -195,6 +195,7 @@
     "source-map-explorer": "^2.5.0",
     "start-server-and-test": "^1.11.5",
     "ts-jest": "^26.4.3",
+    "ts-loader": "^8.0.11",
     "webpack": "^4.44.2"
   },
   "jestSonar": {
