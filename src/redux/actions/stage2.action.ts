@@ -6,9 +6,9 @@ import {
   UpdateStage2CellRequest,
   DeleteStage2Request,
   DeleteStage2Response,
-} from '@common/models';
+} from '../../@common/models';
 import { defaultAsyncParams, defaultParam, PurgeResponse, PURGE_STORE_ACTION } from './constants';
-import { ICell } from '@common/dto';
+import { ICell } from '../../@common/dto';
 
 const actionName = '[Stage2]';
 

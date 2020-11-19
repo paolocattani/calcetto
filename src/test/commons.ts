@@ -1,6 +1,5 @@
-import { TournamentProgress, UserRole } from '@common/dto';
-import { RootState } from '@common/models';
-import { initialState } from '@common/models/common.models';
+import { TournamentProgress, UserRole } from '../@common/dto';
+import { RootState,initialState } from '../@common/models';
 
 export const performAdminLogin = (): RootState => {
   initialState.authState = adminSession;

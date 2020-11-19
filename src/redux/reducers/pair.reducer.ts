@@ -1,6 +1,6 @@
 import { createReducer, Action } from 'typesafe-actions';
-import { PairState } from '@common/models';
-import { PairAction } from 'redux/actions';
+import { PairState } from '../../@common/models';
+import { PairAction } from '../actions';
 
 export const initialPairState: PairState = {
   isLoading: false,

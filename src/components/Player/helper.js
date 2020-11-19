@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import filterTableFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
 import { Type } from 'react-bootstrap-table2-editor';
-import { PlayerRole } from '@common/dto';
+import { PlayerRole } from '../../@common/dto';
 import { EditIcon } from '../core/icons';
 // Filter
 let nameFilter;

@@ -10,7 +10,7 @@ import {
   UpdatePlacementResponse,
   SelectPairsRequest,
   SelectPairsResponse,
-} from '@common/models';
+} from '../../@common/models';
 import { defaultAsyncParams, PurgeResponse, PURGE_STORE_ACTION } from './constants';
 
 const actionName = '[Stage1]';

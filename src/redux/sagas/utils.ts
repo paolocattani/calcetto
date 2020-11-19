@@ -1,5 +1,5 @@
-import { GenericReponse, UnexpectedServerError, UserMessageType } from '@common/models/common.models';
-import { HTTPStatusCode } from '@common/models/HttpStatusCode';
+import { GenericReponse, UnexpectedServerError, UserMessageType } from '../../@common/models/common.models';
+import { HTTPStatusCode } from '../../@common/models/HttpStatusCode';
 import { toast } from 'react-toastify';
 import { put, call } from 'redux-saga/effects';
 

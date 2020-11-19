@@ -1,4 +1,4 @@
-import { PairDTO } from '@common/dto';
+import { PairDTO } from '../../@common/dto';
 import {
   FetchPairsRequest,
   FetchPairsResponse,
@@ -10,7 +10,7 @@ import {
   FindAliasResponse,
   SelectPairsResponse,
   SelectPairsRequest,
-} from '@common/models';
+} from '../../@common/models';
 import { deleteWrapper, getWrapper, postWrapper, putWrapper } from '../../@common/utils/fetch.utils';
 import { getEmptyPlayer } from './player.service';
 

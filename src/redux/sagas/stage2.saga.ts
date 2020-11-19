@@ -1,10 +1,10 @@
 import { put, call, StrictEffect, takeEvery, select, fork } from 'redux-saga/effects';
-import { Stage2Action, TournamentAction } from 'redux/actions';
-import { fetchStage2, updateCells, deleteStage2 } from 'redux/services/stage2.service';
-import { FetchStage2Response, DeleteStage2Response } from '@common/models';
-import { TournamentSelector } from 'redux/selectors';
+import { Stage2Action, TournamentAction } from '../actions';
+import { fetchStage2, updateCells, deleteStage2 } from '../services/stage2.service';
+import { FetchStage2Response, DeleteStage2Response } from '../../@common/models';
+import { TournamentSelector } from '../selectors';
 import { toast } from 'react-toastify';
-import { TournamentProgress } from '@common/dto';
+import { TournamentProgress } from '../../@common/dto';
 
 function* deleteStage2Saga(action: ReturnType<typeof Stage2Action.delete.request>): Generator<StrictEffect, void, any> {
   try {

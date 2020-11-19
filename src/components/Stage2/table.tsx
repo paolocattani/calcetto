@@ -3,9 +3,9 @@ import style from './style.module.css';
 import { getIndexes, getEmptyCell, onClickCallback, onSelectCallback } from './helper';
 import Cell from './cell';
 import { getBaseLog } from '../../@common/utils/math.utils';
-import PairsSelect from 'components/Pair/select';
+import PairsSelect from '../Pair/select';
 import { Styles } from 'react-select';
-import { PairDTO, ICell } from '@common/dto';
+import { PairDTO, ICell } from '../../@common/dto';
 // import { valueFormatter } from 'components/Pair/helper';
 
 // https://www.kodbiro.com/blog/rorgchart-react-module-for-displaying-and-editing-data-in-org-chart/

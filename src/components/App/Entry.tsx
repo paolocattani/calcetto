@@ -4,7 +4,7 @@ import { store, persistor } from '../../redux/store';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
-import { LoadingModal } from 'components/core/generic/Commons';
+import { LoadingModal } from '../core/generic/Commons';
 
 const Application: React.FC = () => (
   <Provider store={store}>

@@ -3,9 +3,9 @@ import { useHistory } from 'react-router-dom';
 import { Modal, Container, Form, Col, Row, Button } from 'react-bootstrap';
 import { useInput } from '../core/hooks/InputHook';
 import { TrashIcon } from '../core/icons';
-import { AuthSelector } from 'redux/selectors';
+import { AuthSelector } from '../../redux/selectors';
 import { useDispatch, useSelector } from 'react-redux';
-import { AuthAction } from 'redux/actions';
+import { AuthAction } from '../../redux/actions';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 interface DeleteProps {

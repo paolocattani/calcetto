@@ -5,10 +5,10 @@ import {
   FetchPlayersResponse,
   SavePlayerRequest,
   SavePlayerResponse,
-} from '@common/models';
+} from '../../@common/models';
 import { StrictEffect, takeEvery } from 'redux-saga/effects';
-import { PlayerAction } from 'redux/actions/player.action';
-import { fetchPlayers, deletePlayers, savePlayer, updatePlayer } from 'redux/services/player.service';
+import { PlayerAction } from '../actions/player.action';
+import { fetchPlayers, deletePlayers, savePlayer, updatePlayer } from '../services/player.service';
 import { entityLifeCycle } from './utils';
 
 const back = (payload: DeletePlayersRequest | SavePlayerRequest) => payload.history?.push('/player');

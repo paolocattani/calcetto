@@ -1,4 +1,4 @@
-import { PlayerDTO } from '@common/dto';
+import { PlayerDTO } from '../../@common/dto';
 import React, { useState } from 'react';
 import Select, { Styles, ValueType, ActionMeta } from 'react-select';
 

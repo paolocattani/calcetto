@@ -1,7 +1,7 @@
 import { createReducer, Action } from 'typesafe-actions';
-import { AuthState } from '@common/models/auth.model';
-import { AuthAction } from 'redux/actions/auth.action';
-import { UserRole } from '@common/dto';
+import { AuthState } from '../../@common/models/auth.model';
+import { AuthAction } from '../actions/auth.action';
+import { UserRole } from '../../@common/dto';
 
 export const initialSessionState: AuthState = {
   isAuthenticated: false,

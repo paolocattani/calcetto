@@ -4,10 +4,10 @@ import { Jumbotron, Navbar, Nav, Button, Dropdown, ButtonGroup } from 'react-boo
 import routes from '../core/routing/Routes';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { AuthSelector } from 'redux/selectors/auth.selector';
+import { AuthSelector } from '../../redux/selectors/auth.selector';
 import { HomeIcon, LanguageIcon, UserIcon, LogoutIcon } from '../core/icons';
-import { AuthAction } from 'redux/actions';
-import i18n, { getOtherLang } from 'i18n/i18n';
+import { AuthAction } from '../../redux/actions';
+import i18n, { getOtherLang } from '../../i18n/i18n';
 import { useTranslation } from 'react-i18next';
 
 const applicationName = 'Calcetto C.S.M';

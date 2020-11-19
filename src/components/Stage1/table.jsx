@@ -8,11 +8,11 @@ import { getOpposite, comparator, rowsGenerator } from './helper';
 import { columns } from './editor';
 //
 import { useSelector, useDispatch } from 'react-redux';
-import { AuthSelector } from 'redux/selectors/auth.selector';
+import { AuthSelector } from '../../redux/selectors/auth.selector';
 // style
-import { Stage1Action } from 'redux/actions';
-import { TournamentSelector } from 'redux/selectors';
-import { TournamentProgress } from '@common/dto';
+import { Stage1Action } from '../../redux/actions';
+import { TournamentSelector } from '../../redux/selectors';
+import { TournamentProgress } from '../../@common/dto';
 
 // TODO: convert this component to ts
 // eslint-disable-next-line sonarjs/cognitive-complexity
