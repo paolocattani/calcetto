@@ -3,7 +3,7 @@ import { createStore, applyMiddleware, compose, combineReducers, ReducersMapObje
 import { all } from 'redux-saga/effects';
 import { persistStore, persistReducer } from 'redux-persist';
 import localForage from 'localforage';
-import { RootState } from '@common/models';
+import { RootState } from '../@common/models';
 import {
   TournamentReducer,
   PlayerReducer,
@@ -17,9 +17,9 @@ import {
   initialStage1State,
   initialStage2State,
   initialSessionState,
-} from 'redux/reducers';
-import { TournamentSagas, PlayersSagas, PairsSagas, SessionSagas, Stage2Sagas, Stage1Sagas } from 'redux/sagas';
-import { initialState } from '@common/models/common.models';
+} from './reducers';
+import { TournamentSagas, PlayersSagas, PairsSagas, SessionSagas, Stage2Sagas, Stage1Sagas } from './sagas';
+import { initialState } from '../@common/models/common.models';
 
 // TODO: https://manukyan.dev/posts/2019-04-15-code-splitting-for-redux-and-optional-redux-saga/#:~:text=Redux%20Saga%20Code%20Splitting,whenever%20those%20actions%20are%20dispatched.
 

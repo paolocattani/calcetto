@@ -1,4 +1,4 @@
-import { FetchStage2Response, FetchStage2Request } from '@common/models';
+import { FetchStage2Response, FetchStage2Request } from '../../@common/models';
 import { ICell } from '../../@common/dto';
 import { DEFAULT_HEADERS } from '../../@common/utils/fetch.utils';
 import { getEmptyPair } from './pair.service';

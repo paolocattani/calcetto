@@ -1,6 +1,6 @@
-import { getBaseLog } from '../../@common/utils/math.utils';
+import { getBaseLog } from '../../@common/utils';
 import { ValueType, ActionMeta } from 'react-select';
-import { PairDTO, ICell } from '@common/dto';
+import { PairDTO, ICell } from '../../@common/dto';
 
 export type onClickCallback = (
   event: React.MouseEvent<HTMLButtonElement, MouseEvent>,

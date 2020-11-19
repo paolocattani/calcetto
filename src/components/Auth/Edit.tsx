@@ -3,10 +3,10 @@ import { Card, Container, Form, Button, Col, Row } from 'react-bootstrap';
 import { useInput } from '../core/hooks/InputHook';
 import DatePicker from 'react-datepicker';
 import { TrashIcon, SaveIcon, TimesIcon } from '../core/icons';
-import { AuthSelector } from 'redux/selectors/auth.selector';
+import { AuthSelector } from '../../redux/selectors/auth.selector';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { AuthAction } from 'redux/actions';
+import { AuthAction } from '../../redux/actions';
 import { useTranslation } from 'react-i18next';
 const Delete = lazy(() => import('./Delete'));
 

@@ -9,11 +9,11 @@ import { RightArrowIcon, TrashIcon, LeftArrowIcon } from '../core/icons';
 import { Button, Col, Row, ButtonGroup, ToggleButton } from 'react-bootstrap';
 // Actions, Selectors
 import { Stage2Action, TournamentAction } from '../../redux/actions';
-import { AuthSelector, TournamentSelector, Stage1Selector, PairSelector } from 'redux/selectors';
+import { AuthSelector, TournamentSelector, Stage1Selector, PairSelector } from '../../redux/selectors';
 import Stage1Table from './table';
 import TournamentBadge from '../Tournament/badge';
 // Models
-import { PairDTO, TournamentProgress } from '@common/dto';
+import { PairDTO, TournamentProgress } from '../../@common/dto';
 
 /**
  * Wraps multiple table components

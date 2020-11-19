@@ -4,12 +4,12 @@ import { useInput } from '../core/hooks/InputHook';
 import { TrashIcon, SaveIcon, TimesIcon } from '../core/icons';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { PlayerAction } from 'redux/actions';
+import { PlayerAction } from '../../redux/actions';
 import { useTranslation } from 'react-i18next';
-import { InputField } from 'components/core/generic/Input';
-import { PlayerSelector } from 'redux/selectors';
-import { SavePlayerRequest } from '@common/models';
-import { YesNoModal } from 'components/core/generic/Commons';
+import { InputField } from '../core/generic/Input';
+import { PlayerSelector } from '../../redux/selectors';
+import { SavePlayerRequest } from '../../@common/models';
+import { YesNoModal } from '../core/generic/Commons';
 
 const modalStyle: CSSProperties = {
   textAlign: 'left',

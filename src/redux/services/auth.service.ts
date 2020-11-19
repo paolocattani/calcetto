@@ -7,9 +7,9 @@ import {
   DeleteUserRequest,
 } from '../../@common/models';
 import { eventChannel, buffers, END } from 'redux-saga';
-import { HTTPStatusCode } from '@common/models/HttpStatusCode';
-import { OmitHistory, UnexpectedServerError, UserMessageType } from '@common/models/common.models';
-import { putWrapper, deleteWrapper, postWrapper, getWrapper } from '@common/utils';
+import { HTTPStatusCode } from '../../@common/models/HttpStatusCode';
+import { OmitHistory, UnexpectedServerError, UserMessageType } from '../../@common/models/common.models';
+import { putWrapper, deleteWrapper, postWrapper, getWrapper } from '../../@common/utils';
 
 export enum SessionStatus {
   // Sessione scaduta, reindirizza l'utente alla login

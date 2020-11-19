@@ -1,5 +1,5 @@
 import React from 'react';
-import { TournamentSelector } from 'redux/selectors';
+import { TournamentSelector } from '../../redux/selectors';
 import { useSelector } from 'react-redux';
 import { Row, Col, Badge } from 'react-bootstrap';
 import { formatDate } from '../../@common/utils/date.utils';

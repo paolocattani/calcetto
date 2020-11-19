@@ -16,16 +16,16 @@ import { cellEditProps, columns } from './editor';
 import './style.css';
 import commonStyle from '../../common.module.css';
 // Service
-import { fetchPlayers, getEmptyPlayer } from 'redux/services/player.service';
+import { fetchPlayers, getEmptyPlayer } from '../../redux/services/player.service';
 // Selector
-import { AuthSelector } from 'redux/selectors/auth.selector';
-import { TournamentSelector } from 'redux/selectors/tournament.selector';
+import { AuthSelector } from 'src/redux/selectors/auth.selector';
+import { TournamentSelector } from 'src/redux/selectors/tournament.selector';
 // Action
 import { TournamentAction, PairAction } from '../../redux/actions';
 import TournamentBadge from '../Tournament/badge';
 import { useTranslation } from 'react-i18next';
 // Models
-import { PairDTO, PlayerDTO, TournamentProgress } from '@common/dto';
+import { PairDTO, PlayerDTO, TournamentProgress } from 'src/@common/dto';
 import {
   deletePairs,
   fetchPairs,
@@ -33,9 +33,9 @@ import {
   getEmptyPair,
   postPair,
   updatePair,
-} from 'redux/services/pair.service';
-import { HTTPStatusCode } from '@common/models/HttpStatusCode';
-import { LABEL_COMMON_LOADING } from '@common/constants/label';
+} from 'src/redux/services/pair.service';
+import { HTTPStatusCode } from 'src/@common/models/HttpStatusCode';
+import { LABEL_COMMON_LOADING } from 'src/@common/constants/label';
 
 const hideAskUser = {
   message: '',

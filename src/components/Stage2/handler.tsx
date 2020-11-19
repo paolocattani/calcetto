@@ -4,14 +4,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import Stage2 from './table';
 import { Button, Col, Row } from 'react-bootstrap';
 import commonStyle from '../../common.module.css';
-import { Stage2Selector, TournamentSelector } from 'redux/selectors';
-import { Stage2Action } from 'redux/actions';
-import { LoadingModal } from 'components/core/generic/Commons';
-import { LeftArrowIcon } from 'components/core/icons';
-import TournamentBadge from 'components/Tournament/badge';
-import { fetchPairsStage2 } from 'redux/services/stage2.service';
+import { Stage2Selector, TournamentSelector } from '../../redux/selectors';
+import { Stage2Action } from '../../redux/actions';
+import { LoadingModal } from '../core/generic/Commons';
+import { LeftArrowIcon } from '../core/icons';
+import TournamentBadge from '../Tournament/badge';
+import { fetchPairsStage2 } from '../../redux/services/stage2.service';
 import { onClickCallback, onSelectCallback } from './helper';
-import { PairDTO, ICell } from '@common/dto';
+import { PairDTO, ICell } from '../../@common/dto';
 
 // import template from './template';
 

@@ -12,13 +12,13 @@ import { formatDate } from '../../@common/utils/date.utils';
 import NewTournament from './new';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { TournamentSelector } from 'redux/selectors/tournament.selector';
-import { TournamentAction, PairAction } from 'redux/actions';
-import { AuthSelector } from 'redux/selectors/auth.selector';
+import { TournamentSelector } from '../../redux/selectors/tournament.selector';
+import { TournamentAction, PairAction } from '../../redux/actions';
+import { AuthSelector } from '../../redux/selectors/auth.selector';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import { TournamentDTO } from '@common/dto';
-import { LABEL_TOURNAMENT_SELECT } from '@common/constants/label';
+import { TournamentDTO } from '../../@common/dto';
+import { LABEL_TOURNAMENT_SELECT } from '../../@common/constants/label';
 
 const FTournament = () => {
   // Redux

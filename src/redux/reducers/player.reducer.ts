@@ -1,6 +1,6 @@
 import { createReducer, Action } from 'typesafe-actions';
-import { PlayerState } from '@common/models/player.model';
-import { PlayerAction } from 'redux/actions/player.action';
+import { PlayerState } from '../../@common/models/player.model';
+import { PlayerAction } from '../actions/player.action';
 
 export const initialPlayerState: PlayerState = {
   isLoading: false,

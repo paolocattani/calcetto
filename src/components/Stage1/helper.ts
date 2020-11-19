@@ -1,4 +1,4 @@
-import { PairDTO, Stage1Row } from '@common/dto';
+import { PairDTO, Stage1Row } from '../../@common/dto';
 
 /**
  *

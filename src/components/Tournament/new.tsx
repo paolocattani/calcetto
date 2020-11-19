@@ -6,7 +6,7 @@ import DatePicker from 'react-datepicker';
 import { getEmptyTournament } from './helper';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { TournamentAction } from 'redux/actions/tournament.action';
+import { TournamentAction } from '../../redux/actions/tournament.action';
 import { toast } from 'react-toastify';
 import { FormEventType } from '../core/types';
 import { useTranslation } from 'react-i18next';

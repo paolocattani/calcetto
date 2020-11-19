@@ -1,4 +1,4 @@
-import { TournamentDTO, TournamentProgress } from '@common/dto';
+import { TournamentDTO, TournamentProgress } from '../../@common/dto';
 import React, { CSSProperties } from 'react';
 
 export function getEmptyTournament(name: string): TournamentDTO {

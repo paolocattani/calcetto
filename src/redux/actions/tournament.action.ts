@@ -6,10 +6,10 @@ import {
   UpdateTournamentRequest,
   UpdateTournamentResponse,
   TournamentError,
-} from '@common/models/tournament.model';
+} from '../../@common/models/tournament.model';
 import { createAsyncAction, createAction } from 'typesafe-actions';
 import { defaultAsyncParams, defaultParam, PurgeResponse, PURGE_STORE_ACTION } from './constants';
-import { TournamentDTO } from '@common/dto';
+import { TournamentDTO } from '../../@common/dto';
 
 const actionName = '[Tournament]';
 
