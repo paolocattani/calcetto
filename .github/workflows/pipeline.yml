@@ -92,7 +92,7 @@ jobs:
     # Service containers to run with `container-job`
     services:
       # Label used to access the service container
-      postgres:
+      postgres-service:
         # Docker Hub image
         image: postgres
         # Provide the password for postgres
@@ -113,17 +113,12 @@ jobs:
         containers: [1, 2, 3]
     steps:
       - uses: actions/checkout@v2
-      # Set db port env var from postgres
-      - name: Set DB Port
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-          POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
-        run: echo "::set-env name=POSTGRES_PORT::$POSTGRES_PORT"
       # Install dependencies
       - name: Install dependencies
         run: |
           npm ci
           cd server && npm ci
+          echo postgresql://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@${{ env.POSTGRES_HOST }}:${{env.POSTGRES_PORT}}/${{env.POSTGRES_DB}}
       # e2e
       - name: e2e
         uses: cypress-io/github-action@v2
@@ -143,7 +138,7 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: test
-          TEST_URL: 'postgresql://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@${{ env.POSTGRES_HOST }}:${{env.POSTGRES_PORT}}/${{env.POSTGRES_DB}}'
+          TEST_URL: 'postgresql://postgres:password@postgres-service:5432/postgres'
           TEST_SCHEMA: test_${{ matrix.browser }}_${{ matrix.containers }}
         # if tests fails save screenshots
       - name: Save screenshots on failure
