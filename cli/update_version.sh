@@ -105,5 +105,9 @@ if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]]; then
   # Package.json
   sed -i 's|\"version\": \".\..\..\"|\"version\": \"'$NEW_VERSION'\"|g' package.json
 
+	if [[ $CURRENT_VERSION != $NEW_VERSION ]] ; then
+  	echo '--> Creating new tag...'
+		git tag -a "v$NEW_VERSION" -m "v$NEW_VERSION"
+	fi
   echo '  Done...'
 fi

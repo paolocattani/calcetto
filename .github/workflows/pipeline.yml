@@ -97,22 +97,25 @@ jobs:
         image: postgres
         # Provide the password for postgres
         env:
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: strong$password
+          POSTGRES_DB: postgres
+          ports: ["5432:5432"]
         # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          # Maps tcp port 5432 on service container to the host
-          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        # Maps tcp port 5432 on service container to the host
+        ports: ["5432:5432"]
     strategy:
       matrix:
         browser: [ chrome, firefox ]
         containers: [1, 2, 3]
     steps:
       - uses: actions/checkout@v2
+      # Set db port env var from postgres-service
+      - name: Set DB Port
+        env:
+          POSTGRES_PORT: ${{ job.services.postgres-service.ports[5432] }}
+        run: echo "::set-env name=POSTGRES_PORT::$POSTGRES_PORT"
       # Install dependencies
       - name: Install dependencies
         run: |
@@ -137,7 +140,7 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: test
-          TEST_URL: postgres://postgres:postgres@localhost:5432/postgres
+          TEST_URL: 'postgresql://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@${{ env.POSTGRES_HOST }}:${{env.POSTGRES_PORT}}/${{env.POSTGRES_DB}}'
           TEST_SCHEMA: test_${{ matrix.browser }}_${{ matrix.containers }}
         # if tests fails save screenshots
       - name: Save screenshots on failure
