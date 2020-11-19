@@ -1,13 +1,16 @@
 {
-	"extends": "../tsconfig.json",
+	"extends": "../tsconfig",
 	"compilerOptions": {
-		"target": "es5",
+		"isolatedModules": false,
 		"noEmit": false,
-		"sourceMap": false,
-		"skipLibCheck": true,
-		"types": ["cypress", "node"],
-		"baseUrl": "../node_modules",
-		"isolatedModules": false
+		"strict": true,
+		"target": "es5",
+		"lib": ["es5", "dom"],
+		"types": ["cypress","node"],
+		"typeRoots": ["./support"]
 	},
-	"include": ["../node_modules/cypress", "*/*.ts"]
+	"include": [
+		"../node_modules/cypress",
+		"./**/*.ts"
+	]
 }
