@@ -11,9 +11,7 @@ jobs:
     name: Build
     strategy:
       matrix:
-        # node-version: [ 10.x, 12.x, 14.x]
-        node-version: [ 14.x]
-    if: ${{ 1==2 }}
+        node-version: [ 10.x, 12.x, 14.x]
     steps:
       - uses: actions/checkout@v2
       # Set up Node
@@ -65,7 +63,7 @@ jobs:
     needs: build
     name: unit tests
     # For now disable this step
-    if: ${{ 1==2 }}
+    # if: ${{ 1==2 }}
     steps:
       - uses: actions/checkout@v2
       # Install dependencies
@@ -107,6 +105,7 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
         # Maps tcp port 5432 on service container to the host
         ports: ["5432:5432"]
+    fail-fast: false
     strategy:
       matrix:
         browser: [ chrome, firefox ]
@@ -118,7 +117,6 @@ jobs:
         run: |
           npm ci
           cd server && npm ci
-          echo postgresql://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@${{ env.POSTGRES_HOST }}:${{env.POSTGRES_PORT}}/${{env.POSTGRES_DB}}
       # e2e
       - name: e2e
         uses: cypress-io/github-action@v2
@@ -135,7 +133,7 @@ jobs:
           record: true
           group: 'e2e_${{ matrix.browser }}'
         env:
-          DEBUG: cypress:webpack
+          # DEBUG: cypress:webpack
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: test
@@ -164,7 +162,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     name: Code Quality
-    if: ${{ 1==2 }}
     steps:
         - uses: actions/checkout@v2
         - name: Download build
