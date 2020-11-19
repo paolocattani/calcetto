@@ -11,6 +11,12 @@ export interface SequelizeConfiguration extends SequelizeOptions {
   useEnvVar: string;
 	databaseVersion?:string;
 	schema?:string;
+	dialectOptions?:{
+		ssl?: {
+			require?: boolean;
+			rejectUnauthorized?: boolean;
+		}
+	}
 }
 
 // Sequelize configuration
