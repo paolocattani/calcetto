@@ -113,6 +113,7 @@ jobs:
       # Set db port env var from postgres-service
       - name: Set DB Port
         env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
           POSTGRES_PORT: ${{ job.services.postgres-service.ports[5432] }}
         run: echo "::set-env name=POSTGRES_PORT::$POSTGRES_PORT"
       # Install dependencies
