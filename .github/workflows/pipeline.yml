@@ -132,7 +132,7 @@ jobs:
           browser: ${{ matrix.browser }}
           parallel: true
           headless: true
-          # record: true
+          record: true
           group: 'e2e_${{ matrix.browser }}'
         env:
           DEBUG: cypress:webpack
