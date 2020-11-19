@@ -1,5 +1,5 @@
 import { Styles } from 'react-select';
-import { PairDTO } from 'src/@common/dto';
+import { PairDTO } from '../../@common/dto';
 
 export const valueFormatter = (selectedOption: PairDTO) =>
   selectedOption.alias ? `${selectedOption.alias}` : createAlias(selectedOption);
