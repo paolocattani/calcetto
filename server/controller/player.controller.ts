@@ -58,7 +58,7 @@ router.put(
   asyncMiddleware(async (req: Request, res: Response) => {
     const { player: dto } = req.body as SavePlayerRequest;
     try {
-      let player = await findById(dto.id);
+      let player = await findById(dto.id!);
       if (!player) {
         return entityNotFound(res);
       }
@@ -68,7 +68,7 @@ router.put(
         return failure(res, 'Esiste già un giocatore con questi dati.', 'Player already exists');
       }
       await update(dto);
-      return success<SavePlayerResponse>(res, 'Giocatore aggiornato...', { player });
+      return success<SavePlayerResponse>(res, 'Giocatore aggiornato...', { player:dto });
     } catch (error) {
       return serverError('PUT player/update error ! : ', error, res);
     }

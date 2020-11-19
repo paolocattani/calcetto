@@ -41,7 +41,7 @@ export const deleteTournament = async (tournament: TournamentDTO): Promise<numbe
   await Tournament.destroy({ where: { id: tournament.id } });
 
 // Aggiorna un torneo esistente
-export const update = async (user: UserDTO, model: TournamentDTO): Promise<TournamentDTO | null> => {
+export const update = async (user: UserDTO, model: TournamentDTO): Promise<TournamentDTO> => {
   logProcess(className + 'update', 'start');
   try {
     const params = new Map<string, WhereOptions | Object | number>();
@@ -70,7 +70,7 @@ export const findById = async (user: UserDTO, tId: number): Promise<TournamentDT
   params.set('id', tId);
   const result = await findByParams(params, user);
   logProcess(className + 'findById', 'end');
-  return convertEntityToDTO(result);
+	return result ? convertEntityToDTO(result) : null;
 };
 
 // Cerca trmite nome e data
@@ -87,7 +87,7 @@ export const findByNameAndDate = async (name: string, date: Date, user: UserDTO)
     ],
   });
   logProcess(className + 'findByNameAndDate', 'end');
-  return convertEntityToDTO(result);
+  return result ? convertEntityToDTO(result) : null;
 };
 
 export const findByParams = async (
@@ -113,21 +113,19 @@ export const findByParams = async (
 
 /**
  * Converte l'entity in un DTO da passare al FE.
- * @param user  Tournament entity
+ * @param t : Tournament tournament entity
  */
-export const convertEntityToDTO = (t: Tournament | null): TournamentDTO | null =>
-  t
-    ? {
-        id: t?.id,
-        name: t?.name ?? '',
-        date: t?.date ?? new Date(),
-        progress: t?.progress ?? TournamentProgress.New,
-        public: t?.public ?? false,
-        autoOrder: t?.autoOrder ?? true,
-        label: t?.label ?? '',
-        ownerId: t?.ownerId ?? 0,
-      }
-    : null;
+export const convertEntityToDTO = (t: Tournament): TournamentDTO =>
+({
+		id: t?.id,
+		name: t?.name ?? '',
+		date: t?.date ?? new Date(),
+		progress: t?.progress ?? TournamentProgress.New,
+		public: t?.public ?? false,
+		autoOrder: t?.autoOrder ?? true,
+		label: t?.label ?? '',
+		ownerId: t?.ownerId ?? 0,
+});
 
 export const parseBody = (body: any) =>
   ({

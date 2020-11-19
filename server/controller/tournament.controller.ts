@@ -4,12 +4,12 @@ import { logger } from '../core/logger';
 import { asyncMiddleware, withAuth, withAdminRights, controllerLogger } from '../core/middleware';
 // Managers
 import {
-  listAll,
-  findById,
-  findByNameAndDate,
-  parseBody,
-  update,
-  deleteTournament,
+	listAll,
+	findById,
+	findByNameAndDate,
+	parseBody,
+	update,
+	deleteTournament, convertEntityToDTO,
 } from '../manager/tournament.manager';
 // Models
 import Tournament from '../database/tournament.model';
@@ -60,7 +60,7 @@ router.get(
         return entityNotFound(res);
       }
       const tournament = await findById(req.user!, parseInt(req.params.tId));
-      return success<FetchTournamentsResponse>(res, 'Torneo caricato...', { tournamentsList: [tournament] });
+      return success<FetchTournamentsResponse>(res, 'Torneo caricato...', { tournamentsList: [tournament!] });
     } catch (err) {
       return serverError('GET tournament/{tId} error ! : ', err, res);
     }
@@ -99,8 +99,9 @@ router.post(
       }
       model.ownerId = user.id;
       t = await Tournament.create(model);
+      const tournament = convertEntityToDTO(t);
       logger.info(`Created Tournament => ${t}`);
-      return success<SaveTournamentResponse>(res, 'Torneo salvato...', { tournament: t });
+      return success<SaveTournamentResponse>(res, 'Torneo salvato...', { tournament});
     } catch (err) {
       return serverError('POST tournament/new error ! : ', err, res);
     }
