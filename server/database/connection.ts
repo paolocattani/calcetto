@@ -30,6 +30,12 @@ async function loadModels(): Promise<Sequelize> {
     modelMatch: (filename: string, member: string) =>
       filename.substring(0, filename.indexOf('.model')) === member.toLowerCase(),
   };
+
+  // If NODE_ENV == 'test' and IS_DOCKER test are running in CI and I'm trying to connect to a container without SSL
+  if(process.env.NODE_ENV === 'test' && process.env.IS_DOCKER && connectionOptions.dialectOptions && connectionOptions.dialectOptions.ssl) {
+		// @ts-ignore
+		delete connectionOptions.dialectOptions.ssl;
+	}
   return new Sequelize(uri, connectionOptions);
 }
 

@@ -98,7 +98,7 @@ jobs:
         # Provide the password for postgres
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: strong$password
+          POSTGRES_PASSWORD:  password
           POSTGRES_DB: postgres
           # use postgres for the host here because we have specified a container for the job.
           # If we were running the job on the VM this would be localhost
@@ -140,6 +140,7 @@ jobs:
           NODE_ENV: test
           TEST_URL: 'postgresql://postgres:password@postgres-service:5432/postgres'
           TEST_SCHEMA: test_${{ matrix.browser }}_${{ matrix.containers }}
+          IS_DOCKER: true
         # if tests fails save screenshots
       - name: Save screenshots on failure
         uses: actions/upload-artifact@v1
