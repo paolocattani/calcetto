@@ -11,12 +11,12 @@ import { LoadingModal } from '../components/core/generic/Commons';
 import '../i18n/i18n';
 import { loadIcons } from '../components/core/icons';
 
-interface CustomRenderOtions extends Omit<RenderOptions, 'queries'> {
+interface CustomRenderOptions extends Omit<RenderOptions, 'queries'> {
   initialState?: RootState;
 }
 
 loadIcons();
-const customRender = (ui: React.ReactElement, options?: CustomRenderOtions) =>
+const customRender = (ui: React.ReactElement, options?: CustomRenderOptions) =>
   render(ui, {
     wrapper: ({ children }) => (
       <Provider store={defaultStore(options?.initialState)}>

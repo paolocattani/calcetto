@@ -1,8 +1,8 @@
 import React from 'react';
-import Tournament from '../../../components/Tournament/select';
-import { render, RenderResult, fireEvent, screen } from '../../test-utils';
+import Tournament from './select';
+import { render, RenderResult, fireEvent, screen } from '../../test/test-utils';
 import userEvent from '@testing-library/user-event';
-import { performAdminLogin, performUserLogin } from 'test/commons';
+import { performAdminLogin, performUserLogin } from 'src/test/commons';
 // import loginResponse from './_mocks_/login_response.json';
 
 describe('<Tournament />.render', () => {

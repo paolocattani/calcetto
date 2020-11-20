@@ -1,6 +1,6 @@
 import React from 'react';
-import Register from 'components/Auth/Register';
-import { render, RenderResult, screen } from '../../test-utils';
+import Register from 'src/components/Auth/Register';
+import { render, RenderResult, screen } from '../../../test/test-utils';
 
 describe('<Register />.render', () => {
   let component: RenderResult;

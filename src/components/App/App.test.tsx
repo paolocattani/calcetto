@@ -1,5 +1,5 @@
 import React from 'react';
-import Entry from 'components/App/Entry';
+import Entry from 'src/components/App/Entry';
 import { render } from '@testing-library/react';
 
 // https://spin.atomicobject.com/2020/04/22/jest-test-express-react/
