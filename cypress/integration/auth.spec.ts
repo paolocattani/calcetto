@@ -26,12 +26,16 @@ describe('Authentication Test', () => {
   describe('Login process', async function () {
     it('Should login as Admin', async function () {
         const admin = this.authFixture.users.admin;
+				cy.visit('/');
+				await fetch('/api/v2/auth/logout');
         cy.loginWithUi(admin);
         await logout();
     });
 
     it('Should login as User', async function () {
         const user = this.authFixture.users.user;
+				cy.visit('/');
+				await fetch('/api/v2/auth/logout');
         cy.loginWithUi(user);
 				await logout();
     });
