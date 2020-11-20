@@ -1,6 +1,6 @@
 
 # https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks
 
-PRE-COMMIT=0
-COMMIT=0
+PRE-COMMIT=1
+POST-COMMIT=0
 
