@@ -33,7 +33,7 @@ if [[ $BRANCH_NAME != "master" ]] && [[ $SEARCH_RESULT = 1 ]]; then
     echo "Add files to commit..."
     cd "$HOOKS_DIR" && cd ..
     git add .env sonar-project.properties package.json package-lock.json
-    git add ./build/* ./analysis/* ./coverage/*
+    git add ./build/*
 
     echo "End : $(date +'%Y.%m.%d - %H:%M:%S')"
 else

@@ -27,10 +27,10 @@ if [[ $BRANCH_NAME != "master" ]] && [[ $SEARCH_RESULT = 1 ]]; then
 		version=$(cd $SCRIPT_DIR/.. && cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]');
 
 		if [ $(git tag -l "$version") ]; then
+			echo "Tag $version already exists.."
+		else
 			echo '--> Creating new tag...'
 			git tag -a "v$version" -m "v$version"
-		else
-			echo "Tag $version already exists.."
 		fi
 
     echo "End : $(date +'%Y.%m.%d - %H:%M:%S')"
