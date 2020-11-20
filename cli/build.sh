@@ -4,8 +4,7 @@ cd $( cd $( dirname "${BASH_SOURCE[0]}" ) >/dev/null 2>&1 && pwd )
 cd ..
 
 echo '--> Install dependencies...'
-# Don't want to update package-lock. Just install
-npm ci
+npm i
 echo "Done..."
 
 echo '--> Run Build...'

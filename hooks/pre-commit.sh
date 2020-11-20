@@ -31,6 +31,7 @@ if [[ $BRANCH_NAME != "master" ]] && [[ $SEARCH_RESULT = 1 ]]; then
     source cli/build.sh
 
     echo "Add files to commit..."
+    cd $( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )
     git add .env sonar-project.properties package.json package-lock.json
     git add ./build/* ./analysis/* ./coverage/*
 
