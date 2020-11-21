@@ -133,7 +133,7 @@ const FTournament = () => {
   return (
     <>
       <Col md={{ span: '6', offset: '3' }} sm="12">
-        <Card style={cardStyle}>
+        <Card style={cardStyle} data-cy="tournament-form">
           <Card.Header as="h2">{t('tournament:tournament')}</Card.Header>
           <Card.Body>
             <Col>{cardBody()}</Col>

@@ -185,4 +185,29 @@ router.delete(
   })
 );
 
+router.delete(
+	'/test/delete',
+	asyncMiddleware(async (req: AppRequest, res: Response) => {
+		const { password,email, username } = req.body;
+		try {
+			logger.info('/test/delete start ');
+			const user = await findUserByEmailAndUsername(email, username);
+			if (!user) {
+				return entityNotFound(res);
+			}
+
+			if (!(await comparePasswords(email, password, user.password)))
+				return res.status(HTTPStatusCode.BadRequest).json(wrongCredentials);
+
+			await deleteUser(user);
+			logger.info('/test/delete end ');
+			removeUserCookies(res);
+			return success<DeleteUserResponse>(res, `Utente "${user.name}" eliminato `);
+		} catch (error) {
+			return serverError('DELETE auth/test/delete error ! : ', error, res);
+		}
+	})
+);
+
+
 export default router;

@@ -1,6 +1,6 @@
 {
 		"projectId": "sxebxi",
-    "baseUrl": "http://localhost:5000",
+    "baseUrl": "http://localhost:5001",
     "fixturesFolder": "cypress/fixtures",
     "integrationFolder": "cypress/integration",
     "screenshotsFolder": "cypress/screenshots",

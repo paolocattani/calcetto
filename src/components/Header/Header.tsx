@@ -66,7 +66,7 @@ const Header: React.FC = () => {
                 <>
                   <Dropdown alignRight as={ButtonGroup}>
                     <Button style={{ opacity: 1 }} variant="outline-warning" size="lg" disabled>
-                      <strong style={{ color: '#64bd9c', fontSize: 'larger' }}>
+                      <strong style={{ color: '#64bd9c', fontSize: 'larger' }} data-cy="header-username">
                         {user.username} <UserIcon />
                       </strong>
                     </Button>
