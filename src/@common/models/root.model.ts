@@ -1,5 +1,6 @@
 import { PlayerState, TournamentState, PairState, AuthState, Stage1State, Stage2State } from './';
 
+
 export interface RootState {
   tournamentState: TournamentState;
   pairState: PairState;

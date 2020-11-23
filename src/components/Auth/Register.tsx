@@ -5,15 +5,15 @@ import DatePicker from 'react-datepicker';
 import Select, { StylesConfig, ValueType } from 'react-select';
 import './style.css';
 import { emailRegExp, passwordRegExp } from '../../@common/utils/math.utils';
-import { AuthAction } from 'redux/actions';
+import { AuthAction } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import { withRouter, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { InputField } from 'components/core/generic/Input';
+import { InputField } from '../core/generic/Input';
 import { useTranslation } from 'react-i18next';
-import { PlayerRoleType } from '@common/models';
-import { PlayerRole } from '@common/dto';
-import { LABEL_AUTH_PASSWORD } from '@common/constants/label';
+import { PlayerRoleType } from '../../@common/models';
+import { PlayerRole } from '../../@common/dto';
+import { LABEL_AUTH_PASSWORD } from '../../@common/constants/label';
 
 
 interface RegisterProps {}

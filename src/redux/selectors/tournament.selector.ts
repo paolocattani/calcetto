@@ -1,4 +1,4 @@
-import { RootState } from '@common/models/root.model';
+import { RootState } from '../../@common/models';
 
 // Get state from store
 export const TournamentSelector = {

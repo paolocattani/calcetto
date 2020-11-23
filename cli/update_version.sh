@@ -103,7 +103,11 @@ if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]]; then
   # Sonar
   sed -i 's|^sonar.projectVersion=.*$|sonar.projectVersion='$NEW_VERSION'|g' sonar-project.properties
   # Package.json
-  sed -i 's|\"version\": \".\..\..\"|\"version\": \"'$NEW_VERSION'\"|g' package.json
+  sed -i 's|\"version\": \".*\..*\..*\"|\"version\": \"'$NEW_VERSION'\"|g' package.json
 
+	if [[ $CURRENT_VERSION != $NEW_VERSION ]] ; then
+		# Enable post commit hook to tag this commit with the new version
+    sed -i 's|^POST-COMMIT=.*$|POST-COMMIT=1|g' ./hooks/.hooks
+	fi
   echo '  Done...'
 fi

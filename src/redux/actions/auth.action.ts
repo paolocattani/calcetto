@@ -10,7 +10,7 @@ import {
   LogoutRequest,
   DeleteUserRequest,
   UpdateUserRequest,
-} from '@common/models/auth.model';
+} from '../../@common/models/auth.model';
 
 const actionName = '[Session]';
 

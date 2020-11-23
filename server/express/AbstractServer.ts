@@ -68,7 +68,7 @@ export abstract class AbstractServer implements IServer {
     this.application
       .options('*', cors(this.corsOptions)) // Preflight Request
       .use(morgan(isProductionMode() ? 'combined' : 'common'))
-      // Escludo compression per 'text/event-stream'
+      // Exclude compression per 'text/event-stream'
       .use(
         //https://github.com/expressjs/compression/issues/61
         compression({
@@ -88,7 +88,7 @@ export abstract class AbstractServer implements IServer {
 
     // public folder path
     const buildPath = path.join(__dirname, '..', '..', 'build');
-    logger.info(`Serving build forlder from ${chalk.green(buildPath)}`);
+    logger.info(`Serving build folder from ${chalk.green(buildPath)}`);
     this.application.use(
       //
       express.static(buildPath, {

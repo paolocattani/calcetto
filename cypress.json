@@ -1,10 +1,13 @@
 {
 		"projectId": "sxebxi",
-    "baseUrl": "http://localhost:5000",
+    "baseUrl": "http://localhost:5001",
     "fixturesFolder": "cypress/fixtures",
     "integrationFolder": "cypress/integration",
     "screenshotsFolder": "cypress/screenshots",
     "videosFolder": "cypress/videos",
+		"env": {
+			"secret":"O<o@cZqCJ-Qmu1-<C<e@R4m0n(nR&Sk"
+		},
     "cypress-watch-and-reload": {
        "watch": "src/*, server/* , cypress/*"
     },

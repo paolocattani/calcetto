@@ -4,19 +4,19 @@ import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 import { render, RenderOptions } from '@testing-library/react';
-import { RootState } from '@common/models/';
+import { RootState } from '../@common/models/';
 import { storeWithState as defaultStore, persistor } from '../redux/store';
-import { LoadingModal } from 'components/core/generic/Commons';
+import { LoadingModal } from '../components/core/generic/Commons';
 // i18n
 import '../i18n/i18n';
-import { loadIcons } from 'components/core/icons';
+import { loadIcons } from '../components/core/icons';
 
-interface CustomRenderOtions extends Omit<RenderOptions, 'queries'> {
+interface CustomRenderOptions extends Omit<RenderOptions, 'queries'> {
   initialState?: RootState;
 }
 
 loadIcons();
-const customRender = (ui: React.ReactElement, options?: CustomRenderOtions) =>
+const customRender = (ui: React.ReactElement, options?: CustomRenderOptions) =>
   render(ui, {
     wrapper: ({ children }) => (
       <Provider store={defaultStore(options?.initialState)}>

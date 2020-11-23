@@ -2,7 +2,7 @@ import { useInput } from '../core/hooks/InputHook';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { AuthAction } from 'redux/actions';
+import { AuthAction } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { InputField } from '../core/generic/Input';

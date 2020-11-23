@@ -9,6 +9,14 @@ export type EnvList = {
 
 export interface SequelizeConfiguration extends SequelizeOptions {
   useEnvVar: string;
+	databaseVersion?:string;
+	schema?:string;
+	dialectOptions?:{
+		ssl?: {
+			require?: boolean;
+			rejectUnauthorized?: boolean;
+		}
+	}
 }
 
 // Sequelize configuration
@@ -24,7 +32,7 @@ const config: EnvList = {
     dialect: 'postgres',
     logging: (sqlString: string) => logger.warn(sqlString),
     pool: { max: 5, min: 0, acquire: 30000, idle: 10000 },
-    dialectOptions: {
+		dialectOptions: {
       ssl: {
         require: true,
         rejectUnauthorized: false,

@@ -8,8 +8,8 @@ import {
   DeletePlayersResponse,
   DeletePlayersRequest,
   PlayerError,
-} from '@common/models/player.model';
-import { PlayerDTO } from '@common/dto';
+} from '../../@common/models/player.model';
+import { PlayerDTO } from '../../@common/dto';
 
 const actionName = '[Player]';
 export const PlayerAction = {

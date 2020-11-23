@@ -5,25 +5,24 @@
 #   source hooks/pre-commit.sh
 #
 
-SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )
-LOG_FILE="$SCRIPT_DIR/pre-commit.log"
+HOOKS_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )
+LOG_FILE="$HOOKS_DIR/pre-commit.log"
 
 source cli/redirect_output.sh
 
 SEARCH_STRING='PRE-COMMIT'
-SEARCH_FILE="$SCRIPT_DIR/.hooks"
+SEARCH_FILE="$HOOKS_DIR/.hooks"
 source cli/search_string.sh
 
 BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
 
-echo "On branch : "$BRANCH_NAME
-echo "Environment : "$NODE_ENV
-echo "Enabled : "$SEARCH_RESULT
+echo "On branch : $BRANCH_NAME"
+echo "Enabled : $SEARCH_RESULT"
 
-# Only on dev enviroment, and branch develop , and if PRE-COMMIT flag is enabled
-if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]] && [[ $BRANCH_NAME == "develop" ]] && [[ $SEARCH_RESULT = 1 ]]; then
+# Only on dev environment, and branch develop , and if PRE-COMMIT flag is enabled
+if [[ $BRANCH_NAME != "master" ]] && [[ $SEARCH_RESULT = 1 ]]; then
 
-    echo "Start : "$(date +'%Y.%m.%d - %H:%M:%S')
+    echo "Start : $(date +'%Y.%m.%d - %H:%M:%S')"
 
     # Update version
     source cli/update_version.sh --patch
@@ -32,10 +31,11 @@ if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]] && [[ $BRANCH_NAME
     source cli/build.sh
 
     echo "Add files to commit..."
+    cd "$HOOKS_DIR" && cd ..
     git add .env sonar-project.properties package.json package-lock.json
-    git add ./build/* ./analysis/* ./coverage/*
+    git add ./build/*
 
-    echo "End : "$(date +'%Y.%m.%d - %H:%M:%S')
+    echo "End : $(date +'%Y.%m.%d - %H:%M:%S')"
 else
     echo "Skipping version update..."
 fi

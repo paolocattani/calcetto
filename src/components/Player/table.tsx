@@ -10,12 +10,12 @@ import columns, { clearAllFilter, filterFactory } from './helper';
 import TableHeader from '../core/generic/TableHeader';
 import { LoadingModal } from '../core/generic/Commons';
 
-import { PlayerAction } from 'redux/actions';
-import { getEmptyPlayer } from 'redux/services/player.service';
-import { PlayerSelector, AuthSelector } from 'redux/selectors';
+import { PlayerAction } from '../../redux/actions';
+import { getEmptyPlayer } from '../../redux/services/player.service';
+import { PlayerSelector, AuthSelector } from '../../redux/selectors';
 import { TrashIcon, PlusIcon, BroomIcon, HomeIcon } from '../core/icons';
 import { useTranslation } from 'react-i18next';
-import { PlayerDTO } from '@common/dto';
+import { PlayerDTO } from '../../@common/dto';
 
 interface PlayerProps {}
 const PlayerTable: React.FC<PlayerProps> = () => {

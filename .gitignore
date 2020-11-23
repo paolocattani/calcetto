@@ -7,10 +7,13 @@
 /.pnp
 .pnp.js
 
+.idea/sonarlint
+
 # testing
-# Need to push coverage beacause of this issue ... https://github.com/facebook/jest/issues/9324
 **/coverage
 **/analysis
+/.idea/sonarlint
+/.nyc_output
 
 # production
 # FIXME:

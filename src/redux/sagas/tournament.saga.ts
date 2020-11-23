@@ -1,14 +1,14 @@
 import { put, call, StrictEffect, takeEvery } from 'redux-saga/effects';
-import { fetchTournaments, postTournament, updateTournament } from 'redux/services/tournament.service';
+import { fetchTournaments, postTournament, updateTournament } from '../services/tournament.service';
 import {
   SaveTournamentResponse,
   FetchTournamentsResponse,
   UpdateTournamentResponse,
   FetchTournamentsRequest,
   UpdateTournamentRequest,
-} from '@common/models/tournament.model';
-import { TournamentAction } from 'redux/actions/tournament.action';
-import { HTTPStatusCode } from '@common/models/HttpStatusCode';
+} from '../../@common/models/tournament.model';
+import { TournamentAction } from '../actions/tournament.action';
+import { HTTPStatusCode } from '../../@common/models/HttpStatusCode';
 import { toast } from 'react-toastify';
 import { UnexpectedServerError } from '../../@common/models/common.models';
 import { entityLifeCycle } from './utils';

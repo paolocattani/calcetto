@@ -31,10 +31,8 @@ export default (application: ExpressApplication): void => {
 
   // Test
   application.get('/status', (req: Request, res: Response) =>
-    // eslint-disable-next-line quotes
     res
       .status(HTTPStatusCode.OK)
-      // eslint-disable-next-line quotes
       .json({ code: HTTPStatusCode.ImATeapot, message: `I ain't gonna brew coffee. I'm a fucking teapot!` })
   );
 };

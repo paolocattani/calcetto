@@ -1,15 +1,21 @@
 {
-	"extends": "../tsconfig.json",
 	"compilerOptions": {
-		"target": "es5",
-		"lib": ["es5","dom"],
+		"baseUrl": "../node_modules",
+		"isolatedModules": false,
+		"lib": [
+			"es5",
+			"dom"
+		],
+		"module": "CommonJS",
 		"noEmit": false,
-		"sourceMap": false,
-		"skipLibCheck": true,
-		"types": ["cypress", "node"],
-		"rootDir": ".",
-		"baseUrl": ".",
-		"isolatedModules": false
+		"strict": true,
+		"target": "ES2015",
+		"types": [
+			"cypress","node"
+		],
+		"sourceMap": true
 	},
-	"include": ["*/*.ts"]
+	"include": [
+		"./**/*.ts"
+	]
 }

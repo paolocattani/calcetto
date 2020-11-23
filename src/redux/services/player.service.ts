@@ -1,4 +1,4 @@
-import { PlayerDTO, PlayerRole } from '@common/dto';
+import { PlayerDTO, PlayerRole } from '../../@common/dto';
 import {
   FetchPlayersRequest,
   FetchPlayersResponse,
@@ -6,8 +6,8 @@ import {
   DeletePlayersResponse,
   SavePlayerResponse,
   SavePlayerRequest,
-} from '@common/models';
-import { UnexpectedServerError } from '@common/models/common.models';
+} from '../../@common/models';
+import { UnexpectedServerError } from '../../@common/models/common.models';
 import { DEFAULT_HEADERS, deleteWrapper, postWrapper, putWrapper } from '../../@common/utils/fetch.utils';
 
 export const fetchPlayers = async ({ tId, addEmpty }: FetchPlayersRequest): Promise<FetchPlayersResponse> => {

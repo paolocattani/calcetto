@@ -1,6 +1,6 @@
 import { put, call, StrictEffect, takeEvery, take, takeLatest, delay } from 'redux-saga/effects';
-import { AuthAction } from 'redux/actions/auth.action';
-import { AuthenticationResponse, RegistrationResponse } from '@common/models';
+import { AuthAction } from '../actions/auth.action';
+import { AuthenticationResponse, RegistrationResponse } from '../../@common/models';
 import {
   CheckAuthentication,
   createSessionChannel,
@@ -11,13 +11,13 @@ import {
   deleteUser,
   logout,
   SessionStatus,
-} from 'redux/services/auth.service';
+} from '../services/auth.service';
 import { toast } from 'react-toastify';
 import { Action } from 'typesafe-actions';
-import { persistor } from 'redux/store';
-import { HTTPStatusCode } from '@common/models/HttpStatusCode';
-import { TournamentAction } from 'redux/actions';
-import { UserMessageType } from '@common/models/common.models';
+import { persistor } from '../store';
+import { HTTPStatusCode } from '../../@common/models/HttpStatusCode';
+import { TournamentAction } from '../actions';
+import { UserMessageType } from '../../@common/models/common.models';
 
 function* checkAuthenticationSaga({
   payload: { history },

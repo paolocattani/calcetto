@@ -22,7 +22,7 @@ import {
 // Models
 import User from '../../database/user.model';
 // Common Responses
-import { missingParameters, success, failure, entityNotFound, serverError } from '../common.response';
+import {missingParameters, success, failure, entityNotFound, serverError, unauthorized} from '../common.response';
 // @Commmon
 import {
   AuthenticationResponse,
@@ -31,9 +31,9 @@ import {
   LoginRequest,
   RegistrationRequest,
   UpdateUserRequest,
-} from '../../../src/@common/models/auth.model';
+	OmitGeneric, OmitHistory
+} from '../../../src/@common/models';
 import { HTTPStatusCode } from '../../../src/@common/models/HttpStatusCode';
-import { OmitGeneric, OmitHistory } from '../../../src/@common/models/common.models';
 
 const router = Router();
 
@@ -184,5 +184,34 @@ router.delete(
     }
   })
 );
+
+router.delete(
+	'/test/delete',
+	asyncMiddleware(async (req: AppRequest, res: Response) => {
+		const { password,email, username,secret } = req.body;
+		try {
+			logger.info('/test/delete start ');
+			if(process.env.NODE_ENV !== 'test' || secret !== process.env.SERVER_SECRET){
+				return unauthorized(res,'Unauthorized!...');
+			}
+
+			const user = await findUserByEmailAndUsername(email, username);
+			if (!user) {
+				return entityNotFound(res);
+			}
+
+			if (!(await comparePasswords(email, password, user.password)))
+				return res.status(HTTPStatusCode.BadRequest).json(wrongCredentials);
+
+			await deleteUser(user);
+			logger.info('/test/delete end ');
+			removeUserCookies(res);
+			return success<DeleteUserResponse>(res, `Utente "${user.name}" eliminato `);
+		} catch (error) {
+			return serverError('DELETE auth/test/delete error ! : ', error, res);
+		}
+	})
+);
+
 
 export default router;

@@ -12,7 +12,7 @@ declare namespace NodeJS {
     CLIENT_COMMIT_HASH: string;
     PORT: number;
     HTTPS: boolean;
-    // React buil Options
+    // React build Options
     INLINE_RUNTIME_CHUNK: boolean;
     //FIXME: Avoid Heroku to prune devDependencies ( remove this after server transpile )
     NPM_CONFIG_PRODUCTION: boolean;
@@ -30,6 +30,7 @@ declare namespace NodeJS {
     //Dbs
     DEV_URL: string;
     TEST_URL: string;
+		TEST_SCHEMA?:string;
     DATABASE_URL: string;
 
     // max age for static contents

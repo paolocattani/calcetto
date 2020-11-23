@@ -1,7 +1,7 @@
 {
   "name": "calcetto",
   "private": false,
-  "version": "2.9.10",
+  "version": "2.10.2",
   "description": "Table Soccer Manager",
   "engines": {
     "node": "14.x",
@@ -87,7 +87,7 @@
     "-----DEVELOPMENT----": "---------------------------",
     "dev": "concurrently -p \"[{name}]\" -n server,client -c \"bgGreen.bold,bgBlue.bold\"  --kill-others-on-fail \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "cd server && nodemon --config \"./nodemon.json\"",
-    "dev:client": "react-scripts start ",
+    "dev:client": "npm run CRA:start",
     "-----PRODUCTION----": "---------------------------",
     "prod:server": "cd server && npm run prod",
     "prod:build:server": "tsc --pretty --allowJs --outDir ./build_server -p ./server/tsconfig.json",
@@ -96,16 +96,16 @@
     "prod:heroku:client": "node --optimize_for_size --max_old_space_size=460 -gc_interval=100 node_modules/.bin/react-scripts build",
     "start": "npm run prod:heroku:server",
     "-----CRA----": "---------------------------",
-    "CRA:start": "react-scripts --requirenpm i @cypress/code-coverage nyc istanbul-lib-coverage @cypress/instrument-cra start",
+    "CRA:start": "react-scripts --require @cypress/instrument-cra start",
     "CRA:build": "react-scripts build ",
     "CRA:eject": "react-scripts eject",
     "CRA:test": "react-scripts test",
     "-----TEST----": "---------------------------",
-    "test:app": "cross-env NODE_ENV=test npm run dev",
+    "test:app": "cross-env NODE_ENV=test npm run dev:server",
     "test:client": "npm run CRA:test",
     "test:client:coverage": "react-scripts test --coverage --watchAll=false --silent --testResultsProcessor ./node_modules/jest-sonar-reporter ",
     "test:client:debug": "react-scripts --inspect-brk test --runInBand --no-cache --env=jest-environment-jsdom-sixteen",
-    "test:e2e": "cross-env NODE_ENV=test CYPRESS_BASE_URL=http://localhost:5001 start-server-and-test prod:heroku:server 5001 cypress:run",
+    "test:e2e": "cross-env NODE_ENV=test start-server-and-test prod:heroku:server 5001 cypress:run",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run  --record --key d290f2c0-5104-4643-96ff-ba6f773d0a9c --browser chrome --headless",
     "-----LINT, ANALYZE----": "---------------------------",
@@ -129,9 +129,9 @@
     ]
   },
   "devDependencies": {
-    "@bahmutov/add-typescript-to-cypress": "^2.1.2",
     "@cypress/code-coverage": "^3.8.3",
     "@cypress/instrument-cra": "^1.4.0",
+    "@cypress/webpack-preprocessor": "^5.4.11",
     "@ljharb/eslint-config": "^17.2.0",
     "@shinnn/eslint-config": "^7.0.0",
     "@testing-library/dom": "^7.26.3",
@@ -195,6 +195,7 @@
     "source-map-explorer": "^2.5.0",
     "start-server-and-test": "^1.11.5",
     "ts-jest": "^26.4.3",
+    "ts-loader": "^8.0.11",
     "webpack": "^4.44.2"
   },
   "jestSonar": {

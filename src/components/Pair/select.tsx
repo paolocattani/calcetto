@@ -1,4 +1,4 @@
-import { PairDTO } from '@common/dto';
+import { PairDTO } from 'src/@common/dto';
 import React, { useState } from 'react';
 import Select, { Styles, ValueType, ActionMeta, components } from 'react-select';
 import { SelectComponents } from 'react-select/src/components';

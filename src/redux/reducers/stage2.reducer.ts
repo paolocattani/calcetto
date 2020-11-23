@@ -1,6 +1,6 @@
 import { createReducer, Action } from 'typesafe-actions';
-import { Stage2State } from '@common/models';
-import { Stage2Action } from 'redux/actions';
+import { Stage2State } from '../../@common/models';
+import { Stage2Action } from '../actions';
 
 export const initialStage2State: Stage2State = {
   isLoading: false,

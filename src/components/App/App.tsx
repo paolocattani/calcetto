@@ -11,14 +11,14 @@ import ErrorBoundary from '../core/errorBoundary';
 import './App.css';
 import { Container } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { AuthAction } from 'redux/actions';
+import { AuthAction } from '../../redux/actions';
 import { loadIcons } from '../core/icons';
 // Toasts
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './toast.css';
 import AppBadge from './badge';
-import { AuthSelector } from 'redux/selectors';
+import { AuthSelector } from '../../redux/selectors';
 // i18n
 import '../../i18n/i18n';
 

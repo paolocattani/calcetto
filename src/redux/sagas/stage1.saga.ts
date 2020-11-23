@@ -1,6 +1,6 @@
-import { Stage1Action } from 'redux/actions';
+import { Stage1Action } from '../actions';
 import { takeLatest, StrictEffect, call, take, takeEvery } from 'redux-saga/effects';
-import { createStage1Channel, fetchStage1, updateCellStage1, updatePlacement } from 'redux/services/stage1.service';
+import { createStage1Channel, fetchStage1, updateCellStage1, updatePlacement } from '../services/stage1.service';
 import {
   FetchStage1Request,
   FetchStage1Response,
@@ -10,9 +10,9 @@ import {
   UpdateCellResponse,
   UpdatePlacementRequest,
   UpdatePlacementResponse,
-} from '@common/models';
+} from '../../@common/models';
 import { entityLifeCycle } from './utils';
-import { selectPairs } from 'redux/services/pair.service';
+import { selectPairs } from '../services/pair.service';
 
 // TODO:
 function* watchStage1Saga(

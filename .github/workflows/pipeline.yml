@@ -55,13 +55,14 @@ jobs:
           path: |
             coverage
             analysis
+
   #-----------------------------------------
-  # Test
+  # unit test
   #-----------------------------------------
-  test:
+  unit-test:
     runs-on: ubuntu-latest
     needs: build
-    name: Tests
+    name: unit tests
     # For now disable this step
     # if: ${{ 1==2 }}
     steps:
@@ -79,35 +80,76 @@ jobs:
         run: |
           cd server
           npm run test:unit
-      # e2e
+
+  #-----------------------------------------
+  # e2e test
+  #-----------------------------------------
+  e2e-test:
+    runs-on: ubuntu-latest
+    needs: build
+    container:
+      image: cypress/browsers:node14.15.0-chrome86-ff82
+      options: --user 1001 --shm-size=2g
+    #needs: build
+    name: e2e test
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres-service:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD:  password
+          POSTGRES_DB: postgres
+          # use postgres for the host here because we have specified a container for the job.
+          # If we were running the job on the VM this would be localhost
+          POSTGRES_HOST: postgres
+        # Set health checks to wait until postgres has started
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        # Maps tcp port 5432 on service container to the host
+        ports: ["5432:5432"]
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [ chrome, firefox ]
+        containers: [1, 2, 3]
+    steps:
+      - uses: actions/checkout@v2
+      # Install dependencies
       - name: Install dependencies
-        uses: cypress-io/github-action@v2
+        run: |
+          npm ci
+          cd server && npm ci
+      # Download build
+      - name: Download build
+        uses: actions/download-artifact@v2
         with:
-          runTests: false
-      - run: |
-          pwd
-          ls -l
+          name: build-14.x
+      # e2e
       - name: e2e
         uses: cypress-io/github-action@v2
         with:
-          install: false
           working-directory: /home/runner/work/calcetto/calcetto
           # Start server and wait for response
           start: npm run prod:heroku:server
           wait-on: 'http://localhost:5001'
           # Test options
           config: baseUrl=http://localhost:5001
-          browser: chrome
+          browser: ${{ matrix.browser }}
+          parallel: true
           headless: true
           record: true
+          group: 'e2e_${{ matrix.browser }}'
         env:
+          # DEBUG: cypress:webpack
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: test
-      - name: where am i ?
-        run: |
-          pwd
-          ls -l
+          TEST_URL: 'postgresql://postgres:password@postgres-service:5432/postgres'
+          TEST_SCHEMA: test_${{ matrix.browser }}_${{ matrix.containers }}
+          IS_DOCKER: true
         # if tests fails save screenshots
       - name: Save screenshots on failure
         uses: actions/upload-artifact@v1
@@ -131,20 +173,20 @@ jobs:
     needs: build
     name: Code Quality
     steps:
-      - uses: actions/checkout@v2
-      - name: Download build
-        uses: actions/download-artifact@v2
-        with:
-          name: build-12.x
-      - name: Download Coverage
-        uses: actions/download-artifact@v2
-        with:
-          name: coverage-12.x
-      # https://github.com/marketplace/actions/sonarcloud-scan
-      - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@master
-        with:
-          projectBaseDir: /home/runner/work/calcetto/calcetto
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        - uses: actions/checkout@v2
+        - name: Download build
+          uses: actions/download-artifact@v2
+          with:
+            name: build-12.x
+        - name: Download Coverage
+          uses: actions/download-artifact@v2
+          with:
+            name: coverage-12.x
+        # https://github.com/marketplace/actions/sonarcloud-scan
+        - name: SonarCloud Scan
+          uses: sonarsource/sonarcloud-github-action@master
+          with:
+            projectBaseDir: /home/runner/work/calcetto/calcetto
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

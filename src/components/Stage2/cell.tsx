@@ -1,8 +1,8 @@
 import React from 'react';
 import style from './style.module.css';
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
-import { DoubleRightIcon, BanIcon, TrophyIcon } from 'components/core/icons';
-import { ICell, PairDTO } from '@common/dto';
+import { DoubleRightIcon, BanIcon, TrophyIcon } from '../core/icons';
+import { ICell, PairDTO } from '../../@common/dto';
 
 interface NodeElement extends ICell {
   span: number;
