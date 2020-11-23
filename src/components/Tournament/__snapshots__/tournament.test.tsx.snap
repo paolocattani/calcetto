@@ -161,6 +161,7 @@ Object {
       >
         <div
           class="card"
+          data-cy="tournament-form"
           style="width: 100%; margin: auto; background-color: inherit; border-color: #ffc107; border-width: 3px; text-align: left;"
         >
           <h2
@@ -307,6 +308,7 @@ Object {
     >
       <div
         class="card"
+        data-cy="tournament-form"
         style="width: 100%; margin: auto; background-color: inherit; border-color: #ffc107; border-width: 3px; text-align: left;"
       >
         <h2
