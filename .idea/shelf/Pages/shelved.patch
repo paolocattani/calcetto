@@ -1,0 +1,237 @@
+Index: cypress/support/utils.ts
+===================================================================
+--- cypress/support/utils.ts	(revision 9cb154a55d09733c07d6d193b8e0e6274186f9bb)
++++ cypress/support/utils.ts	(revision 9cb154a55d09733c07d6d193b8e0e6274186f9bb)
+@@ -1,5 +0,0 @@
+-
+-
+-
+-export const logout = async () => await fetch('/api/v2/auth/logout');
+-
+Index: cypress/support/commands.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// Types definitions\r\ndeclare global {\r\n\tnamespace Cypress {\r\n\t\ttype LoginProps = { username: string, password: string }\r\n\t\ttype RegistrationProps = {\r\n\t\t\tusername: string;\r\n\t\t\tname: string;\r\n\t\t\tsurname: string;\r\n\t\t\temail: string;\r\n\t\t\tconfirmEmail: string;\r\n\t\t\tpassword: string;\r\n\t\t\tconfirmPassword: string;\r\n\t\t\tphone: string;\r\n\t\t\tbirthday: string;\r\n\t\t};\r\n\r\n\t\tinterface Chainable {\r\n\t\t\tloginWithUi: typeof loginWithUi\r\n\t\t\tregisterWithUi: typeof registerWithUi\r\n\t\t}\r\n\t}\r\n}\r\n\r\n// Functions\r\nexport function loginWithUi({username, password}: Cypress.LoginProps) {\r\n\treturn cy.visit('/')\r\n\t\t.get('#username').should('be.visible').type(username)\r\n\t\t.get('#password').should('be.visible').type(password)\r\n\t\t.get('#loginButton').click();\r\n}\r\n\r\nexport function registerWithUi(\r\n\t{username, name, surname, email, confirmEmail, password, confirmPassword, phone, birthday}: Cypress.RegistrationProps,\r\n\tisAdmin: boolean\r\n){\r\n\treturn cy.visit('/')\r\n\t\t.get('#swapButton').click()\r\n\t\t.get('#username').should('be.visible').type(username)\r\n\t\t.get('#name').should('be.visible').type(isAdmin ? `[A]${name}` : name)\r\n\t\t.get('#surname').should('be.visible').type(surname)\r\n\t\t.get('#email').should('be.visible').type(email)\r\n\t\t.get('#cemail').should('be.visible').type(confirmEmail)\r\n\t\t.get('#password').should('be.visible').type(password)\r\n\t\t.get('#cpassword').should('be.visible').type(confirmPassword)\r\n\t\t//FIXME: cypress bug\r\n\t\t//cy.get('#birthday').should('be.visible').type('05/01/1902');\r\n\t\t.get('#phone').should('be.visible').type(phone)\r\n\t\t.get('#registerButton').click();\r\n}\r\n\r\n\r\n// Add to cypress\r\n// https://docs.cypress.io/api/cypress-api/custom-commands.html#Best-Practices\r\nCypress.Commands.add('loginWithUi', loginWithUi);\r\nCypress.Commands.add('registerWithUi', registerWithUi);\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- cypress/support/commands.ts	(revision 9cb154a55d09733c07d6d193b8e0e6274186f9bb)
++++ cypress/support/commands.ts	(date 1605887805592)
+@@ -1,55 +1,40 @@
+ // Types definitions
++/*
+ declare global {
+-	namespace Cypress {
+-		type LoginProps = { username: string, password: string }
+-		type RegistrationProps = {
+-			username: string;
+-			name: string;
+-			surname: string;
+-			email: string;
+-			confirmEmail: string;
+-			password: string;
+-			confirmPassword: string;
+-			phone: string;
+-			birthday: string;
+-		};
++namespace Cypress {
++	type LoginProps = { username: string, password: string }
++	type RegistrationProps = {
++		username: string;
++		name: string;
++		surname: string;
++		email: string;
++		confirmEmail: string;
++		password: string;
++		confirmPassword: string;
++		phone: string;
++		birthday: string;
++	};
+ 
+-		interface Chainable {
+-			loginWithUi: typeof loginWithUi
+-			registerWithUi: typeof registerWithUi
+-		}
++	interface Chainable {
++		loginWithUi: typeof loginWithUi
++		registerWithUi: typeof registerWithUi
++	}
++
+ 	}
+ }
++ */
+ 
+ // Functions
+-export function loginWithUi({username, password}: Cypress.LoginProps) {
++/*export function loginWithUi({username, password}: Cypress.LoginProps) {
+ 	return cy.visit('/')
+ 		.get('#username').should('be.visible').type(username)
+ 		.get('#password').should('be.visible').type(password)
+ 		.get('#loginButton').click();
+ }
+ 
+-export function registerWithUi(
+-	{username, name, surname, email, confirmEmail, password, confirmPassword, phone, birthday}: Cypress.RegistrationProps,
+-	isAdmin: boolean
+-){
+-	return cy.visit('/')
+-		.get('#swapButton').click()
+-		.get('#username').should('be.visible').type(username)
+-		.get('#name').should('be.visible').type(isAdmin ? `[A]${name}` : name)
+-		.get('#surname').should('be.visible').type(surname)
+-		.get('#email').should('be.visible').type(email)
+-		.get('#cemail').should('be.visible').type(confirmEmail)
+-		.get('#password').should('be.visible').type(password)
+-		.get('#cpassword').should('be.visible').type(confirmPassword)
+-		//FIXME: cypress bug
+-		//cy.get('#birthday').should('be.visible').type('05/01/1902');
+-		.get('#phone').should('be.visible').type(phone)
+-		.get('#registerButton').click();
+-}
++ */
+ 
+ 
+ // Add to cypress
+ // https://docs.cypress.io/api/cypress-api/custom-commands.html#Best-Practices
+-Cypress.Commands.add('loginWithUi', loginWithUi);
+-Cypress.Commands.add('registerWithUi', registerWithUi);
++//Cypress.Commands.add('registerWithUi', loginWithUi);
+Index: cypress/pages/landing.page.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- cypress/pages/landing.page.ts	(date 1605894323405)
++++ cypress/pages/landing.page.ts	(date 1605894323405)
+@@ -0,0 +1,61 @@
++import json = Mocha.reporters.json;
++import {DeleteUserRequest, OmitHistory} from "../../src/@common/models";
++
++type LoginProps = { username: string, password: string };
++type RegistrationProps = {
++	username: string;
++	name: string;
++	surname: string;
++	email: string;
++	confirmEmail: string;
++	password: string;
++	confirmPassword: string;
++	phone: string;
++	birthday: string;
++};
++
++export class LandingPage {
++
++	static visit() {
++		return cy.visit('/');
++	}
++
++	static loginWithUi({username, password}: LoginProps) {
++		return cy
++			.get('#username').should('be.visible').type(username)
++			.get('#password').should('be.visible').type(password)
++			.get('#loginButton').click();
++	}
++
++	static registerWithUi( user: RegistrationProps, isAdmin: boolean ){
++		return cy
++			.get('#swapButton').should('be.visible').click()
++			.get('#username').should('be.visible').type(user.username)
++			.get('#name').should('be.visible').type(isAdmin ? `[A]${user.name}` : user.name)
++			.get('#surname').should('be.visible').type(user.surname)
++			.get('#email').should('be.visible').type(user.email)
++			.get('#cemail').should('be.visible').type(user.confirmEmail)
++			.get('#password').should('be.visible').type(user.password)
++			.get('#cpassword').should('be.visible').type(user.confirmPassword)
++			//FIXME: cypress bug
++			//cy.get('#birthday').should('be.visible').type('05/01/1902');
++			.get('#phone').should('be.visible').type(user.phone)
++			.get('#registerButton').should('be.visible').click();
++	}
++
++	static async forceLogout(){
++		await fetch('/api/v2/auth/logout');
++		LandingPage.visit();
++	}
++
++	static async forceDeleteUser(body:OmitHistory<DeleteUserRequest>){
++		await fetch('/api/v2/auth/delete',{
++			method:'DELETE',
++			headers: { 'Content-Type': 'application/json' },
++			body:JSON.stringify(body)
++		});
++	}
++
++
++
++}
+Index: cypress/pages/index.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- cypress/pages/index.ts	(date 1605887935091)
++++ cypress/pages/index.ts	(date 1605887935091)
+@@ -0,0 +1,1 @@
++export * from './landing.page';
+Index: cypress/integration/auth.spec.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// enables intelligent code completion for Cypress commands\r\n// https://on.cypress.io/intelligent-code-completion\r\n\r\nimport {logout} from \"../support/utils\";\r\n\r\ndescribe('Authentication Test', () => {\r\n  beforeEach(function() {\r\n    cy.fixture('auth.fixture','utf-8').as('authFixture');\r\n  });\r\n\r\n  describe('Registration process', function () {\r\n\r\n    it('Should register Admin', function () {\r\n      const admin = this.authFixture.users.admin;\r\n        cy.registerWithUi(admin, true);\r\n\t\t\t// cy.url().should('match', /fuel-savings$/)\r\n\r\n\t\t});\r\n\r\n    it('Should register User', function () {\r\n        const user = this.authFixture.users.user;\r\n        cy.registerWithUi(user, false);\r\n    });\r\n  });\r\n\r\n  describe('Login process', async function () {\r\n    it('Should login as Admin', async function () {\r\n        const admin = this.authFixture.users.admin;\r\n        cy.loginWithUi(admin);\r\n        await logout();\r\n    });\r\n\r\n    it('Should login as User', async function () {\r\n        const user = this.authFixture.users.user;\r\n        cy.loginWithUi(user);\r\n\t\t\t\tawait logout();\r\n    });\r\n  });\r\n\r\n  // more examples\r\n  //\r\n  // https://github.com/cypress-io/cypress-example-todomvc\r\n  // https://github.com/cypress-io/cypress-example-kitchensink\r\n  // https://on.cypress.io/writing-your-first-test\r\n});\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- cypress/integration/auth.spec.ts	(revision 9cb154a55d09733c07d6d193b8e0e6274186f9bb)
++++ cypress/integration/auth.spec.ts	(date 1605894131601)
+@@ -1,7 +1,7 @@
+ // enables intelligent code completion for Cypress commands
+ // https://on.cypress.io/intelligent-code-completion
+ 
+-import {logout} from "../support/utils";
++import { LandingPage } from '../pages';
+ 
+ describe('Authentication Test', () => {
+   beforeEach(function() {
+@@ -10,30 +10,32 @@
+ 
+   describe('Registration process', function () {
+ 
+-    it('Should register Admin', function () {
++    it.only('Should register Admin', async function () {
+       const admin = this.authFixture.users.admin;
+-        cy.registerWithUi(admin, true);
++			await LandingPage.forceDeleteUser({password:admin.password});
++			LandingPage.visit();
++			LandingPage.registerWithUi(admin, true);
+ 			// cy.url().should('match', /fuel-savings$/)
+-
+ 		});
+ 
+-    it('Should register User', function () {
+-        const user = this.authFixture.users.user;
+-        cy.registerWithUi(user, false);
++    it('Should register User', async function () {
++        const user = this.authFixture.users.user;1
++				await LandingPage.forceDeleteUser({password:user.password});
++				LandingPage.registerWithUi(user, false);
+     });
+   });
+ 
+   describe('Login process', async function () {
+     it('Should login as Admin', async function () {
+         const admin = this.authFixture.users.admin;
+-        cy.loginWithUi(admin);
+-        await logout();
++				LandingPage.loginWithUi(admin);
++				await LandingPage.forceLogout();
+     });
+ 
+     it('Should login as User', async function () {
+         const user = this.authFixture.users.user;
+-        cy.loginWithUi(user);
+-				await logout();
++				LandingPage.loginWithUi(user);
++				await LandingPage.forceLogout();
+     });
+   });
+ 

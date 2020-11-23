@@ -13,6 +13,7 @@
 **/coverage
 **/analysis
 /.idea/sonarlint
+/.nyc_output
 
 # production
 # FIXME:

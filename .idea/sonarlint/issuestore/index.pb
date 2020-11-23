@@ -56,3 +56,43 @@ D
 cli/search_string.sh,2\9\2970a68b6646b357aed93c8f426524078e3ef700
 D
 cli/search_string.py,9\2\92a42639033100cc54da5a8222e752372b68e31b
+;
+cli/test.sh,6\e\6e3999ecd03e4e0529b84d8588a4b79fef15b719
+D
+hooks/.hooks.example,5\4\546d7397454337955419f518ee389d118dc151d6
+G
+src/test/test-utils.tsx,8\0\80b705c1e2f7ecd6ff1df36ce44669a9d50f502a
+]
+-src/components/Tournament/tournament.test.tsx,5\2\52316bb27f72b55c8dec1c97bf442cc8d852fb82
+d
+4src/components/Auth/test/_mocks_/login_response.json,5\f\5f0fd5549b8cb5eece2f8aa2528d9cc023d70d54
+W
+'src/components/Auth/test/Login.test.tsx,a\0\a08ec7aa927dd107592f8934addd2ff2231a959f
+Z
+*src/components/Auth/test/Register.test.tsx,2\f\2f19608ae0c9618a863678e014e79c821098cfd1
+O
+src/components/App/App.test.tsx,6\d\6d091727e5d13eff6467d4d9a2ac5d8b8668a945
+C
+src/test/commons.ts,6\b\6b1cfca3a2037c7a5d91d34e1858ebe6dd97fa9c
+K
+cypress/support/commands.ts,0\c\0c7ec7db2aa86877f2dc229d492ef240b739ffb7
+<
+cypress.json,1\c\1cd7786282577f82e5e5d7703505815e6e9e412e
+R
+"cypress/fixtures/auth.fixture.json,f\f\ff3d6448d4611d154fdbc0ebbc0383d1c9a3d5fb
+R
+"src/redux/services/auth.service.ts,a\0\a0673183138186511f5edaf4ca3f278c8d3ae0c6
+9
+	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
+Y
+)server/controller/auth/auth.controller.ts,c\4\c48d6e9a188821e8d76e0ea4fca3fb0e60f3a3d4
+P
+ src/components/Header/Header.tsx,5\9\593609f6a3ce8accf706e0d6904ba33a1c98ec6c
+T
+$src/components/Tournament/select.tsx,0\d\0d8e7aa0c893b846d938bb6c2397684c55c5715d
+P
+ cypress/pages/tournament.page.ts,a\5\a568107d9da0e41e94292096fe6fc06f262cc64d
+N
+cypress/pages/abstract.page.ts,1\4\147d7ceacc8cd632275eefa739fc7ad9165f91ef
+T
+$src/@common/typings/environment.d.ts,8\2\8214d0b38f761ece6f6a7eea3edbbfea65a6a1a6

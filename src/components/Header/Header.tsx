@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 
 const applicationName = 'Calcetto C.S.M';
 
-// Header applicazione, include navbar
+// App header with navbar
 const Header: React.FC = () => {
   const dispatch = useDispatch();
   const currentHistory = useHistory();

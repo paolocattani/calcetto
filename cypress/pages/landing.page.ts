@@ -1,6 +1,6 @@
-import {deleteUser} from "../../src/redux/services/auth.service";
 import {AbstractPage} from "./abstract.page";
 
+// https://glebbahmutov.com/blog/open-source-visual-testing-of-components/
 export type LoginProps = { username: string, password: string }
 export type RegistrationProps = {
 	username: string;
@@ -61,27 +61,28 @@ export class LandingPage extends AbstractPage{
 	}
 
 	// Methods
-	async forceLogout(){
-		await fetch('/api/v2/auth/logout');
+	forceLogout(){
+		return cy.request('http://localhost:5001/api/v2/auth/logout');
 	}
+
 	forceDeleteUser(email:string,username:string,password:string){
-		return fetch('/api/v2/auth/test/delete',{
-			method:'DELETE',
-			body:JSON.stringify({email,username,password}),
-			headers: {
-				'Content-Type': 'application/json',
-			}
+		return cy.request({
+			method: 'DELETE',
+			url: 'http://localhost:5001/api/v2/auth/test/delete',
+			failOnStatusCode: false,
+			headers:{ 'Content-Type': 'application/json' },
+			body:{email,username,password,secret:Cypress.env('secret')}
 		});
 	}
 
-	loginWithUi({username, password}: LoginProps) {
+	login({username, password}: LoginProps) {
 		return cy.visit('/')
 			.get('#username').should('be.visible').type(username)
 			.get('#password').should('be.visible').type(password)
 			.get('#loginButton').click();
 	}
 
-	registerWithUi(user:RegistrationProps,isAdmin: boolean){
+	register(user:RegistrationProps,isAdmin: boolean){
 		return cy.visit('/')
 			.get('#swapButton').click()
 			.get('#username').should('be.visible').type(user.username)
