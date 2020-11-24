@@ -96,3 +96,15 @@ N
 cypress/pages/abstract.page.ts,1\4\147d7ceacc8cd632275eefa739fc7ad9165f91ef
 T
 $src/@common/typings/environment.d.ts,8\2\8214d0b38f761ece6f6a7eea3edbbfea65a6a1a6
+>
+.gitattributes,2\4\24139dae656713ba861751fb2c2ac38839349a7a
+D
+.nyc_output/out.json,3\6\36be1242854418f87140fd46320db2683d66afab
+M
+cypress/pages/landing.page.ts,1\2\12598cdacb840214a270b8e8ce5bd1240015499c
+H
+cypress/plugins/index.ts,d\b\db81a08e197a07f183b76c76d08b4ea7ee53f125
+H
+cypress/support/index.ts,a\1\a12ebc51a3d36e4cfcbc2a401ba038c3ce89f76e
+J
+server/controller/index.ts,1\6\160a59ced61abbc1db359e81e61a5bb1427c7523

@@ -14,7 +14,7 @@
 **/analysis
 /.idea/sonarlint
 /.nyc_output
-
+/cypress-coverage
 # production
 # FIXME:
 # /build

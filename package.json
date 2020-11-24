@@ -1,7 +1,7 @@
 {
   "name": "calcetto",
   "private": false,
-  "version": "2.10.2",
+  "version": "2.10.3",
   "description": "Table Soccer Manager",
   "engines": {
     "node": "14.x",
@@ -101,7 +101,7 @@
     "CRA:eject": "react-scripts eject",
     "CRA:test": "react-scripts test",
     "-----TEST----": "---------------------------",
-    "test:app": "cross-env NODE_ENV=test npm run dev:server",
+    "test:app": "cross-env NODE_ENV=test nyc --silent npm run dev:server",
     "test:client": "npm run CRA:test",
     "test:client:coverage": "react-scripts test --coverage --watchAll=false --silent --testResultsProcessor ./node_modules/jest-sonar-reporter ",
     "test:client:debug": "react-scripts --inspect-brk test --runInBand --no-cache --env=jest-environment-jsdom-sixteen",
@@ -115,6 +115,17 @@
     "-----CLI----": "---------------------------",
     "release": "bash ./cli/release.sh",
     "build": "bash ./cli/build.sh"
+  },
+  "nyc": {
+    "all": true,
+    "report-dir": "cypress-coverage",
+    "----Reporters List-----": "https://istanbul.js.org/docs/advanced/alternative-reporters/",
+    "reporter": [
+      "text",
+      "json",
+      "lcov"
+    ],
+    "exclude": "src/serviceWorker.js"
   },
   "browserslist": {
     "production": [
@@ -169,7 +180,7 @@
     "babel-node": "0.0.1-security",
     "concurrently": "^5.3.0",
     "cross-env": "^7.0.2",
-    "cypress": "^5.5.0",
+    "cypress": "^6.0.0",
     "cypress-intellij-reporter": "0.0.5",
     "cypress-skip-and-only-ui": "^1.2.10",
     "cypress-watch-and-reload": "^1.2.18",

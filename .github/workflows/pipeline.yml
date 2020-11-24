@@ -150,20 +150,27 @@ jobs:
           TEST_URL: 'postgresql://postgres:password@postgres-service:5432/postgres'
           TEST_SCHEMA: test_${{ matrix.browser }}_${{ matrix.containers }}
           IS_DOCKER: true
-        # if tests fails save screenshots
+      # if tests fails save screenshots
       - name: Save screenshots on failure
         uses: actions/upload-artifact@v1
         if: failure()
         with:
           name: cypress-screenshots
           path: cypress/screenshots
-        # if tests success save videos
+      # if tests success save videos and coverage
       - name: Save videos
         uses: actions/upload-artifact@v1
         if: always()
         with:
           name: cypress-videos
           path: cypress/videos
+      - name: Save Coverage
+        if: ${{ success() }}
+      # TODO: e2e coverage
+      # if tests success save videos and coverage
+      # - name: Merge coverage from different processes
+      # if tests success save videos and coverage
+      # - name: Save e2e-coverage
 
   #-----------------------------------------
   # Code Quality ( Sonarcloud )

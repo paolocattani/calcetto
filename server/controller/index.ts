@@ -29,6 +29,10 @@ export default (application: ExpressApplication): void => {
   // SSE
   application.get('/sse/v1/session', withAuth, sessionControl);
 
+  // Coverage
+	// @ts-ignore
+	application.get('/__coverage__', (req: Request, res: Response) => res.json({ coverage: global.__coverage__ || null }));
+
   // Test
   application.get('/status', (req: Request, res: Response) =>
     res

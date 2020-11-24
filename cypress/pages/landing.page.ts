@@ -20,6 +20,47 @@ export class LandingPage extends AbstractPage{
 		return cy.visit('/');
 	}
 
+	// Methods
+	forceLogout(){
+		return cy.request({
+			failOnStatusCode: false,
+			url:'http://localhost:5001/api/v2/auth/logout'
+		});
+	}
+
+	forceDeleteUser(email:string,username:string,password:string){
+		return cy.request({
+			method: 'DELETE',
+			url: 'http://localhost:5001/api/v2/auth/test/delete',
+			failOnStatusCode: false,
+			headers:{ 'Content-Type': 'application/json' },
+			body:{email,username,password,secret:Cypress.env('secret')}
+		});
+	}
+
+	login({username, password}: LoginProps) {
+		return cy.visit('/')
+			.get('#username').should('be.visible').type(username)
+			.get('#password').should('be.visible').type(password)
+			.get('#loginButton').should('be.visible').click();
+	}
+
+	register(user:RegistrationProps,isAdmin: boolean){
+		return cy.visit('/')
+			.get('#swapButton').should('be.visible').click()
+			.get('#username').should('be.visible').type(user.username)
+			.get('#name').should('be.visible').type(isAdmin ? `[A]${user.name}` : user.name)
+			.get('#surname').should('be.visible').type(user.surname)
+			.get('#email').should('be.visible').type(user.email)
+			.get('#cemail').should('be.visible').type(user.confirmEmail)
+			.get('#password').should('be.visible').type(user.password)
+			.get('#cpassword').should('be.visible').type(user.confirmPassword)
+			//FIXME: cypress bug
+			//cy.get('#birthday').should('be.visible').type('05/01/1902');
+			.get('#phone').should('be.visible').type(user.phone)
+			.get('#registerButton').should('be.visible').click();
+	}
+	
 	// Fields
 	getHeaderUsername(){
 		return cy.get('[data-cy=header-username]');
@@ -58,44 +99,6 @@ export class LandingPage extends AbstractPage{
 	}
 	getRegistrationButton(){
 		return cy.get('#registerButton');
-	}
-
-	// Methods
-	forceLogout(){
-		return cy.request('http://localhost:5001/api/v2/auth/logout');
-	}
-
-	forceDeleteUser(email:string,username:string,password:string){
-		return cy.request({
-			method: 'DELETE',
-			url: 'http://localhost:5001/api/v2/auth/test/delete',
-			failOnStatusCode: false,
-			headers:{ 'Content-Type': 'application/json' },
-			body:{email,username,password,secret:Cypress.env('secret')}
-		});
-	}
-
-	login({username, password}: LoginProps) {
-		return cy.visit('/')
-			.get('#username').should('be.visible').type(username)
-			.get('#password').should('be.visible').type(password)
-			.get('#loginButton').click();
-	}
-
-	register(user:RegistrationProps,isAdmin: boolean){
-		return cy.visit('/')
-			.get('#swapButton').click()
-			.get('#username').should('be.visible').type(user.username)
-			.get('#name').should('be.visible').type(isAdmin ? `[A]${user.name}` : user.name)
-			.get('#surname').should('be.visible').type(user.surname)
-			.get('#email').should('be.visible').type(user.email)
-			.get('#cemail').should('be.visible').type(user.confirmEmail)
-			.get('#password').should('be.visible').type(user.password)
-			.get('#cpassword').should('be.visible').type(user.confirmPassword)
-			//FIXME: cypress bug
-			//cy.get('#birthday').should('be.visible').type('05/01/1902');
-			.get('#phone').should('be.visible').type(user.phone)
-			.get('#registerButton').click();
 	}
 
 }

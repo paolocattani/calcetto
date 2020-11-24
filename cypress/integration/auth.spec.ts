@@ -15,30 +15,36 @@ describe('Authentication Test', () => {
 		//Cypress.Cookies.preserveOnce('session_id')
   });
 
+	function testCommon (landingPage:LandingPage,user:{username:string}){
+		landingPage.getHeaderUsername().should('be.visible').and('contain',user.username);
+		cy.getCookies()
+			.should('have.length', 1)
+			.then((cookies) => {
+				const session_id = cookies[0];
+				expect(session_id).to.have.property('name', 'session_id');
+				expect(session_id).to.have.property('domain','localhost');
+				expect(session_id).to.have.property('httpOnly');
+				expect(session_id).to.have.property('path');
+				expect(session_id).to.have.property('secure',false);
+			})
+	}
+
   describe('Registration process', function () {
+
 
 		it('Should register Admin', ()=> {
 			const landingPage = new LandingPage();
 			landingPage.forceDeleteUser(admin.email,admin.username,admin.password);
 			// https://glebbahmutov.com/blog/keep-passwords-secret-in-e2e-tests/
 			landingPage.register(admin,true);
-			landingPage.getHeaderUsername().should('be.visible').and('contain',admin.username);
-			cy.getCookies()
-				.should('have.length', 1)
-				.then((cookies) => {
-					expect(cookies[0]).to.have.property('name', 'session_id');
-					expect(cookies[0]).to.have.property('domain','localhost');
-					expect(cookies[0]).to.have.property('httpOnly');
-					expect(cookies[0]).to.have.property('path');
-					expect(cookies[0]).to.have.property('secure',false);
-				})
+			testCommon(landingPage,admin);
 		});
 
     it('Should register User', ()=> {
 			const landingPage = new LandingPage();
 			landingPage.forceDeleteUser(user.email,user.username,user.password);
 			landingPage.register(user,false);
-			landingPage.getHeaderUsername().should('be.visible').and('contain',user.username);
+			testCommon(landingPage,user);
     });
   });
 
@@ -46,14 +52,14 @@ describe('Authentication Test', () => {
     it('Should login as Admin', ()=> {
 				const landingPage = new LandingPage();
 				landingPage.login(admin);
-				landingPage.getHeaderUsername().should('be.visible').and('contain',admin.username);
+				testCommon(landingPage,admin);
 				landingPage.forceLogout();
-    });
+		});
 
     it('Should login as User', ()=> {
 				const landingPage = new LandingPage();
 				landingPage.login(user);
-				landingPage.getHeaderUsername().should('be.visible').and('contain',user.username);
+				testCommon(landingPage,user);
 				landingPage.forceLogout();
     });
   });
