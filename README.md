@@ -5,8 +5,11 @@
     <a href=""><img src="https://github.com/paolocattani/calcetto/workflows/CodeQL/badge.svg" alt="CodeQL"></a>
 </p>
 <p align="center">
+    <img alt="Libraries.io dependency status for GitHub repo" src="https://img.shields.io/librariesio/github/paolocattani/calcetto">
+    <!--
     <a href="https://david-dm.org/paolocattani/calcetto"><img src="https://david-dm.org/paolocattani/calcetto.svg" alt="Dependency Status"></a>
     <a href="https://david-dm.org/paolocattani/calcetto/?type=dev"><img src="https://david-dm.org/paolocattani/calcetto/dev-status.svg" alt="devDependency Status"></a>
+    -->
 </p>
 <p align="center">
     <a href="https://dashboard.cypress.io/projects/sxebxi/analytics/runs-over-time"><img src="https://img.shields.io/endpoint?url=https://dashboard.cypress.io/badge/detailed/sxebxi/develop&style=flat&logo=cypress" alt="Integration"></a>
