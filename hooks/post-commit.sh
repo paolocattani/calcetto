@@ -30,6 +30,7 @@ if [[ $BRANCH_NAME != "master" ]] && [[ $SEARCH_RESULT = 1 ]]; then
 			echo "Tag $version already exists.."
 		else
 			echo '--> Creating new tag...'
+			# https://github.com/desktop/desktop/issues/11121
 			git tag -a "v$version" HEAD -m "v$version"
 		fi
 
