@@ -30,7 +30,7 @@ if [[ $BRANCH_NAME != "master" ]] && [[ $SEARCH_RESULT = 1 ]]; then
 			echo "Tag $version already exists.."
 		else
 			echo '--> Creating new tag...'
-			git tag -a "v$version" HEAD -m "v$version"
+			git tag -a "v$version" -m "v$version"
 		fi
 
     echo "End : $(date +'%Y.%m.%d - %H:%M:%S')"
