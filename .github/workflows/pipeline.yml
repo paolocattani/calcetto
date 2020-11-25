@@ -164,9 +164,9 @@ jobs:
         with:
           name: cypress-videos
           path: cypress/videos
-      - name: Save Coverage
-        if: ${{ success() }}
       # TODO: e2e coverage
+      # - name: Save Coverage
+      # if: ${{ success() }}
       # if tests success save videos and coverage
       # - name: Merge coverage from different processes
       # if tests success save videos and coverage
