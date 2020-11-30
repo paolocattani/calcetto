@@ -205,7 +205,7 @@
     "redux-mock-store": "^1.5.4",
     "source-map-explorer": "^2.5.0",
     "start-server-and-test": "^1.11.5",
-    "ts-jest": "^26.4.3",
+    "ts-jest": "^26.4.4",
     "ts-loader": "^8.0.11",
     "webpack": "^4.44.2"
   },
