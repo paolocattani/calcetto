@@ -83,9 +83,18 @@ export const storeWithState = (preloaded: RootState = initialState) =>
 
 export const persistor = persistStore(store);
 
+// expose store when run in Cypress
+// https://www.cypress.io/blog/2018/11/14/testing-redux-store/
+// FIXME:
+if ((<any> window).Cypress) {
+	(<any> window).store = store;
+}
+
 // Exec all sagas
 function* rootSagas() {
   yield all([...TournamentSagas, ...PlayersSagas, ...PairsSagas, ...SessionSagas, ...Stage2Sagas, ...Stage1Sagas]);
 }
 
 sagaMiddleware.run(rootSagas);
+
+

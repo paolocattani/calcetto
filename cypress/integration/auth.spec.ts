@@ -3,6 +3,7 @@
 
 
 import {LandingPage, RegistrationProps} from "../pages/landing.page";
+import { AuthAction } from '../../src/redux/actions/auth.action';
 
 const {users:{admin,user}} = require('../fixtures/auth.fixture.json')
 
@@ -15,7 +16,7 @@ describe('Authentication Test', () => {
 		//Cypress.Cookies.preserveOnce('session_id')
   });
 
-	function testCommon (landingPage:LandingPage,user:{username:string}){
+	function afterLogin (landingPage:LandingPage,user:{username:string}){
 		landingPage.getHeaderUsername().should('be.visible').and('contain',user.username);
 		cy.getCookies()
 			.should('have.length', 1)
@@ -26,25 +27,30 @@ describe('Authentication Test', () => {
 				expect(session_id).to.have.property('httpOnly');
 				expect(session_id).to.have.property('path');
 				expect(session_id).to.have.property('secure',false);
-			})
+			});
+
+		// https://www.cypress.io/blog/2018/11/14/testing-redux-store/
+		// Dispatch action   cy.window().its('store').invoke('dispatch', AuthAction.login.... )
+		cy.window().its('store').invoke('getState').toMatchSnapshot();
+
+
 	}
 
   describe('Registration process', function () {
-
 
 		it('Should register Admin', ()=> {
 			const landingPage = new LandingPage();
 			landingPage.forceDeleteUser(admin.email,admin.username,admin.password);
 			// https://glebbahmutov.com/blog/keep-passwords-secret-in-e2e-tests/
 			landingPage.register(admin,true);
-			testCommon(landingPage,admin);
+			afterLogin(landingPage,admin);
 		});
 
     it('Should register User', ()=> {
 			const landingPage = new LandingPage();
 			landingPage.forceDeleteUser(user.email,user.username,user.password);
 			landingPage.register(user,false);
-			testCommon(landingPage,user);
+			afterLogin(landingPage,user);
     });
   });
 
@@ -52,14 +58,14 @@ describe('Authentication Test', () => {
     it('Should login as Admin', ()=> {
 				const landingPage = new LandingPage();
 				landingPage.login(admin);
-				testCommon(landingPage,admin);
+				afterLogin(landingPage,admin);
 				landingPage.forceLogout();
 		});
 
     it('Should login as User', ()=> {
 				const landingPage = new LandingPage();
 				landingPage.login(user);
-				testCommon(landingPage,user);
+				afterLogin(landingPage,user);
 				landingPage.forceLogout();
     });
   });

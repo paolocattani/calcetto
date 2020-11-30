@@ -1,5 +1,6 @@
-/*
+
 // Types definitions
+/*
 declare global {
 	namespace Cypress {
 		type LoginProps = { username: string, password: string }
@@ -9,7 +10,8 @@ declare global {
 		}
 	}
 }
-
+*/
+/*
 // Functions
 export function loginWithUi({username, password}: Cypress.LoginProps) {
 	return cy.visit('/')

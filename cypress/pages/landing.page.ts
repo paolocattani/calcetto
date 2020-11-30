@@ -1,4 +1,5 @@
 import {AbstractPage} from "./abstract.page";
+import {imageSnapshotConfig} from "../support/common";
 
 // https://glebbahmutov.com/blog/open-source-visual-testing-of-components/
 export type LoginProps = { username: string, password: string }
@@ -28,26 +29,33 @@ export class LandingPage extends AbstractPage{
 		});
 	}
 
-	forceDeleteUser(email:string,username:string,password:string){
+	forceDeleteUser(email:string,username:string,password:string) {
 		return cy.request({
 			method: 'DELETE',
 			url: 'http://localhost:5001/api/v2/auth/test/delete',
 			failOnStatusCode: false,
-			headers:{ 'Content-Type': 'application/json' },
-			body:{email,username,password,secret:Cypress.env('secret')}
+			headers: {'Content-Type': 'application/json'},
+			body: {email, username, password, secret: Cypress.env('secret')}
 		});
 	}
 
+
 	login({username, password}: LoginProps) {
-		return cy.visit('/')
-			.get('#username').should('be.visible').type(username)
+		cy.visit('/')
+			.get('#swapButton').should('be.visible')
+			.get('[data-cy=auth-form]').should('be.visible')
+			.toMatchImageSnapshot( imageSnapshotConfig('Login'));
+		return cy.get('#username').should('be.visible').type(username)
 			.get('#password').should('be.visible').type(password)
 			.get('#loginButton').should('be.visible').click();
 	}
 
 	register(user:RegistrationProps,isAdmin: boolean){
-		return cy.visit('/')
+		cy.visit('/')
 			.get('#swapButton').should('be.visible').click()
+			.get('[data-cy=auth-form]').should('be.visible')
+			.toMatchImageSnapshot( imageSnapshotConfig(isAdmin ? 'registration_Admin':'registration_User'));
+		return cy
 			.get('#username').should('be.visible').type(user.username)
 			.get('#name').should('be.visible').type(isAdmin ? `[A]${user.name}` : user.name)
 			.get('#surname').should('be.visible').type(user.surname)
@@ -60,7 +68,7 @@ export class LandingPage extends AbstractPage{
 			.get('#phone').should('be.visible').type(user.phone)
 			.get('#registerButton').should('be.visible').click();
 	}
-	
+
 	// Fields
 	getHeaderUsername(){
 		return cy.get('[data-cy=header-username]');

@@ -128,6 +128,7 @@ jobs:
         with:
           name: build-14.x
       # e2e
+      # https://medium.com/swlh/publish-your-cypress-test-report-with-github-actions-47248788713a
       - name: e2e
         uses: cypress-io/github-action@v2
         with:

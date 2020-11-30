@@ -98,8 +98,6 @@ T
 $src/@common/typings/environment.d.ts,8\2\8214d0b38f761ece6f6a7eea3edbbfea65a6a1a6
 >
 .gitattributes,2\4\24139dae656713ba861751fb2c2ac38839349a7a
-D
-.nyc_output/out.json,3\6\36be1242854418f87140fd46320db2683d66afab
 M
 cypress/pages/landing.page.ts,1\2\12598cdacb840214a270b8e8ce5bd1240015499c
 H
@@ -108,3 +106,29 @@ H
 cypress/support/index.ts,a\1\a12ebc51a3d36e4cfcbc2a401ba038c3ce89f76e
 J
 server/controller/index.ts,1\6\160a59ced61abbc1db359e81e61a5bb1427c7523
+W
+'cypress-coverage/lcov-report/index.html,6\f\6f2d93d3a528e235b4cf5f4712c0f3027ce7ef23
+[
++cypress-coverage/lcov-report/src/index.html,c\c\ccfe051a4181fe9181fc3f5a241d30840394027e
+M
+.github/workflows/publish.yml,4\6\4639989a2b9ca33671669f3e377b9d0308553f80
+L
+src/components/App/Entry.tsx,b\7\b7213c822ff41816a2a40dc8137b5660f7679554
+Q
+!cypress/plugins/webpack.config.js,2\c\2c070310d400d94442789f097a81b6382b794d5e
+E
+cypress/tsconfig.json,5\a\5a73b6916d3e06a12a6310cf88e435b669bf642a
+=
+tsconfig.json,6\1\61ebb9fd6e8cf9082658121d5d81e297791dacd0
+P
+ src/@common/typings/globals.d.ts,8\7\87232e72fb6a3837776879166a7ab8f8bb52e3bd
+P
+ src/redux/actions/auth.action.ts,e\8\e87dbf93ea3bdcd6ec738c3e7460b0171d7fabec
+B
+src/redux/store.ts,6\6\6687bbd9e0c8541a6b7e657278fc7e91e52f9a25
+L
+cypress/support/typings.d.ts,e\5\e5b7ac017e33e684a620a0bb16831aa3b658498b
+c
+3cypress/integration/__snapshots__/auth.spec.ts.snap,7\2\7294ea3e7b4e0d00d200f687baf8a6c2a576eec7
+I
+cypress/support/common.ts,7\6\7655437d133a49bcdb3fbaa59d67f3c1b42b91d9

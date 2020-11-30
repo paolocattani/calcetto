@@ -123,9 +123,13 @@
     "reporter": [
       "text",
       "json",
-      "lcov"
+      "lcov",
+      "html"
     ],
-    "exclude": "src/serviceWorker.js"
+    "exclude": [
+      "src/serviceWorker.ts",
+      "/build"
+    ]
   },
   "browserslist": {
     "production": [
@@ -182,6 +186,7 @@
     "cross-env": "^7.0.2",
     "cypress": "^6.0.0",
     "cypress-intellij-reporter": "0.0.5",
+    "cypress-plugin-snapshots": "^1.4.4",
     "cypress-skip-and-only-ui": "^1.2.10",
     "cypress-watch-and-reload": "^1.2.18",
     "eslint": "^7.14.0",

@@ -21,7 +21,7 @@ const AuthWrapper: React.FC = (): JSX.Element => {
 
   return (
     <Col md={{ span: '6', offset: '3' }} sm="12">
-      <Card style={modalStyle} className="default-background">
+      <Card data-cy="auth-form" style={modalStyle} className="default-background">
         <Card.Header as="h2">{title}</Card.Header>
         <Card.Body>
           <Container>{body}</Container>

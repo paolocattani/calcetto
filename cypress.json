@@ -5,16 +5,25 @@
     "integrationFolder": "cypress/integration",
     "screenshotsFolder": "cypress/screenshots",
     "videosFolder": "cypress/videos",
+		"ignoreTestFiles": [
+			"**/*.snap",
+			"**/__snapshots__/*",
+			"**/__image_snapshots__/*"
+		],
 		"env": {
-			"secret":"O<o@cZqCJ-Qmu1-<C<e@R4m0n(nR&Sk",
-			"codeCoverage": {
-				"url": "http://localhost:5001/__coverage__"
-			}
+			"cypress-plugin-snapshots": {
+				"diffLines": 5,
+				"excludeFields": ["birthday"],
+				"prettier": true,
+				"updateSnapshots": false,
+				"backgroundBlend": "difference"
+			},
+			"secret":"O<o@cZqCJ-Qmu1-<C<e@R4m0n(nR&Sk"
 		},
     "cypress-watch-and-reload": {
        "watch": "src/*, server/* , cypress/*"
     },
-		"viewportWidth": 1280,
-		"viewportHeight": 768
+		"viewportWidth": 1920,
+		"viewportHeight": 1080
 
 }

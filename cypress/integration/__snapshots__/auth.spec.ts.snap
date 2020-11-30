@@ -1,0 +1,351 @@
+exports[`Authentication Test > Registration process > Should register Admin #0`] =
+{
+  "_persist": {
+    "rehydrated": true,
+    "version": -1
+  },
+  "authState": {
+    "isAdmin": true,
+    "isAuthenticated": true,
+    "isLoading": false,
+    "user": {
+      "birthday": "2020-11-30T17:46:15.319Z",
+      "email": "admin@gmail.com",
+      "id": 1,
+      "label": "Admin Admin",
+      "name": "Admin",
+      "phone": "3672948995",
+      "role": "Admin",
+      "surname": "Admin",
+      "username": "Admin"
+    }
+  },
+  "pairState": {
+    "isLoading": false,
+    "isSaving": false
+  },
+  "playerState": {
+    "isLoading": false,
+    "isSaving": false,
+    "playersList": []
+  },
+  "stage1State": {
+    "isLoading": false,
+    "needRefresh": false,
+    "selectedPairs": [
+      {
+        "alias": "-",
+        "id": null,
+        "paid1": false,
+        "paid2": false,
+        "placement": 0,
+        "player1": {
+          "alias": "",
+          "editable": false,
+          "email": "",
+          "id": null,
+          "label": "",
+          "match_played": 0,
+          "match_won": 0,
+          "name": "",
+          "phone": "",
+          "role": "Portiere",
+          "rowNumber": 0,
+          "surname": "",
+          "total_score": 0
+        },
+        "player2": {
+          "alias": "",
+          "editable": false,
+          "email": "",
+          "id": null,
+          "label": "",
+          "match_played": 0,
+          "match_won": 0,
+          "name": "",
+          "phone": "",
+          "role": "Portiere",
+          "rowNumber": 0,
+          "surname": "",
+          "total_score": 0
+        },
+        "rowNumber": 0,
+        "stage1Name": "",
+        "tournamentId": 0
+      }
+    ],
+    "stages": []
+  },
+  "stage2State": {
+    "isLoading": false
+  },
+  "tournamentState": {
+    "isLoading": true,
+    "tournament": null,
+    "tournamentsList": []
+  }
+};
+
+exports[`Authentication Test > Registration process > Should register User #0`] =
+{
+  "_persist": {
+    "rehydrated": true,
+    "version": -1
+  },
+  "authState": {
+    "isAdmin": false,
+    "isAuthenticated": true,
+    "isLoading": false,
+    "user": {
+      "birthday": "2020-11-30T17:46:22.097Z",
+      "email": "user@gmail.com",
+      "id": 2,
+      "label": "User User",
+      "name": "User",
+      "phone": "3672948006",
+      "role": "User",
+      "surname": "User",
+      "username": "User"
+    }
+  },
+  "pairState": {
+    "isLoading": false,
+    "isSaving": false
+  },
+  "playerState": {
+    "isLoading": false,
+    "isSaving": false,
+    "playersList": []
+  },
+  "stage1State": {
+    "isLoading": false,
+    "needRefresh": false,
+    "selectedPairs": [
+      {
+        "alias": "-",
+        "id": null,
+        "paid1": false,
+        "paid2": false,
+        "placement": 0,
+        "player1": {
+          "alias": "",
+          "editable": false,
+          "email": "",
+          "id": null,
+          "label": "",
+          "match_played": 0,
+          "match_won": 0,
+          "name": "",
+          "phone": "",
+          "role": "Portiere",
+          "rowNumber": 0,
+          "surname": "",
+          "total_score": 0
+        },
+        "player2": {
+          "alias": "",
+          "editable": false,
+          "email": "",
+          "id": null,
+          "label": "",
+          "match_played": 0,
+          "match_won": 0,
+          "name": "",
+          "phone": "",
+          "role": "Portiere",
+          "rowNumber": 0,
+          "surname": "",
+          "total_score": 0
+        },
+        "rowNumber": 0,
+        "stage1Name": "",
+        "tournamentId": 0
+      }
+    ],
+    "stages": []
+  },
+  "stage2State": {
+    "isLoading": false
+  },
+  "tournamentState": {
+    "isLoading": true,
+    "tournament": null,
+    "tournamentsList": []
+  }
+};
+
+exports[`Authentication Test > Login process > Should login as Admin #0`] =
+{
+  "_persist": {
+    "rehydrated": true,
+    "version": -1
+  },
+  "authState": {
+    "isAdmin": true,
+    "isAuthenticated": true,
+    "isLoading": false,
+    "user": {
+      "birthday": "2020-11-30T17:47:20.126Z",
+      "email": "admin@gmail.com",
+      "id": 3,
+      "label": "Admin Admin",
+      "name": "Admin",
+      "phone": "3672948995",
+      "role": "Admin",
+      "surname": "Admin",
+      "username": "Admin"
+    }
+  },
+  "pairState": {
+    "isLoading": false,
+    "isSaving": false
+  },
+  "playerState": {
+    "isLoading": false,
+    "isSaving": false,
+    "playersList": []
+  },
+  "stage1State": {
+    "isLoading": false,
+    "needRefresh": false,
+    "selectedPairs": [
+      {
+        "alias": "-",
+        "id": null,
+        "paid1": false,
+        "paid2": false,
+        "placement": 0,
+        "player1": {
+          "alias": "",
+          "editable": false,
+          "email": "",
+          "id": null,
+          "label": "",
+          "match_played": 0,
+          "match_won": 0,
+          "name": "",
+          "phone": "",
+          "role": "Portiere",
+          "rowNumber": 0,
+          "surname": "",
+          "total_score": 0
+        },
+        "player2": {
+          "alias": "",
+          "editable": false,
+          "email": "",
+          "id": null,
+          "label": "",
+          "match_played": 0,
+          "match_won": 0,
+          "name": "",
+          "phone": "",
+          "role": "Portiere",
+          "rowNumber": 0,
+          "surname": "",
+          "total_score": 0
+        },
+        "rowNumber": 0,
+        "stage1Name": "",
+        "tournamentId": 0
+      }
+    ],
+    "stages": []
+  },
+  "stage2State": {
+    "isLoading": false
+  },
+  "tournamentState": {
+    "isLoading": true,
+    "tournament": null,
+    "tournamentsList": []
+  }
+};
+
+exports[`Authentication Test > Login process > Should login as User #0`] =
+{
+  "_persist": {
+    "rehydrated": true,
+    "version": -1
+  },
+  "authState": {
+    "isAdmin": false,
+    "isAuthenticated": true,
+    "isLoading": false,
+    "user": {
+      "birthday": "2020-11-30T17:47:25.817Z",
+      "email": "user@gmail.com",
+      "id": 4,
+      "label": "User User",
+      "name": "User",
+      "phone": "3672948006",
+      "role": "User",
+      "surname": "User",
+      "username": "User"
+    }
+  },
+  "pairState": {
+    "isLoading": false,
+    "isSaving": false
+  },
+  "playerState": {
+    "isLoading": false,
+    "isSaving": false,
+    "playersList": []
+  },
+  "stage1State": {
+    "isLoading": false,
+    "needRefresh": false,
+    "selectedPairs": [
+      {
+        "alias": "-",
+        "id": null,
+        "paid1": false,
+        "paid2": false,
+        "placement": 0,
+        "player1": {
+          "alias": "",
+          "editable": false,
+          "email": "",
+          "id": null,
+          "label": "",
+          "match_played": 0,
+          "match_won": 0,
+          "name": "",
+          "phone": "",
+          "role": "Portiere",
+          "rowNumber": 0,
+          "surname": "",
+          "total_score": 0
+        },
+        "player2": {
+          "alias": "",
+          "editable": false,
+          "email": "",
+          "id": null,
+          "label": "",
+          "match_played": 0,
+          "match_won": 0,
+          "name": "",
+          "phone": "",
+          "role": "Portiere",
+          "rowNumber": 0,
+          "surname": "",
+          "total_score": 0
+        },
+        "rowNumber": 0,
+        "stage1Name": "",
+        "tournamentId": 0
+      }
+    ],
+    "stages": []
+  },
+  "stage2State": {
+    "isLoading": false
+  },
+  "tournamentState": {
+    "isLoading": true,
+    "tournament": null,
+    "tournamentsList": []
+  }
+};
