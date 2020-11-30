@@ -194,7 +194,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-sonarjs": "^0.5.0",
-    "eslint-plugin-testing-library": "^3.10.0",
+    "eslint-plugin-testing-library": "^3.10.1",
     "install": "^0.13.0",
     "istanbul-lib-coverage": "^3.0.0",
     "jest-environment-jsdom-sixteen": "^1.0.3",
