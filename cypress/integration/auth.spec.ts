@@ -4,8 +4,14 @@
 
 import {LandingPage, RegistrationProps} from "../pages/landing.page";
 import { AuthAction } from '../../src/redux/actions/auth.action';
+import {UserRole} from "../../src/@common/dto";
 
-const {users:{admin,user}} = require('../fixtures/auth.fixture.json')
+const { users } = require('../fixtures/auth.fixture.json')
+const user:RegistrationProps = users.user;
+const admin:RegistrationProps = users.admin;
+
+// https://www.cypress.io/blog/2018/11/14/testing-redux-store/
+// Dispatch action   cy.window().its('store').invoke('dispatch', AuthAction.login.... )
 
 describe('Authentication Test', () => {
 	before(() => {
@@ -16,8 +22,11 @@ describe('Authentication Test', () => {
 		//Cypress.Cookies.preserveOnce('session_id')
   });
 
-	function afterLogin (landingPage:LandingPage,user:{username:string}){
+	function afterLogin (landingPage:LandingPage,user:RegistrationProps,isAdmin:boolean){
+		// Header should show username
 		landingPage.getHeaderUsername().should('be.visible').and('contain',user.username);
+
+		// Test cookies
 		cy.getCookies()
 			.should('have.length', 1)
 			.then((cookies) => {
@@ -29,10 +38,23 @@ describe('Authentication Test', () => {
 				expect(session_id).to.have.property('secure',false);
 			});
 
-		// https://www.cypress.io/blog/2018/11/14/testing-redux-store/
-		// Dispatch action   cy.window().its('store').invoke('dispatch', AuthAction.login.... )
-		cy.window().its('store').invoke('getState').toMatchSnapshot();
+		// Test store
+		cy.window().its('store').invoke('getState').its('authState').then( authState => {
+				// Authentication props
+				expect(authState).to.have.property('isAdmin', isAdmin);
+				expect(authState).to.have.property('isAuthenticated', true);
+				expect(authState).to.have.property('isLoading', false);
 
+				// User prop
+				const { userState } = authState;
+				expect(userState).to.have.property('username',user.username);
+				expect(userState).to.have.property('name',user.name);
+				expect(userState).to.have.property('surname',user.surname);
+				expect(userState).to.have.property('email',user.email);
+				expect(userState).to.have.property('phone',user.phone);
+				expect(userState).to.have.property('role', isAdmin ? UserRole.Admin : UserRole.User);
+				expect(userState).to.have.property('birthday');
+		});
 
 	}
 
@@ -43,14 +65,14 @@ describe('Authentication Test', () => {
 			landingPage.forceDeleteUser(admin.email,admin.username,admin.password);
 			// https://glebbahmutov.com/blog/keep-passwords-secret-in-e2e-tests/
 			landingPage.register(admin,true);
-			afterLogin(landingPage,admin);
+			afterLogin(landingPage,admin, true);
 		});
 
     it('Should register User', ()=> {
 			const landingPage = new LandingPage();
 			landingPage.forceDeleteUser(user.email,user.username,user.password);
 			landingPage.register(user,false);
-			afterLogin(landingPage,user);
+			afterLogin(landingPage,user, false);
     });
   });
 
@@ -58,14 +80,14 @@ describe('Authentication Test', () => {
     it('Should login as Admin', ()=> {
 				const landingPage = new LandingPage();
 				landingPage.login(admin);
-				afterLogin(landingPage,admin);
+				afterLogin(landingPage,admin, true);
 				landingPage.forceLogout();
 		});
 
     it('Should login as User', ()=> {
 				const landingPage = new LandingPage();
 				landingPage.login(user);
-				afterLogin(landingPage,user);
+				afterLogin(landingPage,user, false);
 				landingPage.forceLogout();
     });
   });
