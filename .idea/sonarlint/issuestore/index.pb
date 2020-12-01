@@ -138,3 +138,39 @@ T
 $server/controller/pair.controller.ts,7\5\75437df1cb3cfa87831770f468f01a9ee9feb865
 A
 package-lock.json,f\a\fa288d1472d29beccb489a676f68739ad365fc47
+N
+public/locales/en-US/auth.json,3\6\3627bbce08ba669d9a75cd36788c062497e1b616
+P
+ public/locales/en-US/player.json,0\5\05fe6e2b45ee30d5c0416cd74b3252aeb8fa85d3
+O
+src/components/Auth/Wrapper.tsx,5\e\5e198f2673a66f65a817071f9d6a0e66be4709ec
+P
+ public/locales/en-US/common.json,9\a\9a978575d041e8f21fafcf3d64f2795d632c289b
+N
+public/locales/en-US/pair.json,9\8\98480969e31c67d16121f78b0f8ffef5249ef594
+P
+ public/locales/it-IT/common.json,a\c\ac1c012ed54e76ded61b6b5bafc805ddf44d7683
+T
+$server/controller/common.response.ts,6\0\6014daaf3cbabd87010a4e65fd1cb190939931e8
+N
+src/redux/sagas/player.saga.ts,1\e\1e723a62622c884c2893336eb5dfb6f338bec5d7
+R
+"src/redux/sagas/tournament.saga.ts,5\7\577ab2e03f0403339ca80b4d81342751a44a095c
+P
+ src/components/Auth/Register.tsx,f\4\f4048dad91ec9e34dda835597655593333ddaf5f
+M
+src/components/Pair/table.tsx,8\7\876c2bb1d7094eb08b14bc98f8b94b1368c17206
+@
+src/i18n/i18n.ts,e\5\e59c86fc7900edce0fb2ae93d8b5bd80298c5a22
+S
+#src/@common/models/common.models.ts,2\d\2dfcbeb66998a2d75efb22a36344df8297438046
+P
+ src/@common/utils/fetch.utils.ts,6\0\60e4445f0f3fe75c5effb1b87e1cfb6b5abb8d51
+H
+src/redux/sagas/utils.ts,a\7\a709c05dbb397f6da198f783944dcbb24e0e9165
+N
+public/locales/it-IT/auth.json,1\f\1f4398b0a777608e0dd1b114b26043c5688e5acb
+L
+src/redux/sagas/auth.saga.ts,7\1\7169a830ef5bc4338dae75ac66e24882b8f8e547
+T
+$src/redux/services/stage1.service.ts,2\a\2a0b6cf7767eda2e22b29dc83b33c8a7b1b35b58
