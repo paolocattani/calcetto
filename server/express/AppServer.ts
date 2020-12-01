@@ -19,7 +19,7 @@ const defaultName: string = 'ApplicationServer Calcetto';
 const defaultPort: number = isProductionMode() ? Number(process.env.PORT) : Number(process.env.SERVER_PORT);
 const defaultCPUs: number = Number(process.env.SERVER_WORKERS);
 
-// FIXME:
+/* FIXME:
 const applicationCorsOption: CorsOptions = {
   origin: (origin, callback) =>
     [
@@ -30,7 +30,7 @@ const applicationCorsOption: CorsOptions = {
       : callback(new Error(`Not allowed by CORS : ${origin}`)),
   credentials: true,
 };
-
+*/
 export default class AppServer extends AbstractServer {
   connection: Sequelize | null;
   constructor(applicationName = defaultName, applicationPort = defaultPort, applicationCPUs = defaultCPUs) {
@@ -39,7 +39,7 @@ export default class AppServer extends AbstractServer {
   }
 
   public async connect(): Promise<Sequelize> {
-    const force = process.env.SERVER_FORCE && process.env.SERVER_FORCE.toLowerCase() === 'true' ? true : false;
+    const force = process.env.SERVER_FORCE && process.env.SERVER_FORCE.toLowerCase() === 'true';
     logger.info(
       (force ? chalk.redBright.bold(' [ FORCE ] ') : chalk.greenBright.bold(' [ NORMAL ] ')).concat(
         chalk.cyan.bold('Starting database synchronization...')
@@ -54,7 +54,8 @@ export default class AppServer extends AbstractServer {
       // Always start from clean db on test
     } else if (isTestMode()) {
     		this.connection = process.env.TEST_SCHEMA ?
-						await createSchemaAndSync(process.env.TEST_SCHEMA, { force: true }) :
+						await createSchemaAndSync(process.env.TEST_SCHEMA,
+							{ force: true ,restartIdentity:true}) :
 						await sync({ force: true });
     } else {
       this.connection = await authenticate();

@@ -15,9 +15,13 @@ import config, { SequelizeConfiguration } from './config/config';
 // Other
 import util from 'util';
 import chalk from 'chalk';
-import { Environment } from '../../src/@common/models/common.models';
+import { Environment } from '../../src/@common/models';
 
 let connection: Sequelize;
+
+interface SequelizeSyncOptions extends SyncOptions{
+	restartIdentity?:boolean
+}
 async function loadModels(): Promise<Sequelize> {
   // FIXME: should import types from @commmon/typings
   const envConfig: SequelizeConfiguration =
@@ -39,7 +43,7 @@ async function loadModels(): Promise<Sequelize> {
   return new Sequelize(uri, connectionOptions);
 }
 
-export async function authenticate(options?: SyncOptions): Promise<Sequelize> {
+export async function authenticate(options?: SequelizeSyncOptions): Promise<Sequelize> {
   if (connection) {
     logger.info(chalk.cyan.bold('Connection found! Database connected!'));
     return connection;
@@ -50,7 +54,7 @@ export async function authenticate(options?: SyncOptions): Promise<Sequelize> {
   return sequelizeConnection;
 }
 
-export async function sync(options?: SyncOptions): Promise<Sequelize> {
+export async function sync(options?: SequelizeSyncOptions): Promise<Sequelize> {
   if (connection) return connection;
   const sequelizeConnection = await loadModels();
   connection = await sequelizeConnection.sync(options);
@@ -58,12 +62,12 @@ export async function sync(options?: SyncOptions): Promise<Sequelize> {
   return connection;
 }
 
-export async function createSchemaAndSync(schema:string, options?: SyncOptions): Promise<Sequelize> {
+export async function createSchemaAndSync(schema:string, options?: SequelizeSyncOptions): Promise<Sequelize> {
 	if (connection) return connection;
 	const sequelizeConnection = await loadModels();
 	await sequelizeConnection.createSchema(schema, {});
-	connection = await sequelizeConnection.sync(options);
-	logger.info(chalk.cyan.bold('Database synchronization complete!'));
+	connection = await sequelizeConnection.sync({...options, schema});
+	logger.info(chalk.cyan.bold('Database synchronizatio1n complete!'));
 	return connection;
 }
 
