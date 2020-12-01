@@ -132,3 +132,7 @@ c
 3cypress/integration/__snapshots__/auth.spec.ts.snap,7\2\7294ea3e7b4e0d00d200f687baf8a6c2a576eec7
 I
 cypress/support/common.ts,7\6\7655437d133a49bcdb3fbaa59d67f3c1b42b91d9
+M
+server/database/pair.model.ts,3\9\39c4dba4da8c4842aa54e7c648caf96ad70a4136
+T
+$server/controller/pair.controller.ts,7\5\75437df1cb3cfa87831770f468f01a9ee9feb865
