@@ -38,7 +38,7 @@ import { HTTPStatusCode } from '../../../src/@common/models/HttpStatusCode';
 const router = Router();
 
 const wrongCredentials = (res: Response) =>
-  failure(res, 'Credenziali errate', 'Wrong credentials', HTTPStatusCode.Unauthorized);
+  failure(res, 'auth:server.error.wrong_credential', 'Wrong credentials', HTTPStatusCode.Unauthorized);
 
 router.use('/', (req: Request, res: Response, next: NextFunction) =>
   controllerLogger(req, next, 'Auth Controller', '/api/v2/auth')

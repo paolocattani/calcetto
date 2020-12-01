@@ -1,6 +1,7 @@
 import { PlayerRole } from '../dto';
 import { RootState } from '.';
 import { HTTPStatusCode } from './HttpStatusCode';
+import {TOptions} from "i18next";
 
 export enum Environment {
   development = 'development',
@@ -8,9 +9,13 @@ export enum Environment {
   production = 'production',
 }
 
+export type I18nLabel = {
+	message:string;
+	options?:TOptions<{[key: string]: any }> | string;
+}
 export interface GenericReponse {
   code: HTTPStatusCode;
-  message: string;
+  message:string,
   userMessage: UserMessage;
 }
 
@@ -19,9 +24,11 @@ export enum UserMessageType {
   Warning = 'warning',
   Danger = 'danger',
 }
+
 export interface UserMessage {
   type: UserMessageType;
   message: string;
+	label?:I18nLabel;
 }
 
 export type OmitHistory<T> = Omit<T, 'history'>;

@@ -1,7 +1,11 @@
-import { GenericReponse, UnexpectedServerError, UserMessageType } from '../../@common/models/common.models';
+import {GenericReponse, UnexpectedServerError, UserMessage, UserMessageType} from '../../@common/models/common.models';
 import { HTTPStatusCode } from '../../@common/models/HttpStatusCode';
 import { toast } from 'react-toastify';
 import { put, call } from 'redux-saga/effects';
+import i18n from '../../i18n/i18n';
+
+export const getMessage = (message:UserMessage):string =>
+	message.label ? i18n.t(message.label.message,message.label.options) : message.message;
 
 // FIXME: remove this any type
 export function* entityLifeCycle<Req, Res extends GenericReponse>(
@@ -14,16 +18,19 @@ export function* entityLifeCycle<Req, Res extends GenericReponse>(
   try {
     // Call method with payload
     const response: Res = yield call(method, payload);
-    if (response.userMessage) {
-      switch (response.userMessage.message) {
+    const { userMessage: message } = response;
+
+    if (message) {
+    	const messageText = message.label ? i18n.t(message.label.message,message.label.options) : message.message;
+      switch (message.type) {
         case UserMessageType.Success:
-          toast.success(response.userMessage.message);
+          toast.success(messageText);
           break;
         case UserMessageType.Warning:
-          toast.warning(response.userMessage.message);
+          toast.warning(messageText);
           break;
         case UserMessageType.Danger:
-          toast.error(response.userMessage.message);
+          toast.error(messageText);
           break;
       }
     }

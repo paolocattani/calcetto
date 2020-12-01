@@ -8,3 +8,7 @@ export const imageSnapshotConfig = (name:string,percentage?:number) => ({
 	name,            // Naming resulting image file with a custom name rather than concatenating test titles
 	separator: "@",  // Naming resulting image file with a custom separator rather than using the default ` #`
 });
+
+
+
+const dispatch = (action:any) => cy.window().its('store').invoke('dispatch', action)

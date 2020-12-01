@@ -18,6 +18,8 @@ import { persistor } from '../store';
 import { HTTPStatusCode } from '../../@common/models/HttpStatusCode';
 import { TournamentAction } from '../actions';
 import { UserMessageType } from '../../@common/models/common.models';
+import { getMessage } from "./utils";
+import i18next from "i18next";
 
 function* checkAuthenticationSaga({
   payload: { history },
@@ -51,14 +53,18 @@ function* watchSessionSaga({
     while (true) {
       const message: Message = yield take(channel);
       if (message && message.status === SessionStatus.SESSION_EXPIRED) {
-        toast.error('La tua sessione è scaduta. Stai per essere reindirizzato alla login...');
+        toast.error(i18next.t('auth:expired_alert'));
         yield delay(3000);
         yield put(
           AuthAction.logout.success({
             user: undefined,
             code: HTTPStatusCode.Unauthorized,
             message: 'Unauthorized!',
-            userMessage: { message: 'Sessione scaduta...', type: UserMessageType.Danger },
+            userMessage: {
+            	type: UserMessageType.Danger,
+							message: 'Sessione scaduta...',
+							label:{ message: "auth:expired" }
+						},
           })
         );
         history.push('/login');
@@ -75,12 +81,13 @@ function* logoutSaga({
   payload: { history },
 }: ReturnType<typeof AuthAction.logout.request>): Generator<StrictEffect, void, any> {
   const logoutReponse: AuthenticationResponse = yield call(logout);
+	const message = getMessage(logoutReponse.userMessage);
   if (logoutReponse.code === HTTPStatusCode.Success) {
     yield put(AuthAction.logout.success(logoutReponse));
     history.push('/');
-    toast.success(logoutReponse.userMessage.message);
+    toast.success(message);
   } else {
-    toast.error(logoutReponse.userMessage.message);
+    toast.error(message);
     yield put(AuthAction.logout.failure(logoutReponse));
   }
   persistor.purge();
@@ -91,6 +98,7 @@ function* logoutSaga({
       userMessage: {
         type: UserMessageType.Success,
         message: 'Logout ',
+				label:{ message: "auth:logout" }
       },
     })
   );
@@ -102,6 +110,7 @@ function* loginSaga({
 }: ReturnType<typeof AuthAction.login.request>): Generator<StrictEffect, void, any> {
   // Validate Login
   const loginReponse: AuthenticationResponse = yield call(login, loginRequest);
+	const message = getMessage(loginReponse.userMessage);
   if (loginReponse.code === HTTPStatusCode.Success) {
     yield put(AuthAction.login.success(loginReponse));
     // Session control
@@ -109,9 +118,9 @@ function* loginSaga({
     // Fetch tournament
     yield put(TournamentAction.fetch.request({}));
     // history.push('/');
-    toast.success(loginReponse.userMessage.message);
+    toast.success(message);
   } else {
-    toast.error(loginReponse.userMessage.message);
+    toast.error(message);
     yield put(AuthAction.login.failure(loginReponse));
   }
 }
@@ -122,6 +131,7 @@ function* registrationSaga({
 }: ReturnType<typeof AuthAction.registration.request>): Generator<StrictEffect, void, any> {
   // Validate Registration
   const registrationReponse: RegistrationResponse = yield call(registration, registrationRequest);
+	const message = getMessage(registrationReponse.userMessage);
   if (registrationReponse.code === HTTPStatusCode.Success) {
     yield put(AuthAction.registration.success(registrationReponse));
     // Session control
@@ -129,7 +139,7 @@ function* registrationSaga({
     // Fetch tournament
     yield put(TournamentAction.fetch.request({}));
     history.push('/');
-    toast.success(registrationReponse.userMessage.message);
+    toast.success(message);
   } else {
     if (registrationReponse.errors) {
       registrationReponse.errors.forEach((e) => toast.error(e));
@@ -144,12 +154,13 @@ function* updateUserSaga({
 }: ReturnType<typeof AuthAction.update.request>): Generator<StrictEffect, void, any> {
   // Validate Login
   const updateReponse: AuthenticationResponse = yield call(updateUser, updateUserRequest);
+	const message = getMessage(updateReponse.userMessage);
   if (updateReponse.code === HTTPStatusCode.Success) {
     yield put(AuthAction.update.success(updateReponse));
     history.push('/');
-    toast.success(updateReponse.userMessage.message);
+    toast.success(message);
   } else {
-    toast.error(updateReponse.userMessage.message);
+    toast.error(message);
     yield put(AuthAction.update.failure(updateReponse));
   }
 }
@@ -160,12 +171,13 @@ function* deleteUserSaga({
 }: ReturnType<typeof AuthAction.delete.request>): Generator<StrictEffect, void, any> {
   // Validate Login
   const deleteReponse: AuthenticationResponse = yield call(deleteUser, deleteUserRequest);
+	const message = getMessage(deleteReponse.userMessage);
   if (deleteReponse.code === HTTPStatusCode.Success) {
     yield put(AuthAction.delete.success(deleteReponse));
     yield put(AuthAction.logout.request({ history }));
-    toast.success(deleteReponse.userMessage.message);
+    toast.success(message);
   } else {
-    toast.error(deleteReponse.userMessage.message);
+    toast.error(message);
     yield put(AuthAction.delete.failure(deleteReponse));
   }
 }
