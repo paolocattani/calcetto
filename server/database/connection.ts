@@ -65,6 +65,7 @@ export async function sync(options?: SequelizeSyncOptions): Promise<Sequelize> {
 export async function createSchemaAndSync(schema:string, options?: SequelizeSyncOptions): Promise<Sequelize> {
 	if (connection) return connection;
 	const sequelizeConnection = await loadModels();
+	await sequelizeConnection.dropSchema(schema, {});
 	await sequelizeConnection.createSchema(schema, {});
 	connection = await sequelizeConnection.sync({...options, schema});
 	logger.info(chalk.cyan.bold('Database synchronizatio1n complete!'));

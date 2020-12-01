@@ -54,8 +54,7 @@ export default class AppServer extends AbstractServer {
       // Always start from clean db on test
     } else if (isTestMode()) {
     		this.connection = process.env.TEST_SCHEMA ?
-						await createSchemaAndSync(process.env.TEST_SCHEMA,
-							{ force: true ,restartIdentity:true}) :
+						await createSchemaAndSync(process.env.TEST_SCHEMA, { force: true ,restartIdentity:true}) :
 						await sync({ force: true });
     } else {
       this.connection = await authenticate();
