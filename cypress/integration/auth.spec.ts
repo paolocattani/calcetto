@@ -53,6 +53,7 @@ describe('Authentication Test', () => {
 				expect(userState).to.have.property('email',user.email);
 				expect(userState).to.have.property('phone',user.phone);
 				expect(userState).to.have.property('role', isAdmin ? UserRole.Admin : UserRole.User);
+				// FIXME: compare only dates, without time
 				expect(userState).to.have.property('birthday');
 		});
 
