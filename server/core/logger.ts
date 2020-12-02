@@ -51,8 +51,8 @@ if (isProductionMode()) {
   logger.level = 'debug';
   dbLogger.level = 'debug';
 } else if (isTestMode()) {
-  logger.level = 'warn';
-  dbLogger.level = 'warn';
+  logger.level = 'debug';
+  dbLogger.level = 'debug';
 }
 
 export const logProcess = (method: string, value: string): void => logger.info(`[${chalk.yellow(method)}].${value}`);

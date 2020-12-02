@@ -174,3 +174,26 @@ L
 src/redux/sagas/auth.saga.ts,7\1\7169a830ef5bc4338dae75ac66e24882b8f8e547
 T
 $src/redux/services/stage1.service.ts,2\a\2a0b6cf7767eda2e22b29dc83b33c8a7b1b35b58
+N
+public/locales/it-IT/pair.json,d\5\d55ebeb4e75346e6e5d2409addad02aae247e869
+P
+ public/locales/it-IT/player.json,3\6\36dfbee308ff2d0339d4de2511fe1cfb856b7b5f
+P
+ public/locales/it-IT/stage1.json,e\5\e5cc7c97184baf073fbe66cb8085443863c44b5c
+P
+ public/locales/en-US/stage1.json,3\d\3d0b46bdeef885080a03b610cdb37ae8bb44e2d7
+T
+$public/locales/en-US/tournament.json,1\b\1b2677526c619a227fdc3fec33c81e70a65facbc
+T
+$public/locales/it-IT/tournament.json,7\3\73d018e842690f2c9ee423fbc5e46d53181989b0
+:
+
+.nycrc.yml,3\a\3a973077c8520c06e1cc584fc1d56b3ebc6a83e5
+A
+server/server.log,0\0\0053a29f7234e160b6de5c254aaf9b4418e57dc6
+E
+server/core/logger.ts,7\c\7c2288560ab7c6babc37adf021fefd5052bbe014
+N
+server/manager/auth.manager.ts,f\9\f960f798caa9dc958e7c4ffbff5bac64ea79777a
+M
+server/database/user.model.ts,4\4\44fd98c108e7593b0e783419df6f2fcbf94661f5
