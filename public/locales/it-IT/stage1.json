@@ -1,3 +1,5 @@
 {
-    "reset":"Reset gironi"
+    "reset":"Reset gironi",
+    "position_done":"Posizionamento aggiornato...",
+    "position_not_done":"Posizionamento non aggiornato..."
 }

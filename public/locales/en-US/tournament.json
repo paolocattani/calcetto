@@ -1,4 +1,9 @@
 {
+		"loaded_1":"Tournament loaded...",
+		"loaded_2":"Tournaments loaded...",
+		"saved":"Tournament saved...",
+		"deleted":"Tournament saved...",
+		"duplicated":"Tournament {{name}} already exists.!",
     "tournament":"Tournament",
     "select":"Select tournament",
     "new":"New tournament",
@@ -19,5 +24,4 @@
         "name":"Provide a tournament name",
         "duplicate":"Tournament {{name}} already exists"
     }
-
 }

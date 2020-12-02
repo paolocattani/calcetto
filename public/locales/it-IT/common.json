@@ -31,7 +31,11 @@
     "error":{
         "generic":"Errore, riprovare piu tardi..."
     },
-		"server": {
-			"unexpected": "Errore server non previsto!..",
-		}
+    "server": {
+        "missing": "Parametri mancanti",
+        "unexpected": "Errore server non previsto!..",
+        "not_found":"Oggetto non trovato",
+        "unauthorize":"Non autorizzato",
+        "updated":"Aggiornamento effettuato"
+    }
 }

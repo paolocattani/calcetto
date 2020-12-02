@@ -12,42 +12,42 @@ import { failure, success } from './common.response';
 
 const router = Router();
 router.use('/', (req: Request, res: Response, next: NextFunction) =>
-  controllerLogger(req, next, 'Stage1 Controller', '/api/v1/stage1')
+	controllerLogger(req, next, 'Stage1 Controller', '/api/v1/stage1')
 );
 
 // GET
 
 // PUT
 router.put(
-  '/update/placement',
-  withAuth,
-  withAdminRights,
-  asyncMiddleware(async (req: AppRequest, res: Response) => {
-    const { rows }: UpdatePlacementRequest = req.body;
-    const result = await updatePlacement(rows);
-    return result
-      ? success<UpdatePlacementResponse>(res, 'Posizionamento aggiornato...')
-      : failure<UpdatePlacementResponse>(res, 'Posizionamento non aggiornato...');
-  })
+	'/update/placement',
+	withAuth,
+	withAdminRights,
+	asyncMiddleware(async (req: AppRequest, res: Response) => {
+		const { rows }: UpdatePlacementRequest = req.body;
+		const result = await updatePlacement(rows);
+		return result
+			? success<UpdatePlacementResponse>(res, { label: 'stage1:position_done' })
+			: failure<UpdatePlacementResponse>(res, { label: 'stage1:position_not_done' });
+	})
 );
 
 /**
  * Aggiornamento record specifico
  */
 router.put(
-  '/update/cell',
-  withAuth,
-  withAdminRights,
-  asyncMiddleware(async (req: AppRequest, res: Response) => {
-    const { tId, tableName, pair1Id, pair2Id, score } = req.body;
-    try {
-      await updateCell(tId, tableName, pair1Id, pair2Id, score);
-      return res.status(200).json({ saved: true });
-    } catch (error) {
-      logger.error('/cell error', error);
-      return res.status(500).json({ error, saved: false });
-    }
-  })
+	'/update/cell',
+	withAuth,
+	withAdminRights,
+	asyncMiddleware(async (req: AppRequest, res: Response) => {
+		const { tId, tableName, pair1Id, pair2Id, score } = req.body;
+		try {
+			await updateCell(tId, tableName, pair1Id, pair2Id, score);
+			return res.status(200).json({ saved: true });
+		} catch (error) {
+			logger.error('/cell error', error);
+			return res.status(500).json({ error, saved: false });
+		}
+	})
 );
 
 // POST
@@ -60,32 +60,32 @@ router.put(
  *
  */
 router.post(
-  '/',
-  withAuth,
-  asyncMiddleware(async (req: AppRequest, res: Response) => {
-    const { rows, stageName } = req.body;
-    const { user } = req;
-    try {
-      const result = await generateStage1Rows(rows, stageName, user!);
-      // logger.info('STAGE1 RESULT : ', result);
-      return res.status(200).json(result);
-    } catch (error) {
-      logger.error('Error while update matrix  : ', error);
-      return res.status(500).json({ error });
-    }
-  })
+	'/',
+	withAuth,
+	asyncMiddleware(async (req: AppRequest, res: Response) => {
+		const { rows, stageName } = req.body;
+		const { user } = req;
+		try {
+			const result = await generateStage1Rows(rows, stageName, user!);
+			// logger.info('STAGE1 RESULT : ', result);
+			return res.status(200).json(result);
+		} catch (error) {
+			logger.error('Error while update matrix  : ', error);
+			return res.status(500).json({ error });
+		}
+	})
 );
 
 // DELETE
 router.delete(
-  '/',
-  withAuth,
-  withAdminRights,
-  asyncMiddleware(async (req: AppRequest, res: Response) => {
-    const { tId } = req.body;
-    await deleteStage1(tId);
-    return res.status(200).json({ saved: true });
-  })
+	'/',
+	withAuth,
+	withAdminRights,
+	asyncMiddleware(async (req: AppRequest, res: Response) => {
+		const { tId } = req.body;
+		await deleteStage1(tId);
+		return res.status(200).json({ saved: true });
+	})
 );
 
 export default router;

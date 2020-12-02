@@ -1,5 +1,11 @@
 {
-    "data":"No data found",
+	"loaded":"Player loaded...",
+	"updated":"Player updated...",
+	"saved":"Player created...",
+	"deleted_1":"Player deleted...",
+	"deleted_2":"Players deleted...",
+	"duplicated":"A player already exists with current data.",
+	"data":"No data found",
     "add":"Add player",
     "edit":"Edit player",
     "filter":"Clear filters",

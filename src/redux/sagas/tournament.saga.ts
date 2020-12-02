@@ -11,7 +11,7 @@ import { TournamentAction } from '../actions/tournament.action';
 import { HTTPStatusCode } from '../../@common/models/HttpStatusCode';
 import { toast } from 'react-toastify';
 import { UnexpectedServerError } from '../../@common/models/common.models';
-import { entityLifeCycle } from './utils';
+import { entityLifeCycle, getMessage } from './utils';
 
 // https://medium.com/swlh/asynchronous-with-redux-sagas-b43c9630f218
 function* getTournamentsSaga({
@@ -32,9 +32,9 @@ function* saveTournamentSaga(
     if (response.code === HTTPStatusCode.Success) {
       yield put(TournamentAction.save.success(response));
       action.payload.history.push('/tournament');
-      toast.success(response.userMessage.message);
+      toast.success(getMessage(response.userMessage));
     } else {
-      toast.error(response.userMessage.message);
+      toast.error(getMessage(response.userMessage));
       yield put(TournamentAction.save.failure(response));
     }
   } catch (err) {
