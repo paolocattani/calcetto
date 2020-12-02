@@ -39,7 +39,7 @@ import { HTTPStatusCode } from '../../../src/@common/models/HttpStatusCode';
 const router = Router();
 
 const wrongCredentials = (res: Response) =>
-	failure(res, { message: 'auth:server.error.wrong_credential' }, 'Wrong credentials', HTTPStatusCode.Unauthorized);
+	failure(res, { label: 'auth:server.error.wrong_credential' }, 'Wrong credentials', HTTPStatusCode.Unauthorized);
 
 router.use('/', (req: Request, res: Response, next: NextFunction) =>
 	controllerLogger(req, next, 'Auth Controller', '/api/v2/auth')
@@ -53,7 +53,7 @@ router.get(
 		return success(
 			res,
 			{
-				message: 'auth:server.error.wrong_credential',
+				label: 'auth:server.error.wrong_credential',
 				options: { username: req.user!.name },
 			},
 			additional
@@ -66,7 +66,7 @@ router.get(
 	withAuth,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		removeUserCookies(res);
-		return success(res, { message: 'auth:logout' });
+		return success(res, { label: 'auth:logout' });
 	})
 );
 
@@ -83,7 +83,7 @@ router.post(
 			if (errors.length !== 0) {
 				return failure(
 					res,
-					{ message: 'auth:error.generic' },
+					{ label: 'auth:error.generic' },
 					'Registration data is not valid',
 					HTTPStatusCode.BadRequest,
 					{ errors }
@@ -94,7 +94,7 @@ router.post(
 			if (user) {
 				return failure(
 					res,
-					{ message: 'auth:server.error.already_exists' },
+					{ label: 'auth:server.error.already_exists' },
 					'Email or Username alrealdy exists.',
 					HTTPStatusCode.BadRequest,
 					{
@@ -108,7 +108,7 @@ router.post(
 				logger.info('/register end ');
 				return success<AuthenticationResponse>(
 					res,
-					{ message: 'auth:welcome', options: { username: record.name } },
+					{ label: 'auth:welcome', options: { username: record.name } },
 					{ user: record }
 				);
 			} else {
@@ -138,7 +138,7 @@ router.put(
 			// TODO: aggiornare anche il giocare associato con i dati comuni
 			return success<AuthenticationResponse>(
 				res,
-				{ message: 'common:server.updated' },
+				{ label: 'common:server.updated' },
 				{ user: convertEntityToDTO(user) }
 			);
 		} catch (error) {
@@ -170,7 +170,7 @@ router.post(
 			addUserCookies(userDTO, res);
 			return success<AuthenticationResponse>(
 				res,
-				{ message: 'auth:welcome', options: { username: userDTO.name } },
+				{ label: 'auth:welcome', options: { username: userDTO.name } },
 				{ user: userDTO }
 			);
 		} catch (error) {
@@ -198,7 +198,7 @@ router.delete(
 			await deleteUser(user);
 			logger.info('/delete end ');
 			removeUserCookies(res);
-			return success<DeleteUserResponse>(res, { message: 'auth:server.deleted', options: { username: user.name } });
+			return success<DeleteUserResponse>(res, { label: 'auth:server.deleted', options: { username: user.name } });
 		} catch (error) {
 			return serverError('DELETE auth/delete error ! : ', error, res);
 		}
@@ -212,7 +212,7 @@ router.delete(
 		try {
 			logger.info('/test/delete start ');
 			if (process.env.NODE_ENV !== 'test' || secret !== process.env.SERVER_SECRET) {
-				return unauthorized(res, { message: 'common:server.unauthorize' });
+				return unauthorized(res, { label: 'common:server.unauthorize' });
 			}
 
 			const user = await findUserByEmailAndUsername(email, username);
@@ -226,7 +226,7 @@ router.delete(
 			await deleteUser(user);
 			logger.info('/test/delete end ');
 			removeUserCookies(res);
-			return success<DeleteUserResponse>(res, { message: 'auth:server.deleted', options: { username: user.name } });
+			return success<DeleteUserResponse>(res, { label: 'auth:server.deleted', options: { username: user.name } });
 		} catch (error) {
 			return serverError('DELETE auth/test/delete error ! : ', error, res);
 		}

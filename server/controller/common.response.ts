@@ -74,7 +74,7 @@ export const success = <T extends GenericReponse>(res: Response, label: I18nLabe
 
 // Entity Not Found
 export const entityNotFound = (res: Response) =>
-	failure(res, { message: 'common:server.not_found' }, 'Entity not found', HTTPStatusCode.NotFound);
+	failure(res, { label: 'common:server.not_found' }, 'Entity not found', HTTPStatusCode.NotFound);
 
 // Missing parameters / data
 export const missingParameters = <T extends GenericReponse>(res: Response, additionalInfo?: OmitGeneric<T>) =>
@@ -83,7 +83,7 @@ export const missingParameters = <T extends GenericReponse>(res: Response, addit
 		HTTPStatusCode.BadRequest,
 		'Missing parameters',
 		UserMessageType.Danger,
-		{ message: '', options: {} },
+		{ label: '' },
 		additionalInfo
 	);
 
@@ -94,7 +94,7 @@ export const unexpectedServerError = <T extends GenericReponse>(res: Response, a
 		HTTPStatusCode.InternalServerError,
 		'Unexpected Server Error',
 		UserMessageType.Danger,
-		{ message: 'common:server.missing' },
+		{ label: 'common:server.missing' },
 		additionalInfo
 	);
 

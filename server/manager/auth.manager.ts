@@ -212,37 +212,37 @@ export async function checkIfExist(user: User) {
 export const isValidRegister = (user: Omit<RegistrationRequest, 'history'>): Array<I18nLabel> => {
 	let result: Array<I18nLabel> = [];
 	if (!user.username) {
-		result.push({ message: 'auth:error.username' });
+		result.push({ label: 'auth:error.username' });
 	}
 	if (!user.name) {
-		result.push({ message: 'auth:error.name' });
+		result.push({ label: 'auth:error.name' });
 	}
 	if (!user.surname) {
-		result.push({ message: 'auth:error.surname' });
+		result.push({ label: 'auth:error.surname' });
 	}
 	if (!user.email) {
-		result.push({ message: 'auth:error.email.address' });
+		result.push({ label: 'auth:error.email.address' });
 	}
 	if (!user.cEmail) {
-		result.push({ message: 'auth:error.email.confirm' });
+		result.push({ label: 'auth:error.email.confirm' });
 	}
 	if (user.email !== user.cEmail) {
-		result.push({ message: 'auth:error.email.match' });
+		result.push({ label: 'auth:error.email.match' });
 	}
 	if (!emailRegExp.test(user.email)) {
-		result.push({ message: 'auth:error.email.validation' });
+		result.push({ label: 'auth:error.email.validation' });
 	}
 	if (!user.password) {
-		result.push({ message: 'auth:error.password.password' });
+		result.push({ label: 'auth:error.password.password' });
 	}
 	if (!user.cPassword) {
-		result.push({ message: 'auth:error.password.confirm' });
+		result.push({ label: 'auth:error.password.confirm' });
 	}
 	if (user.password !== user.cPassword) {
-		result.push({ message: 'auth:error.password.match' });
+		result.push({ label: 'auth:error.password.match' });
 	}
 	if (!passwordRegExp.test(user.password)) {
-		result.push({ message: 'auth:error.password.validation' });
+		result.push({ label: 'auth:error.password.validation' });
 	}
 	return result;
 };

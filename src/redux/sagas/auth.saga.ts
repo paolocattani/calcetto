@@ -19,7 +19,7 @@ import { HTTPStatusCode } from '../../@common/models/HttpStatusCode';
 import { TournamentAction } from '../actions';
 import { UserMessageType } from '../../@common/models/common.models';
 import { getMessage } from './utils';
-import i18next from 'i18next';
+import i18next from 'src/i18n/i18n';
 
 function* checkAuthenticationSaga({
 	payload: { history },
@@ -109,6 +109,10 @@ function* loginSaga({
 	// Validate Login
 	const loginReponse: AuthenticationResponse = yield call(login, loginRequest);
 	const message = getMessage(loginReponse.userMessage);
+	console.log('login saga : ', message, loginReponse.userMessage);
+	console.log('trans : ', i18next.t('auth:name'));
+	console.log('trans : ', i18next.t('auth:server.error.wrong_credential'));
+	console.log('trans : ', i18next.t(loginReponse.userMessage.label!));
 	if (loginReponse.code === HTTPStatusCode.Success) {
 		yield put(AuthAction.login.success(loginReponse));
 		// Session control
@@ -140,7 +144,7 @@ function* registrationSaga({
 		toast.success(message);
 	} else {
 		if (registrationReponse.errors) {
-			registrationReponse.errors.forEach((e) => toast.error(i18next.t(e.message, e.options)));
+			registrationReponse.errors.forEach((e) => toast.error(i18next.t(e.label, e.options)));
 		}
 		yield put(AuthAction.registration.failure(registrationReponse));
 	}

@@ -4,7 +4,7 @@ import { HTTPStatusCode } from './HttpStatusCode';
 import { TOptions } from 'i18next';
 
 export type I18nLabel = {
-	message: string;
+	label: string;
 	options?: TOptions<{ [key: string]: any }> | string;
 };
 

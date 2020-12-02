@@ -26,8 +26,8 @@ router.put(
 		const { rows }: UpdatePlacementRequest = req.body;
 		const result = await updatePlacement(rows);
 		return result
-			? success<UpdatePlacementResponse>(res, { message: 'stage1:position_done' })
-			: failure<UpdatePlacementResponse>(res, { message: 'stage1:position_not_done' });
+			? success<UpdatePlacementResponse>(res, { label: 'stage1:position_done' })
+			: failure<UpdatePlacementResponse>(res, { label: 'stage1:position_not_done' });
 	})
 );
 

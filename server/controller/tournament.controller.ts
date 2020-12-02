@@ -43,7 +43,7 @@ router.get(
 			const tournamentsList = await listAll(req.user!);
 			return success<FetchTournamentsResponse>(
 				res,
-				{ message: tournamentsList.length > 1 ? 'tournament:loaded_2' : 'tournament:loaded_1' },
+				{ label: tournamentsList.length > 1 ? 'tournament:loaded_2' : 'tournament:loaded_1' },
 				{ tournamentsList }
 			);
 		} catch (err) {
@@ -67,7 +67,7 @@ router.get(
 			const tournament = await findById(req.user!, parseInt(req.params.tId));
 			return success<FetchTournamentsResponse>(
 				res,
-				{ message: 'tournament:loaded_1' },
+				{ label: 'tournament:loaded_1' },
 				{ tournamentsList: [tournament!] }
 			);
 		} catch (err) {
@@ -84,7 +84,7 @@ router.put(
 		try {
 			const request: UpdateTournamentRequest = req.body;
 			const tournament = await update(req.user!, parseBody(request.tournament));
-			return success<UpdateTournamentResponse>(res, { message: 'tournament:saved' }, { tournament });
+			return success<UpdateTournamentResponse>(res, { label: 'tournament:saved' }, { tournament });
 		} catch (err) {
 			return serverError('PUT tournament/update error ! : ', err, res);
 		}
@@ -104,13 +104,13 @@ router.post(
 			let t: Tournament | TournamentDTO | null = await findByNameAndDate(model.name, model.date, user);
 			if (t) {
 				logger.info(`Tournament ${model.name} already exists....`);
-				return failure(res, { message: 'tournament:duplicated', options: { name: model.name } });
+				return failure(res, { label: 'tournament:duplicated', options: { name: model.name } });
 			}
 			model.ownerId = user.id;
 			t = await Tournament.create(model);
 			const tournament = convertEntityToDTO(t);
 			logger.info(`Created Tournament => ${t}`);
-			return success<SaveTournamentResponse>(res, { message: 'tournament:saved' }, { tournament });
+			return success<SaveTournamentResponse>(res, { label: 'tournament:saved' }, { tournament });
 		} catch (err) {
 			return serverError('POST tournament/new error ! : ', err, res);
 		}
@@ -128,7 +128,7 @@ router.delete(
 			await deleteTournament(parseBody(request.tournament));
 			return success<DeleteTournamentResponse>(
 				res,
-				{ message: 'tournament:deleted' },
+				{ label: 'tournament:deleted' },
 				{ tournament: request.tournament }
 			);
 		} catch (error) {
