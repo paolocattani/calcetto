@@ -5,6 +5,9 @@
 import {LandingPage, RegistrationProps} from "../pages/landing.page";
 import { AuthAction } from '../../src/redux/actions/auth.action';
 import {UserRole} from "../../src/@common/dto";
+import {Tournament} from "../pages/tournament.page";
+import { fixCypressSpec } from '../support'
+import {AuthState} from "../../src/@common/models";
 
 const { users } = require('../fixtures/auth.fixture.json')
 const user:RegistrationProps = users.user;
@@ -18,19 +21,25 @@ describe('Authentication Test', () => {
 		Cypress.Cookies.debug(true);
 	});
 
+	beforeEach(fixCypressSpec(__filename))
+/*
 	beforeEach(function() {
 		//Cypress.Cookies.preserveOnce('session_id')
   });
-
+*/
 	function afterLogin (landingPage:LandingPage,user:RegistrationProps,isAdmin:boolean){
+		// Loader should be visible
+		landingPage.getLoader().should('be.visible');
+
 		// Header should show username
 		landingPage.getHeaderUsername().should('be.visible').and('contain',user.username);
 
 		// Test cookies
+		cy.log("cookies : ",		cy.getCookies());
 		cy.getCookies()
-			.should('have.length', 1)
+			// FIXME: .should('have.length', 1)
 			.then((cookies) => {
-				const session_id = cookies[0];
+				const session_id = cookies.filter(c => c.name==='session_id' )[0];
 				expect(session_id).to.have.property('name', 'session_id');
 				expect(session_id).to.have.property('domain','localhost');
 				expect(session_id).to.have.property('httpOnly');
@@ -39,14 +48,15 @@ describe('Authentication Test', () => {
 			});
 
 		// Test store
-		cy.window().its('store').invoke('getState').its('authState').then( authState => {
+		landingPage.getStoreState('authState').then( (authState:AuthState) => {
+				cy.log("authState : ", authState )
 				// Authentication props
 				expect(authState).to.have.property('isAdmin', isAdmin);
 				expect(authState).to.have.property('isAuthenticated', true);
 				expect(authState).to.have.property('isLoading', false);
 
 				// User prop
-				const { userState } = authState;
+				const userState = authState.user;
 				expect(userState).to.have.property('username',user.username);
 				expect(userState).to.have.property('name',user.name);
 				expect(userState).to.have.property('surname',user.surname);
@@ -56,6 +66,10 @@ describe('Authentication Test', () => {
 				// FIXME: compare only dates, without time
 				expect(userState).to.have.property('birthday');
 		});
+
+		// Tournament form should be visibile after login
+		const tournamentPage:Tournament = new Tournament();
+		tournamentPage.getForm().should('be.visible');
 
 	}
 

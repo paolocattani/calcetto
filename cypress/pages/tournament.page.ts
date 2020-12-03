@@ -1,6 +1,6 @@
 import {AbstractPage} from "./abstract.page";
 
-class Tournament extends AbstractPage{
+export class Tournament extends AbstractPage{
 
 
 	getForm(){
