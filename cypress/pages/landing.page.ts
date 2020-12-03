@@ -1,5 +1,6 @@
 import {AbstractPage} from "./abstract.page";
 import {imageSnapshotConfig} from "../support/common";
+import {UserRole} from "../../src/@common/dto";
 
 // https://glebbahmutov.com/blog/open-source-visual-testing-of-components/
 export type LoginProps = { username: string, password: string }
@@ -40,22 +41,31 @@ export class LandingPage extends AbstractPage{
 	}
 
 
-	login({username, password}: LoginProps) {
+	login({username, password}: LoginProps):void {
+		// https://docs.cypress.io/api/commands/intercept.html
 		cy.visit('/')
+			.intercept("POST", "/api/v2/auth/login").as("authentication")
 			.get('#swapButton').should('be.visible')
 			.get('[data-cy=auth-form]').should('be.visible')
 			.toMatchImageSnapshot( imageSnapshotConfig('Login'));
-		return cy.get('#username').should('be.visible').type(username)
+		cy.get('#username').should('be.visible').type(username)
 			.get('#password').should('be.visible').type(password)
 			.get('#loginButton').should('be.visible').click();
+
+		cy.wait('@authentication').then((interception) => {
+			const body = interception.request.body;
+			expect(body).to.have.property('username',username);
+			expect(body).to.have.property('password', password);
+		});
 	}
 
-	register(user:RegistrationProps,isAdmin: boolean){
+	register(user:RegistrationProps,isAdmin: boolean):void {
 		cy.visit('/')
+			.intercept("POST", "/api/v2/auth/register").as("authentication")
 			.get('#swapButton').should('be.visible').click()
 			.get('[data-cy=auth-form]').should('be.visible')
 			.toMatchImageSnapshot( imageSnapshotConfig(isAdmin ? 'registration_Admin':'registration_User'));
-		return cy
+		cy
 			.get('#username').should('be.visible').type(user.username)
 			.get('#name').should('be.visible').type(isAdmin ? `[A]${user.name}` : user.name)
 			.get('#surname').should('be.visible').type(user.surname)
@@ -67,6 +77,29 @@ export class LandingPage extends AbstractPage{
 			//cy.get('#birthday').should('be.visible').type('05/01/1902');
 			.get('#phone').should('be.visible').type(user.phone)
 			.get('#registerButton').should('be.visible').click();
+
+			// Loader should be visible
+			super.getLoader().should('be.visible');
+			cy.wait('@authentication').then((interception) => {
+				const body = interception.request.body;
+				this.compareRegistrationProperty(body,user,isAdmin);
+				expect(body).to.have.property('name',isAdmin ? `[A]${user.name}` : user.name);
+				expect(body).to.have.property('cEmail',user.email);
+				expect(body).to.have.property('password',user.password);
+				expect(body).to.have.property('cPassword',user.password);
+				// FIXME:
+				expect(body).to.have.property('playerRole', "Non sono un giocatore");
+			});
+	}
+
+	// Compare common registration properties
+	compareRegistrationProperty(body:any, user:RegistrationProps,isAdmin:boolean){
+		expect(body).to.have.property('username',user.username);
+		expect(body).to.have.property('surname',user.surname);
+		expect(body).to.have.property('email',user.email);
+		expect(body).to.have.property('phone',user.phone);
+		// FIXME: compare only dates, without time
+		expect(body).to.have.property('birthday');
 	}
 
 	// Fields

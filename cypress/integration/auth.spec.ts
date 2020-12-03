@@ -28,14 +28,10 @@ describe('Authentication Test', () => {
   });
 */
 	function afterLogin (landingPage:LandingPage,user:RegistrationProps,isAdmin:boolean){
-		// Loader should be visible
-		landingPage.getLoader().should('be.visible');
-
 		// Header should show username
 		landingPage.getHeaderUsername().should('be.visible').and('contain',user.username);
 
 		// Test cookies
-		cy.log("cookies : ",		cy.getCookies());
 		cy.getCookies()
 			// FIXME: .should('have.length', 1)
 			.then((cookies) => {
@@ -57,14 +53,9 @@ describe('Authentication Test', () => {
 
 				// User prop
 				const userState = authState.user;
-				expect(userState).to.have.property('username',user.username);
+				landingPage.compareRegistrationProperty(userState,user,isAdmin);
 				expect(userState).to.have.property('name',user.name);
-				expect(userState).to.have.property('surname',user.surname);
-				expect(userState).to.have.property('email',user.email);
-				expect(userState).to.have.property('phone',user.phone);
 				expect(userState).to.have.property('role', isAdmin ? UserRole.Admin : UserRole.User);
-				// FIXME: compare only dates, without time
-				expect(userState).to.have.property('birthday');
 		});
 
 		// Tournament form should be visibile after login

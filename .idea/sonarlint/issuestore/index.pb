@@ -197,3 +197,21 @@ N
 server/manager/auth.manager.ts,f\9\f960f798caa9dc958e7c4ffbff5bac64ea79777a
 M
 server/database/user.model.ts,4\4\44fd98c108e7593b0e783419df6f2fcbf94661f5
+P
+ server/database/config/config.ts,d\d\dd94e23d5ff08082f408bbbcdbc5a0ec643c2fe1
+P
+ server/manager/player.manager.ts,3\2\32f7ba1d6a7c243f1e079c058f4eb69b035e2caf
+O
+server/database/player.model.ts,8\0\80d43a8ff9a2db7a5a24fde559e531765096b9f6
+V
+&src/@common/models/tournament.model.ts,9\d\9da33879bb395bc609fb043c3ac4c2a965ac94a7
+P
+ src/@common/models/root.model.ts,2\a\2a5bb2d33903a7ef6360f952a091731ca7a4bfcd
+J
+src/components/App/App.tsx,5\e\5e91b656be6a5a1eda844ceb9740e24ded3b2a47
+W
+'src/components/core/generic/Commons.tsx,7\a\7a4afb3132638c7e26693fa51914d2f53982fb81
+8
+.babelrc,b\c\bcac7464521b8c19a2372c739f6dc9e9ab7dfc80
+K
+cypress-coverage/index.html,7\5\756804bc3ae0187253d1b06e5a87418f5afb5143
