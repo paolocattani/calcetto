@@ -3,7 +3,7 @@ name: Build/Test/Analyze
 on:
   push:
     branches:
-      - develop
+      - [ e2e, develop ]
   pull_request:
     branches:
       - develop
@@ -143,9 +143,9 @@ jobs:
           browser: ${{ matrix.browser }}
           # FIXME: check code coverage
           # parallel: true
+          # group: 'e2e_${{ matrix.browser }}'
           headless: true
           record: true
-          group: 'e2e_${{ matrix.browser }}'
         env:
           # DEBUG: cypress:webpack
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
