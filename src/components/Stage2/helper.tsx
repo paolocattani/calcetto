@@ -9,7 +9,7 @@ export type onClickCallback = (
   isWinner: boolean
 ) => void;
 
-export type onSelectCallback = (value: ValueType<PairDTO>, rowIndex: number, actionMeta?: ActionMeta<PairDTO>) => void;
+export type onSelectCallback = (value: ValueType<PairDTO, false>, rowIndex: number, actionMeta?: ActionMeta<PairDTO>) => void;
 export const getIndexes = (pairsNumber: number): number[] => {
   const N = getBaseLog(2, pairsNumber) + 1; // Numero massimo di elementi td
   /*

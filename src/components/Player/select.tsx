@@ -1,4 +1,4 @@
-import { PlayerDTO } from '../../@common/dto';
+import {PairDTO, PlayerDTO} from '../../@common/dto';
 import React, { useState } from 'react';
 import Select, { Styles, ValueType, ActionMeta } from 'react-select';
 
@@ -16,7 +16,7 @@ const PlayerSelection: React.FC<PlayerSelectProps> = React.forwardRef(
   ({ styles, row, columnIndex, /*id,*/ onUpdate, onSelect, options }, ref) => {
     const [selectedOption, setSelectedOption] = useState<PlayerDTO>();
 
-    const handleChange = (option: ValueType<PlayerDTO>, actionMeta: ActionMeta<PlayerDTO>) => {
+    const handleChange = (option: ValueType<PlayerDTO, false>, actionMeta: ActionMeta<PlayerDTO>) => {
       setSelectedOption(option as PlayerDTO);
       onSelect(option, row.id, columnIndex);
     };

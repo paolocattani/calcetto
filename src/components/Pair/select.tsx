@@ -13,8 +13,8 @@ interface PairSelectProps {
   // Callback per formattare le opzioni della lista
   getOptionLabel?: (option: PairDTO) => string;
   // Callback onChange
-  onChange?: (value: ValueType<PairDTO>, rowIndex: number, actionMeta?: ActionMeta<PairDTO>) => void;
-  components?: Partial<SelectComponents<PairDTO>>;
+  onChange?: (value: ValueType<PairDTO, false>, rowIndex: number, actionMeta?: ActionMeta<PairDTO>) => void;
+  components?: Partial<SelectComponents<PairDTO, false>>;
   defaultValue?: PairDTO;
 }
 
@@ -24,7 +24,7 @@ const PairsSelect: React.FC<PairSelectProps> = React.forwardRef(
   ({ getOptionLabel, styles, rowIndex, options, onChange, defaultValue }, ref) => {
     const [selectedOption, setSelectedOption] = useState<PairDTO>();
 
-    const handleChange = (value: ValueType<PairDTO>, actionMeta: ActionMeta<PairDTO>) => {
+    const handleChange = (value: ValueType<PairDTO, false>, actionMeta: ActionMeta<PairDTO>) => {
       setSelectedOption(value as PairDTO);
       if (onChange) onChange(value, rowIndex, actionMeta);
     };
