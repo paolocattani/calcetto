@@ -1,4 +1,10 @@
 {
+    "loaded":"Giocatori caricati...",
+    "updated":"Giocatore aggiornato...",
+    "saved":"Giocatore creato...",
+    "deleted_1":"Giocatore eliminato...",
+    "deleted_2":"Giocatori elimnati...",
+    "duplicated":"Esiste già un giocatore con questi dati.",
     "data":"Nessun dato reperito",
     "add":"Aggiungi giocatore",
     "edit":"Modifica giocatore",

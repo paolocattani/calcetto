@@ -212,7 +212,7 @@ router.delete(
 		try {
 			logger.info('/test/delete start ');
 			if (process.env.NODE_ENV !== 'test' || secret !== process.env.SERVER_SECRET) {
-				return unauthorized(res, { label: 'common:server.unauthorize' });
+				return unauthorized(res, { label: 'common:server.unauthorized' });
 			}
 
 			const user = await findUserByEmailAndUsername(email, username);

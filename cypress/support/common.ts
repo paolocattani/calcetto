@@ -5,7 +5,7 @@ export const imageSnapshotConfig = (name:string,percentage?:number) => ({
 		threshold: percentage || 0.01, 	// Amount in pixels or percentage before snapshot image is invalid
 		thresholdType: "percent",       // Can be either "pixel" or "percent"
 	},
-	name,            // Naming resulting image file with a custom name rather than concatenating test titles
+	//name,            // Naming resulting image file with a custom name rather than concatenating test titles
 	separator: "@",  // Naming resulting image file with a custom separator rather than using the default ` #`
 });
 

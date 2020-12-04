@@ -106,10 +106,6 @@ H
 cypress/support/index.ts,a\1\a12ebc51a3d36e4cfcbc2a401ba038c3ce89f76e
 J
 server/controller/index.ts,1\6\160a59ced61abbc1db359e81e61a5bb1427c7523
-W
-'cypress-coverage/lcov-report/index.html,6\f\6f2d93d3a528e235b4cf5f4712c0f3027ce7ef23
-[
-+cypress-coverage/lcov-report/src/index.html,c\c\ccfe051a4181fe9181fc3f5a241d30840394027e
 M
 .github/workflows/publish.yml,4\6\4639989a2b9ca33671669f3e377b9d0308553f80
 L
@@ -128,8 +124,6 @@ B
 src/redux/store.ts,6\6\6687bbd9e0c8541a6b7e657278fc7e91e52f9a25
 L
 cypress/support/typings.d.ts,e\5\e5b7ac017e33e684a620a0bb16831aa3b658498b
-c
-3cypress/integration/__snapshots__/auth.spec.ts.snap,7\2\7294ea3e7b4e0d00d200f687baf8a6c2a576eec7
 I
 cypress/support/common.ts,7\6\7655437d133a49bcdb3fbaa59d67f3c1b42b91d9
 M
@@ -213,5 +207,21 @@ W
 'src/components/core/generic/Commons.tsx,7\a\7a4afb3132638c7e26693fa51914d2f53982fb81
 8
 .babelrc,b\c\bcac7464521b8c19a2372c739f6dc9e9ab7dfc80
-K
-cypress-coverage/index.html,7\5\756804bc3ae0187253d1b06e5a87418f5afb5143
+R
+"src/@common/models/stage1.model.ts,2\2\22f09aecf16217687760cd7207dd3d40073ee50f
+R
+"src/@common/models/stage2.model.ts,5\c\5c485b925d2f6e3594f1692bdd7aba6938c1c7c9
+T
+$src/@common/models/HttpStatusCode.ts,7\a\7a9ce765bcf5fb2f3b887b03bb081797db48dc90
+P
+ src/@common/models/pair.model.ts,1\4\14b725b1fc4d75a6beb2065e23952fc9ac08e64b
+R
+"src/@common/models/player.model.ts,6\8\68fdca05b40602d688cd45e8f90166d57db1b553
+P
+ src/@common/models/user.model.ts,1\6\163f8f18f4a16697cc22e40f2836bec2a9dba572
+R
+"src/redux/services/pair.service.ts,5\6\56155f50216212ca737b5ad1705f7966ae88f123
+P
+ src/@common/models/auth.model.ts,1\4\1404181663b07a80e8c4cb87bfeab23e0f3171a3
+Q
+!src/components/Tournament/new.tsx,3\e\3e91ce631c380acf59df78c11abc83f1b3fe87ec

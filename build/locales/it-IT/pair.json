@@ -1,4 +1,10 @@
 {
+    "saved":"Coppie salvata...",
+    "loaded":"Coppie caricate...",
+    "selected_1":"Coppia selezionata...",
+    "selected_2":"Coppie selezionate...",
+    "deleted_1":"Coppia eliminata...",
+    "deleted_2":"Coppie eliminate...",
     "stage1":{
        "set" :"Assegna gironi",
        "resetConfirm":"Vuoi resettare i gironi",

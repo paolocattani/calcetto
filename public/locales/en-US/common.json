@@ -35,7 +35,7 @@
 			"missing": "Missing parameters",
 			"unexpected": "Unexpected server error!..",
 			"not_found":"Item not found",
-			"unauthorize":"Unauthorized",
+			"unauthorized":"Unauthorized",
 			"updated":"Update complete"
 		}
 }

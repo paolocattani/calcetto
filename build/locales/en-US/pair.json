@@ -1,5 +1,11 @@
 {
-    "stage1":{
+	"saved":"Pair saved...",
+	"loaded":"Pairs loaded...",
+	"selected_1":"Pair selected...",
+	"selected_2":"Pairs selected...",
+	"deleted_1":"Pair deleted...",
+	"deleted_2":"Pairs deleted...",
+	"stage1":{
        "set" :"Assegna gironi",
        "resetConfirm":"Vuoi resettare i gironi",
        "reset":"Reset gironi"
