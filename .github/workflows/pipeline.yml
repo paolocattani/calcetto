@@ -164,7 +164,6 @@ jobs:
         with:
           name: cypress-videos
           path: cypress/videos
-      -
       # TODO: e2e coverage
       # - name: Save Coverage
       # if: ${{ success() }}

@@ -10,10 +10,6 @@
 			"**/__snapshots__/*",
 			"**/__image_snapshots__/*"
 		],
-		"reporter": "cypress-sonarqube-reporter",
-		"reporterOptions": {
-			"outputDir": "./coverage"
-		},
 		"env": {
 			"cypress-plugin-snapshots": {
 				"diffLines": 5,
