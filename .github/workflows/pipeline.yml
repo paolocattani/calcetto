@@ -82,7 +82,7 @@ jobs:
   # e2e test
   #-----------------------------------------
   e2e:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     needs: build
     container:
       image: cypress/browsers:node14.15.0-chrome86-ff82
