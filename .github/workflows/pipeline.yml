@@ -138,7 +138,8 @@ jobs:
           # Test options
           # config: baseUrl=http://localhost:5001
           browser: ${{ matrix.browser }}
-          parallel: true
+          # FIXME: check code coverage
+          # parallel: true
           headless: true
           record: true
           group: 'e2e_${{ matrix.browser }}'
@@ -165,8 +166,13 @@ jobs:
           name: cypress-videos
           path: cypress/videos
       # TODO: e2e coverage
-      # - name: Save Coverage
-      # if: ${{ success() }}
+      - name: Save Coverage
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-cypress
+          path: |
+            coverage
       # if tests success save videos and coverage
       # - name: Merge coverage from different processes
       # if tests success save videos and coverage
@@ -188,7 +194,7 @@ jobs:
         - name: Download Coverage
           uses: actions/download-artifact@v2
           with:
-            name: coverage
+            name: coverage-cypress
         # https://github.com/marketplace/actions/sonarcloud-scan
         - name: SonarCloud Scan
           uses: sonarsource/sonarcloud-github-action@master
