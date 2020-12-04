@@ -121,6 +121,8 @@ jobs:
       matrix:
         browser: [ chrome, firefox ]
         containers: [1, 2, 3]
+    # Run e2e only on develop
+    if: github.ref == 'refs/heads/develop'
     steps:
       - uses: actions/checkout@v2
       # Install dependencies
