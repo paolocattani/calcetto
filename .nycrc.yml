@@ -17,4 +17,4 @@ exclude: [
     # node_modules
     '**/node_modules/**'
 ]
-report-dir: 'cypress-coverage'
+report-dir: 'coverage'
