@@ -13,7 +13,7 @@ jobs:
   # Build
   #-----------------------------------------
   build:
-    runs-on: ubuntu-latest
+    runs-on: Ubuntu-20.04
     name: Build
     strategy:
       matrix:
@@ -66,7 +66,7 @@ jobs:
   # unit test
   #-----------------------------------------
   unit-test:
-    runs-on: ubuntu-latest
+    runs-on: Ubuntu-20.04
     needs: build
     name: unit tests
     # For now disable this step, only run e2e
@@ -91,7 +91,7 @@ jobs:
   # e2e test
   #-----------------------------------------
   e2e-test:
-    runs-on: ubuntu-latest
+    runs-on: Ubuntu-20.04
     needs: build
     container:
       image: cypress/browsers:node14.15.0-chrome86-ff82
@@ -122,7 +122,7 @@ jobs:
         browser: [ chrome, firefox ]
         containers: [1, 2, 3]
     # Run e2e only on develop
-    if: github.ref == 'refs/heads/e2e' || github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master'
+    # FIXME: if: github.ref == 'refs/heads/e2e' || github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v2
       # Install dependencies
@@ -185,7 +185,7 @@ jobs:
   # Code Quality ( Sonarcloud )
   #-----------------------------------------
   analyze:
-    runs-on: ubuntu-latest
+    runs-on: Ubuntu-20.04
     needs: build
     name: Code Quality
     steps:
