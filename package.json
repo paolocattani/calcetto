@@ -104,7 +104,7 @@
     "test:app": "concurrently -p \"[{name}]\" -n server,client -c \"bgGreen.bold,bgBlue.bold\"  --kill-others-on-fail \"npm run test:app:server\" \"npm run dev:client\"",
     "test:app:server": "cross-env NODE_ENV=test npm run dev:server",
     "test:app:server:coverage": "cross-env NODE_ENV=test nyc --silent npm run dev:server",
-    "test:client": "cross-env NODE_ENV=test npm run CRA:test",
+    "test:client": "cross-env NODE_ENV=CI npm run CRA:test",
     "test:client:coverage": "react-scripts test --coverage --watchAll=false --silent --testResultsProcessor ./node_modules/jest-sonar-reporter ",
     "test:client:debug": "react-scripts --inspect-brk test --runInBand --no-cache --env=jest-environment-jsdom-sixteen",
     "test:e2e": "cross-env NODE_ENV=test start-server-and-test test:app 5000 cypress:run",
