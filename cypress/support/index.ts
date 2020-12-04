@@ -22,7 +22,7 @@ import '@cypress/code-coverage/support';
 // https://www.cypress.io/blog/2019/09/05/cypress-code-coverage-for-create-react-app-v3/
 // https://github.com/NoriSte/ui-testing-best-practices/blob/master/sections/generic-best-practices/use-your-testing-tool-as-your-primary-development-tool.md
 // require('cypress-skip-and-only-ui/support');
-require('cypress-watch-and-reload/support');
+// require('cypress-watch-and-reload/support');
 
 
 export const fixCypressSpec = (filename:string) => () => {

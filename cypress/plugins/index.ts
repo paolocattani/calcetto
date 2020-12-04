@@ -1,4 +1,4 @@
-require('cypress-watch-and-reload/plugins')
+// require('cypress-watch-and-reload/plugins')
 // Preprocessor
 const webpack = require('@cypress/webpack-preprocessor');
 const { initPlugin } = require('cypress-plugin-snapshots/plugin');
