@@ -1,4 +1,9 @@
 {
+    "loaded_1":"Torneo caricato...",
+    "loaded_2":"Tornei caricati...",
+    "saved":"Torneo salvato...",
+    "deleted":"Torneo eliminato...",
+    "duplicated":"Torneo {{name}} già presente.!",
     "tournament":"Torneo",
     "select":"Selezione Torneo",
     "new":"Nuovo torneo",

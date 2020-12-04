@@ -30,5 +30,12 @@
     },
     "error":{
         "generic":"An error occur.Try again later..."
-    }
+    },
+		"server": {
+			"missing": "Missing parameters",
+			"unexpected": "Unexpected server error!..",
+			"not_found":"Item not found",
+			"unauthorized":"Unauthorized",
+			"updated":"Update complete"
+		}
 }

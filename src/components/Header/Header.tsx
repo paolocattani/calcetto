@@ -70,7 +70,7 @@ const Header: React.FC = () => {
                         {user.username} <UserIcon />
                       </strong>
                     </Button>
-                    <Dropdown.Toggle split variant="outline-warning" id="dropdown-custom-2" />
+                    <Dropdown.Toggle split variant="outline-warning" id="dropdown-custom-2" data-cy="header-dropdown" />
                     <Dropdown.Menu className="default-background default-border-yellow">
                       <Dropdown.Item
                         className="default-color-white default-hover-green"
@@ -96,6 +96,7 @@ const Header: React.FC = () => {
                         as="button"
                         onClick={logout}
                         eventKey="3"
+												data-cy="header-user-logout"
                       >
                         <span>
                           <LogoutIcon /> <strong>{t('logout')} </strong>

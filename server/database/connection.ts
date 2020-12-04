@@ -22,7 +22,7 @@ let connection: Sequelize;
 interface SequelizeSyncOptions extends SyncOptions{
 	restartIdentity?:boolean
 }
-async function loadModels(): Promise<Sequelize> {
+async function loadModels(schema?:string): Promise<Sequelize> {
   // FIXME: should import types from @commmon/typings
   const envConfig: SequelizeConfiguration =
     config[process.env.NODE_ENV ? (process.env.NODE_ENV as Environment) : Environment.development];
@@ -33,6 +33,7 @@ async function loadModels(): Promise<Sequelize> {
     models: [__dirname + '/*.model.ts'],
     modelMatch: (filename: string, member: string) =>
       filename.substring(0, filename.indexOf('.model')) === member.toLowerCase(),
+		define: schema ? { schema } : undefined
   };
 
   // If NODE_ENV == 'test' and IS_DOCKER test are running in CI and I'm trying to connect to a container without SSL
@@ -64,10 +65,10 @@ export async function sync(options?: SequelizeSyncOptions): Promise<Sequelize> {
 
 export async function createSchemaAndSync(schema:string, options?: SequelizeSyncOptions): Promise<Sequelize> {
 	if (connection) return connection;
-	const sequelizeConnection = await loadModels();
+	const sequelizeConnection = await loadModels(schema);
 	await sequelizeConnection.dropSchema(schema, {});
 	await sequelizeConnection.createSchema(schema, {});
-	connection = await sequelizeConnection.sync({...options, schema});
+	connection = await sequelizeConnection.sync({...options, schema, searchPath:schema});
 	logger.info(chalk.cyan.bold('Database synchronizatio1n complete!'));
 	return connection;
 }

@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack://src/components/Swagger/style.css"],"names":[],"mappings":"AAAA,YACI,wBAA8B,CAC9B,YACJ","file":"13.3dd2ba2c.chunk.css","sourcesContent":[".swagger-ui{\r\n    background-color: antiquewhite;\r\n    padding: 1rem;\r\n}"]}

@@ -38,10 +38,7 @@ export const fetchWrapper = async <B, T extends GenericReponse>(
     console.error('Error', error);
     console.error('Details : ', response);
     console.groupEnd();
-    // If performing fetch from FE, show errror.
-    if (!url.startsWith('http')) {
-      toast.error('Whoooops...Something went wrong...');
-    }
+    toast.error('Whoooops...Something went wrong...');
     /*  FIXME:
       Type 'GenericReponse' is not assignable to type 'T'.
       'GenericReponse' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'GenericReponse'.

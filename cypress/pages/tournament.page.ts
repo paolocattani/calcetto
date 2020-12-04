@@ -1,13 +1,17 @@
 import {AbstractPage} from "./abstract.page";
 
-class Tournament extends AbstractPage{
+export class Tournament extends AbstractPage{
 
 
 	getForm(){
 		return cy.get('[data-cy=tournament-form]');
 	}
 
+	getNewTournamentButton(){
+		return cy.get('[data-cy=new-tournament]')
+	}
 	visit(): Cypress.Chainable<Cypress.AUTWindow> {
 		return cy.visit('/');
 	}
+
 }

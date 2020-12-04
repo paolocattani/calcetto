@@ -30,7 +30,7 @@ export const LoadingModal: React.FC<LoadingModalPropsType> = ({
   show = true,
   onHide = () => (show = false),
 }) => (
-  <Modal show={show} onHide={onHide} size="lg" centered style={{ borderColor: '#ffc107', borderWidth: '3px' }}>
+  <Modal data-cy="loader" show={show} onHide={onHide} size="lg" centered style={{ borderColor: '#ffc107', borderWidth: '3px' }}>
     <Modal.Header closeButton style={modalStyle}>
       <Modal.Title>{title}</Modal.Title>
     </Modal.Header>

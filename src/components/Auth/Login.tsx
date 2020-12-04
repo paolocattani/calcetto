@@ -19,16 +19,26 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
   const { value: username, bind: bindUsername } = useInput<string>('');
   const { value: password, bind: bindPassword } = useInput<string>('');
 
+  const isValid = () => {
+		const errors: Array<string> = [];
+  	if(!username){
+  		errors.push('auth:error.username');
+		}
+  	if(!password){
+			errors.push('auth:error.password.password');
+		}
+		if (errors.length !== 0) {
+			errors.forEach((e) => toast.error(t(e)));
+			return false;
+		}
+		return true;
+	};
+
   const handleSubmit = async (evt: React.SyntheticEvent) => {
     evt.preventDefault();
-    if (!username || username === '') {
-      toast.error(t('auth:error.username'));
-      return;
-    }
-    if (!password || password === '') {
-      toast.error(t('auth:error.password.password'));
-      return;
-    }
+		if(!isValid()){
+			return;
+		}
     setValidated(true);
     dispatch(
       AuthAction.login.request({
@@ -45,7 +55,6 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
       <InputField
         controlId="username"
         label={t('auth:usernameEmail')}
-        required={true}
         type="text"
         placeholder={t('auth:usernameEmail')}
         {...bindUsername}
@@ -54,7 +63,6 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
       <InputField
         controlId="password"
         label={t('auth:password.password')}
-        required={true}
         type="password"
         placeholder={t('auth:password.password')}
         {...bindPassword}

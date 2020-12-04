@@ -106,10 +106,6 @@ H
 cypress/support/index.ts,a\1\a12ebc51a3d36e4cfcbc2a401ba038c3ce89f76e
 J
 server/controller/index.ts,1\6\160a59ced61abbc1db359e81e61a5bb1427c7523
-W
-'cypress-coverage/lcov-report/index.html,6\f\6f2d93d3a528e235b4cf5f4712c0f3027ce7ef23
-[
-+cypress-coverage/lcov-report/src/index.html,c\c\ccfe051a4181fe9181fc3f5a241d30840394027e
 M
 .github/workflows/publish.yml,4\6\4639989a2b9ca33671669f3e377b9d0308553f80
 L
@@ -128,11 +124,104 @@ B
 src/redux/store.ts,6\6\6687bbd9e0c8541a6b7e657278fc7e91e52f9a25
 L
 cypress/support/typings.d.ts,e\5\e5b7ac017e33e684a620a0bb16831aa3b658498b
-c
-3cypress/integration/__snapshots__/auth.spec.ts.snap,7\2\7294ea3e7b4e0d00d200f687baf8a6c2a576eec7
 I
 cypress/support/common.ts,7\6\7655437d133a49bcdb3fbaa59d67f3c1b42b91d9
 M
 server/database/pair.model.ts,3\9\39c4dba4da8c4842aa54e7c648caf96ad70a4136
 T
 $server/controller/pair.controller.ts,7\5\75437df1cb3cfa87831770f468f01a9ee9feb865
+A
+package-lock.json,f\a\fa288d1472d29beccb489a676f68739ad365fc47
+N
+public/locales/en-US/auth.json,3\6\3627bbce08ba669d9a75cd36788c062497e1b616
+P
+ public/locales/en-US/player.json,0\5\05fe6e2b45ee30d5c0416cd74b3252aeb8fa85d3
+O
+src/components/Auth/Wrapper.tsx,5\e\5e198f2673a66f65a817071f9d6a0e66be4709ec
+P
+ public/locales/en-US/common.json,9\a\9a978575d041e8f21fafcf3d64f2795d632c289b
+N
+public/locales/en-US/pair.json,9\8\98480969e31c67d16121f78b0f8ffef5249ef594
+P
+ public/locales/it-IT/common.json,a\c\ac1c012ed54e76ded61b6b5bafc805ddf44d7683
+T
+$server/controller/common.response.ts,6\0\6014daaf3cbabd87010a4e65fd1cb190939931e8
+N
+src/redux/sagas/player.saga.ts,1\e\1e723a62622c884c2893336eb5dfb6f338bec5d7
+R
+"src/redux/sagas/tournament.saga.ts,5\7\577ab2e03f0403339ca80b4d81342751a44a095c
+P
+ src/components/Auth/Register.tsx,f\4\f4048dad91ec9e34dda835597655593333ddaf5f
+M
+src/components/Pair/table.tsx,8\7\876c2bb1d7094eb08b14bc98f8b94b1368c17206
+@
+src/i18n/i18n.ts,e\5\e59c86fc7900edce0fb2ae93d8b5bd80298c5a22
+S
+#src/@common/models/common.models.ts,2\d\2dfcbeb66998a2d75efb22a36344df8297438046
+P
+ src/@common/utils/fetch.utils.ts,6\0\60e4445f0f3fe75c5effb1b87e1cfb6b5abb8d51
+H
+src/redux/sagas/utils.ts,a\7\a709c05dbb397f6da198f783944dcbb24e0e9165
+N
+public/locales/it-IT/auth.json,1\f\1f4398b0a777608e0dd1b114b26043c5688e5acb
+L
+src/redux/sagas/auth.saga.ts,7\1\7169a830ef5bc4338dae75ac66e24882b8f8e547
+T
+$src/redux/services/stage1.service.ts,2\a\2a0b6cf7767eda2e22b29dc83b33c8a7b1b35b58
+N
+public/locales/it-IT/pair.json,d\5\d55ebeb4e75346e6e5d2409addad02aae247e869
+P
+ public/locales/it-IT/player.json,3\6\36dfbee308ff2d0339d4de2511fe1cfb856b7b5f
+P
+ public/locales/it-IT/stage1.json,e\5\e5cc7c97184baf073fbe66cb8085443863c44b5c
+P
+ public/locales/en-US/stage1.json,3\d\3d0b46bdeef885080a03b610cdb37ae8bb44e2d7
+T
+$public/locales/en-US/tournament.json,1\b\1b2677526c619a227fdc3fec33c81e70a65facbc
+T
+$public/locales/it-IT/tournament.json,7\3\73d018e842690f2c9ee423fbc5e46d53181989b0
+:
+
+.nycrc.yml,3\a\3a973077c8520c06e1cc584fc1d56b3ebc6a83e5
+A
+server/server.log,0\0\0053a29f7234e160b6de5c254aaf9b4418e57dc6
+E
+server/core/logger.ts,7\c\7c2288560ab7c6babc37adf021fefd5052bbe014
+N
+server/manager/auth.manager.ts,f\9\f960f798caa9dc958e7c4ffbff5bac64ea79777a
+M
+server/database/user.model.ts,4\4\44fd98c108e7593b0e783419df6f2fcbf94661f5
+P
+ server/database/config/config.ts,d\d\dd94e23d5ff08082f408bbbcdbc5a0ec643c2fe1
+P
+ server/manager/player.manager.ts,3\2\32f7ba1d6a7c243f1e079c058f4eb69b035e2caf
+O
+server/database/player.model.ts,8\0\80d43a8ff9a2db7a5a24fde559e531765096b9f6
+V
+&src/@common/models/tournament.model.ts,9\d\9da33879bb395bc609fb043c3ac4c2a965ac94a7
+P
+ src/@common/models/root.model.ts,2\a\2a5bb2d33903a7ef6360f952a091731ca7a4bfcd
+J
+src/components/App/App.tsx,5\e\5e91b656be6a5a1eda844ceb9740e24ded3b2a47
+W
+'src/components/core/generic/Commons.tsx,7\a\7a4afb3132638c7e26693fa51914d2f53982fb81
+8
+.babelrc,b\c\bcac7464521b8c19a2372c739f6dc9e9ab7dfc80
+R
+"src/@common/models/stage1.model.ts,2\2\22f09aecf16217687760cd7207dd3d40073ee50f
+R
+"src/@common/models/stage2.model.ts,5\c\5c485b925d2f6e3594f1692bdd7aba6938c1c7c9
+T
+$src/@common/models/HttpStatusCode.ts,7\a\7a9ce765bcf5fb2f3b887b03bb081797db48dc90
+P
+ src/@common/models/pair.model.ts,1\4\14b725b1fc4d75a6beb2065e23952fc9ac08e64b
+R
+"src/@common/models/player.model.ts,6\8\68fdca05b40602d688cd45e8f90166d57db1b553
+P
+ src/@common/models/user.model.ts,1\6\163f8f18f4a16697cc22e40f2836bec2a9dba572
+R
+"src/redux/services/pair.service.ts,5\6\56155f50216212ca737b5ad1705f7966ae88f123
+P
+ src/@common/models/auth.model.ts,1\4\1404181663b07a80e8c4cb87bfeab23e0f3171a3
+Q
+!src/components/Tournament/new.tsx,3\e\3e91ce631c380acf59df78c11abc83f1b3fe87ec

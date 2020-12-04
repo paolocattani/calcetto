@@ -1,0 +1,20 @@
+extends: "@istanbuljs/nyc-config-typescript"
+reporter: [json, html, text, lcov]
+all: true
+exclude: [
+    #
+    'build/', 'docker/', 'cypress/','hooks/',
+    #
+    '.eslintrc.js','.prettierrc.js','src/serviceWorker.ts',
+    # Coverage
+    'cypress-coverage/',
+    'coverage/',
+    # Test
+    '**/*.test.ts',
+    '**/*.spec.ts',
+    '**/mocks/**',
+    '**/test/**',
+    # node_modules
+    '**/node_modules/**'
+]
+report-dir: 'coverage'

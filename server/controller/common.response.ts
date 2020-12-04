@@ -1,113 +1,110 @@
 import { Response } from 'express';
 import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
-import { GenericReponse, OmitGeneric, UserMessageType } from '../../src/@common/models/common.models';
+import { GenericReponse, I18nLabel, OmitGeneric, UserMessageType } from '../../src/@common/models/common.models';
 import { logger } from '../core/logger';
 import chalk from 'chalk';
 
 export const ComposeReponse = <T extends GenericReponse>(
-  res: Response,
-  status: HTTPStatusCode,
-  internalMessage: string,
-  messageType: UserMessageType,
-  message: string,
-  additionalInfo?: OmitGeneric<T>
+	res: Response,
+	status: HTTPStatusCode,
+	internalMessage: string,
+	type: UserMessageType,
+	label: I18nLabel,
+	additionalInfo?: OmitGeneric<T>
 ) => {
-  HTTPStatusCode.Success;
-  logger.info(`---->  ${status} : ${internalMessage}`);
-  return res.status(status).json({
-    ...additionalInfo,
-    code: status,
-    message: internalMessage,
-    userMessage: { type: messageType, message },
-  });
+	logger.info(`---->  ${status} : ${internalMessage}`);
+	return res.status(status).json({
+		...additionalInfo,
+		code: status,
+		message: internalMessage,
+		userMessage: { type, ...label },
+	});
 };
 
 // Unauthorized
 export const unauthorized = <T extends GenericReponse>(
-  res: Response,
-  message: string,
-  internalMessage?: string,
-  additionalInfo?: OmitGeneric<T>
+	res: Response,
+	label: I18nLabel,
+	internalMessage?: string,
+	additionalInfo?: OmitGeneric<T>
 ) =>
-  ComposeReponse(
-    res,
-    HTTPStatusCode.Unauthorized,
-    internalMessage || 'Unauthorized !',
-    UserMessageType.Danger,
-    message,
-    additionalInfo
-  );
+	ComposeReponse(
+		res,
+		HTTPStatusCode.Unauthorized,
+		internalMessage || 'Unauthorized !',
+		UserMessageType.Danger,
+		label,
+		additionalInfo
+	);
 export const forbidden = <T extends GenericReponse>(
-  res: Response,
-  message: string,
-  internalMessage?: string,
-  additionalInfo?: OmitGeneric<T>
+	res: Response,
+	label: I18nLabel,
+	internalMessage?: string,
+	additionalInfo?: OmitGeneric<T>
 ) =>
-  ComposeReponse(
-    res,
-    HTTPStatusCode.Forbidden,
-    internalMessage || 'Forbidden !',
-    UserMessageType.Danger,
-    message,
-    additionalInfo
-  );
+	ComposeReponse(
+		res,
+		HTTPStatusCode.Forbidden,
+		internalMessage || 'Forbidden !',
+		UserMessageType.Danger,
+		label,
+		additionalInfo
+	);
 
 // Generic error
 export const failure = <T extends GenericReponse>(
-  res: Response,
-  message: string,
-  internalMessage?: string,
-  status?: HTTPStatusCode,
-  additionalInfo?: OmitGeneric<T>
+	res: Response,
+	label: I18nLabel,
+	internalMessage?: string,
+	status?: HTTPStatusCode,
+	additionalInfo?: OmitGeneric<T>
 ) =>
-  ComposeReponse(
-    res,
-    status || HTTPStatusCode.BadRequest,
-    internalMessage || 'Bad Request.',
-    UserMessageType.Danger,
-    message,
-    additionalInfo
-  );
+	ComposeReponse(
+		res,
+		status || HTTPStatusCode.BadRequest,
+		internalMessage || 'Bad Request.',
+		UserMessageType.Danger,
+		label,
+		additionalInfo
+	);
 
 // Success
-export const success = <T extends GenericReponse>(res: Response, message: string, additionalInfo?: OmitGeneric<T>) =>
-  ComposeReponse(res, HTTPStatusCode.Success, 'Success', UserMessageType.Success, message, additionalInfo);
+export const success = <T extends GenericReponse>(res: Response, label: I18nLabel, additionalInfo?: OmitGeneric<T>) =>
+	ComposeReponse(res, HTTPStatusCode.Success, 'Success', UserMessageType.Success, label, additionalInfo);
 
 // Entity Not Found
 export const entityNotFound = (res: Response) =>
-  failure(res, 'Oggetto non trovato', 'Entity not found', HTTPStatusCode.NotFound);
+	failure(res, { label: 'common:server.not_found' }, 'Entity not found', HTTPStatusCode.NotFound);
 
 // Missing parameters / data
 export const missingParameters = <T extends GenericReponse>(res: Response, additionalInfo?: OmitGeneric<T>) =>
-  ComposeReponse(
-    res,
-    HTTPStatusCode.BadRequest,
-    'Missing parameters',
-    UserMessageType.Danger,
-    // eslint-disable-next-line quotes
-    "Errore server. Questo l'ho previsto...",
-    additionalInfo
-  );
+	ComposeReponse(
+		res,
+		HTTPStatusCode.BadRequest,
+		'Missing parameters',
+		UserMessageType.Danger,
+		{ label: '' },
+		additionalInfo
+	);
 
 // Server error
 export const unexpectedServerError = <T extends GenericReponse>(res: Response, additionalInfo?: OmitGeneric<T>) =>
-  ComposeReponse(
-    res,
-    HTTPStatusCode.InternalServerError,
-    'Unexpected Server Error',
-    UserMessageType.Danger,
-    // eslint-disable-next-line quotes
-    "Errore server non previsto. E' stata avviata la procedura di autodistruzione.",
-    additionalInfo
-  );
+	ComposeReponse(
+		res,
+		HTTPStatusCode.InternalServerError,
+		'Unexpected Server Error',
+		UserMessageType.Danger,
+		{ label: 'common:server.missing' },
+		additionalInfo
+	);
 
 // Handle server error
 export const serverError = <T extends GenericReponse>(
-  message: string,
-  err: any,
-  res: Response,
-  additionalInfo?: OmitGeneric<T>
+	message: string,
+	err: any,
+	res: Response,
+	additionalInfo?: OmitGeneric<T>
 ) => {
-  logger.error(chalk.redBright(message), err);
-  return unexpectedServerError(res, additionalInfo);
+	logger.error(chalk.redBright(message), err);
+	return unexpectedServerError(res, additionalInfo);
 };

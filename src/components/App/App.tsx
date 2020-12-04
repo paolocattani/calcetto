@@ -42,7 +42,7 @@ const App: React.FC = (_) => {
         </Suspense>
         <Container fluid style={{ marginBottom: '20vh' }}>
           {/*<RedirectionControl />*/}
-          <ToastContainer autoClose={2000} />
+          <ToastContainer autoClose={3000} data-cy="toast-container"/>
           {isLoading ? (
             // Loading store
             <LoadingModal />

@@ -60,47 +60,47 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
   const isValid = () => {
     const errors: Array<string> = [];
     if (!username) {
-      errors.push(t('auth:error.username'));
+      errors.push('auth:error.username');
     }
     if (!name) {
-      errors.push(t('auth:error.name'));
+      errors.push('auth:error.name');
     }
     if (!surname) {
-      errors.push(t('auth:error.surname'));
+      errors.push('auth:error.surname');
     }
     if (!email) {
-      errors.push(t('auth:error.email.email'));
+      errors.push('auth:error.email.address');
     }
     if (!emailRegExp.test(email)) {
-      errors.push(t('auth:error.email.validation'));
+      errors.push('auth:error.email.validation');
     }
     if (!cEmail) {
-      errors.push(t('auth:error.email.confirm'));
+      errors.push('auth:error.email.confirm');
     }
     if (!emailRegExp.test(cEmail)) {
-      errors.push(t('auth:error.email.validation'));
+      errors.push('auth:error.email.validation');
     }
     if (email !== cEmail) {
-      errors.push(t('auth:error.email.match'));
+      errors.push('auth:error.email.match');
     }
     if (!password) {
-      errors.push(t('auth:error.password.password'));
+      errors.push('auth:error.password.password');
     }
     if (!passwordRegExp.test(password)) {
-      errors.push(t('auth:error.password.validation'));
+      errors.push('auth:error.password.validation');
     }
     if (!cPassword) {
-      errors.push(t('auth:error.password.confirm'));
+      errors.push('auth:error.password.confirm');
     }
     if (!passwordRegExp.test(cPassword)) {
-      errors.push(t('auth:error.password.validation'));
+      errors.push('auth:error.password.validation');
     }
     if (password !== cPassword) {
-      errors.push(t('auth:error.password.match'));
+      errors.push('auth:error.password.match');
     }
 
     if (errors.length !== 0) {
-      errors.forEach((e) => toast.error(e));
+      errors.forEach((e) => toast.error(t(e)));
       return false;
     }
     return true;
@@ -141,7 +141,6 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
           <InputField
             controlId="username"
             label={t('auth:username')}
-            required={true}
             placeholder={t('auth:username')}
             {...bindUsername}
           />
@@ -150,7 +149,6 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
           <InputField
             controlId="name"
             label={t('auth:name')}
-            required={true}
             placeholder={t('auth:name')}
             {...bindName}
           />
@@ -159,7 +157,6 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
           <InputField
             controlId="surname"
             label={t('auth:surname')}
-            required={true}
             placeholder={t('auth:surname')}
             {...bindSurname}
           />
@@ -171,7 +168,6 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
           <InputField
             controlId="email"
             label={t('auth:email.email')}
-            required={true}
             type="email"
             placeholder={t('auth:email.email')}
             {...bindEmail}
@@ -181,7 +177,6 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
           <InputField
             controlId="cemail"
             label={t('auth:email.confirm')}
-            required={true}
             type="email"
             placeholder={t('auth:email.confirm')}
             {...bindCEmail}
@@ -194,7 +189,6 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
           <InputField
             controlId="password"
             label={t(LABEL_AUTH_PASSWORD)}
-            required={true}
             type="password"
             placeholder={t(LABEL_AUTH_PASSWORD)}
             {...bindPassword}
@@ -202,7 +196,6 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
           <InputField
             controlId="cpassword"
             label={t('auth:password.confirm')}
-            required={true}
             type="password"
             placeholder={t(LABEL_AUTH_PASSWORD)}
             {...bindCPassword}
@@ -229,7 +222,6 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
               id="birthday"
               className="datepicker"
               dateFormat="dd/MM/yyyy"
-              required={true}
               selected={birthday}
               onChange={(val) => setBirthday(val)}
             />
