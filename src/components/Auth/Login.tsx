@@ -25,7 +25,7 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
   		errors.push('auth:error.username');
 		}
   	if(!password){
-			errors.push('auth:error.username');
+			errors.push('auth:error.password.password');
 		}
 		if (errors.length !== 0) {
 			errors.forEach((e) => toast.error(t(e)));
