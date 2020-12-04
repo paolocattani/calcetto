@@ -3,7 +3,8 @@ name: Build/Test/Analyze
 on:
   push:
     branches:
-      - [ e2e, develop ]
+      - e2e
+      - develop
   pull_request:
     branches:
       - develop
