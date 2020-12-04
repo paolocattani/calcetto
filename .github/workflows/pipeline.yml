@@ -122,7 +122,10 @@ jobs:
         browser: [ chrome, firefox ]
         containers: [1, 2, 3]
     # Run e2e only on develop
-    if: github.ref == 'refs/heads/develop'
+    if:  ${{
+      github.ref == 'refs/heads/e2e' ||
+      github.ref == 'refs/heads/develop' ||
+      github.ref == 'refs/heads/master' }}
     steps:
       - uses: actions/checkout@v2
       # Install dependencies
