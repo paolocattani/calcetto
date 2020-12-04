@@ -127,8 +127,8 @@ jobs:
         with:
           name: build-14.x
       # CRA "Bug" : https://github.com/facebook/create-react-app/issues/7612
-      - name: Fixing known bug
-        run: echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf && sysctl -p
+      # - name: Fixing known bug
+      #   run: echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf && sysctl -p
       # e2e
       # https://medium.com/swlh/publish-your-cypress-test-report-with-github-actions-47248788713a
       - name: e2e
