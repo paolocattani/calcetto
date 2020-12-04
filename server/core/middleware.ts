@@ -58,6 +58,21 @@ export const withAdminRights = (req: AppRequest, res: Response, next: NextFuncti
 	} else next();
 };
 
+// Check authorization for test
+export const withTestAuth = (req: AppRequest, res: Response, next: NextFunction) => {
+	const { secret } = req.body;
+	if (process.env.NODE_ENV !== 'test' || secret !== process.env.SERVER_SECRET) {
+		return unauthorized(res, { label: 'common:server.unauthorized' });
+	}
+	next();
+};
+
+
+//TODO: Controllo accessi
+export const auditControl = (req: Request, res: Response, next: NextFunction) => {
+	next();
+};
+
 // wrapper per verificare il token
 export const safeVerifyToken = (token: any): [UserDTO | null, boolean] => {
 	let decoded = null;
@@ -69,7 +84,4 @@ export const safeVerifyToken = (token: any): [UserDTO | null, boolean] => {
 	}
 };
 
-//TODO: Controllo accessi
-export const auditControl = (req: Request, res: Response, next: NextFunction) => {
-	next();
-};
+
