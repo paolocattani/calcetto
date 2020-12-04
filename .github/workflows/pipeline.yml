@@ -13,7 +13,7 @@ jobs:
   # Build
   #-----------------------------------------
   build:
-    runs-on: Ubuntu-20.04
+    runs-on: ubuntu-latest
     name: Build
     strategy:
       matrix:
@@ -47,26 +47,17 @@ jobs:
       # Build server
       - name: Build server
         run: npm run prod:build:server
-      # Save build, coverage and analysis for later use
+      # Save build for later
       - name: Upload build
         uses: actions/upload-artifact@v2
         with:
           name: build-${{ matrix.node-version }}
-          path: |
-            build
-      - name: Upload coverage and analysis
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage-${{ matrix.node-version }}
-          path: |
-            coverage
-            analysis
-
+          path: build
   #-----------------------------------------
   # unit test
   #-----------------------------------------
   unit-test:
-    runs-on: Ubuntu-20.04
+    runs-on: ubuntu-latest
     needs: build
     name: unit tests
     # For now disable this step, only run e2e
@@ -90,8 +81,8 @@ jobs:
   #-----------------------------------------
   # e2e test
   #-----------------------------------------
-  e2e-test:
-    runs-on: Ubuntu-20.04
+  e2e:
+    runs-on: ubuntu-latest
     needs: build
     container:
       image: cypress/browsers:node14.15.0-chrome86-ff82
@@ -142,10 +133,10 @@ jobs:
         with:
           working-directory: /home/runner/work/calcetto/calcetto
           # Start server and wait for response
-          start: npm run prod:heroku:server
+          start: npm run test:app
           wait-on: 'http://localhost:5001'
           # Test options
-          config: baseUrl=http://localhost:5001
+          # config: baseUrl=http://localhost:5001
           browser: ${{ matrix.browser }}
           parallel: true
           headless: true
@@ -173,6 +164,7 @@ jobs:
         with:
           name: cypress-videos
           path: cypress/videos
+      -
       # TODO: e2e coverage
       # - name: Save Coverage
       # if: ${{ success() }}
@@ -185,8 +177,8 @@ jobs:
   # Code Quality ( Sonarcloud )
   #-----------------------------------------
   analyze:
-    runs-on: Ubuntu-20.04
-    needs: build
+    runs-on: ubuntu-latest
+    needs: [build, e2e]
     name: Code Quality
     steps:
         - uses: actions/checkout@v2
@@ -197,7 +189,7 @@ jobs:
         - name: Download Coverage
           uses: actions/download-artifact@v2
           with:
-            name: coverage-12.x
+            name: coverage
         # https://github.com/marketplace/actions/sonarcloud-scan
         - name: SonarCloud Scan
           uses: sonarsource/sonarcloud-github-action@master

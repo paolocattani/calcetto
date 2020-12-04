@@ -16,18 +16,21 @@ npm run analyze
 npm run lint:report
 echo "Done..."
 
-echo '--> Run Coverage...'
+####
+## FIXME: now coverage is collected from e2e test which runs on CI
+###
+#echo '--> Run Coverage...'
 ## Need to push coverage due to this issue https://github.com/facebook/jest/issues/9324
-set -e
-! npm run test:client:coverage
-if [ $? -eq 0 ]; then
-  echo "Done..."
-else
-  echo "Always the same error..."
-fi
-! cd server && npm run test:unit:coverage
-if [ $? -eq 0 ]; then
-  echo "Done..."
-else
-  echo "Always the same error..."
-fi
+#set -e
+#! npm run test:client:coverage
+#if [ $? -eq 0 ]; then
+#  echo "Done..."
+#else
+#  echo "Always the same error..."
+#fi
+#! cd server && npm run test:unit:coverage
+#if [ $? -eq 0 ]; then
+#  echo "Done..."
+#else
+#  echo "Always the same error..."
+#fi

@@ -8,7 +8,7 @@ import {UserRole} from "../../src/@common/dto";
 import {Tournament} from "../pages/tournament.page";
 import { fixCypressSpec } from '../support'
 import {AuthState} from "../../src/@common/models";
-
+const specTitle = require("cypress-sonarqube-reporter/specTitle");
 const { users } = require('../fixtures/auth.fixture.json')
 const user:RegistrationProps = users.user;
 const admin:RegistrationProps = users.admin;
@@ -67,7 +67,7 @@ describe('Authentication Test', () => {
 
 	}
 
-  describe('Registration process', function () {
+  describe(specTitle('Registration process'), function () {
 		it('Should show errors on registration', ()=> {
 			const landingPage = new LandingPage();
 			landingPage.visit()
@@ -100,7 +100,7 @@ describe('Authentication Test', () => {
 
   });
 
-  describe('Login process', ()=> {
+  describe(specTitle('Login process'), ()=> {
 
 		it('Should show errors on login with missing data', ()=> {
 			const landingPage = new LandingPage();
@@ -154,7 +154,7 @@ describe('Authentication Test', () => {
 
 	});
 
-	describe('Logout process', ()=> {
+	describe(specTitle('Logout process'), ()=> {
 		it('Should logout', ()=> {
 			const landingPage = new LandingPage();
 			landingPage.forceLogout();

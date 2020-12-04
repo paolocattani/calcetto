@@ -127,7 +127,7 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
     );
   };
 
-  const onSelectPlayerRole = (newRole: ValueType<PlayerRoleType>) => {
+  const onSelectPlayerRole = (newRole: ValueType<PlayerRoleType, false>) => {
     if (newRole) {
       setPlayerRole(newRole as PlayerRoleType);
     }
