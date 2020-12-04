@@ -1,6 +1,5 @@
 import {AbstractPage} from "./abstract.page";
 import {imageSnapshotConfig} from "../support/common";
-import {UserRole} from "../../src/@common/dto";
 
 // https://glebbahmutov.com/blog/open-source-visual-testing-of-components/
 export type LoginProps = { username: string, password: string }

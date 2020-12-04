@@ -7,8 +7,10 @@ export abstract class AbstractPage {
 		return cy.get('[data-cy=loader]');
 	}
 
-	getToastContainer(){
-		return cy.get('[data-cy=toast-container]');
+	getToastList(){
+		return cy
+			.get('.Toastify__toast-container.Toastify__toast-container--top-right')
+			.children();
 	}
 
 	getStoreState(reducer:keyof RootState){

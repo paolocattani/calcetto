@@ -12,6 +12,7 @@ import {AuthState} from "../../src/@common/models";
 const { users } = require('../fixtures/auth.fixture.json')
 const user:RegistrationProps = users.user;
 const admin:RegistrationProps = users.admin;
+const empty:RegistrationProps = users.empty;
 
 // https://www.cypress.io/blog/2018/11/14/testing-redux-store/
 // Dispatch action   cy.window().its('store').invoke('dispatch', AuthAction.login.... )
@@ -45,7 +46,6 @@ describe('Authentication Test', () => {
 
 		// Test store
 		landingPage.getStoreState('authState').then( (authState:AuthState) => {
-				cy.log("authState : ", authState )
 				// Authentication props
 				expect(authState).to.have.property('isAdmin', isAdmin);
 				expect(authState).to.have.property('isAuthenticated', true);
@@ -65,6 +65,20 @@ describe('Authentication Test', () => {
 	}
 
   describe('Registration process', function () {
+		it('Should show errors on registration', ()=> {
+			const landingPage = new LandingPage();
+			landingPage.visit()
+				.get('#swapButton').should('be.visible').click()
+				.get('[data-cy=auth-form]').should('be.visible')
+				.get('#registerButton').should('be.visible').click();
+				landingPage.getToastList().should('have.length', 11);
+				/* TODO: test list content
+				.clock().then((clock) => {
+					landingPage.getToastContainer().should('have.length', 11);
+
+				});
+			 	*/
+		});
 
 		it('Should register Admin', ()=> {
 			const landingPage = new LandingPage();
@@ -80,23 +94,62 @@ describe('Authentication Test', () => {
 			landingPage.register(user,false);
 			afterLogin(landingPage,user, false);
     });
+
   });
 
   describe('Login process', ()=> {
-    it('Should login as Admin', ()=> {
+
+		it('Should show errors on login with missing data', ()=> {
+			const landingPage = new LandingPage();
+			landingPage.visit()
+				.get('#swapButton').should('be.visible')
+				.get('[data-cy=auth-form]').should('be.visible')
+				.get('#loginButton').should('be.visible').should('be.disabled')
+				.invoke('removeAttr', 'disabled')
+				.click();
+			landingPage.getToastList().should('have.length', 2);
+			/* TODO: test list content
+			.clock().then((clock) => {
+				landingPage.getToastContainer().should('have.length', 11);
+
+			});
+			 */
+		});
+		it('Should show error with wrong credentials', ()=> {
+			const landingPage = new LandingPage();
+			cy.visit('/')
+				.get('#swapButton').should('be.visible')
+				.get('[data-cy=auth-form]').should('be.visible')
+				.get('#username').should('be.visible').type('wronguser')
+				.get('#password').should('be.visible').type(admin.password)
+				.get('#loginButton').should('be.visible').click();
+			landingPage.getToastList().should('have.length', 1);
+
+			cy.visit('/')
+				.get('#swapButton').should('be.visible')
+				.get('[data-cy=auth-form]').should('be.visible')
+				.get('#username').should('be.visible').type(admin.username)
+				.get('#password').should('be.visible').type('wrongpassword')
+				.get('#loginButton').should('be.visible').click();
+			landingPage.getToastList().should('have.length', 1);
+
+		});
+
+		it('Should login as Admin', ()=> {
 				const landingPage = new LandingPage();
 				landingPage.login(admin);
 				afterLogin(landingPage,admin, true);
 				landingPage.forceLogout();
 		});
 
-    it('Should login as User', ()=> {
-				const landingPage = new LandingPage();
-				landingPage.login(user);
-				afterLogin(landingPage,user, false);
-				landingPage.forceLogout();
-    });
-  });
+		it('Should login as User', ()=> {
+			const landingPage = new LandingPage();
+			landingPage.login(user);
+			afterLogin(landingPage,user, false);
+			landingPage.forceLogout();
+		});
+
+	});
 
   // more examples
   //
