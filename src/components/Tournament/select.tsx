@@ -110,6 +110,7 @@ const FTournament = () => {
       newTournament ? (
         <Button
           type="button"
+					data-cy="select-tournament"
           size="lg"
           variant="outline-warning"
           className="float-left default-color-white"
@@ -120,6 +121,7 @@ const FTournament = () => {
       ) : (
         <Button
           type="button"
+					data-cy="new-tournament"
           size="lg"
           variant="outline-warning"
           className="float-left default-color-white"

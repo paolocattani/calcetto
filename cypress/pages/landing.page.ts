@@ -39,6 +39,12 @@ export class LandingPage extends AbstractPage{
 		});
 	}
 
+	logout(){
+		return cy
+			.get('[data-cy=header-dropdown]').should('be.visible').click()
+			.get('[data-cy=header-user-logout]').should('be.visible').click();
+
+	}
 
 	login({username, password}: LoginProps):void {
 		// https://docs.cypress.io/api/commands/intercept.html

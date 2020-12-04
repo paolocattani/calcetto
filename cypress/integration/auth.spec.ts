@@ -61,6 +61,9 @@ describe('Authentication Test', () => {
 		// Tournament form should be visibile after login
 		const tournamentPage:Tournament = new Tournament();
 		tournamentPage.getForm().should('be.visible');
+		// Admin should see button for new tournament
+		const newTournamentButton = tournamentPage.getNewTournamentButton();
+		newTournamentButton.should(isAdmin ? 'be.visible' : 'not.exist');
 
 	}
 
@@ -151,7 +154,18 @@ describe('Authentication Test', () => {
 
 	});
 
-  // more examples
+	describe('Logout process', ()=> {
+		it('Should logout', ()=> {
+			const landingPage = new LandingPage();
+			landingPage.forceLogout();
+			landingPage.login(user);
+			landingPage.logout();
+			cy.get('#swapButton').should('be.visible')
+				.get('[data-cy=auth-form]').should('be.visible');
+		});
+	});
+
+		// more examples
   //
   // https://github.com/cypress-io/cypress-example-todomvc
   // https://github.com/cypress-io/cypress-example-kitchensink
