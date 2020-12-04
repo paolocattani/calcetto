@@ -29,16 +29,6 @@ export class LandingPage extends AbstractPage{
 		});
 	}
 
-	forceDeleteUser(email:string,username:string,password:string) {
-		return cy.request({
-			method: 'DELETE',
-			url: 'http://localhost:5001/api/v2/auth/test/delete',
-			failOnStatusCode: false,
-			headers: {'Content-Type': 'application/json'},
-			body: {email, username, password, secret: Cypress.env('secret')}
-		});
-	}
-
 	logout(){
 		return cy
 			.get('[data-cy=header-dropdown]').should('be.visible').click()

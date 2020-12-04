@@ -12,7 +12,6 @@ import {AuthState} from "../../src/@common/models";
 const { users } = require('../fixtures/auth.fixture.json')
 const user:RegistrationProps = users.user;
 const admin:RegistrationProps = users.admin;
-const empty:RegistrationProps = users.empty;
 
 // https://www.cypress.io/blog/2018/11/14/testing-redux-store/
 // Dispatch action   cy.window().its('store').invoke('dispatch', AuthAction.login.... )
