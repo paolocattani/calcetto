@@ -111,7 +111,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        browser: [ chrome, firefox ]
+        browser: chrome
+        # browser: [ chrome, firefox ]
         containers: [1, 2, 3]
     # Run e2e only on develop
     # FIXME: if: github.ref == 'refs/heads/e2e' || github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master'
@@ -132,19 +133,20 @@ jobs:
       #   run: echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf && sysctl -p
       # e2e
       # https://medium.com/swlh/publish-your-cypress-test-report-with-github-actions-47248788713a
+      # https://github.com/bahmutov/cypress-gh-action-example/tree/master/.github/workflows
       - name: e2e
         uses: cypress-io/github-action@v2
         with:
           working-directory: /home/runner/work/calcetto/calcetto
           # Start server and wait for response
-          start: npm run test:app
-          wait-on: 'http://localhost:5001'
+          start: npm run test:app:server , npm run test:app:client
+          wait-on: 'http://localhost:5000'
           # Test options
           # config: baseUrl=http://localhost:5001
           browser: ${{ matrix.browser }}
           # FIXME: check code coverage
-          # parallel: true
-          # group: 'e2e_${{ matrix.browser }}'
+          parallel: true
+          group: 'e2e_${{ matrix.browser }}'
           headless: true
           record: true
         env:

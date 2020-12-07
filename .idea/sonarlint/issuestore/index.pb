@@ -1,8 +1,6 @@
 
 M
 src/@common/dto/stage2.dto.ts,2\2\229b1dc5fa7d345524eb1ac938ef145f40ad8684
-P
- cypress/integration/auth.spec.ts,2\8\28ed2aa4349118d5b2c63d1dbe6645e4b0e29c83
 <
 .eslintrc.js,d\b\dbc0c31823b8f2e4ed04a397722fed33a67f123f
 S
@@ -205,8 +203,6 @@ J
 src/components/App/App.tsx,5\e\5e91b656be6a5a1eda844ceb9740e24ded3b2a47
 W
 'src/components/core/generic/Commons.tsx,7\a\7a4afb3132638c7e26693fa51914d2f53982fb81
-8
-.babelrc,b\c\bcac7464521b8c19a2372c739f6dc9e9ab7dfc80
 R
 "src/@common/models/stage1.model.ts,2\2\22f09aecf16217687760cd7207dd3d40073ee50f
 R
@@ -225,3 +221,19 @@ P
  src/@common/models/auth.model.ts,1\4\1404181663b07a80e8c4cb87bfeab23e0f3171a3
 Q
 !src/components/Tournament/new.tsx,3\e\3e91ce631c380acf59df78c11abc83f1b3fe87ec
+H
+sonar-project.properties,2\5\2538046035efb77ecc44e1fd2eec1e2641594d4c
+P
+ src/components/Stage2/helper.tsx,0\7\0753fe6f31050920d5031f773b92e9534321704c
+N
+src/components/Pair/select.tsx,7\1\713c493d60108f18f393e404276ecc5f70ce8d23
+P
+ src/components/Player/select.tsx,2\4\24c22ed716ebf58020ef1aac3a3be66b2361516d
+I
+server/core/middleware.ts,5\1\51cfd92a486125e172ee82485888e2290df91ad0
+Z
+*server/controller/tournament.controller.ts,f\d\fd997de325c64f9d3056ef73e82a9cb0dfcadd09
+O
+cypress/integration/auth.e2e.ts,7\a\7a429078af694750db07f965546bd15a0ce7dd30
+U
+%cypress/integration/tournament.e2e.ts,5\b\5b0c62b406c015d16f005ab6600c008a42fe0fc0

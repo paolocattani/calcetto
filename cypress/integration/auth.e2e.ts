@@ -22,11 +22,7 @@ describe('Authentication Test', () => {
 	});
 
 	beforeEach(fixCypressSpec(__filename))
-/*
-	beforeEach(function() {
-		//Cypress.Cookies.preserveOnce('session_id')
-  });
-*/
+
 	function afterLogin (landingPage:LandingPage,user:RegistrationProps,isAdmin:boolean){
 		// Header should show username
 		landingPage.getHeaderUsername().should('be.visible').and('contain',user.username);
