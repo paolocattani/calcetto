@@ -179,7 +179,7 @@
     "cypress-watch-and-reload": "^1.2.18",
     "eslint": "^7.14.0",
     "eslint-config-google": "^0.14.0",
-    "eslint-config-prettier": "^6.15.0",
+    "eslint-config-prettier": "^7.0.0",
     "eslint-config-sinon": "^4.0.0",
     "eslint-config-strict": "^14.0.1",
     "eslint-plugin-ie11": "^1.0.0",
