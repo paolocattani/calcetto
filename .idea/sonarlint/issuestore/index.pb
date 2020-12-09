@@ -237,3 +237,13 @@ O
 cypress/integration/auth.e2e.ts,7\a\7a429078af694750db07f965546bd15a0ce7dd30
 U
 %cypress/integration/tournament.e2e.ts,5\b\5b0c62b406c015d16f005ab6600c008a42fe0fc0
+I
+.github/workflows/e2e.yml,c\2\c22d7ab0c3ebc6ebf8996c2effd665b0557c63ca
+=
+.eslintignore,8\8\88939cd7e826eac4f61dd9adac091b9d64277287
+L
+src/components/App/badge.tsx,b\c\bc290f97f93cedb3faeaf3e3b556d7a4c56938a6
+M
+src/@common/dto/player.dto.ts,a\f\aff8d377f30d42cb43c6539b23401e0a2ee96f70
+K
+src/@common/dto/pair.dto.ts,5\f\5f90068061dc9b014d11715bb3abd3fb777dd485
