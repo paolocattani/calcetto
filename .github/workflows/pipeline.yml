@@ -97,10 +97,12 @@ jobs:
           uses: actions/download-artifact@v2
           with:
             name: build-14.x
+            path: build
         - name: Download analysis
           uses: actions/download-artifact@v2
           with:
             name: analysis-14.x
+            path: analysis
         # https://github.com/marketplace/actions/sonarcloud-scan
         - name: SonarCloud Scan
           uses: sonarsource/sonarcloud-github-action@master
