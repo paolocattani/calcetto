@@ -103,7 +103,7 @@
     "-----TEST----": "---------------------------",
     "test:app": "concurrently -p \"[{name}]\" -n server,client -c \"bgGreen.bold,bgBlue.bold\"  --kill-others-on-fail \"npm run test:app:server\" \"npm run test:app:client\"",
     "test:app:server": "cross-env NODE_ENV=test npm run prod:heroku:server",
-		"test:app:server:coverage": "cross-env NODE_ENV=test nyc --silent npm run dev:server",
+    "test:app:server:coverage": "cross-env NODE_ENV=test nyc --silent npm run dev:server",
     "test:app:client": "cross-env NODE_ENV=test CI=true BROWSER=NONE npm run CRA:start",
     "test:client:coverage": "react-scripts test --coverage --watchAll=false --silent --testResultsProcessor ./node_modules/jest-sonar-reporter ",
     "test:client:debug": "react-scripts --inspect-brk test --runInBand --no-cache --env=jest-environment-jsdom-sixteen",
