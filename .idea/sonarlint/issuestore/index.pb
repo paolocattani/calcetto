@@ -257,3 +257,7 @@ N
 src/components/Auth/Delete.tsx,8\0\80d975aceaa40760559dfda7b20179a40f85b7a7
 b
 2src/components/App/__snapshots__/App.test.tsx.snap,4\c\4c3da298bfec6353c46e5dfc54b8299dfa399142
+M
+.github/workflows/Publish.yml,d\6\d676943adace8cd2e4ddf93425994cdf44873ac4
+F
+.github/dependabot.yml,0\9\091aff741808a09242f252264b14f4a9adaa5305
