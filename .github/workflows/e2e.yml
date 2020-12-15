@@ -2,7 +2,8 @@ name: e2e
 on:
   push:
     branches:
-      - e2e
+      # Disable for now. I'll run e2e before push.
+      - e2e_disabled
 jobs:
   #-----------------------------------------
   # e2e test
