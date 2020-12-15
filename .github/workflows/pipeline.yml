@@ -53,6 +53,12 @@ jobs:
         with:
           name: build-${{ matrix.node-version }}
           path: build
+      # Save build for later
+      - name: Upload analysis
+        uses: actions/upload-artifact@v2
+        with:
+          name: analysis-${{ matrix.node-version }}
+          path: analysis
   #-----------------------------------------
   # unit test
   #-----------------------------------------
@@ -91,6 +97,10 @@ jobs:
           uses: actions/download-artifact@v2
           with:
             name: build-14.x
+        - name: Download analysis
+          uses: actions/download-artifact@v2
+          with:
+            name: analysis-14.x
         # https://github.com/marketplace/actions/sonarcloud-scan
         - name: SonarCloud Scan
           uses: sonarsource/sonarcloud-github-action@master
