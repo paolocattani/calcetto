@@ -247,3 +247,13 @@ M
 src/@common/dto/player.dto.ts,a\f\aff8d377f30d42cb43c6539b23401e0a2ee96f70
 K
 src/@common/dto/pair.dto.ts,5\f\5f90068061dc9b014d11715bb3abd3fb777dd485
+L
+src/components/Auth/Edit.tsx,c\a\ca916c711d1423252583d4880788ea323be9ced8
+L
+src/components/App/toast.css,5\6\5677957e82b21f36f04432a2ecf4b57e44d323b8
+M
+src/components/Auth/Login.tsx,4\2\429161e9085d450f71cd2c7b8d4ac4dc16ea1145
+N
+src/components/Auth/Delete.tsx,8\0\80d975aceaa40760559dfda7b20179a40f85b7a7
+b
+2src/components/App/__snapshots__/App.test.tsx.snap,4\c\4c3da298bfec6353c46e5dfc54b8299dfa399142

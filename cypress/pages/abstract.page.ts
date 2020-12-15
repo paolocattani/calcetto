@@ -58,12 +58,12 @@ export abstract class AbstractPage {
 		return this.forceRegistration(admin);
 	}
 
-	forceRegistration(user:RegistrationProps){
+	forceRegistration(registrationOptions:RegistrationProps){
 		cy.request({
 			method: 'POST',
 			url: 'http://localhost:5001/api/v2/auth/test/register',
 			headers: {'Content-Type': 'application/json'},
-			body: { ...user, secret: Cypress.env('secret')}
+			body: { ...registrationOptions, secret: Cypress.env('secret')}
 		}).then((resp) => {
 			this.dispatchAction(AuthAction.registration.success(resp.body));
 		});
