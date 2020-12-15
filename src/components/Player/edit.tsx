@@ -46,15 +46,15 @@ const EditPlayer: React.FC<{}> = () => {
       },
       history: currentHistory,
     };
-    const action = isEdit ? PlayerAction.updatePlayer : PlayerAction.savePlayer;
-    dispatch(action.request(request));
+    dispatch((isEdit ? PlayerAction.updatePlayer : PlayerAction.savePlayer).request(request));
   };
 
   if (!player) {
     setTimeout(() => currentHistory.push('/player'), 3000);
-    return <div>Giocatore non trovato</div>;
+    return <div>{t('player:not_found')}</div>;
   }
   const isEdit = !!player.id;
+	console.log("Render edit : ");
 
   return (
     <Col md={{ span: '6', offset: '3' }} sm="12">

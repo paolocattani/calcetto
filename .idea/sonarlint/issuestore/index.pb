@@ -181,8 +181,6 @@ $public/locales/it-IT/tournament.json,7\3\73d018e842690f2c9ee423fbc5e46d5318198
 :
 
 .nycrc.yml,3\a\3a973077c8520c06e1cc584fc1d56b3ebc6a83e5
-A
-server/server.log,0\0\0053a29f7234e160b6de5c254aaf9b4418e57dc6
 E
 server/core/logger.ts,7\c\7c2288560ab7c6babc37adf021fefd5052bbe014
 N
@@ -261,3 +259,15 @@ M
 .github/workflows/Publish.yml,d\6\d676943adace8cd2e4ddf93425994cdf44873ac4
 F
 .github/dependabot.yml,0\9\091aff741808a09242f252264b14f4a9adaa5305
+C
+server/nodemon.json,8\2\82e7967f251d05796c78138ad65d55e3a1bf5e4e
+N
+src/components/Pair/noData.tsx,8\1\81f36547f654c4135475ac00092a988a32da3d84
+O
+src/components/Player/table.tsx,2\2\225a423ff5eb8d1f0fe0672b83aff20dd4202bfa
+R
+"src/redux/actions/player.action.ts,a\0\a0dbfc3e973a92d3f7d3fb9a97bee9550396d615
+N
+src/redux/actions/constants.ts,9\1\9179fe4540bdc178662923438ad916411f09c1f8
+N
+src/components/Player/edit.tsx,f\7\f73011b2e54b53e3210c75dd481545a69f9acf2d

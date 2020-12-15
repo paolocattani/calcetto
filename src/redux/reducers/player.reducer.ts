@@ -40,7 +40,14 @@ export const PlayerReducer = createReducer<PlayerState, Action>(initialPlayerSta
     playersList: [player, ...state.playersList],
     isLoading: false,
     isSaving: false,
+		player
   }))
+	.handleAction([ PlayerAction.updatePlayer.success], (state, { payload: { player } }) => ({
+		playersList: state.playersList,
+		isLoading: false,
+		isSaving: false,
+		player
+	}))
   .handleAction([PlayerAction.deletePlayers.success], (state, { payload: { playersList } }) => ({
     playersList: state.playersList.filter((row) => !playersList.find((selectedRow) => selectedRow.id === row.id)),
     isLoading: false,

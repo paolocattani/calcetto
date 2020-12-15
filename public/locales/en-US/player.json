@@ -6,27 +6,29 @@
 	"deleted_2":"Players deleted...",
 	"duplicated":"A player already exists with current data.",
 	"data":"No data found",
-    "add":"Add player",
-    "edit":"Edit player",
-    "filter":"Clear filters",
-    "field": {
-        "name":"Name",
-        "surname":"Surname",
-        "alias":"Alias",
-        "role":"Role",
-        "email":"Email",
-        "phone":"Mobile",
-        "filter":"Filter"
-    },
-    "delete":{
-        "one":"Delete player",
-        "multi":"Delete players"
-    },
-    "role":{
-        "role":"Role",
-        "none":"I'm not a player",
-        "goalKeeper":"GoalKeeper",
-        "striker":"Striker",
-        "master":"Master"
-    }
+	"add":"Add player",
+	"edit":"Edit player",
+	"filter":"Clear filters",
+	"not_found": "Player not found",
+	"no_data": "No players found...",
+	"field": {
+			"name":"Name",
+			"surname":"Surname",
+			"alias":"Alias",
+			"role":"Role",
+			"email":"Email",
+			"phone":"Mobile",
+			"filter":"Filter"
+	},
+	"delete":{
+			"one":"Delete player",
+			"multi":"Delete players"
+	},
+	"role":{
+			"role":"Role",
+			"none":"I'm not a player",
+			"goalKeeper":"GoalKeeper",
+			"striker":"Striker",
+			"master":"Master"
+	}
 }

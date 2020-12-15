@@ -16,7 +16,7 @@ export const PlayerAction = {
   // set selected tournament
   setPlayer: createAction(...defaultParam(actionName, 'Set Player'))<PlayerDTO>(),
   // fetch tournaments
-  fetchPlayers: createAsyncAction(...defaultAsyncParams(actionName, 'Fetch Palyers'))<
+  fetchPlayers: createAsyncAction(...defaultAsyncParams(actionName, 'Fetch Player'))<
     FetchPlayersRequest,
     FetchPlayersResponse,
     PlayerError

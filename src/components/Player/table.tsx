@@ -43,7 +43,7 @@ const PlayerTable: React.FC<PlayerProps> = () => {
           <span> {t('common:route.home')}</span>
         </Button>
         {isAdmin ? (
-          <Button variant="success" onClick={() => addEdit(getEmptyPlayer())}>
+          <Button variant="success" onClick={() => addEdit()}>
             <PlusIcon />
             <span>{t('player:add')}</span>
           </Button>
@@ -85,8 +85,8 @@ const PlayerTable: React.FC<PlayerProps> = () => {
       playersList[rowIndex].editable ? {} : { backgroundColor: '#dc3545' },
   };
 
-  const addEdit = (player: PlayerDTO) => {
-    console.log('addEdit : ', player);
+  const addEdit = (player: PlayerDTO = getEmptyPlayer()) => {
+   	console.log('addEdit : ', player);
     dispatch(PlayerAction.setPlayer(player));
     currentHistory.push('/player/edit');
   };
@@ -114,6 +114,7 @@ const PlayerTable: React.FC<PlayerProps> = () => {
     master: t('player:role.master'),
     edit: t('common:edit'),
   };
+  console.log("Render player : ");
   return (
     <>
       <LoadingModal show={isLoading} message={t('common:loading')} />
@@ -130,7 +131,12 @@ const PlayerTable: React.FC<PlayerProps> = () => {
               caption={<TableHeader title={'common:route.player'} saved={isSaving} />}
               filter={filterFactory}
               headerClasses="default-background default-color-yellow"
-              noDataIndication={() => <p>{t('player:data')}</p>}
+              noDataIndication={() => isAdmin ?
+								<Button variant="success" onClick={()=> addEdit()}>
+									{t('player:add')}
+								</Button> :
+								<p>{t('player:no_data')}</p>
+              }
               striped
               hover
             />
