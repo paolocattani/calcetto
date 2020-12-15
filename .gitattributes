@@ -1,2 +1,19 @@
 # Don't convert EOL on .sh files
-*.sh text eol=lf
+# *.sh text eol=lf
+
+# .gitattributes snippet to force users to use same line endings for project.
+#
+# Handle line endings automatically for files detected as text
+# and leave all files detected as binary untouched.
+* text=auto
+
+#
+# The above will handle all files NOT found below
+# https://help.github.com/articles/dealing-with-line-endings/
+# https://github.com/Danimoth/gitattributes/blob/master/Web.gitattributes
+*.js 	text eol=lf
+*.ts 	text eol=lf
+*.jsx text eol=lf
+*.tsx text eol=lf
+*.css text eol=lf
+*.html text eol=lf

@@ -1,4 +1,5 @@
 name: "CodeQL config"
+
 paths:
   - cli
   - cypress
@@ -7,7 +8,7 @@ paths:
   - public
   - server
   - src
-- paths-ignore:
+paths-ignore:
   - node_modules
   - build
   - .idea

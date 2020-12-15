@@ -1,17 +1,16 @@
 // enables intelligent code completion for Cypress commands
 // https://on.cypress.io/intelligent-code-completion
 
+import { AUTH_FORM, LandingPage, LOGIN_BUTTON, RegistrationProps, SWAP_BUTTON } from '../pages/landing.page';
+import { UserRole } from '../../src/@common/dto';
+import { Tournament } from '../pages/tournament.page';
+import { fixCypressSpec } from '../support';
+import { AuthState } from '../../src/@common/models';
+import { BE_VISIBLE, HAVE_LENGTH } from '../pages/abstract.page';
 
-import {LandingPage, RegistrationProps} from "../pages/landing.page";
-import { AuthAction } from '../../src/redux/actions/auth.action';
-import {UserRole} from "../../src/@common/dto";
-import {Tournament} from "../pages/tournament.page";
-import { fixCypressSpec } from '../support'
-import {AuthState} from "../../src/@common/models";
-
-const { users } = require('../fixtures/auth.fixture.json')
-const user:RegistrationProps = users.user;
-const admin:RegistrationProps = users.admin;
+const { users } = require('../fixtures/auth.fixture.json');
+const user: RegistrationProps = users.user;
+const admin: RegistrationProps = users.admin;
 
 // https://www.cypress.io/blog/2018/11/14/testing-redux-store/
 // Dispatch action   cy.window().its('store').invoke('dispatch', AuthAction.login.... )
@@ -21,152 +20,170 @@ describe('Authentication Test', () => {
 		Cypress.Cookies.debug(true);
 	});
 
-	beforeEach(fixCypressSpec(__filename))
-/*
-	beforeEach(function() {
-		//Cypress.Cookies.preserveOnce('session_id')
-  });
-*/
-	function afterLogin (landingPage:LandingPage,user:RegistrationProps,isAdmin:boolean){
+	beforeEach(fixCypressSpec(__filename));
+
+	function afterLogin(landingPage: LandingPage, registrationOptions: RegistrationProps, isAdmin: boolean) {
 		// Header should show username
-		landingPage.getHeaderUsername().should('be.visible').and('contain',user.username);
+		landingPage.getHeaderUsername().should(BE_VISIBLE).and('contain', registrationOptions.username);
 
 		// Test cookies
 		cy.getCookies()
-			// FIXME: .should('have.length', 1)
+			// FIXME: .should(HAVE_LENGTH, 1)
 			.then((cookies) => {
-				const session_id = cookies.filter(c => c.name==='session_id' )[0];
+				const session_id = cookies.filter((c) => c.name === 'session_id')[0];
 				expect(session_id).to.have.property('name', 'session_id');
-				expect(session_id).to.have.property('domain','localhost');
+				expect(session_id).to.have.property('domain', 'localhost');
 				expect(session_id).to.have.property('httpOnly');
 				expect(session_id).to.have.property('path');
-				expect(session_id).to.have.property('secure',false);
+				expect(session_id).to.have.property('secure', false);
 			});
 
 		// Test store
-		landingPage.getStoreState('authState').then( (authState:AuthState) => {
-				// Authentication props
-				expect(authState).to.have.property('isAdmin', isAdmin);
-				expect(authState).to.have.property('isAuthenticated', true);
-				expect(authState).to.have.property('isLoading', false);
+		landingPage.getStoreState('authState').then((authState: AuthState) => {
+			// Authentication props
+			expect(authState).to.have.property('isAdmin', isAdmin);
+			expect(authState).to.have.property('isAuthenticated', true);
+			expect(authState).to.have.property('isLoading', false);
 
-				// User prop
-				const userState = authState.user;
-				landingPage.compareRegistrationProperty(userState,user,isAdmin);
-				expect(userState).to.have.property('name',user.name);
-				expect(userState).to.have.property('role', isAdmin ? UserRole.Admin : UserRole.User);
+			// User prop
+			const userState = authState.user;
+			landingPage.compareRegistrationProperty(userState, registrationOptions, isAdmin);
+			expect(userState).to.have.property('name', registrationOptions.name);
+			expect(userState).to.have.property('role', isAdmin ? UserRole.Admin : UserRole.User);
 		});
 
 		// Tournament form should be visibile after login
-		const tournamentPage:Tournament = new Tournament();
-		tournamentPage.getForm().should('be.visible');
+		const tournamentPage: Tournament = new Tournament();
+		tournamentPage.getForm().should(BE_VISIBLE);
 		// Admin should see button for new tournament
 		const newTournamentButton = tournamentPage.getNewTournamentButton();
-		newTournamentButton.should(isAdmin ? 'be.visible' : 'not.exist');
-
+		newTournamentButton.should(isAdmin ? BE_VISIBLE : 'not.exist');
 	}
 
-  describe('Registration process', function () {
-		it('Should show errors on registration', ()=> {
+	describe('Registration process', function () {
+		it('Should show errors on registration', () => {
 			const landingPage = new LandingPage();
-			landingPage.visit()
-				.get('#swapButton').should('be.visible').click()
-				.get('[data-cy=auth-form]').should('be.visible')
-				.get('#registerButton').should('be.visible').click();
-				landingPage.getToastList().should('have.length', 11);
-				/* TODO: test list content
+			landingPage
+				.visit()
+				.get(SWAP_BUTTON)
+				.should(BE_VISIBLE)
+				.click()
+				.get(AUTH_FORM)
+				.should(BE_VISIBLE)
+				.get('#registerButton')
+				.should(BE_VISIBLE)
+				.click();
+			landingPage.getToastList().should(HAVE_LENGTH, 11);
+			/* TODO: test list content
 				.clock().then((clock) => {
-					landingPage.getToastContainer().should('have.length', 11);
+					landingPage.getToastContainer().should(HAVE_LENGTH, 11);
 
 				});
 			 	*/
 		});
 
-		it('Should register Admin', ()=> {
+		it('Should register Admin', () => {
 			const landingPage = new LandingPage();
-			landingPage.forceDeleteUser(admin.email,admin.username,admin.password);
+			landingPage.forceDeleteUser(admin.email, admin.username, admin.password);
 			// https://glebbahmutov.com/blog/keep-passwords-secret-in-e2e-tests/
-			landingPage.register(admin,true);
-			afterLogin(landingPage,admin, true);
+			landingPage.register(admin, true);
+			afterLogin(landingPage, admin, true);
 		});
 
-    it('Should register User', ()=> {
+		it('Should register User', () => {
 			const landingPage = new LandingPage();
-			landingPage.forceDeleteUser(user.email,user.username,user.password);
-			landingPage.register(user,false);
-			afterLogin(landingPage,user, false);
-    });
+			landingPage.forceDeleteUser(user.email, user.username, user.password);
+			landingPage.register(user, false);
+			afterLogin(landingPage, user, false);
+		});
+	});
 
-  });
-
-  describe('Login process', ()=> {
-
-		it('Should show errors on login with missing data', ()=> {
+	describe('Login process', () => {
+		it('Should show errors on login with missing data', () => {
 			const landingPage = new LandingPage();
-			landingPage.visit()
-				.get('#swapButton').should('be.visible')
-				.get('[data-cy=auth-form]').should('be.visible')
-				.get('#loginButton').should('be.visible').should('be.disabled')
+			landingPage
+				.visit()
+				.get(SWAP_BUTTON)
+				.should(BE_VISIBLE)
+				.get(AUTH_FORM)
+				.should(BE_VISIBLE)
+				.get(LOGIN_BUTTON)
+				.should(BE_VISIBLE)
+				.should('be.disabled')
+				// Test Force click
 				.invoke('removeAttr', 'disabled')
 				.click();
-			landingPage.getToastList().should('have.length', 2);
+			landingPage.getToastList().should(HAVE_LENGTH, 2);
 			/* TODO: test list content
 			.clock().then((clock) => {
-				landingPage.getToastContainer().should('have.length', 11);
+				landingPage.getToastContainer().should(HAVE_LENGTH, 11);
 
 			});
 			 */
 		});
-		it('Should show error with wrong credentials', ()=> {
+		it('Should show error with wrong credentials', () => {
 			const landingPage = new LandingPage();
 			cy.visit('/')
-				.get('#swapButton').should('be.visible')
-				.get('[data-cy=auth-form]').should('be.visible')
-				.get('#username').should('be.visible').type('wronguser')
-				.get('#password').should('be.visible').type(admin.password)
-				.get('#loginButton').should('be.visible').click();
-			landingPage.getToastList().should('have.length', 1);
+				.get(SWAP_BUTTON)
+				.should(BE_VISIBLE)
+				.get(AUTH_FORM)
+				.should(BE_VISIBLE)
+				.get('#username')
+				.should(BE_VISIBLE)
+				.type('wronguser')
+				.get('#password')
+				.should(BE_VISIBLE)
+				.type(admin.password)
+				.get(LOGIN_BUTTON)
+				.should(BE_VISIBLE)
+				.click();
+			landingPage.getToastList().should(HAVE_LENGTH, 1);
 
 			cy.visit('/')
-				.get('#swapButton').should('be.visible')
-				.get('[data-cy=auth-form]').should('be.visible')
-				.get('#username').should('be.visible').type(admin.username)
-				.get('#password').should('be.visible').type('wrongpassword')
-				.get('#loginButton').should('be.visible').click();
-			landingPage.getToastList().should('have.length', 1);
-
+				.get(SWAP_BUTTON)
+				.should(BE_VISIBLE)
+				.get(AUTH_FORM)
+				.should(BE_VISIBLE)
+				.get('#username')
+				.should(BE_VISIBLE)
+				.type(admin.username)
+				.get('#password')
+				.should(BE_VISIBLE)
+				.type('wrongpassword')
+				.get(LOGIN_BUTTON)
+				.should(BE_VISIBLE)
+				.click();
+			landingPage.getToastList().should(HAVE_LENGTH, 1);
 		});
 
-		it('Should login as Admin', ()=> {
-				const landingPage = new LandingPage();
-				landingPage.login(admin);
-				afterLogin(landingPage,admin, true);
-				landingPage.forceLogout();
-		});
-
-		it('Should login as User', ()=> {
+		it('Should login as Admin', () => {
 			const landingPage = new LandingPage();
-			landingPage.login(user);
-			afterLogin(landingPage,user, false);
+			landingPage.login(admin);
+			afterLogin(landingPage, admin, true);
 			landingPage.forceLogout();
 		});
 
+		it('Should login as User', () => {
+			const landingPage = new LandingPage();
+			landingPage.login(user);
+			afterLogin(landingPage, user, false);
+			landingPage.forceLogout();
+		});
 	});
 
-	describe('Logout process', ()=> {
-		it('Should logout', ()=> {
+	describe('Logout process', () => {
+		it('Should logout', () => {
 			const landingPage = new LandingPage();
 			landingPage.forceLogout();
 			landingPage.login(user);
 			landingPage.logout();
-			cy.get('#swapButton').should('be.visible')
-				.get('[data-cy=auth-form]').should('be.visible');
+			cy.get(SWAP_BUTTON).should(BE_VISIBLE).get(AUTH_FORM).should(BE_VISIBLE);
 		});
 	});
 
-		// more examples
-  //
-  // https://github.com/cypress-io/cypress-example-todomvc
-  // https://github.com/cypress-io/cypress-example-kitchensink
-  // https://on.cypress.io/writing-your-first-test
+	// more examples
+	//
+	// https://github.com/cypress-io/cypress-example-todomvc
+	// https://github.com/cypress-io/cypress-example-kitchensink
+	// https://on.cypress.io/writing-your-first-test
 });

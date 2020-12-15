@@ -1,8 +1,6 @@
 
 M
 src/@common/dto/stage2.dto.ts,2\2\229b1dc5fa7d345524eb1ac938ef145f40ad8684
-P
- cypress/integration/auth.spec.ts,2\8\28ed2aa4349118d5b2c63d1dbe6645e4b0e29c83
 <
 .eslintrc.js,d\b\dbc0c31823b8f2e4ed04a397722fed33a67f123f
 S
@@ -205,8 +203,6 @@ J
 src/components/App/App.tsx,5\e\5e91b656be6a5a1eda844ceb9740e24ded3b2a47
 W
 'src/components/core/generic/Commons.tsx,7\a\7a4afb3132638c7e26693fa51914d2f53982fb81
-8
-.babelrc,b\c\bcac7464521b8c19a2372c739f6dc9e9ab7dfc80
 R
 "src/@common/models/stage1.model.ts,2\2\22f09aecf16217687760cd7207dd3d40073ee50f
 R
@@ -225,3 +221,43 @@ P
  src/@common/models/auth.model.ts,1\4\1404181663b07a80e8c4cb87bfeab23e0f3171a3
 Q
 !src/components/Tournament/new.tsx,3\e\3e91ce631c380acf59df78c11abc83f1b3fe87ec
+H
+sonar-project.properties,2\5\2538046035efb77ecc44e1fd2eec1e2641594d4c
+P
+ src/components/Stage2/helper.tsx,0\7\0753fe6f31050920d5031f773b92e9534321704c
+N
+src/components/Pair/select.tsx,7\1\713c493d60108f18f393e404276ecc5f70ce8d23
+P
+ src/components/Player/select.tsx,2\4\24c22ed716ebf58020ef1aac3a3be66b2361516d
+I
+server/core/middleware.ts,5\1\51cfd92a486125e172ee82485888e2290df91ad0
+Z
+*server/controller/tournament.controller.ts,f\d\fd997de325c64f9d3056ef73e82a9cb0dfcadd09
+O
+cypress/integration/auth.e2e.ts,7\a\7a429078af694750db07f965546bd15a0ce7dd30
+U
+%cypress/integration/tournament.e2e.ts,5\b\5b0c62b406c015d16f005ab6600c008a42fe0fc0
+I
+.github/workflows/e2e.yml,c\2\c22d7ab0c3ebc6ebf8996c2effd665b0557c63ca
+=
+.eslintignore,8\8\88939cd7e826eac4f61dd9adac091b9d64277287
+L
+src/components/App/badge.tsx,b\c\bc290f97f93cedb3faeaf3e3b556d7a4c56938a6
+M
+src/@common/dto/player.dto.ts,a\f\aff8d377f30d42cb43c6539b23401e0a2ee96f70
+K
+src/@common/dto/pair.dto.ts,5\f\5f90068061dc9b014d11715bb3abd3fb777dd485
+L
+src/components/Auth/Edit.tsx,c\a\ca916c711d1423252583d4880788ea323be9ced8
+L
+src/components/App/toast.css,5\6\5677957e82b21f36f04432a2ecf4b57e44d323b8
+M
+src/components/Auth/Login.tsx,4\2\429161e9085d450f71cd2c7b8d4ac4dc16ea1145
+N
+src/components/Auth/Delete.tsx,8\0\80d975aceaa40760559dfda7b20179a40f85b7a7
+b
+2src/components/App/__snapshots__/App.test.tsx.snap,4\c\4c3da298bfec6353c46e5dfc54b8299dfa399142
+M
+.github/workflows/Publish.yml,d\6\d676943adace8cd2e4ddf93425994cdf44873ac4
+F
+.github/dependabot.yml,0\9\091aff741808a09242f252264b14f4a9adaa5305

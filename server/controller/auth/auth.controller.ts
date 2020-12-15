@@ -104,16 +104,6 @@ router.put(
 );
 
 router.post(
-	'/register',
-	withAuth,
-	asyncMiddleware(async (req: Request, res: Response) => {
-		logger.info('/register start ');
-		const registrationInfo = req.body as OmitHistory<RegistrationRequest>;
-		return await registrationController(res,registrationInfo);
-	})
-);
-
-router.post(
 	'/login',
 	withAuth,
 	asyncMiddleware(async (req: Request, res: Response) => {
@@ -133,6 +123,16 @@ router.delete(
 );
 
 // Test
+router.post(
+	'/test/register',
+	withTestAuth,
+	asyncMiddleware(async (req: Request, res: Response) => {
+		logger.info('/register start ');
+		const registrationInfo = req.body as OmitHistory<RegistrationRequest>;
+		return await registrationController(res,registrationInfo);
+	})
+);
+
 router.delete(
 	'/test/delete',
 	withTestAuth,
@@ -143,7 +143,7 @@ router.delete(
 );
 
 router.post(
-	'/login',
+	'/test/login',
 	withTestAuth,
 	asyncMiddleware(async (req: Request, res: Response) => {
 		const { username, password } = req.body as OmitHistory<LoginRequest>;

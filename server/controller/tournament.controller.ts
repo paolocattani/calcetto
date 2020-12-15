@@ -1,7 +1,7 @@
 import { Router, NextFunction, Response, Request } from 'express';
 // Core
 import { logger } from '../core/logger';
-import { asyncMiddleware, withAuth, withAdminRights, controllerLogger } from '../core/middleware';
+import {asyncMiddleware, withAuth, withAdminRights, controllerLogger, withTestAuth} from '../core/middleware';
 // Managers
 import {
 	listAll,
@@ -14,7 +14,7 @@ import {
 } from '../manager/tournament.manager';
 // Models
 import Tournament from '../database/tournament.model';
-import { TournamentDTO } from '../../src/@common/dto';
+import {TournamentDTO, UserDTO} from '../../src/@common/dto';
 import { AppRequest } from './index';
 import { entityNotFound, failure, missingParameters, serverError, success } from './common.response';
 import { OmitHistory, OmitGeneric } from '../../src/@common/models/common.models';
@@ -38,18 +38,13 @@ router.use('/', (req: Request, res: Response, next: NextFunction) =>
 router.get(
 	'/list',
 	withAuth,
-	asyncMiddleware(async (req: AppRequest, res: Response) => {
-		try {
-			const tournamentsList = await listAll(req.user!);
-			return success<FetchTournamentsResponse>(
-				res,
-				{ label: tournamentsList.length > 1 ? 'tournament:loaded_2' : 'tournament:loaded_1' },
-				{ tournamentsList }
-			);
-		} catch (err) {
-			return serverError('GET tournament/list error : ', err, res);
-		}
-	})
+	asyncMiddleware(async (req: AppRequest, res: Response) => listController(res,req.user!))
+);
+
+router.post(
+	'/test/list',
+	withTestAuth,
+	asyncMiddleware(async (req: AppRequest, res: Response) => listController(res,req.user!))
 );
 
 router.get(
@@ -136,4 +131,19 @@ router.delete(
 		}
 	})
 );
+
+const listController = async (res:Response, user:UserDTO) =>{
+	try {
+		const tournamentsList = await listAll(user);
+		return success<FetchTournamentsResponse>(
+			res,
+			{ label: tournamentsList.length > 1 ? 'tournament:loaded_2' : 'tournament:loaded_1' },
+			{ tournamentsList }
+		);
+	} catch (err) {
+		return serverError('GET tournament/list error : ', err, res);
+	}
+}
+
+
 export default router;

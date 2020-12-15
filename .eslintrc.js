@@ -46,7 +46,7 @@ module.exports = {
 
         // enable additional rules
         //indent: ['error', 2],
-        'linebreak-style': ['error', 'windows'],
+        'linebreak-style': ['error', 'unix'],
         quotes: ['warn', 'single'],
         semi: ['error', 'always'],
         // override default options for rules from base configurations
@@ -56,9 +56,9 @@ module.exports = {
         'no-console': 'off',
     },
     settings: {
-        react: {version: 'detect'}, // Tells eslint-plugin-react to automatically detect the version of React to use
+        react: { version: 'detect' }, // Tells eslint-plugin-react to automatically detect the version of React to use
         'import/resolver': {
-            node: {extensions: ['.js', '.jsx', '.ts', '.tsx', 'html']},
+            node: { extensions: ['.js', '.jsx', '.ts', '.tsx', 'html'] },
         },
     },
     env: {
