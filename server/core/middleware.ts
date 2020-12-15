@@ -35,7 +35,7 @@ export const withAuth = async (req: AppRequest, res: Response, next: NextFunctio
 	const token = getToken(req);
 	if (!token || typeof token != 'string') {
 		logger.error(chalk.redBright('Token not found : '), token);
-		return unauthorized(res, { label: 'common:server.unauthorize' });
+		return unauthorized(res, { label: 'common:server.unauthorized' });
 	}
 	const [user, isTokenValid] = safeVerifyToken(token);
 	if (isTokenValid && user) {

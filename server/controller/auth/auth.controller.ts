@@ -105,7 +105,6 @@ router.put(
 
 router.post(
 	'/login',
-	withAuth,
 	asyncMiddleware(async (req: Request, res: Response) => {
 		const { username, password } = req.body as OmitHistory<LoginRequest>;
 		return await loginUserController(res,username,password);
