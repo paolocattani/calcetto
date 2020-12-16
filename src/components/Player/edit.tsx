@@ -54,7 +54,6 @@ const EditPlayer: React.FC<{}> = () => {
     return <div>{t('player:not_found')}</div>;
   }
   const isEdit = !!player.id;
-	console.log("Render edit : ");
 
   return (
     <Col md={{ span: '6', offset: '3' }} sm="12">

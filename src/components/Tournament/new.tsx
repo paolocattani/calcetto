@@ -43,6 +43,7 @@ const NewTournament: React.FC<newTProps> = (_) => {
           <Form.Group controlId="formBasicEmail">
             <Form.Label>{t('tournament:name')}</Form.Label>
             <Form.Control
+							data-cy="new-name"
               type="text"
               required
               placeholder={t('tournament:name')}
@@ -56,6 +57,7 @@ const NewTournament: React.FC<newTProps> = (_) => {
           <Form.Group>
             <Form.Label>{t('tournament:date')}</Form.Label>
             <Form.Control
+							data-cy="new-date"
               as={() => (
                 <DatePicker
                   highlightDates={[new Date()]}
@@ -72,7 +74,7 @@ const NewTournament: React.FC<newTProps> = (_) => {
         <Col md={3}>
           <Form.Group controlId="visible">
             <Form.Label>{t('tournament:visibility')} </Form.Label>
-            <Form.Control as="select" onChange={() => setVisible(!visible)}>
+            <Form.Control as="select" onChange={() => setVisible(!visible)} data-cy="new-visibility">
               <option>{t('tournament:public')}</option>
               <option>{t('tournament:private')}</option>
             </Form.Control>
@@ -81,7 +83,13 @@ const NewTournament: React.FC<newTProps> = (_) => {
       </Form.Row>
       <Form.Row>
         <Col>
-          <Button type="submit" size="lg" variant="outline-warning" className="float-right default-color-white">
+          <Button
+							disabled={!name}
+							type="submit"
+							size="lg"
+							variant="outline-warning"
+							data-cy="new-submit"
+							className="float-right default-color-white">
             <span style={{ fontSize: 'larger', fontWeight: 'bolder' }}>{t('common:continue')}</span>
           </Button>
         </Col>

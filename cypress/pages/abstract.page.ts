@@ -38,6 +38,13 @@ export abstract class AbstractPage {
 		});
 	}
 
+	forceLogout() {
+		return cy.request({
+			failOnStatusCode: false,
+			url: 'http://localhost:5001/api/v2/auth/logout',
+		});
+	}
+
 	// Login
 	forceLogin(username: string, password: string) {
 		cy.request({
@@ -57,7 +64,7 @@ export abstract class AbstractPage {
 
 	forceRegisterAdmin() {
 		this.forceDeleteUser(admin.email, admin.username, admin.password);
-		return this.forceRegistration(admin);
+		this.forceRegistration({...admin,name:`[A]${admin.name}`});
 	}
 
 	forceRegistration(registrationOptions: RegistrationProps) {

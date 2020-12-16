@@ -42,9 +42,9 @@ export interface RegistrationRequest extends AuthenticationRequest {
 	name: string;
 	surname: string;
 	email: string;
-	cEmail: string;
+	confirmEmail: string;
 	password: string;
-	cPassword: string;
+	confirmPassword: string;
 	phone: string;
 	birthday: Date | null;
 	playerRole: PlayerRole;

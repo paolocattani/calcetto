@@ -114,7 +114,7 @@ const PlayerTable: React.FC<PlayerProps> = () => {
     master: t('player:role.master'),
     edit: t('common:edit'),
   };
-  console.log("Render player : ");
+
   return (
     <>
       <LoadingModal show={isLoading} message={t('common:loading')} />

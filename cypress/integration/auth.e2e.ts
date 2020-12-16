@@ -16,11 +16,9 @@ const admin: RegistrationProps = users.admin;
 // Dispatch action   cy.window().its('store').invoke('dispatch', AuthAction.login.... )
 
 describe('Authentication Test', () => {
-	before(() => {
-		Cypress.Cookies.debug(true);
-	});
-
-	beforeEach(fixCypressSpec(__filename));
+	// Show when cookies change
+	before(() => Cypress.Cookies.debug(true));
+	beforeEach(() => fixCypressSpec('/cypress/integration/auth.2e2.ts'));
 
 	function afterLogin(landingPage: LandingPage, registrationOptions: RegistrationProps, isAdmin: boolean) {
 		// Header should show username
@@ -28,7 +26,7 @@ describe('Authentication Test', () => {
 
 		// Test cookies
 		cy.getCookies()
-			// FIXME: .should(HAVE_LENGTH, 1)
+			.should(HAVE_LENGTH, 1)
 			.then((cookies) => {
 				const session_id = cookies.filter((c) => c.name === 'session_id')[0];
 				expect(session_id).to.have.property('name', 'session_id');
@@ -55,24 +53,22 @@ describe('Authentication Test', () => {
 		// Tournament form should be visibile after login
 		const tournamentPage: Tournament = new Tournament();
 		tournamentPage.getForm().should(BE_VISIBLE);
-		// Admin should see button for new tournament
-		const newTournamentButton = tournamentPage.getNewTournamentButton();
-		newTournamentButton.should(isAdmin ? BE_VISIBLE : 'not.exist');
+		// In this case there isn't any tournament so, for admin only, we show the form to create a new tournament
+		if(isAdmin){
+			tournamentPage.getSelectTournamentButton().should(BE_VISIBLE);
+		} else{
+			// User should not see button for new tournament
+			tournamentPage.getNewTournamentButton().should('not.exist');
+		}
 	}
 
 	describe('Registration process', function () {
 		it('Should show errors on registration', () => {
 			const landingPage = new LandingPage();
-			landingPage
-				.visit()
-				.get(SWAP_BUTTON)
-				.should(BE_VISIBLE)
-				.click()
-				.get(AUTH_FORM)
-				.should(BE_VISIBLE)
-				.get('#registerButton')
-				.should(BE_VISIBLE)
-				.click();
+			landingPage.visit()
+				.get(SWAP_BUTTON).should(BE_VISIBLE).click()
+				.get(AUTH_FORM).should(BE_VISIBLE)
+				.get('#registerButton').should(BE_VISIBLE).click();
 			landingPage.getToastList().should(HAVE_LENGTH, 11);
 			/* TODO: test list content
 				.clock().then((clock) => {
@@ -101,15 +97,10 @@ describe('Authentication Test', () => {
 	describe('Login process', () => {
 		it('Should show errors on login with missing data', () => {
 			const landingPage = new LandingPage();
-			landingPage
-				.visit()
-				.get(SWAP_BUTTON)
-				.should(BE_VISIBLE)
-				.get(AUTH_FORM)
-				.should(BE_VISIBLE)
-				.get(LOGIN_BUTTON)
-				.should(BE_VISIBLE)
-				.should('be.disabled')
+			landingPage.visit()
+				.get(SWAP_BUTTON).should(BE_VISIBLE)
+				.get(AUTH_FORM).should(BE_VISIBLE)
+				.get(LOGIN_BUTTON).should(BE_VISIBLE).should('be.disabled')
 				// Test Force click
 				.invoke('removeAttr', 'disabled')
 				.click();
@@ -124,35 +115,19 @@ describe('Authentication Test', () => {
 		it('Should show error with wrong credentials', () => {
 			const landingPage = new LandingPage();
 			cy.visit('/')
-				.get(SWAP_BUTTON)
-				.should(BE_VISIBLE)
-				.get(AUTH_FORM)
-				.should(BE_VISIBLE)
-				.get('#username')
-				.should(BE_VISIBLE)
-				.type('wronguser')
-				.get('#password')
-				.should(BE_VISIBLE)
-				.type(admin.password)
-				.get(LOGIN_BUTTON)
-				.should(BE_VISIBLE)
-				.click();
+				.get(SWAP_BUTTON).should(BE_VISIBLE)
+				.get(AUTH_FORM).should(BE_VISIBLE)
+				.get('#username').should(BE_VISIBLE).type('wronguser')
+				.get('#password').should(BE_VISIBLE).type(admin.password)
+				.get(LOGIN_BUTTON).should(BE_VISIBLE).click();
 			landingPage.getToastList().should(HAVE_LENGTH, 1);
 
 			cy.visit('/')
-				.get(SWAP_BUTTON)
-				.should(BE_VISIBLE)
-				.get(AUTH_FORM)
-				.should(BE_VISIBLE)
-				.get('#username')
-				.should(BE_VISIBLE)
-				.type(admin.username)
-				.get('#password')
-				.should(BE_VISIBLE)
-				.type('wrongpassword')
-				.get(LOGIN_BUTTON)
-				.should(BE_VISIBLE)
-				.click();
+				.get(SWAP_BUTTON).should(BE_VISIBLE)
+				.get(AUTH_FORM).should(BE_VISIBLE)
+				.get('#username').should(BE_VISIBLE).type(admin.username)
+				.get('#password').should(BE_VISIBLE).type('wrongpassword')
+				.get(LOGIN_BUTTON).should(BE_VISIBLE).click();
 			landingPage.getToastList().should(HAVE_LENGTH, 1);
 		});
 

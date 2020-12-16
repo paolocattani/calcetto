@@ -223,10 +223,10 @@ export const isValidRegister = (user: Omit<RegistrationRequest, 'history'>): Arr
 	if (!user.email) {
 		result.push({ label: 'auth:error.email.address' });
 	}
-	if (!user.cEmail) {
+	if (!user.confirmEmail) {
 		result.push({ label: 'auth:error.email.confirm' });
 	}
-	if (user.email !== user.cEmail) {
+	if (user.email !== user.confirmEmail) {
 		result.push({ label: 'auth:error.email.match' });
 	}
 	if (!emailRegExp.test(user.email)) {
@@ -235,10 +235,10 @@ export const isValidRegister = (user: Omit<RegistrationRequest, 'history'>): Arr
 	if (!user.password) {
 		result.push({ label: 'auth:error.password.password' });
 	}
-	if (!user.cPassword) {
+	if (!user.confirmPassword) {
 		result.push({ label: 'auth:error.password.confirm' });
 	}
-	if (user.password !== user.cPassword) {
+	if (user.password !== user.confirmPassword) {
 		result.push({ label: 'auth:error.password.match' });
 	}
 	if (!passwordRegExp.test(user.password)) {

@@ -39,6 +39,7 @@ const FTournament = () => {
       setNewTournament(true);
     	//dispatch(TournamentAction.fetch.request({}));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLElement>): Promise<void> => {
@@ -91,6 +92,7 @@ const FTournament = () => {
             onChange={(selected) => dispatch(TournamentAction.setTournament(selected as TournamentDTO))}
           />
           <Button
+						data-cy="select-submit"
             type="submit"
             size="lg"
             variant="outline-warning"

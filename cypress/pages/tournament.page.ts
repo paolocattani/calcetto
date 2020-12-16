@@ -1,16 +1,55 @@
-import { AbstractPage } from './abstract.page';
+import {AbstractPage, headers} from './abstract.page';
+import {AuthAction} from "../../src/redux/actions";
+import {OmitHistory, SaveTournamentRequest} from "../../src/@common/models";
 
 export class Tournament extends AbstractPage {
+	// Override
+	visit(username?: string, password?: string) {
+		return cy.visit('/');
+	}
+
+	// Common
 	getForm() {
 		return cy.get('[data-cy=tournament-form]');
 	}
 
+	// New Tournament
+	getNewName(){
+		return cy.get('[data-cy=new-name]');
+	}
+	getNewDate(){
+		return cy.get('[data-cy=new-date]');
+	}
+	getNewVisibility(){
+		return cy.get('[data-cy=new-visibility]');
+	}
+	getNewSubmit(){
+		return cy.get('[data-cy=new-submit]');
+	}
 	getNewTournamentButton() {
 		return cy.get('[data-cy=new-tournament]');
 	}
 
-	visit(username?: string, password?: string) {
-		super.forceLogin(username!, password!);
-		return cy.visit('/');
+	// Selection
+	getSelect(){
+		return cy.get("[data-cy=#tournamentSelect]");
 	}
+	getSelectSubmit(){
+		return cy.get('[data-cy=select-submit]');
+	}	getSelectTournamentButton() {
+		return cy.get('[data-cy=select-tournament]');
+	}
+
+	// Force
+	forceNewTournament(body: OmitHistory<SaveTournamentRequest> ){
+		cy.request({
+			...headers,
+			method: 'POST',
+			url: 'http://localhost:5001/api/v2/tournament/new',
+			body
+		}).then((resp) => {
+			cy.visit('/')
+		});
+	}
+
 }
