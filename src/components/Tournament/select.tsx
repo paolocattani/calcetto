@@ -36,11 +36,11 @@ const FTournament = () => {
   const [newTournament, setNewTournament] = useState(false);
   useEffect(() => {
     if (!tournamentsList || tournamentsList.length === 0) {
-      setNewTournament(true);
-    	//dispatch(TournamentAction.fetch.request({}));
+      // setNewTournament(true);
+    	dispatch(TournamentAction.fetch.request({}));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [tournamentsList]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLElement>): Promise<void> => {
     event.preventDefault();

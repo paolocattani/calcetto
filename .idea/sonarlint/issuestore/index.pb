@@ -271,3 +271,11 @@ N
 src/redux/actions/constants.ts,9\1\9179fe4540bdc178662923438ad916411f09c1f8
 N
 src/components/Player/edit.tsx,f\7\f73011b2e54b53e3210c75dd481545a69f9acf2d
+Q
+!src/@common/dto/tournament.dto.ts,c\e\ce2a97a64318fe077d685c7591e529ed4a749889
+J
+cypress/pages/pair.page.ts,4\5\45d968209718406e7bc5b2b57569f18d7b66587e
+T
+$server/manager/tournament.manager.ts,0\5\0544d21d9550d37a9d27617f288aed66550049c2
+D
+server/core/utils.ts,b\a\baf8da9b598e0f1d37301c21a11f995b25359790

@@ -1,16 +1,24 @@
-import { RootState } from '../../src/@common/models';
+import {AuthenticationResponse, RootState} from '../../src/@common/models';
 import { RegistrationProps } from './landing.page';
 import { AuthAction } from '../../src/redux/actions';
+import {UserDTO} from "../../src/@common/dto";
 const { users } = require('../fixtures/auth.fixture.json');
 const user: RegistrationProps = users.user;
 const admin: RegistrationProps = users.admin;
 
 export const BE_VISIBLE = 'be.visible';
+export const BE_DISABLED = 'be.disabled';
 export const HAVE_LENGTH = 'have.length';
 export const headers = { headers: { 'Content-Type': 'application/json' } };
 
 export abstract class AbstractPage {
+	user?:UserDTO;
+
 	abstract visit(username?: string, password?: string): Cypress.Chainable<Cypress.AUTWindow>;
+
+	getUser(){
+		return this.user;
+	}
 
 	getLoader() {
 		return cy.get('[data-cy=loader]');
@@ -53,7 +61,9 @@ export abstract class AbstractPage {
 			...headers,
 			body: { username, password, secret: Cypress.env('secret') },
 		}).then((resp) => {
-			this.dispatchAction(AuthAction.login.success(resp.body));
+			const response = resp.body as AuthenticationResponse;
+			this.user = response.user;
+			this.dispatchAction(AuthAction.login.success(response));
 		});
 	}
 
@@ -74,7 +84,9 @@ export abstract class AbstractPage {
 			...headers,
 			body: { ...registrationOptions, secret: Cypress.env('secret') },
 		}).then((resp) => {
-			this.dispatchAction(AuthAction.registration.success(resp.body));
+			const response = resp.body as AuthenticationResponse;
+			this.user = response.user;
+			this.dispatchAction(AuthAction.registration.success(response));
 		});
 	}
 }

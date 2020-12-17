@@ -1,10 +1,10 @@
 import {AbstractPage, headers} from './abstract.page';
 import {AuthAction} from "../../src/redux/actions";
-import {OmitHistory, SaveTournamentRequest} from "../../src/@common/models";
+import {DeleteTournamentRequest, OmitHistory, SaveTournamentRequest} from "../../src/@common/models";
 
 export class Tournament extends AbstractPage {
 	// Override
-	visit(username?: string, password?: string) {
+	visit() {
 		return cy.visit('/');
 	}
 
@@ -32,7 +32,7 @@ export class Tournament extends AbstractPage {
 
 	// Selection
 	getSelect(){
-		return cy.get("[data-cy=#tournamentSelect]");
+		return cy.get("#tournamentSelect");
 	}
 	getSelectSubmit(){
 		return cy.get('[data-cy=select-submit]');
@@ -49,6 +49,14 @@ export class Tournament extends AbstractPage {
 			body
 		}).then((resp) => {
 			cy.visit('/')
+		});
+	}
+
+	forceDeleteTournament(){
+		cy.request({
+			...headers,
+			method: 'DELETE',
+			url: 'http://localhost:5001/api/v2/tournament/test/delete'
 		});
 	}
 

@@ -427,7 +427,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
   );
 
   const toolsBar =  (
-    <div className={commonStyle.toolsBarContainer}>
+    <div className={commonStyle.toolsBarContainer} data-cy="pair-toolbar">
       <Row className={commonStyle.toolsBar}>
         <Col>
           <Button variant="secondary" className="float-left align-middle" onClick={goBack}>
@@ -497,9 +497,11 @@ const PairsTable: React.FC<PairTableProps> = () => {
       <Col>
         {toolsBar}
         <Row>
-          <Col>
-            {data.rows && data.players ? (
+          <Col data-cy="pair-table">
+            { // https://github.com/react-bootstrap-table/react-bootstrap-table2/issues/1451
+            	data.rows && data.players ? (
               <BootstrapTable
+								data-cy="pair-table"
                 bootstrap4
                 keyField="id"
                 data={data.rows}

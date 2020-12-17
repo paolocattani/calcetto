@@ -13,7 +13,6 @@ import {
 	comparePasswords,
 	registerUser,
 	findUserByEmailOrUsername,
-	checkIfExist,
 	findUserByEmailAndUsername,
 	addUserCookies,
 	isValidRegister,
@@ -150,13 +149,32 @@ router.post(
 	})
 );
 
+router.get(
+	'/test/user',
+	withTestAuth,
+	asyncMiddleware(async (req: Request, res: Response) => {
+		const { username, email } = req.query;
+		const user = await findUserByEmailAndUsername(email as string,username as string);
+		if(user) {
+			const userDTO = convertEntityToDTO(user);
+			return success<AuthenticationResponse>(
+				res,
+				{label: 'auth:welcome', options: {username: userDTO.name}},
+				{user: userDTO}
+			);
+		}else{
+			return entityNotFound(res);
+		}
+	})
+);
+
 const loginUserController = async (res:Response,username:string,password:string) => {
 	try {
 		logger.info('/login start ');
 		if (!username || !password) {
 			return missingParameters(res);
 		}
-		const user = await findUserByEmailOrUsername(username);
+		const user = await findUserByEmailOrUsername(username,username);
 		// utente non trovato
 		if (!user) {
 			return entityNotFound(res);
@@ -194,7 +212,7 @@ const registrationController = async (res:Response,registrationInfo:OmitHistory<
 			);
 		}
 		const model: User = parseBody(registrationInfo);
-		const user = await checkIfExist(model);
+		const user = await findUserByEmailOrUsername(model.username,model.email);
 		if (user) {
 			return failure(
 				res,

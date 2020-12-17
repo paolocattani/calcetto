@@ -6,7 +6,7 @@ import { UserRole } from '../../src/@common/dto';
 import { Tournament } from '../pages/tournament.page';
 import { fixCypressSpec } from '../support';
 import { AuthState } from '../../src/@common/models';
-import { BE_VISIBLE, HAVE_LENGTH } from '../pages/abstract.page';
+import {BE_DISABLED, BE_VISIBLE, HAVE_LENGTH} from '../pages/abstract.page';
 
 const { users } = require('../fixtures/auth.fixture.json');
 const user: RegistrationProps = users.user;
@@ -100,7 +100,7 @@ describe('Authentication Test', () => {
 			landingPage.visit()
 				.get(SWAP_BUTTON).should(BE_VISIBLE)
 				.get(AUTH_FORM).should(BE_VISIBLE)
-				.get(LOGIN_BUTTON).should(BE_VISIBLE).should('be.disabled')
+				.get(LOGIN_BUTTON).should(BE_VISIBLE).should(BE_DISABLED)
 				// Test Force click
 				.invoke('removeAttr', 'disabled')
 				.click();

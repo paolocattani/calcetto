@@ -43,7 +43,7 @@ export const dateInRageWrapper = (colName: string, startDate: string | Date, end
   [Op.and]: [
     Sequelize.where(
       castWrapper(true, colName, 'DATE'),
-      '<=',
+      '>=',
       castWrapper(false, justADate(startDate).toISOString(), 'DATE')
     ),
     Sequelize.where(

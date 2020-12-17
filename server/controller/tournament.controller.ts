@@ -10,7 +10,7 @@ import {
 	parseBody,
 	update,
 	deleteTournament,
-	convertEntityToDTO,
+	convertEntityToDTO, deleteAllTournament,
 } from '../manager/tournament.manager';
 // Models
 import Tournament from '../database/tournament.model';
@@ -38,13 +38,18 @@ router.use('/', (req: Request, res: Response, next: NextFunction) =>
 router.get(
 	'/list',
 	withAuth,
-	asyncMiddleware(async (req: AppRequest, res: Response) => listController(res,req.user!))
-);
-
-router.post(
-	'/test/list',
-	withTestAuth,
-	asyncMiddleware(async (req: AppRequest, res: Response) => listController(res,req.user!))
+	asyncMiddleware(async (req: AppRequest, res: Response) => {
+		try {
+			const tournamentsList = await listAll(req.user!);
+			return success<FetchTournamentsResponse>(
+				res,
+				{ label: tournamentsList.length > 1 ? 'tournament:loaded_2' : 'tournament:loaded_1' },
+				{ tournamentsList }
+			);
+		} catch (err) {
+			return serverError('GET tournament/list error : ', err, res);
+		}
+	})
 );
 
 router.get(
@@ -132,18 +137,18 @@ router.delete(
 	})
 );
 
-const listController = async (res:Response, user:UserDTO) =>{
-	try {
-		const tournamentsList = await listAll(user);
-		return success<FetchTournamentsResponse>(
-			res,
-			{ label: tournamentsList.length > 1 ? 'tournament:loaded_2' : 'tournament:loaded_1' },
-			{ tournamentsList }
-		);
-	} catch (err) {
-		return serverError('GET tournament/list error : ', err, res);
-	}
-}
-
-
+router.delete(
+	'/test/delete',
+	withAuth,
+	withAdminRights,
+	withTestAuth,
+	asyncMiddleware(async (req: Request, res: Response) => {
+		try {
+			await deleteAllTournament();
+			return success(res,{ label: 'tournament:deleted' });
+		} catch (error) {
+			return serverError('DELETE tournament/delete error ! : ', error, res);
+		}
+	})
+);
 export default router;

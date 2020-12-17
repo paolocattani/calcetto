@@ -167,12 +167,12 @@ export async function findUserDTOByEmailOrUsername(username: string) {
 	}
 }
 
-export async function findUserByEmailOrUsername(username: string) {
+export async function findUserByEmailOrUsername(username: string, email:string) {
 	try {
 		logProcess(className + 'findUserByEmailOrUsername', '');
 		return await User.findOne({
 			where: {
-				[Op.or]: [lowerWrapper('email', username), lowerWrapper('username', username)],
+				[Op.or]: [lowerWrapper('email', email), lowerWrapper('username', username)],
 			},
 		});
 	} catch (error) {
@@ -191,20 +191,6 @@ export async function findUserByEmailAndUsername(email: string, username: string
 		});
 	} catch (error) {
 		logProcess(className + 'findUserByEmailAndUsername', ` Error : ${error}`);
-		return null;
-	}
-}
-
-export async function checkIfExist(user: User) {
-	try {
-		logProcess(className + 'checkIfExist', '');
-		return await User.findOne({
-			where: {
-				[Op.or]: [lowerWrapper('email', user.email), lowerWrapper('username', user.username)],
-			},
-		});
-	} catch (error) {
-		logProcess(className + 'checkIfExist', ` Error : ${error}`);
 		return null;
 	}
 }
