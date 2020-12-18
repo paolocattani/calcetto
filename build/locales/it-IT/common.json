@@ -35,7 +35,7 @@
         "missing": "Parametri mancanti",
         "unexpected": "Errore server non previsto!..",
         "not_found":"Oggetto non trovato",
-        "unauthorize":"Non autorizzato",
+        "unauthorized":"Non autorizzato",
         "updated":"Aggiornamento effettuato"
     }
 }

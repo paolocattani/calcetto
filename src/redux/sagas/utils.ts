@@ -40,7 +40,6 @@ export function* entityLifeCycle<Req, Res extends GenericReponse>(
 
 		// If success
 		// FIXME: include all 2XX
-		console.log("EntityLifeCycle : ", response);
 		if (response.code === HTTPStatusCode.Success) {
 			// Show success toast
 			// Dispatch success action

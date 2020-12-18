@@ -9,6 +9,8 @@
     "add":"Aggiungi giocatore",
     "edit":"Modifica giocatore",
     "filter":"Pulisci filtri",
+		"not_found": "Giocatore non trovato",
+		"no_data": "Nessun giocatore...",
     "field": {
         "name":"Nome",
         "surname":"Cognome",
