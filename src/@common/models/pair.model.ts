@@ -25,7 +25,7 @@ export interface SavePairRequest {
 }
 export interface SelectPairsRequest {
   stage1Name: string;
-  pairsList: Array<PairDTO>;
+	stage1Rows: Array<Stage1Row>;
 }
 // Response
 export interface FindAliasResponse extends GenericReponse {

@@ -110,6 +110,8 @@ const Wrapper: React.FC = (): JSX.Element => {
       </Row>
     </div>
   );
+
+  console.log("Stage1 : ",selected , tournament);
   return (
     <>
       {toolsBar}

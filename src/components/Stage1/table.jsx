@@ -131,8 +131,8 @@ const Stage1Table = ({ pairsList, autoOrder }) => {
     setSelectedRows(selected);
     dispatch(
       Stage1Action.updateSelectedPairs.request({
-        stageName,
-        rows: selected,
+				stage1Name:stageName,
+				stage1Rows: selected,
       })
     );
     return true;
@@ -142,8 +142,8 @@ const Stage1Table = ({ pairsList, autoOrder }) => {
     setSelectedRows(isSelected ? s1Rows : []);
     dispatch(
       Stage1Action.updateSelectedPairs.request({
-        stageName,
-        rows: isSelected ? s1Rows : [],
+				stage1Name:stageName,
+				stage1Rows: isSelected ? s1Rows : [],
       })
     );
   };

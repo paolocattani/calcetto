@@ -56,7 +56,8 @@ export class Tournament extends AbstractPage {
 		cy.request({
 			...headers,
 			method: 'DELETE',
-			url: 'http://localhost:5001/api/v2/tournament/test/delete'
+			url: 'http://localhost:5001/api/v2/tournament/test/delete',
+			body:{secret: Cypress.env('secret')}
 		});
 	}
 

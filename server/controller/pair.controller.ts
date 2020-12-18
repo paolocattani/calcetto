@@ -76,26 +76,29 @@ router.put(
 	withAdminRights,
 	asyncMiddleware(async (req: Request, res: Response) => {
 		const request: SelectPairsRequest = req.body;
-		const { pairsList, stage1Name } = request;
-		if (pairsList.length === 0) {
-			return missingParameters(res);
-		}
+		const { stage1Rows, stage1Name } = request;
 		const connection = await getDbConnection();
 		const transaction = await connection.transaction();
+		if (!stage1Rows) {
+			return missingParameters(res);
+		}
 		try {
+			const tournamentId = stage1Rows[0].pair.tournamentId;
 			// Reset selection
 			await Pair.update(
 				{ stage2Selected: false },
-				{ where: { tournamentId: pairsList[0].tournamentId, stage1Name }, transaction }
+				{ where: { tournamentId, stage1Name }, transaction }
 			);
-			// Update selection
-			await Pair.update(
-				{ stage2Selected: true },
-				{
-					where: { tournamentId: pairsList[0].tournamentId, stage1Name, id: pairsList.map((e) => e.id!) },
-					transaction,
-				}
-			);
+			if (stage1Rows.length !== 0) {
+				// Update selection
+				await Pair.update(
+					{stage2Selected: true},
+					{
+						where: {tournamentId, stage1Name, id: stage1Rows.map((e) => e.pair.id!)},
+						transaction,
+					}
+				);
+			}
 			await transaction.commit();
 		} catch (err) {
 			await transaction.rollback();
@@ -104,11 +107,8 @@ router.put(
 		// FIXME:
 		return success<SelectPairsResponse>(
 			res,
-			{ label: pairsList.length > 1 ? 'pair:selected_2' : 'pair:selected_1' },
-			{
-				stage1Rows: [],
-				stage1Name,
-			}
+			{ label: stage1Rows.length > 1 ? 'pair:selected_2' : 'pair:selected_1' },
+			{ stage1Rows, stage1Name }
 		);
 	})
 );

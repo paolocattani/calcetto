@@ -23,13 +23,13 @@ describe('Tournament Test', () => {
 		//
 		it('Should see tournament form', () => {
 			tournamentPage.getForm().should(BE_VISIBLE);
-			tournamentPage.getSelectTournamentButton().should(BE_VISIBLE);
+			tournamentPage.getNewTournamentButton().should(BE_VISIBLE);
 		});
 
 		function newTournament(name:string,date:string,visibility:string){
 			tournamentPage.getForm().should(BE_VISIBLE);
 			tournamentPage.getSelectSubmit().should(BE_VISIBLE).should(BE_DISABLED)
-			tournamentPage.getSelectTournamentButton().should(BE_VISIBLE);
+			tournamentPage.getNewTournamentButton().should(BE_VISIBLE).click();
 			tournamentPage.getNewName().type(name);
 			// tournamentPage.getNewDate().type(date);
 			tournamentPage.getNewVisibility().select(visibility);
