@@ -22,22 +22,14 @@ const selectAPI = () => `${API_VERSION}/selected`;
 const newAPI = () => `${API_VERSION}/new`;
 const deleteAPI = () => `${API_VERSION}/delete`;
 
-export const fetchPairs = async ({ tId }: FetchPairsRequest): Promise<FetchPairsResponse> =>
-  getWrapper<FetchPairsResponse>(listAPI(tId));
-export const findAlias = async ({ player1Id, player2Id }: FindAliasRequest): Promise<FindAliasResponse> =>
-  getWrapper<FindAliasResponse>(aliasAPI(player1Id, player2Id));
-export const selectPairs = async (request: SelectPairsRequest): Promise<SelectPairsResponse> =>
-  putWrapper<SelectPairsRequest, SelectPairsResponse>(selectAPI(), request);
-
-export const postPair = async (request: SavePairRequest): Promise<SavePairResponse> =>
-  postWrapper<SavePairRequest, SavePairResponse>(newAPI(), request);
+export const fetchPairs = async ({ tId }: FetchPairsRequest) => getWrapper<FetchPairsResponse>(listAPI(tId));
+export const findAlias = async ({ player1Id, player2Id }: FindAliasRequest) => getWrapper<FindAliasResponse>(aliasAPI(player1Id, player2Id));
+export const selectPairs = async (request: SelectPairsRequest) => putWrapper<SelectPairsRequest, SelectPairsResponse>(selectAPI(), request);
+export const postPair = async (request: SavePairRequest) => postWrapper<SavePairRequest, SavePairResponse>(newAPI(), request);
 
 // FIXME: create update
-export const updatePair = async (request: SavePairRequest): Promise<SavePairResponse> =>
-  postWrapper<SavePairRequest, SavePairResponse>(newAPI(), request);
-
-export const deletePairs = async (request: DeletePairsRequest): Promise<DeletePairsResponse> =>
-  deleteWrapper<DeletePairsRequest, DeletePairsResponse>(deleteAPI(), request);
+export const updatePair = async (request: SavePairRequest) => postWrapper<SavePairRequest, SavePairResponse>(newAPI(), request);
+export const deletePairs = async (request: DeletePairsRequest) => deleteWrapper<DeletePairsRequest, DeletePairsResponse>(deleteAPI(), request);
 
 export const getEmptyPair = (label?: string): PairDTO => ({
   id: null,

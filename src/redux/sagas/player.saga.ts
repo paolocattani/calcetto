@@ -1,10 +1,10 @@
 import {
-  DeletePlayersRequest,
-  DeletePlayersResponse,
-  FetchPlayersRequest,
-  FetchPlayersResponse,
-  SavePlayerRequest,
-  SavePlayerResponse,
+	DeletePlayersRequest,
+	DeletePlayersResponse,
+	FetchPlayersRequest,
+	FetchPlayersResponse, PlayerError,
+	SavePlayerRequest,
+	SavePlayerResponse,
 } from '../../@common/models';
 import { StrictEffect, takeEvery } from 'redux-saga/effects';
 import { PlayerAction } from '../actions/player.action';
@@ -16,13 +16,13 @@ const back = (payload: DeletePlayersRequest | SavePlayerRequest) => payload.hist
 function* getPlayersSaga({
   payload,
 }: ReturnType<typeof PlayerAction.fetchPlayers.request>): Generator<StrictEffect, void, any> {
-  yield entityLifeCycle<FetchPlayersRequest, FetchPlayersResponse>(PlayerAction.fetchPlayers, fetchPlayers, payload);
+  yield* entityLifeCycle<FetchPlayersRequest, FetchPlayersResponse, PlayerError>(PlayerAction.fetchPlayers, fetchPlayers, payload);
 }
 
 function* deletePlayersSaga({
   payload,
 }: ReturnType<typeof PlayerAction.deletePlayers.request>): Generator<StrictEffect, void, any> {
-  yield entityLifeCycle<DeletePlayersRequest, DeletePlayersResponse>(
+  yield* entityLifeCycle<DeletePlayersRequest, DeletePlayersResponse, PlayerError>(
     PlayerAction.deletePlayers,
     deletePlayers,
     payload,
@@ -33,7 +33,7 @@ function* deletePlayersSaga({
 function* savePlayerSaga({
   payload,
 }: ReturnType<typeof PlayerAction.savePlayer.request>): Generator<StrictEffect, void, any> {
-  yield entityLifeCycle<SavePlayerRequest, SavePlayerResponse>(PlayerAction.savePlayer, savePlayer, payload, () =>
+  yield* entityLifeCycle<SavePlayerRequest, SavePlayerResponse, PlayerError>(PlayerAction.savePlayer, savePlayer, payload, () =>
     back(payload)
   );
 }
@@ -41,7 +41,7 @@ function* savePlayerSaga({
 function* updatePlayerSaga({
   payload,
 }: ReturnType<typeof PlayerAction.updatePlayer.request>): Generator<StrictEffect, void, any> {
-  yield entityLifeCycle<SavePlayerRequest, SavePlayerResponse>(PlayerAction.updatePlayer, updatePlayer, payload, () =>
+  yield* entityLifeCycle<SavePlayerRequest, SavePlayerResponse, PlayerError>(PlayerAction.updatePlayer, updatePlayer, payload,() =>
     back(payload)
   );
 }

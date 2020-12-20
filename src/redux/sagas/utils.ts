@@ -1,29 +1,40 @@
 import {
-	GenericReponse,
+	GenericReponse, OmitHistory,
 	UnexpectedServerError,
 	UserMessage,
 	UserMessageType,
 } from '../../@common/models/common.models';
 import { HTTPStatusCode } from '../../@common/models/HttpStatusCode';
+import { put, call, StrictEffect } from 'redux-saga/effects';
+import { PayloadActionCreator } from 'typesafe-actions';
 import { toast } from 'react-toastify';
-import { put, call } from 'redux-saga/effects';
 import i18n from '../../i18n/i18n';
 
+interface IActionCallback<T> {
+	( response?:T ) : void | Promise<void> | Generator<StrictEffect,void, void>;
+}
+
+interface ActionType<TReq, TRes extends GenericReponse,TErr> {
+	request: PayloadActionCreator<string, TReq>,
+	success: PayloadActionCreator<string, TRes>,
+	failure: PayloadActionCreator<string, TErr | typeof UnexpectedServerError>
+}
+
 export const getMessage = (message: UserMessage) => i18n.t(message.label, message.options);
-// FIXME: remove this any type
-export function* entityLifeCycle<Req, Res extends GenericReponse>(
-	action: any,
-	method: (p: Req) => Res | Promise<Res>,
-	payload: Req,
-	onSuccess?: (response: Res) => void,
-	onFailure?: (response: Res) => void
-): ReturnType<typeof action.request> {
+export function* entityLifeCycle<TReq, TRes extends GenericReponse,TErr extends GenericReponse>(
+	action: ActionType<TReq, TRes, TErr>,
+	method: (p: OmitHistory<TReq>) => TRes | Promise<TRes | typeof UnexpectedServerError>,
+	payload: OmitHistory<TReq>,
+	onSuccess?: IActionCallback<TRes>,
+	showMessage?:boolean,
+	onFailure?: IActionCallback<TErr>,
+): Generator<StrictEffect, void, any> {
 	try {
 		// Call method with payload
-		const response: Res = yield call(method, payload);
+		const response: TRes | TErr = yield call(method, payload);
 		const { userMessage: message } = response;
 
-		if (message) {
+		if (showMessage && message) {
 			const messageText = getMessage(message);
 			switch (message.type) {
 				case UserMessageType.Success:
@@ -41,19 +52,21 @@ export function* entityLifeCycle<Req, Res extends GenericReponse>(
 		// If success
 		// FIXME: include all 2XX
 		if (response.code === HTTPStatusCode.Success) {
+			const successRes = response as TRes;
 			// Show success toast
 			// Dispatch success action
-			yield put(action.success(response));
+			yield put(action.success(successRes));
 			// Callback
 			if (onSuccess) {
-				onSuccess(response);
+				yield* onSuccess(successRes);
 			}
 		} else {
+			const failureRes = response as TErr;
 			// Dispatch failure action
-			yield put(action.failure(response));
+			yield put(action.failure(failureRes));
 			// Callback
 			if (onFailure) {
-				onFailure(response);
+				yield* onFailure(failureRes);
 			}
 		}
 	} catch (err) {

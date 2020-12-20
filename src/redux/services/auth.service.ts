@@ -4,7 +4,7 @@ import {
 	RegistrationRequest,
 	RegistrationResponse,
 	UpdateUserRequest,
-	DeleteUserRequest,
+	DeleteUserRequest, LogoutRequest,
 } from '../../@common/models';
 import { eventChannel, buffers, END } from 'redux-saga';
 import { HTTPStatusCode } from '../../@common/models/HttpStatusCode';
@@ -24,26 +24,22 @@ export interface Message {
 }
 
 // Update
-export const updateUser = async (updateUserRequest: OmitHistory<UpdateUserRequest>): Promise<AuthenticationResponse> =>
+export const updateUser = (updateUserRequest: OmitHistory<UpdateUserRequest>) =>
 	putWrapper<UpdateUserRequest, AuthenticationResponse>('/api/v2/auth/update', updateUserRequest);
 
 // Delete
-export const deleteUser = async (deleteUserRequest: OmitHistory<DeleteUserRequest>): Promise<AuthenticationResponse> =>
+export const deleteUser = (deleteUserRequest: OmitHistory<DeleteUserRequest>) =>
 	deleteWrapper<DeleteUserRequest, AuthenticationResponse>('/api/v2/auth/delete', deleteUserRequest);
 
 // Login
-export const login = async (loginRequest: OmitHistory<LoginRequest>): Promise<AuthenticationResponse> =>
+export const login = (loginRequest: OmitHistory<LoginRequest>) =>
 	postWrapper<LoginRequest, AuthenticationResponse>('/api/v2/auth/login', loginRequest);
 
 // Login
-export const logout = async (): Promise<AuthenticationResponse> =>
-	getWrapper<AuthenticationResponse>('/api/v2/auth/logout');
+export const logout = (logoutRequest:OmitHistory<LogoutRequest>) => getWrapper<AuthenticationResponse>('/api/v2/auth/logout');
 
 // Registration
-export const registration = async (
-	registrationRequest: OmitHistory<RegistrationRequest>
-): Promise<RegistrationResponse> =>
-	postWrapper<RegistrationRequest, AuthenticationResponse>('/api/v2/auth/register', registrationRequest);
+export const registration = ( registrationRequest: OmitHistory<RegistrationRequest>) => postWrapper<RegistrationRequest, AuthenticationResponse>('/api/v2/auth/register', registrationRequest);
 
 export const CheckAuthentication = async (): Promise<AuthenticationResponse> => {
 	let response;

@@ -44,3 +44,5 @@ export interface SelectPairsResponse extends GenericReponse {
   stage1Name: string;
   stage1Rows: Array<Stage1Row>;
 }
+
+export interface PairError extends GenericReponse{};

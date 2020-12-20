@@ -279,3 +279,19 @@ T
 $server/manager/tournament.manager.ts,0\5\0544d21d9550d37a9d27617f288aed66550049c2
 D
 server/core/utils.ts,b\a\baf8da9b598e0f1d37301c21a11f995b25359790
+V
+&server/controller/stage1.controller.ts,5\7\571fea505718543e1ac9c384f27aea8cee215eb9
+O
+src/components/Stage1/helper.ts,3\a\3a53b1df85014ae452efb85076a25e69961c35cf
+N
+src/redux/sagas/stage1.saga.ts,d\e\de5c9c58f752f04873e0a8241414b95eeb51ad7c
+R
+"src/redux/actions/stage1.action.ts,b\0\b054bcc46b0a14e3f6fa5dbec765da0d6f064ee9
+T
+$src/redux/reducers/stage1.reducer.ts,a\d\adb1221bf39144b4b5b146bf250cdc3d955fb3ff
+O
+src/components/Stage1/table.jsx,a\4\a46e4010294d551aa0c153c2a4fd63d300674c24
+Q
+!src/components/Stage1/wrapper.tsx,d\2\d224f1f4e3dc04fe3be3a8e5a4816da28fd5ee30
+P
+ src/redux/actions/pair.action.ts,c\0\c08ecb2550e4013430045f959cb9c323adaa2cba

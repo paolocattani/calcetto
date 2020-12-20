@@ -1,6 +1,13 @@
 import { put, call, StrictEffect, takeEvery, take, takeLatest, delay } from 'redux-saga/effects';
 import { AuthAction } from '../actions/auth.action';
-import { AuthenticationResponse, RegistrationResponse } from '../../@common/models';
+import {
+	AuthenticationError,
+	AuthenticationResponse, CheckAuthenticationRequest, DeleteUserRequest,
+	LoginRequest, LogoutRequest,
+	OmitHistory,
+	RegistrationRequest,
+	RegistrationResponse, UpdateUserRequest
+} from '../../@common/models';
 import {
 	CheckAuthentication,
 	createSessionChannel,
@@ -18,23 +25,20 @@ import { persistor } from '../store';
 import { HTTPStatusCode } from '../../@common/models/HttpStatusCode';
 import { TournamentAction } from '../actions';
 import { UserMessageType } from '../../@common/models/common.models';
-import { getMessage } from './utils';
+import {entityLifeCycle, getMessage} from './utils';
 import i18next from 'src/i18n/i18n';
 
 function* checkAuthenticationSaga({
 	payload: { history },
 }: ReturnType<typeof AuthAction.checkAuthentication.request>): Generator<StrictEffect, void, any> {
-	try {
-		const response: AuthenticationResponse = yield call(CheckAuthentication);
-		if (response.code === HTTPStatusCode.Success) {
-			yield put(AuthAction.checkAuthentication.success(response));
+	yield* entityLifeCycle<CheckAuthenticationRequest, AuthenticationResponse,AuthenticationError>(
+		AuthAction.checkAuthentication,
+		CheckAuthentication,
+		{ },
+		function* (){
 			yield put(AuthAction.sessionControl.request({ history }));
-		} else {
-			yield put(AuthAction.checkAuthentication.failure(response));
 		}
-	} catch (err) {
-		yield put(AuthAction.checkAuthentication.failure(err));
-	}
+	);
 }
 
 /*
@@ -79,26 +83,15 @@ function* watchSessionSaga({
 function* logoutSaga({
 	payload: { history },
 }: ReturnType<typeof AuthAction.logout.request>): Generator<StrictEffect, void, any> {
-	const logoutReponse: AuthenticationResponse = yield call(logout);
-	const message = getMessage(logoutReponse.userMessage);
-	if (logoutReponse.code === HTTPStatusCode.Success) {
-		yield put(AuthAction.logout.success(logoutReponse));
-		history.push('/');
-		toast.success(message);
-	} else {
-		toast.error(message);
-		yield put(AuthAction.logout.failure(logoutReponse));
-	}
-	persistor.purge();
-	yield put(
-		AuthAction.logout.success({
-			code: HTTPStatusCode.Success,
-			message: 'Logout complete',
-			userMessage: {
-				type: UserMessageType.Success,
-				label: 'auth:logout',
-			},
-		})
+	yield* entityLifeCycle<LogoutRequest, AuthenticationResponse,AuthenticationError>(
+		AuthAction.logout,
+		logout,
+		{},
+		function* (){
+			history.push('/');
+			persistor.purge();
+		}
+
 	);
 }
 
@@ -106,82 +99,56 @@ function* logoutSaga({
 function* loginSaga({
 	payload: { history, ...loginRequest },
 }: ReturnType<typeof AuthAction.login.request>): Generator<StrictEffect, void, any> {
-	// Validate Login
-	const loginReponse: AuthenticationResponse = yield call(login, loginRequest);
-	const message = getMessage(loginReponse.userMessage);
-	console.log('login saga : ', message, loginReponse.userMessage);
-	console.log('trans : ', i18next.t('auth:name'));
-	console.log('trans : ', i18next.t('auth:server.error.wrong_credential'));
-	console.log('trans : ', i18next.t(loginReponse.userMessage.label!));
-	if (loginReponse.code === HTTPStatusCode.Success) {
-		yield put(AuthAction.login.success(loginReponse));
-		// Session control
-		yield put(AuthAction.sessionControl.request({ history }));
-		// Fetch tournament
-		yield put(TournamentAction.fetch.request({}));
-		// history.push('/');
-		toast.success(message);
-	} else {
-		toast.error(message);
-		yield put(AuthAction.login.failure(loginReponse));
-	}
+	yield* entityLifeCycle<LoginRequest, AuthenticationResponse,AuthenticationError>(
+		AuthAction.login,
+		login,
+		loginRequest,
+		function* (){
+			yield put(AuthAction.sessionControl.request({ history }));
+			yield put(TournamentAction.fetch.request({}));
+		}
+	);
 }
 
 // Registration
 function* registrationSaga({
 	payload: { history, ...registrationRequest },
 }: ReturnType<typeof AuthAction.registration.request>): Generator<StrictEffect, void, any> {
-	// Validate Registration
-	const registrationReponse: RegistrationResponse = yield call(registration, registrationRequest);
-	const message = getMessage(registrationReponse.userMessage);
-	if (registrationReponse.code === HTTPStatusCode.Success) {
-		yield put(AuthAction.registration.success(registrationReponse));
-		// Session control
-		yield put(AuthAction.sessionControl.request({ history }));
-		// Fetch tournament
-		yield put(TournamentAction.fetch.request({}));
-		history.push('/');
-		toast.success(message);
-	} else {
-		if (registrationReponse.errors) {
-			registrationReponse.errors.forEach((e) => toast.error(i18next.t(e.label, e.options)));
+	yield* entityLifeCycle<RegistrationRequest, RegistrationResponse,AuthenticationError>(
+		AuthAction.registration,
+		registration,
+		registrationRequest,
+		function* (){
+			yield put(AuthAction.sessionControl.request({ history }));
+			yield put(TournamentAction.fetch.request({}));
 		}
-		yield put(AuthAction.registration.failure(registrationReponse));
-	}
+	);
 }
 
 // Update user
 function* updateUserSaga({
 	payload: { history, ...updateUserRequest },
 }: ReturnType<typeof AuthAction.update.request>): Generator<StrictEffect, void, any> {
-	// Validate Login
-	const updateReponse: AuthenticationResponse = yield call(updateUser, updateUserRequest);
-	const message = getMessage(updateReponse.userMessage);
-	if (updateReponse.code === HTTPStatusCode.Success) {
-		yield put(AuthAction.update.success(updateReponse));
-		history.push('/');
-		toast.success(message);
-	} else {
-		toast.error(message);
-		yield put(AuthAction.update.failure(updateReponse));
-	}
+	yield* entityLifeCycle<UpdateUserRequest, AuthenticationResponse,AuthenticationError>(
+		AuthAction.update,
+		updateUser,
+		updateUserRequest,
+		()=>	history.push('/')
+	);
 }
 
 // Delete user
 function* deleteUserSaga({
 	payload: { history, ...deleteUserRequest },
 }: ReturnType<typeof AuthAction.delete.request>): Generator<StrictEffect, void, any> {
-	// Validate Login
-	const deleteReponse: AuthenticationResponse = yield call(deleteUser, deleteUserRequest);
-	const message = getMessage(deleteReponse.userMessage);
-	if (deleteReponse.code === HTTPStatusCode.Success) {
-		yield put(AuthAction.delete.success(deleteReponse));
-		yield put(AuthAction.logout.request({ history }));
-		toast.success(message);
-	} else {
-		toast.error(message);
-		yield put(AuthAction.delete.failure(deleteReponse));
-	}
+	yield* entityLifeCycle<DeleteUserRequest, RegistrationResponse,AuthenticationError>(
+		AuthAction.delete,
+		deleteUser,
+		deleteUserRequest,
+		function* (){
+			yield put(AuthAction.logout.request({ history }));
+		}
+	);
 }
 
 function logger(action: Action<any>) {

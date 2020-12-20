@@ -18,7 +18,7 @@ export const TournamentAction = {
   fetch: createAsyncAction(...defaultAsyncParams(actionName, 'Fetch Tournaments'))<
     FetchTournamentsRequest,
     FetchTournamentsResponse,
-    Error
+		TournamentError
   >(),
   // set selected tournament
   setTournament: createAction(...defaultParam(actionName, 'Set Tournament'))<TournamentDTO | null>(),

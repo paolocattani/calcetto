@@ -11,7 +11,7 @@ import {
 import { rowsGenerator } from '../../components/Stage1/helper';
 import { postWrapper, putWrapper } from '../../@common/utils/fetch.utils';
 
-export const fetchStage1 = async ({ pairsList, stageName }: FetchStage1Request): Promise<FetchStage1Response> =>
+export const fetchStage1 = async ({ pairsList, stageName }: FetchStage1Request) =>
   postWrapper<FetchStage1Request, FetchStage1Response>('/api/v1/stage1', {
     // FIXME:
     rows: rowsGenerator(pairsList),

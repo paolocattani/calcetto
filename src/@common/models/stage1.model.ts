@@ -56,3 +56,5 @@ export interface FetchStage1Response extends GenericReponse {
 }
 export interface UpdateCellResponse extends GenericReponse {}
 export interface UpdatePlacementResponse extends GenericReponse {}
+
+export interface Stage1Error extends GenericReponse {}

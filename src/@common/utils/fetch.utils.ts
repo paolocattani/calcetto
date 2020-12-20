@@ -11,19 +11,16 @@ export const DEFAULT_HEADERS: { headers: HeadersInit } = {
   },
 };
 
-export const getWrapper = async <T extends GenericReponse>(url: string): Promise<T> => await fetchWrapper(url, 'GET');
-export const deleteWrapper = async <B, T extends GenericReponse>(url: string, body?: OmitHistory<B>): Promise<T> =>
-  await fetchWrapper(url, 'DELETE', body);
-export const putWrapper = async <B, T extends GenericReponse>(url: string, body?: OmitHistory<B>): Promise<T> =>
-  await fetchWrapper(url, 'PUT', body);
-export const postWrapper = async <B, T extends GenericReponse>(url: string, body?: OmitHistory<B>): Promise<T> =>
-  await fetchWrapper(url, 'POST', body);
+export const getWrapper = <T extends GenericReponse>(url: string) => fetchWrapper<never,T>(url, 'GET');
+export const deleteWrapper = <B, T extends GenericReponse>(url: string, body?: OmitHistory<B>) => fetchWrapper<B,T>(url, 'DELETE', body);
+export const putWrapper = <B, T extends GenericReponse>(url: string, body?: OmitHistory<B>) => fetchWrapper<B,T>(url, 'PUT', body);
+export const postWrapper = <B, T extends GenericReponse>(url: string, body?: OmitHistory<B>) => fetchWrapper<B,T>(url, 'POST', body);
 
 export const fetchWrapper = async <B, T extends GenericReponse>(
   url: string,
   method: string,
   body?: OmitHistory<B>
-): Promise<T> => {
+): Promise<T | typeof UnexpectedServerError> => {
   console.log('fetchWrapper : ', method, url, body);
   let response = null;
   try {
@@ -43,6 +40,6 @@ export const fetchWrapper = async <B, T extends GenericReponse>(
       Type 'GenericReponse' is not assignable to type 'T'.
       'GenericReponse' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'GenericReponse'.
     */
-    return UnexpectedServerError as any;
+    return UnexpectedServerError;
   }
 };

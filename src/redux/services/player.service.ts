@@ -26,13 +26,13 @@ export const fetchPlayers = async ({ tId, addEmpty }: FetchPlayersRequest): Prom
   }
 };
 
-export const deletePlayers = async ({ players }: DeletePlayersRequest): Promise<DeletePlayersResponse> =>
+export const deletePlayers = async ({ players }: DeletePlayersRequest) =>
   deleteWrapper<DeletePlayersRequest, DeletePlayersResponse>('/api/v2/player/delete', { players });
 
-export const savePlayer = async ({ player }: SavePlayerRequest): Promise<SavePlayerResponse> =>
+export const savePlayer = async ({ player }: SavePlayerRequest) =>
   postWrapper<SavePlayerRequest, SavePlayerResponse>('/api/v2/player/new', { player });
 
-export const updatePlayer = async ({ player }: SavePlayerRequest): Promise<SavePlayerResponse> =>
+export const updatePlayer = async ({ player }: SavePlayerRequest) =>
   putWrapper<SavePlayerRequest, SavePlayerResponse>('/api/v2/player/update', { player });
 
 export const getEmptyPlayer = (label?: string): PlayerDTO => ({

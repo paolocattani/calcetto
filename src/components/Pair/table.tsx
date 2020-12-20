@@ -36,6 +36,7 @@ import {
 } from 'src/redux/services/pair.service';
 import { HTTPStatusCode } from 'src/@common/models/HttpStatusCode';
 import { LABEL_COMMON_LOADING } from 'src/@common/constants/label';
+import {FetchPairsResponse, FindAliasResponse, SavePairResponse} from '../../@common/models';
 
 const hideAskUser = {
   message: '',
@@ -70,7 +71,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
   useEffect(() => {
     if (!tournament) return;
     (async () => {
-      const { pairsList } = await fetchPairs({ tId: tournament.id! });
+      const { pairsList } = await fetchPairs({ tId: tournament.id! }) as FetchPairsResponse;
       const { playersList } = await fetchPlayers({ addEmpty: true, tId: tournament.id! });
       setData({ rows: pairsList, players: playersList });
     })();
@@ -91,7 +92,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
       setIsLoading({ state: true, message: t(LABEL_COMMON_LOADING) });
       const emptyRow:PairDTO = getEmptyPair();
       emptyRow.tournamentId = tournament.id || 0;
-      const result = await postPair({ pair: emptyRow });
+      const result = await postPair({ pair: emptyRow }) as SavePairResponse;
       emptyRow.id = result.pair.id;
       emptyRow.rowNumber = index || data.rows.length + 1;
       setData((current) => ({
@@ -187,7 +188,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
           }
           //
           if (!row.alias && row.player1 && row.player1.id && row.player2 && row.player2.id) {
-            const result = await findAlias({ player1Id: row.player1.id, player2Id: row.player2.id });
+            const result = await findAlias({ player1Id: row.player1.id, player2Id: row.player2.id }) as FindAliasResponse;
             row.alias = result.code === HTTPStatusCode.OK && result.alias ? result.alias : '';
           }
           // update Db. Non aspetto la risposta...
