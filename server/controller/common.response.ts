@@ -70,7 +70,7 @@ export const failure = <T extends GenericReponse>(
 
 // Success
 export const success = <T extends GenericReponse>(res: Response, label: I18nLabel, additionalInfo?: OmitGeneric<T>) =>
-	ComposeReponse(res, HTTPStatusCode.Success, 'Success', UserMessageType.Success, label, additionalInfo);
+	ComposeReponse(res, HTTPStatusCode.OK, 'Success', UserMessageType.Success, label, additionalInfo);
 
 // Entity Not Found
 export const entityNotFound = (res: Response) =>

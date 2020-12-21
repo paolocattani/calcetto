@@ -4,7 +4,7 @@ import {
 	UserMessage,
 	UserMessageType,
 } from '../../@common/models/common.models';
-import { HTTPStatusCode } from '../../@common/models/HttpStatusCode';
+import {HTTPStatusCode, SuccessCodes} from '../../@common/models/HttpStatusCode';
 import { put, call, StrictEffect } from 'redux-saga/effects';
 import { PayloadActionCreator } from 'typesafe-actions';
 import { toast } from 'react-toastify';
@@ -26,8 +26,8 @@ export function* entityLifeCycle<TReq, TRes extends GenericReponse,TErr extends 
 	method: (p: OmitHistory<TReq>) => TRes | Promise<TRes | typeof UnexpectedServerError>,
 	payload: OmitHistory<TReq>,
 	onSuccess?: IActionCallback<TRes>,
-	showMessage?:boolean,
 	onFailure?: IActionCallback<TErr>,
+	showMessage:boolean = true,
 ): Generator<StrictEffect, void, any> {
 	try {
 		// Call method with payload
@@ -51,7 +51,7 @@ export function* entityLifeCycle<TReq, TRes extends GenericReponse,TErr extends 
 
 		// If success
 		// FIXME: include all 2XX
-		if (response.code === HTTPStatusCode.Success) {
+		if (SuccessCodes.includes(response.code)) {
 			const successRes = response as TRes;
 			// Show success toast
 			// Dispatch success action

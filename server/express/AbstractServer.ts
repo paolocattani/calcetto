@@ -65,7 +65,7 @@ export abstract class AbstractServer implements IServer {
       });
     } else {
     */
-    this.application
+		this.application
       .options('*', cors(this.corsOptions)) // Preflight Request
       .use(morgan(isProductionMode() ? 'combined' : 'common'))
       // Exclude compression per 'text/event-stream'
@@ -75,12 +75,12 @@ export abstract class AbstractServer implements IServer {
           filter: (req, res) => res.getHeader('Content-Type') != 'text/event-stream',
         })
       )
-      .use(helmet({ dnsPrefetchControl: { allow: true } }))
+      //.use(helmet({ dnsPrefetchControl: { allow: true } }))
+      .use(helmet())
       //this.application.set('trust proxy', 1);
       .use(json())
       .use(urlencoded({ extended: false }))
       .use(cookieParser(process.env.SERVER_SECRET || 'O<o@cZqCJ-Qmu1-<C<e@R4m0n(nR&Sk'))
-      .disable('X-Powered-By')
       .all('*', auditControl)
       .all('*', routeLogger);
 

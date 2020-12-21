@@ -87,6 +87,7 @@ const Wrapper: React.FC = (): JSX.Element => {
           </Button>
         </Col>
       </Row>
+			{tournament.progress <= TournamentProgress.Stage1 ? (
       <Row>
         <Col>
           <ButtonGroup toggle className="mb-2">
@@ -107,7 +108,7 @@ const Wrapper: React.FC = (): JSX.Element => {
             </ToggleButton>
           </ButtonGroup>
         </Col>
-      </Row>
+      </Row>) : null}
     </div>
   );
 

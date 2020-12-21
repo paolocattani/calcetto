@@ -31,13 +31,11 @@ import i18next from 'src/i18n/i18n';
 function* checkAuthenticationSaga({
 	payload: { history },
 }: ReturnType<typeof AuthAction.checkAuthentication.request>): Generator<StrictEffect, void, any> {
+	const onSuccess = function* (){
+		yield put(AuthAction.sessionControl.request({ history }));
+	};
 	yield* entityLifeCycle<CheckAuthenticationRequest, AuthenticationResponse,AuthenticationError>(
-		AuthAction.checkAuthentication,
-		CheckAuthentication,
-		{ },
-		function* (){
-			yield put(AuthAction.sessionControl.request({ history }));
-		}
+		AuthAction.checkAuthentication, CheckAuthentication,{ }
 	);
 }
 
@@ -83,15 +81,12 @@ function* watchSessionSaga({
 function* logoutSaga({
 	payload: { history },
 }: ReturnType<typeof AuthAction.logout.request>): Generator<StrictEffect, void, any> {
+	const onSuccess = function* (){
+		history.push('/');
+		persistor.purge();
+	};
 	yield* entityLifeCycle<LogoutRequest, AuthenticationResponse,AuthenticationError>(
-		AuthAction.logout,
-		logout,
-		{},
-		function* (){
-			history.push('/');
-			persistor.purge();
-		}
-
+		AuthAction.logout, logout, {}, onSuccess
 	);
 }
 
@@ -99,14 +94,12 @@ function* logoutSaga({
 function* loginSaga({
 	payload: { history, ...loginRequest },
 }: ReturnType<typeof AuthAction.login.request>): Generator<StrictEffect, void, any> {
+	const onSuccess = function* (){
+		yield put(AuthAction.sessionControl.request({ history }));
+		yield put(TournamentAction.fetch.request({}));
+	};
 	yield* entityLifeCycle<LoginRequest, AuthenticationResponse,AuthenticationError>(
-		AuthAction.login,
-		login,
-		loginRequest,
-		function* (){
-			yield put(AuthAction.sessionControl.request({ history }));
-			yield put(TournamentAction.fetch.request({}));
-		}
+		AuthAction.login, login, loginRequest, onSuccess
 	);
 }
 
@@ -114,14 +107,12 @@ function* loginSaga({
 function* registrationSaga({
 	payload: { history, ...registrationRequest },
 }: ReturnType<typeof AuthAction.registration.request>): Generator<StrictEffect, void, any> {
+	const onSuccess = function* (){
+		yield put(AuthAction.sessionControl.request({ history }));
+		yield put(TournamentAction.fetch.request({}));
+	};
 	yield* entityLifeCycle<RegistrationRequest, RegistrationResponse,AuthenticationError>(
-		AuthAction.registration,
-		registration,
-		registrationRequest,
-		function* (){
-			yield put(AuthAction.sessionControl.request({ history }));
-			yield put(TournamentAction.fetch.request({}));
-		}
+		AuthAction.registration, registration, registrationRequest, onSuccess
 	);
 }
 
@@ -130,10 +121,7 @@ function* updateUserSaga({
 	payload: { history, ...updateUserRequest },
 }: ReturnType<typeof AuthAction.update.request>): Generator<StrictEffect, void, any> {
 	yield* entityLifeCycle<UpdateUserRequest, AuthenticationResponse,AuthenticationError>(
-		AuthAction.update,
-		updateUser,
-		updateUserRequest,
-		()=>	history.push('/')
+		AuthAction.update, updateUser, updateUserRequest,()=>	history.push('/')
 	);
 }
 
@@ -141,13 +129,11 @@ function* updateUserSaga({
 function* deleteUserSaga({
 	payload: { history, ...deleteUserRequest },
 }: ReturnType<typeof AuthAction.delete.request>): Generator<StrictEffect, void, any> {
+	const onSuccess = function* (){
+		yield put(AuthAction.logout.request({ history }));
+	};
 	yield* entityLifeCycle<DeleteUserRequest, RegistrationResponse,AuthenticationError>(
-		AuthAction.delete,
-		deleteUser,
-		deleteUserRequest,
-		function* (){
-			yield put(AuthAction.logout.request({ history }));
-		}
+		AuthAction.delete, deleteUser, deleteUserRequest, onSuccess
 	);
 }
 
