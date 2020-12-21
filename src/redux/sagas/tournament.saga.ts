@@ -27,9 +27,7 @@ function* saveTournamentSaga({
 	payload,
 }: ReturnType<typeof TournamentAction.save.request>): Generator<StrictEffect, void, any> {
 	const onSuccess = function* (response: SaveTournamentResponse) {
-		console.log("saveTournamentSaga :", response);
 		// Reload tournament List
-		yield put(TournamentAction.setTournament(response.tournament));
 		yield put(TournamentAction.fetch.request({}));
 		// Send user to pair page
 		payload.history.push('/tournament');

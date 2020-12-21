@@ -12,6 +12,7 @@ import { Message, SessionStatus } from '../../src/@common/models';
 interface ConnectedClient {
 	id: Date;
 	user: UserDTO;
+	tournamentId?: number;
 	token: string;
 	response: Response;
 	notification: boolean;
@@ -80,17 +81,26 @@ const isSessionValid = (token: string, response: Response, intervalId: NodeJS.Ti
 	}
 	return true;
 };
-
-export const sendNotificationToAll = (message: Message) => {
-	logger.info("sendNotificationToAll.start ");
+export const subscribe = (user: UserDTO, tournamentId: number) => {
 	connectedClients.forEach((c) => {
-		logger.info("sendNotificationToAll.user : ",c);
-		if (c.user.role === UserRole.User) {
-			logger.info("sendNotificationToAll.user : ",c);
-			sendNotification(c.response, message, false);
+		if (c.user.role === UserRole.User && c.user.id === user.id) {
+			c.tournamentId = tournamentId;
 		}
 	});
-	logger.info("sendNotificationToAll.end");
+};
+
+export const sendNotificationToAll = (message: Message, tournamentId?: number) => {
+	connectedClients.forEach((c) => {
+		if (c.user.role === UserRole.User) {
+			if (tournamentId) {
+				if (tournamentId && c.tournamentId && c.tournamentId === tournamentId) {
+					sendNotification(c.response, message, false);
+				}
+			} else {
+				sendNotification(c.response, message, false);
+			}
+		}
+	});
 };
 
 export const sendNotification = (response: Response, message?: Message, endSession?: boolean) => {
@@ -99,7 +109,7 @@ export const sendNotification = (response: Response, message?: Message, endSessi
 		response.write(`data:${JSON.stringify(message)}`, CHAR_SET);
 	}
 	// End Message
-	response.write(`:${EOM}`, CHAR_SET);
+	response.write(`${EOM}`, CHAR_SET);
 	// Send message
 	response.flush();
 	// Close session

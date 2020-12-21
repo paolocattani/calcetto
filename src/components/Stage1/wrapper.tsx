@@ -1,6 +1,5 @@
 // React, Router, Redux
 import { useHistory } from 'react-router';
-import { withRouter } from 'react-router-dom';
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // Style
@@ -28,7 +27,7 @@ const Wrapper: React.FC = (): JSX.Element => {
   // Torneo
   const tournament = useSelector(TournamentSelector.getTournament)!;
   // Sono presenti aggiornamenti
-  const toogleRefresh = useSelector(Stage1Selector.getToogleRefresh);
+  // const toogleRefresh = useSelector(Stage1Selector.getToogleRefresh);
   // Squadre selezionate
   const selected = useSelector(Stage1Selector.getSelectedPairs);
   // Lista coppie
@@ -56,7 +55,7 @@ const Wrapper: React.FC = (): JSX.Element => {
     currentHistory.push('/stage2');
   }
 
-  console.log('Refreshing : ', toogleRefresh);
+  //console.log('Refreshing : ', toogleRefresh);
   const toolsBar = (
     <div className={commonStyle.toolsBarContainer}>
       <Row className={commonStyle.toolsBarRow}>
@@ -79,7 +78,7 @@ const Wrapper: React.FC = (): JSX.Element => {
         <Col>
           <Button
             variant="outline-warning"
-            className="default-color-white float-right"
+             className="default-color-white float-right"
             onClick={goToStage2}
             disabled={selected.length < 4 && tournament.progress < TournamentProgress.Stage2}
           >
@@ -121,7 +120,7 @@ const Wrapper: React.FC = (): JSX.Element => {
   );
 };
 
-export default withRouter(Wrapper);
+export default Wrapper;
 
 function renderTables(pairsList: PairDTO[], autoOrder: boolean): JSX.Element[] {
   let stageName = '';

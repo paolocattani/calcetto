@@ -9,6 +9,7 @@ import { updatePlacement } from '../manager/pair.manager';
 import { deleteStage1, generateStage1Rows, updateCell } from '../manager/stage1.manager';
 import { UpdatePlacementRequest, UpdatePlacementResponse } from '../../src/@common/models';
 import { failure, success } from './common.response';
+import { subscribe } from '../events/events';
 
 const router = Router();
 router.use('/', (req: Request, res: Response, next: NextFunction) =>
@@ -68,6 +69,7 @@ router.post(
 		try {
 			const result = await generateStage1Rows(rows, stageName, user!);
 			// logger.info('STAGE1 RESULT : ', result);
+			subscribe(user, result[0].pair.tournamentId);
 			return res.status(200).json(result);
 		} catch (error) {
 			logger.error('Error while update matrix  : ', error);

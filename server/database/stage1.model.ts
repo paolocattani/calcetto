@@ -61,9 +61,8 @@ export default class Stage1 extends Model<Stage1> {
 	public placement!: number;
 
 	@AfterSave
-	static notify() {
+	static notify(entity: Stage1) {
 		const message = { status: SessionStatus.STAGE1_UPDATE };
-		console.log('Notify :');
-		sendNotificationToAll(message);
+		sendNotificationToAll(message, entity.tournamentId);
 	}
 }

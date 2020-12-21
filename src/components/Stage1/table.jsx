@@ -11,13 +11,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AuthSelector } from '../../redux/selectors/auth.selector';
 // style
 import { Stage1Action } from '../../redux/actions';
-import { TournamentSelector } from '../../redux/selectors';
+import { TournamentSelector,Stage1Selector } from '../../redux/selectors';
 import { TournamentProgress } from '../../@common/dto';
 
 // TODO: convert this component to ts
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const Stage1Table = ({ pairsList, autoOrder }) => {
   const dispatch = useDispatch();
+  // Sono presenti aggiornamenti
+  const toogleRefresh = useSelector(Stage1Selector.getToogleRefresh);
   // From store
   const isAdmin = useSelector(AuthSelector.isAdmin);
   const tournament = useSelector(TournamentSelector.getTournament);
@@ -51,7 +53,7 @@ const Stage1Table = ({ pairsList, autoOrder }) => {
       fetchData();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [toogleRefresh]
   );
 
   const cellEditProps = (editable) =>
@@ -156,6 +158,7 @@ const Stage1Table = ({ pairsList, autoOrder }) => {
     hideSelectColumn: !isAdmin || tournament.progress >= TournamentProgress.Stage2,
   };
 
+  console.log('Refreshing : ', toogleRefresh);
   return isLoading ? (
     <h3>
       Caricamento girone <b>{stageName}</b> in corso....
