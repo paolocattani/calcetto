@@ -1,7 +1,19 @@
-import { PlayerRole } from '../dto';
-import { RootState } from '.';
+import { PlayerRole, UserDTO } from '../dto';
+import { AuthenticationResponse, RootState } from '.';
 import { HTTPStatusCode } from './HttpStatusCode';
 import { TOptions } from 'i18next';
+
+export enum SessionStatus {
+	// Sessione scaduta, reindirizza l'utente alla login
+	SESSION_EXPIRED = 'session_expired',
+	// Necessario aggiornamento dati su Stage1
+	STAGE1_UPDATE = 'stage1_update',
+}
+
+export interface Message {
+	status: SessionStatus;
+	message?: string;
+}
 
 export type I18nLabel = {
 	label: string;
@@ -43,7 +55,17 @@ export const UnexpectedServerError: GenericReponse = {
 	message: 'Unexpected Server Error',
 	userMessage: {
 		type: UserMessageType.Danger,
-		label: 'commmon:server.unexpected',
+		label: 'common:server.unexpected',
+	},
+};
+
+export const Unauthorized: AuthenticationResponse = {
+	user: undefined,
+	code: HTTPStatusCode.Unauthorized,
+	message: 'Unauthorized!',
+	userMessage: {
+		type: UserMessageType.Danger,
+		label: 'auth:expired',
 	},
 };
 
@@ -68,7 +90,7 @@ export const initialState: RootState = {
 		isLoading: false,
 	},
 	stage1State: {
-		needRefresh: false,
+		toogleRefresh: false,
 		selectedPairs: [
 			{
 				id: null,

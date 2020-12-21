@@ -25,7 +25,7 @@ export const TournamentReducer = createReducer<TournamentState, Action>(initialT
   // SUCCESS
   // Fetch Tournament
   .handleAction(TournamentAction.fetch.success, (state, { payload: { tournamentsList } }) => ({
-    tournament: tournamentsList && tournamentsList.length > 0 ? tournamentsList[0] : null,
+    ...state,
     tournamentsList: tournamentsList || [],
     isLoading: false,
   }))

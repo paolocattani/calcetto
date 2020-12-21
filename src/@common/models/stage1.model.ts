@@ -4,8 +4,7 @@ import { GenericReponse } from './common.models';
 export interface Stage1State {
   // Utilizzato per indicare se è necessario ricaricare i dati dal db
   // a seguito di un cambiamento causato da un'altro utente
-  // TODO:
-  needRefresh: boolean;
+	toogleRefresh: boolean;
   isLoading: boolean;
   //Righe Stage1 selezionate nella forma di Mappa <Nome Girone, Lista Righe Selezionate>
   selectedRows?: Map<string, Array<Stage1Row>>;
@@ -25,9 +24,6 @@ export interface SingleStageState {
 }
 
 // Requests
-export interface WatchStage1Request {
-  tounamentId: number;
-}
 export interface FetchStage1Request {
   // FIXME:
   rows?: Array<Stage1Row>;
@@ -46,9 +42,6 @@ export interface UpdatePlacementRequest {
 }
 
 // Response
-export interface WatchStage1Response {
-  needRefresh: boolean;
-}
 export interface FetchStage1Response extends GenericReponse {
   stageName: string;
   pairsList: Array<PairDTO>;

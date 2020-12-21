@@ -5,18 +5,15 @@ import { Stage1Row } from '../../@common/dto';
 import { getEmptyPair } from '../services/pair.service';
 
 export const initialStage1State: Stage1State = {
-  needRefresh: false,
+  toogleRefresh: false,
   selectedPairs: [getEmptyPair('-')],
   isLoading: false,
   stages: [],
 };
 
 export const Stage1Reducer = createReducer<Stage1State, Action>(initialStage1State)
-  // Gestione Watcher
-  // All'avvio del watcher reimposto needRefresh
-  .handleAction([Stage1Action.stage1Watcher.request], (state) => ({ ...state, needRefresh: false }))
-  .handleAction([Stage1Action.stage1Watcher.failure], (state) => ({ ...state }))
-  .handleAction([Stage1Action.stage1Watcher.success], (state) => ({ ...state, needRefresh: true }))
+  // SSE
+  .handleAction([Stage1Action.reloadFromServer], (state) => ({ ...state, toogleRefresh: !state.toogleRefresh }))
   //
   .handleAction([Stage1Action.fetchStage1.request, Stage1Action.updateSelectedPairs.request], (state) => ({
     ...state,

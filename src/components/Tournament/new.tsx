@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 type newTProps = {};
 
 const NewTournament: React.FC<newTProps> = (_) => {
-  let currentHistory = useHistory();
+  const currentHistory = useHistory();
   const dispatch = useDispatch();
   const { t } = useTranslation(['common', 'tournament']);
 
@@ -29,7 +29,7 @@ const NewTournament: React.FC<newTProps> = (_) => {
       return;
     }
 
-    let tournament = getEmptyTournament(name);
+    const tournament = getEmptyTournament(name);
     tournament.date = date;
     tournament.public = visible;
     dispatch(TournamentAction.save.request({ tournament, history: currentHistory }));

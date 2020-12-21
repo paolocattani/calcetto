@@ -11,11 +11,11 @@ export interface AuthState {
 }
 
 //## OTHER
-export interface SessionDTO {}
 export type PlayerRoleType = {
 	value: PlayerRole;
 	label: PlayerRole;
 };
+
 
 //## REQUEST - RESPONSE - ERROR
 // Request

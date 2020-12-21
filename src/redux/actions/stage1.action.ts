@@ -1,7 +1,5 @@
 import { createAsyncAction, createAction } from 'typesafe-actions';
 import {
-	WatchStage1Request,
-	WatchStage1Response,
 	FetchStage1Response,
 	FetchStage1Request,
 	UpdateCellRequest,
@@ -11,7 +9,7 @@ import {
 	SelectPairsRequest,
 	SelectPairsResponse, Stage1Error,
 } from '../../@common/models';
-import { defaultAsyncParams, PurgeResponse, PURGE_STORE_ACTION } from './constants';
+import {defaultAsyncParams, PurgeResponse, PURGE_STORE_ACTION, defaultParam} from './constants';
 
 const actionName = '[Stage1]';
 
@@ -22,13 +20,8 @@ export const Stage1Action = {
     SelectPairsResponse,
 		Stage1Error
   >(),
-
   // watcher
-  stage1Watcher: createAsyncAction(...defaultAsyncParams(actionName, 'Stage1 Watcher'))<
-    WatchStage1Request,
-    WatchStage1Response,
-		Stage1Error
-  >(),
+	reloadFromServer: createAction(...defaultParam(actionName, 'Stage1 Watcher'))<{}>(),
   fetchStage1: createAsyncAction(...defaultAsyncParams(actionName, 'Fetch Stage1'))<
     FetchStage1Request,
     FetchStage1Response,

@@ -28,7 +28,7 @@ const Wrapper: React.FC = (): JSX.Element => {
   // Torneo
   const tournament = useSelector(TournamentSelector.getTournament)!;
   // Sono presenti aggiornamenti
-  const needRefresh = useSelector(Stage1Selector.getNeedRefresh);
+  const toogleRefresh = useSelector(Stage1Selector.getToogleRefresh);
   // Squadre selezionate
   const selected = useSelector(Stage1Selector.getSelectedPairs);
   // Lista coppie
@@ -56,7 +56,7 @@ const Wrapper: React.FC = (): JSX.Element => {
     currentHistory.push('/stage2');
   }
 
-  console.log('Refreshing : ', needRefresh);
+  console.log('Refreshing : ', toogleRefresh);
   const toolsBar = (
     <div className={commonStyle.toolsBarContainer}>
       <Row className={commonStyle.toolsBarRow}>
@@ -65,7 +65,7 @@ const Wrapper: React.FC = (): JSX.Element => {
             <LeftArrowIcon /> Indietro
           </Button>
         </Col>
-        {tournament.progress > TournamentProgress.Stage1 ? (
+        {tournament.progress > TournamentProgress.Stage1 && session.isAdmin? (
           <Col>
             <Button
               variant="danger"
@@ -87,7 +87,7 @@ const Wrapper: React.FC = (): JSX.Element => {
           </Button>
         </Col>
       </Row>
-			{tournament.progress <= TournamentProgress.Stage1 ? (
+			{tournament.progress <= TournamentProgress.Stage1 && session.isAdmin ? (
       <Row>
         <Col>
           <ButtonGroup toggle className="mb-2">

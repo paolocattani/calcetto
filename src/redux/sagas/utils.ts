@@ -4,14 +4,31 @@ import {
 	UserMessage,
 	UserMessageType,
 } from '../../@common/models/common.models';
-import {HTTPStatusCode, SuccessCodes} from '../../@common/models/HttpStatusCode';
+import { SuccessCodes} from '../../@common/models/HttpStatusCode';
 import { put, call, StrictEffect } from 'redux-saga/effects';
 import { PayloadActionCreator } from 'typesafe-actions';
 import { toast } from 'react-toastify';
 import i18n from '../../i18n/i18n';
 
 interface IActionCallback<T> {
-	( response?:T ) : void | Promise<void> | Generator<StrictEffect,void, void>;
+	( response:T ) : void | Promise<void> | Generator<StrictEffect,void, void>;
+}
+
+const GeneratorFunction = (function* () { }).constructor;
+const AsyncFunction = (async function () { }).constructor;
+const NormalFunction = (function () { }).constructor;
+
+function* execCallBack<TRes>(callBack:IActionCallback<TRes>,response:TRes) {
+	if (callBack instanceof GeneratorFunction) {
+		const genFunction: typeof GeneratorFunction = callBack;
+		yield* genFunction(response);
+	} else if (callBack instanceof AsyncFunction)  {
+		const asyncFunction: typeof AsyncFunction = callBack;
+		yield asyncFunction(response);
+	} else {
+		const normalFunction: typeof NormalFunction = callBack;
+		normalFunction(response);
+	}
 }
 
 interface ActionType<TReq, TRes extends GenericReponse,TErr> {
@@ -50,7 +67,6 @@ export function* entityLifeCycle<TReq, TRes extends GenericReponse,TErr extends 
 		}
 
 		// If success
-		// FIXME: include all 2XX
 		if (SuccessCodes.includes(response.code)) {
 			const successRes = response as TRes;
 			// Show success toast
@@ -58,7 +74,7 @@ export function* entityLifeCycle<TReq, TRes extends GenericReponse,TErr extends 
 			yield put(action.success(successRes));
 			// Callback
 			if (onSuccess) {
-				yield* onSuccess(successRes);
+				yield* execCallBack(onSuccess,successRes);
 			}
 		} else {
 			const failureRes = response as TErr;
@@ -66,7 +82,7 @@ export function* entityLifeCycle<TReq, TRes extends GenericReponse,TErr extends 
 			yield put(action.failure(failureRes));
 			// Callback
 			if (onFailure) {
-				yield* onFailure(failureRes);
+				yield* execCallBack(onFailure,failureRes);
 			}
 		}
 	} catch (err) {

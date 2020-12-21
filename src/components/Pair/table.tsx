@@ -55,6 +55,8 @@ const PairsTable: React.FC<PairTableProps> = () => {
   const isAdmin = useSelector(AuthSelector.isAdmin);
   const tournament = useSelector(TournamentSelector.getTournament)!;
 
+  console.log("Tournament :", tournament);
+
   // States
   // User messages
   const [isLoading, setIsLoading] = useState({ state: false, message: t(LABEL_COMMON_LOADING) });
