@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import chalk from 'chalk';
-import jwt from 'jsonwebtoken';
 import { AppRequest } from '../controller';
 // Models
 import { User } from '../database';
@@ -8,9 +7,9 @@ import { User } from '../database';
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 import { unauthorized } from '../controller/common.response';
-import {getToken, getUuid} from "../controller/auth/cookies.utils";
-import {isAdmin} from "../manager/auth.manager";
-import {safeVerifyToken} from "../controller/auth/auth.utils";
+import { getCookies } from '../controller/auth/cookies.utils';
+import { isAdmin } from '../manager/auth.manager';
+import { safeVerifyToken } from '../controller/auth/auth.utils';
 
 // dev logger
 export const routeLogger = (req: Request, res: Response, next: NextFunction) => {
@@ -30,8 +29,7 @@ export const asyncMiddleware = (fn: any) => (req: Request, res: Response, next: 
 
 // Controllo autenticazione. Da utilizzare per tutte le API che richiedono autenticazione
 export const withAuth = async (req: AppRequest, res: Response, next: NextFunction) => {
-	const token = getToken(req);
-	const uuid = getUuid(req);
+	const [token, uuid] = getCookies(req);
 	if (!token || typeof token != 'string' || !uuid) {
 		logger.error(chalk.redBright('Token not found : '), token);
 		return unauthorized(res, { label: 'common:server.unauthorized' });
@@ -66,7 +64,6 @@ export const withTestAuth = (req: AppRequest, res: Response, next: NextFunction)
 	}
 	next();
 };
-
 
 //TODO: Controllo accessi
 export const auditControl = (req: Request, res: Response, next: NextFunction) => {

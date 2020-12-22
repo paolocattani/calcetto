@@ -1,19 +1,19 @@
 
 
 -- Stage 1
-	select s.id,s.name,
-		s."pair1Id" , concat(p1p1."name",' ',p1p1."surname"), concat(p1p2."name",' ',p1p2."surname"),
-		s."pair2Id" , concat(p2p1."name",' ',p2p1."surname"), concat(p2p2."name",' ',p2p2."surname"),
-		s.score
+	with details as (
+		select p.id id ,
+			case when p1.alias is not null then p1.alias else concat(p1."name",' ',p1."surname") end player1,
+			case when p2.alias is not null then p2.alias else concat(p2."name",' ',p2."surname") end player2
+		from pairs p
+		join player p1 on p."player1Id" = p1.id
+		join player p2 on p."player2Id" = p2.id
+	)
+	select s.id,s.name,d1.id,d1.player1,d1.player2,d2.id,d2.player1,d2.player2,s.score
 	from stage1 s
 	join tournament t on s."tournamentId" = t.id
-	join pairs p1 on s."pair1Id" = p1.id
-	join player p1p1 on p1."player1Id" = p1p1.id
-	join player p1p2 on p1."player2Id" = p1p2.id
-	join pairs p2 on s."pair2Id" =p2.id
-	join player p2p1 on p2."player1Id" = p2p1.id
-	join player p2p2 on p2."player2Id" = p2p2.id
+	join details d1 on d1.id=s."pair1Id"
+	join details d2 on d2.id=s."pair2Id"
 	where t."name" ='T6'
 	order by s.id
-
 

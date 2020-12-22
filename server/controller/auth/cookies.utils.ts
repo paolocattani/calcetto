@@ -25,12 +25,12 @@ export const getCookies = (req: AppRequest) => [getToken(req), getUuid(req)];
  * Extract token from cookies
  * @param req AppRequest : request
  */
-export const getToken = (req: AppRequest) => req.signedCookies[SESSION_TOKEN];
+const getToken = (req: AppRequest) => req.signedCookies[SESSION_TOKEN];
 /**
  * Extract uuid from cookies
  * @param req AppRequest : request
  */
-export const getUuid = (req: AppRequest) => req.signedCookies[USER_UUID];
+const getUuid = (req: AppRequest) => req.signedCookies[USER_UUID];
 
 /**
  * cookiesOption
@@ -38,15 +38,16 @@ export const getUuid = (req: AppRequest) => req.signedCookies[USER_UUID];
 const cookiesOption: CookieOptions = {
 	// 8h : Allineare a process.env.SERVER_TOKEN_EXPIRES_IN
 	maxAge: 8 * 60 * 60 * 1000,
+	httpOnly: true,
 	signed: true,
 	...(isProductionMode()
 		? {
+				// FIXME:
 				secure: true,
 				sameSite: 'none',
 		  }
 		: {
 				httpOnly: true,
-				maxAge: 8 * 60 * 60 * 1000,
 		  }),
 };
 // http://expressjs.com/en/api.html#res.cookie
