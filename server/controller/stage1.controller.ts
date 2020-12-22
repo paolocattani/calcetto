@@ -69,7 +69,7 @@ router.post(
 		try {
 			const result = await generateStage1Rows(rows, stageName, user!);
 			// logger.info('STAGE1 RESULT : ', result);
-			subscribe(user, result[0].pair.tournamentId);
+			subscribe(user!, result[0].pair.tournamentId);
 			return res.status(200).json(result);
 		} catch (error) {
 			logger.error('Error while update matrix  : ', error);

@@ -73,7 +73,7 @@ export const updateCell = async (
   logProcess(className + 'updateCell', 'end');
 };
 
-export const generateStage1Rows = async (rows: Stage1Row[], stageName: string, user: UserDTO) => {
+export const generateStage1Rows = async (rows: Stage1Row[], stageName: string, user: UserDTO):Promise<Stage1Row[]> => {
   logProcess(className + 'generateStage1Rows', 'start');
   try {
     const connection = await getDbConnection();
@@ -160,6 +160,7 @@ export const generateStage1Rows = async (rows: Stage1Row[], stageName: string, u
     logProcess(className + 'generateStage1Rows', error);
     logger.error('generateStage1Rows : ', error);
   }
+	return rows;
 };
 
 const updateRow = (

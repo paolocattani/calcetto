@@ -39,7 +39,9 @@ function* checkAuthenticationSaga({
 		AuthAction.checkAuthentication,
 		checkAuthentication,
 		{},
-		onSuccess
+		onSuccess,
+		undefined,
+		false
 	);
 }
 

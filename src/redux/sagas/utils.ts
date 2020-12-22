@@ -74,7 +74,7 @@ export function* entityLifeCycle<TReq, TRes extends GenericReponse,TErr extends 
 			yield put(action.success(successRes));
 			// Callback
 			if (onSuccess) {
-				yield* execCallBack(onSuccess,successRes);
+				yield* execCallBack<TRes>(onSuccess,successRes);
 			}
 		} else {
 			const failureRes = response as TErr;
@@ -82,7 +82,7 @@ export function* entityLifeCycle<TReq, TRes extends GenericReponse,TErr extends 
 			yield put(action.failure(failureRes));
 			// Callback
 			if (onFailure) {
-				yield* execCallBack(onFailure,failureRes);
+				yield* execCallBack<TErr>(onFailure,failureRes);
 			}
 		}
 	} catch (err) {
