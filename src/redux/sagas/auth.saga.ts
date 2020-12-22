@@ -1,4 +1,4 @@
-import { put, call, StrictEffect, takeEvery, take, takeLatest, delay } from 'redux-saga/effects';
+import { put, call, StrictEffect, takeEvery, take, takeLatest, delay, select } from 'redux-saga/effects';
 import { AuthAction } from '../actions/auth.action';
 import {
 	AuthenticationError,
@@ -28,6 +28,9 @@ import { Stage1Action, TournamentAction } from '../actions';
 import { Message, SessionStatus } from '../../@common/models/common.models';
 import { entityLifeCycle } from './utils';
 import i18next from 'src/i18n/i18n';
+import { getEmptyTournament } from 'src/components/Tournament/helper';
+import { formatDate } from 'src/@common/utils/date.utils';
+import { TournamentSelector } from '../selectors';
 
 function* checkAuthenticationSaga({
 	payload: { history },
@@ -60,22 +63,36 @@ function* watchSessionSaga({
 		const channel = yield call(createSessionChannel, eventChannel);
 		while (true) {
 			const message: Message = yield take(channel);
-			if (message.status === SessionStatus.SESSION_EXPIRED) {
-				toast.error(i18next.t('auth:expired_alert'));
-				yield delay(3000);
-				yield put(AuthAction.logout.success(Unauthorized));
-				history.push('/login');
-				persistor.purge();
-				return;
-			}
-			if (message.status === SessionStatus.STAGE1_UPDATE) {
-				yield put(Stage1Action.reloadFromServer({}));
+			switch (message.status) {
+				case SessionStatus.SESSION_EXPIRED:
+					toast.error(i18next.t('auth:expired_alert'));
+					yield delay(3000);
+					yield put(AuthAction.logout.success(Unauthorized));
+					history.push('/login');
+					persistor.purge();
+					break;
+				case SessionStatus.STAGE1_UPDATE:
+					yield put(Stage1Action.reloadFromServer({}));
+					break;
+				case SessionStatus.STAGE1_DELETE:
+					toast.error(i18next.t(message.label!));
+					yield put(TournamentAction.fetch.request({}));
+					const tournamentList = yield select(TournamentSelector.getTournamentsList);
+					console.log("auth.saga.tournamentlist :", tournamentList);
+					yield put(TournamentAction.setTournament(tournamentList[0]));
+					history.push('/');
+					break;
+				case SessionStatus.NEW_TOURNAMENT:
+					toast.success(i18next.t(message.label!, { tournament: `${message.data!.name} - ${formatDate(message.data!.date!)}` }));
+					yield put(TournamentAction.fetch.request({}));
+					break;
 			}
 		}
 	} catch (err) {
 		console.log('watchSessionSaga.err : ', err);
 	}
 }
+
 
 // Logout
 function* logoutSaga({

@@ -8,6 +8,7 @@ import {
 	BelongsTo,
 	AfterSave,
 	AfterUpdate,
+	AfterBulkDestroy,
 } from 'sequelize-typescript';
 import Pair from './pair.model';
 import Tournament from './tournament.model';
@@ -60,9 +61,10 @@ export default class Stage1 extends Model<Stage1> {
 	@Column(DataType.INTEGER)
 	public placement!: number;
 
-	@AfterSave
-	static notify(entity: Stage1) {
+	@AfterUpdate
+	static notifyUpdate(entity: Stage1) {
 		const message = { status: SessionStatus.STAGE1_UPDATE };
 		sendNotificationToAll(message, entity.tournamentId);
 	}
+
 }

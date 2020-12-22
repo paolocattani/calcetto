@@ -9,6 +9,8 @@ import { getDbConnection } from '../database/connection';
 import { isAdmin } from '../manager/auth.manager';
 //
 import { Op } from 'sequelize';
+import { SessionStatus } from '../../src/@common/models';
+import { sendNotificationToAll } from '../events/events';
 
 const className = 'Stage1 Manager : ';
 
@@ -16,6 +18,8 @@ export const deleteStage1 = async (tournamentId: number) => {
   logProcess(className + 'deleteStage1', 'start');
   try {
     await Stage1.destroy({ where: { tournamentId } });
+    const message = { status: SessionStatus.STAGE1_DELETE, label: 'common:notification.stage1_delete'  };
+		sendNotificationToAll(message, tournamentId);
   } catch (error) {
     logProcess(className + 'deleteStage1', 'error');
     logger.error('deleteStage1 : ', error);

@@ -14,10 +14,10 @@ import {
 } from '../manager/tournament.manager';
 // Models
 import Tournament from '../database/tournament.model';
-import {TournamentDTO, UserDTO} from '../../src/@common/dto';
+import {TournamentDTO } from '../../src/@common/dto';
 import { AppRequest } from './index';
 import { entityNotFound, failure, missingParameters, serverError, success } from './common.response';
-import { OmitHistory, OmitGeneric } from '../../src/@common/models/common.models';
+import { OmitHistory } from '../../src/@common/models/common.models';
 import {
 	DeleteTournamentRequest,
 	DeleteTournamentResponse,

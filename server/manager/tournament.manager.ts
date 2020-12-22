@@ -3,6 +3,8 @@ import { TournamentDTO, TournamentProgress, UserDTO, UserRole } from '../../src/
 import Tournament from '../database/tournament.model';
 import { Op, WhereOptions } from 'sequelize';
 import { getWhereFromMap, lowerWrapper, dateInRageWrapper } from '../core/utils';
+import { Message, SessionStatus } from '../../src/@common/models';
+import { sendNotificationToAll } from '../events/events';
 
 const className = 'Tournament Manager : ';
 const defaultFilter = (user: UserDTO) => ({ [Op.or]: [{ ownerId: user.id }, { public: true }] });
@@ -53,6 +55,19 @@ export const update = async (user: UserDTO, model: TournamentDTO): Promise<Tourn
       logProcess(className + 'update', 'end : Tournament not found');
       return model;
     }
+    /*
+      Se sto passando da TournamentProgress.PairsSelection a TournamentProgress.Stage1
+      aggiorno i client collegati che c'è un nuovo torneo disponibile
+    */
+   if (t.public && t.progress === TournamentProgress.PairsSelection && model.progress === TournamentProgress.Stage1) {
+     const message: Message = {
+       status: SessionStatus.NEW_TOURNAMENT,
+       label: 'common:notification.new_tournament',
+       data: { name: model.name, date: model.date }
+     };
+     sendNotificationToAll(message);
+   }
+
     const result = await t.update({
       progress: model.progress,
       autoOrder: model.autoOrder,
