@@ -3,14 +3,14 @@ import { NextFunction, Response } from 'express';
 import { AppRequest } from '../controller';
 // Core
 import { logger } from '../core/logger';
-import { asyncMiddleware, safeVerifyToken } from '../core/middleware';
-import { getToken } from '../manager/auth.manager';
 import { CHAR_SET, DEFAULT_HEADERS, EOM } from './const';
 import { UserDTO, UserRole } from '../../src/@common/dto';
 import { Message, SessionStatus } from '../../src/@common/models';
+import {getCookies} from "../controller/auth/cookies.utils";
+import {safeVerifyToken} from "../controller/auth/auth.utils";
 
-interface ConnectedClient {
-	id: Date;
+interface ConnectedClient extends Object{
+	uuid: string;
 	user: UserDTO;
 	tournamentId?: number;
 	token: string;
@@ -18,12 +18,14 @@ interface ConnectedClient {
 	notification: boolean;
 }
 
-let ii = 0;
+let count = 0;
 let connectedClients: ConnectedClient[] = [];
+
+const clientToString = ({response}:ConnectedClient) => ''
 
 export const sessionControl = (req: AppRequest, res: Response, next: NextFunction) => {
 	req.socket.setTimeout(10000);
-	const token = getToken(req);
+	const [token,uuid] = getCookies(req);
 	let intervalId: NodeJS.Timeout | null = null;
 
 	let [user] = safeVerifyToken(token);
@@ -34,9 +36,8 @@ export const sessionControl = (req: AppRequest, res: Response, next: NextFunctio
 	res.writeHead(200, DEFAULT_HEADERS);
 
 	// Aggiugo questo client a quelli collegati
-	const id = ii++;
-	const currentDate = new Date();
-	connectedClients.push({ id: currentDate, token, response: res, user, notification: user.role !== UserRole.Admin });
+	const id = count++;
+	connectedClients.push({ uuid , token, response: res, user, notification: user.role !== UserRole.Admin });
 	logger.info(`New User connected . Total connected : ${connectedClients.length}`);
 	// Controllo ogni 5 secondi
 	// https://gist.github.com/akirattii/257d7efc8430c7e3fd0b4ec60fc7a768
@@ -49,7 +50,7 @@ export const sessionControl = (req: AppRequest, res: Response, next: NextFunctio
 	}, 5000);
 
 	const stopWatcher = () => {
-		connectedClients = connectedClients.filter((e) => e.id != currentDate);
+		connectedClients = connectedClients.filter((e) => e.uuid != uuid);
 		logger.info(`User ${user?.username ?? ''} disconnected. . Total connected : ${connectedClients.length}`);
 		if (intervalId) {
 			clearInterval(intervalId);
@@ -72,6 +73,7 @@ const isSessionValid = (token: string, response: Response, intervalId: NodeJS.Ti
 		const message: Message = {
 			status: SessionStatus.SESSION_EXPIRED,
 		};
+		count--;
 		sendNotification(response, message, true);
 		connectedClients.splice(id, 1);
 		if (intervalId) {
@@ -81,19 +83,23 @@ const isSessionValid = (token: string, response: Response, intervalId: NodeJS.Ti
 	}
 	return true;
 };
-export const subscribe = (user: UserDTO, tournamentId: number) => {
-	connectedClients.forEach((c) => {
-		if (c.user.role === UserRole.User && c.user.id === user.id) {
+export const subscribe = (user: UserDTO, uuid:string, tournamentId: number) => {
+	connectedClients = connectedClients.map((c) => {
+		if (c.notification && c.uuid === uuid) {
+			logger.error(`${c.uuid} : ${c.user.username} subscribe to ${tournamentId}`)
 			c.tournamentId = tournamentId;
 		}
+		return c;
 	});
 };
 
 export const sendNotificationToAll = (message: Message, tournamentId?: number) => {
+	logger.warn(`sendNotificationToAll`)
 	connectedClients.forEach((c) => {
-		if (c.user.role === UserRole.User) {
+		if (c.notification) {
 			if (tournamentId) {
-				if (tournamentId && c.tournamentId && c.tournamentId === tournamentId) {
+				if (c.tournamentId && c.tournamentId === tournamentId) {
+					logger.error(`${c.uuid} : ${c.user.username} notify for ${tournamentId}`)
 					sendNotification(c.response, message, false);
 				}
 			} else {

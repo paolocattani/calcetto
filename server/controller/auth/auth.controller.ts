@@ -10,13 +10,10 @@ import {
 	convertEntityToDTO,
 	parseBody,
 	deleteUser,
-	comparePasswords,
 	registerUser,
 	findUserByEmailOrUsername,
 	findUserByEmailAndUsername,
-	addUserCookies,
-	isValidRegister,
-	removeUserCookies,
+	isValidRegister
 } from '../../manager/auth.manager';
 // Models
 import User from '../../database/user.model';
@@ -34,6 +31,8 @@ import {
 	OmitHistory,
 } from '../../../src/@common/models';
 import { HTTPStatusCode } from '../../../src/@common/models/HttpStatusCode';
+import {addUserCookies, removeUserCookies} from "./cookies.utils";
+import {comparePasswords} from "./auth.utils";
 
 const router = Router();
 

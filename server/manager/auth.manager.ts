@@ -1,74 +1,24 @@
-// Session
-import { CookieOptions, Response } from 'express';
 // Models/Types
 import { User } from '../database';
 import { UserDTO, UserRole, PlayerRole, PlayerDTO } from '../../src/@common/dto';
 // Logger utils
 import { logProcess, logger } from '../core/logger';
-// Password
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
 // managers
 import * as playerManager from './player.manager';
 import { Op } from 'sequelize';
 import { lowerWrapper } from '../core/utils';
-import { isProductionMode } from '../core/debug';
 import { RegistrationRequest } from '../../src/@common/models/auth.model';
-import { AppRequest } from '../controller';
 import { I18nLabel } from '../../src/@common/models';
+import {generatePassword} from "../controller/auth/auth.utils";
 
 // Const
 const className = 'Authentication Manager : ';
-const DEFAULT_TOKEN_EXPIRATION = '8h';
-const DEFAULT_HASH = 'dummy$Hash';
-const SESSION_TOKEN = 'session_id';
 export const phoneRegExp = new RegExp('^d{10}$');
 export const passwordRegExp = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,16})');
 export const emailRegExp = new RegExp(
 	// eslint-disable-next-line quotes
 	"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
 );
-
-// Password utils
-export const generatePassword = async (email: string, password: string) =>
-	await bcrypt.hash(generateHashSecret(email, password), 10);
-
-export const comparePasswords = async (email: string, password: string, hash: string): Promise<boolean> =>
-	await bcrypt.compare(generateHashSecret(email, password), hash);
-
-export const TOKEN_SECRET = process.env.SERVER_HASH || DEFAULT_HASH;
-
-const TOKEN_EXPIRATION = process.env.SERVER_TOKEN_EXPIRES_IN || DEFAULT_TOKEN_EXPIRATION;
-const generateHashSecret = (email: string, password: string) => email + TOKEN_SECRET + password;
-
-export const getToken = (req: AppRequest) => req.signedCookies[SESSION_TOKEN];
-// Generate JWT Token
-const generateToken = (value: UserDTO) =>
-	jwt.sign({ ...value }, TOKEN_SECRET, {
-		expiresIn: TOKEN_EXPIRATION,
-		algorithm: 'HS256',
-	});
-
-const cookiesOption: CookieOptions = {
-	// 8h : Allineare a process.env.SERVER_TOKEN_EXPIRES_IN
-	maxAge: 8 * 60 * 60 * 1000,
-	signed: true,
-	...(isProductionMode()
-		? {
-				secure: true,
-				sameSite: 'none',
-		  }
-		: {
-				httpOnly: true,
-				maxAge: 8 * 60 * 60 * 1000,
-		  }),
-};
-
-// http://expressjs.com/en/api.html#res.cookie
-export const addUserCookies = (user: UserDTO, res: Response) =>
-	res.cookie(SESSION_TOKEN, generateToken(user), cookiesOption);
-// http://expressjs.com/en/api.html#res.clearCookie
-export const removeUserCookies = (res: Response) => res.clearCookie(SESSION_TOKEN, cookiesOption);
 
 // List all users
 export const listAll = async (): Promise<UserDTO[]> => {

@@ -15,7 +15,9 @@ import { UserDTO } from '../../src/@common/dto';
 
 export interface AppRequest extends Request {
   user?: UserDTO;
+  uuid?:string;
 }
+
 
 export default (application: ExpressApplication): void => {
   // Endpoints

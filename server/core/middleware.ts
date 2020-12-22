@@ -1,15 +1,16 @@
 import { Request, Response, NextFunction } from 'express';
 import chalk from 'chalk';
 import jwt from 'jsonwebtoken';
-import { TOKEN_SECRET, isAdmin, getToken } from '../manager/auth.manager';
 import { AppRequest } from '../controller';
 // Models
 import { User } from '../database';
-import { UserDTO } from '../../src/@common/dto';
 // Core
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 import { unauthorized } from '../controller/common.response';
+import {getToken, getUuid} from "../controller/auth/cookies.utils";
+import {isAdmin} from "../manager/auth.manager";
+import {safeVerifyToken} from "../controller/auth/auth.utils";
 
 // dev logger
 export const routeLogger = (req: Request, res: Response, next: NextFunction) => {
@@ -27,13 +28,11 @@ export const asyncMiddleware = (fn: any) => (req: Request, res: Response, next: 
 	Promise.resolve(fn(req, res, next)).catch(next);
 };
 
-// TODO:
-export const typeControl = <T extends Request>(req: T, res: Response, next: NextFunction) => {};
-
 // Controllo autenticazione. Da utilizzare per tutte le API che richiedono autenticazione
 export const withAuth = async (req: AppRequest, res: Response, next: NextFunction) => {
 	const token = getToken(req);
-	if (!token || typeof token != 'string') {
+	const uuid = getUuid(req);
+	if (!token || typeof token != 'string' || !uuid) {
 		logger.error(chalk.redBright('Token not found : '), token);
 		return unauthorized(res, { label: 'common:server.unauthorized' });
 	}
@@ -43,6 +42,7 @@ export const withAuth = async (req: AppRequest, res: Response, next: NextFunctio
 		const userDb = await User.findByPk(user.id);
 		if (userDb) {
 			req.user = user;
+			req.uuid = uuid;
 			next();
 		}
 	} else {
@@ -72,16 +72,3 @@ export const withTestAuth = (req: AppRequest, res: Response, next: NextFunction)
 export const auditControl = (req: Request, res: Response, next: NextFunction) => {
 	next();
 };
-
-// wrapper per verificare il token
-export const safeVerifyToken = (token: any): [UserDTO | null, boolean] => {
-	let decoded = null;
-	try {
-		decoded = jwt.verify(token, TOKEN_SECRET) as UserDTO;
-		return [decoded, true];
-	} catch (error) {
-		return [null, false];
-	}
-};
-
-
