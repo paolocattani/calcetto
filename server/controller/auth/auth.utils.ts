@@ -1,7 +1,7 @@
 // Password utils
-import bcrypt from "bcryptjs";
-import {UserDTO} from "../../../src/@common/dto";
-import jwt from "jsonwebtoken";
+import bcrypt from 'bcryptjs';
+import { UserDTO } from '../../../src/@common/dto';
+import jwt from 'jsonwebtoken';
 
 // Password
 const DEFAULT_HASH = 'dummy$Hash';
@@ -14,7 +14,6 @@ export const generatePassword = async (email: string, password: string) =>
 export const comparePasswords = async (email: string, password: string, hash: string): Promise<boolean> =>
 	await bcrypt.compare(generateHashSecret(email, password), hash);
 
-
 // wrapper per verificare il token
 export const safeVerifyToken = (token: any): [UserDTO | null, boolean] => {
 	let decoded = null;
@@ -25,7 +24,3 @@ export const safeVerifyToken = (token: any): [UserDTO | null, boolean] => {
 		return [null, false];
 	}
 };
-
-
-
-

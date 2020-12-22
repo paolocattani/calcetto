@@ -48,8 +48,8 @@ const FTournament = () => {
       if (isAdmin) {
         currentHistory.push('/tournament');
       } else {
-        dispatch(PairAction.fetch.request({ tId: tournament.id! }));
-        currentHistory.push('/stage1');
+        console.log('Fetching pairs for tournament : ',tournament.id);
+        dispatch(PairAction.fetch.request({ tId: tournament.id!, history:currentHistory }));
       }
     } else toast.error(t('common:error.generic'));
   };

@@ -81,9 +81,9 @@ function* watchSessionSaga({
 function* logoutSaga({
 	payload: { history },
 }: ReturnType<typeof AuthAction.logout.request>): Generator<StrictEffect, void, any> {
-	const onSuccess = () => {
+	const onSuccess = async () => {
+		await persistor.purge();
 		history.push('/');
-		persistor.purge();
 	};
 	yield* entityLifeCycle<LogoutRequest, AuthenticationResponse, AuthenticationError>(
 		AuthAction.logout,

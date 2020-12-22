@@ -333,3 +333,19 @@ S
 #server/database/tournament.model.ts,8\7\87212855e96b00c42059d856871a765baafabc04
 G
 server/events/events.ts,f\7\f739a6b0f4a10a087bba22dafc57fb3997f539c0
+F
+server/events/const.ts,d\b\dbcb06f823f8364d543584e54e25f088669da382
+T
+$server/controller/auth/auth.utils.ts,4\d\4de1d9b4cccb7e00821e81e60c8d4dc13df9e8cd
+8
+temp.txt,4\5\45ebed19db9cfb3cea503d6b62a50ffe6b30247c
+G
+sql/DecryptDbeaver.java,4\7\474c4767d19c7b0048b0ddeec25f676be8a56780
+>
+sql/stage1.sql,7\7\77f7de6f55756336a0a54718a3d594f4d927624a
+B
+sql/tournament.sql,5\3\5363d44f25eee9ae37da3c36fa0ca4f976b84b81
+W
+'server/controller/auth/cookies.utils.ts,d\f\df54ed033d8d2ac88f931f87da8b3d74b6b09086
+P
+ server/manager/stage1.manager.ts,f\8\f8abf31217203b62da09b6feb2e0066367ded6a9

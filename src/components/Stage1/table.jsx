@@ -133,7 +133,7 @@ const Stage1Table = ({ pairsList, autoOrder }) => {
     setSelectedRows(selected);
     dispatch(
       Stage1Action.updateSelectedPairs.request({
-				stage1Name:stageName,
+				stage1Name: stageName,
 				stage1Rows: selected,
       })
     );
