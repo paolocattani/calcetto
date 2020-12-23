@@ -131,7 +131,7 @@
     ]
   },
   "devDependencies": {
-    "@cypress/code-coverage": "^3.8.5",
+    "@cypress/code-coverage": "^3.8.8",
     "@cypress/instrument-cra": "^1.4.0",
     "@cypress/webpack-preprocessor": "^5.5.0",
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
@@ -200,7 +200,7 @@
     "source-map-support": "^0.5.19",
     "start-server-and-test": "^1.11.6",
     "ts-jest": "^26.4.4",
-    "ts-loader": "^8.0.11",
+    "ts-loader": "^8.0.12",
     "webpack": "^4.44.2"
   },
   "jestSonar": {
