@@ -13,6 +13,10 @@
     "close":"Chiudi",
     "logout":"Logut",
     "loading":"Caricamento",
+    "notification":{
+        "new_tournament":"Il torneo {{tournament}} è ora disponibile",
+        "stage1_delete":"Questa fase del torneo è stata eliminata da parte di un amminstratore."
+    },
     "route":{
         "home":"Home",
         "tournament":"Selezione Torneo",

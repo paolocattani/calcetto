@@ -96,11 +96,8 @@ function* logoutSaga({
 	payload: { history },
 }: ReturnType<typeof AuthAction.logout.request>): Generator<StrictEffect, void, any> {
 	const onSuccess = async () => {
-		console.log('onSuccess Logout 1');
 		await persistor.purge();
-		console.log('onSuccess Logout 2');
 		history.push('/');
-		console.log('onSuccess Logout 3');
 	};
 	yield* entityLifeCycle<LogoutRequest, AuthenticationResponse, AuthenticationError>(
 		AuthAction.logout,

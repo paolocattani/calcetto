@@ -13,6 +13,10 @@
     "close":"Close",
     "logout":"Logut",
     "loading":"Loading",
+    "notification":{
+        "new_tournament":"Tournament {{tournament}} is now available",
+        "stage1_delete":"This tournament stage has been deleted from an administrator."
+    },
     "route":{
         "home":"Home",
         "tournament":"Tournament Selection",

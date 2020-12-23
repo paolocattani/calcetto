@@ -13,6 +13,8 @@
     "public":"Pubblico",
     "private":"Privato",
     "visibility":"Visibilità",
+    "public_tournament":"Torneo pubblico",
+    "private_tournament":"Torneo privato",
     "progress":{
         "new":"Nuovo",
         "pairsSelection":"Selezione Coppie",

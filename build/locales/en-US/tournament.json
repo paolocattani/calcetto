@@ -13,6 +13,8 @@
     "public":"Public",
     "private":"Private",
     "visibility":"Visibility",
+    "public_tournament":"Public tournament",
+    "private_tournament":"Private tournament",
     "progress":{
         "new":"New",
         "pairsSelection":"Pairs selection",
