@@ -22,6 +22,24 @@ export const controllerLogger = (req: Request, next: NextFunction, controller: s
 	next();
 };
 
+export const cacheControl = (req: Request, res: Response, next: NextFunction) => {
+	// Period in second, this one is 5 minutes
+	const period = 60 * 5;
+	// you only want to cache for GET requests
+	// for the other requests set strict no caching parameters
+	res.set('Cache-control', req.method == 'GET' ? `public, max-age=${period}` : 'no-store');
+
+	next();
+};
+
+export const doNotCacheThis = (req: Request, res: Response, next: NextFunction) => {
+	res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+	res.set('Pragma', 'no-cache');
+	res.set('Expires', '0');
+
+	next();
+};
+
 // Da utilizzare per le funzioni async, altrimenti viene ritornata una Promise
 export const asyncMiddleware = (fn: any) => (req: Request, res: Response, next: NextFunction) => {
 	Promise.resolve(fn(req, res, next)).catch(next);

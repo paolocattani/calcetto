@@ -1,7 +1,7 @@
 import { Router, NextFunction, Response, Request } from 'express';
 // Core
 import { logger } from '../core/logger';
-import {asyncMiddleware, withAuth, withAdminRights, controllerLogger, withTestAuth} from '../core/middleware';
+import { asyncMiddleware, withAuth, withAdminRights, controllerLogger, withTestAuth, doNotCacheThis } from '../core/middleware';
 // Managers
 import {
 	listAll,
@@ -10,11 +10,12 @@ import {
 	parseBody,
 	update,
 	deleteTournament,
-	convertEntityToDTO, deleteAllTournament,
+	convertEntityToDTO,
+	deleteAllTournament,
 } from '../manager/tournament.manager';
 // Models
 import Tournament from '../database/tournament.model';
-import {TournamentDTO } from '../../src/@common/dto';
+import { TournamentDTO } from '../../src/@common/dto';
 import { AppRequest } from './index';
 import { entityNotFound, failure, missingParameters, serverError, success } from './common.response';
 import { OmitHistory } from '../../src/@common/models/common.models';
@@ -38,9 +39,12 @@ router.use('/', (req: Request, res: Response, next: NextFunction) =>
 router.get(
 	'/list',
 	withAuth,
+	doNotCacheThis,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		try {
+			logger.info('Listing torunament 1....');
 			const tournamentsList = await listAll(req.user!);
+			logger.info('Listing torunament 2....');
 			return success<FetchTournamentsResponse>(
 				res,
 				{ label: tournamentsList.length > 1 ? 'tournament:loaded_2' : 'tournament:loaded_1' },
@@ -80,10 +84,13 @@ router.get(
 router.put(
 	'/update',
 	withAuth,
+	withAdminRights,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		try {
 			const request: UpdateTournamentRequest = req.body;
+			logger.info(`Tournament ${request.tournament.name} updating....`);
 			const tournament = await update(req.user!, parseBody(request.tournament));
+			logger.info(`Tournament ${request.tournament.name} updated`);
 			return success<UpdateTournamentResponse>(res, { label: 'tournament:saved' }, { tournament });
 		} catch (err) {
 			return serverError('PUT tournament/update error ! : ', err, res);
@@ -145,7 +152,7 @@ router.delete(
 	asyncMiddleware(async (req: Request, res: Response) => {
 		try {
 			await deleteAllTournament();
-			return success(res,{ label: 'tournament:deleted' });
+			return success(res, { label: 'tournament:deleted' });
 		} catch (error) {
 			return serverError('DELETE tournament/delete error ! : ', error, res);
 		}

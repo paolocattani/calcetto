@@ -9,7 +9,7 @@ import {
   UpdateTournamentResponse,
 } from '../../@common/models/tournament.model';
 import { postWrapper, putWrapper, getWrapper, deleteWrapper } from '../../@common/utils/fetch.utils';
-import {DeleteUserRequest, OmitHistory} from '../../@common/models';
+import { OmitHistory} from '../../@common/models';
 
 export const fetchTournaments = (request: OmitHistory<FetchTournamentsRequest>): Promise<FetchTournamentsResponse> =>
   getWrapper<FetchTournamentsResponse>(

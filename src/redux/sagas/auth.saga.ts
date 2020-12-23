@@ -28,7 +28,6 @@ import { Stage1Action, TournamentAction } from '../actions';
 import { Message, SessionStatus } from '../../@common/models/common.models';
 import { entityLifeCycle } from './utils';
 import i18next from 'src/i18n/i18n';
-import { getEmptyTournament } from 'src/components/Tournament/helper';
 import { formatDate } from 'src/@common/utils/date.utils';
 import { TournamentSelector } from '../selectors';
 
@@ -77,13 +76,12 @@ function* watchSessionSaga({
 				case SessionStatus.STAGE1_DELETE:
 					toast.error(i18next.t(message.label!));
 					yield put(TournamentAction.fetch.request({}));
-					const tournamentList = yield select(TournamentSelector.getTournamentsList);
-					console.log("auth.saga.tournamentlist :", tournamentList);
-					yield put(TournamentAction.setTournament(tournamentList[0]));
 					history.push('/');
 					break;
 				case SessionStatus.NEW_TOURNAMENT:
-					toast.success(i18next.t(message.label!, { tournament: `${message.data!.name} - ${formatDate(message.data!.date!)}` }));
+					toast.success(
+						i18next.t(message.label!, { tournament: `${message.data!.name} - ${formatDate(message.data!.date!)}` })
+					);
 					yield put(TournamentAction.fetch.request({}));
 					break;
 			}
@@ -93,14 +91,16 @@ function* watchSessionSaga({
 	}
 }
 
-
 // Logout
 function* logoutSaga({
 	payload: { history },
 }: ReturnType<typeof AuthAction.logout.request>): Generator<StrictEffect, void, any> {
 	const onSuccess = async () => {
+		console.log('onSuccess Logout 1');
 		await persistor.purge();
+		console.log('onSuccess Logout 2');
 		history.push('/');
+		console.log('onSuccess Logout 3');
 	};
 	yield* entityLifeCycle<LogoutRequest, AuthenticationResponse, AuthenticationError>(
 		AuthAction.logout,
