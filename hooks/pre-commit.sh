@@ -35,6 +35,9 @@ if [[ $BRANCH_NAME != "master" ]] && [[ $SEARCH_RESULT = 1 ]]; then
     git add .env sonar-project.properties package.json package-lock.json
     git add ./build/*
 
+    # Disable this hook
+    sed -i 's|^PRE-COMMIT=.*$|PRE-COMMIT=0|g' ./hooks/.hooks
+
     echo "End : $(date +'%Y.%m.%d - %H:%M:%S')"
 else
     echo "Skipping version update..."
