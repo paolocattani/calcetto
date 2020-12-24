@@ -1,29 +1,29 @@
 {
-		"loaded_1":"Tournament loaded...",
-		"loaded_2":"Tournaments loaded...",
-		"saved":"Tournament saved...",
-		"deleted":"Tournament saved...",
-		"duplicated":"Tournament {{name}} already exists.!",
-    "tournament":"Tournament",
-    "select":"Select tournament",
-    "new":"New tournament",
-    "search":"Search",
-    "name":"Name",
-    "date":"Date",
-    "public":"Public",
-    "private":"Private",
-    "visibility":"Visibility",
-    "public_tournament":"Public tournament",
-    "private_tournament":"Private tournament",
-    "progress":{
-        "new":"New",
-        "pairsSelection":"Pairs selection",
-        "stage1" : "Stage 1",
-        "stage2" : "Stage 2"
+    "loaded_1": "Tournament loaded...",
+    "loaded_2": "Tournaments loaded...",
+    "saved": "Tournament saved...",
+    "deleted": "Tournament saved...",
+    "duplicated": "Tournament {{name}} already exists.!",
+    "tournament": "Tournament",
+    "select": "Select tournament",
+    "new": "New tournament",
+    "search": "Search",
+    "name": "Name",
+    "date": "Date",
+    "public": "Public",
+    "private": "Private",
+    "visibility": "Visibility",
+    "public_tournament": "Public tournament",
+    "private_tournament": "Private tournament",
+    "progress": {
+        "new": "New",
+        "pairsSelection": "Pairs selection",
+        "stage1": "Stage 1",
+        "stage2": "Stage 2"
     },
-    "error":{
-        "none":"No tournament found. Try again later or contact an administrator.",
-        "name":"Provide a tournament name",
-        "duplicate":"Tournament {{name}} already exists"
+    "error": {
+        "none": "No tournament found. Try again later or contact an administrator.",
+        "name": "Provide a tournament name",
+        "duplicate": "Tournament {{name}} already exists"
     }
 }
