@@ -1,6 +1,8 @@
-import { Column, Model, Table, Comment, DataType, ForeignKey, AllowNull, BelongsTo } from 'sequelize-typescript';
+import { Column, Model, Table, Comment, DataType, ForeignKey, AllowNull, BelongsTo, AfterUpdate } from 'sequelize-typescript';
 import Tournament from './tournament.model';
 import Pair from './pair.model';
+import { sendNotificationToAll } from '../events/events';
+import { SessionStatus } from '../../src/@common/models';
 
 /**
  *
@@ -33,4 +35,11 @@ export default class Stage2 extends Model<Stage2> {
   @Comment('Rank')
   @Column(DataType.INTEGER)
   public rank?: number;
+
+  @AfterUpdate
+	static notifyUpdate(entity: Stage2) {
+		const message = { status: SessionStatus.STAGE2_UPDATE };
+		sendNotificationToAll(message, entity.tournamentId);
+  }
+
 }

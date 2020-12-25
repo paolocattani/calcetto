@@ -11,19 +11,41 @@ export const DEFAULT_HEADERS: { headers: HeadersInit } = {
 	},
 };
 
-export const getWrapper = <T extends GenericReponse>(url: string) => fetchWrapper<never, T>(url, 'GET');
-export const deleteWrapper = <B, T extends GenericReponse>(url: string, body?: OmitHistory<B>) =>
-	fetchWrapper<B, T>(url, 'DELETE', body);
-export const putWrapper = <B, T extends GenericReponse>(url: string, body?: OmitHistory<B>) =>
-	fetchWrapper<B, T>(url, 'PUT', body);
-export const postWrapper = <B, T extends GenericReponse>(url: string, body?: OmitHistory<B>) =>
-	fetchWrapper<B, T>(url, 'POST', body);
+interface IFetchCallback<T> {
+	(response: T): T | Promise<T>;
+}
 
+// Get
+export const getWrapper = <T extends GenericReponse>(url: string, afterResponse?: IFetchCallback<T>) =>
+	fetchWrapper<never, T>(url, 'GET', undefined, afterResponse);
+// Delete
+export const deleteWrapper = <B, T extends GenericReponse>(
+	url: string,
+	body?: OmitHistory<B>,
+	afterResponse?: IFetchCallback<T>
+) => fetchWrapper<B, T>(url, 'DELETE', body, afterResponse);
+
+// Put
+export const putWrapper = <B, T extends GenericReponse>(
+	url: string,
+	body?: OmitHistory<B>,
+	afterResponse?: IFetchCallback<T>
+) => fetchWrapper<B, T>(url, 'PUT', body, afterResponse);
+
+// Post
+export const postWrapper = <B, T extends GenericReponse>(
+	url: string,
+	body?: OmitHistory<B>,
+	afterResponse?: IFetchCallback<T>
+) => fetchWrapper<B, T>(url, 'POST', body, afterResponse);
+
+// wrapper
 export const fetchWrapper = async <B, T extends GenericReponse>(
 	url: string,
 	method: string,
-	body?: OmitHistory<B>
-): Promise<T | typeof UnexpectedServerError> => {
+	body?: OmitHistory<B>,
+	afterResponse?: IFetchCallback<T>
+): Promise<T | GenericReponse> => {
 	console.log('fetchWrapper : ', method, url, body);
 	let response = null;
 	try {
@@ -32,7 +54,8 @@ export const fetchWrapper = async <B, T extends GenericReponse>(
 			body: method === 'PUT' || method === 'POST' || method === 'DELETE' ? JSON.stringify(body) : undefined,
 			...DEFAULT_HEADERS,
 		});
-		return await response.json();
+		const result: T = await response.json();
+		return afterResponse ? afterResponse(result) : result;
 	} catch (error) {
 		console.group('An error occur : ');
 		console.error('Error', error);

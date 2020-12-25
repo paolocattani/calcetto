@@ -6,6 +6,7 @@ import {
   UpdateStage2CellRequest,
   DeleteStage2Request,
   DeleteStage2Response,
+  Stage2Error,
 } from '../../@common/models';
 import { defaultAsyncParams, defaultParam, PurgeResponse, PURGE_STORE_ACTION } from './constants';
 import { ICell } from '../../@common/dto';
@@ -17,19 +18,20 @@ export const Stage2Action = {
   fetchStage2: createAsyncAction(...defaultAsyncParams(actionName, 'Fetch Stage2'))<
     FetchStage2Request,
     FetchStage2Response,
-    Error
+    Stage2Error
   >(),
   updateCell: createAsyncAction(...defaultAsyncParams(actionName, 'Update Cell Stage2'))<
     UpdateStage2CellRequest,
     UpdateStage2CellResponse,
-    Error
+    Stage2Error
   >(),
   delete: createAsyncAction(...defaultAsyncParams(actionName, 'Delete Stage2'))<
     DeleteStage2Request,
     DeleteStage2Response,
-    Error
+    Stage2Error
   >(),
   setCells: createAction(...defaultParam(actionName, 'Set Cells'))<ICell[][]>(),
   setLoading: createAction(...defaultParam(actionName, 'Stage2 is Loading'))<boolean>(),
+	reloadFromServer: createAction(...defaultParam(actionName, 'Stage2 Watcher'))<{}>(),
   purge: createAction(PURGE_STORE_ACTION)<PurgeResponse>(),
 };
