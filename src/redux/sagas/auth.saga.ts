@@ -24,12 +24,11 @@ import {
 import { toast } from 'react-toastify';
 import { Action } from 'typesafe-actions';
 import { persistor } from '../store';
-import { Stage1Action, TournamentAction } from '../actions';
+import { Stage1Action, Stage2Action, TournamentAction } from '../actions';
 import { Message, SessionStatus } from '../../@common/models/common.models';
 import { entityLifeCycle } from './utils';
 import i18next from 'src/i18n/i18n';
 import { formatDate } from 'src/@common/utils/date.utils';
-import { TournamentSelector } from '../selectors';
 
 function* checkAuthenticationSaga({
 	payload: { history },
@@ -76,11 +75,20 @@ function* watchSessionSaga({
 				case SessionStatus.STAGE1_DELETE:
 					toast.error(i18next.t(message.label!));
 					yield put(TournamentAction.fetch.request({}));
+					yield delay(3000);
 					history.push('/');
+					break;
+				case SessionStatus.STAGE2_UPDATE:
+					yield put(Stage2Action.reloadFromServer({}));
+					break;
+				case SessionStatus.STAGE2_DELETE:
+					toast.error(i18next.t(message.label!));
+					yield delay(3000);
+					history.push('/state1');
 					break;
 				case SessionStatus.NEW_TOURNAMENT:
 					toast.success(
-						i18next.t(message.label!, { tournament: `${message.data!.name} - ${formatDate(message.data!.date!)}` })
+						i18next.t(message.label!, { tournament: `${message.data!.name}@${formatDate(message.data!.date!)}` })
 					);
 					yield put(TournamentAction.fetch.request({}));
 					break;

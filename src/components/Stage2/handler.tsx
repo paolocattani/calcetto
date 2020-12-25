@@ -12,6 +12,8 @@ import TournamentBadge from '../Tournament/badge';
 import { fetchPairsStage2 } from '../../redux/services/stage2.service';
 import { onClickCallback, onSelectCallback } from './helper';
 import { PairDTO, ICell } from '../../@common/dto';
+import { SuccessCodes } from 'src/@common/models/HttpStatusCode';
+import { FetchStage2PairsResponse } from 'src/@common/models';
 
 // import template from './template';
 
@@ -22,8 +24,10 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
   const currentHistory = useHistory();
   const dispatch = useDispatch();
 
+  // Sono presenti aggiornamenti
+  const toogleRefresh = useSelector(Stage2Selector.getToogleRefresh);
   const cells = useSelector(Stage2Selector.getCells);
-  const rowNumber = useSelector(Stage2Selector.getRowsNumber);
+  const count = useSelector(Stage2Selector.getCount);
   const isLoading = useSelector(Stage2Selector.isLoading);
   const tournament = useSelector(TournamentSelector.getTournament)!;
   // const pairsListFromStore = useSelector(Stage1Selector.getSelectedPairs);
@@ -36,12 +40,15 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
   useEffect(() => {
     (async () => {
       dispatch(Stage2Action.setLoading(true));
-      const result = await fetchPairsStage2(tournament.id!);
-      setPairsList(result.pairs);
+      const response = await fetchPairsStage2({ tournamentId: tournament.id! });
+      if (SuccessCodes.includes(response.code)) {
+        const result = response as FetchStage2PairsResponse;
+        setPairsList(result.pairs);
+      }
       dispatch(Stage2Action.setLoading(false));
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tournament.id]);
+  }, [tournament.id,toogleRefresh]);
 
   // Callback tasto vittoria/sconfitta coppia : Sposta la coppia alla fase successiva
   const onClick: onClickCallback = (event, rowIndex, colIndex, isWinner) => {
@@ -96,7 +103,7 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
   };
 
   //console.log('render stage2 :', cells, pairsList, rowNumber);
-  return cells && pairsList && rowNumber ? (
+  return cells && pairsList && count ? (
     <>
       <Col className={commonStyle.toolsBarContainer}>
         <Row className={commonStyle.toolsBarRow}>
@@ -112,7 +119,7 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
       <Stage2
         pairsSelect={pairsList}
         onClick={onClick}
-        rowNumber={rowNumber}
+        rowNumber={count}
         elements={cells}
         onSelectPair={onSelectPair}
       />

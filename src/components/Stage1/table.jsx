@@ -28,7 +28,7 @@ const Stage1Table = ({ pairsList, autoOrder }) => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [saved, setIsSaved] = useState(false);
-  const [rows, setRows] = useState(rowsGenerator(pairsList));
+  const [rows, setRows] = useState([]);
   // Const
   const stageName = pairsList[0].stage1Name;
 

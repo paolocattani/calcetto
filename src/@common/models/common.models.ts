@@ -7,9 +7,12 @@ export enum SessionStatus {
 	// Sessione scaduta, reindirizza l'utente alla login
 	SESSION_EXPIRED = 'session_expired',
 	NEW_TOURNAMENT = 'new_tournament',
-	// Necessario aggiornamento dati su Stage1
+	// Aggiornamento dati su Stage1
 	STAGE1_UPDATE = 'stage1_update',
 	STAGE1_DELETE = 'stage1_delete',
+	// Aggiornamento dati su Stage2
+	STAGE2_UPDATE = 'stage2_update',
+	STAGE2_DELETE = 'stage2_delete',
 }
 
 export interface Message {
@@ -143,6 +146,7 @@ export const initialState: RootState = {
 		stages: [],
 	},
 	stage2State: {
+		toogleRefresh: false,
 		isLoading: false,
 	},
 };
