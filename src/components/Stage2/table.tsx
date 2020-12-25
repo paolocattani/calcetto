@@ -6,6 +6,8 @@ import { getBaseLog } from '../../@common/utils/math.utils';
 import PairsSelect from '../Pair/select';
 import { Styles } from 'react-select';
 import { PairDTO, ICell } from '../../@common/dto';
+import { useSelector } from 'react-redux';
+import { AuthSelector } from 'src/redux/selectors';
 // import { valueFormatter } from 'components/Pair/helper';
 
 // https://www.kodbiro.com/blog/rorgchart-react-module-for-displaying-and-editing-data-in-org-chart/
