@@ -80,6 +80,7 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
 
   // Questa funzione viene richiamata quando viene selezionata una coppia nella prima colonna
   const onSelectPair: onSelectCallback = (value, rowIndex, actionMeta) => {
+    console.log(' onSelectPair : ', value, rowIndex);
     if (!pairsList) {
       return;
     }
@@ -94,10 +95,11 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
     }
     // Se nella celle era gia presente una coppia la ripristino
     if (prevPair && prevPair.id) {
-      pairs = [...pairs!, prevPair];
+      pairs = [...pairs, prevPair];
     }
     setPairsList(pairs);
     elements[0][rowIndex - 1].pair = newPair;
+    console.log(' onSelectPair : ', elements[0][rowIndex - 1]);
     dispatch(Stage2Action.setCells(elements));
     dispatch(Stage2Action.updateCell.request({ cell1: elements[0][rowIndex - 1], cell2: null }));
   };
