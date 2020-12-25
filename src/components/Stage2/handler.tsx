@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter, RouteComponentProps, useHistory } from 'react-router-dom';
+import { RouteComponentProps, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Stage2 from './table';
 import { Button, Col, Row } from 'react-bootstrap';
@@ -129,4 +129,4 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
   );
 };
 
-export default withRouter(Stage2Handler);
+export default Stage2Handler;

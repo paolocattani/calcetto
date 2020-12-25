@@ -13,7 +13,7 @@ import { sendNotificationToAll } from '../events/events';
 
 const className = 'Stage2 Manager : ';
 
-export const updateCells = async (cell1: ICell, cell2: ICell|null): Promise<boolean> => {
+export const updateCells = async (cell1: ICell, cell2: ICell | null): Promise<boolean> => {
 	logProcess(className + 'updateCells', 'start');
 	logger.info('updateCells : ', cell1, cell2);
 	try {
@@ -107,23 +107,17 @@ export const generateStage2Rows = async (
 						where,
 						defaults: { tournamentId, order: jj, step: ii },
 					});
-					if (record.pairId) {
-						const pair = await Pair.findOne({
-							where: { id: record.pairId },
-							include: [Pair.associations.tournament, Pair.associations.player1, Pair.associations.player2],
-						});
-						record.pair = pair!;
-					}
-				} else
-					record = await Stage2.findOne({
-						where,
-						include: [
-							Stage2.associations.pair,
-							Pair.associations.tournament,
-							Pair.associations.player1,
-							Pair.associations.player2,
-						],
+				} else {
+					record = await Stage2.findOne({ where });
+				}
+				if (record?.pairId) {
+					const pair = await Pair.findOne({
+						where: { id: record.pairId },
+						include: [Pair.associations.tournament, Pair.associations.player1, Pair.associations.player2],
 					});
+					record.pair = pair!;
+				}
+
 				if (record?.pair) structure[ii][jj].pair = rowToModel(record.pair, 0);
 				// if (ii === 0) logger.info(`Pushing ${ii} , ${jj} : `, structure[ii][jj].pair);
 				cells[ii].push(structure[ii][jj]);
