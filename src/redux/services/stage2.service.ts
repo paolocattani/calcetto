@@ -12,18 +12,18 @@ import { deleteWrapper, getWrapper, postWrapper } from '../../@common/utils/fetc
 import { getEmptyPair } from './pair.service';
 
 export const deleteStage2 = async (request: DeleteStage2Request) =>
-	deleteWrapper<DeleteStage2Request, DeleteStage2Response>('/api/v1/stage2', request);
+	deleteWrapper<DeleteStage2Request, DeleteStage2Response>('/api/v2/stage2', request);
 
 export const updateCells = async (request: UpdateStage2CellRequest) =>
-	postWrapper<UpdateStage2CellRequest, UpdateStage2CellResponse>('/api/v1/stage2/cells', request);
+	postWrapper<UpdateStage2CellRequest, UpdateStage2CellResponse>('/api/v2/stage2/cells', request);
 
 export const fetchPairsStage2 = async ({ tournamentId }: FetchStage2PairsRequest) => {
 	const afterFetch = (response: FetchStage2PairsResponse) => ({
 		...response,
 		pairs: [getEmptyPair('-'), ...response.pairs],
 	});
-	return getWrapper<FetchStage2PairsResponse>(`/api/v1/stage2/pairs/${tournamentId}`, afterFetch);
+	return getWrapper<FetchStage2PairsResponse>(`/api/v2/stage2/pairs/${tournamentId}`, afterFetch);
 };
 
 export const fetchStage2 = async (request: FetchStage2Request) =>
-	postWrapper<FetchStage2Request, FetchStage2Response>('/api/v1/stage2', request);
+	postWrapper<FetchStage2Request, FetchStage2Response>('/api/v2/stage2', request);

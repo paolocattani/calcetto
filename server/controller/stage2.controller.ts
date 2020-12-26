@@ -9,7 +9,7 @@ import { generateStage2Rows, countStage2, updateCells, deleteStage2 } from '../m
 // Models
 import { AppRequest } from './index';
 import { fetchPairsStage2 } from '../manager/pair.manager';
-import { missingParameters, serverError, success, unexpectedServerError } from './common.response';
+import { missingParameters, serverError, success } from './common.response';
 import {
 	CountStage2PairsRequest,
 	CountStage2PairsResponse,
@@ -22,10 +22,10 @@ import {
 	UpdateStage2CellResponse,
 } from '../../src/@common/models';
 
-// all API path must be relative to /api/v1/stage2
+// all API path must be relative to /api/v2/stage2
 const router = Router();
 router.use('/', (req: Request, res: Response, next: NextFunction) =>
-	controllerLogger(req, next, 'Stage2 Controller', '/api/v1/stage2')
+	controllerLogger(req, next, 'Stage2 Controller', '/api/v2/stage2')
 );
 
 // Generazione struttura / reperimento dati
