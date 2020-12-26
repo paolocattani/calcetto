@@ -1,8 +1,7 @@
 import { createReducer, Action } from 'typesafe-actions';
-import { Stage1State } from '../../@common/models';
+import { getEmptyPair, Stage1State } from '../../@common/models';
 import { Stage1Action } from '../actions';
 import { Stage1Row } from '../../@common/dto';
-import { getEmptyPair } from '../services/pair.service';
 
 export const initialStage1State: Stage1State = {
   toogleRefresh: false,

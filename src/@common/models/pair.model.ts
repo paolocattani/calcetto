@@ -1,6 +1,7 @@
 import * as H from 'history';
 import { PairDTO, Stage1Row } from '../dto';
 import { GenericReponse } from './common.models';
+import { getEmptyPlayer } from './player.model';
 
 export interface PairState {
 	// Pairs selected for stage1
@@ -48,3 +49,16 @@ export interface SelectPairsResponse extends GenericReponse {
 }
 
 export interface PairError extends GenericReponse {}
+
+export const getEmptyPair = (label?: string, tournamentId: number = 0): PairDTO => ({
+	id: null,
+	tournamentId,
+	rowNumber: 0,
+	player1: getEmptyPlayer(),
+	player2: getEmptyPlayer(),
+	alias: label || '',
+	stage1Name: '',
+	placement: 0,
+	paid1: false,
+	paid2: false,
+});

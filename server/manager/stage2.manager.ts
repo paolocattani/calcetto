@@ -8,7 +8,7 @@ import { IStage2FE, ICell, PairDTO, UserDTO } from '../../src/@common/dto';
 import { isAdmin } from './auth.manager';
 import { rowToModel } from './pair.manager';
 import { WhereOptions } from 'sequelize';
-import { SessionStatus } from '../../src/@common/models';
+import { getEmptyPair, SessionStatus } from '../../src/@common/models';
 import { sendNotificationToAll } from '../events/events';
 
 const className = 'Stage2 Manager : ';
@@ -18,7 +18,7 @@ export const updateCells = async (cell1: ICell, cell2: ICell | null): Promise<bo
 	logger.info('updateCells : ', cell1, cell2);
 	try {
 		// Cella 1
-		if (cell1.pair && cell1.pair.id)
+		if (cell1.pair && ( cell1.pair.id || cell1.pair.alias === '-'))
 			await updateSingleCell(
 				cell1.pair.tournamentId,
 				cell1.cellColIndex,
@@ -29,7 +29,7 @@ export const updateCells = async (cell1: ICell, cell2: ICell | null): Promise<bo
 			);
 
 		// Cella 1
-		if (cell2 && cell2.pair && cell2.pair.id)
+		if (cell2 && cell2.pair && ( cell2.pair.id || cell2.pair.alias === '-'))
 			await updateSingleCell(
 				cell2.pair.tournamentId,
 				cell2.cellColIndex,
@@ -59,6 +59,7 @@ export const updateSingleCell = async (
 	try {
 		// Reperisco la cella corrente e aggiorno
 		const record = await Stage2.findOne({ where: { tournamentId, step, order: rowIndex } });
+		logProcess(className + 'updateSingleCell', 'record', record);
 		if (record) {
 			await record.update({ pairId: pair.id });
 			if (isWinner) await updateSingleCell(tournamentId, step, matchId, 0, pair, false);
@@ -117,8 +118,7 @@ export const generateStage2Rows = async (
 					});
 					record.pair = pair!;
 				}
-
-				if (record?.pair) structure[ii][jj].pair = rowToModel(record.pair, 0);
+				structure[ii][jj].pair = record?.pair ? rowToModel(record.pair, 0) : getEmptyPair('-',tournamentId);
 				// if (ii === 0) logger.info(`Pushing ${ii} , ${jj} : `, structure[ii][jj].pair);
 				cells[ii].push(structure[ii][jj]);
 			}

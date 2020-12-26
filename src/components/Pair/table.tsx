@@ -16,7 +16,7 @@ import { cellEditProps, columns } from './editor';
 import './style.css';
 import commonStyle from '../../common.module.css';
 // Service
-import { fetchPlayers, getEmptyPlayer } from '../../redux/services/player.service';
+import { fetchPlayers } from '../../redux/services/player.service';
 // Selector
 import { AuthSelector } from 'src/redux/selectors/auth.selector';
 import { TournamentSelector } from 'src/redux/selectors/tournament.selector';
@@ -30,13 +30,12 @@ import {
   deletePairs,
   fetchPairs,
   findAlias,
-  getEmptyPair,
   postPair,
   updatePair,
 } from 'src/redux/services/pair.service';
 import { HTTPStatusCode } from 'src/@common/models/HttpStatusCode';
 import { LABEL_COMMON_LOADING } from 'src/@common/constants/label';
-import {FetchPairsResponse, FindAliasResponse, SavePairResponse} from '../../@common/models';
+import {FetchPairsResponse, FindAliasResponse, getEmptyPair, getEmptyPlayer, SavePairResponse} from '../../@common/models';
 
 const hideAskUser = {
   message: '',
@@ -90,8 +89,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
   async function addRow(index?: number) {
     try {
       setIsLoading({ state: true, message: t(LABEL_COMMON_LOADING) });
-      const emptyRow:PairDTO = getEmptyPair();
-      emptyRow.tournamentId = tournament.id || 0;
+      const emptyRow:PairDTO = getEmptyPair('',tournament.id || 0);
       const result = await postPair({ pair: emptyRow }) as SavePairResponse;
       emptyRow.id = result.pair.id;
       emptyRow.rowNumber = index || data.rows.length + 1;

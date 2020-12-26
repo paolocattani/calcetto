@@ -7,9 +7,9 @@ import {
 	UpdateStage2CellResponse,
 	FetchStage2PairsResponse,
 	FetchStage2PairsRequest,
+	getEmptyPair,
 } from '../../@common/models';
 import { deleteWrapper, getWrapper, postWrapper } from '../../@common/utils/fetch.utils';
-import { getEmptyPair } from './pair.service';
 
 export const deleteStage2 = async (request: DeleteStage2Request) =>
 	deleteWrapper<DeleteStage2Request, DeleteStage2Response>('/api/v2/stage2', request);
@@ -20,7 +20,7 @@ export const updateCells = async (request: UpdateStage2CellRequest) =>
 export const fetchPairsStage2 = async ({ tournamentId }: FetchStage2PairsRequest) => {
 	const afterFetch = (response: FetchStage2PairsResponse) => ({
 		...response,
-		pairs: [getEmptyPair('-'), ...response.pairs],
+		pairs: [getEmptyPair('-',tournamentId), ...response.pairs],
 	});
 	return getWrapper<FetchStage2PairsResponse>(`/api/v2/stage2/pairs/${tournamentId}`, afterFetch);
 };

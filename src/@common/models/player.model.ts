@@ -1,5 +1,5 @@
 import * as H from 'history';
-import { PlayerDTO } from '../dto';
+import { PlayerDTO, PlayerRole } from '../dto';
 import { GenericReponse } from './common.models';
 //
 export interface PlayerState {
@@ -34,3 +34,19 @@ export interface DeletePlayersResponse extends GenericReponse {
 }
 
 export interface PlayerError extends GenericReponse {}
+
+export const getEmptyPlayer = (label?: string): PlayerDTO => ({
+  id: null,
+  name: '',
+  surname: '',
+  alias: '',
+  label: label || '',
+  role: PlayerRole.GoalKeeper,
+  email: '',
+  phone: '',
+  match_played: 0,
+  match_won: 0,
+  total_score: 0,
+  editable: false,
+  rowNumber: 0,
+});

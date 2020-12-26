@@ -3,7 +3,7 @@
  */
 import log4js from 'log4js';
 import chalk from 'chalk';
-import { isTestMode, isDevMode, isProductionMode } from './debug';
+import { isProductionMode } from './debug';
 
 log4js.configure({
   appenders: {
@@ -47,12 +47,9 @@ export const dbLogger = log4js.getLogger('database');
 if (isProductionMode()) {
   logger.level = 'info';
   dbLogger.level = 'info';
-} else if (isDevMode()) {
-  logger.level = 'debug';
-  dbLogger.level = 'debug';
-} else if (isTestMode()) {
+} else {
   logger.level = 'debug';
   dbLogger.level = 'debug';
 }
 
-export const logProcess = (method: string, value: string): void => logger.info(`[${chalk.yellow(method)}].${value}`);
+export const logProcess = (method: string, value: string,...rest:any): void => rest ? logger.info( `[${chalk.yellow(method)}].${value}`,...rest) : logger.info( `[${chalk.yellow(method)}].${value}`);

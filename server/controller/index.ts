@@ -30,9 +30,9 @@ export default (application: ExpressApplication): void => {
 	// SSE
 	application.get('/sse/v1/session', withAuth, sessionControl);
 
-	// Coverage
-	// @ts-ignore
+	// FIXME: Coverage
 	application.get('/__coverage__', (req: Request, res: Response) =>
+		// @ts-ignore
 		res.json({ coverage: global.__coverage__ || null })
 	);
 
@@ -40,6 +40,6 @@ export default (application: ExpressApplication): void => {
 	application.get('/status', (req: Request, res: Response) =>
 		res
 			.status(HTTPStatusCode.OK)
-			.json({ code: HTTPStatusCode.ImATeapot, message: `I ain't gonna brew coffee. I'm a fucking teapot!` })
+			.json({ code: HTTPStatusCode.ImATeapot, message: "I ain't gonna brew coffee. I'm a fucking teapot!" })
 	);
 };
