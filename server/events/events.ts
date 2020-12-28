@@ -4,7 +4,7 @@ import { AppRequest } from '../controller';
 // Core
 import { logger } from '../core/logger';
 import { CHAR_SET, DEFAULT_HEADERS, EOM } from './const';
-import { UserDTO, UserRole } from '../../src/@common/dto';
+import { TournamentProgress, UserDTO, UserRole } from '../../src/@common/dto';
 import { Message, SessionStatus } from '../../src/@common/models';
 import { getCookies } from '../controller/auth/cookies.utils';
 import { safeVerifyToken } from '../controller/auth/auth.utils';
@@ -13,6 +13,7 @@ interface ConnectedClient {
 	uuid: string;
 	user: UserDTO;
 	tournamentId?: number;
+	progress?: TournamentProgress;
 	token: string;
 	response: Response;
 	notification: boolean;
@@ -21,8 +22,10 @@ interface ConnectedClient {
 let count = 0;
 let connectedClients: ConnectedClient[] = [];
 
-const clientToString = ({ uuid, user, tournamentId }: ConnectedClient) =>
-	`${uuid} : ${user.name} ( ${user.id} ) @ ${tournamentId}`;
+const clientToString = ({ uuid, user, tournamentId, progress }: ConnectedClient) =>
+	tournamentId
+		? `${uuid} : ${user.name} ( ${user.id} ) --> ${tournamentId}@${progress}`
+		: `${uuid} : ${user.name} ( ${user.id} ) `;
 
 export const sessionControl = (req: AppRequest, res: Response, next: NextFunction) => {
 	req.socket.setTimeout(10000);
@@ -89,31 +92,32 @@ const isSessionValid = (token: string, response: Response, intervalId: NodeJS.Ti
 	}
 	return true;
 };
-export const subscribe = (user: UserDTO, uuid: string, tournamentId: number) => {
+export const subscribe = (user: UserDTO, uuid: string, tournamentId: number, progress: TournamentProgress) => {
 	logger.error(`${user.username} subscribe to ${tournamentId}`);
 	connectedClients = connectedClients.map((c) => {
 		if (c.notification && c.uuid === uuid) {
-			logger.error(`${c.uuid} : ${c.user.username} subscribe to ${tournamentId}`);
+			logger.error(`${c.uuid} : ${c.user.username} subscribe to ${tournamentId}@${progress}`);
 			c.tournamentId = tournamentId;
+			c.progress = progress;
 		}
 		return c;
 	});
 };
 
-export const sendNotificationToAll = (message: Message, tournamentId?: number) => {
-	logger.warn('sendNotificationToAll : ');
-	connectedClients.forEach((c) => {
-		if (c.notification) {
-			if (tournamentId) {
-				if (c.tournamentId && c.tournamentId === tournamentId) {
-					logger.error(`${c.uuid} : ${c.user.username} notify for ${tournamentId}`);
+export const sendNotifications = (message: Message, tournamentId?: number, progress?: TournamentProgress) => {
+	logger.warn('sendNotifications : ');
+	connectedClients
+		.filter((c) => c.notification)
+		.forEach((c) => {
+			if (tournamentId && progress) {
+				if (c.tournamentId && c.progress && c.tournamentId === tournamentId && c.progress === progress) {
+					logger.error(`${c.uuid} : ${c.user.username} notify for ${tournamentId}@${progress}`);
 					sendNotification(c.response, message, false);
 				}
 			} else {
 				sendNotification(c.response, message, false);
 			}
-		}
-	});
+		});
 };
 
 export const sendNotification = (response: Response, message?: Message, endSession?: boolean) => {

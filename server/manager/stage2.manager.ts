@@ -3,13 +3,13 @@ import { logProcess, logger } from '../core/logger';
 import { getDbConnection } from '../database/connection';
 // Models
 import { Stage2, Pair } from '../database';
-import { IStage2FE, ICell, PairDTO, UserDTO } from '../../src/@common/dto';
+import { IStage2FE, ICell, PairDTO, UserDTO, TournamentProgress } from '../../src/@common/dto';
 
 import { isAdmin } from './auth.manager';
 import { rowToModel } from './pair.manager';
 import { WhereOptions } from 'sequelize';
 import { getEmptyPair, SessionStatus } from '../../src/@common/models';
-import { sendNotificationToAll } from '../events/events';
+import { sendNotifications } from '../events/events';
 
 const className = 'Stage2 Manager : ';
 
@@ -131,7 +131,7 @@ export const deleteStage2 = async (tournamentId: number) => {
 	try {
 		await Stage2.destroy({ where: { tournamentId } });
 		const message = { status: SessionStatus.STAGE2_DELETE, label: 'common:notification.stage2_delete' };
-		sendNotificationToAll(message, tournamentId);
+		sendNotifications(message, tournamentId,TournamentProgress.Stage2);
 	} catch (error) {
 		logProcess(className + 'deleteStage2', 'error');
 		logger.error('deleteStage2 : ', error);

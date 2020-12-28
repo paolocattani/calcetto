@@ -9,6 +9,7 @@ export enum SessionStatus {
 	// Aggiornamento torneo
 	TOURNAMENT_NEW = 'tournament_new',
 	TOURNAMENT_UPDATE = 'tournament_update',
+	TOURNAMENT_DELETE = 'tournament_delete',
 	// Aggiornamento dati su Stage1
 	STAGE1_UPDATE = 'stage1_update',
 	STAGE1_DELETE = 'stage1_delete',

@@ -1,19 +1,6 @@
-import {
-	Column,
-	Model,
-	Comment,
-	Table,
-	ForeignKey,
-	DataType,
-	BelongsTo,
-	AfterSave,
-	AfterUpdate,
-	AfterBulkDestroy,
-} from 'sequelize-typescript';
+import { Column, Model, Comment, Table, ForeignKey, DataType, BelongsTo } from 'sequelize-typescript';
 import Pair from './pair.model';
 import Tournament from './tournament.model';
-import { sendNotificationToAll } from '../events/events';
-import { SessionStatus } from '../../src/@common/models';
 
 /**
  * https://stackoverflow.com/questions/2142566/storing-matrices-in-a-relational-database
@@ -60,11 +47,4 @@ export default class Stage1 extends Model<Stage1> {
 	// Posizionamento della coppia all'interno del girone.
 	@Column(DataType.INTEGER)
 	public placement!: number;
-
-	@AfterUpdate
-	static notifyUpdate(entity: Stage1) {
-		const message = { status: SessionStatus.STAGE1_UPDATE, label:'common:notification.updating' };
-		sendNotificationToAll(message, entity.tournamentId);
-	}
-
 }

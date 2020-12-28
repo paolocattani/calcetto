@@ -1,6 +1,6 @@
 // Models
 import { Stage1 } from '../database';
-import { Stage1Row, UserDTO } from '../../src/@common/dto';
+import { Stage1Row, TournamentProgress, UserDTO } from '../../src/@common/dto';
 // Core
 import { logProcess, logger } from '../core/logger';
 import { asyncForEach } from '../core/utils';
@@ -10,7 +10,7 @@ import { isAdmin } from '../manager/auth.manager';
 //
 import { Op } from 'sequelize';
 import { SessionStatus } from '../../src/@common/models';
-import { sendNotificationToAll } from '../events/events';
+import { sendNotifications } from '../events/events';
 
 const className = 'Stage1 Manager : ';
 
@@ -19,7 +19,7 @@ export const deleteStage1 = async (tournamentId: number) => {
 	try {
 		await Stage1.destroy({ where: { tournamentId } });
 		const message = { status: SessionStatus.STAGE1_DELETE, label: 'common:notification.stage1_delete' };
-		sendNotificationToAll(message, tournamentId);
+		sendNotifications(message, tournamentId,TournamentProgress.Stage1);
 	} catch (error) {
 		logProcess(className + 'deleteStage1', 'error');
 		logger.error('deleteStage1 : ', error);

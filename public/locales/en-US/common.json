@@ -16,6 +16,7 @@
     "notification": {
         "tournament_new": "Tournament {{tournament}} is now available",
         "tournament_update": "Tournament has been updated to next stage",
+        "tournament_delete": "Tournament {{tournament}} has been deleted",
         "stage1_delete": "This tournament stage has been deleted from an administrator.",
         "stage2_delete": "This tournament stage has been deleted from an administrator.",
         "updating": "Updating..."

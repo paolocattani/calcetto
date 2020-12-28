@@ -23,7 +23,8 @@ import {
 	UpdateStage2CellRequest,
 	UpdateStage2CellResponse,
 } from '../../src/@common/models';
-import { sendNotificationToAll, subscribe } from '../events/events';
+import { sendNotifications, subscribe } from '../events/events';
+import { TournamentProgress } from '../../src/@common/dto';
 
 // all API path must be relative to /api/v2/stage2
 const router = Router();
@@ -63,7 +64,7 @@ router.get(
 			const { user,uuid } = req;
 			const tournamentId = parseInt(req.params.tournamentId);
 			const pairs = await fetchPairsStage2(tournamentId);
-			subscribe(user!, uuid!, tournamentId);
+			subscribe(user!, uuid!, tournamentId, TournamentProgress.Stage2);
 			return success<FetchStage2PairsResponse>(res, { label: 'stage2:pairs' }, { pairs });
 		} catch (error) {
 			logger.error(chalk.redBright('Error while fetching pairs Stage2 ! : ', error));
@@ -104,7 +105,7 @@ router.post(
 				label:'common:notification.updating',
 				data: { tournamentId }
 			  };
-		  	sendNotificationToAll(message, tournamentId);
+		  	sendNotifications(message, tournamentId,TournamentProgress.Stage2);
 			return success<UpdateStage2CellResponse>(res, { label: 'stage2:updated_cell' });
 		} catch (error) {
 			logger.error(chalk.redBright('Error while updating Stage2 cell ! : ', error));

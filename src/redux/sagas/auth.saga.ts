@@ -65,6 +65,7 @@ function* watchSessionSaga({
 			const message: Message = yield take(channel);
 			const tournament = yield select(TournamentSelector.getTournament);
 			switch (message.status) {
+				// Session
 				case SessionStatus.SESSION_EXPIRED:
 					toast.error(i18next.t('auth:expired_alert'));
 					yield delay(3000);
@@ -72,6 +73,22 @@ function* watchSessionSaga({
 					history.push('/login');
 					persistor.purge();
 					break;
+				// Tournament
+				case SessionStatus.TOURNAMENT_NEW:
+					toast.success(
+						i18next.t(message.label!, { tournament: `${message.data!.name}@${formatDate(message.data!.date!)}` })
+					);
+					yield put(TournamentAction.fetch.request({}));
+					break;
+				case SessionStatus.TOURNAMENT_UPDATE:
+					toast.success(i18next.t(message.label!, { tournament: `${message.data!.name}@${formatDate(message.data!.date!)}` }));
+					yield put(TournamentAction.reload.request({ tId:tournament.id }));
+					break;
+				case SessionStatus.TOURNAMENT_DELETE:
+					toast.warn(i18next.t(message.label!));
+					yield put(TournamentAction.fetch.request({}));
+					break;
+				// Stage 1
 				case SessionStatus.STAGE1_UPDATE:
 					toast.success(i18next.t(message.label!));
 					yield put(Stage1Action.reloadFromServer({}));
@@ -84,6 +101,7 @@ function* watchSessionSaga({
 					yield put(Stage2Action.reset({}));
 					history.push('/');
 					break;
+				// Stage 2
 				case SessionStatus.STAGE2_UPDATE:
 					toast.success(i18next.t(message.label!));
 					yield put(Stage2Action.fetchStage2.request({ tournamentId: message.data!.tournamentId! }));
@@ -94,16 +112,6 @@ function* watchSessionSaga({
 					yield put(TournamentAction.reload.request({ tId:tournament.id }));
 					yield put(Stage2Action.reset({}));
 					history.push('/stage1');
-					break;
-				case SessionStatus.TOURNAMENT_NEW:
-					toast.success(
-						i18next.t(message.label!, { tournament: `${message.data!.name}@${formatDate(message.data!.date!)}` })
-					);
-					yield put(TournamentAction.fetch.request({}));
-					break;
-				case SessionStatus.TOURNAMENT_UPDATE:
-					toast.success(i18next.t(message.label!));
-					yield put(TournamentAction.reload.request({ tId:tournament.id }));
 					break;
 				}
 		}
