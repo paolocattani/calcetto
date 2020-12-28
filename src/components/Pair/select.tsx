@@ -2,8 +2,10 @@ import { PairDTO } from 'src/@common/dto';
 import React, { useState } from 'react';
 import Select, { Styles, ValueType, ActionMeta, components } from 'react-select';
 import { SelectComponents } from 'react-select/src/components';
+import { getEmptyPair } from 'src/@common/models';
 
 interface PairSelectProps {
+  tournamentId:number;
   // indice riga ( Stage2 )
   rowIndex: number;
   // stili
@@ -21,12 +23,13 @@ interface PairSelectProps {
 // Probabilmente il componente Select usa Ref.... Lascio cosi..
 // TODO: Si potrebbe generalizzare questo componente tramite i generics
 const PairsSelect: React.FC<PairSelectProps> = React.forwardRef(
-  ({ getOptionLabel, styles, rowIndex, options, onChange, defaultValue }, ref) => {
+  ({ getOptionLabel, styles, rowIndex, options, onChange, defaultValue,tournamentId }, ref) => {
     const [selectedOption, setSelectedOption] = useState<PairDTO>();
 
     const handleChange = (value: ValueType<PairDTO, false>, actionMeta: ActionMeta<PairDTO>) => {
-      setSelectedOption(value as PairDTO);
-      if (onChange) onChange(value, rowIndex, actionMeta);
+      const newValue = value ? value as PairDTO : getEmptyPair('-', tournamentId);
+      setSelectedOption(newValue);
+      if (onChange) onChange(newValue, rowIndex, actionMeta);
     };
 
     return (

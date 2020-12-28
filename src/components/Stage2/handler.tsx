@@ -13,7 +13,7 @@ import { fetchPairsStage2 } from '../../redux/services/stage2.service';
 import { onClickCallback, onSelectCallback } from './helper';
 import { PairDTO, ICell } from '../../@common/dto';
 import { SuccessCodes } from 'src/@common/models/HttpStatusCode';
-import { FetchStage2PairsResponse } from 'src/@common/models';
+import { FetchStage2PairsResponse, getEmptyPair } from 'src/@common/models';
 
 // import template from './template';
 
@@ -25,7 +25,6 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
   const dispatch = useDispatch();
 
   // Sono presenti aggiornamenti
-  const toogleRefresh = useSelector(Stage2Selector.getToogleRefresh);
   const cells = useSelector(Stage2Selector.getCells);
   const count = useSelector(Stage2Selector.getCount);
   const isLoading = useSelector(Stage2Selector.isLoading);
@@ -50,7 +49,7 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
       dispatch(Stage2Action.setLoading(false));
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tournament.id,toogleRefresh]);
+  }, [tournament.id]);
 
   // Callback tasto vittoria/sconfitta coppia : Sposta la coppia alla fase successiva
   const onClick: onClickCallback = (event, rowIndex, colIndex, isWinner) => {
@@ -73,11 +72,11 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
     current1.isWinner = isWinner;
     current2.isWinner = !isWinner;
     if (next) next.pair = isWinner ? current1.pair : current2.pair;
+    // Update cell1 and cell2 ( current step )
     dispatch(Stage2Action.updateCell.request({ cell1: current1, cell2: current2 }));
     dispatch(Stage2Action.setCells(elements));
-    if (elements[colIndex].length === 1) {
-      dispatch(Stage2Action.updateCell.request({ cell1: next, cell2: null }));
-    }
+    // Update cell1 ( next step )
+    dispatch(Stage2Action.updateCell.request({ cell1: next, cell2: null }));
   };
 
   // Questa funzione viene richiamata quando viene selezionata una coppia nella prima colonna
@@ -89,9 +88,9 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
     const elements = [...cells!];
     const newPair = value as PairDTO;
     const prevPair = elements[0][rowIndex - 1].pair;
-    let pairs: PairDTO[] = [...pairsList];
+    let pairs: Array<PairDTO> = [...pairsList];
 
-    // Se ho selezionato una coppia la elimino dalla lista ( questa condizione esclude il placeholder )
+    // Se ho selezionato una coppia la elimino dalla lista ( newPair.id esclude il placeholder )
     if (newPair && newPair.id) {
       pairs = pairs.filter((e) => e.id !== newPair.id);
     }

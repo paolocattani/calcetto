@@ -6,6 +6,8 @@ import { getBaseLog } from '../../@common/utils/math.utils';
 import PairsSelect from '../Pair/select';
 import { Styles } from 'react-select';
 import { PairDTO, ICell } from '../../@common/dto';
+import { useSelector } from 'react-redux';
+import { TournamentSelector } from '../../redux/selectors';
 // import { valueFormatter } from 'components/Pair/helper';
 
 // https://www.kodbiro.com/blog/rorgchart-react-module-for-displaying-and-editing-data-in-org-chart/
@@ -18,13 +20,14 @@ interface Stage2Props {
   onSelectPair: onSelectCallback;
 }
 
-const Stage2: React.FC<Stage2Props> = ({ onClick, elements, pairsSelect, rowNumber = 64, onSelectPair }) => {
+const Stage2: React.FC<Stage2Props> = ({ onClick, elements, pairsSelect,rowNumber = 64, onSelectPair }) => {
   /*
    * Calcolo il numero di colonne in funzione del numero di righe
    * in quanto l'oggetto che ricevo protrebbe essere solo un parziale
    */
+  const tournament = useSelector(TournamentSelector.getTournament)!;
   const colNumber = getBaseLog(2, rowNumber) + 1;
-  const bRows = getTableBodyRows(elements, rowNumber, colNumber, onClick, pairsSelect, onSelectPair);
+  const bRows = getTableBodyRows(tournament.id!,elements, rowNumber, colNumber, onClick, pairsSelect, onSelectPair);
   const hElem = getTableHeaderElements(colNumber);
 
   return (
@@ -59,6 +62,7 @@ function getTableHeaderElements(colNumber: number): JSX.Element[] {
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 function getTableBodyRows(
+  tournamentId:number,
   elements: ICell[][],
   rowNumber: number,
   colNumber: number,
@@ -104,6 +108,7 @@ function getTableBodyRows(
     return (
       <PairsSelect
         //components={{ Option: CustomOption }}
+        tournamentId={tournamentId}
         styles={styles}
         defaultValue={pair}
         options={pairsSelect}

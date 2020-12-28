@@ -66,11 +66,11 @@ export const fetchPairsStage2 = async (tournamentId: number): Promise<Array<Pair
   logProcess(className + '.fetchPairsStage2', 'start');
   let result: PairDTO[] = [];
   try {
-    const selectedStage2 = ((await Stage2.findAll({
+    const selectedStage2 = await Stage2.findAll({
       attributes: ['pairId'],
-      where: { tournamentId, pairId: { [Op.not]: null } },
+      where: { tournamentId, pairId: { [Op.not]: null },step:0 },
       group: ['pairId'],
-    })) as unknown) as { pairId: number }[];
+    });
     logger.info(
       'selectedStage2 : ',
       selectedStage2.map((p) => p.pairId)
