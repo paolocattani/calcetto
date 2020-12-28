@@ -61,6 +61,7 @@ function* watchSessionSaga({
 		const channel = yield call(createSessionChannel, eventChannel);
 		while (true) {
 			const message: Message = yield take(channel);
+			toast.warn(`New message from server : ${message.status}`);
 			switch (message.status) {
 				case SessionStatus.SESSION_EXPIRED:
 					toast.error(i18next.t('auth:expired_alert'));
@@ -79,7 +80,7 @@ function* watchSessionSaga({
 					history.push('/');
 					break;
 				case SessionStatus.STAGE2_UPDATE:
-					yield put(Stage2Action.reloadFromServer({}));
+					yield put(Stage2Action.fetchStage2.request({ tournamentId: message.data!.tournamentId! }));
 					break;
 				case SessionStatus.STAGE2_DELETE:
 					toast.error(i18next.t(message.label!));

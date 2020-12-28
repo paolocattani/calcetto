@@ -15,7 +15,7 @@ const className = 'Stage2 Manager : ';
 
 export const updateCells = async (cell1: ICell, cell2: ICell | null): Promise<boolean> => {
 	logProcess(className + 'updateCells', 'start');
-	logger.info('updateCells : ', cell1, cell2);
+	//logger.info('updateCells : ', cell1, cell2);
 	try {
 		// Cella 1
 		if (cell1.pair && ( cell1.pair.id || cell1.pair.alias === '-'))
@@ -59,7 +59,7 @@ export const updateSingleCell = async (
 	try {
 		// Reperisco la cella corrente e aggiorno
 		const record = await Stage2.findOne({ where: { tournamentId, step, order: rowIndex } });
-		logProcess(className + 'updateSingleCell', 'record', record);
+		//logProcess(className + 'updateSingleCell', 'record', record);
 		if (record) {
 			await record.update({ pairId: pair.id });
 			if (isWinner) await updateSingleCell(tournamentId, step, matchId, 0, pair, false);

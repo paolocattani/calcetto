@@ -18,6 +18,7 @@ export enum SessionStatus {
 export interface Message {
 	status: SessionStatus;
 	data?: {
+		tournamentId?: number;
 		name?: string;
 		date?: Date;
 	};

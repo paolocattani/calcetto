@@ -42,9 +42,7 @@ router.get(
 	doNotCacheThis,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		try {
-			logger.info('Listing torunament 1....');
 			const tournamentsList = await listAll(req.user!);
-			logger.info('Listing torunament 2....');
 			return success<FetchTournamentsResponse>(
 				res,
 				{ label: tournamentsList.length > 1 ? 'tournament:loaded_2' : 'tournament:loaded_1' },

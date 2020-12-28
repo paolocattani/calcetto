@@ -2,7 +2,7 @@ import { Column, Model, Table, Comment, DataType, ForeignKey, AllowNull, Belongs
 import Tournament from './tournament.model';
 import Pair from './pair.model';
 import { sendNotificationToAll } from '../events/events';
-import { SessionStatus } from '../../src/@common/models';
+import { Message, SessionStatus } from '../../src/@common/models';
 
 /**
  *
@@ -37,9 +37,9 @@ export default class Stage2 extends Model<Stage2> {
   public rank?: number;
 
   @AfterUpdate
-	static notifyUpdate(entity: Stage2) {
-		const message = { status: SessionStatus.STAGE2_UPDATE };
-		sendNotificationToAll(message, entity.tournamentId);
+	static notifyUpdate({tournamentId}: Stage2) {
+		const message:Message = { status: SessionStatus.STAGE2_UPDATE, data:{tournamentId} };
+		sendNotificationToAll(message, tournamentId);
   }
 
 }

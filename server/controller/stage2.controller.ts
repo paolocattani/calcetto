@@ -3,7 +3,7 @@ import { Router, NextFunction, Response, Request } from 'express';
 import chalk from 'chalk';
 // Core
 import { logger } from '../core/logger';
-import { asyncMiddleware, withAuth, withAdminRights, controllerLogger } from '../core/middleware';
+import { asyncMiddleware, withAuth, withAdminRights, controllerLogger, doNotCacheThis } from '../core/middleware';
 // Managers
 import { generateStage2Rows, countStage2, updateCells, deleteStage2 } from '../manager/stage2.manager';
 // Models
@@ -21,6 +21,7 @@ import {
 	UpdateStage2CellRequest,
 	UpdateStage2CellResponse,
 } from '../../src/@common/models';
+import { subscribe } from '../events/events';
 
 // all API path must be relative to /api/v2/stage2
 const router = Router();
@@ -32,6 +33,7 @@ router.use('/', (req: Request, res: Response, next: NextFunction) =>
 router.post(
 	'/',
 	withAuth,
+	doNotCacheThis,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		try {
 			let { tournamentId, count }: FetchStage2Request = req.body;
@@ -50,13 +52,16 @@ router.post(
 router.get(
 	'/pairs/:tournamentId',
 	withAuth,
+	doNotCacheThis,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		try {
 			if (!req.params.tournamentId) {
 				return missingParameters(res);
 			}
+			const { user,uuid } = req;
 			const tournamentId = parseInt(req.params.tournamentId);
 			const pairs = await fetchPairsStage2(tournamentId);
+			subscribe(user!, uuid!, tournamentId);
 			return success<FetchStage2PairsResponse>(res, { label: 'stage2:pairs' }, { pairs });
 		} catch (error) {
 			logger.error(chalk.redBright('Error while fetching pairs Stage2 ! : ', error));
@@ -69,6 +74,7 @@ router.get(
 router.post(
 	'/count',
 	withAuth,
+	doNotCacheThis,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		try {
 			const { tournamentId }: CountStage2PairsRequest = req.body;
