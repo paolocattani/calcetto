@@ -79,9 +79,9 @@ function* watchSessionSaga({
 				case SessionStatus.STAGE1_DELETE:
 					toast.warn(i18next.t(message.label!));
 					// Reload tournament list
+					yield put(TournamentAction.reset({}));
 					yield put(TournamentAction.fetch.request({}));
-					persistor.purge();
-					yield delay(3000);
+					yield put(Stage2Action.reset({}));
 					history.push('/');
 					break;
 				case SessionStatus.STAGE2_UPDATE:

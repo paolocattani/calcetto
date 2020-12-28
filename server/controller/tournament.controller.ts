@@ -1,7 +1,14 @@
 import { Router, NextFunction, Response, Request } from 'express';
 // Core
 import { logger } from '../core/logger';
-import { asyncMiddleware, withAuth, withAdminRights, controllerLogger, withTestAuth, doNotCacheThis } from '../core/middleware';
+import {
+	asyncMiddleware,
+	withAuth,
+	withAdminRights,
+	controllerLogger,
+	withTestAuth,
+	doNotCacheThis,
+} from '../core/middleware';
 // Managers
 import {
 	listAll,
@@ -68,11 +75,7 @@ router.get(
 			if (!tournament) {
 				return entityNotFound(res);
 			}
-			return success<ReloadTournamentResponse>(
-				res,
-				{ label: 'tournament:loaded_1' },
-				{ tournament:tournament! }
-			);
+			return success<ReloadTournamentResponse>(res, { label: 'tournament:loaded_1' }, { tournament: tournament! });
 		} catch (err) {
 			return serverError('GET tournament/{tId} error ! : ', err, res);
 		}

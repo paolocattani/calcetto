@@ -40,6 +40,7 @@ export const TournamentAction = {
     UpdateTournamentRequest,
     UpdateTournamentResponse,
     TournamentError
-  >(),
+    >(),
+  reset: createAction(...defaultParam(actionName, 'Tournament Reset'))<{}>(),
   purge: createAction(PURGE_STORE_ACTION)<PurgeResponse>(),
 };

@@ -54,4 +54,5 @@ export const TournamentReducer = createReducer<TournamentState, Action>(initialT
 			isLoading: false,
 		})
 	)
+	.handleAction(TournamentAction.reset, () => initialTournamentState)
 	.handleAction(TournamentAction.purge, () => initialTournamentState);

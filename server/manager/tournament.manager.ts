@@ -61,7 +61,7 @@ export const update = async (user: UserDTO, model: TournamentDTO): Promise<Tourn
 		if (t.public && t.progress === TournamentProgress.PairsSelection && model.progress === TournamentProgress.Stage1) {
 			const message: Message = {
 				status: SessionStatus.TOURNAMENT_NEW,
-				label: 'common:notification.new_tournament',
+				label: 'common:notification.tournament_new',
 				data: { name: model.name, date: model.date },
 			};
 			sendNotificationToAll(message);
