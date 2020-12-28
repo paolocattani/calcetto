@@ -36,6 +36,7 @@ export const Stage1Action = {
     UpdatePlacementRequest,
     UpdatePlacementResponse,
 		Stage1Error
-  >(),
+    >(),
+  reset: createAction(...defaultParam(actionName, 'Stage1 Reset'))<{}>(),
   purge: createAction(PURGE_STORE_ACTION)<PurgeResponse>(),
 };

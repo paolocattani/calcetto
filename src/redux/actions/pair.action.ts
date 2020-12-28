@@ -1,5 +1,5 @@
 import { createAsyncAction, createAction } from 'typesafe-actions';
-import { defaultAsyncParams, PurgeResponse, PURGE_STORE_ACTION } from './constants';
+import { defaultAsyncParams, defaultParam, PurgeResponse, PURGE_STORE_ACTION } from './constants';
 import {FetchPairsRequest, FetchPairsResponse, PairError} from '../../@common/models';
 
 const actionName = '[Pair]';
@@ -11,5 +11,6 @@ export const PairAction = {
     FetchPairsResponse,
 		PairError
   >(),
+  reset: createAction(...defaultParam(actionName, 'Pair Reset'))<{}>(),
   purge: createAction(PURGE_STORE_ACTION)<PurgeResponse>(),
 };

@@ -1,4 +1,4 @@
-import { put, call, StrictEffect, takeEvery, take, takeLatest, delay, select } from 'redux-saga/effects';
+import { put, call, StrictEffect, takeEvery, take, takeLatest, delay } from 'redux-saga/effects';
 import { AuthAction } from '../actions/auth.action';
 import {
 	AuthenticationError,
@@ -71,21 +71,25 @@ function* watchSessionSaga({
 					persistor.purge();
 					break;
 				case SessionStatus.STAGE1_UPDATE:
+					toast.success(i18next.t(message.label!));
 					yield put(Stage1Action.reloadFromServer({}));
 					break;
 				case SessionStatus.STAGE1_DELETE:
-					toast.error(i18next.t(message.label!));
+					toast.warn(i18next.t(message.label!));
 					yield put(TournamentAction.fetch.request({}));
+					persistor.purge();
 					yield delay(3000);
 					history.push('/');
 					break;
 				case SessionStatus.STAGE2_UPDATE:
+					toast.success(i18next.t(message.label!));
 					yield put(Stage2Action.fetchStage2.request({ tournamentId: message.data!.tournamentId! }));
 					break;
 				case SessionStatus.STAGE2_DELETE:
-					toast.error(i18next.t(message.label!));
+					toast.warn(i18next.t(message.label!));
 					yield delay(3000);
-					history.push('/state1');
+					history.push('/stage1');
+					yield put(Stage2Action.reset({}));
 					break;
 				case SessionStatus.NEW_TOURNAMENT:
 					toast.success(

@@ -62,4 +62,5 @@ export const Stage1Reducer = createReducer<Stage1State, Action>(initialStage1Sta
       isLoading: false,
     };
   })
+  .handleAction(Stage1Action.reset, () => initialStage1State)
   .handleAction(Stage1Action.purge, () => initialStage1State);

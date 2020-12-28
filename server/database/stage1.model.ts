@@ -63,7 +63,7 @@ export default class Stage1 extends Model<Stage1> {
 
 	@AfterUpdate
 	static notifyUpdate(entity: Stage1) {
-		const message = { status: SessionStatus.STAGE1_UPDATE };
+		const message = { status: SessionStatus.STAGE1_UPDATE, label:'common:notification.updating' };
 		sendNotificationToAll(message, entity.tournamentId);
 	}
 

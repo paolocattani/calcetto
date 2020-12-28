@@ -3,7 +3,6 @@ import { GenericReponse } from './common.models';
 
 export interface Stage2State {
 	isLoading: boolean;
-	toogleRefresh: boolean;
 	count?: number;
 	cells?: Array<Array<ICell>>;
 }
