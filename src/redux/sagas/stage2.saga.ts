@@ -1,4 +1,4 @@
-import { put, call, StrictEffect, takeEvery, select, fork } from 'redux-saga/effects';
+import { put, takeEvery, select } from 'redux-saga/effects';
 import { Stage2Action, TournamentAction } from '../actions';
 import { fetchStage2, updateCells, deleteStage2 } from '../services/stage2.service';
 import {

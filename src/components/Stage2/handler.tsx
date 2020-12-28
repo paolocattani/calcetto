@@ -39,9 +39,7 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
   useEffect(() => {
     (async () => {
       dispatch(Stage2Action.setLoading(true));
-      console.log("Stage2Handler.useEffect 1 : ");
       const response = await fetchPairsStage2({ tournamentId: tournament.id! });
-      console.log("Stage2Handler.useEffect 2 : ",response);
       if (SuccessCodes.includes(response.code)) {
         const result = response as FetchStage2PairsResponse;
         setPairsList(result.pairs);
@@ -72,11 +70,9 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
     current1.isWinner = isWinner;
     current2.isWinner = !isWinner;
     if (next) next.pair = isWinner ? current1.pair : current2.pair;
-    // Update cell1 and cell2 ( current step )
-    dispatch(Stage2Action.updateCell.request({ cell1: current1, cell2: current2 }));
+    // Update current and next steps
+    dispatch(Stage2Action.updateCell.request({ cells:[current1, current2,next] }));
     dispatch(Stage2Action.setCells(elements));
-    // Update cell1 ( next step )
-    dispatch(Stage2Action.updateCell.request({ cell1: next, cell2: null }));
   };
 
   // Questa funzione viene richiamata quando viene selezionata una coppia nella prima colonna
@@ -102,7 +98,7 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
     elements[0][rowIndex - 1].pair = newPair;
     console.log(' onSelectPair : ', elements[0][rowIndex - 1]);
     dispatch(Stage2Action.setCells(elements));
-    dispatch(Stage2Action.updateCell.request({ cell1: elements[0][rowIndex - 1], cell2: null }));
+    dispatch(Stage2Action.updateCell.request({ cells:[elements[0][rowIndex - 1]]}));
   };
 
   //console.log('render stage2 :', cells, pairsList, rowNumber);

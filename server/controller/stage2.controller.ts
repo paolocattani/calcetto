@@ -18,10 +18,12 @@ import {
 	FetchStage2PairsResponse,
 	FetchStage2Request,
 	FetchStage2Response,
+	Message,
+	SessionStatus,
 	UpdateStage2CellRequest,
 	UpdateStage2CellResponse,
 } from '../../src/@common/models';
-import { subscribe } from '../events/events';
+import { sendNotificationToAll, subscribe } from '../events/events';
 
 // all API path must be relative to /api/v2/stage2
 const router = Router();
@@ -94,8 +96,15 @@ router.post(
 	withAdminRights,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		try {
-			const { cell1, cell2 }: UpdateStage2CellRequest = req.body;
-			await updateCells(cell1, cell2);
+			const { cells }: UpdateStage2CellRequest = req.body;
+			await updateCells(cells);
+			const tournamentId = cells[0].pair!.tournamentId;
+			const message: Message = {
+				status: SessionStatus.STAGE2_UPDATE,
+				label:'common:notification.updating',
+				data: { tournamentId }
+			  };
+		  	sendNotificationToAll(message, tournamentId);
 			return success<UpdateStage2CellResponse>(res, { label: 'stage2:updated_cell' });
 		} catch (error) {
 			logger.error(chalk.redBright('Error while updating Stage2 cell ! : ', error));

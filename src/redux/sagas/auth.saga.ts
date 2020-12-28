@@ -1,4 +1,4 @@
-import { put, call, StrictEffect, takeEvery, take, takeLatest, delay } from 'redux-saga/effects';
+import { put, call, StrictEffect, takeEvery, take, takeLatest, delay, select } from 'redux-saga/effects';
 import { AuthAction } from '../actions/auth.action';
 import {
 	AuthenticationError,
@@ -27,14 +27,16 @@ import { persistor } from '../store';
 import { Stage1Action, Stage2Action, TournamentAction } from '../actions';
 import { Message, SessionStatus } from '../../@common/models/common.models';
 import { entityLifeCycle } from './utils';
-import i18next from 'src/i18n/i18n';
-import { formatDate } from 'src/@common/utils/date.utils';
+import i18next from '../../i18n/i18n';
+import { formatDate } from '../../@common/utils/date.utils';
+import { TournamentSelector } from '../selectors';
 
 function* checkAuthenticationSaga({
 	payload: { history },
 }: ReturnType<typeof AuthAction.checkAuthentication.request>): Generator<StrictEffect, void, any> {
 	const onSuccess = function* () {
 		yield put(AuthAction.sessionControl.request({ history }));
+		yield put(TournamentAction.fetch.request({}));
 	};
 	yield* entityLifeCycle<CheckAuthenticationRequest, AuthenticationResponse, AuthenticationError>(
 		AuthAction.checkAuthentication,
@@ -61,7 +63,7 @@ function* watchSessionSaga({
 		const channel = yield call(createSessionChannel, eventChannel);
 		while (true) {
 			const message: Message = yield take(channel);
-			toast.warn(`New message from server : ${message.status}`);
+			const tournament = yield select(TournamentSelector.getTournament);
 			switch (message.status) {
 				case SessionStatus.SESSION_EXPIRED:
 					toast.error(i18next.t('auth:expired_alert'));
@@ -76,6 +78,7 @@ function* watchSessionSaga({
 					break;
 				case SessionStatus.STAGE1_DELETE:
 					toast.warn(i18next.t(message.label!));
+					// Reload tournament list
 					yield put(TournamentAction.fetch.request({}));
 					persistor.purge();
 					yield delay(3000);
@@ -87,17 +90,22 @@ function* watchSessionSaga({
 					break;
 				case SessionStatus.STAGE2_DELETE:
 					toast.warn(i18next.t(message.label!));
-					yield delay(3000);
-					history.push('/stage1');
+					// Reload only this tournament
+					yield put(TournamentAction.reload.request({ tId:tournament.id }));
 					yield put(Stage2Action.reset({}));
+					history.push('/stage1');
 					break;
-				case SessionStatus.NEW_TOURNAMENT:
+				case SessionStatus.TOURNAMENT_NEW:
 					toast.success(
 						i18next.t(message.label!, { tournament: `${message.data!.name}@${formatDate(message.data!.date!)}` })
 					);
 					yield put(TournamentAction.fetch.request({}));
 					break;
-			}
+				case SessionStatus.TOURNAMENT_UPDATE:
+					toast.success(i18next.t(message.label!));
+					yield put(TournamentAction.reload.request({ tId:tournament.id }));
+					break;
+				}
 		}
 	} catch (err) {
 		console.log('watchSessionSaga.err : ', err);

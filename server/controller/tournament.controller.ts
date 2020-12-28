@@ -23,6 +23,7 @@ import {
 	DeleteTournamentRequest,
 	DeleteTournamentResponse,
 	FetchTournamentsResponse,
+	ReloadTournamentResponse,
 	SaveTournamentRequest,
 	SaveTournamentResponse,
 	UpdateTournamentRequest,
@@ -57,20 +58,20 @@ router.get(
 router.get(
 	'/:tId',
 	withAuth,
+	doNotCacheThis,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		try {
 			if (!req.params.tId) {
 				return missingParameters(res);
 			}
-			const t = await findById(req.user!, parseInt(req.params.tId));
-			if (!t) {
+			const tournament = await findById(req.user!, parseInt(req.params.tId));
+			if (!tournament) {
 				return entityNotFound(res);
 			}
-			const tournament = await findById(req.user!, parseInt(req.params.tId));
-			return success<FetchTournamentsResponse>(
+			return success<ReloadTournamentResponse>(
 				res,
 				{ label: 'tournament:loaded_1' },
-				{ tournamentsList: [tournament!] }
+				{ tournament:tournament! }
 			);
 		} catch (err) {
 			return serverError('GET tournament/{tId} error ! : ', err, res);

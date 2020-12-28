@@ -13,31 +13,22 @@ import { sendNotificationToAll } from '../events/events';
 
 const className = 'Stage2 Manager : ';
 
-export const updateCells = async (cell1: ICell, cell2: ICell | null): Promise<boolean> => {
+export const updateCells = async (cells: Array<ICell>): Promise<boolean> => {
 	logProcess(className + 'updateCells', 'start');
 	//logger.info('updateCells : ', cell1, cell2);
 	try {
-		// Cella 1
-		if (cell1.pair && ( cell1.pair.id || cell1.pair.alias === '-'))
-			await updateSingleCell(
-				cell1.pair.tournamentId,
-				cell1.cellColIndex,
-				cell1.cellRowIndex,
-				cell1.matchId,
-				cell1.pair,
-				cell1.isWinner
-			);
-
-		// Cella 1
-		if (cell2 && cell2.pair && ( cell2.pair.id || cell2.pair.alias === '-'))
-			await updateSingleCell(
-				cell2.pair.tournamentId,
-				cell2.cellColIndex,
-				cell2.cellRowIndex,
-				cell2.matchId,
-				cell2.pair,
-				cell2.isWinner
-			);
+		cells
+			.filter(cell => cell.pair && (cell.pair.id || cell.pair.alias === '-'))
+			.forEach(async cell =>
+				await updateSingleCell(
+					cell.pair!.tournamentId,
+					cell.cellColIndex,
+					cell.cellRowIndex,
+					cell.matchId,
+					cell.pair!,
+					cell.isWinner
+				)
+		);
 		logProcess(className + 'updateCells', 'end');
 		return true;
 	} catch (error) {
@@ -62,7 +53,7 @@ export const updateSingleCell = async (
 		//logProcess(className + 'updateSingleCell', 'record', record);
 		if (record) {
 			await record.update({ pairId: pair.id });
-			if (isWinner) await updateSingleCell(tournamentId, step, matchId, 0, pair, false);
+			// if (isWinner) await updateSingleCell(tournamentId, step, matchId, 0, pair, false);
 			logProcess(className + 'updateSingleCell', 'end');
 			return true;
 		}

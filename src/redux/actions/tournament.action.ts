@@ -6,6 +6,8 @@ import {
   UpdateTournamentRequest,
   UpdateTournamentResponse,
   TournamentError,
+  ReloadTournamentRequest,
+  ReloadTournamentResponse,
 } from '../../@common/models/tournament.model';
 import { createAsyncAction, createAction } from 'typesafe-actions';
 import { defaultAsyncParams, defaultParam, PurgeResponse, PURGE_STORE_ACTION } from './constants';
@@ -15,6 +17,11 @@ const actionName = '[Tournament]';
 
 export const TournamentAction = {
   // fetch tournaments
+  reload: createAsyncAction(...defaultAsyncParams(actionName, 'Reload Tournament'))<
+    ReloadTournamentRequest,
+    ReloadTournamentResponse,
+		TournamentError
+  >(),
   fetch: createAsyncAction(...defaultAsyncParams(actionName, 'Fetch Tournaments'))<
     FetchTournamentsRequest,
     FetchTournamentsResponse,

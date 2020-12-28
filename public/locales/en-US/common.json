@@ -14,7 +14,8 @@
     "logout": "Logut",
     "loading": "Loading",
     "notification": {
-        "new_tournament": "Tournament {{tournament}} is now available",
+        "tournament_new": "Tournament {{tournament}} is now available",
+        "tournament_update": "Tournament has been updated to next stage",
         "stage1_delete": "This tournament stage has been deleted from an administrator.",
         "stage2_delete": "This tournament stage has been deleted from an administrator.",
         "updating": "Updating..."

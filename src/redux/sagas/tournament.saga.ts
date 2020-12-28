@@ -1,5 +1,5 @@
-import { put, StrictEffect, takeEvery } from 'redux-saga/effects';
-import { fetchTournaments, postTournament, updateTournament } from '../services/tournament.service';
+import { put, takeEvery } from 'redux-saga/effects';
+import { fetchTournaments, postTournament, reloadTournament, updateTournament } from '../services/tournament.service';
 import {
 	SaveTournamentResponse,
 	FetchTournamentsResponse,
@@ -8,14 +8,14 @@ import {
 	UpdateTournamentRequest,
 	SaveTournamentRequest,
 	TournamentError,
+	ReloadTournamentRequest,
+	ReloadTournamentResponse,
 } from '../../@common/models/tournament.model';
 import { TournamentAction } from '../actions/tournament.action';
 import { entityLifeCycle } from './utils';
 
 // https://medium.com/swlh/asynchronous-with-redux-sagas-b43c9630f218
-function* getTournamentsSaga({
-	payload,
-}: ReturnType<typeof TournamentAction.fetch.request>): Generator<StrictEffect, void, any> {
+function* fetchTournamentsSaga({ payload }: ReturnType<typeof TournamentAction.fetch.request>) {
 	yield* entityLifeCycle<FetchTournamentsRequest, FetchTournamentsResponse, TournamentError>(
 		TournamentAction.fetch,
 		fetchTournaments,
@@ -23,9 +23,15 @@ function* getTournamentsSaga({
 	);
 }
 
-function* saveTournamentSaga({
-	payload,
-}: ReturnType<typeof TournamentAction.save.request>): Generator<StrictEffect, void, any> {
+function* reloadTournamentSaga({ payload }: ReturnType<typeof TournamentAction.reload.request>) {
+	yield* entityLifeCycle<ReloadTournamentRequest, ReloadTournamentResponse, TournamentError>(
+		TournamentAction.reload,
+		reloadTournament,
+		payload,undefined,undefined,false
+	);
+}
+
+function* saveTournamentSaga({ payload }: ReturnType<typeof TournamentAction.save.request>) {
 	const onSuccess = function* (response: SaveTournamentResponse) {
 		// Reload tournament List
 		yield put(TournamentAction.fetch.request({}));
@@ -40,9 +46,7 @@ function* saveTournamentSaga({
 	);
 }
 
-function* updateTournamentSaga({
-	payload,
-}: ReturnType<typeof TournamentAction.update.request>): Generator<StrictEffect, void, any> {
+function* updateTournamentSaga({ payload }: ReturnType<typeof TournamentAction.update.request>) {
 	yield* entityLifeCycle<UpdateTournamentRequest, UpdateTournamentResponse, TournamentError>(
 		TournamentAction.update,
 		updateTournament,
@@ -51,7 +55,8 @@ function* updateTournamentSaga({
 }
 
 export const TournamentSagas = [
-	takeEvery(TournamentAction.fetch.request, getTournamentsSaga),
+	takeEvery(TournamentAction.reload.request, reloadTournamentSaga),
+	takeEvery(TournamentAction.fetch.request, fetchTournamentsSaga),
 	takeEvery(TournamentAction.save.request, saveTournamentSaga),
 	takeEvery(TournamentAction.update.request, updateTournamentSaga),
 ];

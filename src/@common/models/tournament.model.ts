@@ -11,9 +11,10 @@ export interface TournamentState {
 
 //## REQUEST - RESPONSE - ERROR
 // Requests
-export interface FetchTournamentsRequest {
-  tId?: number;
+export interface ReloadTournamentRequest {
+  tId: number;
 }
+export interface FetchTournamentsRequest {}
 
 export interface SaveTournamentRequest {
   tournament: TournamentDTO;
@@ -34,6 +35,9 @@ export interface FetchTournamentsResponse extends GenericReponse {
 }
 export interface SaveTournamentResponse extends GenericReponse {
   tournament: TournamentDTO | null;
+}
+export interface ReloadTournamentResponse extends GenericReponse {
+  tournament: TournamentDTO;
 }
 export interface UpdateTournamentResponse extends GenericReponse {
   tournament: TournamentDTO;

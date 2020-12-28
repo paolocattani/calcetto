@@ -6,7 +6,9 @@ import { TOptions } from 'i18next';
 export enum SessionStatus {
 	// Sessione scaduta, reindirizza l'utente alla login
 	SESSION_EXPIRED = 'session_expired',
-	NEW_TOURNAMENT = 'new_tournament',
+	// Aggiornamento torneo
+	TOURNAMENT_NEW = 'tournament_new',
+	TOURNAMENT_UPDATE = 'tournament_update',
 	// Aggiornamento dati su Stage1
 	STAGE1_UPDATE = 'stage1_update',
 	STAGE1_DELETE = 'stage1_delete',

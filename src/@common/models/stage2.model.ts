@@ -30,8 +30,7 @@ export interface FetchStage2Response extends GenericReponse {
 }
 
 export interface UpdateStage2CellRequest {
-	cell1: ICell;
-	cell2: ICell | null;
+	cells: Array<ICell>;
 }
 export interface UpdateStage2CellResponse extends GenericReponse {}
 
