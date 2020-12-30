@@ -15,6 +15,7 @@ import {
 import { TournamentAction } from '../actions/tournament.action';
 import { entityLifeCycle } from './utils';
 
+// FIXME: unused
 const onSuccessRedirect = async (redirect?: Redirect) => {
 	if (redirect) {
 		redirect.history.push(redirect.path);

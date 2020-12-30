@@ -81,6 +81,7 @@ export const update = async (user: UserDTO, model: TournamentDTO): Promise<Tourn
 		/*
 			Se sto passando da TournamentProgress.Stage1 a TournamentProgress.PairsSelection
 			aggiorno i client collegati che il torneo non è piu disponibile
+			FIXME: Questa casistica è gia coperta da STAGE1_DELETE
 		*/
 		if (t.public && t.progress === TournamentProgress.Stage1 && model.progress === TournamentProgress.PairsSelection) {
 			const message: Message = {

@@ -1,5 +1,5 @@
 // Models
-import { Stage1 } from '../database';
+import { Stage1, Tournament } from '../database';
 import { Stage1Row, TournamentProgress, UserDTO } from '../../src/@common/dto';
 // Core
 import { logProcess, logger } from '../core/logger';
@@ -17,9 +17,17 @@ const className = 'Stage1 Manager : ';
 export const deleteStage1 = async (tournamentId: number) => {
 	logProcess(className + 'deleteStage1', 'start');
 	try {
+		const tournament = await Tournament.findByPk(tournamentId);
+		if (!tournament) {
+			return;
+		}
 		await Stage1.destroy({ where: { tournamentId } });
-		const message = { status: SessionStatus.STAGE1_DELETE, label: 'common:notification.stage1_delete' };
-		sendNotifications(message, tournamentId,TournamentProgress.Stage1);
+		const message = {
+			status: SessionStatus.STAGE1_DELETE,
+			label: 'common:notification.stage1_delete',
+			data: { name: tournament.name, date: tournament.date },
+		};
+		sendNotifications(message);
 	} catch (error) {
 		logProcess(className + 'deleteStage1', 'error');
 		logger.error('deleteStage1 : ', error);

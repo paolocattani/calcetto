@@ -89,7 +89,9 @@ const isSessionValid = (token: string, response: Response, intervalId: NodeJS.Ti
 	}
 	return true;
 };
-export const subscribe = (user: UserDTO, uuid: string, tournamentId: number, progress: TournamentProgress) => {
+export const unsubscribe = (user: UserDTO, uuid: string) => subscribe(user, uuid, undefined, undefined);
+
+export const subscribe = (user: UserDTO, uuid: string, tournamentId?: number, progress?: TournamentProgress) => {
 	const client = connectedClients.get(uuid);
 	if (client && client.notification) {
 		clientToString(client);

@@ -10,6 +10,10 @@ export const initialSessionState: AuthState = {
 };
 
 export const SessionReducer = createReducer<AuthState, Action>(initialSessionState)
+	// Just unsubscribe user from tournament
+	.handleAction(AuthAction.unsubscribe.request, (state) => state)
+	.handleAction(AuthAction.unsubscribe.failure, (state) => state)
+	.handleAction(AuthAction.unsubscribe.success, (state) => state)
 	// Request
 	.handleAction(
 		[

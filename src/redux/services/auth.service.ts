@@ -4,7 +4,7 @@ import {
 	RegistrationRequest,
 	UpdateUserRequest,
 	DeleteUserRequest,
-	LogoutRequest, SessionStatus, Message
+	LogoutRequest, SessionStatus, Message, UnsubscribeRequest, UnsubscribeResponse
 } from '../../@common/models';
 import { OmitHistory } from '../../@common/models/common.models';
 import {putWrapper, deleteWrapper, postWrapper, getWrapper} from '../../@common/utils';
@@ -24,7 +24,7 @@ export const logout = (logoutRequest:OmitHistory<LogoutRequest>) => getWrapper<A
 // Registration
 export const registration = ( registrationRequest: OmitHistory<RegistrationRequest>) => postWrapper<RegistrationRequest, AuthenticationResponse>('/api/v2/auth/register', registrationRequest);
 export const checkAuthentication = () => getWrapper<AuthenticationResponse>('/api/v2/auth/check');
-
+export const unsubscribe = () => putWrapper<UnsubscribeRequest, UnsubscribeResponse>('/api/v2/auth/unsubscribe');
 
 export const createSessionChannel = (channel: EventSource) =>
 	eventChannel<Message>((emitter) => {

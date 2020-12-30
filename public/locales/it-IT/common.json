@@ -17,8 +17,8 @@
         "tournament_new": "Il torneo {{tournament}} è ora disponibile",
         "tournament_update": "Il torneo è stato aggiornato alla fase successiva",
         "tournament_delete": "Il torneo {{tournament}} non è piu disponibile",
-        "stage1_delete": "Questa fase del torneo è stata eliminata da parte di un amminstratore.",
-        "stage2_delete": "Questa fase del torneo è stata eliminata da parte di un amminstratore.",
+        "stage1_delete": "Il torneo {{tournament}} è stato eliminato da un amminstratore.",
+        "stage2_delete": "La fase 2 del torneo è stata eliminata da un amminstratore.",
         "updating": "Aggiornamento..."
     },
     "route": {

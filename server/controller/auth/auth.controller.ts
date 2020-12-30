@@ -18,7 +18,7 @@ import {
 // Models
 import User from '../../database/user.model';
 // Common Responses
-import { missingParameters, success, failure, entityNotFound, serverError, unauthorized } from '../common.response';
+import { missingParameters, success, failure, entityNotFound, serverError } from '../common.response';
 // @Commmon
 import {
 	AuthenticationResponse,
@@ -29,10 +29,12 @@ import {
 	UpdateUserRequest,
 	OmitGeneric,
 	OmitHistory,
+	UnsubscribeResponse,
 } from '../../../src/@common/models';
 import { HTTPStatusCode } from '../../../src/@common/models/HttpStatusCode';
 import { addUserCookies, removeUserCookies } from './cookies.utils';
 import { comparePasswords } from './auth.utils';
+import { unsubscribe } from '../../events/events';
 
 const router = Router();
 const registrationController = asyncMiddleware(async (req: Request, res: Response) => {
@@ -117,6 +119,21 @@ router.get(
 );
 
 router.post('/register', registrationController);
+
+router.put(
+	'/unsubscribe',
+	withAuth,
+	asyncMiddleware(async (req: AppRequest, res: Response) => {
+		try {
+			const { user, uuid } = req;
+			unsubscribe(user!,uuid!);
+			return success<UnsubscribeResponse>(res, { label: '' });
+		} catch (err) {
+			return serverError('PUT tournament/unsubscribe error ! : ', err, res);
+		}
+	})
+);
+
 
 router.put(
 	'/update',

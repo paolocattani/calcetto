@@ -17,8 +17,8 @@
         "tournament_new": "Tournament {{tournament}} is now available",
         "tournament_update": "Tournament has been updated to next stage",
         "tournament_delete": "Tournament {{tournament}} has been deleted",
-        "stage1_delete": "This tournament stage has been deleted from an administrator.",
-        "stage2_delete": "This tournament stage has been deleted from an administrator.",
+        "stage1_delete": "Tournament {{tournament}} has been deleted by an administrator.",
+        "stage2_delete": "Stage 2 has been deleted by an administrator.",
         "updating": "Updating..."
     },
     "route": {

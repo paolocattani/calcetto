@@ -13,7 +13,7 @@ import NewTournament from './new';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { TournamentSelector } from '../../redux/selectors/tournament.selector';
-import { TournamentAction, PairAction } from '../../redux/actions';
+import { TournamentAction, PairAction, AuthAction } from '../../redux/actions';
 import { AuthSelector } from '../../redux/selectors/auth.selector';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -37,7 +37,8 @@ const FTournament = () => {
   useEffect(() => {
     if (!tournamentsList || tournamentsList.length === 0) {
       // setNewTournament(true);
-    	dispatch(TournamentAction.fetch.request({}));
+      dispatch(TournamentAction.fetch.request({}));
+      dispatch(AuthAction.unsubscribe.request({}));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tournamentsList,tournament]);

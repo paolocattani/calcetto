@@ -10,6 +10,8 @@ import {
 	RegistrationRequest,
 	RegistrationResponse,
 	Unauthorized,
+	UnsubscribeRequest,
+	UnsubscribeResponse,
 	UpdateUserRequest,
 } from '../../@common/models';
 import {
@@ -20,6 +22,7 @@ import {
 	updateUser,
 	deleteUser,
 	logout,
+	unsubscribe,
 } from '../services/auth.service';
 import { toast } from 'react-toastify';
 import { Action } from 'typesafe-actions';
@@ -87,29 +90,27 @@ function* watchSessionSaga({
 					);
 					yield put(TournamentAction.reload.request({ tId: tournament.id }));
 					break;
-				case SessionStatus.TOURNAMENT_DELETE:
-					toast.warn(i18next.t(message.label!));
-					yield put(TournamentAction.fetch.request({}));
-					history.push('/');
-					break;
+				/*
+					case SessionStatus.TOURNAMENT_DELETE:
+						toast.warn(i18next.t(message.label!));
+						yield put(TournamentAction.fetch.request({}));
+						history.push('/');
+						break;
+				*/
 				// Stage 1
 				case SessionStatus.STAGE1_UPDATE:
 					toast.success(i18next.t(message.label!));
 					yield put(Stage1Action.reloadFromServer({}));
 					break;
 				case SessionStatus.STAGE1_DELETE:
-					toast.warn(i18next.t(message.label!));
-					// Reload tournament list
-					yield put(TournamentAction.reset({}));
-					yield put(
-						TournamentAction.fetch.request({
-							redirect: {
-								history,
-								path: '/',
-							},
-						})
+					toast.warn(
+						i18next.t(message.label!, { tournament: `${message.data!.name}@${formatDate(message.data!.date!)}` })
 					);
-					yield put(Stage2Action.reset({}));
+					// Reload tournament list
+					history.push('/');
+					yield put(TournamentAction.reset({}));
+					yield put(TournamentAction.fetch.request({}));
+					yield put(Stage1Action.reset({}));
 					break;
 				// Stage 2
 				case SessionStatus.STAGE2_UPDATE:
@@ -121,15 +122,8 @@ function* watchSessionSaga({
 					yield delay(5000);
 					// Reload only this tournament
 					yield put(Stage2Action.reset({}));
-					yield put(
-						TournamentAction.reload.request({
-							tId: tournament.id,
-							redirect: {
-								history,
-								path: '/stage1',
-							},
-						})
-					);
+					yield put(TournamentAction.reload.request({ tId: tournament.id }));
+					history.push('/stage1');
 					break;
 			}
 		}
@@ -186,6 +180,14 @@ function* registrationSaga({
 	);
 }
 
+function* unsubscribeSaga({}: ReturnType<typeof AuthAction.unsubscribe.request>) {
+	yield* entityLifeCycle<UnsubscribeRequest, UnsubscribeResponse, AuthenticationError>(
+		AuthAction.unsubscribe,
+		unsubscribe,
+		{}
+	);
+}
+
 // Update user
 function* updateUserSaga({
 	payload: { history, ...updateUserRequest },
@@ -220,6 +222,7 @@ function logger(action: Action<any>) {
 }
 
 export const SessionSagas = [
+	takeEvery(AuthAction.unsubscribe.request, unsubscribeSaga),
 	takeEvery(AuthAction.logout.request, logoutSaga),
 	takeEvery(AuthAction.login.request, loginSaga),
 	takeEvery(AuthAction.update.request, updateUserSaga),
