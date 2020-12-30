@@ -10,16 +10,24 @@ import {
 	TournamentError,
 	ReloadTournamentRequest,
 	ReloadTournamentResponse,
+	Redirect,
 } from '../../@common/models/tournament.model';
 import { TournamentAction } from '../actions/tournament.action';
 import { entityLifeCycle } from './utils';
+
+const onSuccessRedirect = async (redirect?: Redirect) => {
+	if (redirect) {
+		redirect.history.push(redirect.path);
+	}
+};
 
 // https://medium.com/swlh/asynchronous-with-redux-sagas-b43c9630f218
 function* fetchTournamentsSaga({ payload }: ReturnType<typeof TournamentAction.fetch.request>) {
 	yield* entityLifeCycle<FetchTournamentsRequest, FetchTournamentsResponse, TournamentError>(
 		TournamentAction.fetch,
 		fetchTournaments,
-		payload
+		payload,
+		() => onSuccessRedirect(payload.redirect)
 	);
 }
 
@@ -27,7 +35,10 @@ function* reloadTournamentSaga({ payload }: ReturnType<typeof TournamentAction.r
 	yield* entityLifeCycle<ReloadTournamentRequest, ReloadTournamentResponse, TournamentError>(
 		TournamentAction.reload,
 		reloadTournament,
-		payload,undefined,undefined,false
+		payload,
+		() => onSuccessRedirect(payload.redirect),
+		undefined,
+		false
 	);
 }
 

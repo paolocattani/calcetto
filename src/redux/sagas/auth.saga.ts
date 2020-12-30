@@ -64,6 +64,7 @@ function* watchSessionSaga({
 		while (true) {
 			const message: Message = yield take(channel);
 			const tournament = yield select(TournamentSelector.getTournament);
+			// https://fkhadra.github.io/react-toastify/render-what-you-want/
 			switch (message.status) {
 				// Session
 				case SessionStatus.SESSION_EXPIRED:
@@ -81,12 +82,15 @@ function* watchSessionSaga({
 					yield put(TournamentAction.fetch.request({}));
 					break;
 				case SessionStatus.TOURNAMENT_UPDATE:
-					toast.success(i18next.t(message.label!, { tournament: `${message.data!.name}@${formatDate(message.data!.date!)}` }));
-					yield put(TournamentAction.reload.request({ tId:tournament.id }));
+					toast.success(
+						i18next.t(message.label!, { tournament: `${message.data!.name}@${formatDate(message.data!.date!)}` })
+					);
+					yield put(TournamentAction.reload.request({ tId: tournament.id }));
 					break;
 				case SessionStatus.TOURNAMENT_DELETE:
 					toast.warn(i18next.t(message.label!));
 					yield put(TournamentAction.fetch.request({}));
+					history.push('/');
 					break;
 				// Stage 1
 				case SessionStatus.STAGE1_UPDATE:
@@ -97,9 +101,15 @@ function* watchSessionSaga({
 					toast.warn(i18next.t(message.label!));
 					// Reload tournament list
 					yield put(TournamentAction.reset({}));
-					yield put(TournamentAction.fetch.request({}));
+					yield put(
+						TournamentAction.fetch.request({
+							redirect: {
+								history,
+								path: '/',
+							},
+						})
+					);
 					yield put(Stage2Action.reset({}));
-					history.push('/');
 					break;
 				// Stage 2
 				case SessionStatus.STAGE2_UPDATE:
@@ -108,12 +118,20 @@ function* watchSessionSaga({
 					break;
 				case SessionStatus.STAGE2_DELETE:
 					toast.warn(i18next.t(message.label!));
+					yield delay(5000);
 					// Reload only this tournament
-					yield put(TournamentAction.reload.request({ tId:tournament.id }));
 					yield put(Stage2Action.reset({}));
-					history.push('/stage1');
+					yield put(
+						TournamentAction.reload.request({
+							tId: tournament.id,
+							redirect: {
+								history,
+								path: '/stage1',
+							},
+						})
+					);
 					break;
-				}
+			}
 		}
 	} catch (err) {
 		console.log('watchSessionSaga.err : ', err);

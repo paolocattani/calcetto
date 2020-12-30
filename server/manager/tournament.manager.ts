@@ -74,6 +74,7 @@ export const update = async (user: UserDTO, model: TournamentDTO): Promise<Tourn
 			const message: Message = {
 				status: SessionStatus.TOURNAMENT_UPDATE,
 				label: 'common:notification.tournament_update',
+				data: { name: model.name, date: model.date },
 			};
 			sendNotifications(message);
 		}

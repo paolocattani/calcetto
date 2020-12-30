@@ -9,7 +9,7 @@ import { Message, SessionStatus } from '../../src/@common/models';
 import { getCookies } from '../controller/auth/cookies.utils';
 import { safeVerifyToken } from '../controller/auth/auth.utils';
 
-interface ConnectedClient {
+interface Client {
 	uuid: string;
 	user: UserDTO;
 	tournamentId?: number;
@@ -19,10 +19,8 @@ interface ConnectedClient {
 	notification: boolean;
 }
 
-let count = 0;
-let connectedClients: ConnectedClient[] = [];
-
-const clientToString = ({ uuid, user, tournamentId, progress }: ConnectedClient) =>
+let connectedClients = new Map<string, Client>();
+const clientToString = ({ uuid, user, tournamentId, progress }: Client) =>
 	tournamentId
 		? `${uuid} : ${user.name} ( ${user.id} ) --> ${tournamentId}@${progress}`
 		: `${uuid} : ${user.name} ( ${user.id} ) `;
@@ -33,35 +31,34 @@ export const sessionControl = (req: AppRequest, res: Response, next: NextFunctio
 	let intervalId: NodeJS.Timeout | null = null;
 
 	let [user] = safeVerifyToken(token);
-	if (!user || connectedClients.map((c) => c.uuid).includes(uuid)) {
+	if (!user) {
 		return;
 	}
-	if (connectedClients.map((c) => c.uuid).includes(uuid)) {
+	if (connectedClients.get(uuid)) {
 		logger.info(`User ${user.username} already connected..`);
 	}
 	// Apro connessione
 	res.writeHead(200, DEFAULT_HEADERS);
 
 	// Aggiugo questo client a quelli collegati
-	const id = count++;
-	const client: ConnectedClient = { uuid, token, response: res, user, notification: user.role !== UserRole.Admin };
-	connectedClients.push(client);
+	const client: Client = { uuid, token, response: res, user, notification: user.role !== UserRole.Admin };
+	connectedClients.set(uuid , client);
 	logger.info(`--> New User connected : ${clientToString(client)}`);
-	logger.info(`--> Total connected : ${connectedClients.length}`);
+	logger.info(`--> Total connected : ${connectedClients.size}`);
 	// Controllo ogni 5 secondi
 	// https://gist.github.com/akirattii/257d7efc8430c7e3fd0b4ec60fc7a768
-	//@ts-ignore
 	intervalId = setInterval(() => {
 		// Serve per evitare il timeout
-		sendNotification(res);
+		const message: Message = { status: SessionStatus.HEARTBEAT };
+		sendNotification(res,message);
 		// Controllo validità sessione
-		isSessionValid(token, res, intervalId, id);
+		isSessionValid(token, res, intervalId, uuid);
 	}, 5000);
 
 	const stopWatcher = () => {
-		connectedClients = connectedClients.filter((e) => e.uuid != uuid);
+		connectedClients.delete(uuid);
 		logger.info(`--> User disconnected : ${clientToString(client)}`);
-		logger.info(`--> Total connected : ${connectedClients.length}`);
+		logger.info(`--> Total connected : ${connectedClients.size}`);
 		if (intervalId) {
 			clearInterval(intervalId);
 		}
@@ -70,12 +67,12 @@ export const sessionControl = (req: AppRequest, res: Response, next: NextFunctio
 	};
 
 	// on Connection Close
-	res.on('close', () => stopWatcher());
-	res.on('end', () => stopWatcher());
+	req.on('close', () => stopWatcher());
+	req.on('end', () => stopWatcher());
 };
 
 // Verifica se il token per questo client è ancora valido
-const isSessionValid = (token: string, response: Response, intervalId: NodeJS.Timeout | null, id: number) => {
+const isSessionValid = (token: string, response: Response, intervalId: NodeJS.Timeout | null, uuid: string) => {
 	const [user, isTokenValid] = safeVerifyToken(token);
 	if (!isTokenValid) {
 		// Se il token non è piu valido informo il client,chiudo la connessione e interropondo il ciclo di controllo
@@ -84,7 +81,7 @@ const isSessionValid = (token: string, response: Response, intervalId: NodeJS.Ti
 			status: SessionStatus.SESSION_EXPIRED,
 		};
 		sendNotification(response, message, true);
-		connectedClients.splice(id, 1);
+		connectedClients.delete(uuid);
 		if (intervalId) {
 			clearInterval(intervalId);
 		}
@@ -93,29 +90,29 @@ const isSessionValid = (token: string, response: Response, intervalId: NodeJS.Ti
 	return true;
 };
 export const subscribe = (user: UserDTO, uuid: string, tournamentId: number, progress: TournamentProgress) => {
-	logger.error(`${user.username} subscribe to ${tournamentId}`);
-	connectedClients = connectedClients.map((c) => {
-		if (c.notification && c.uuid === uuid) {
-			logger.error(`${c.uuid} : ${c.user.username} subscribe to ${tournamentId}@${progress}`);
-			c.tournamentId = tournamentId;
-			c.progress = progress;
-		}
-		return c;
-	});
+	const client = connectedClients.get(uuid);
+	if (client && client.notification) {
+		clientToString(client);
+		client.tournamentId = tournamentId;
+		client.progress = progress;
+		connectedClients.set(uuid , client);
+	}
 };
 
 export const sendNotifications = (message: Message, tournamentId?: number, progress?: TournamentProgress) => {
 	logger.warn('sendNotifications : ');
+
 	connectedClients
-		.filter((c) => c.notification)
 		.forEach((c) => {
-			if (tournamentId && progress) {
-				if (c.tournamentId && c.progress && c.tournamentId === tournamentId && c.progress === progress) {
-					logger.error(`${c.uuid} : ${c.user.username} notify for ${tournamentId}@${progress}`);
+			if (c.notification) {
+				if (tournamentId && progress) {
+					if (c.tournamentId && c.progress && c.tournamentId === tournamentId && c.progress === progress) {
+						logger.error(`${c.uuid} : ${c.user.username} notify for ${tournamentId}@${progress}`);
+						sendNotification(c.response, message, false);
+					}
+				} else {
 					sendNotification(c.response, message, false);
 				}
-			} else {
-				sendNotification(c.response, message, false);
 			}
 		});
 };

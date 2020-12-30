@@ -24,7 +24,12 @@ export const TournamentReducer = createReducer<TournamentState, Action>(initialT
 	)
 	// Failure
 	.handleAction(
-		[TournamentAction.fetch.failure, TournamentAction.save.failure, TournamentAction.update.failure,TournamentAction.reload.failure],
+		[
+			TournamentAction.fetch.failure,
+			TournamentAction.save.failure,
+			TournamentAction.update.failure,
+			TournamentAction.reload.failure,
+		],
 		(state) => ({ ...state, isLoading: false })
 	)
 	// SUCCESS
@@ -47,7 +52,7 @@ export const TournamentReducer = createReducer<TournamentState, Action>(initialT
 	}))
 	// Create/Update a new tournament
 	.handleAction(
-		[TournamentAction.save.success, TournamentAction.update.success,TournamentAction.reload.success],
+		[TournamentAction.save.success, TournamentAction.update.success, TournamentAction.reload.success],
 		(state, { payload: { tournament } }) => ({
 			...state,
 			tournament,

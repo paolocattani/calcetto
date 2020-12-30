@@ -36,14 +36,15 @@ router.use('/', (req: Request, res: Response, next: NextFunction) =>
 router.post(
 	'/',
 	withAuth,
-	doNotCacheThis,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		try {
 			let { tournamentId, count }: FetchStage2Request = req.body;
+			const { user,uuid } = req;
 			if (!count || count === 0) {
 				count = await countStage2(tournamentId);
 			}
 			const model = await generateStage2Rows(tournamentId, count, req.user!);
+			subscribe(user!, uuid!, tournamentId, TournamentProgress.Stage2);
 			return success<FetchStage2Response>(res, { label: 'stage2:loaded' }, { cells: model, count });
 		} catch (error) {
 			logger.error(chalk.redBright('Error while fetching Stage2 ! : ', error));
@@ -61,10 +62,8 @@ router.get(
 			if (!req.params.tournamentId) {
 				return missingParameters(res);
 			}
-			const { user,uuid } = req;
 			const tournamentId = parseInt(req.params.tournamentId);
 			const pairs = await fetchPairsStage2(tournamentId);
-			subscribe(user!, uuid!, tournamentId, TournamentProgress.Stage2);
 			return success<FetchStage2PairsResponse>(res, { label: 'stage2:pairs' }, { pairs });
 		} catch (error) {
 			logger.error(chalk.redBright('Error while fetching pairs Stage2 ! : ', error));

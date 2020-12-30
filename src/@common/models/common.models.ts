@@ -4,6 +4,8 @@ import { HTTPStatusCode } from './HttpStatusCode';
 import { TOptions } from 'i18next';
 
 export enum SessionStatus {
+	//
+	HEARTBEAT = 'heartbeat',
 	// Sessione scaduta, reindirizza l'utente alla login
 	SESSION_EXPIRED = 'session_expired',
 	// Aggiornamento torneo
