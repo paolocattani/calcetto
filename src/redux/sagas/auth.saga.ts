@@ -180,7 +180,7 @@ function* registrationSaga({
 	);
 }
 
-function* unsubscribeSaga({}: ReturnType<typeof AuthAction.unsubscribe.request>) {
+function* unsubscribeSaga(payload: ReturnType<typeof AuthAction.unsubscribe.request>) {
 	yield* entityLifeCycle<UnsubscribeRequest, UnsubscribeResponse, AuthenticationError>(
 		AuthAction.unsubscribe,
 		unsubscribe,

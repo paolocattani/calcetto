@@ -21,7 +21,6 @@ export const Stage1Action = {
 		Stage1Error
   >(),
   // watcher
-	reloadFromServer: createAction(...defaultParam(actionName, 'Stage1 Watcher'))<{}>(),
   fetchStage1: createAsyncAction(...defaultAsyncParams(actionName, 'Fetch Stage1'))<
     FetchStage1Request,
     FetchStage1Response,
@@ -37,6 +36,8 @@ export const Stage1Action = {
     UpdatePlacementResponse,
 		Stage1Error
     >(),
+  reloadFromServer: createAction(...defaultParam(actionName, 'Stage1 Watcher'))<{}>(),
+  resetPairs: createAction(...defaultParam(actionName, 'Stage1 Reset Pairs'))<{}>(),
   reset: createAction(...defaultParam(actionName, 'Stage1 Reset'))<{}>(),
   purge: createAction(PURGE_STORE_ACTION)<PurgeResponse>(),
 };

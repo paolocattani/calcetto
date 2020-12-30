@@ -7,7 +7,7 @@ import commonStyle from '../../common.module.css';
 import { RightArrowIcon, TrashIcon, LeftArrowIcon } from '../core/icons';
 import { Button, Col, Row, ButtonGroup, ToggleButton } from 'react-bootstrap';
 // Actions, Selectors
-import { Stage2Action, TournamentAction } from '../../redux/actions';
+import { Stage1Action, Stage2Action, TournamentAction } from '../../redux/actions';
 import { AuthSelector, TournamentSelector, Stage1Selector, PairSelector } from '../../redux/selectors';
 import Stage1Table from './table';
 import TournamentBadge from '../Tournament/badge';
@@ -55,6 +55,11 @@ const Wrapper: React.FC = (): JSX.Element => {
     currentHistory.push('/stage2');
   }
 
+  function resetStage2() {
+    dispatch(Stage2Action.delete.request({ tId: tournament.id! }));
+    dispatch(Stage1Action.resetPairs({}));
+  }
+
   //console.log('Refreshing : ', toogleRefresh);
   const toolsBar = (
     <div className={commonStyle.toolsBarContainer}>
@@ -68,7 +73,7 @@ const Wrapper: React.FC = (): JSX.Element => {
           <Col>
             <Button
               variant="danger"
-              onClick={() => dispatch(Stage2Action.delete.request({ tId: tournament.id! }))}
+              onClick={resetStage2}
               disabled={!session.isAdmin || (session.isAdmin && tournament.progress < TournamentProgress.Stage2)}
             >
               <TrashIcon /> Reset Fase 2

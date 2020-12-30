@@ -51,7 +51,7 @@ export function* entityLifeCycle<TReq, TRes extends GenericReponse,TErr extends 
 		const response: TRes | TErr = yield call(method, payload);
 		const { userMessage: message } = response;
 
-		if (showMessage && message) {
+		if (showMessage && message && message.label) {
 			const messageText = getMessage(message);
 			switch (message.type) {
 				case UserMessageType.Success:
