@@ -29,7 +29,9 @@ const PairsSelect: React.FC<PairSelectProps> = React.forwardRef(
     const handleChange = (value: ValueType<PairDTO, false>, actionMeta: ActionMeta<PairDTO>) => {
       const newValue = value ? value : getEmptyPair('-', tournamentId);
       setSelectedOption(newValue);
-      if (onChange) { onChange(newValue, rowIndex, actionMeta); }
+      if (onChange) {
+        onChange(newValue, rowIndex, actionMeta);
+      }
     };
 
     return (

@@ -12,9 +12,8 @@ import TournamentBadge from '../Tournament/badge';
 import { fetchPairsStage2 } from '../../redux/services/stage2.service';
 import { onClickCallback, onSelectCallback } from './helper';
 import { PairDTO, ICell } from '../../@common/dto';
-import { SuccessCodes } from 'src/@common/models/HttpStatusCode';
-import { FetchStage2PairsResponse, getEmptyPair } from 'src/@common/models';
-
+import { SuccessCodes } from '../../@common/models/HttpStatusCode';
+import { FetchStage2PairsResponse } from '../../@common/models';
 // import template from './template';
 
 interface Stage2HandlerProps extends RouteComponentProps {}

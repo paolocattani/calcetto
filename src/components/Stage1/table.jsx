@@ -4,7 +4,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 // helper
 import TableHeader from './header';
-import { getOpposite, comparator, rowsGenerator } from './helper';
+import { getOpposite, comparator } from './helper';
 import { columns } from './editor';
 //
 import { useSelector, useDispatch } from 'react-redux';

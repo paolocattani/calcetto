@@ -4,7 +4,7 @@ import { InputGroup, FormControl, Button } from 'react-bootstrap';
 import { DoubleRightIcon, BanIcon, TrophyIcon } from '../core/icons';
 import { ICell, PairDTO } from '../../@common/dto';
 import { useSelector } from 'react-redux';
-import { AuthSelector } from 'src/redux/selectors';
+import { AuthSelector } from '../../redux/selectors';
 
 interface NodeElement extends ICell {
   span: number;
