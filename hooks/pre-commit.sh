@@ -31,7 +31,7 @@ if [[ $BRANCH_NAME != "master" ]] && [[ $SEARCH_RESULT = 1 ]]; then
     # source cli/search_string.sh
 
     # Update version
-    source cli/update_version.sh --patch
+    source cli/update_version.sh --minor
 
     # Build
     source cli/build.sh
