@@ -70,8 +70,8 @@ const PairsTable: React.FC<PairTableProps> = () => {
   useEffect(() => {
     if (!tournament) return;
     (async () => {
-      const { pairsList } = await fetchPairs({ tId: tournament.id! }) as FetchPairsResponse;
-      const { playersList } = await fetchPlayers({ addEmpty: true, tId: tournament.id! });
+      const { pairsList } = await fetchPairs({ tId: tournament.id }) as FetchPairsResponse;
+      const { playersList } = await fetchPlayers({ addEmpty: true, tId: tournament.id });
       setData({ rows: pairsList, players: playersList });
     })();
   }, [tournament]);
@@ -267,7 +267,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
       dispatch(TournamentAction.update.request({ tournament }));
     }
     // Go to Stage1
-    dispatch(PairAction.fetch.request({ tId: tournament.id!, history:currentHistory }));
+    dispatch(PairAction.fetch.request({ tId: tournament.id, history:currentHistory }));
   };
 
   function goBack() {

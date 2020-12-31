@@ -27,7 +27,7 @@ const Stage2: React.FC<Stage2Props> = ({ onClick, elements, pairsSelect,rowNumbe
    */
   const tournament = useSelector(TournamentSelector.getTournament)!;
   const colNumber = getBaseLog(2, rowNumber) + 1;
-  const bRows = getTableBodyRows(tournament.id!,elements, rowNumber, colNumber, onClick, pairsSelect, onSelectPair);
+  const bRows = getTableBodyRows(tournament.id,elements, rowNumber, colNumber, onClick, pairsSelect, onSelectPair);
   const hElem = getTableHeaderElements(colNumber);
 
   return (

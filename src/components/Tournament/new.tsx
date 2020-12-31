@@ -11,9 +11,9 @@ import { toast } from 'react-toastify';
 import { FormEventType } from '../core/types';
 import { useTranslation } from 'react-i18next';
 
-type newTProps = {};
+interface NewTournamentProps {}
 
-const NewTournament: React.FC<newTProps> = (_) => {
+const NewTournament: React.FC<NewTournamentProps> = () => {
   const currentHistory = useHistory();
   const dispatch = useDispatch();
   const { t } = useTranslation(['common', 'tournament']);

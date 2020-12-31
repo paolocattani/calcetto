@@ -51,12 +51,12 @@ const Wrapper: React.FC = (): JSX.Element => {
       count = selected.length - 1;
       while (count % 8 !== 0) count++;
     }
-    dispatch(Stage2Action.fetchStage2.request({ tournamentId: tournament.id!, count }));
+    dispatch(Stage2Action.fetchStage2.request({ tournamentId: tournament.id, count }));
     currentHistory.push('/stage2');
   }
 
   function resetStage2() {
-    dispatch(Stage2Action.delete.request({ tId: tournament.id! }));
+    dispatch(Stage2Action.delete.request({ tId: tournament.id }));
     dispatch(Stage1Action.resetPairs({}));
   }
 

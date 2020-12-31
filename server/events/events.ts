@@ -79,6 +79,7 @@ const isSessionValid = (token: string, response: Response, intervalId: NodeJS.Ti
 		logger.info(`Token for user ${user?.username ?? ''} expired !`);
 		const message: Message = {
 			status: SessionStatus.SESSION_EXPIRED,
+			label:'auth:expired_alert'
 		};
 		sendNotification(response, message, true);
 		connectedClients.delete(uuid);

@@ -3,9 +3,9 @@ import React, { CSSProperties } from 'react';
 
 export function getEmptyTournament(name: string): TournamentDTO {
   return {
-    id: null,
+    id: 0,
     name: name || '',
-    ownerId: null,
+    ownerId: 0,
     date: new Date(),
     progress: TournamentProgress.New,
     public: true,

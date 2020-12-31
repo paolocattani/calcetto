@@ -39,7 +39,7 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
   useEffect(() => {
     (async () => {
       dispatch(Stage2Action.setLoading(true));
-      const response = await fetchPairsStage2({ tournamentId: tournament.id! });
+      const response = await fetchPairsStage2({ tournamentId: tournament.id });
       if (SuccessCodes.includes(response.code)) {
         const result = response as FetchStage2PairsResponse;
         setPairsList(result.pairs);

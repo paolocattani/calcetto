@@ -15,7 +15,7 @@ import { PlayerSelector, AuthSelector } from '../../redux/selectors';
 import { TrashIcon, PlusIcon, BroomIcon, HomeIcon } from '../core/icons';
 import { useTranslation } from 'react-i18next';
 import { PlayerDTO } from '../../@common/dto';
-import { getEmptyPlayer } from 'src/@common/models';
+import { getEmptyPlayer } from '../../@common/models';
 
 interface PlayerProps {}
 const PlayerTable: React.FC<PlayerProps> = () => {

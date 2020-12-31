@@ -1,8 +1,8 @@
-import { PairDTO } from 'src/@common/dto';
+import { PairDTO } from '../../@common/dto';
 import React, { useState } from 'react';
 import Select, { Styles, ValueType, ActionMeta, components } from 'react-select';
 import { SelectComponents } from 'react-select/src/components';
-import { getEmptyPair } from 'src/@common/models';
+import { getEmptyPair } from '../../@common/models';
 
 interface PairSelectProps {
   tournamentId:number;
@@ -27,9 +27,9 @@ const PairsSelect: React.FC<PairSelectProps> = React.forwardRef(
     const [selectedOption, setSelectedOption] = useState<PairDTO>();
 
     const handleChange = (value: ValueType<PairDTO, false>, actionMeta: ActionMeta<PairDTO>) => {
-      const newValue = value ? value as PairDTO : getEmptyPair('-', tournamentId);
+      const newValue = value ? value : getEmptyPair('-', tournamentId);
       setSelectedOption(newValue);
-      if (onChange) onChange(newValue, rowIndex, actionMeta);
+      if (onChange) { onChange(newValue, rowIndex, actionMeta); }
     };
 
     return (

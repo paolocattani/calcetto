@@ -50,7 +50,7 @@ export interface SelectPairsResponse extends GenericReponse {
 
 export interface PairError extends GenericReponse {}
 
-export const getEmptyPair = (label?: string, tournamentId: number = 0): PairDTO => ({
+export const getEmptyPair = (label?: string, tournamentId = 0): PairDTO => ({
 	id: null,
 	tournamentId,
 	rowNumber: 0,

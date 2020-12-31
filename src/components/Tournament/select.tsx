@@ -50,7 +50,7 @@ const FTournament = () => {
         currentHistory.push('/tournament');
       } else {
         console.log('Fetching pairs for tournament : ',tournament.id);
-        dispatch(PairAction.fetch.request({ tId: tournament.id!, history:currentHistory }));
+        dispatch(PairAction.fetch.request({ tId: tournament.id, history:currentHistory }));
       }
     } else toast.error(t('common:error.generic'));
   };

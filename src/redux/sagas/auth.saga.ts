@@ -28,8 +28,8 @@ import { toast } from 'react-toastify';
 import { Action } from 'typesafe-actions';
 import { persistor } from '../store';
 import { Stage1Action, Stage2Action, TournamentAction } from '../actions';
-import { Message, SessionStatus } from '../../@common/models/common.models';
-import { entityLifeCycle } from './utils';
+import { Message, SessionStatus, UserMessageType } from '../../@common/models/common.models';
+import { entityLifeCycle, getToast } from './utils';
 import i18next from '../../i18n/i18n';
 import { formatDate } from '../../@common/utils/date.utils';
 import { TournamentSelector } from '../selectors';
@@ -57,6 +57,18 @@ https://github.com/redux-saga/redux-saga/issues/868
 https://github.com/redux-saga/redux-saga/blob/master/docs/advanced/Channels.md#using-the-eventchannel-factory-to-connect-to-external-events
 https://github.com/redux-saga/redux-saga/issues/940#issuecomment-298170212
 */
+const showMessage = (message: Message, type: UserMessageType) => {
+	if (message.label) {
+		getToast(type)(
+			i18next.t(
+				message.label,
+				message.data?.name && message.data?.date
+					? { tournament: `${message.data.name}@${formatDate(message.data.date)}` }
+					: undefined
+			)
+		);
+	}
+};
 
 function* watchSessionSaga({
 	payload: { history },
@@ -71,7 +83,7 @@ function* watchSessionSaga({
 			switch (message.status) {
 				// Session
 				case SessionStatus.SESSION_EXPIRED:
-					toast.error(i18next.t('auth:expired_alert'));
+					showMessage(message, UserMessageType.Danger);
 					yield delay(3000);
 					yield put(AuthAction.logout.success(Unauthorized));
 					history.push('/login');
@@ -79,15 +91,11 @@ function* watchSessionSaga({
 					break;
 				// Tournament
 				case SessionStatus.TOURNAMENT_NEW:
-					toast.success(
-						i18next.t(message.label!, { tournament: `${message.data!.name}@${formatDate(message.data!.date!)}` })
-					);
+					showMessage(message, UserMessageType.Success);
 					yield put(TournamentAction.fetch.request({}));
 					break;
 				case SessionStatus.TOURNAMENT_UPDATE:
-					toast.success(
-						i18next.t(message.label!, { tournament: `${message.data!.name}@${formatDate(message.data!.date!)}` })
-					);
+					showMessage(message, UserMessageType.Success);
 					yield put(TournamentAction.reload.request({ tId: tournament.id }));
 					break;
 				/*
@@ -99,13 +107,13 @@ function* watchSessionSaga({
 				*/
 				// Stage 1
 				case SessionStatus.STAGE1_UPDATE:
-					toast.success(i18next.t(message.label!));
+					if (message.label) {
+						toast.success(i18next.t(message.label));
+					}
 					yield put(Stage1Action.reloadFromServer({}));
 					break;
 				case SessionStatus.STAGE1_DELETE:
-					toast.warn(
-						i18next.t(message.label!, { tournament: `${message.data!.name}@${formatDate(message.data!.date!)}` })
-					);
+					showMessage(message, UserMessageType.Warning);
 					// Reload tournament list
 					history.push('/');
 					yield put(TournamentAction.reset({}));
@@ -114,11 +122,11 @@ function* watchSessionSaga({
 					break;
 				// Stage 2
 				case SessionStatus.STAGE2_UPDATE:
-					toast.success(i18next.t(message.label!));
+					showMessage(message, UserMessageType.Success);
 					yield put(Stage2Action.fetchStage2.request({ tournamentId: message.data!.tournamentId! }));
 					break;
 				case SessionStatus.STAGE2_DELETE:
-					toast.warn(i18next.t(message.label!));
+					showMessage(message, UserMessageType.Warning);
 					yield delay(5000);
 					// Reload only this tournament
 					yield put(Stage2Action.reset({}));
