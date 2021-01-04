@@ -1,7 +1,7 @@
 {
   "name": "calcetto",
   "private": false,
-  "version": "2.10.7",
+  "version": "2.12.0",
   "description": "Table Soccer Manager",
   "engines": {
     "node": "14.x",
@@ -36,6 +36,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.1",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@fortawesome/react-fontawesome": "^0.1.13",
+    "@types/uuid": "^8.3.0",
     "bcryptjs": "^2.4.3",
     "bootstrap": "^4.5.3",
     "cookie-parser": "^1.4.5",
@@ -198,7 +199,7 @@
     "redux-mock-store": "^1.5.4",
     "source-map-explorer": "^2.5.1",
     "source-map-support": "^0.5.19",
-    "start-server-and-test": "^1.11.6",
+    "start-server-and-test": "^1.11.7",
     "ts-jest": "^26.4.4",
     "ts-loader": "^8.0.12",
     "webpack": "^4.44.2"
