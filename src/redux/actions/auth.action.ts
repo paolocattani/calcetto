@@ -10,11 +10,18 @@ import {
   LogoutRequest,
   DeleteUserRequest,
   UpdateUserRequest,
+  UnsubscribeResponse,
+  UnsubscribeRequest,
 } from '../../@common/models/auth.model';
 
 const actionName = '[Session]';
 
 export const AuthAction = {
+  unsubscribe: createAsyncAction(...defaultAsyncParams(actionName, 'Unsubscribe User'))<
+    UnsubscribeRequest,
+    UnsubscribeResponse,
+    AuthenticationError
+  >(),
   // Register new user
   registration: createAsyncAction(...defaultAsyncParams(actionName, 'Register User'))<
     RegistrationRequest,

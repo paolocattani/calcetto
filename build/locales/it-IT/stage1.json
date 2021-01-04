@@ -1,5 +1,7 @@
 {
     "reset":"Reset gironi",
     "position_done":"Posizionamento aggiornato...",
-    "position_not_done":"Posizionamento non aggiornato..."
+    "position_not_done":"Posizionamento non aggiornato...",
+    "cell_done":"Cella aggiornata..."
+
 }

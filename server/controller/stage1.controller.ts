@@ -7,8 +7,10 @@ import { asyncMiddleware, withAuth, withAdminRights, controllerLogger } from '..
 import { AppRequest } from './index';
 import { updatePlacement } from '../manager/pair.manager';
 import { deleteStage1, generateStage1Rows, updateCell } from '../manager/stage1.manager';
-import { UpdatePlacementRequest, UpdatePlacementResponse } from '../../src/@common/models';
+import { SessionStatus, Stage1Error, UpdateCellRequest, UpdateCellResponse, UpdatePlacementRequest, UpdatePlacementResponse } from '../../src/@common/models';
 import { failure, success } from './common.response';
+import { sendNotifications, subscribe } from '../events/events';
+import { TournamentProgress } from '../../src/@common/dto';
 
 const router = Router();
 router.use('/', (req: Request, res: Response, next: NextFunction) =>
@@ -27,7 +29,7 @@ router.put(
 		const result = await updatePlacement(rows);
 		return result
 			? success<UpdatePlacementResponse>(res, { label: 'stage1:position_done' })
-			: failure<UpdatePlacementResponse>(res, { label: 'stage1:position_not_done' });
+			: failure<Stage1Error>(res, { label: 'stage1:position_not_done' });
 	})
 );
 
@@ -39,13 +41,15 @@ router.put(
 	withAuth,
 	withAdminRights,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
-		const { tId, tableName, pair1Id, pair2Id, score } = req.body;
+		const { tId, stageName, pair1Id, pair2Id, score }:UpdateCellRequest = req.body;
 		try {
-			await updateCell(tId, tableName, pair1Id, pair2Id, score);
-			return res.status(200).json({ saved: true });
+			await updateCell(tId, stageName, pair1Id, pair2Id, score);
+			const message = { status: SessionStatus.STAGE1_UPDATE, label:'common:notification.updating' };
+			sendNotifications(message, tId, TournamentProgress.Stage1);
+			return success<UpdateCellResponse>(res,{label:'stage1:cell_done' },{ saved: true });
 		} catch (error) {
 			logger.error('/cell error', error);
-			return res.status(500).json({ error, saved: false });
+			return failure<Stage1Error>(res,{label:'stage1:cell_done' });
 		}
 	})
 );
@@ -64,14 +68,15 @@ router.post(
 	withAuth,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		const { rows, stageName } = req.body;
-		const { user } = req;
+		const { user,uuid } = req;
 		try {
 			const result = await generateStage1Rows(rows, stageName, user!);
 			// logger.info('STAGE1 RESULT : ', result);
+			subscribe(user!, uuid!, result[0].pair.tournamentId, TournamentProgress.Stage1);
 			return res.status(200).json(result);
 		} catch (error) {
 			logger.error('Error while update matrix  : ', error);
-			return res.status(500).json({ error });
+			return failure<Stage1Error>(res,{label:'stage1:cell_done' });
 		}
 	})
 );
@@ -82,9 +87,14 @@ router.delete(
 	withAuth,
 	withAdminRights,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
-		const { tId } = req.body;
-		await deleteStage1(tId);
-		return res.status(200).json({ saved: true });
+		try {
+			const { tId } = req.body;
+			await deleteStage1(tId);
+			return res.status(200).json({ saved: true });
+		} catch (error) {
+			logger.error('Error while update matrix  : ', error);
+			return failure<Stage1Error>(res,{label:'stage1:cell_done' });
+		}
 	})
 );
 

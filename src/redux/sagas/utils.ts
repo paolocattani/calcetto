@@ -1,56 +1,78 @@
 import {
-	GenericReponse, OmitHistory,
+	GenericReponse,
+	OmitHistory,
 	UnexpectedServerError,
 	UserMessage,
 	UserMessageType,
 } from '../../@common/models/common.models';
-import {HTTPStatusCode, SuccessCodes} from '../../@common/models/HttpStatusCode';
+import { SuccessCodes } from '../../@common/models/HttpStatusCode';
 import { put, call, StrictEffect } from 'redux-saga/effects';
 import { PayloadActionCreator } from 'typesafe-actions';
 import { toast } from 'react-toastify';
 import i18n from '../../i18n/i18n';
 
 interface IActionCallback<T> {
-	( response?:T ) : void | Promise<void> | Generator<StrictEffect,void, void>;
+	(response: T): void | Promise<void> | Generator<StrictEffect, void, void>;
 }
 
-interface ActionType<TReq, TRes extends GenericReponse,TErr> {
-	request: PayloadActionCreator<string, TReq>,
-	success: PayloadActionCreator<string, TRes>,
-	failure: PayloadActionCreator<string, TErr | typeof UnexpectedServerError>
+const GeneratorFunction = function* () {/* this is a template */}.constructor;
+const AsyncFunction = async function () {/* this is a template */}.constructor;
+const NormalFunction = function () {/* this is a template */}.constructor;
+
+function* execCallBack<TRes>(callBack: IActionCallback<TRes>, response: TRes) {
+	if (callBack instanceof GeneratorFunction) {
+		const genFunction: typeof GeneratorFunction = callBack;
+		yield* genFunction(response);
+	} else if (callBack instanceof AsyncFunction) {
+		const asyncFunction: typeof AsyncFunction = callBack;
+		yield asyncFunction(response);
+	} else {
+		const normalFunction: typeof NormalFunction = callBack;
+		normalFunction(response);
+	}
+}
+
+interface ActionType<TReq, TRes extends GenericReponse, TErr> {
+	request: PayloadActionCreator<string, TReq>;
+	success: PayloadActionCreator<string, TRes>;
+	failure: PayloadActionCreator<string, TErr | typeof UnexpectedServerError>;
 }
 
 export const getMessage = (message: UserMessage) => i18n.t(message.label, message.options);
-export function* entityLifeCycle<TReq, TRes extends GenericReponse,TErr extends GenericReponse>(
+export const getToast = (type: UserMessageType) => {
+	let alert = null;
+	switch (type) {
+		case UserMessageType.Success:
+			alert = toast.error;
+			break;
+		case UserMessageType.Warning:
+			alert = toast.warn;
+			break;
+		case UserMessageType.Danger:
+			alert = toast.success;
+			break;
+	}
+	return alert;
+};
+export function* entityLifeCycle<TReq, TRes extends GenericReponse, TErr extends GenericReponse>(
 	action: ActionType<TReq, TRes, TErr>,
 	method: (p: OmitHistory<TReq>) => TRes | Promise<TRes | typeof UnexpectedServerError>,
 	payload: OmitHistory<TReq>,
 	onSuccess?: IActionCallback<TRes>,
 	onFailure?: IActionCallback<TErr>,
-	showMessage:boolean = true,
+	showMessage: boolean = true
 ): Generator<StrictEffect, void, any> {
 	try {
 		// Call method with payload
 		const response: TRes | TErr = yield call(method, payload);
 		const { userMessage: message } = response;
 
-		if (showMessage && message) {
+		if (showMessage && message && message.label) {
 			const messageText = getMessage(message);
-			switch (message.type) {
-				case UserMessageType.Success:
-					toast.success(messageText);
-					break;
-				case UserMessageType.Warning:
-					toast.warning(messageText);
-					break;
-				case UserMessageType.Danger:
-					toast.error(messageText);
-					break;
-			}
+			getToast(message.type)(messageText);
 		}
 
 		// If success
-		// FIXME: include all 2XX
 		if (SuccessCodes.includes(response.code)) {
 			const successRes = response as TRes;
 			// Show success toast
@@ -58,7 +80,7 @@ export function* entityLifeCycle<TReq, TRes extends GenericReponse,TErr extends 
 			yield put(action.success(successRes));
 			// Callback
 			if (onSuccess) {
-				yield* onSuccess(successRes);
+				yield* execCallBack<TRes>(onSuccess, successRes);
 			}
 		} else {
 			const failureRes = response as TErr;
@@ -66,7 +88,7 @@ export function* entityLifeCycle<TReq, TRes extends GenericReponse,TErr extends 
 			yield put(action.failure(failureRes));
 			// Callback
 			if (onFailure) {
-				yield* onFailure(failureRes);
+				yield* execCallBack<TErr>(onFailure, failureRes);
 			}
 		}
 	} catch (err) {

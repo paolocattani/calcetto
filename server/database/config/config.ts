@@ -25,7 +25,7 @@ const config: EnvList = {
     useEnvVar: 'DEV_URL',
     dialect: 'postgres',
 		minifyAliases:true,
-    logging: (sqlString: string) => logger.warn(sqlString),
+    logging: false, //(sqlString: string) => logger.warn(sqlString),
     pool: { max: 5, min: 0, acquire: 30000, idle: 10000 },
   },
   test: {

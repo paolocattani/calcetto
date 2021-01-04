@@ -3,6 +3,8 @@ import style from './style.module.css';
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
 import { DoubleRightIcon, BanIcon, TrophyIcon } from '../core/icons';
 import { ICell, PairDTO } from '../../@common/dto';
+import { useSelector } from 'react-redux';
+import { AuthSelector } from '../../redux/selectors';
 
 interface NodeElement extends ICell {
   span: number;
@@ -31,6 +33,7 @@ const Cell: React.FC<NodeElement> = ({
   isLast,
   renderCustomComponent,
 }) => {
+  const isAdmin = useSelector(AuthSelector.isAdmin);
   let icon: JSX.Element;
   if (isLast) icon = <TrophyIcon size="lg" color="gold" />;
   else icon = isWinner ? <DoubleRightIcon size="lg" color="green" /> : <BanIcon size="1x" color="red" />;
@@ -41,7 +44,7 @@ const Cell: React.FC<NodeElement> = ({
         <InputGroup.Prepend className={style.prepend}>
           <InputGroup.Text>{rowIndex}</InputGroup.Text>
         </InputGroup.Prepend>
-        {renderCustomComponent ? (
+        {isAdmin && renderCustomComponent ? (
           renderCustomComponent(rowIndex, colIndex, isLast, pair)
         ) : (
           <FormControl
@@ -49,19 +52,20 @@ const Cell: React.FC<NodeElement> = ({
             value={pair ? `${pair.player1?.name} - ${pair.player2?.name}` : name}
             aria-label="Username"
             aria-describedby="Username"
-            readOnly={colIndex > 1}
+            readOnly={colIndex > 1 || !isAdmin}
             size="lg"
           />
-        )}
-        <InputGroup.Append>
-          <Button
-            disabled={buttonDisabled}
-            className={style.append}
-            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onClick(e, rowIndex, colIndex, !isWinner)}
-          >
-            {icon}
-          </Button>
-        </InputGroup.Append>
+          )}
+        {isAdmin ?
+          <InputGroup.Append>
+            <Button
+              disabled={!isAdmin || buttonDisabled}
+              className={style.append}
+              onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onClick(e, rowIndex, colIndex, !isWinner)}
+            >
+              {icon}
+            </Button>
+          </InputGroup.Append> : null}
       </InputGroup>
     </td>
   );

@@ -34,6 +34,9 @@ if [[ $BRANCH_NAME != "master" ]] && [[ $SEARCH_RESULT = 1 ]]; then
 			git tag -a "v$version" HEAD -m "v$version"
 		fi
 
+    # Disable this hook
+    sed -i 's|^POST-COMMIT=.*$|POST-COMMIT=0|g' ./hooks/.hooks
+
     echo "End : $(date +'%Y.%m.%d - %H:%M:%S')"
 else
     echo "Version not tagged..."

@@ -14,29 +14,32 @@ import { withAuth } from '../core/middleware';
 import { UserDTO } from '../../src/@common/dto';
 
 export interface AppRequest extends Request {
-  user?: UserDTO;
+	user?: UserDTO;
+	uuid?: string;
 }
 
 export default (application: ExpressApplication): void => {
-  // Endpoints
-  application.use('/api/v2/tournament', tournamentRouter);
-  application.use('/api/v2/player', playerRouter);
-  application.use('/api/v1/stage1', stage1Router);
-  application.use('/api/v1/stage2', stage2Router);
-  application.use('/api/v2/pair', pairRouter);
-  application.use('/api/v2/auth', authRouter);
+	// Endpoints
+	application.use('/api/v2/tournament', tournamentRouter);
+	application.use('/api/v2/player', playerRouter);
+	application.use('/api/v1/stage1', stage1Router);
+	application.use('/api/v2/stage2', stage2Router);
+	application.use('/api/v2/pair', pairRouter);
+	application.use('/api/v2/auth', authRouter);
 
-  // SSE
-  application.get('/sse/v1/session', withAuth, sessionControl);
+	// SSE
+	application.get('/sse/v1/session', withAuth, sessionControl);
 
-  // Coverage
-	// @ts-ignore
-	application.get('/__coverage__', (req: Request, res: Response) => res.json({ coverage: global.__coverage__ || null }));
+	// FIXME: Coverage
+	application.get('/__coverage__', (req: Request, res: Response) =>
+		// @ts-ignore
+		res.json({ coverage: global.__coverage__ || null })
+	);
 
-  // Test
-  application.get('/status', (req: Request, res: Response) =>
-    res
-      .status(HTTPStatusCode.OK)
-      .json({ code: HTTPStatusCode.ImATeapot, message: `I ain't gonna brew coffee. I'm a fucking teapot!` })
-  );
+	// Test
+	application.get('/status', (req: Request, res: Response) =>
+		res
+			.status(HTTPStatusCode.OK)
+			.json({ code: HTTPStatusCode.ImATeapot, message: "I ain't gonna brew coffee. I'm a fucking teapot!" })
+	);
 };

@@ -1,7 +1,14 @@
 import { Router, NextFunction, Response, Request } from 'express';
 // Core
 import { logger } from '../core/logger';
-import {asyncMiddleware, withAuth, withAdminRights, controllerLogger, withTestAuth} from '../core/middleware';
+import {
+	asyncMiddleware,
+	withAuth,
+	withAdminRights,
+	controllerLogger,
+	withTestAuth,
+	doNotCacheThis,
+} from '../core/middleware';
 // Managers
 import {
 	listAll,
@@ -10,23 +17,26 @@ import {
 	parseBody,
 	update,
 	deleteTournament,
-	convertEntityToDTO, deleteAllTournament,
+	convertEntityToDTO,
+	deleteAllTournament,
 } from '../manager/tournament.manager';
 // Models
 import Tournament from '../database/tournament.model';
-import {TournamentDTO, UserDTO} from '../../src/@common/dto';
+import { TournamentDTO } from '../../src/@common/dto';
 import { AppRequest } from './index';
 import { entityNotFound, failure, missingParameters, serverError, success } from './common.response';
-import { OmitHistory, OmitGeneric } from '../../src/@common/models/common.models';
+import { GenericReponse, OmitHistory } from '../../src/@common/models/common.models';
 import {
 	DeleteTournamentRequest,
 	DeleteTournamentResponse,
 	FetchTournamentsResponse,
+	ReloadTournamentResponse,
 	SaveTournamentRequest,
 	SaveTournamentResponse,
 	UpdateTournamentRequest,
 	UpdateTournamentResponse,
 } from '../../src/@common/models/tournament.model';
+import { unsubscribe } from '../events/events';
 
 // all API path must be relative to /api/v2/tournament
 const router = Router();
@@ -38,6 +48,7 @@ router.use('/', (req: Request, res: Response, next: NextFunction) =>
 router.get(
 	'/list',
 	withAuth,
+	doNotCacheThis,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		try {
 			const tournamentsList = await listAll(req.user!);
@@ -55,21 +66,17 @@ router.get(
 router.get(
 	'/:tId',
 	withAuth,
+	doNotCacheThis,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		try {
 			if (!req.params.tId) {
 				return missingParameters(res);
 			}
-			const t = await findById(req.user!, parseInt(req.params.tId));
-			if (!t) {
+			const tournament = await findById(req.user!, parseInt(req.params.tId));
+			if (!tournament) {
 				return entityNotFound(res);
 			}
-			const tournament = await findById(req.user!, parseInt(req.params.tId));
-			return success<FetchTournamentsResponse>(
-				res,
-				{ label: 'tournament:loaded_1' },
-				{ tournamentsList: [tournament!] }
-			);
+			return success<ReloadTournamentResponse>(res, { label: 'tournament:loaded_1' }, { tournament: tournament! });
 		} catch (err) {
 			return serverError('GET tournament/{tId} error ! : ', err, res);
 		}
@@ -80,10 +87,13 @@ router.get(
 router.put(
 	'/update',
 	withAuth,
+	withAdminRights,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		try {
 			const request: UpdateTournamentRequest = req.body;
+			logger.info(`Tournament ${request.tournament.name} updating....`);
 			const tournament = await update(req.user!, parseBody(request.tournament));
+			logger.info(`Tournament ${request.tournament.name} updated`);
 			return success<UpdateTournamentResponse>(res, { label: 'tournament:saved' }, { tournament });
 		} catch (err) {
 			return serverError('PUT tournament/update error ! : ', err, res);
@@ -145,7 +155,7 @@ router.delete(
 	asyncMiddleware(async (req: Request, res: Response) => {
 		try {
 			await deleteAllTournament();
-			return success(res,{ label: 'tournament:deleted' });
+			return success(res, { label: 'tournament:deleted' });
 		} catch (error) {
 			return serverError('DELETE tournament/delete error ! : ', error, res);
 		}

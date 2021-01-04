@@ -1,15 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
 import chalk from 'chalk';
-import jwt from 'jsonwebtoken';
-import { TOKEN_SECRET, isAdmin, getToken } from '../manager/auth.manager';
 import { AppRequest } from '../controller';
 // Models
 import { User } from '../database';
-import { UserDTO } from '../../src/@common/dto';
 // Core
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 import { unauthorized } from '../controller/common.response';
+import { getCookies } from '../controller/auth/cookies.utils';
+import { isAdmin } from '../manager/auth.manager';
+import { safeVerifyToken } from '../controller/auth/auth.utils';
 
 // dev logger
 export const routeLogger = (req: Request, res: Response, next: NextFunction) => {
@@ -22,18 +22,33 @@ export const controllerLogger = (req: Request, next: NextFunction, controller: s
 	next();
 };
 
+export const cacheControl = (req: Request, res: Response, next: NextFunction) => {
+	// Period in second, this one is 5 minutes
+	const period = 60 * 5;
+	// you only want to cache for GET requests
+	// for the other requests set strict no caching parameters
+	res.set('Cache-control', req.method == 'GET' ? `public, max-age=${period}` : 'no-store');
+
+	next();
+};
+
+export const doNotCacheThis = (req: Request, res: Response, next: NextFunction) => {
+	res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+	res.set('Pragma', 'no-cache');
+	res.set('Expires', '0');
+
+	next();
+};
+
 // Da utilizzare per le funzioni async, altrimenti viene ritornata una Promise
 export const asyncMiddleware = (fn: any) => (req: Request, res: Response, next: NextFunction) => {
 	Promise.resolve(fn(req, res, next)).catch(next);
 };
 
-// TODO:
-export const typeControl = <T extends Request>(req: T, res: Response, next: NextFunction) => {};
-
 // Controllo autenticazione. Da utilizzare per tutte le API che richiedono autenticazione
 export const withAuth = async (req: AppRequest, res: Response, next: NextFunction) => {
-	const token = getToken(req);
-	if (!token || typeof token != 'string') {
+	const [token, uuid] = getCookies(req);
+	if (!token || typeof token != 'string' || !uuid) {
 		logger.error(chalk.redBright('Token not found : '), token);
 		return unauthorized(res, { label: 'common:server.unauthorized' });
 	}
@@ -43,6 +58,7 @@ export const withAuth = async (req: AppRequest, res: Response, next: NextFunctio
 		const userDb = await User.findByPk(user.id);
 		if (userDb) {
 			req.user = user;
+			req.uuid = uuid;
 			next();
 		}
 	} else {
@@ -67,21 +83,7 @@ export const withTestAuth = (req: AppRequest, res: Response, next: NextFunction)
 	next();
 };
 
-
 //TODO: Controllo accessi
 export const auditControl = (req: Request, res: Response, next: NextFunction) => {
 	next();
 };
-
-// wrapper per verificare il token
-export const safeVerifyToken = (token: any): [UserDTO | null, boolean] => {
-	let decoded = null;
-	try {
-		decoded = jwt.verify(token, TOKEN_SECRET) as UserDTO;
-		return [decoded, true];
-	} catch (error) {
-		return [null, false];
-	}
-};
-
-

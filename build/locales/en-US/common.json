@@ -1,41 +1,49 @@
 {
-    "confirm":"Confirm",
-    "select":"Select",
-    "continue":"Continue",
-    "cancel":"Cancel",
-    "exec":"Exec",
-    "save":"Save",
-    "edit":"Edit",
-    "delete":"Delete",
-    "max":"Max",
-    "saving":"Saving",
-    "reset":"Reset",
-    "close":"Close",
-    "logout":"Logut",
-    "loading":"Loading",
-    "route":{
-        "home":"Home",
-        "tournament":"Tournament Selection",
-        "stage1":"Stage 1",
-        "stage2":"Stage 2",
-        "user":"User Managment",
-        "player":"Player Managment",
-        "login":"Login",
-        "swagger":"Swagger",
-        "notFound":"Not found"
+    "confirm": "Confirm",
+    "select": "Select",
+    "continue": "Continue",
+    "cancel": "Cancel",
+    "exec": "Exec",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "max": "Max",
+    "saving": "Saving",
+    "reset": "Reset",
+    "close": "Close",
+    "logout": "Logut",
+    "loading": "Loading",
+    "notification": {
+        "tournament_new": "Tournament {{tournament}} is now available",
+        "tournament_update": "Tournament has been updated to next stage",
+        "tournament_delete": "Tournament {{tournament}} has been deleted",
+        "stage1_delete": "Tournament {{tournament}} has been deleted by an administrator.",
+        "stage2_delete": "Stage 2 has been deleted by an administrator.",
+        "updating": "Updating..."
     },
-    "lang":{
-        "en-US":"English",
-        "it-IT":"Italiano"
+    "route": {
+        "home": "Home",
+        "tournament": "Tournament Selection",
+        "stage1": "Stage 1",
+        "stage2": "Stage 2",
+        "user": "User Managment",
+        "player": "Player Managment",
+        "login": "Login",
+        "swagger": "Swagger",
+        "notFound": "Not found"
     },
-    "error":{
-        "generic":"An error occur.Try again later..."
+    "lang": {
+        "en-US": "English",
+        "it-IT": "Italiano"
     },
-		"server": {
-			"missing": "Missing parameters",
-			"unexpected": "Unexpected server error!..",
-			"not_found":"Item not found",
-			"unauthorized":"Unauthorized",
-			"updated":"Update complete"
-		}
+    "error": {
+        "generic": "An error occur.Try again later..."
+    },
+    "server": {
+        "missing": "Missing parameters",
+        "unexpected": "Unexpected server error!..",
+        "not_found": "Item not found",
+        "unauthorized": "Unauthorized",
+        "updated": "Update complete"
+    }
 }

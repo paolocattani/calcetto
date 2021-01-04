@@ -1,6 +1,5 @@
 // React, Router, Redux
 import { useHistory } from 'react-router';
-import { withRouter } from 'react-router-dom';
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // Style
@@ -8,7 +7,7 @@ import commonStyle from '../../common.module.css';
 import { RightArrowIcon, TrashIcon, LeftArrowIcon } from '../core/icons';
 import { Button, Col, Row, ButtonGroup, ToggleButton } from 'react-bootstrap';
 // Actions, Selectors
-import { Stage2Action, TournamentAction } from '../../redux/actions';
+import { Stage1Action, Stage2Action, TournamentAction } from '../../redux/actions';
 import { AuthSelector, TournamentSelector, Stage1Selector, PairSelector } from '../../redux/selectors';
 import Stage1Table from './table';
 import TournamentBadge from '../Tournament/badge';
@@ -28,7 +27,7 @@ const Wrapper: React.FC = (): JSX.Element => {
   // Torneo
   const tournament = useSelector(TournamentSelector.getTournament)!;
   // Sono presenti aggiornamenti
-  const needRefresh = useSelector(Stage1Selector.getNeedRefresh);
+  // const toogleRefresh = useSelector(Stage1Selector.getToogleRefresh);
   // Squadre selezionate
   const selected = useSelector(Stage1Selector.getSelectedPairs);
   // Lista coppie
@@ -52,11 +51,16 @@ const Wrapper: React.FC = (): JSX.Element => {
       count = selected.length - 1;
       while (count % 8 !== 0) count++;
     }
-    dispatch(Stage2Action.fetchStage2.request({ tournamentId: tournament.id!, count }));
+    dispatch(Stage2Action.fetchStage2.request({ tournamentId: tournament.id, count }));
     currentHistory.push('/stage2');
   }
 
-  console.log('Refreshing : ', needRefresh);
+  function resetStage2() {
+    dispatch(Stage2Action.delete.request({ tId: tournament.id }));
+    dispatch(Stage1Action.resetPairs({}));
+  }
+
+  //console.log('Refreshing : ', toogleRefresh);
   const toolsBar = (
     <div className={commonStyle.toolsBarContainer}>
       <Row className={commonStyle.toolsBarRow}>
@@ -65,11 +69,11 @@ const Wrapper: React.FC = (): JSX.Element => {
             <LeftArrowIcon /> Indietro
           </Button>
         </Col>
-        {tournament.progress > TournamentProgress.Stage1 ? (
+        {tournament.progress > TournamentProgress.Stage1 && session.isAdmin? (
           <Col>
             <Button
               variant="danger"
-              onClick={() => dispatch(Stage2Action.delete.request({ tId: tournament.id! }))}
+              onClick={resetStage2}
               disabled={!session.isAdmin || (session.isAdmin && tournament.progress < TournamentProgress.Stage2)}
             >
               <TrashIcon /> Reset Fase 2
@@ -79,7 +83,7 @@ const Wrapper: React.FC = (): JSX.Element => {
         <Col>
           <Button
             variant="outline-warning"
-            className="default-color-white float-right"
+             className="default-color-white float-right"
             onClick={goToStage2}
             disabled={selected.length < 4 && tournament.progress < TournamentProgress.Stage2}
           >
@@ -87,7 +91,7 @@ const Wrapper: React.FC = (): JSX.Element => {
           </Button>
         </Col>
       </Row>
-			{tournament.progress <= TournamentProgress.Stage1 ? (
+			{tournament.progress <= TournamentProgress.Stage1 && session.isAdmin ? (
       <Row>
         <Col>
           <ButtonGroup toggle className="mb-2">
@@ -121,7 +125,7 @@ const Wrapper: React.FC = (): JSX.Element => {
   );
 };
 
-export default withRouter(Wrapper);
+export default Wrapper;
 
 function renderTables(pairsList: PairDTO[], autoOrder: boolean): JSX.Element[] {
   let stageName = '';

@@ -1,7 +1,34 @@
 import { PlayerRole } from '../dto';
-import { RootState } from '.';
+import { AuthenticationResponse, RootState } from '.';
 import { HTTPStatusCode } from './HttpStatusCode';
 import { TOptions } from 'i18next';
+
+export enum SessionStatus {
+	//
+	HEARTBEAT = 'heartbeat',
+	// Sessione scaduta, reindirizza l'utente alla login
+	SESSION_EXPIRED = 'session_expired',
+	// Aggiornamento torneo
+	TOURNAMENT_NEW = 'tournament_new',
+	TOURNAMENT_UPDATE = 'tournament_update',
+	TOURNAMENT_DELETE = 'tournament_delete',
+	// Aggiornamento dati su Stage1
+	STAGE1_UPDATE = 'stage1_update',
+	STAGE1_DELETE = 'stage1_delete',
+	// Aggiornamento dati su Stage2
+	STAGE2_UPDATE = 'stage2_update',
+	STAGE2_DELETE = 'stage2_delete',
+}
+
+export interface Message {
+	status: SessionStatus;
+	data?: {
+		tournamentId?: number;
+		name?: string;
+		date?: Date;
+	};
+	label?: string;
+}
 
 export type I18nLabel = {
 	label: string;
@@ -43,7 +70,17 @@ export const UnexpectedServerError: GenericReponse = {
 	message: 'Unexpected Server Error',
 	userMessage: {
 		type: UserMessageType.Danger,
-		label: 'commmon:server.unexpected',
+		label: 'common:server.unexpected',
+	},
+};
+
+export const Unauthorized: AuthenticationResponse = {
+	user: undefined,
+	code: HTTPStatusCode.Unauthorized,
+	message: 'Unauthorized!',
+	userMessage: {
+		type: UserMessageType.Danger,
+		label: 'auth:expired',
 	},
 };
 
@@ -68,7 +105,7 @@ export const initialState: RootState = {
 		isLoading: false,
 	},
 	stage1State: {
-		needRefresh: false,
+		toogleRefresh: false,
 		selectedPairs: [
 			{
 				id: null,

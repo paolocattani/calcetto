@@ -11,10 +11,10 @@ import { toast } from 'react-toastify';
 import { FormEventType } from '../core/types';
 import { useTranslation } from 'react-i18next';
 
-type newTProps = {};
+interface NewTournamentProps {}
 
-const NewTournament: React.FC<newTProps> = (_) => {
-  let currentHistory = useHistory();
+const NewTournament: React.FC<NewTournamentProps> = () => {
+  const currentHistory = useHistory();
   const dispatch = useDispatch();
   const { t } = useTranslation(['common', 'tournament']);
 
@@ -29,7 +29,7 @@ const NewTournament: React.FC<newTProps> = (_) => {
       return;
     }
 
-    let tournament = getEmptyTournament(name);
+    const tournament = getEmptyTournament(name);
     tournament.date = date;
     tournament.public = visible;
     dispatch(TournamentAction.save.request({ tournament, history: currentHistory }));

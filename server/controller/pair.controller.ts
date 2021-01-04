@@ -28,7 +28,7 @@ router.use('/', (req: Request, res: Response, next: NextFunction) =>
 router.get(
 	'/list/',
 	withAuth,
-	withAdminRights,
+	//withAdminRights,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		try {
 			const { user, query } = req;

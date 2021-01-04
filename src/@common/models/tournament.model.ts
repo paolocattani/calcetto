@@ -4,42 +4,56 @@ import { TournamentDTO } from '../dto';
 
 //## STATE
 export interface TournamentState {
-  tournament: TournamentDTO | null;
-  tournamentsList: Array<TournamentDTO>;
-  isLoading: boolean;
+	tournament: TournamentDTO | null;
+	tournamentsList: Array<TournamentDTO>;
+	isLoading: boolean;
 }
 
+export interface Redirect {
+	history: H.History<unknown>;
+	path: string;
+}
 //## REQUEST - RESPONSE - ERROR
 // Requests
+export interface ReloadTournamentRequest {
+	tId: number;
+	redirect?: Redirect;
+}
 export interface FetchTournamentsRequest {
-  tId?: number;
+	redirect?: {
+		history: H.History<unknown>;
+		path: string;
+	};
 }
 
 export interface SaveTournamentRequest {
-  tournament: TournamentDTO;
-  history: H.History<unknown>;
+	tournament: TournamentDTO;
+	history: H.History<unknown>;
 }
 
 export interface UpdateTournamentRequest {
-  tournament: TournamentDTO;
+	tournament: TournamentDTO;
 }
 
 export interface DeleteTournamentRequest {
-  tournament: TournamentDTO;
+	tournament: TournamentDTO;
 }
 
 // Responses
 export interface FetchTournamentsResponse extends GenericReponse {
-  tournamentsList?: Array<TournamentDTO>;
+	tournamentsList?: Array<TournamentDTO>;
 }
 export interface SaveTournamentResponse extends GenericReponse {
-  tournament: TournamentDTO | null;
+	tournament: TournamentDTO | null;
+}
+export interface ReloadTournamentResponse extends GenericReponse {
+	tournament: TournamentDTO;
 }
 export interface UpdateTournamentResponse extends GenericReponse {
-  tournament: TournamentDTO;
+	tournament: TournamentDTO;
 }
 export interface DeleteTournamentResponse extends GenericReponse {
-  tournament: TournamentDTO;
+	tournament: TournamentDTO;
 }
 
 //

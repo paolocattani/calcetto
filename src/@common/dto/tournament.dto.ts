@@ -1,12 +1,12 @@
 export interface TournamentDTO {
-  id: number | null;
+  id: number;
   name: string;
   date: Date;
   progress: TournamentProgress;
   public: boolean;
   autoOrder: boolean;
   label: string;
-  ownerId: number | null;
+  ownerId: number;
 }
 
 export enum TournamentProgress {

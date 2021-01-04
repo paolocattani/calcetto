@@ -4,20 +4,23 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 // helper
 import TableHeader from './header';
-import { getOpposite, comparator, rowsGenerator } from './helper';
+import { getOpposite, comparator } from './helper';
 import { columns } from './editor';
 //
 import { useSelector, useDispatch } from 'react-redux';
 import { AuthSelector } from '../../redux/selectors/auth.selector';
 // style
 import { Stage1Action } from '../../redux/actions';
-import { TournamentSelector } from '../../redux/selectors';
+import { TournamentSelector,Stage1Selector } from '../../redux/selectors';
 import { TournamentProgress } from '../../@common/dto';
+import { fetchStage1, updateCellStage1 } from '../../redux/services/stage1.service';
 
 // TODO: convert this component to ts
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const Stage1Table = ({ pairsList, autoOrder }) => {
   const dispatch = useDispatch();
+  // Sono presenti aggiornamenti
+  const toogleRefresh = useSelector(Stage1Selector.getToogleRefresh);
   // From store
   const isAdmin = useSelector(AuthSelector.isAdmin);
   const tournament = useSelector(TournamentSelector.getTournament);
@@ -25,33 +28,26 @@ const Stage1Table = ({ pairsList, autoOrder }) => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [saved, setIsSaved] = useState(false);
-  const [rows, setRows] = useState(rowsGenerator(pairsList));
+  const [rows, setRows] = useState([]);
   // Const
   const stageName = pairsList[0].stage1Name;
 
   // Effects
   useEffect(
     () => {
-      const fetchData = async () => {
+      (async () => {
         setIsLoading(true);
-        const response = await fetch('/api/v1/stage1', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ rows, stageName }),
-        });
-        const result = await response.json();
+        const result = await fetchStage1({pairsList,stageName});
         if (!!autoOrder)
           [...result]
             .sort((e1, e2) => comparator(e1, e2))
             .forEach((row, index) => (result[row.rowNumber - 1]['placement'] = index + 1));
-
         setRows(result);
         setIsLoading(false);
-      };
-      fetchData();
+      })();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [pairsList,toogleRefresh]
   );
 
   const cellEditProps = (editable) =>
@@ -68,18 +64,13 @@ const Stage1Table = ({ pairsList, autoOrder }) => {
         const newRows = [...rows];
         if (column.id.startsWith('col')) {
           // Aggiorno dati sul Db
-          const response = await fetch('/api/v1/stage1/update/cell', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              tId: row.pair.tournamentId,
-              tableName: stageName,
-              score: newValue,
-              pair1Id: row.pair.id,
-              pair2Id: rows[parseInt(column.text) - 1].pair.id,
-            }),
+          const response = await updateCellStage1({
+            tId: row.pair.tournamentId,
+            stageName,
+            score: newValue,
+            pair1Id: row.pair.id,
+            pair2Id: rows[parseInt(column.text) - 1].pair.id,
           });
-          await response.json();
           if (response.ok) {
             setIsSaved(true);
             setTimeout(() => setIsSaved(false), 3000);
@@ -131,7 +122,7 @@ const Stage1Table = ({ pairsList, autoOrder }) => {
     setSelectedRows(selected);
     dispatch(
       Stage1Action.updateSelectedPairs.request({
-				stage1Name:stageName,
+				stage1Name: stageName,
 				stage1Rows: selected,
       })
     );
@@ -156,6 +147,7 @@ const Stage1Table = ({ pairsList, autoOrder }) => {
     hideSelectColumn: !isAdmin || tournament.progress >= TournamentProgress.Stage2,
   };
 
+  console.log('Refreshing : ', toogleRefresh);
   return isLoading ? (
     <h3>
       Caricamento girone <b>{stageName}</b> in corso....

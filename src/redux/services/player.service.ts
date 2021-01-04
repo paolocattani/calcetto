@@ -1,4 +1,3 @@
-import { PlayerDTO, PlayerRole } from '../../@common/dto';
 import {
   FetchPlayersRequest,
   FetchPlayersResponse,
@@ -6,6 +5,7 @@ import {
   DeletePlayersResponse,
   SavePlayerResponse,
   SavePlayerRequest,
+  getEmptyPlayer,
 } from '../../@common/models';
 import { UnexpectedServerError } from '../../@common/models/common.models';
 import { DEFAULT_HEADERS, deleteWrapper, postWrapper, putWrapper } from '../../@common/utils/fetch.utils';
@@ -26,27 +26,11 @@ export const fetchPlayers = async ({ tId, addEmpty }: FetchPlayersRequest): Prom
   }
 };
 
-export const deletePlayers = async ({ players }: DeletePlayersRequest) =>
-  deleteWrapper<DeletePlayersRequest, DeletePlayersResponse>('/api/v2/player/delete', { players });
+export const deletePlayers = async (request: DeletePlayersRequest) =>
+  deleteWrapper<DeletePlayersRequest, DeletePlayersResponse>('/api/v2/player/delete', request);
 
-export const savePlayer = async ({ player }: SavePlayerRequest) =>
-  postWrapper<SavePlayerRequest, SavePlayerResponse>('/api/v2/player/new', { player });
+export const savePlayer = async (request: SavePlayerRequest) =>
+  postWrapper<SavePlayerRequest, SavePlayerResponse>('/api/v2/player/new', request);
 
-export const updatePlayer = async ({ player }: SavePlayerRequest) =>
-  putWrapper<SavePlayerRequest, SavePlayerResponse>('/api/v2/player/update', { player });
-
-export const getEmptyPlayer = (label?: string): PlayerDTO => ({
-  id: null,
-  name: '',
-  surname: '',
-  alias: '',
-  label: label || '',
-  role: PlayerRole.GoalKeeper,
-  email: '',
-  phone: '',
-  match_played: 0,
-  match_won: 0,
-  total_score: 0,
-  editable: false,
-  rowNumber: 0,
-});
+export const updatePlayer = async (request: SavePlayerRequest) =>
+  putWrapper<SavePlayerRequest, SavePlayerResponse>('/api/v2/player/update', request);

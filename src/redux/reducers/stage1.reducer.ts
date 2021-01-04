@@ -1,22 +1,20 @@
 import { createReducer, Action } from 'typesafe-actions';
-import { Stage1State } from '../../@common/models';
+import { getEmptyPair, Stage1State } from '../../@common/models';
 import { Stage1Action } from '../actions';
 import { Stage1Row } from '../../@common/dto';
-import { getEmptyPair } from '../services/pair.service';
 
+const emptyPair = getEmptyPair('-');
 export const initialStage1State: Stage1State = {
-  needRefresh: false,
-  selectedPairs: [getEmptyPair('-')],
+  toogleRefresh: false,
+  selectedPairs: [emptyPair],
   isLoading: false,
   stages: [],
 };
 
 export const Stage1Reducer = createReducer<Stage1State, Action>(initialStage1State)
-  // Gestione Watcher
-  // All'avvio del watcher reimposto needRefresh
-  .handleAction([Stage1Action.stage1Watcher.request], (state) => ({ ...state, needRefresh: false }))
-  .handleAction([Stage1Action.stage1Watcher.failure], (state) => ({ ...state }))
-  .handleAction([Stage1Action.stage1Watcher.success], (state) => ({ ...state, needRefresh: true }))
+  // SSE
+  .handleAction([Stage1Action.reloadFromServer], (state) => ({ ...state, toogleRefresh: !state.toogleRefresh }))
+  .handleAction([Stage1Action.resetPairs], (state) => ({ ...state, selectedPairs: [emptyPair] }))
   //
   .handleAction([Stage1Action.fetchStage1.request, Stage1Action.updateSelectedPairs.request], (state) => ({
     ...state,
@@ -66,4 +64,5 @@ export const Stage1Reducer = createReducer<Stage1State, Action>(initialStage1Sta
       isLoading: false,
     };
   })
+  .handleAction(Stage1Action.reset, () => initialStage1State)
   .handleAction(Stage1Action.purge, () => initialStage1State);

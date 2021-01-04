@@ -13,7 +13,7 @@ import NewTournament from './new';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { TournamentSelector } from '../../redux/selectors/tournament.selector';
-import { TournamentAction, PairAction } from '../../redux/actions';
+import { TournamentAction, PairAction, AuthAction } from '../../redux/actions';
 import { AuthSelector } from '../../redux/selectors/auth.selector';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -37,10 +37,11 @@ const FTournament = () => {
   useEffect(() => {
     if (!tournamentsList || tournamentsList.length === 0) {
       // setNewTournament(true);
-    	dispatch(TournamentAction.fetch.request({}));
+      dispatch(TournamentAction.fetch.request({}));
+      dispatch(AuthAction.unsubscribe.request({}));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tournamentsList]);
+  }, [tournamentsList,tournament]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLElement>): Promise<void> => {
     event.preventDefault();
@@ -48,8 +49,8 @@ const FTournament = () => {
       if (isAdmin) {
         currentHistory.push('/tournament');
       } else {
-        dispatch(PairAction.fetch.request({ tId: tournament.id! }));
-        currentHistory.push('/stage1');
+        console.log('Fetching pairs for tournament : ',tournament.id);
+        dispatch(PairAction.fetch.request({ tId: tournament.id, history:currentHistory }));
       }
     } else toast.error(t('common:error.generic'));
   };

@@ -11,17 +11,18 @@ export interface AuthState {
 }
 
 //## OTHER
-export interface SessionDTO {}
 export type PlayerRoleType = {
 	value: PlayerRole;
 	label: PlayerRole;
 };
+
 
 //## REQUEST - RESPONSE - ERROR
 // Request
 export interface AuthenticationRequest {
 	history: H.History<unknown>;
 }
+export interface UnsubscribeRequest {}
 export interface CheckAuthenticationRequest extends AuthenticationRequest {}
 export interface WatchSessionRequest extends AuthenticationRequest {}
 export interface LogoutRequest extends AuthenticationRequest {}
@@ -60,6 +61,7 @@ export interface RegistrationResponse extends GenericReponse {
 	user?: UserDTO;
 }
 export interface DeleteUserResponse extends GenericReponse {}
+export interface UnsubscribeResponse extends GenericReponse {}
 
 // Error
 export interface AuthenticationError extends GenericReponse {}
