@@ -44,7 +44,7 @@ export const Stage1Reducer = createReducer<Stage1State, Action>(initialStage1Sta
   })
   // Aggiornamento coppie selezionate dati vari gironi
   .handleAction([Stage1Action.updateSelectedPairs.success], (state, { payload: { stage1Name, stage1Rows } }) => {
-    const selected = state.selectedRows ? state.selectedRows : new Map<string, Stage1Row[]>();
+    const selected = state.selectedRows && state.selectedRows.size > 0 ? state.selectedRows : new Map<string, Stage1Row[]>();
     selected.set(stage1Name, stage1Rows);
 
     const selectedPairs = state.selectedPairs

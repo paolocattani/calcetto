@@ -85,22 +85,20 @@ router.put(
 		try {
 			const tournamentId = stage1Rows[0].pair.tournamentId;
 			// Reset selection
-			await Pair.update(
-				{ stage2Selected: false },
-				{ where: { tournamentId, stage1Name }, transaction }
-			);
+			await Pair.update({ stage2Selected: false }, { where: { tournamentId, stage1Name }, transaction });
 			if (stage1Rows.length !== 0) {
 				// Update selection
 				await Pair.update(
-					{stage2Selected: true},
+					{ stage2Selected: true },
 					{
-						where: {tournamentId, stage1Name, id: stage1Rows.map((e) => e.pair.id!)},
+						where: { tournamentId, stage1Name, id: stage1Rows.map((e) => e.pair.id!) },
 						transaction,
 					}
 				);
 			}
 			await transaction.commit();
 		} catch (err) {
+			logger.error('PUT pair/selected error : ', err);
 			await transaction.rollback();
 			return serverError('PUT pair/selected error : ', err, res);
 		}
@@ -150,9 +148,13 @@ router.delete(
 				return missingParameters(res);
 			}
 			await Pair.destroy({ where: { id: request.pairsList.map((e) => e.id!) } });
-			return success(res, 	{ label: request.pairsList.length > 1 ? 'pair:deleted_2' : 'pair:deleted_1' },  {
-				pairsList: request.pairsList,
-			});
+			return success(
+				res,
+				{ label: request.pairsList.length > 1 ? 'pair:deleted_2' : 'pair:deleted_1' },
+				{
+					pairsList: request.pairsList,
+				}
+			);
 		} catch (err) {
 			return serverError('DELETE pair/delete error : ', err, res);
 		}

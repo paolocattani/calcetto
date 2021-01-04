@@ -118,7 +118,6 @@ const Stage1Table = ({ pairsList, autoOrder }) => {
       selected = found ? selectedRows.filter((e) => e.rowNumber !== row.rowNumber) : selectedRows;
     }
 
-    console.log('handleOnSelect : ');
     setSelectedRows(selected);
     dispatch(
       Stage1Action.updateSelectedPairs.request({

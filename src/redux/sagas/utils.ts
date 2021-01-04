@@ -92,6 +92,7 @@ export function* entityLifeCycle<TReq, TRes extends GenericReponse, TErr extends
 			}
 		}
 	} catch (err) {
+		console.error('entityLifeCycle.error : ', err);
 		yield put(action.failure(UnexpectedServerError));
 	}
 }
