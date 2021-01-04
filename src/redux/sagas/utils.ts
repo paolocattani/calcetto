@@ -43,13 +43,13 @@ export const getToast = (type: UserMessageType) => {
 	let alert = null;
 	switch (type) {
 		case UserMessageType.Success:
-			alert = toast.error;
+			alert = toast.success;
 			break;
 		case UserMessageType.Warning:
 			alert = toast.warn;
 			break;
 		case UserMessageType.Danger:
-			alert = toast.success;
+			alert = toast.error;
 			break;
 	}
 	return alert;
