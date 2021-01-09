@@ -178,7 +178,7 @@
     "cypress-plugin-snapshots": "^1.4.4",
     "cypress-skip-and-only-ui": "^1.2.10",
     "cypress-watch-and-reload": "^1.2.18",
-    "eslint": "^7.14.0",
+    "eslint": "^7.17.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-config-sinon": "^4.0.0",
