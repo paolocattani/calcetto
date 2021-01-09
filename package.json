@@ -50,7 +50,7 @@
     "localforage": "^1.9.0",
     "log4js": "^6.3.0",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.6",
+    "nodemon": "^2.0.7",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
     "react": "^16.14.0",
@@ -201,7 +201,7 @@
     "source-map-support": "^0.5.19",
     "start-server-and-test": "^1.11.7",
     "ts-jest": "^26.4.4",
-    "ts-loader": "^8.0.12",
+    "ts-loader": "^8.0.14",
     "webpack": "^4.44.2"
   },
   "jestSonar": {
