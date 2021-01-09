@@ -201,7 +201,7 @@
     "source-map-support": "^0.5.19",
     "start-server-and-test": "^1.11.7",
     "ts-jest": "^26.4.4",
-    "ts-loader": "^8.0.12",
+    "ts-loader": "^8.0.14",
     "webpack": "^4.44.2"
   },
   "jestSonar": {
