@@ -46,30 +46,27 @@ async function loadModels(schema?:string): Promise<Sequelize> {
 
 export async function authenticate(options?: SequelizeSyncOptions): Promise<Sequelize> {
   if (connection) {
-    logger.info(chalk.cyan.bold('Connection found! Database connected!'));
     return connection;
   }
-  const sequelizeConnection = await loadModels();
-  await sequelizeConnection.authenticate(options);
+  connection = await loadModels();
+  await connection.authenticate(options);
   logger.info(chalk.cyan.bold('Database connected!'));
-  return sequelizeConnection;
+  return connection;
 }
 
 export async function sync(options?: SequelizeSyncOptions): Promise<Sequelize> {
-  if (connection) return connection;
-  const sequelizeConnection = await loadModels();
-  connection = await sequelizeConnection.sync(options);
+  connection = await loadModels();
+  await connection.sync(options);
   logger.info(chalk.cyan.bold('Database synchronization complete!'));
   return connection;
 }
 
 export async function createSchemaAndSync(schema:string, options?: SequelizeSyncOptions): Promise<Sequelize> {
-	if (connection) return connection;
-	const sequelizeConnection = await loadModels(schema);
-	await sequelizeConnection.dropSchema(schema, {});
-	await sequelizeConnection.createSchema(schema, {});
-	connection = await sequelizeConnection.sync({...options, schema, searchPath:schema});
-	logger.info(chalk.cyan.bold('Database synchronizatio1n complete!'));
+	connection = await loadModels(schema);
+	await connection.dropSchema(schema, {});
+	await connection.createSchema(schema, {});
+	await connection.sync({...options, schema, searchPath:schema});
+	logger.info(chalk.cyan.bold(`Database synchronizatio1n complete on schema ${schema}!`));
 	return connection;
 }
 

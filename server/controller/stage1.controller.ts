@@ -76,7 +76,7 @@ router.post(
 			return res.status(200).json(result);
 		} catch (error) {
 			logger.error('Error while update matrix  : ', error);
-			return failure<Stage1Error>(res,{label:'stage1:cell_done' });
+			return failure<Stage1Error>(res,{label:'stage1:cell_not_done' });
 		}
 	})
 );
@@ -93,7 +93,7 @@ router.delete(
 			return res.status(200).json({ saved: true });
 		} catch (error) {
 			logger.error('Error while update matrix  : ', error);
-			return failure<Stage1Error>(res,{label:'stage1:cell_done' });
+			return failure<Stage1Error>(res,{label:'stage1:deleted' });
 		}
 	})
 );

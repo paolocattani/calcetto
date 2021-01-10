@@ -13,7 +13,6 @@ import {
 	FetchPairsResponse,
 	FindAliasRequest,
 	FindAliasResponse,
-	SavePairRequest,
 	SavePairResponse,
 	SelectPairsRequest,
 	SelectPairsResponse,

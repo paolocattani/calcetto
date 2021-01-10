@@ -14,13 +14,12 @@ import morgan from 'morgan';
 import compression from 'compression';
 import { json, urlencoded } from 'body-parser';
 import cookieParser from 'cookie-parser';
-import express, { Application as ExpressApplication } from 'express';
+import express, { Request,Application as ExpressApplication } from 'express';
 // Auth
 import cors from 'cors';
 // Other
 import chalk from 'chalk';
 import path from 'path';
-import { Sequelize } from 'sequelize/types';
 //import cluster from 'cluster';
 //import { cpus as osCpus } from 'os';
 
@@ -66,7 +65,7 @@ export abstract class AbstractServer implements IServer {
     } else {
     */
 		this.application
-			.options('*', cors(this.corsOptions)) // Preflight Request
+			.options('*', cors<Request>(this.corsOptions)) // Preflight Request
 			.use(morgan(isProductionMode() ? 'combined' : 'common'))
 			// Exclude compression per 'text/event-stream'
 			.use(

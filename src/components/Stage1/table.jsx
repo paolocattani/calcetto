@@ -24,13 +24,13 @@ const Stage1Table = ({ pairsList, autoOrder }) => {
   // From store
   const isAdmin = useSelector(AuthSelector.isAdmin);
   const tournament = useSelector(TournamentSelector.getTournament);
+  // Const
+  const stageName = pairsList[0].stage1Name;
   // State
-  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedRows, setSelectedRows] = useState(useSelector( state => Stage1Selector.getSelectedRows(stageName,state)));
   const [isLoading, setIsLoading] = useState(false);
   const [saved, setIsSaved] = useState(false);
   const [rows, setRows] = useState([]);
-  // Const
-  const stageName = pairsList[0].stage1Name;
 
   // Effects
   useEffect(

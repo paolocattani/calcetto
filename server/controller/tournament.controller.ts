@@ -25,7 +25,7 @@ import Tournament from '../database/tournament.model';
 import { TournamentDTO } from '../../src/@common/dto';
 import { AppRequest } from './index';
 import { entityNotFound, failure, missingParameters, serverError, success } from './common.response';
-import { GenericReponse, OmitHistory } from '../../src/@common/models/common.models';
+import { OmitHistory } from '../../src/@common/models/common.models';
 import {
 	DeleteTournamentRequest,
 	DeleteTournamentResponse,
@@ -36,7 +36,6 @@ import {
 	UpdateTournamentRequest,
 	UpdateTournamentResponse,
 } from '../../src/@common/models/tournament.model';
-import { unsubscribe } from '../events/events';
 
 // all API path must be relative to /api/v2/tournament
 const router = Router();

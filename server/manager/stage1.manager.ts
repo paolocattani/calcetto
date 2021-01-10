@@ -1,6 +1,6 @@
 // Models
 import { Stage1, Tournament } from '../database';
-import { Stage1Row, TournamentProgress, UserDTO } from '../../src/@common/dto';
+import { Stage1Row, UserDTO } from '../../src/@common/dto';
 // Core
 import { logProcess, logger } from '../core/logger';
 import { asyncForEach } from '../core/utils';
