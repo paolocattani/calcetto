@@ -174,7 +174,7 @@
     "concurrently": "^5.3.0",
     "cross-env": "^7.0.3",
     "cypress": "^6.2.1",
-    "cypress-intellij-reporter": "0.0.5",
+    "cypress-intellij-reporter": "0.0.6",
     "cypress-plugin-snapshots": "^1.4.4",
     "cypress-skip-and-only-ui": "^1.2.10",
     "cypress-watch-and-reload": "^1.3.2",
