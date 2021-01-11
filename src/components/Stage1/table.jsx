@@ -17,17 +17,15 @@ import { fetchStage1, updateCellStage1 } from '../../redux/services/stage1.servi
 
 // TODO: convert this component to ts
 // eslint-disable-next-line sonarjs/cognitive-complexity
-const Stage1Table = ({ pairsList, autoOrder }) => {
+const Stage1Table = ({ pairsList, autoOrder, stageName }) => {
   const dispatch = useDispatch();
   // Sono presenti aggiornamenti
   const toogleRefresh = useSelector(Stage1Selector.getToogleRefresh);
   // From store
   const isAdmin = useSelector(AuthSelector.isAdmin);
   const tournament = useSelector(TournamentSelector.getTournament);
-  // Const
-  const stageName = pairsList[0].stage1Name;
   // State
-  const [selectedRows, setSelectedRows] = useState(useSelector( state => Stage1Selector.getSelectedRows(stageName,state)));
+  const [selectedRows, setSelectedRows] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [saved, setIsSaved] = useState(false);
   const [rows, setRows] = useState([]);
@@ -113,11 +111,12 @@ const Stage1Table = ({ pairsList, autoOrder }) => {
     const found = selectedRows.find((e) => e.rowNumber === row.rowNumber) ? true : false;
     let selected;
     if (isSelected) {
-      selected = found ? selectedRows : [row, ...selectedRows];
+      selected = found ? selectedRows : [...selectedRows, row];
     } else {
       selected = found ? selectedRows.filter((e) => e.rowNumber !== row.rowNumber) : selectedRows;
     }
 
+    // console.log( 'handleOnSelect : ', isSelected, found, selectedRows, selected );
     setSelectedRows(selected);
     dispatch(
       Stage1Action.updateSelectedPairs.request({
@@ -129,6 +128,7 @@ const Stage1Table = ({ pairsList, autoOrder }) => {
   };
 
   const handleOnSelectAll = (isSelected, s1Rows) => {
+    // console.log( 'handleOnSelectAll : ', isSelected, s1Rows );
     setSelectedRows(isSelected ? s1Rows : []);
     dispatch(
       Stage1Action.updateSelectedPairs.request({

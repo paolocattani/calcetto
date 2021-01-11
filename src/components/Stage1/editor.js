@@ -69,7 +69,9 @@ export const columns = (pairsList) => {
   ];
 
   // generazione dinamica colonne intermedie
-  for (let ii = 0; ii < pairsList.length; ii++) baseColumns.push(newColumn(ii + 1, pairsList.length));
+  for (let ii = 0; ii < pairsList.length; ii++) {
+    baseColumns.push(newColumn(ii + 1, pairsList.length));
+  }
 
   baseColumns.push(
     {

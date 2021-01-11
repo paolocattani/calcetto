@@ -28,8 +28,8 @@ const Wrapper: React.FC = (): JSX.Element => {
   const tournament = useSelector(TournamentSelector.getTournament)!;
   // Sono presenti aggiornamenti
   // const toogleRefresh = useSelector(Stage1Selector.getToogleRefresh);
-  // Squadre selezionate
-  const selected = useSelector(Stage1Selector.getSelectedPairs);
+  // Pairs selected : don't want to refresh conmponent so "... , () => true);""
+  const selected = useSelector(Stage1Selector.getSelectedPairs, () => true);
   // Lista coppie
   const pairsList = useSelector(PairSelector.getPairsList);
 
@@ -139,14 +139,14 @@ function renderTables(pairsList: PairDTO[], autoOrder: boolean): JSX.Element[] {
       // A rottura di stage1Name
       if (stageName === '') stageName = element.stage1Name;
       if (stageName !== element.stage1Name) {
-        stageList.push(<Stage1Table key={`Stage1-${stageName}`} pairsList={stage} autoOrder={autoOrder} />);
+        stageList.push(<Stage1Table key={`Stage1-${stageName}`} stageName={stageName} pairsList={stage} autoOrder={autoOrder} />);
         stageName = element.stage1Name;
         stage = [];
       }
       stage.push(element);
     });
   if (stage.length > 0) {
-    stageList.push(<Stage1Table key={`Stage1-${stageName}`} pairsList={stage} autoOrder={autoOrder} />);
+    stageList.push(<Stage1Table key={`Stage1-${stageName}`} stageName={stageName} pairsList={stage} autoOrder={autoOrder} />);
     // console.log(`stages ${stageName} :`, stage);
   }
 
