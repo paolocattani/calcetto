@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 // React-Select
 import Select, { Styles } from 'react-select';
 // Bootstrap
@@ -13,7 +13,7 @@ import NewTournament from './new';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { TournamentSelector } from '../../redux/selectors/tournament.selector';
-import { TournamentAction, PairAction, AuthAction } from '../../redux/actions';
+import { TournamentAction, PairAction } from '../../redux/actions';
 import { AuthSelector } from '../../redux/selectors/auth.selector';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -34,15 +34,16 @@ const FTournament = () => {
 
   // State definition
   const [newTournament, setNewTournament] = useState(false);
-  useEffect(() => {
-    if (!tournamentsList || tournamentsList.length === 0) {
-      // setNewTournament(true);
-      dispatch(TournamentAction.fetch.request({}));
-      dispatch(AuthAction.unsubscribe.request({}));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tournamentsList,tournament]);
-
+  /*
+    useEffect(() => {
+      if (!tournamentsList || tournamentsList.length === 0) {
+        // setNewTournament(true);
+        // dispatch(TournamentAction.fetch.request({}));
+        dispatch(AuthAction.unsubscribe.request({}));
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tournamentsList,tournament]);
+  */
   const handleSubmit = async (event: React.FormEvent<HTMLElement>): Promise<void> => {
     event.preventDefault();
     if (tournament) {

@@ -33,10 +33,10 @@ const getToken = (req: AppRequest) => req.signedCookies[SESSION_TOKEN];
 const getUuid = (req: AppRequest) => req.signedCookies[USER_UUID];
 
 /**
+ * Source : https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
  * cookiesOption
  */
-const cookiesOption: CookieOptions = {
-	// 8h : Allineare a process.env.SERVER_TOKEN_EXPIRES_IN
+const cookiesOption_old: CookieOptions = {
 	maxAge: 8 * 60 * 60 * 1000,
 	httpOnly: true,
 	signed: true,
@@ -49,6 +49,33 @@ const cookiesOption: CookieOptions = {
 		: {
 				httpOnly: true,
 		  }),
+};
+const cookiesOption: CookieOptions = {
+	// 8h : Allineare a process.env.SERVER_TOKEN_EXPIRES_IN
+	maxAge: 8 * 60 * 60 * 1000,
+	/*
+		A cookie with the HttpOnly attribute is inaccessible to the JavaScript Document.cookie API; it is sent only to the server.
+		For example, cookies that persist server-side sessions don't need to be available to JavaScript,
+		and should have the HttpOnly attribute. This precaution helps mitigate cross-site scripting (XSS) attacks.
+	*/
+	httpOnly: true,
+	/*
+		source : https://github.com/expressjs/cookie-parser#readme
+		Set this cookie as signed so cookie-parser will try to decode it.
+		The cookie will still be visible, but it has a signature, so it can detect if the client modified the cookie.
+	*/
+	signed: true,
+	/*
+		A cookie with the Secure attribute is sent to the server only with an encrypted request over the HTTPS protocol,
+		never with unsecured HTTP (except on localhost)
+	*/
+	secure: isProductionMode(),
+	/*
+		source : https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite
+		The SameSite attribute lets servers specify whether/when cookies are sent with cross-origin requests
+		(where Site is defined by the registrable domain), which provides some protection against cross-site request forgery attacks (CSRF).
+	*/
+	sameSite: isProductionMode() ? 'strict' : 'lax',
 };
 // http://expressjs.com/en/api.html#res.cookie
 export const addUserCookies = (user: UserDTO, res: Response) => {

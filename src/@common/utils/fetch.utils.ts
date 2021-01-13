@@ -5,10 +5,9 @@ import { GenericReponse, OmitHistory, UnexpectedServerError } from '../models/co
 import { toast } from 'react-toastify';
 
 //
-export const DEFAULT_HEADERS: { headers: HeadersInit } = {
-	headers: {
-		'Content-Type': 'application/json',
-	},
+export const default_headers: HeadersInit = {
+	'Content-Type': 'application/json',
+	// credentials: 'same-origin',
 };
 
 interface IFetchCallback<T> {
@@ -52,7 +51,7 @@ export const fetchWrapper = async <B, T extends GenericReponse>(
 		response = await fetch(url, {
 			method,
 			body: method === 'PUT' || method === 'POST' || method === 'DELETE' ? JSON.stringify(body) : undefined,
-			...DEFAULT_HEADERS,
+			headers: default_headers,
 		});
 		const result: T = await response.json();
 		return afterResponse ? afterResponse(result) : result;

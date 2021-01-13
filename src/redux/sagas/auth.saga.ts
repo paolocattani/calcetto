@@ -39,7 +39,7 @@ function* checkAuthenticationSaga({
 }: ReturnType<typeof AuthAction.checkAuthentication.request>): Generator<StrictEffect, void, any> {
 	const onSuccess = function* () {
 		yield put(AuthAction.sessionControl.request({ history }));
-		yield put(TournamentAction.fetch.request({}));
+		//yield put(TournamentAction.fetch.request({}));
 	};
 	yield* entityLifeCycle<CheckAuthenticationRequest, AuthenticationResponse, AuthenticationError>(
 		AuthAction.checkAuthentication,
@@ -162,7 +162,7 @@ function* loginSaga({
 }: ReturnType<typeof AuthAction.login.request>): Generator<StrictEffect, void, any> {
 	const onSuccess = function* () {
 		yield put(AuthAction.sessionControl.request({ history }));
-		yield put(TournamentAction.fetch.request({}));
+		// yield put(TournamentAction.fetch.request({}));
 	};
 	yield* entityLifeCycle<LoginRequest, AuthenticationResponse, AuthenticationError>(
 		AuthAction.login,

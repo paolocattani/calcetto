@@ -10,6 +10,8 @@ import { unauthorized } from '../controller/common.response';
 import { getCookies } from '../controller/auth/cookies.utils';
 import { isAdmin } from '../manager/auth.manager';
 import { safeVerifyToken } from '../controller/auth/auth.utils';
+import { Message, SessionStatus } from '../../src/@common/models';
+import { sendNotification } from '../events/events';
 
 // dev logger
 export const routeLogger = (req: Request, res: Response, next: NextFunction) => {
@@ -49,7 +51,7 @@ export const asyncMiddleware = (fn: any) => (req: Request, res: Response, next: 
 export const withAuth = async (req: AppRequest, res: Response, next: NextFunction) => {
 	const [token, uuid] = getCookies(req);
 	if (!token || typeof token != 'string' || !uuid) {
-		logger.error(chalk.redBright('Token not found : '), token);
+		logger.error(chalk.redBright('Come back with more cookies...'));
 		return unauthorized(res, { label: 'common:server.unauthorized' });
 	}
 	const [user, isTokenValid] = safeVerifyToken(token);
@@ -62,7 +64,12 @@ export const withAuth = async (req: AppRequest, res: Response, next: NextFunctio
 			next();
 		}
 	} else {
-		logger.error(chalk.redBright('Unauthorized:  Token Expired '));
+		logger.error(chalk.redBright('Unauthorized: Token Expired '));
+		const message: Message = {
+			status: SessionStatus.SESSION_EXPIRED,
+			label: 'auth:expired_alert',
+		};
+		sendNotification(res, message, true);
 		return unauthorized(res, { label: 'auth:expired' });
 	}
 };
