@@ -74,6 +74,11 @@ jobs:
       run: |
         echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
         echo ${GITHUB_REF/refs\/tags\//}
+    - name: Get the version
+      id: get_version
+      run: |
+        echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+        echo ${GITHUB_REF/refs\/tags\//}
     - name: Create Pull Request
       if: startsWith(github.ref, 'refs/tags/v')
       uses: peter-evans/create-pull-request@v3
