@@ -94,7 +94,7 @@ export const unexpectedServerError = <T extends GenericReponse>(res: Response, a
 		HTTPStatusCode.InternalServerError,
 		'Unexpected Server Error',
 		UserMessageType.Danger,
-		{ label: 'common:server.missing' },
+		{ label: 'common:server.unexpected' },
 		additionalInfo
 	);
 

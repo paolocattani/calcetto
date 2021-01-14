@@ -3,7 +3,7 @@ import { CorsOptions } from 'cors';
 import { AbstractServer } from './AbstractServer';
 import { Application as ExpressApplication } from 'express';
 // Db
-import {sync, authenticate, createSchemaAndSync} from '../database/connection';
+import { sync, authenticate, createSchemaAndSync } from '../database/connection';
 import { Sequelize } from 'sequelize-typescript';
 import generator from '../generator/generator';
 // Routes
@@ -32,38 +32,38 @@ const applicationCorsOption: CorsOptions = {
 };
 */
 export default class AppServer extends AbstractServer {
-  connection: Sequelize | null;
-  constructor(applicationName = defaultName, applicationPort = defaultPort, applicationCPUs = defaultCPUs) {
-    super(applicationName, applicationPort, applicationCPUs);
-    this.connection = null;
-  }
+	connection: Sequelize | null;
+	constructor(applicationName = defaultName, applicationPort = defaultPort, applicationCPUs = defaultCPUs) {
+		super(applicationName, applicationPort, applicationCPUs);
+		this.connection = null;
+	}
 
-  public async connect(): Promise<Sequelize> {
-    const force = process.env.SERVER_FORCE && process.env.SERVER_FORCE.toLowerCase() === 'true';
-    logger.info(
-      (force ? chalk.redBright.bold(' [ FORCE ] ') : chalk.greenBright.bold(' [ NORMAL ] ')).concat(
-        chalk.cyan.bold('Starting database synchronization...')
-      )
-    );
+	public async connect(): Promise<Sequelize> {
+		const force = process.env.SERVER_FORCE && process.env.SERVER_FORCE.toLowerCase() === 'true';
+		logger.info(
+			(force ? chalk.redBright.bold(' [ FORCE ] ') : chalk.greenBright.bold(' [ NORMAL ] ')).concat(
+				chalk.cyan.bold('Starting database synchronization...')
+			)
+		);
 
-    // Dev and Test can use THE FORCE :
-    // “Don’t underestimate the Force.” – Darth Vader
-    if ((isDevMode() || isTestMode()) && force) {
-      this.connection = await sync({ force });
-      await generator(true);
-      // Always start from clean db on test
-    } else if (isTestMode()) {
-    		this.connection = process.env.TEST_SCHEMA ?
-						await createSchemaAndSync(process.env.TEST_SCHEMA, { force: true ,restartIdentity:true}) :
-						await sync({ force: true });
-    } else {
-      this.connection = await authenticate();
-    }
+		// Dev and Test can use THE FORCE :
+		// “Don’t underestimate the Force.” – Darth Vader
+		if ((isDevMode() || isTestMode()) && force) {
+			this.connection = await sync({ force });
+			await generator(false);
+			// Always start from clean db on test
+		} else if (isTestMode()) {
+			this.connection = process.env.TEST_SCHEMA
+				? await createSchemaAndSync(process.env.TEST_SCHEMA, { force: true, restartIdentity: true })
+				: await sync({ force: true });
+		} else {
+			this.connection = await authenticate();
+		}
 
-    return this.connection;
-  }
+		return this.connection;
+	}
 
-  public routes(application: ExpressApplication): void {
-    routes(application);
-  }
+	public routes(application: ExpressApplication): void {
+		routes(application);
+	}
 }
