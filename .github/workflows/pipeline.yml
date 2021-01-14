@@ -4,6 +4,7 @@ on:
     branches:
       - e2e
       - develop
+      - auto-pr
   pull_request:
     branches:
       - develop
@@ -69,11 +70,6 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - name: Get the version
-      id: get_version
-      run: |
-        echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-        echo ${GITHUB_REF/refs\/tags\//}
     - name: Get the version
       id: get_version
       run: |
