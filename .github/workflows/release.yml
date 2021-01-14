@@ -1,0 +1,32 @@
+name: Release
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+jobs:
+  #-----------------------------------------
+  # Release
+  #-----------------------------------------
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Gather info
+        id: gather_info
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+      - name: Check output
+        env:
+          RELEASE_VERSION: ${{ steps.gather_info.outputs.tag }}
+        run: |
+          echo $RELEASE_VERSION
+          echo ${{ steps.gather_info.outputs.tag }}
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          tokentoken: ${{ secrets.GITHUB_TOKEN }}
+          title: Release ${{ steps.gather_info.outputs.version }}
+          body: Release ${{ steps.gather_info.outputs.version }}
+          branch: master
+          milestone: v2
+          labels: |
+            automated pr
