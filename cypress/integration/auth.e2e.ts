@@ -6,7 +6,7 @@ import { UserRole } from '../../src/@common/dto';
 import { Tournament } from '../pages/tournament.page';
 import { fixCypressSpec } from '../support';
 import { AuthState } from '../../src/@common/models';
-import {BE_DISABLED, BE_VISIBLE, HAVE_LENGTH} from '../pages/abstract.page';
+import { BE_DISABLED, BE_VISIBLE, HAVE_LENGTH } from '../pages/abstract.page';
 
 const { users } = require('../fixtures/auth.fixture.json');
 const user: RegistrationProps = users.user;
@@ -26,7 +26,7 @@ describe('Authentication Test', () => {
 
 		// Test cookies
 		cy.getCookies()
-			.should(HAVE_LENGTH, 1)
+			.should(HAVE_LENGTH, 2)
 			.then((cookies) => {
 				const session_id = cookies.filter((c) => c.name === 'session_id')[0];
 				expect(session_id).to.have.property('name', 'session_id');
@@ -54,9 +54,9 @@ describe('Authentication Test', () => {
 		const tournamentPage: Tournament = new Tournament();
 		tournamentPage.getForm().should(BE_VISIBLE);
 		// In this case there isn't any tournament so, for admin only, we show the form to create a new tournament
-		if(isAdmin){
+		if (isAdmin) {
 			tournamentPage.getSelectTournamentButton().should(BE_VISIBLE);
-		} else{
+		} else {
 			// User should not see button for new tournament
 			tournamentPage.getNewTournamentButton().should('not.exist');
 		}
@@ -65,10 +65,16 @@ describe('Authentication Test', () => {
 	describe('Registration process', function () {
 		it('Should show errors on registration', () => {
 			const landingPage = new LandingPage();
-			landingPage.visit()
-				.get(SWAP_BUTTON).should(BE_VISIBLE).click()
-				.get(AUTH_FORM).should(BE_VISIBLE)
-				.get('#registerButton').should(BE_VISIBLE).click();
+			landingPage
+				.visit()
+				.get(SWAP_BUTTON)
+				.should(BE_VISIBLE)
+				.click()
+				.get(AUTH_FORM)
+				.should(BE_VISIBLE)
+				.get('#registerButton')
+				.should(BE_VISIBLE)
+				.click();
 			landingPage.getToastList().should(HAVE_LENGTH, 11);
 			/* TODO: test list content
 				.clock().then((clock) => {
@@ -97,10 +103,15 @@ describe('Authentication Test', () => {
 	describe('Login process', () => {
 		it('Should show errors on login with missing data', () => {
 			const landingPage = new LandingPage();
-			landingPage.visit()
-				.get(SWAP_BUTTON).should(BE_VISIBLE)
-				.get(AUTH_FORM).should(BE_VISIBLE)
-				.get(LOGIN_BUTTON).should(BE_VISIBLE).should(BE_DISABLED)
+			landingPage
+				.visit()
+				.get(SWAP_BUTTON)
+				.should(BE_VISIBLE)
+				.get(AUTH_FORM)
+				.should(BE_VISIBLE)
+				.get(LOGIN_BUTTON)
+				.should(BE_VISIBLE)
+				.should(BE_DISABLED)
 				// Test Force click
 				.invoke('removeAttr', 'disabled')
 				.click();
@@ -115,19 +126,35 @@ describe('Authentication Test', () => {
 		it('Should show error with wrong credentials', () => {
 			const landingPage = new LandingPage();
 			cy.visit('/')
-				.get(SWAP_BUTTON).should(BE_VISIBLE)
-				.get(AUTH_FORM).should(BE_VISIBLE)
-				.get('#username').should(BE_VISIBLE).type('wronguser')
-				.get('#password').should(BE_VISIBLE).type(admin.password)
-				.get(LOGIN_BUTTON).should(BE_VISIBLE).click();
+				.get(SWAP_BUTTON)
+				.should(BE_VISIBLE)
+				.get(AUTH_FORM)
+				.should(BE_VISIBLE)
+				.get('#username')
+				.should(BE_VISIBLE)
+				.type('wronguser')
+				.get('#password')
+				.should(BE_VISIBLE)
+				.type(admin.password)
+				.get(LOGIN_BUTTON)
+				.should(BE_VISIBLE)
+				.click();
 			landingPage.getToastList().should(HAVE_LENGTH, 1);
 
 			cy.visit('/')
-				.get(SWAP_BUTTON).should(BE_VISIBLE)
-				.get(AUTH_FORM).should(BE_VISIBLE)
-				.get('#username').should(BE_VISIBLE).type(admin.username)
-				.get('#password').should(BE_VISIBLE).type('wrongpassword')
-				.get(LOGIN_BUTTON).should(BE_VISIBLE).click();
+				.get(SWAP_BUTTON)
+				.should(BE_VISIBLE)
+				.get(AUTH_FORM)
+				.should(BE_VISIBLE)
+				.get('#username')
+				.should(BE_VISIBLE)
+				.type(admin.username)
+				.get('#password')
+				.should(BE_VISIBLE)
+				.type('wrongpassword')
+				.get(LOGIN_BUTTON)
+				.should(BE_VISIBLE)
+				.click();
 			landingPage.getToastList().should(HAVE_LENGTH, 1);
 		});
 

@@ -9,7 +9,7 @@ import { Op } from 'sequelize';
 import { lowerWrapper } from '../core/utils';
 import { RegistrationRequest } from '../../src/@common/models/auth.model';
 import { I18nLabel } from '../../src/@common/models';
-import {generatePassword} from "../controller/auth/auth.utils";
+import { generatePassword } from '../controller/auth/auth.utils';
 
 // Const
 const className = 'Authentication Manager : ';
@@ -117,7 +117,7 @@ export async function findUserDTOByEmailOrUsername(username: string) {
 	}
 }
 
-export async function findUserByEmailOrUsername(username: string, email:string) {
+export async function findUserByEmailOrUsername(username: string, email: string) {
 	try {
 		logProcess(className + 'findUserByEmailOrUsername', '');
 		return await User.findOne({

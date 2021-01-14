@@ -126,14 +126,13 @@ router.put(
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		try {
 			const { user, uuid } = req;
-			unsubscribe(user!,uuid!);
+			unsubscribe(user!, uuid!);
 			return success<UnsubscribeResponse>(res, { label: '' });
 		} catch (err) {
 			return serverError('PUT tournament/unsubscribe error ! : ', err, res);
 		}
 	})
 );
-
 
 router.put(
 	'/update',
@@ -178,7 +177,7 @@ router.delete(
 );
 
 // Test
-router.post('/test/register', withTestAuth, registrationController );
+router.post('/test/register', withTestAuth, registrationController);
 
 router.delete(
 	'/test/delete',
@@ -224,15 +223,14 @@ const loginUserController = async (res: Response, username: string, password: st
 			return missingParameters(res);
 		}
 		const user = await findUserByEmailOrUsername(username, username);
-		// utente non trovato
+		// User not found
 		if (!user) {
 			return entityNotFound(res);
 		}
-		const isValid = await comparePasswords(user.email, password, user.password);
-		if (!isValid) {
+		// Compare passwords
+		if (!(await comparePasswords(user.email, password, user.password))) {
 			return wrongCredentials(res);
 		}
-
 		const userDTO = convertEntityToDTO(user);
 		addUserCookies(userDTO, res);
 		return success<AuthenticationResponse>(
@@ -247,21 +245,20 @@ const loginUserController = async (res: Response, username: string, password: st
 
 const deleteUserController = async (res: Response, username: string, email: string, password: string) => {
 	try {
-		logger.info('/test/delete start ');
+		logger.info('/delete start ');
 		const user = await findUserByEmailAndUsername(email, username);
 		if (!user) {
 			return entityNotFound(res);
 		}
-
-		if (!(await comparePasswords(email, password, user.password)))
-			return res.status(HTTPStatusCode.BadRequest).json(wrongCredentials);
-
+		if (!(await comparePasswords(email, password, user.password))) {
+			return wrongCredentials(res);
+		}
 		await deleteUser(user);
-		logger.info('/test/delete end ');
+		logger.info('/delete end ');
 		removeUserCookies(res);
 		return success<DeleteUserResponse>(res, { label: 'auth:server.deleted', options: { username: user.name } });
 	} catch (error) {
-		return serverError('DELETE auth/test/delete error ! : ', error, res);
+		return serverError('DELETE auth/delete error ! : ', error, res);
 	}
 };
 

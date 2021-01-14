@@ -8,11 +8,11 @@ const DEFAULT_HASH = 'dummy$Hash';
 export const TOKEN_SECRET = process.env.SERVER_HASH || DEFAULT_HASH;
 const generateHashSecret = (email: string, password: string) => email + TOKEN_SECRET + password;
 
-export const generatePassword = async (email: string, password: string) =>
-	await bcrypt.hash(generateHashSecret(email, password), 10);
+export const generatePassword = (email: string, password: string) =>
+	bcrypt.hash(generateHashSecret(email, password), 10);
 
-export const comparePasswords = async (email: string, password: string, hash: string): Promise<boolean> =>
-	await bcrypt.compare(generateHashSecret(email, password), hash);
+export const comparePasswords = (email: string, password: string, hash: string): Promise<boolean> =>
+	bcrypt.compare(generateHashSecret(email, password), hash);
 
 // wrapper per verificare il token
 export const safeVerifyToken = (token: any): [UserDTO | null, boolean] => {

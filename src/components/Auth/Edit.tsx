@@ -28,7 +28,7 @@ const EditUser: React.FC<{}> = () => {
     dispatch(
       AuthAction.update.request({
         user: {
-          ...user!,
+          ...user,
           name: name.trim(),
           surname: surname.trim(),
           phone: phone.trim(),
@@ -68,7 +68,7 @@ const EditUser: React.FC<{}> = () => {
                 <Col sm="9">
                   <Form.Control
                     plaintext
-                    value={user.username!}
+                    value={user.username}
                     readOnly
                     style={{ fontSize: 'larger', fontWeight: 'bolder' }}
                     className="default-color-white "
@@ -80,7 +80,7 @@ const EditUser: React.FC<{}> = () => {
                 <Col sm="9">
                   <Form.Control
                     plaintext
-                    value={user.email!}
+                    value={user.email}
                     readOnly
                     style={{ fontSize: 'larger', fontWeight: 'bolder' }}
                     className="default-color-white"

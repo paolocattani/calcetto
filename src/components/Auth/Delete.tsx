@@ -24,7 +24,7 @@ const Delete: React.FC<DeleteProps> = ({ show, onHide }) => {
   // Hook gestione campo password
   const { value: password, bind: bindPassword } = useInput<string>('');
 
-  const handleSubmit = async (
+  const handleSubmit = (
     evt: React.SyntheticEvent<Element, Event>,
     email: string | null | undefined,
     username: string | null | undefined

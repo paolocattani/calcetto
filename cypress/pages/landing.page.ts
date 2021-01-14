@@ -27,20 +27,33 @@ export class LandingPage extends AbstractPage {
 	// Methods
 	logout() {
 		return cy
-			.get('[data-cy=header-dropdown]').should(BE_VISIBLE).click()
-			.get('[data-cy=header-user-logout]').should(BE_VISIBLE).click();
+			.get('[data-cy=header-dropdown]')
+			.should(BE_VISIBLE)
+			.click()
+			.get('[data-cy=header-user-logout]')
+			.should(BE_VISIBLE)
+			.click();
 	}
 
 	login({ username, password }: LoginProps): void {
 		// https://docs.cypress.io/api/commands/intercept.html
 		cy.visit('/')
-			.intercept('POST', '/api/v2/auth/login').as('authentication')
-			.get(SWAP_BUTTON).should(BE_VISIBLE)
-			.get(AUTH_FORM).should(BE_VISIBLE)
+			.intercept('POST', '/api/v2/auth/login')
+			.as('authentication')
+			.get(SWAP_BUTTON)
+			.should(BE_VISIBLE)
+			.get(AUTH_FORM)
+			.should(BE_VISIBLE)
 			.toMatchImageSnapshot(imageSnapshotConfig('Login'));
-		cy.get('#username').should(BE_VISIBLE).type(username)
-			.get('#password').should(BE_VISIBLE).type(password)
-			.get('#loginButton').should(BE_VISIBLE).click();
+		cy.get('#username')
+			.should(BE_VISIBLE)
+			.type(username)
+			.get('#password')
+			.should(BE_VISIBLE)
+			.type(password)
+			.get('#loginButton')
+			.should(BE_VISIBLE)
+			.click();
 
 		cy.wait('@authentication').then((interception) => {
 			const body = interception.request.body;
@@ -51,21 +64,43 @@ export class LandingPage extends AbstractPage {
 
 	register(user: RegistrationProps, isAdmin: boolean): void {
 		cy.visit('/')
-			.intercept('POST', '/api/v2/auth/register').as('authentication')
-			.get(SWAP_BUTTON).should(BE_VISIBLE).click()
-			.get(AUTH_FORM).should(BE_VISIBLE)
+			.intercept('POST', '/api/v2/auth/register')
+			.as('authentication')
+			.get(SWAP_BUTTON)
+			.should(BE_VISIBLE)
+			.click()
+			.get(AUTH_FORM)
+			.should(BE_VISIBLE)
 			.toMatchImageSnapshot(imageSnapshotConfig(isAdmin ? 'registration_Admin' : 'registration_User'));
-		cy.get('#username').should(BE_VISIBLE).type(user.username)
-			.get('#name').should(BE_VISIBLE).type(isAdmin ? `[A]${user.name}` : user.name)
-			.get('#surname').should(BE_VISIBLE).type(user.surname)
-			.get('#email').should(BE_VISIBLE).type(user.email)
-			.get('#cemail').should(BE_VISIBLE).type(user.confirmEmail)
-			.get('#password').should(BE_VISIBLE).type(user.password)
-			.get('#cpassword').should(BE_VISIBLE).type(user.confirmPassword)
+		cy.get('#username')
+			.should(BE_VISIBLE)
+			.type(user.username)
+			.get('#name')
+			.should(BE_VISIBLE)
+			.type(isAdmin ? `[A]${user.name}` : user.name)
+			.get('#surname')
+			.should(BE_VISIBLE)
+			.type(user.surname)
+			.get('#email')
+			.should(BE_VISIBLE)
+			.type(user.email)
+			.get('#cemail')
+			.should(BE_VISIBLE)
+			.type(user.confirmEmail)
+			.get('#password')
+			.should(BE_VISIBLE)
+			.type(user.password)
+			.get('#cpassword')
+			.should(BE_VISIBLE)
+			.type(user.confirmPassword)
 			//FIXME: cypress bug
 			//cy.get('#birthday').should(BE_VISIBLE).type('05/01/1902');
-			.get('#phone').should(BE_VISIBLE).type(user.phone)
-			.get('#registerButton').should(BE_VISIBLE).click();
+			.get('#phone')
+			.should(BE_VISIBLE)
+			.type(user.phone)
+			.get('#registerButton')
+			.should(BE_VISIBLE)
+			.click();
 
 		// Loader should be visible
 		super.getLoader().should(BE_VISIBLE);
@@ -73,9 +108,9 @@ export class LandingPage extends AbstractPage {
 			const body = interception.request.body;
 			this.compareRegistrationProperty(body, user, isAdmin);
 			expect(body).to.have.property('name', isAdmin ? `[A]${user.name}` : user.name);
-			expect(body).to.have.property('cEmail', user.email);
+			expect(body).to.have.property('confirmEmail', user.email);
 			expect(body).to.have.property('password', user.password);
-			expect(body).to.have.property('cPassword', user.password);
+			expect(body).to.have.property('confirmPassword', user.password);
 			// FIXME:
 			expect(body).to.have.property('playerRole', 'Non sono un giocatore');
 		});
