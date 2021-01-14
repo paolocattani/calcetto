@@ -70,7 +70,7 @@ jobs:
       - name: Gather info
         id: gather_info
         run: |
-          echo ::set-output name=version::$(echo $(git describe --tags --abbrev=0))
+          echo "GIT_TAG=`echo $(git describe --tags --abbrev=0)`" >> $GITHUB_ENV
       - name: Check output
         env:
           RELEASE_VERSION: ${{ steps.gather_info.outputs.version }}
