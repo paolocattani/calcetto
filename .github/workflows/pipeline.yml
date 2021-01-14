@@ -75,16 +75,22 @@ jobs:
       run: |
         echo ::set-output name=version::${GITHUB_REF#refs/tags/}
         echo ::set-output name=branch::${GITHUB_REF#refs/heads/}
-        echo ${{ steps.gather_info.outputs.version }}
+        echo -----------------
         echo ${{ steps.gather_info.outputs.branch }}
+        echo ${{ steps.gather_info.outputs.branch }}
+        echo -----------------
+        echo ${{ github.ref }}
     - name: Create Pull Request
       if: startsWith(github.ref, 'refs/tags/v')
       uses: peter-evans/create-pull-request@v3
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        tokentoken: ${{ secrets.GITHUB_TOKEN }}
         title: Release ${{ steps.gather_info.outputs.version }}
         body: Release ${{ steps.gather_info.outputs.version }}
         branch: master
+        milestone: v2
+        labels: |
+          automated pr
   #-----------------------------------------
   # unit test
   #-----------------------------------------
