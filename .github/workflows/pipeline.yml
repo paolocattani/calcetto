@@ -61,6 +61,41 @@ jobs:
           name: analysis-${{ matrix.node-version }}
           path: analysis
   #-----------------------------------------
+  # Release
+  #-----------------------------------------
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Gather info
+        id: gather_info
+        run: |
+          echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+          echo ::set-output name=version::${GITHUB_REF#refs/tags/}
+          echo ::set-output name=branch::${GITHUB_REF#refs/heads/}
+      - name: Check output
+        env:
+          RELEASE_TAG: ${{ steps.gather_info.outputs.tag }}
+          RELEASE_VERSION: ${{ steps.gather_info.outputs.version }}
+          RELEASE_BRANCH: ${{ steps.gather_info.outputs.branch }}
+        run: |
+          echo $RELEASE_TAG
+          echo $RELEASE_VERSION
+          echo $RELEASE_BRANCH
+          echo ${{ steps.gather_info.outputs.tag }}
+          echo ${{ steps.gather_info.outputs.version }}
+          echo ${{ steps.gather_info.outputs.branch }}
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          tokentoken: ${{ secrets.GITHUB_TOKEN }}
+          title: Release ${{ steps.gather_info.outputs.version }}
+          body: Release ${{ steps.gather_info.outputs.version }}
+          branch: master
+          milestone: v2
+          labels: |
+            automated pr
+  #-----------------------------------------
   # unit test
   #-----------------------------------------
   unit-test:
