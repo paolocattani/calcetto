@@ -21,11 +21,16 @@ import AppBadge from './badge';
 import { AuthSelector } from '../../redux/selectors';
 // i18n
 import '../../i18n/i18n';
+// Cookies
+import CookieConsent from 'react-cookie-consent';
+import { useTranslation } from 'react-i18next';
+
 
 loadIcons();
 const App: React.FC = (_) => {
   const dispatch = useDispatch();
   const currentHistory = useHistory();
+  const { t } = useTranslation(['auth']);
   const isLoading = useSelector(AuthSelector.isLoading);
 
   // Check if user is already logged
@@ -57,6 +62,17 @@ const App: React.FC = (_) => {
             </Suspense>
           )}
           <AppBadge />
+          <CookieConsent
+            location="bottom"
+            buttonText={t('auth:cookies.accept')}
+            cookieName="session_id"
+            style={{ background: '#2B373B' }}
+            buttonStyle={{ color: '#4e503b', fontSize: '13px' }}
+            expires={150}
+            overlay
+          >
+            {t('auth:cookies.info')}
+          </CookieConsent>
         </Container>
       </ErrorBoundary>
     </div>
