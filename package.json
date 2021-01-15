@@ -42,7 +42,6 @@
     "i18next-http-backend": "^1.0.21",
     "jquery": "^3.5.1",
     "localforage": "^1.9.0",
-    "nodemon": "^2.0.7",
     "react": "^16.14.0",
     "react-bootstrap": "^1.4.3",
     "react-bootstrap-table-next": "^4.0.3",
@@ -71,7 +70,7 @@
   "scripts": {
     "-----DEVELOPMENT----": "---------------------------",
     "dev": "concurrently -p \"[{name}]\" -n server,client -c \"bgGreen.bold,bgBlue.bold\"  --kill-others-on-fail \"npm run dev:server\" \"npm run dev:client\"",
-    "dev:server": "cd server && nodemon --config \"./nodemon.json\"",
+    "dev:server": "cd server && npm run dev",
     "dev:client": "npm run CRA:start",
     "-----PRODUCTION----": "---------------------------",
     "prod:server": "cd server && npm run prod",
