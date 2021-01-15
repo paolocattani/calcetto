@@ -4,7 +4,7 @@ import { logger } from '../core/logger';
 import { getDbConnection } from '../database/connection';
 // Models
 import { Pair } from '../database';
-import { asyncMiddleware, withAuth, controllerLogger, withAdminRights } from '../core/middleware';
+import { asyncMiddleware, withAuth, controllerLogger, withAdminRights, doNotCacheThis } from '../core/middleware';
 import { AppRequest } from './index';
 import { listInTournament, findAlias, rowToModel, parseBodyToPair } from '../manager/pair.manager';
 import { missingParameters, serverError, success } from './common.response';
@@ -27,7 +27,7 @@ router.use('/', (req: Request, res: Response, next: NextFunction) =>
 router.get(
 	'/list/',
 	withAuth,
-	//withAdminRights,
+	doNotCacheThis,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		try {
 			const { user, query } = req;
