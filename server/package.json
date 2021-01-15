@@ -82,7 +82,6 @@
     "sequelize-typescript": "^2.0.0-beta.1",
     "ts-node": "^9.1.1",
     "umzug": "^2.3.0",
-    "umzug-typescript-helper": "^1.0.10",
     "uuid": "^8.3.2"
   }
 }
