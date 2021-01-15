@@ -1,14 +1,14 @@
 import {
-  Column,
-  Model,
-  Table,
-  Comment,
-  HasMany,
-  DataType,
-  Default,
-  AllowNull,
-  ForeignKey,
-  BelongsTo,
+	Column,
+	Model,
+	Table,
+	Comment,
+	HasMany,
+	DataType,
+	Default,
+	AllowNull,
+	ForeignKey,
+	BelongsTo,
 } from 'sequelize-typescript';
 import Pair from './pair.model';
 import Stage1 from './stage1.model';
@@ -28,62 +28,62 @@ import { TournamentProgress } from '../../src/@common/dto';
  *
  */
 @Table({ tableName: 'tournament', freezeTableName: true, version: false })
-export default class Tournament extends Model<Tournament> {
-  @Comment('Nome')
-  @Column(DataType.STRING)
-  public name!: string;
+export default class Tournament extends Model {
+	@Comment('Nome')
+	@Column(DataType.STRING)
+	public name!: string;
 
-  @Comment('Data')
-  @Column(DataType.DATE)
-  public date!: Date;
+	@Comment('Data')
+	@Column(DataType.DATE)
+	public date!: Date;
 
-  @Comment('Stato')
-  @Default(TournamentProgress.New)
-  @Column(
-    DataType.ENUM<TournamentProgress>(
-      TournamentProgress.New,
-      TournamentProgress.PairsSelection,
-      TournamentProgress.Stage1,
-      TournamentProgress.Stage2
-    )
-  )
-  public progress!: TournamentProgress;
+	@Comment('Stato')
+	@Default(TournamentProgress.New)
+	@Column(
+		DataType.ENUM<TournamentProgress>(
+			TournamentProgress.New,
+			TournamentProgress.PairsSelection,
+			TournamentProgress.Stage1,
+			TournamentProgress.Stage2
+		)
+	)
+	public progress!: TournamentProgress;
 
-  @Comment('Visibile ad utenti non loggati')
-  @Column(DataType.BOOLEAN)
-  public public!: boolean;
+	@Comment('Visibile ad utenti non loggati')
+	@Column(DataType.BOOLEAN)
+	public public!: boolean;
 
-  @Comment('Ordinamento automatico')
-  @Default(false)
-  @Column(DataType.BOOLEAN)
-  public autoOrder!: boolean;
+	@Comment('Ordinamento automatico')
+	@Default(false)
+	@Column(DataType.BOOLEAN)
+	public autoOrder!: boolean;
 
-  // Virtual columns
-  @Comment('Label')
-  @Column({
-    type: DataType.VIRTUAL,
-    get(this: Tournament): string {
-      return `${this.name} @ ${this.progress}`;
-    },
-  })
-  public label!: string;
+	// Virtual columns
+	@Comment('Label')
+	@Column({
+		type: DataType.VIRTUAL,
+		get(this: Tournament): string {
+			return `${this.name} @ ${this.progress}`;
+		},
+	})
+	public label!: string;
 
-  // Model Associations
-  @HasMany(() => Pair)
-  public pairs!: Pair[];
+	// Model Associations
+	@HasMany(() => Pair)
+	public pairs!: Pair[];
 
-  @HasMany(() => Stage1)
-  public Stage1!: Stage1[];
+	@HasMany(() => Stage1)
+	public Stage1!: Stage1[];
 
-  @HasMany(() => Stage2)
-  public Stage2!: Stage2[];
+	@HasMany(() => Stage2)
+	public Stage2!: Stage2[];
 
-  // Associazione utente
-  @AllowNull
-  @Comment('Id Owner')
-  @ForeignKey(() => User)
-  @Column(DataType.INTEGER)
-  public ownerId?: number;
-  @BelongsTo(() => User, 'ownerId')
-  public owner?: User;
+	// Associazione utente
+	@AllowNull
+	@Comment('Id Owner')
+	@ForeignKey(() => User)
+	@Column(DataType.INTEGER)
+	public ownerId?: number;
+	@BelongsTo(() => User, 'ownerId')
+	public owner?: User;
 }
