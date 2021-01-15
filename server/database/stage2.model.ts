@@ -6,7 +6,7 @@ import Pair from './pair.model';
  *
  */
 @Table({ tableName: 'stage2', comment: 'Stage2', freezeTableName: true, version: false })
-export default class Stage2 extends Model<Stage2> {
+export default class Stage2 extends Model {
 	@Comment('Id Torneo')
 	@ForeignKey(() => Tournament)
 	@Column(DataType.INTEGER)
