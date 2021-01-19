@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import chalk from 'chalk';
 import { logger } from '../core/logger';
-import { getDbConnection } from '../database/connection';
+import { getDbConnection } from '../database/config/connection';
 // Models
 import { Pair } from '../database';
 import { asyncMiddleware, withAuth, controllerLogger, withAdminRights, doNotCacheThis } from '../core/middleware';

@@ -3,7 +3,7 @@ import { CorsOptions } from 'cors';
 import { AbstractServer } from './AbstractServer';
 import { Application as ExpressApplication } from 'express';
 // Db
-import { sync, authenticate, createSchemaAndSync } from '../database/connection';
+import { sync, authenticate, createSchemaAndSync } from '../database/config/connection';
 import { Sequelize } from 'sequelize-typescript';
 import generator from '../generator/generator';
 // Routes
@@ -13,6 +13,7 @@ import '../core/env';
 import chalk from 'chalk';
 import { logger } from '../core/logger';
 import { isDevMode, isProductionMode, isTestMode } from '../core/debug';
+import { migrationUp } from '../database/migrations';
 
 // white list for CORS
 const defaultName: string = 'ApplicationServer Calcetto';
@@ -39,6 +40,9 @@ export default class AppServer extends AbstractServer {
 	}
 
 	public async connect(): Promise<Sequelize> {
+		// Always run db migrations, befor load sequelize models
+		await migrationUp();
+
 		const force = process.env.SERVER_FORCE && process.env.SERVER_FORCE.toLowerCase() === 'true';
 		logger.info(
 			(force ? chalk.redBright.bold(' [ FORCE ] ') : chalk.greenBright.bold(' [ NORMAL ] ')).concat(
@@ -53,6 +57,11 @@ export default class AppServer extends AbstractServer {
 			await generator(false);
 			// Always start from clean db on test
 		} else if (isTestMode()) {
+			/*
+				When test on local we just user "public" schema.
+				In CI multiple jobs runs at the same time so we need to use schemas.
+				( Each job use a differente schema )
+			*/
 			this.connection = process.env.TEST_SCHEMA
 				? await createSchemaAndSync(process.env.TEST_SCHEMA, { force: true, restartIdentity: true })
 				: await sync({ force: true });

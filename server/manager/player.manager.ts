@@ -24,10 +24,14 @@ export const listAllInTournament = async (tId: number): Promise<PlayerDTO[]> => 
 
 		const result = users
 			.filter((player) => {
-				// Se il giocatore non ha alias o nome lo escludo in quanto non sarebbe identificabile nella selezione delle coppie
-				if (player.alias === '' && player.name === '') return false;
+				// Se il giocatore non ha alias e nome lo escludo in quanto non sarebbe identificabile nella selezione delle coppie
+				if (player.alias === '' && player.name === '') {
+					return false;
+				}
 				// Se non è ancora stato assegnato a nessuno coppia allora è disponibile
-				if (!player.pair1 && !player.pair2) return true;
+				if (!player.pair1 && !player.pair2) {
+					return true;
+				}
 				/*
 				 * Se il giocatore è gia stato assegnato ad una coppia ( in posizione 1 o 2 )
 				 * che appartiene al torneo che sto analizzando allora lo devo escludere
