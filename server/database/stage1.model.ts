@@ -13,7 +13,7 @@ import Tournament from './tournament.model';
  *
  */
 @Table({ tableName: 'stage1', freezeTableName: true, version: false })
-export default class Stage1 extends Model<Stage1> {
+export default class Stage1 extends Model {
 	@Column(DataType.STRING)
 	name!: string;
 

@@ -1,14 +1,7 @@
-import { Router, NextFunction, Response, Request } from 'express';
+import { Router, Response, Request } from 'express';
 // Core
 import { logger } from '../core/logger';
-import {
-	asyncMiddleware,
-	withAuth,
-	withAdminRights,
-	controllerLogger,
-	withTestAuth,
-	doNotCacheThis,
-} from '../core/middleware';
+import { asyncMiddleware, withAuth, withAdminRights, withTestAuth, doNotCacheThis } from '../core/middleware';
 // Managers
 import {
 	listAll,
@@ -39,9 +32,6 @@ import {
 
 // all API path must be relative to /api/v2/tournament
 const router = Router();
-router.use('/', (req: Request, res: Response, next: NextFunction) =>
-	controllerLogger(req, next, 'Tournament Controller', '/api/v2/tournament')
-);
 
 // GET
 router.get(

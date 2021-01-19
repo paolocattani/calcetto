@@ -39,27 +39,24 @@ const App: React.FC = (_) => {
   }, [currentHistory, dispatch]);
 
   return (
+    <Suspense fallback={<LoadingModal />}>
     <div className="App">
       <ErrorBoundary>
         {/* Loading translations */}
-        <Suspense fallback={<LoadingModal />}>
           <Header />
-        </Suspense>
         <Container fluid style={{ marginBottom: '20vh' }}>
           {/*<RedirectionControl />*/}
-          <ToastContainer autoClose={3000} data-cy="toast-container"/>
+           <ToastContainer autoClose={3000} data-cy="toast-container"/>
           {isLoading ? (
             // Loading store
             <LoadingModal />
           ) : (
             // Loading lazy components
-            <Suspense fallback={<LoadingModal />}>
               <Switch>
                 {routes.map((route) => (
                   <ProtectedRoute {...route} key={route.index} />
                 ))}
               </Switch>
-            </Suspense>
           )}
           <AppBadge />
           <CookieConsent
@@ -76,6 +73,7 @@ const App: React.FC = (_) => {
         </Container>
       </ErrorBoundary>
     </div>
+    </Suspense>
   );
 };
 

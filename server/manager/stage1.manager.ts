@@ -5,7 +5,7 @@ import { Stage1Row, UserDTO } from '../../src/@common/dto';
 import { logProcess, logger } from '../core/logger';
 import { asyncForEach } from '../core/utils';
 //
-import { getDbConnection } from '../database/connection';
+import { getDbConnection } from '../database/config/connection';
 import { isAdmin } from '../manager/auth.manager';
 //
 import { Op } from 'sequelize';

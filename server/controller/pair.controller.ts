@@ -1,10 +1,10 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router, Request, Response } from 'express';
 import chalk from 'chalk';
 import { logger } from '../core/logger';
-import { getDbConnection } from '../database/connection';
+import { getDbConnection } from '../database/config/connection';
 // Models
 import { Pair } from '../database';
-import { asyncMiddleware, withAuth, controllerLogger, withAdminRights } from '../core/middleware';
+import { asyncMiddleware, withAuth, withAdminRights, doNotCacheThis } from '../core/middleware';
 import { AppRequest } from './index';
 import { listInTournament, findAlias, rowToModel, parseBodyToPair } from '../manager/pair.manager';
 import { missingParameters, serverError, success } from './common.response';
@@ -19,15 +19,12 @@ import {
 } from '../../src/@common/models';
 
 const router = Router();
-router.use('/', (req: Request, res: Response, next: NextFunction) =>
-	controllerLogger(req, next, 'Pair Controller', '/api/v1/pair')
-);
 
 // GET
 router.get(
 	'/list/',
 	withAuth,
-	//withAdminRights,
+	doNotCacheThis,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		try {
 			const { user, query } = req;
