@@ -8,22 +8,22 @@ import Player from '../player.model';
 export default class StatsPlayers extends Model {
 	@ForeignKey(() => Player)
 	@Column(DataType.INTEGER)
-	public readonly playerId: number;
+	public readonly playerId!: number;
 	@HasOne(() => Player, 'playerId')
-	public readonly player: Player;
+	public readonly player!: Player;
 
 	@Column(DataType.INTEGER)
-	public readonly s1Win: number;
+	public readonly s1Win!: number;
 	@Column(DataType.INTEGER)
-	public readonly s1Def: number;
+	public readonly s1Def!: number;
 	@Column(DataType.INTEGER)
-	public readonly s2Win: number;
+	public readonly s2Win!: number;
 	@Column(DataType.INTEGER)
-	public readonly s2Def: number;
+	public readonly s2Def!: number;
 	@Column(DataType.INTEGER)
-	public readonly totWin: number;
+	public readonly totWin!: number;
 	@Column(DataType.INTEGER)
-	public readonly totDef: number;
+	public readonly totDef!: number;
 	@Column(DataType.INTEGER)
-	public readonly totRatio: number;
+	public readonly totRatio!: number;
 }

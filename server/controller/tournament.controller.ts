@@ -1,14 +1,7 @@
-import { Router, NextFunction, Response, Request } from 'express';
+import { Router, Response, Request } from 'express';
 // Core
 import { logger } from '../core/logger';
-import {
-	asyncMiddleware,
-	withAuth,
-	withAdminRights,
-	controllerLogger,
-	withTestAuth,
-	doNotCacheThis,
-} from '../core/middleware';
+import { asyncMiddleware, withAuth, withAdminRights, withTestAuth, doNotCacheThis } from '../core/middleware';
 // Managers
 import {
 	listAll,

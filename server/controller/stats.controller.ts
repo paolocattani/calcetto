@@ -1,34 +1,30 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router, Request, Response } from 'express';
 import {
-	DeletePlayersRequest,
-	DeletePlayersResponse,
-	FetchPlayersResponse,
-	SavePlayerRequest,
-	SavePlayerResponse,
-} from '../../src/@common/models/player.model';
-import { withAuth, asyncMiddleware, controllerLogger, withAdminRights } from '../core/middleware';
-import {
-	create,
-	deletePlayer,
-	parseBody,
-	listAll,
-	listAllInTournament,
-	update,
-	findByNameSurname,
-	findById,
-} from '../manager/player.manager';
-import { entityNotFound, failure, missingParameters, serverError, success } from './common.response';
+	StatsPairRequest1,
+	StatsPairRequest2,
+	StatsPairResponse,
+	StatsPlayerResponse,
+} from '../../src/@common/models/stats.model';
+import { withAuth, doNotCacheThis, asyncMiddleware } from '../core/middleware';
+import { findById } from '../manager/pair.manager';
+
+import { getStatsByPairs, getStatsByPlayer } from '../manager/stats.manager';
+import { missingParameters, serverError, success } from './common.response';
 
 const router = Router();
 
 router.get(
-	'/list/:tId',
+	'/player/:playerId',
 	withAuth,
-	withAdminRights,
+	doNotCacheThis,
 	asyncMiddleware(async (req: Request, res: Response) => {
 		try {
-			const playersList = await listAllInTournament(req.params.tId ? parseInt(req.params.tId) : 0);
-			return success<FetchPlayersResponse>(res, { label: 'player:loaded' }, { playersList });
+			if (!req.params.playerId) {
+				return missingParameters(res);
+			}
+			const playerId = parseInt(req.params.playerId);
+			const statsPlayer = await getStatsByPlayer(playerId);
+			return success<StatsPlayerResponse>(res, { label: 'player:loaded' }, { statsPlayer });
 		} catch (error) {
 			return serverError('GET player/list/:tId error ! : ', error, res);
 		}
@@ -36,79 +32,30 @@ router.get(
 );
 
 router.get(
-	'/list',
+	'/pair',
 	withAuth,
+	doNotCacheThis,
 	asyncMiddleware(async (req: Request, res: Response) => {
 		try {
-			const playersList = await listAll();
-			return success<FetchPlayersResponse>(res, { label: 'player:loaded' }, { playersList });
-		} catch (error) {
-			return serverError('GET player/list/ error ! : ', error, res);
-		}
-	})
-);
-
-router.put(
-	'/update',
-	withAuth,
-	withAdminRights,
-	asyncMiddleware(async (req: Request, res: Response) => {
-		const { player: dto } = req.body as SavePlayerRequest;
-		try {
-			let player = await findById(dto.id!);
-			if (!player) {
-				return entityNotFound(res);
-			}
-			// Aggiungere controlli
-			let playerTest = await findByNameSurname(dto.name, dto.surname);
-			if (playerTest && playerTest.id !== player.id) {
-				return failure(res, { label: 'player:duplicated' }, 'Player already exists');
-			}
-			await update(dto);
-			return success<SavePlayerResponse>(res, { label: 'player:updated' }, { player: dto });
-		} catch (error) {
-			return serverError('PUT player/update error ! : ', error, res);
-		}
-	})
-);
-
-router.post(
-	'/new',
-	withAuth,
-	withAdminRights,
-	asyncMiddleware(async (req: Request, res: Response) => {
-		const { player: model } = req.body as SavePlayerRequest;
-		try {
-			if (!model.name || !model.surname) {
+			const { player1IdString, player2IdString, pairIdString } = req.query;
+			if (!pairIdString && (!player1IdString || player2IdString)) {
 				return missingParameters(res);
 			}
-			let player = await findByNameSurname(model.name, model.surname);
-			if (player) {
-				return failure(res, { label: 'player:duplicated' }, 'Player already exists');
+			let player1Id: number;
+			let player2Id: number;
+			if (pairIdString) {
+				const pairId = parseInt(pairIdString as string);
+				const pair = await findById(pairId);
+				player1Id = pair.player1Id;
+				player2Id = pair.player2Id;
+			} else {
+				player1Id = parseInt(player1IdString as string);
+				player2Id = parseInt(player2IdString as string);
 			}
-			const dto = await create(model);
-			return success<SavePlayerResponse>(res, { label: 'player:saved' }, { player: dto });
+			const statsPair = await getStatsByPairs(player1Id, player2Id);
+			return success<StatsPairResponse>(res, { label: 'player:loaded' }, { statsPair });
 		} catch (error) {
-			return serverError('POST player/new error ! : ', error, res);
-		}
-	})
-);
-
-router.delete(
-	'/delete',
-	withAuth,
-	withAdminRights,
-	asyncMiddleware(async (req: Request, res: Response) => {
-		try {
-			const request: DeletePlayersRequest = req.body;
-			const rowsAffected = await deletePlayer(request.players.map((e) => parseBody(e)));
-			return success<DeletePlayersResponse>(
-				res,
-				{ label: rowsAffected > 1 ? 'player:deleted_2' : 'player:deleted_1' },
-				{ playersList: request.players }
-			);
-		} catch (error) {
-			return serverError('DELETE player/delete error ! : ', error, res);
+			return serverError('GET player/list/:tId error ! : ', error, res);
 		}
 	})
 );

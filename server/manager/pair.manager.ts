@@ -7,6 +7,17 @@ import { convertEntityToDTO } from './player.manager';
 
 const className = 'Pairs Manager';
 
+export const findById = async (pairId: number) => {
+	logProcess(className + 'findById', 'start');
+	try {
+		const pair = await Pair.findByPk(pairId);
+		return rowToModel(pair, 0);
+	} catch (error) {
+		logProcess(className + 'findById', 'error');
+	}
+	logProcess(className + 'findById', 'end');
+};
+
 export const updatePlacement = async (mapper: { id: number; placement: number }[]): Promise<boolean> => {
 	logProcess(className + 'updatePlacement', 'start');
 	try {
