@@ -19,9 +19,6 @@ import {
 } from '../../src/@common/models';
 
 const router = Router();
-router.use('/', (req: Request, res: Response, next: NextFunction) =>
-	controllerLogger(req, next, 'Pair Controller', '/api/v1/pair')
-);
 
 // GET
 router.get(

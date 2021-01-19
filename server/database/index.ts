@@ -5,3 +5,5 @@ export { default as Stage1 } from './stage1.model';
 export { default as Stage2 } from './stage2.model';
 export { default as Tournament } from './tournament.model';
 export { default as User } from './user.model';
+export { default as StatsPlayer } from './stats/stats.players.model';
+export { default as StatsPairs } from './stats/stats.pairs.model';

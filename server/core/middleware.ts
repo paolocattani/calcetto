@@ -20,7 +20,7 @@ export const routeLogger = (req: Request, res: Response, next: NextFunction) => 
 };
 
 export const controllerLogger = (req: Request, next: NextFunction, controller: string, path: string) => {
-	if (isDevMode()) logger.info(`${controller} : ${req.method} ${req.originalUrl.replace(path, '')} `);
+	if (isDevMode()) logger.info(`${controller} Controller : ${req.method} ${req.originalUrl.replace(path, '')} `);
 	next();
 };
 

@@ -28,9 +28,6 @@ import { TournamentProgress } from '../../src/@common/dto';
 
 // all API path must be relative to /api/v2/stage2
 const router = Router();
-router.use('/', (req: Request, res: Response, next: NextFunction) =>
-	controllerLogger(req, next, 'Stage2 Controller', '/api/v2/stage2')
-);
 
 // Generazione struttura / reperimento dati
 router.post(
@@ -39,7 +36,7 @@ router.post(
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		try {
 			let { tournamentId, count }: FetchStage2Request = req.body;
-			const { user,uuid } = req;
+			const { user, uuid } = req;
 			if (!count || count === 0) {
 				count = await countStage2(tournamentId);
 			}
@@ -101,10 +98,10 @@ router.post(
 			const tournamentId = cells[0].pair!.tournamentId;
 			const message: Message = {
 				status: SessionStatus.STAGE2_UPDATE,
-				label:'common:notification.updating',
-				data: { tournamentId }
-			  };
-		  	sendNotifications(message, tournamentId,TournamentProgress.Stage2);
+				label: 'common:notification.updating',
+				data: { tournamentId },
+			};
+			sendNotifications(message, tournamentId, TournamentProgress.Stage2);
 			return success<UpdateStage2CellResponse>(res, { label: 'stage2:updated_cell' });
 		} catch (error) {
 			logger.error(chalk.redBright('Error while updating Stage2 cell ! : ', error));

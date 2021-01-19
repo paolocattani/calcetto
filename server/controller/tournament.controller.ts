@@ -39,9 +39,6 @@ import {
 
 // all API path must be relative to /api/v2/tournament
 const router = Router();
-router.use('/', (req: Request, res: Response, next: NextFunction) =>
-	controllerLogger(req, next, 'Tournament Controller', '/api/v2/tournament')
-);
 
 // GET
 router.get(
