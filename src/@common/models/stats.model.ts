@@ -10,12 +10,10 @@ export interface StatsPlayerResponse extends GenericReponse {
 	statsPlayer: StatsPlayerDTO;
 }
 
-export interface StatsPairRequest1 {
-	pairId: number;
-}
-export interface StatsPairRequest2 {
-	player1Id: number;
-	player2Id: number;
+export interface StatsPairRequest {
+	pairId?: number;
+	player1Id?: number;
+	player2Id?: number;
 }
 
 export interface StatsPairResponse extends GenericReponse {
