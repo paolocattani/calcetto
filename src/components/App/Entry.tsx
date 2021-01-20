@@ -1,4 +1,4 @@
-import React, { StrictMode } from 'react';
+import React, { StrictMode, Suspense } from 'react';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from '../../redux/store';
 import { Provider } from 'react-redux';
@@ -16,12 +16,14 @@ const Application: React.FC = () => (
   </Provider>
 );
 const Entry: React.FC = () =>
-  process.env.NODE_ENV !== 'production' ? (
+  <Suspense fallback={<LoadingModal />}>
+    {process.env.NODE_ENV !== 'production' ? (
     <StrictMode>
       <Application />
     </StrictMode>
   ) : (
     <Application />
-  );
+  )}
+  </Suspense>;
 
 export default Entry;
