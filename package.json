@@ -76,7 +76,7 @@
     "prod:server": "cd server && npm run prod",
     "prod:build:server": "tsc --pretty --allowJs --outDir ./build_server -p ./server/tsconfig.json",
     "-----HEROKU----": "---------------------------",
-    "heroku-prebuild": "cd server && npm ci",
+    "heroku-prebuild": "cd server && npm ci && pm2 install pm2-intercom",
     "heroku-postbuild": "npm run CRA:build ",
     "heroku-cleanup": "echo This runs after Heroku prunes and caches dependencies.",
     "start": "cd server && npm run prod:heroku:server",
