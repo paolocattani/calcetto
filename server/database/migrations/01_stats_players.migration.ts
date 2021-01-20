@@ -14,11 +14,11 @@ export const up: Migration = async ({ context: sequelize }: UmzugContext) => {
 			case when sum(s1Def + s2Def) != 0 then (sum(s1Win + s2Win)/sum(s1Def + s2Def))::float else '+Infinity'::float end ratioTot
 		from (
 			select sp."player1Id" playerId,sum(s1Win) s1Win,sum(s1Def) s1Def,sum(s2Win) s2Win,sum(s2Def) s2Def
-			from stats_player sp
+			from stats_pairs sp
 			group by sp."player1Id"
 			union
 			select sp."player2Id" playerId,sum(s1Win) s1Win,sum(s1Def) s1Def,sum(s2Win) s2Win,sum(s2Def) s2Def
-			from stats_player sp
+			from stats_pairs sp
 			group by sp."player2Id"
 		) stats_player
 		group by playerId

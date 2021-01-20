@@ -14,7 +14,8 @@
   },
   "scripts": {
     "prod:build": "tsc --pretty",
-    "prod:heroku:server": "./node_modules/.bin/ts-node server.ts --optimize_for_size --max_old_space_size=460 --gc_interval=100",
+    "prod:heroku:server": "pm2-runtime start ecosystem.config.js --env production",
+    "prod:heroku:server_opt": "./node_modules/.bin/ts-node server.ts --optimize_for_size --max_old_space_size=460 --gc_interval=100",
     "prod": " ../node_modules/.bin/ts-node server.ts ",
     "dev": "./node_modules/.bin/nodemon --config \"./nodemon.json\"",
     "test:unit": "cross-env NODE_ENV=test jest",
@@ -78,6 +79,7 @@
     "node-schedule": "^1.3.2",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
+    "pm2": "^4.5.1",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.3.5",
     "sequelize-cli": "^6.2.0",

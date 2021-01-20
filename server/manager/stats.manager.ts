@@ -8,18 +8,19 @@ import { convertEntityToDTO as convertPlayerEntityToDTO } from './player.manager
 // Const
 const className = 'Stats Manager : ';
 
-export const getStatsByPlayer = async (playerId: number): Promise<StatsPlayerDTO> => {
+export const getStatsByPlayer = async (playerId: number) => {
 	logProcess(className + 'getStatsByPlayer', 'start');
 	try {
 		const entity = await StatsPlayer.findOne({ where: { playerId } });
-		return playerEntity2DTO(entity);
+		return entity ? playerEntity2DTO(entity) : undefined;
 	} catch (error) {
 		logProcess(className + 'getStatsByPlayer', ` Error : ${error}`);
 	}
 	logProcess(className + 'getStatsByPlayer', 'end');
+	return undefined;
 };
 
-export async function getStatsByPairs(player1Id: number, player2Id: number): Promise<StatsPairDTO> {
+export async function getStatsByPairs(player1Id: number, player2Id: number) {
 	logProcess(className + 'getStatsByPairs', 'start');
 	try {
 		const entity = await StatsPairs.findOne({
@@ -27,11 +28,12 @@ export async function getStatsByPairs(player1Id: number, player2Id: number): Pro
 				[Op.or]: [{ [Op.and]: { player1Id, player2Id } }, { [Op.and]: { pair1Id: player2Id, pair2Id: player1Id } }],
 			},
 		});
-		return pairEntity2DTO(entity);
+		return entity ? pairEntity2DTO(entity) : undefined;
 	} catch (error) {
 		logProcess(className + 'getStatsByPairs', ` Error : ${error}`);
 	}
 	logProcess(className + 'getStatsByPairs', 'end');
+	return undefined;
 }
 
 export const playerEntity2DTO = (stats: StatsPlayer): StatsPlayerDTO => ({
