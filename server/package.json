@@ -14,7 +14,7 @@
   },
   "scripts": {
     "prod:build": "tsc --pretty",
-    "prod:heroku:server": "pm2-runtime start ecosystem.config.js --env production",
+    "prod:heroku:server": "pm2 link p4lck0k9kr70li6 07el3t4hyafn5z5 && pm2-runtime start ecosystem.config.js --env production",
     "prod:heroku:server_opt": "./node_modules/.bin/ts-node server.ts --optimize_for_size --max_old_space_size=460 --gc_interval=100",
     "prod": " ../node_modules/.bin/ts-node server.ts ",
     "dev": "./node_modules/.bin/nodemon --config \"./nodemon.json\"",
