@@ -1,10 +1,5 @@
 import { Router, Request, Response } from 'express';
-import {
-	StatsPairRequest1,
-	StatsPairRequest2,
-	StatsPairResponse,
-	StatsPlayerResponse,
-} from '../../src/@common/models/stats.model';
+import { StatsPairResponse, StatsPlayerResponse } from '../../src/@common/models/stats.model';
 import { withAuth, doNotCacheThis, asyncMiddleware } from '../core/middleware';
 import { findById } from '../manager/pair.manager';
 
