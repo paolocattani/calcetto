@@ -35,7 +35,7 @@ import {
 } from 'src/redux/services/pair.service';
 import { HTTPStatusCode } from 'src/@common/models/HttpStatusCode';
 import { LABEL_COMMON_LOADING } from 'src/@common/constants/label';
-import {FetchPairsResponse, FindAliasResponse, getEmptyPair, getEmptyPlayer, SavePairResponse} from '../../@common/models';
+import {FetchPairsResponse, FetchPlayersResponse, FindAliasResponse, getEmptyPair, getEmptyPlayer, SavePairResponse} from '../../@common/models';
 
 const hideAskUser = {
   message: '',
@@ -71,7 +71,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
     if (!tournament) return;
     (async () => {
       const { pairsList } = await fetchPairs({ tId: tournament.id }) as FetchPairsResponse;
-      const { playersList } = await fetchPlayers({ addEmpty: true, tId: tournament.id });
+      const { playersList } = await fetchPlayers({ addEmpty: true, tId: tournament.id }) as FetchPlayersResponse;
       setData({ rows: pairsList, players: playersList });
     })();
   }, [tournament]);

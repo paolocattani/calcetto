@@ -2,7 +2,7 @@ import { logProcess, logger } from '../core/logger';
 // Db
 import { getDbConnection } from '../database/config/connection';
 // Models
-import { Stage2, Pair } from '../database';
+import { Stage2, Pair } from '../database/models';
 import { IStage2FE, ICell, PairDTO, UserDTO, TournamentProgress } from '../../src/@common/dto';
 
 import { isAdmin } from './auth.manager';

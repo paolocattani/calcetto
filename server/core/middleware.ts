@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import chalk from 'chalk';
 import { AppRequest } from '../controller';
 // Models
-import { User } from '../database';
+import { User } from '../database/models';
 // Core
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';

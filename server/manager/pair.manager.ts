@@ -1,7 +1,7 @@
 import { PairDTO, UserDTO } from '../../src/@common/dto';
 import { logProcess, logger } from '../core/logger';
 import { Op } from 'sequelize';
-import { Stage2, Pair, Player } from '../database';
+import { Stage2, Pair, Player } from '../database/models';
 import { asyncForEach } from '../core/utils';
 import { convertEntityToDTO } from './player.manager';
 
@@ -11,7 +11,7 @@ export const findById = async (pairId: number) => {
 	logProcess(className + 'findById', 'start');
 	try {
 		const pair = await Pair.findByPk(pairId);
-		return rowToModel(pair, 0);
+		return pair ? rowToModel(pair, 0) : null;
 	} catch (error) {
 		logProcess(className + 'findById', 'error');
 	}

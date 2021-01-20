@@ -16,8 +16,7 @@
 /.nyc_output
 /cypress-coverage
 # production
-# FIXME:
-# /build
+/build
 
 # misc
 .DS_Store

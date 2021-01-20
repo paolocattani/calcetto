@@ -20,16 +20,15 @@ const selectAPI = () => `${API_VERSION}/selected`;
 const newAPI = () => `${API_VERSION}/new`;
 const deleteAPI = () => `${API_VERSION}/delete`;
 
-export const fetchPairs = async ({ tId }: FetchPairsRequest) => getWrapper<FetchPairsResponse>(listAPI(tId));
-export const findAlias = async ({ player1Id, player2Id }: FindAliasRequest) =>
+export const fetchPairs = ({ tId }: FetchPairsRequest) => getWrapper<FetchPairsResponse>(listAPI(tId));
+export const findAlias = ({ player1Id, player2Id }: FindAliasRequest) =>
 	getWrapper<FindAliasResponse>(aliasAPI(player1Id, player2Id));
-export const selectPairs = async (request: SelectPairsRequest) =>
+export const selectPairs = (request: SelectPairsRequest) =>
 	putWrapper<SelectPairsRequest, SelectPairsResponse>(selectAPI(), request);
-export const postPair = async (request: SavePairRequest) =>
-	postWrapper<SavePairRequest, SavePairResponse>(newAPI(), request);
+export const postPair = (request: SavePairRequest) => postWrapper<SavePairRequest, SavePairResponse>(newAPI(), request);
 
 // FIXME: create update
-export const updatePair = async (request: SavePairRequest) =>
+export const updatePair = (request: SavePairRequest) =>
 	postWrapper<SavePairRequest, SavePairResponse>(newAPI(), request);
-export const deletePairs = async (request: DeletePairsRequest) =>
+export const deletePairs = (request: DeletePairsRequest) =>
 	deleteWrapper<DeletePairsRequest, DeletePairsResponse>(deleteAPI(), request);

@@ -1,7 +1,7 @@
 {
   "name": "calcetto",
   "private": false,
-  "version": "2.12.6",
+  "version": "2.12.7",
   "description": "Table Soccer Manager",
   "engines": {
     "node": "14.x",
@@ -75,10 +75,11 @@
     "-----PRODUCTION----": "---------------------------",
     "prod:server": "cd server && npm run prod",
     "prod:build:server": "tsc --pretty --allowJs --outDir ./build_server -p ./server/tsconfig.json",
-    "prod:heroku": "npm i && npm run prod:heroku:server",
-    "prod:heroku:server": "cd server && npm run prod:heroku:server",
-    "prod:heroku:client": "node --optimize_for_size --max_old_space_size=460 -gc_interval=100 node_modules/.bin/react-scripts build",
-    "start": "npm run prod:heroku:server",
+    "-----HEROKU----": "---------------------------",
+    "heroku-prebuild": "cd server && npm ci && ./node_modules/.bin/pm2 install pm2-intercom",
+    "heroku-postbuild": "npm run CRA:build ",
+    "heroku-cleanup": "echo This runs after Heroku prunes and caches dependencies.",
+    "start": "cd server && npm run prod:heroku:server",
     "-----CRA----": "---------------------------",
     "CRA:start": "react-scripts --require @cypress/instrument-cra start",
     "CRA:build": "react-scripts build ",
@@ -99,8 +100,8 @@
     "lint:report": "./node_modules/.bin/eslint -f json -o ./analysis/eslint-report.json .",
     "analyze": "source-map-explorer build/static/js/*.js --html analysis/build-analysis.html",
     "-----CLI----": "---------------------------",
-    "release": "bash ./cli/release.sh",
-    "build": "bash ./cli/build.sh"
+    "cli_release": "bash ./cli/release.sh",
+    "cli_build": "bash ./cli/build.sh"
   },
   "browserslist": {
     "production": [

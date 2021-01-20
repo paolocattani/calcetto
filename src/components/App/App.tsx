@@ -39,7 +39,6 @@ const App: React.FC = (_) => {
   }, [currentHistory, dispatch]);
 
   return (
-    <Suspense fallback={<LoadingModal />}>
     <div className="App">
       <ErrorBoundary>
         {/* Loading translations */}
@@ -73,7 +72,6 @@ const App: React.FC = (_) => {
         </Container>
       </ErrorBoundary>
     </div>
-    </Suspense>
   );
 };
 
