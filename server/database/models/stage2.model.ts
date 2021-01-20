@@ -1,7 +1,5 @@
 import { Column, Model, Table, Comment, DataType, ForeignKey, AllowNull, BelongsTo } from 'sequelize-typescript';
-import Tournament from './tournament.model';
-import Pair from './pair.model';
-
+import { Tournament, Pair } from '.';
 /**
  *
  */

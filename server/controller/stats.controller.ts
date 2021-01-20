@@ -36,14 +36,14 @@ router.get(
 			if (!pairIdString && (!player1IdString || player2IdString)) {
 				return missingParameters(res);
 			}
-			let player1Id: number;
-			let player2Id: number;
+			let player1Id: number | null = null;
+			let player2Id: number | null = null;
 			if (pairIdString) {
 				const pairId = parseInt(pairIdString as string);
 				const pair = await findById(pairId);
 				if (pair) {
-					player1Id = pair.player1Id;
-					player2Id = pair.player2Id;
+					player1Id = pair.player1Id!;
+					player2Id = pair.player2Id!;
 				}
 			} else {
 				player1Id = parseInt(player1IdString as string);

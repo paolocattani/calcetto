@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import { logger } from '../core/logger';
 import { getDbConnection } from '../database/config/connection';
 // Models
-import { Pair } from '../database';
+import { Pair } from '../database/models';
 import { asyncMiddleware, withAuth, withAdminRights, doNotCacheThis } from '../core/middleware';
 import { AppRequest } from './index';
 import { listInTournament, findAlias, rowToModel, parseBodyToPair } from '../manager/pair.manager';

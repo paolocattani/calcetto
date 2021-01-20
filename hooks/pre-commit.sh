@@ -39,7 +39,6 @@ if [[ $BRANCH_NAME != "master" ]] && [[ $SEARCH_RESULT = 1 ]]; then
     echo "Add files to commit..."
     cd "$HOOKS_DIR" && cd ..
     git add .env sonar-project.properties package.json package-lock.json
-    git add ./build/*
 
     # Disable this hook
     sed -i 's|^PRE-COMMIT=.*$|PRE-COMMIT=0|g' ./hooks/.hooks

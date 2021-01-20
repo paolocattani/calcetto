@@ -1,7 +1,5 @@
 import { Column, Comment, Model, DataType, Table, ForeignKey, BelongsTo, Default, HasMany } from 'sequelize-typescript';
-import Tournament from './tournament.model';
-import Player from './player.model';
-import { Stage2 } from '.';
+import { Tournament, Player, Stage2 } from '.';
 
 @Table({ tableName: 'pairs', freezeTableName: true, version: false })
 export default class Pair extends Model {

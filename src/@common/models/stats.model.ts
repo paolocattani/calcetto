@@ -7,7 +7,7 @@ export interface StatsPlayerRequest {
 }
 
 export interface StatsPlayerResponse extends GenericReponse {
-	statsPlayer: StatsPlayerDTO;
+	statsPlayer?: StatsPlayerDTO;
 }
 
 export interface StatsPairRequest {
@@ -17,7 +17,7 @@ export interface StatsPairRequest {
 }
 
 export interface StatsPairResponse extends GenericReponse {
-	statsPair: StatsPairDTO;
+	statsPair?: StatsPairDTO;
 }
 
 export interface StatsError extends GenericReponse {}

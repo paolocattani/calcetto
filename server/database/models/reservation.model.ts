@@ -1,6 +1,5 @@
 import { Column, Model, Table, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
-import Player from './player.model';
-import { User } from '.';
+import { Player, User } from '.';
 
 /**
  * Gestione prenotazione

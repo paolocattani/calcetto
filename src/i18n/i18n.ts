@@ -9,7 +9,7 @@ i18n
 	.use(LanguageDetector)
 	.use(initReactI18next) // passes i18n down to react-i18next
 	.init({
-		debug: process.env.NODE_ENV !== 'production',
+		debug: false,
 		//## Langs
 		// Language to use (overrides language detection)
 		// lng: 'it-IT',
@@ -20,7 +20,7 @@ i18n
 
 		//## Namespaces
 		// String or array of namespaces to load
-		ns: ['common', 'auth', 'tournament', 'pair','stage1','stage2'],
+		ns: ['common', 'auth', 'tournament', 'pair', 'stage1', 'stage2'],
 		// Default namespace used if not passed to translation function
 		defaultNS: 'common',
 		// String or array of namespaces to lookup key if not found in given namespace.

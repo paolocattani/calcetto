@@ -10,9 +10,8 @@ import {
 	ForeignKey,
 	BelongsTo,
 } from 'sequelize-typescript';
-import Pair from './pair.model';
-import User from './user.model';
-import { PlayerRole } from '../../src/@common/dto';
+import { Pair, User } from '.';
+import { PlayerRole } from '../../../src/@common/dto';
 
 @Table({ tableName: 'player', freezeTableName: true, version: false })
 export default class Player extends Model {

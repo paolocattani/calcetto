@@ -109,5 +109,14 @@ if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]]; then
 		# Enable post commit hook to tag this commit with the new version
     sed -i 's|^POST-COMMIT=.*$|POST-COMMIT=1|g' ./hooks/.hooks
 	fi
+
+  echo '  Done...'
+  echo '--> Updating heroku...'
+  export HEROKU_API_KEY='5156b758-3383-4d74-a0cf-69371949b4ab'
+  heroku config:set REACT_APP_CLIENT_VERSION=$NEW_VERSION -a calcetto2020stage
+  heroku config:set REACT_APP_CLIENT_COMMIT_HASH=$NEW_VERSION -a calcetto2020stage
+  heroku config:set REACT_APP_CLIENT_VERSION=$NEW_VERSION -a calcetto2020production
+  heroku config:set REACT_APP_CLIENT_COMMIT_HASH=$NEW_VERSION -a calcetto2020production
+
   echo '  Done...'
 fi

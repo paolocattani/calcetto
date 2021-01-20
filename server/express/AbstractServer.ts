@@ -130,22 +130,22 @@ export abstract class AbstractServer implements IServer {
 			logger.info('Shutdown...');
 		});
 
-		/*
-			const closeServer = (signal: string) => {
+		// Graceful Shutdown
+		const closeServer = (signal: string) => {
 			logger.info(`Detect event ${signal}.`);
 			if (httpServer.listening) {
 				httpServer.close(function () {
-				logger.info('Stopping async processes...');
-				clearInterval(interval);
-				logger.info('Shutdown...');
-				process.exit(0);
+					logger.info('Stopping async processes...');
+					clearInterval(interval);
+					logger.info('Shutdown...');
+					process.exit(0);
 				});
 			}
-			};
+		};
 
-			process.on('SIGINT', () => closeServer('SIGINT'));
-			process.on('SIGTERM', () => closeServer('SIGINT'));
-		*/
+		process.on('SIGINT', () => closeServer('SIGINT'));
+		process.on('SIGTERM', () => closeServer('SIGINT'));
+
 		return httpServer;
 	}
 	// Implementation have to handle all other API

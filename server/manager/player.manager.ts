@@ -1,6 +1,6 @@
 // Models/Types
 import { PlayerDTO, PlayerRole } from '../../src/@common/dto';
-import Player from '../database/player.model';
+import { Player } from '../database/models';
 // Logger utils
 import { logProcess } from '../core/logger';
 import { WhereOptions } from 'sequelize';

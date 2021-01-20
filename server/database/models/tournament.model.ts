@@ -10,11 +10,8 @@ import {
 	ForeignKey,
 	BelongsTo,
 } from 'sequelize-typescript';
-import Pair from './pair.model';
-import Stage1 from './stage1.model';
-import Stage2 from './stage2.model';
-import User from './user.model';
-import { TournamentProgress } from '../../src/@common/dto';
+import { Pair, Stage1, Stage2, User } from '.';
+import { TournamentProgress } from '../../../src/@common/dto';
 
 /**
  * Rapprenta un Torneo :

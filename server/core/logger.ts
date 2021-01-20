@@ -6,6 +6,7 @@ import chalk from 'chalk';
 import { isProductionMode } from './debug';
 
 log4js.configure({
+	pm2: isProductionMode(),
 	appenders: {
 		console: { type: 'stdout' },
 		'dev-logger': {
