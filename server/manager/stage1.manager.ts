@@ -1,5 +1,5 @@
 // Models
-import { Stage1, Tournament } from '../database';
+import { Stage1, Tournament } from '../database/models';
 import { Stage1Row, UserDTO } from '../../src/@common/dto';
 // Core
 import { logProcess, logger } from '../core/logger';

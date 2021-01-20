@@ -1,5 +1,5 @@
 // Models/Types
-import { User } from '../database';
+import { User } from '../database/models';
 import { UserDTO, UserRole, PlayerRole, PlayerDTO } from '../../src/@common/dto';
 // Logger utils
 import { logProcess, logger } from '../core/logger';

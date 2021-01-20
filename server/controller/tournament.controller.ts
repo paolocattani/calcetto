@@ -14,7 +14,7 @@ import {
 	deleteAllTournament,
 } from '../manager/tournament.manager';
 // Models
-import Tournament from '../database/tournament.model';
+import { Tournament } from '../database/models';
 import { TournamentDTO } from '../../src/@common/dto';
 import { AppRequest } from './index';
 import { entityNotFound, failure, missingParameters, serverError, success } from './common.response';

@@ -1,6 +1,5 @@
 import { Column, Model, Comment, Table, ForeignKey, DataType, BelongsTo } from 'sequelize-typescript';
-import Pair from './pair.model';
-import Tournament from './tournament.model';
+import { Tournament, Pair } from '.';
 
 /**
  * https://stackoverflow.com/questions/2142566/storing-matrices-in-a-relational-database

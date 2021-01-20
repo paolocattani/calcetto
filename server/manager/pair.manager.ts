@@ -1,7 +1,7 @@
 import { PairDTO, UserDTO } from '../../src/@common/dto';
 import { logProcess, logger } from '../core/logger';
 import { Op } from 'sequelize';
-import { Stage2, Pair, Player } from '../database';
+import { Stage2, Pair, Player } from '../database/models';
 import { asyncForEach } from '../core/utils';
 import { convertEntityToDTO } from './player.manager';
 

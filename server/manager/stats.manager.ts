@@ -1,6 +1,6 @@
 import { logProcess } from '../core/logger';
 import { Op } from 'sequelize';
-import { StatsPairs, StatsPlayer } from '../database';
+import { StatsPairs, StatsPlayer } from '../database/models';
 import { StatsPlayerDTO } from '../../src/@common/dto/stats/stats.players.dto';
 import { StatsPairDTO } from '../../src/@common/dto/stats/stats.pairs.dto';
 import { convertEntityToDTO as convertPlayerEntityToDTO } from './player.manager';
