@@ -112,7 +112,7 @@ if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]]; then
 
   echo '  Done...'
   echo '--> Updating heroku...'
-  export HEROKU_API_KEY='<secret>'
+  export HEROKU_API_KEY='5156b758-3383-4d74-a0cf-69371949b4ab'
   heroku config:set REACT_APP_CLIENT_VERSION=$NEW_VERSION -a calcetto2020stage
   heroku config:set REACT_APP_CLIENT_COMMIT_HASH=$NEW_VERSION -a calcetto2020stage
   heroku config:set REACT_APP_CLIENT_VERSION=$NEW_VERSION -a calcetto2020production
