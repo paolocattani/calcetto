@@ -1,0 +1,34 @@
+{
+    "loaded":"Giocatori caricati...",
+    "updated":"Giocatore aggiornato...",
+    "saved":"Giocatore creato...",
+    "deleted_1":"Giocatore eliminato...",
+    "deleted_2":"Giocatori elimnati...",
+    "duplicated":"Esiste già un giocatore con questi dati.",
+    "data":"Nessun dato reperito",
+    "add":"Aggiungi giocatore",
+    "edit":"Modifica giocatore",
+    "filter":"Pulisci filtri",
+		"not_found": "Giocatore non trovato",
+		"no_data": "Nessun giocatore...",
+    "field": {
+        "name":"Nome",
+        "surname":"Cognome",
+        "alias":"Alias",
+        "role":"Ruolo",
+        "email":"Email",
+        "phone":"Cellulare",
+        "filter":"Filtra"
+    },
+    "delete":{
+        "one":"Elimina giocatore",
+        "multi":"Elimina giocatori"
+    },
+    "role":{
+        "role":"Ruolo",
+        "none":"Non sono un giocatore",
+        "goalKeeper":"Portiere",
+        "striker":"Attaccante",
+        "master":"Master"
+    }
+}

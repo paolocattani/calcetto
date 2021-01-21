@@ -1,0 +1,62 @@
+{
+	"saved":"Pair saved...",
+	"loaded":"Pairs loaded...",
+	"selected_1":"Pair selected...",
+	"selected_2":"Pairs selected...",
+	"deleted_1":"Pair deleted...",
+	"deleted_2":"Pairs deleted...",
+	"stage1":{
+       "set" :"Assegna gironi",
+       "resetConfirm":"Vuoi resettare i gironi",
+       "reset":"Reset gironi"
+    },
+    "add":{
+        "one":"Aggiungi coppia",
+        "multi":"Aggiungi coppie"
+    },
+    "missing":{
+        "1":"Aggiungi le coppie per questo torneo",
+        "2":"Ci sono solo {{current}} giocatori definiti ma devono essercene almeno {{min}} per poter formare un torneo.",
+        "3":"Devi creare un altro giocatore",
+        "4":"Devi creare almeno altri {{diff}}"
+    },
+    "delete":{
+        "one":"Elimina coppia",
+        "multi":"Elimina coppie"
+    },
+    "success":{
+        "stage1Name":"Gironi assegnati correttamente",
+        "deleteOne":"Riga cancellata",
+        "deleteMulti":"Righe cancellate",
+        "add":"Riga aggiunta"
+    },
+    "error":{
+        "1":"Numero massimo di coppie gia creato",
+        "2":"Numero di coppie da aggiungere ( max {{max}} )",
+        "3":"Inserisci almeno 4 coppie",
+        "4":"Numero di gironi ( max {{max}} )",
+        "5":"Non puoi riassegnare i gironi in quanto le coppie sono gia state confermate per la fase successiva",
+        "6":"Specificare il numero di gironi da assegnare",
+        "7":"Non è possibile cancellare in quanto il torneo è gia alla fase 2",
+        "8":"Errore cancellazione Fase 1",
+        "9":"Il torneo {{invalidStage}} deve contenere almeno {{min}} coppie",
+        "10":"I tornei {{invalidStage}} devono contenere almeno {{min}} coppie",
+        "11":"Assegna i giocatori alla riga {{missingPairs}} per procedere ",
+        "12":"Assegna i giocatori alle righe {{missingPairs}} per procedere ",
+        "13":"Assegna la riga {{missingStage1Name}} ad un girone per procedere ",
+        "14":"Assegna le righe {{missingStage1Name}} ad un girone per procedere ",
+        "15":"Numero di coppie insufficente. Devi formare almeno 4 coppie",
+        "16":"Id torneo mancante. Verrai inviato alla Home tra 5 secondi",
+        "17":"Attenzione : Non puoi selezionare lo stesso giocare !",
+        "18":"Errore cancellazione riga",
+        "19":"Errore aggiunta riga"
+    },
+    "field": {
+        "player1":"Giocatore 1",
+        "player2":"Giocatore 2",
+        "alias":"Alias coppia",
+        "stage1":"Nome girone",
+        "paid1":"Pagato 1",
+        "paid2":"Pagato 2"
+    }
+}
