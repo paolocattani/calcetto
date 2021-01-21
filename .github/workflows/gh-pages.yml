@@ -3,10 +3,10 @@ name: Publish To Github Pages
 on:
   push:
     branches:
-      - develop
+      - disabled
   pull_request:
     branches:
-      - master
+      - disabled
 
 jobs:
   build-and-deploy:
