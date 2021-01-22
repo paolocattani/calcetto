@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { StatsError, StatsPairResponse, StatsPlayerResponse } from '../../src/@common/models/stats.model';
+import { logger } from '../core/logger';
 import { withAuth, doNotCacheThis, asyncMiddleware } from '../core/middleware';
 import { findById } from '../manager/pair.manager';
 
@@ -32,7 +33,7 @@ router.get(
 	doNotCacheThis,
 	asyncMiddleware(async (req: Request, res: Response) => {
 		try {
-			const { player1IdString, player2IdString, pairIdString } = req.query;
+			const { player1Id: player1IdString, player2Id: player2IdString, pairId: pairIdString } = req.query;
 			if (!pairIdString && (!player1IdString || player2IdString)) {
 				return missingParameters(res);
 			}
@@ -42,8 +43,8 @@ router.get(
 				const pairId = parseInt(pairIdString as string);
 				const pair = await findById(pairId);
 				if (pair) {
-					player1Id = pair.player1Id!;
-					player2Id = pair.player2Id!;
+					player1Id = pair.player1!.id;
+					player2Id = pair.player2!.id;
 				}
 			} else {
 				player1Id = parseInt(player1IdString as string);

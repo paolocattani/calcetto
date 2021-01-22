@@ -1,35 +1,38 @@
-import { Column, Model, Table, DataType, ForeignKey, HasOne } from 'sequelize-typescript';
+import { Column, Model, Table, DataType, ForeignKey, BelongsTo, DefaultScope } from 'sequelize-typescript';
 import Player from '../player.model';
 
 /**
  *
  */
-@Table({ tableName: 'stats_pairs', freezeTableName: true, version: false })
+@DefaultScope(() => ({
+	include: [StatsPairs.associations.player1, StatsPairs.associations.player2],
+}))
+@Table({ tableName: 'stats_pairs', freezeTableName: true, version: false, timestamps: false })
 export default class StatsPairs extends Model {
 	@ForeignKey(() => Player)
 	@Column(DataType.INTEGER)
 	public player1Id!: number;
-	@HasOne(() => Player, 'player1Id')
+	@BelongsTo(() => Player, 'player1Id')
 	public player1!: Player;
 
 	@ForeignKey(() => Player)
 	@Column(DataType.INTEGER)
 	public player2Id!: number;
-	@HasOne(() => Player, 'player2Id')
+	@BelongsTo(() => Player, 'player2Id')
 	public player2!: Player;
 
 	@Column(DataType.INTEGER)
-	public readonly s1Win!: number;
+	public readonly s1win!: number;
 	@Column(DataType.INTEGER)
-	public readonly s1Def!: number;
+	public readonly s1def!: number;
 	@Column(DataType.INTEGER)
-	public readonly s2Win!: number;
+	public readonly s2win!: number;
 	@Column(DataType.INTEGER)
-	public readonly s2Def!: number;
+	public readonly s2def!: number;
 	@Column(DataType.INTEGER)
-	public readonly totWin!: number;
+	public readonly totwin!: number;
 	@Column(DataType.INTEGER)
-	public readonly totDef!: number;
+	public readonly totdef!: number;
 	@Column(DataType.INTEGER)
-	public readonly totRatio!: number;
+	public readonly ratiotot!: number;
 }

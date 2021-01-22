@@ -33,7 +33,7 @@ async function loadModels(schema?: string): Promise<Sequelize> {
 	if (!isProductionMode()) logger.info(`URI : ${chalk.red.bold(util.inspect(uri))}`);
 	const connectionOptions: SequelizeOptions = {
 		...envConfig,
-		models: [__dirname + '/../models/*.model.ts'],
+		models: [__dirname + '/../models/**/*.model.ts'],
 		modelMatch: (filename: string, member: string) =>
 			filename.substring(0, filename.indexOf('.model')) === member.toLowerCase(),
 		define: { schema },

@@ -54,7 +54,7 @@ if (isProductionMode()) {
 }
 
 export const logProcess = (method: string, value: string, ...rest: any) =>
-	rest ? logger.info(`[${chalk.yellow(method)}].${value}`, ...rest) : logger.info(`[${chalk.yellow(method)}].${value}`);
+	logger.info(`[${chalk.yellow(method)}].${value}`, ...rest);
 
 export const logMigrationStart = (method: string, name: string) =>
 	logger.info(`Running migration ${chalk.red.bold(method)} : ${chalk.yellow(name)}`);
