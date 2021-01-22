@@ -9,10 +9,16 @@ import {
 	Comment,
 	ForeignKey,
 	BelongsTo,
+	Scopes,
 } from 'sequelize-typescript';
 import { Pair, User } from '.';
 import { PlayerRole } from '../../../src/@common/dto';
 
+@Scopes(() => ({
+	withPairs: {
+		include: [Player.associations.pair1, Player.associations.pair2],
+	},
+}))
 @Table({ tableName: 'player', freezeTableName: true, version: false })
 export default class Player extends Model {
 	@Column(DataType.STRING)
@@ -60,8 +66,7 @@ export default class Player extends Model {
 		type: DataType.VIRTUAL,
 		get(this: Player): boolean {
 			if (this.pair1 && this.pair1.length > 0) return false;
-			if (this.pair2 && this.pair2.length > 0) return false;
-			else return true;
+			return !(this.pair2 && this.pair2.length > 0);
 		},
 	})
 	public editable!: boolean;

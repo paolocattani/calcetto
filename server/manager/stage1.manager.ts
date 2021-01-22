@@ -141,8 +141,6 @@ export const generateStage1Rows = async (rows: Stage1Row[], stageName: string, u
 									where,
 									defaults: model,
 									transaction,
-									// @ts-ignore
-									// FIXME:
 									include,
 								});
 							} else record = await Stage1.findOne({ where, transaction, include });

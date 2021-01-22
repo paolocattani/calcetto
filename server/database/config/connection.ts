@@ -16,7 +16,6 @@ import config, { SequelizeConfiguration } from './config';
 import util from 'util';
 import chalk from 'chalk';
 import { Environment } from '../../../src/@common/models';
-import { Tournament, Player, Pair, Stage1, Stage2, User, StatsPlayer, StatsPairs } from '../models';
 
 let connection: Sequelize;
 
@@ -34,13 +33,9 @@ async function loadModels(schema?: string): Promise<Sequelize> {
 	if (!isProductionMode()) logger.info(`URI : ${chalk.red.bold(util.inspect(uri))}`);
 	const connectionOptions: SequelizeOptions = {
 		...envConfig,
-		// FIXME:
-		models: [User, Tournament, Player, Pair, Stage1, Stage2, StatsPlayer, StatsPairs],
-		/*
-			models: [__dirname + '/*.model.ts'],
-			modelMatch: (filename: string, member: string) =>
-				filename.substring(0, filename.indexOf('.model')) === member.toLowerCase(),
-		*/
+		models: [__dirname + '/../models/*.model.ts'],
+		modelMatch: (filename: string, member: string) =>
+			filename.substring(0, filename.indexOf('.model')) === member.toLowerCase(),
 		define: { schema },
 	};
 

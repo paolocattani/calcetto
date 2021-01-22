@@ -12,13 +12,12 @@ const className = 'Player Manager : ';
 export const listAllInTournament = async (tId: number): Promise<PlayerDTO[]> => {
 	try {
 		logProcess(className + 'listAllInTournament', 'start');
-		const users = await Player.findAll({
+		const users = await Player.scope('withPairs').findAll({
 			order: [
 				['alias', 'DESC'],
 				['name', 'DESC'],
 				['surname', 'DESC'],
 			],
-			include: [Player.associations.pair1, Player.associations.pair2],
 		});
 		logProcess(className + 'listAllInTournament', 'users fetched');
 
@@ -55,10 +54,7 @@ export const listAllInTournament = async (tId: number): Promise<PlayerDTO[]> => 
 export const listAll = async (): Promise<PlayerDTO[]> => {
 	try {
 		logProcess(className + 'listAll', 'start');
-		const users = await Player.findAll({
-			order: [['id', 'ASC']],
-			include: [Player.associations.pair1, Player.associations.pair2],
-		});
+		const users = await Player.scope('withPairs').findAll({ order: [['id', 'ASC']] });
 		logProcess(className + 'listAll', 'end');
 		return users.map((player, ii) => convertEntityToDTO(player, ii, player?.editable ?? false, player?.label ?? ''));
 	} catch (error) {
@@ -130,8 +126,8 @@ export const findById = async (id: number): Promise<Player | null> => {
 	return player;
 };
 
-export const deletePlayer = async (models: Player[]): Promise<number> =>
-	await Player.destroy({ where: { id: models.map((e) => e.id) } });
+export const deletePlayer = (models: Player[]): Promise<number> =>
+	Player.destroy({ where: { id: models.map((e) => e.id) } });
 
 // Utils
 export const findByParams = async (parameters: Map<string, WhereOptions | Object>): Promise<Player | null> => {

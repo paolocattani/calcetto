@@ -26,6 +26,11 @@ export async function asyncForEach<T>(
 //
 export const logEntity = <T extends Model<any, any>>(entity: T) => JSON.stringify(entity, null, 2);
 
+export const isNotNull = () => ({
+	[Op.not]: '',
+	[Op.ne]: null,
+});
+
 export const getWhereFromMap = (parameters: Map<string, WhereOptions | Object>): WhereOptions =>
 	[...parameters.entries()].reduce<WhereOptions>(
 		(acc, [key, value]) => (key === 'fn' ? { ...acc, value } : { ...acc, ...{ [key]: value } }),
