@@ -24,7 +24,7 @@ import { useTranslation } from 'react-i18next';
 // Models
 import { PairDTO, PlayerDTO, TournamentProgress } from 'src/@common/dto';
 import { deletePairs, fetchPairs, findAlias, postPair, updatePair } from 'src/redux/services/pair.service';
-import { HTTPStatusCode } from '../../@common/models/HttpStatusCode';
+import { HTTPStatusCode, SuccessCodes } from '../../@common/models/HttpStatusCode';
 import { LABEL_COMMON_LOADING } from '../../@common/constants/label';
 import {
 	FetchPairsResponse,
@@ -37,6 +37,9 @@ import {
 import Toolsbar from './toolsbar';
 import { SyntheticEvent } from 'react';
 import { fetchPairStats } from '../../redux/services/stats.service';
+import { StatsPairDTO } from 'src/@common/dto/stats/stats.pairs.dto';
+import StatsPair from './stat';
+import { StatsPairResponse } from 'src/@common/models/stats.model';
 
 const hideAskUser = {
 	message: '',
@@ -63,6 +66,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 	// Data
 	const [data, setData] = useState<{ rows: PairDTO[]; players: PlayerDTO[] }>({ rows: [], players: [] });
 	const [selectedRows, setSelectedRows] = useState<PairDTO[]>([]);
+	const [stats, setStats] = useState<Map<number, StatsPairDTO | undefined>>(new Map());
 	// Function params
 	const [stage1Number, setStage1Number] = useState<number>(0);
 	const [newRowsNumber, setNewRowsNumber] = useState<number>(0);
@@ -402,20 +406,20 @@ const PairsTable: React.FC<PairTableProps> = () => {
 	const expandRow = {
 		expandByColumnOnly: true,
 		showExpandColumn: true,
-		renderer: (row: PairDTO) => (
-			<div>
-				<p>{`This Expand row is belong to rowKey ${row.id}`}</p>
-				<p>You can render anything here, also you can add additional data on every row object</p>
-				<p>expandRow.renderer callback will pass the origin row object to you</p>
-			</div>
-		),
+		renderer: (row: PairDTO) => {
+			return row.id && stats.get(row.id) ? (
+				<StatsPair stats={stats.get(row.id)!} />
+			) : (
+				<div>It looks like it's the first time you play togher! Good Luck! </div>
+			);
+		},
 		onExpand: async (row: PairDTO, isExpand: boolean, rowIndex: number, e: SyntheticEvent) => {
-			const result = await fetchPairStats({ pairId: row.id! });
-			console.log(result);
-			console.log(row.id);
-			console.log(isExpand);
-			console.log(rowIndex);
-			console.log(e);
+			if (row.id) {
+				const result = await fetchPairStats({ pairId: row.id! });
+				const { statsPair } = result as StatsPairResponse;
+				stats.set(row.id, SuccessCodes.includes(result.code) && statsPair ? statsPair : undefined);
+				setStats(stats);
+			}
 		},
 		onExpandAll: (isExpandAll: boolean, rows: Array<PairDTO>, e: SyntheticEvent) => {
 			console.log(isExpandAll);
