@@ -53,7 +53,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 	// Navigation
 	const currentHistory = useHistory();
 	const dispatch = useDispatch();
-	const { t } = useTranslation(['common', 'pair']);
+	const { t } = useTranslation(['common', 'pair', 'stats']);
 
 	const isAdmin = useSelector(AuthSelector.isAdmin);
 	const tournament = useSelector(TournamentSelector.getTournament)!;
@@ -407,14 +407,10 @@ const PairsTable: React.FC<PairTableProps> = () => {
 		expandByColumnOnly: true,
 		showExpandColumn: true,
 		renderer: (row: PairDTO) => {
-			return row.id && stats.get(row.id) ? (
-				<StatsPair stats={stats.get(row.id)!} />
-			) : (
-				<div>It looks like it's the first time you play togher! Good Luck! </div>
-			);
+			return row.id && stats.get(row.id) ? <StatsPair stats={stats.get(row.id)!} /> : <div>{t('stats:not_found')}</div>;
 		},
 		onExpand: async (row: PairDTO, isExpand: boolean, rowIndex: number, e: SyntheticEvent) => {
-			if (row.id) {
+			if (row.id && isExpand) {
 				const result = await fetchPairStats({ pairId: row.id! });
 				const { statsPair } = result as StatsPairResponse;
 				stats.set(row.id, SuccessCodes.includes(result.code) && statsPair ? statsPair : undefined);

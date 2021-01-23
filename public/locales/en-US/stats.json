@@ -1,0 +1,18 @@
+{
+    "stage1": "Stage 1",
+    "stage2": "Stage 2",
+    "tot": "Total",
+    "not_found": "It looks like it's the first time you play togher! Good Luck! ",
+    "winnings1": "Stage 1 Winnings",
+    "winnings2": "Stage 2 Winnings",
+    "winningsTot": "Total Winnings",
+    "winnings": "Winnings ",
+    "defeats1": "Stage 1 Defeats",
+    "defeats2": "Stage 2 Defeats",
+    "defeatsTot": "Total Defeats",
+    "defeats": "Defeats",
+    "ratio1": "Stage 1 Ratio ",
+    "ratio2": "Stage 2 Ratio",
+    "ratioTot": "Total Ratio",
+    "ratio": "Ratio"
+}

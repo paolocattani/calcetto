@@ -17,7 +17,7 @@ interface StatsBadgeProps {
 const StatsBadge: React.FC<StatsBadgeProps> = ({ stats, variant, header }) => (
 	<Col>
 		<Row key={header + '0'} className="justify-content-center">
-			{header}
+			<strong>{header}</strong>
 		</Row>
 		<hr />
 		{stats.map((s, i) => (
