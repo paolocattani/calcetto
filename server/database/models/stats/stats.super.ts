@@ -1,5 +1,6 @@
 import { Model, Column, DataType } from 'sequelize-typescript';
 import { StatsPairs, StatsPlayer } from '..';
+import { logger } from '../../../core/logger';
 
 export default class StatsGeneric extends Model {
 	@Column(DataType.INTEGER)
@@ -18,67 +19,67 @@ export default class StatsGeneric extends Model {
 	public readonly ratiotot!: number;
 
 	@Column({
-		type: DataType.VIRTUAL,
+		type: DataType.VIRTUAL(DataType.NUMBER),
 		get(this: StatsPairs | StatsPlayer): number {
-			return this.totwin + this.totdef;
+			return Number(this.totwin) + Number(this.totdef);
 		},
 	})
-	public totMatch!: number;
+	public readonly totMatch!: number;
 	@Column({
-		type: DataType.VIRTUAL,
+		type: DataType.VIRTUAL(DataType.NUMBER),
 		get(this: StatsPairs | StatsPlayer): number {
-			return this.s1win + this.s1def;
+			return Number(this.s1win) + Number(this.s1def);
 		},
 	})
-	public totS1!: number;
+	public readonly totS1!: number;
 	@Column({
-		type: DataType.VIRTUAL,
+		type: DataType.VIRTUAL(DataType.NUMBER),
 		get(this: StatsPairs | StatsPlayer): number {
-			return this.s2win + this.s2def;
+			return Number(this.s2win) + Number(this.s2def);
 		},
 	})
-	public totS2!: number;
+	public readonly totS2!: number;
 	@Column({
-		type: DataType.VIRTUAL,
+		type: DataType.VIRTUAL(DataType.NUMBER),
 		get(this: StatsPairs | StatsPlayer): number {
-			return ((this.s1win + this.s2win) * 100) / +this.totMatch;
+			return ((Number(this.s1win) + Number(this.s2win)) * 100) / this.totMatch;
 		},
 	})
-	public winPercentage!: number;
+	public readonly winPercentage!: number;
 	@Column({
-		type: DataType.VIRTUAL,
+		type: DataType.VIRTUAL(DataType.NUMBER),
 		get(this: StatsPairs | StatsPlayer): number {
-			return (this.s1win * 100) / +this.totS1;
+			return (this.s1win * 100) / this.totS1;
 		},
 	})
-	public winS1Percentage!: number;
+	public readonly winS1Percentage!: number;
 	@Column({
-		type: DataType.VIRTUAL,
+		type: DataType.VIRTUAL(DataType.NUMBER),
 		get(this: StatsPairs | StatsPlayer): number {
-			return (this.s2win * 100) / +this.totS2;
+			return (this.s2win * 100) / this.totS2;
 		},
 	})
-	public winS2Percentage!: number;
+	public readonly winS2Percentage!: number;
 
 	@Column({
-		type: DataType.VIRTUAL,
+		type: DataType.VIRTUAL(DataType.NUMBER),
 		get(this: StatsPairs | StatsPlayer): number {
-			return ((this.s1def + this.s2def) * 100) / +this.totMatch;
+			return ((Number(this.s1def) + Number(this.s2def)) * 100) / this.totMatch;
 		},
 	})
-	public defPercentage!: number;
+	public readonly defPercentage!: number;
 	@Column({
-		type: DataType.VIRTUAL,
-		get(this: StatsPairs | StatsPlayer): number {
-			return (this.s1def * 100) / +this.totS1;
+		type: DataType.VIRTUAL(DataType.NUMBER),
+		get(this: StatsPairs | StatsPlayer) {
+			return (this.s1def * 100) / this.totS1;
 		},
 	})
-	public defS1Percentage!: number;
+	public readonly defS1Percentage!: number;
 	@Column({
-		type: DataType.VIRTUAL,
+		type: DataType.VIRTUAL(DataType.NUMBER),
 		get(this: StatsPairs | StatsPlayer): number {
-			return (this.s2def * 100) / +this.totS2;
+			return (this.s2def * 100) / this.totS2;
 		},
 	})
-	public defS2Percentage!: number;
+	public readonly defS2Percentage!: number;
 }
