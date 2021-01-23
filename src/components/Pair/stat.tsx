@@ -59,6 +59,7 @@ const StatsPair: React.FC<StatsPairProps> = ({ stats }) => {
 		{ label: tot, value: stats.ratiotot },
 	];
 
+	console.log('StatsPair : ', stats);
 	return (
 		<Row>
 			<StatsBadge variant="success" stats={winnings} header={t('stats:winnings')} />

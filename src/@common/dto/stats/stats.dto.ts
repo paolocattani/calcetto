@@ -1,9 +1,21 @@
 export interface Stats {
+	ratiotot: number; // @unused
+	// Totals
+	totMatch: number;
+	totS1: number;
+	totS2: number;
+	// Winnings
 	s1win: number;
-	s1def: number;
 	s2win: number;
-	s2def: number;
 	totwin: number;
+	winPercentage: number;
+	winS1Percentage: number;
+	winS2Percentage: number;
+	// Defeats
+	s1def: number;
+	s2def: number;
 	totdef: number;
-	ratiotot: number;
+	defPercentage: number;
+	defS1Percentage: number;
+	defS2Percentage: number;
 }
