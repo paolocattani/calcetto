@@ -20,7 +20,7 @@ i18n
 
 		//## Namespaces
 		// String or array of namespaces to load
-		ns: ['common', 'auth', 'tournament', 'pair', 'stage1', 'stage2'],
+		ns: ['common', 'auth', 'tournament', 'pair', 'stage1', 'stage2', 'stats'],
 		// Default namespace used if not passed to translation function
 		defaultNS: 'common',
 		// String or array of namespaces to lookup key if not found in given namespace.
