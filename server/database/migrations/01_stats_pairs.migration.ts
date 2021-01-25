@@ -3,7 +3,7 @@ import { logMigrationStart, logMigrationEnd } from '../../core/logger';
 import { Migration, UmzugContext } from '.';
 
 const viewName = 'stats_pairs';
-const migrationName = '00_stats_pairs.migration';
+const migrationName = '01_stats_pairs';
 
 export const up: Migration = async ({ context: sequelize }: UmzugContext) => {
 	// https://stackoverflow.com/questions/48407329/cant-able-to-create-views-in-mysql-using-sequelize-orm

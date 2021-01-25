@@ -3,7 +3,7 @@ import { logMigrationStart, logMigrationEnd } from '../../core/logger';
 import { Migration, UmzugContext } from '.';
 
 const viewName = 'stats_players';
-const migrationName = '01_stats_players.migration';
+const migrationName = '00_stats_players';
 
 export const up: Migration = async ({ context: sequelize }: UmzugContext) => {
 	logMigrationStart('up', migrationName);
