@@ -9,6 +9,7 @@ export const up: Migration = async ({ context: sequelize }: UmzugContext) => {
 	// https://stackoverflow.com/questions/48407329/cant-able-to-create-views-in-mysql-using-sequelize-orm
 	// https://stackoverflow.com/questions/48407329/cant-able-to-create-views-in-mysql-using-sequelize-orm
 	logMigrationStart('up', migrationName);
+	await viewDown(sequelize, 'stats_players');
 	const viewBody = `
 		select
 			row_number() over (order by least("player1Id" ,"player2Id" ), greatest("player1Id" ,"player2Id" )) id,
@@ -48,7 +49,6 @@ export const up: Migration = async ({ context: sequelize }: UmzugContext) => {
 		order by least("player1Id" ,"player2Id" ), greatest("player1Id" ,"player2Id" )
 	`;
 	await viewDown(sequelize, viewName);
-	await viewUp(sequelize, viewName, viewBody);
 	logMigrationEnd('up', migrationName);
 };
 
