@@ -8,33 +8,40 @@ import { convertEntityToDTO } from './player.manager';
 const className = 'Pairs Manager';
 
 export const findById = async (pairId: number) => {
-	logProcess(className + 'findById', 'start');
+	const methodName = className + '.findById';
+	logProcess(methodName, 'start');
 	try {
-		const pair = await Pair.findByPk(pairId);
-		return pair ? rowToModel(pair, 0) : null;
+		const pair = await Pair.findOne({
+			where: { id: pairId },
+			include: [Pair.associations.tournament, Pair.associations.player1, Pair.associations.player2],
+		});
+		const dto = pair ? rowToModel(pair, 0) : null;
+		logProcess(methodName, 'end');
+		return dto;
 	} catch (error) {
-		logProcess(className + 'findById', 'error');
+		logProcess(methodName, 'error', error);
 	}
-	logProcess(className + 'findById', 'end');
+	logProcess(methodName, 'end');
 };
 
 export const updatePlacement = async (mapper: { id: number; placement: number }[]): Promise<boolean> => {
-	logProcess(className + 'updatePlacement', 'start');
+	const methodName = className + '.updatePlacement';
+	logProcess(methodName, 'start');
 	try {
 		await asyncForEach(mapper, async (current, index, ref) => {
 			await Pair.update({ placement: current.placement }, { where: { id: current.id } });
 		});
 	} catch (error) {
-		logProcess(className + 'updatePlacement', 'error');
-		logger.error('updatePlacement : ', error);
+		logProcess(methodName, 'error : ', error);
 		return false;
 	}
-	logProcess(className + 'updatePlacement', 'end');
+	logProcess(methodName, 'end');
 	return true;
 };
 
 export const findAlias = async (player1Id: number, player2Id: number): Promise<string> => {
-	logProcess(className + 'findAlias', 'start');
+	const methodName = className + '.findAlias';
+	logProcess(methodName, 'start');
 	try {
 		const pair = await Pair.findOne({
 			where: {
@@ -47,15 +54,16 @@ export const findAlias = async (player1Id: number, player2Id: number): Promise<s
 			},
 			order: [['updatedAt', 'DESC']],
 		});
-		logProcess(className + 'findAlias', 'end');
+		logProcess(methodName, 'end');
 		return pair?.alias ?? '';
 	} catch (error) {
-		logProcess(className + 'findAlias', 'error');
+		logProcess(methodName, 'error', error);
 		return '';
 	}
 };
 export const listInTournament = async (tId: number, user: UserDTO): Promise<Array<PairDTO>> => {
-	logProcess(className + 'listInTournament', 'start');
+	const methodName = className + '.listInTournament';
+	logProcess(methodName, 'start');
 	try {
 		const pairsList = await Pair.findAll({
 			where: {
@@ -66,16 +74,17 @@ export const listInTournament = async (tId: number, user: UserDTO): Promise<Arra
 			include: [Pair.associations.tournament, Pair.associations.player1, Pair.associations.player2],
 		});
 		const modelList = pairsList.map((row, index) => rowToModel(row, index));
-		logProcess(className + 'listInTournament', 'end');
+		logProcess(methodName, 'end');
 		return modelList;
 	} catch (error) {
-		logProcess(className + 'listInTournament', 'error');
+		logProcess(methodName, 'error', error);
 		return [];
 	}
 };
 
 export const fetchPairsStage2 = async (tournamentId: number): Promise<Array<PairDTO>> => {
-	logProcess(className + '.fetchPairsStage2', 'start');
+	const methodName = className + '.fetchPairsStage2';
+	logProcess(methodName, 'start');
 	let result: PairDTO[] = [];
 	try {
 		const selectedStage2 = await Stage2.findAll({
@@ -102,10 +111,10 @@ export const fetchPairsStage2 = async (tournamentId: number): Promise<Array<Pair
 		});
 		result = selectedPairs.length !== 0 ? selectedPairs.map((p, i) => rowToModel(p, i)) : [];
 	} catch (error) {
-		logProcess(className + '.fetchPairsStage2', 'error');
+		logProcess(methodName, 'error', error);
 		logger.error('fetchPairsStage2 : ', error);
 	}
-	logProcess(className + '.fetchPairsStage2', `end (${result.length})`);
+	logProcess(methodName, `end (${result.length})`);
 	return result;
 };
 
