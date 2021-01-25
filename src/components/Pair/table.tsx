@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
-import BootstrapTable, { SelectRowProps, ColumnDescription } from 'react-bootstrap-table-next';
+import BootstrapTable, { SelectRowProps, ColumnDescription, ExpandRowProps } from 'react-bootstrap-table-next';
 import { useHistory } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -63,6 +63,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 	const [isLoading, setIsLoading] = useState({ state: false, message: t(LABEL_COMMON_LOADING) });
 	const [askUser, setAskUser] = useState<YesNoModalProps>(hideAskUser);
 
+	const [expandedRows, setExpandedRows] = useState<Array<number>>([]);
 	// Data
 	const [data, setData] = useState<{ rows: PairDTO[]; players: PlayerDTO[] }>({ rows: [], players: [] });
 	const [selectedRows, setSelectedRows] = useState<PairDTO[]>([]);
@@ -402,27 +403,47 @@ const PairsTable: React.FC<PairTableProps> = () => {
 		paid1: t('pair:field.paid1'),
 		paid2: t('pair:field.paid2'),
 	};
-
-	const expandRow = {
+	function sleep(ms: number) {
+		return new Promise((resolve) => setTimeout(resolve, ms));
+	}
+	const expandRow: ExpandRowProps<PairDTO, number> = {
 		expandByColumnOnly: true,
 		showExpandColumn: true,
+		expanded: expandedRows,
 		renderer: (row: PairDTO) => {
-			return row.id && stats.get(row.id) ? <StatsPair stats={stats.get(row.id)!} /> : <div>{t('stats:not_found')}</div>;
+			if (!row.id) {
+				return <p>Completa la coppia</p>;
+			}
+			if (isLoading.state) {
+				return <p>Caricamento</p>;
+			}
+			return stats.get(row.id) ? <StatsPair stats={stats.get(row.id)!} /> : <div>{t('stats:not_found')}</div>;
 		},
-		onExpand: async (row: PairDTO, isExpand: boolean, rowIndex: number, e: SyntheticEvent) => {
-			if (row.id && isExpand) {
-				const result = await fetchPairStats({ pairId: row.id! });
-				const { statsPair } = result as StatsPairResponse;
-				stats.set(row.id, SuccessCodes.includes(result.code) && statsPair ? statsPair : undefined);
-				setStats(stats);
+		onExpand: (row: PairDTO, isExpand: boolean, rowIndex: number, e: SyntheticEvent) => {
+			if (row.id) {
+				if (isExpand) {
+					setIsLoading({ state: true, message: t(LABEL_COMMON_LOADING) });
+					fetchPairStats({ pairId: row.id }).then((result) => {
+						const { statsPair } = result as StatsPairResponse;
+						stats.set(row.id!, SuccessCodes.includes(result.code) && statsPair ? statsPair : undefined);
+						setStats(stats);
+						setIsLoading({ state: false, message: '' });
+						setExpandedRows([...expandedRows, row.id!]);
+					});
+				} else {
+					setExpandedRows((e) => e.filter((x) => x !== row.id));
+				}
 			}
 		},
 		onExpandAll: (isExpandAll: boolean, rows: Array<PairDTO>, e: SyntheticEvent) => {
-			console.log(isExpandAll);
-			console.log(rows);
-			console.log(e);
+			if (isExpandAll) {
+			} else {
+				setExpandedRows([]);
+			}
 		},
 	};
+
+	console.log('ExpandedRows : ', isLoading, expandedRows);
 
 	return (
 		<div>

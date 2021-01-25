@@ -4,6 +4,10 @@ export interface Stats {
 	totMatch: number;
 	totS1: number;
 	totS2: number;
+	// Ratios
+	ratioS1: number;
+	ratioS2: number;
+	ratioTot: number;
 	// Winnings
 	s1win: number;
 	s2win: number;

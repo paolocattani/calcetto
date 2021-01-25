@@ -1,18 +1,13 @@
-import React from 'react';
-import { Badge, Col, Row } from 'react-bootstrap';
+import React, { CSSProperties } from 'react';
+import { Badge, Col, Row, Table } from 'react-bootstrap';
 import { Variant } from 'react-bootstrap/esm/types';
 import { useTranslation } from 'react-i18next';
 import { StatsPairDTO } from 'src/@common/dto/stats/stats.pairs.dto';
 
-interface StatMapper {
-	label: string;
-	value: number;
-}
-
 interface StatsBadgeProps {
 	header: string;
 	variant: Variant;
-	stats: Array<StatMapper>;
+	stats: Array<number>;
 }
 const StatsBadge: React.FC<StatsBadgeProps> = ({ stats, variant, header }) => (
 	<Col>
@@ -21,11 +16,10 @@ const StatsBadge: React.FC<StatsBadgeProps> = ({ stats, variant, header }) => (
 		</Row>
 		<hr />
 		{stats.map((s, i) => (
-			<Row key={header + s.label} className="justify-content-center">
-				<Col>{s.label}</Col>
+			<Row key={header + i} className="justify-content-center">
 				<Col>
 					<Badge pill variant={variant}>
-						{s.value}
+						{s}
 					</Badge>
 				</Col>
 			</Row>
@@ -41,31 +35,81 @@ const StatsPair: React.FC<StatsPairProps> = ({ stats }) => {
 	const stage1 = t('stats:stage1');
 	const stage2 = t('stats:stage2');
 	const tot = t('stats:tot');
-	const winnings = [
-		{ label: stage1, value: stats.s1win },
-		{ label: stage2, value: stats.s2win },
-		{ label: tot, value: stats.totwin },
-	];
 
-	const defeats = [
-		{ label: stage1, value: stats.s1def },
-		{ label: stage2, value: stats.s2def },
-		{ label: tot, value: stats.totdef },
-	];
-
-	const ratio = [
-		{ label: stage1, value: stats.ratiotot },
-		{ label: stage2, value: stats.ratiotot },
-		{ label: tot, value: stats.ratiotot },
-	];
+	const winnings = [stats.s1win, stats.s2win, stats.totwin];
+	const defeats = [stats.s1def, stats.s2def, stats.totdef];
+	const winningsPercentage = [stats.ratiotot, stats.ratiotot, stats.ratiotot];
+	const defeatsPercentage = [stats.ratiotot, stats.ratiotot, stats.ratiotot];
 
 	console.log('StatsPair : ', stats);
-	return (
+	const test1 = (
 		<Row>
+			<Col>
+				<Row className="justify-content-center">
+					<strong></strong>
+				</Row>
+				<hr />
+				<Row>{stage1}</Row>
+				<Row>{stage2}</Row>
+				<Row>{tot}</Row>
+			</Col>
 			<StatsBadge variant="success" stats={winnings} header={t('stats:winnings')} />
 			<StatsBadge variant="danger" stats={defeats} header={t('stats:defeats')} />
-			<StatsBadge variant="warning" stats={ratio} header={t('stats:ratio')} />
+			<StatsBadge variant="success" stats={winningsPercentage} header={t('stats:ratio')} />
+			<StatsBadge variant="danger" stats={defeatsPercentage} header={t('stats:ratio')} />
 		</Row>
+	);
+	const darkBackGround: CSSProperties = {
+		backgroundColor: 'var(--default-black)',
+		color: 'whitesmoke',
+	};
+	return (
+		<Table striped bordered hover>
+			<thead>
+				<tr
+					style={{
+						backgroundColor: 'cadetblue',
+					}}
+				>
+					<td>#</td>
+					<td>{stage1}</td>
+					<td>{stage2}</td>
+					<td>{tot}</td>
+					<td>% Fase 1</td>
+					<td>% Fase 2</td>
+					<td>% Totale</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr style={darkBackGround}>
+					<td>Vittorie</td>
+					<td>{stats.s1win}</td>
+					<td>{stats.s2win}</td>
+					<td>{stats.totwin}</td>
+					<td>{stats.winS1Percentage}</td>
+					<td>{stats.winS2Percentage}</td>
+					<td>{stats.winPercentage}</td>
+				</tr>
+				<tr style={darkBackGround}>
+					<td>Sconfitte</td>
+					<td>{stats.s1def}</td>
+					<td>{stats.s2def}</td>
+					<td>{stats.totdef}</td>
+					<td>{stats.defS1Percentage}</td>
+					<td>{stats.defS2Percentage}</td>
+					<td>{stats.defPercentage}</td>
+				</tr>
+				<tr style={darkBackGround}>
+					<td>Totali</td>
+					<td>{stats.totS1}</td>
+					<td>{stats.totS2}</td>
+					<td>{stats.totMatch}</td>
+					<td>{stats.ratioS1}</td>
+					<td>{stats.ratioS2}</td>
+					<td>{stats.ratioTot}</td>
+				</tr>
+			</tbody>
+		</Table>
 	);
 };
 
