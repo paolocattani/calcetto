@@ -40,6 +40,7 @@ import { fetchPairStats } from '../../redux/services/stats.service';
 import { StatsPairDTO } from 'src/@common/dto/stats/stats.pairs.dto';
 import StatsPair from './stat';
 import { StatsPairResponse } from 'src/@common/models/stats.model';
+import { ChartIcon, PlusIcon, MinusIcon } from '../core/icons';
 
 const hideAskUser = {
 	message: '',
@@ -403,13 +404,21 @@ const PairsTable: React.FC<PairTableProps> = () => {
 		paid1: t('pair:field.paid1'),
 		paid2: t('pair:field.paid2'),
 	};
-	function sleep(ms: number) {
-		return new Promise((resolve) => setTimeout(resolve, ms));
-	}
 	const expandRow: ExpandRowProps<PairDTO, number> = {
 		expandByColumnOnly: true,
 		showExpandColumn: true,
 		expanded: expandedRows,
+		expandColumnRenderer: ({ expanded }) => {
+			if (expanded) {
+				return <MinusIcon size="sm" />;
+			}
+			return (
+				<>
+					<PlusIcon size="sm" />
+					<ChartIcon size="lg" />
+				</>
+			);
+		},
 		renderer: (row: PairDTO) => {
 			if (!row.id) {
 				return <p>Completa la coppia</p>;
@@ -422,16 +431,21 @@ const PairsTable: React.FC<PairTableProps> = () => {
 		onExpand: (row: PairDTO, isExpand: boolean, rowIndex: number, e: SyntheticEvent) => {
 			if (row.id) {
 				if (isExpand) {
-					setIsLoading({ state: true, message: t(LABEL_COMMON_LOADING) });
-					fetchPairStats({ pairId: row.id }).then((result) => {
-						const { statsPair } = result as StatsPairResponse;
-						stats.set(row.id!, SuccessCodes.includes(result.code) && statsPair ? statsPair : undefined);
-						setStats(stats);
-						setIsLoading({ state: false, message: '' });
+					// Cache results
+					if (stats.get(row.id)) {
 						setExpandedRows([...expandedRows, row.id!]);
-					});
+					} else {
+						setIsLoading({ state: true, message: t(LABEL_COMMON_LOADING) });
+						fetchPairStats({ pairId: row.id }).then((result) => {
+							const { statsPair } = result as StatsPairResponse;
+							stats.set(row.id!, SuccessCodes.includes(result.code) && statsPair ? statsPair : undefined);
+							setStats(stats);
+							setIsLoading({ state: false, message: '' });
+							setExpandedRows([...expandedRows, row.id!]);
+						});
+					}
 				} else {
-					setExpandedRows((e) => e.filter((x) => x !== row.id));
+					setExpandedRows((ex) => ex.filter((x) => x !== row.id));
 				}
 			}
 		},
