@@ -1,0 +1,18 @@
+{
+    "stage1": "Fase 1",
+    "stage2": "Fase 2",
+    "tot": "Totale",
+    "not_found": "Sembra sia la prima volta che giocate insieme. Buona fortuna!",
+    "winnings1": "Vittorie Fase 1",
+    "winnings2": "Vittorie Fase 2",
+    "winningsTot": "Vittorie Totali",
+    "winnings": "Vittorie ",
+    "defeats1": "Sconfitte Fase 1",
+    "defeats2": "Sconfitte Fase 2",
+    "defeatsTot": "Sconfitte Totali",
+    "defeats": "Sconfitte",
+    "ratio1": "Percentuali Fase 1",
+    "ratio2": "Percentuali Fase 2",
+    "ratioTot": "Rapporto",
+    "ratio": "Rapporto"
+}

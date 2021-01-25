@@ -16,7 +16,7 @@ import {
 	isValidRegister,
 } from '../../manager/auth.manager';
 // Models
-import User from '../../database/user.model';
+import { User } from '../../database/models';
 // Common Responses
 import { missingParameters, success, failure, entityNotFound, serverError } from '../common.response';
 // @Commmon

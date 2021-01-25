@@ -61,32 +61,6 @@ jobs:
           name: analysis-${{ matrix.node-version }}
           path: analysis
   #-----------------------------------------
-  # Release
-  #-----------------------------------------
-  release:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Gather info
-        id: gather_info
-        run: |
-          echo "GIT_TAG=`echo $(git describe --tags --abbrev=0)`" >> $GITHUB_ENV
-      - name: Check output
-        env:
-          RELEASE_VERSION: ${{ steps.gather_info.outputs.version }}
-        run: |
-          echo $RELEASE_VERSION
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          tokentoken: ${{ secrets.GITHUB_TOKEN }}
-          title: Release ${{ steps.gather_info.outputs.version }}
-          body: Release ${{ steps.gather_info.outputs.version }}
-          branch: master
-          milestone: v2
-          labels: |
-            automated pr
-  #-----------------------------------------
   # unit test
   #-----------------------------------------
   unit-test:

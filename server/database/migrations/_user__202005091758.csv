@@ -1,3 +1,0 @@
-"id","username","name","surname","password","email","phone","birthday","role","playerId","createdAt","updatedAt"
-1,Admin,Admin,Admin,$2b$10$DG/diiFDJWN9ZLDrUUqvx.6eKD.yZhX/.emp0ZGnObgZoHdskbCnC,admin@admin.it,"",1894-01-01 00:00:00,Admin,,2020-05-09 16:59:59,2020-05-09 16:59:59
-2,Utente,Utente,Utente,$2b$10$hqEE9.Fyy78C28QBGyG.seDGFboZowYkngEpBe0wy0WdIaV./XxGu,utente@info.it,"",1894-01-01 00:00:00,User,,2020-05-09 17:20:45,2020-05-09 17:20:45

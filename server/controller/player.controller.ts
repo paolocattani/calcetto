@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router, Request, Response } from 'express';
 import {
 	DeletePlayersRequest,
 	DeletePlayersResponse,
@@ -6,7 +6,7 @@ import {
 	SavePlayerRequest,
 	SavePlayerResponse,
 } from '../../src/@common/models/player.model';
-import { withAuth, asyncMiddleware, controllerLogger, withAdminRights } from '../core/middleware';
+import { withAuth, asyncMiddleware, withAdminRights } from '../core/middleware';
 import {
 	create,
 	deletePlayer,
@@ -20,9 +20,6 @@ import {
 import { entityNotFound, failure, missingParameters, serverError, success } from './common.response';
 
 const router = Router();
-router.use('/', (req: Request, res: Response, next: NextFunction) =>
-	controllerLogger(req, next, 'Player Controller', '/api/v2/player')
-);
 
 router.get(
 	'/list/:tId',

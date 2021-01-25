@@ -1,11 +1,11 @@
 // Models
-import { Stage1, Tournament } from '../database';
+import { Stage1, Tournament } from '../database/models';
 import { Stage1Row, UserDTO } from '../../src/@common/dto';
 // Core
 import { logProcess, logger } from '../core/logger';
 import { asyncForEach } from '../core/utils';
 //
-import { getDbConnection } from '../database/connection';
+import { getDbConnection } from '../database/config/connection';
 import { isAdmin } from '../manager/auth.manager';
 //
 import { Op } from 'sequelize';
@@ -141,8 +141,6 @@ export const generateStage1Rows = async (rows: Stage1Row[], stageName: string, u
 									where,
 									defaults: model,
 									transaction,
-									// @ts-ignore
-									// FIXME:
 									include,
 								});
 							} else record = await Stage1.findOne({ where, transaction, include });

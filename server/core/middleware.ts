@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import chalk from 'chalk';
 import { AppRequest } from '../controller';
 // Models
-import { User } from '../database';
+import { User } from '../database/models';
 // Core
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
@@ -20,7 +20,7 @@ export const routeLogger = (req: Request, res: Response, next: NextFunction) => 
 };
 
 export const controllerLogger = (req: Request, next: NextFunction, controller: string, path: string) => {
-	if (isDevMode()) logger.info(`${controller} : ${req.method} ${req.originalUrl.replace(path, '')} `);
+	if (isDevMode()) logger.info(`${controller} Controller : ${req.method} ${req.originalUrl.replace(path, '')} `);
 	next();
 };
 

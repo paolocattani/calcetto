@@ -1,8 +1,8 @@
 import { logProcess, logger } from '../core/logger';
 // Db
-import { getDbConnection } from '../database/connection';
+import { getDbConnection } from '../database/config/connection';
 // Models
-import { Stage2, Pair } from '../database';
+import { Stage2, Pair } from '../database/models';
 import { IStage2FE, ICell, PairDTO, UserDTO, TournamentProgress } from '../../src/@common/dto';
 
 import { isAdmin } from './auth.manager';
@@ -18,17 +18,18 @@ export const updateCells = async (cells: Array<ICell>): Promise<boolean> => {
 	//logger.info('updateCells : ', cell1, cell2);
 	try {
 		cells
-			.filter(cell => cell.pair && (cell.pair.id || cell.pair.alias === '-'))
-			.forEach(async cell =>
-				await updateSingleCell(
-					cell.pair!.tournamentId,
-					cell.cellColIndex,
-					cell.cellRowIndex,
-					cell.matchId,
-					cell.pair!,
-					cell.isWinner
-				)
-		);
+			.filter((cell) => cell.pair && (cell.pair.id || cell.pair.alias === '-'))
+			.forEach(
+				async (cell) =>
+					await updateSingleCell(
+						cell.pair!.tournamentId,
+						cell.cellColIndex,
+						cell.cellRowIndex,
+						cell.matchId,
+						cell.pair!,
+						cell.isWinner
+					)
+			);
 		logProcess(className + 'updateCells', 'end');
 		return true;
 	} catch (error) {
@@ -109,7 +110,7 @@ export const generateStage2Rows = async (
 					});
 					record.pair = pair!;
 				}
-				structure[ii][jj].pair = record?.pair ? rowToModel(record.pair, 0) : getEmptyPair('-',tournamentId);
+				structure[ii][jj].pair = record?.pair ? rowToModel(record.pair, 0) : getEmptyPair('-', tournamentId);
 				// if (ii === 0) logger.info(`Pushing ${ii} , ${jj} : `, structure[ii][jj].pair);
 				cells[ii].push(structure[ii][jj]);
 			}
@@ -131,7 +132,7 @@ export const deleteStage2 = async (tournamentId: number) => {
 	try {
 		await Stage2.destroy({ where: { tournamentId } });
 		const message = { status: SessionStatus.STAGE2_DELETE, label: 'common:notification.stage2_delete' };
-		sendNotifications(message, tournamentId,TournamentProgress.Stage2);
+		sendNotifications(message, tournamentId, TournamentProgress.Stage2);
 	} catch (error) {
 		logProcess(className + 'deleteStage2', 'error');
 		logger.error('deleteStage2 : ', error);

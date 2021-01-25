@@ -1,14 +1,7 @@
-import { Router, NextFunction, Response, Request } from 'express';
+import { Router, Response, Request } from 'express';
 // Core
 import { logger } from '../core/logger';
-import {
-	asyncMiddleware,
-	withAuth,
-	withAdminRights,
-	controllerLogger,
-	withTestAuth,
-	doNotCacheThis,
-} from '../core/middleware';
+import { asyncMiddleware, withAuth, withAdminRights, withTestAuth, doNotCacheThis } from '../core/middleware';
 // Managers
 import {
 	listAll,
@@ -21,7 +14,7 @@ import {
 	deleteAllTournament,
 } from '../manager/tournament.manager';
 // Models
-import Tournament from '../database/tournament.model';
+import { Tournament } from '../database/models';
 import { TournamentDTO } from '../../src/@common/dto';
 import { AppRequest } from './index';
 import { entityNotFound, failure, missingParameters, serverError, success } from './common.response';
@@ -39,9 +32,6 @@ import {
 
 // all API path must be relative to /api/v2/tournament
 const router = Router();
-router.use('/', (req: Request, res: Response, next: NextFunction) =>
-	controllerLogger(req, next, 'Tournament Controller', '/api/v2/tournament')
-);
 
 // GET
 router.get(
