@@ -16,6 +16,7 @@ import config, { SequelizeConfiguration } from './config';
 import util from 'util';
 import chalk from 'chalk';
 import { Environment } from '../../../src/@common/models';
+import { Tournament, Player, Pair, Stage1, Stage2, User, StatsPlayer, StatsPairs } from '../models';
 
 let connection: Sequelize;
 

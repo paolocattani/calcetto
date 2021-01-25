@@ -1,3 +1,4 @@
+
 import { Column, Table, DataType, ForeignKey, BelongsTo, DefaultScope } from 'sequelize-typescript';
 import Player from '../player.model';
 import StatsGeneric from './stats.super';
