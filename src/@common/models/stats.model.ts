@@ -10,14 +10,21 @@ export interface StatsPlayerResponse extends GenericReponse {
 	statsPlayer?: StatsPlayerDTO;
 }
 
+export interface StatsPairFromPlayerRequest {
+	player1Id: number;
+	player2Id: number;
+}
+
+export interface StatsPairFromPlayerResponse extends GenericReponse {
+	stats?: StatsPairDTO;
+}
+
 export interface StatsPairRequest {
-	pairId?: number;
-	player1Id?: number;
-	player2Id?: number;
+	pairs: Array<number>;
 }
 
 export interface StatsPairResponse extends GenericReponse {
-	statsPair?: StatsPairDTO;
+	stats: Map<number, StatsPairDTO>;
 }
 
 export interface StatsError extends GenericReponse {}

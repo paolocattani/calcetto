@@ -29,14 +29,14 @@ const StatsPair: React.FC<StatsPairProps> = ({ stats }) => {
 					<td>{stage1}</td>
 					<td>{stage2}</td>
 					<td>{tot}</td>
-					<td>% Fase 1</td>
-					<td>% Fase 2</td>
-					<td>% Totale</td>
+					<td>% {stage1}</td>
+					<td>% {stage2}</td>
+					<td>% {tot}</td>
 				</tr>
 			</thead>
 			<tbody>
 				<tr style={darkBackGround}>
-					<td>Vittorie</td>
+					<td>{t('stats:winnings')}</td>
 					<td>{stats.s1win}</td>
 					<td>{stats.s2win}</td>
 					<td>{stats.totwin}</td>
@@ -45,7 +45,7 @@ const StatsPair: React.FC<StatsPairProps> = ({ stats }) => {
 					<td>{stats.winPercentage}</td>
 				</tr>
 				<tr style={darkBackGround}>
-					<td>Sconfitte</td>
+					<td>{t('stats:defeats')}</td>
 					<td>{stats.s1def}</td>
 					<td>{stats.s2def}</td>
 					<td>{stats.totdef}</td>
@@ -54,7 +54,7 @@ const StatsPair: React.FC<StatsPairProps> = ({ stats }) => {
 					<td>{stats.defPercentage}</td>
 				</tr>
 				<tr style={darkBackGround}>
-					<td>Totali</td>
+					<td>{t('stats:tots')}</td>
 					<td>{stats.totS1}</td>
 					<td>{stats.totS2}</td>
 					<td>{stats.totMatch}</td>

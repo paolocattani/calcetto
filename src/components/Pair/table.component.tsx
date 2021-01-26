@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
-import BootstrapTable, { SelectRowProps, ColumnDescription, ExpandRowProps } from 'react-bootstrap-table-next';
+import BootstrapTable, { SelectRowProps, ColumnDescription } from 'react-bootstrap-table-next';
 import { useHistory } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { toast } from 'react-toastify';
 // Components
-import NoData from './noData';
+import NoData from './noData.component';
 // Core / Helper / Editor
 import { LoadingModal, YesNoModal, YesNoModalProps } from '../core/generic/Commons';
 import { cellEditProps, columns } from './editor';
@@ -24,7 +24,7 @@ import { useTranslation } from 'react-i18next';
 // Models
 import { PairDTO, PlayerDTO, TournamentProgress } from 'src/@common/dto';
 import { deletePairs, fetchPairs, findAlias, postPair, updatePair } from 'src/redux/services/pair.service';
-import { HTTPStatusCode, SuccessCodes } from '../../@common/models/HttpStatusCode';
+import { HTTPStatusCode } from '../../@common/models/HttpStatusCode';
 import { LABEL_COMMON_LOADING } from '../../@common/constants/label';
 import {
 	FetchPairsResponse,
@@ -34,13 +34,9 @@ import {
 	getEmptyPlayer,
 	SavePairResponse,
 } from '../../@common/models';
-import Toolsbar from './toolsbar';
-import { SyntheticEvent } from 'react';
-import { fetchPairStats } from '../../redux/services/stats.service';
+import Toolsbar from './toolsbar.component';
 import { StatsPairDTO } from 'src/@common/dto/stats/stats.pairs.dto';
-import StatsPair from './stat';
-import { StatsPairResponse } from 'src/@common/models/stats.model';
-import { ChartIcon, PlusIcon, MinusIcon } from '../core/icons';
+import expandManager from './expand.manager';
 
 const hideAskUser = {
 	message: '',
@@ -404,60 +400,6 @@ const PairsTable: React.FC<PairTableProps> = () => {
 		paid1: t('pair:field.paid1'),
 		paid2: t('pair:field.paid2'),
 	};
-	const expandRow: ExpandRowProps<PairDTO, number> = {
-		expandByColumnOnly: true,
-		showExpandColumn: true,
-		expanded: expandedRows,
-		expandColumnRenderer: ({ expanded }) => {
-			if (expanded) {
-				return <MinusIcon size="sm" />;
-			}
-			return (
-				<>
-					<PlusIcon size="sm" />
-					<ChartIcon size="lg" />
-				</>
-			);
-		},
-		renderer: (row: PairDTO) => {
-			if (!row.id) {
-				return <p>Completa la coppia</p>;
-			}
-			if (isLoading.state) {
-				return <p>Caricamento</p>;
-			}
-			return stats.get(row.id) ? <StatsPair stats={stats.get(row.id)!} /> : <div>{t('stats:not_found')}</div>;
-		},
-		onExpand: (row: PairDTO, isExpand: boolean, rowIndex: number, e: SyntheticEvent) => {
-			if (row.id) {
-				if (isExpand) {
-					// Cache results
-					if (stats.get(row.id)) {
-						setExpandedRows([...expandedRows, row.id!]);
-					} else {
-						setIsLoading({ state: true, message: t(LABEL_COMMON_LOADING) });
-						fetchPairStats({ pairId: row.id }).then((result) => {
-							const { statsPair } = result as StatsPairResponse;
-							stats.set(row.id!, SuccessCodes.includes(result.code) && statsPair ? statsPair : undefined);
-							setStats(stats);
-							setIsLoading({ state: false, message: '' });
-							setExpandedRows([...expandedRows, row.id!]);
-						});
-					}
-				} else {
-					setExpandedRows((ex) => ex.filter((x) => x !== row.id));
-				}
-			}
-		},
-		onExpandAll: (isExpandAll: boolean, rows: Array<PairDTO>, e: SyntheticEvent) => {
-			if (isExpandAll) {
-			} else {
-				setExpandedRows([]);
-			}
-		},
-	};
-
-	console.log('ExpandedRows : ', isLoading, expandedRows);
 
 	return (
 		<div>
@@ -494,7 +436,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 									columns={columns(onSelect, data.players, labels) as ColumnDescription<PairDTO, PairDTO>[]}
 									cellEdit={cellEditProps(isAdmin && tournament.progress < TournamentProgress.Stage1)}
 									selectRow={selectRow}
-									expandRow={expandRow}
+									expandRow={expandManager(stats, setStats, expandedRows, setExpandedRows, isLoading, setIsLoading)}
 									noDataIndication={() => (
 										<NoData isEditable={isAdmin || false} addRow={() => addRow()} optionsLength={data.players.length} />
 									)}
