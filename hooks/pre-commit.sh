@@ -24,14 +24,13 @@ if [[ $BRANCH_NAME != "master" ]] && [[ $SEARCH_RESULT = 1 ]]; then
 
     echo "Start : $(date +'%Y.%m.%d - %H:%M:%S')"
 
-    # TODO:
-    # SEARCH_STRING='TYPE'
-    # SEARCH_FILE="$HOOKS_DIR/.hooks"
-    # SEARCH_LENGTH='*'
-    # source cli/search_string.sh
+    SEARCH_STRING='TYPE'
+    SEARCH_FILE="$HOOKS_DIR/.hooks"
+    SEARCH_LENGTH='*'
+    source cli/search_string.sh
 
     # Update version
-    source cli/update_version.sh --patch
+    source cli/update_version.sh "--$SEARCH_RESULT"
 
     # Build
     source cli/build.sh
