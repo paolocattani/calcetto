@@ -87,7 +87,7 @@ cat << EOF
   |
   |  $VERSION_MESSAGE
   |
-  |  Commit    | '$REACT_APP_CLIENT_COMMIT_HASH
+  |  Commit    | '$REACT_APP_CLIENT_COMMIT_HASH'
   |
   ------------------------------------------------------------
 
