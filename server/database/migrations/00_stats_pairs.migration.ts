@@ -11,6 +11,7 @@ export const up: Migration = async ({ context: sequelize }: UmzugContext) => {
 	logMigrationStart('up', migrationName);
 	const viewBody = `
 		select
+			row_number() over (order by least("player1Id" ,"player2Id" ), greatest("player1Id" ,"player2Id" )) id,
 			least("player1Id" ,"player2Id" ) "player1Id",
 			greatest("player1Id" ,"player2Id" ) "player2Id",
 			sum(s1Win) s1Win,sum(s1Def) s1Def,

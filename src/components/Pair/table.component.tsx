@@ -35,8 +35,8 @@ import {
 	SavePairResponse,
 } from '../../@common/models';
 import Toolsbar from './toolsbar.component';
-import { StatsPairDTO } from 'src/@common/dto/stats/stats.pairs.dto';
 import expandManager from './expand.manager';
+import { StatsMap } from '../../@common/models/stats.model';
 
 const hideAskUser = {
 	message: '',
@@ -64,7 +64,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 	// Data
 	const [data, setData] = useState<{ rows: PairDTO[]; players: PlayerDTO[] }>({ rows: [], players: [] });
 	const [selectedRows, setSelectedRows] = useState<PairDTO[]>([]);
-	const [stats, setStats] = useState<Map<number, StatsPairDTO | undefined>>(new Map());
+	const [stats, setStats] = useState<StatsMap>({});
 	// Function params
 	const [stage1Number, setStage1Number] = useState<number>(0);
 	const [newRowsNumber, setNewRowsNumber] = useState<number>(0);

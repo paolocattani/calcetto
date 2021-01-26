@@ -4,7 +4,7 @@ import { ExpandRowProps } from 'react-bootstrap-table-next';
 import { LABEL_COMMON_LOADING } from 'src/@common/constants/label';
 import { PairDTO } from 'src/@common/dto';
 import { SuccessCodes } from 'src/@common/models/HttpStatusCode';
-import { StatsPairResponse } from 'src/@common/models/stats.model';
+import { StatsMap, StatsPairResponse } from 'src/@common/models/stats.model';
 import { fetchPairStats } from 'src/redux/services/stats.service';
 import { MinusIcon, PlusIcon, ChartIcon } from '../core/icons';
 import StatsPair from './stat.component';
@@ -12,8 +12,8 @@ import i18next from '../../i18n/i18n';
 import { StatsPairDTO } from 'src/@common/dto/stats/stats.pairs.dto';
 
 const expandManager = (
-	stats: Map<number, StatsPairDTO | undefined>,
-	setStats: (value: React.SetStateAction<Map<number, StatsPairDTO | undefined>>) => void,
+	stats: StatsMap,
+	setStats: (value: React.SetStateAction<StatsMap>) => void,
 	expandedRows: number[],
 	setExpandedRows: (value: React.SetStateAction<number[]>) => void,
 	isLoading: { state: boolean; message: string },
@@ -22,17 +22,18 @@ const expandManager = (
 	expandByColumnOnly: true,
 	showExpandColumn: true,
 	expanded: expandedRows,
-	expandColumnRenderer: ({ expanded }) => {
-		if (expanded) {
-			return <MinusIcon size="sm" />;
-		}
-		return (
-			<>
-				<PlusIcon size="sm" />
-				<ChartIcon size="lg" />
-			</>
-		);
-	},
+	expandHeaderColumnRenderer: ({ isAnyExpands }) => (
+		<>
+			{isAnyExpands ? <MinusIcon size="sm" /> : <PlusIcon size="sm" />}
+			<ChartIcon size="lg" />
+		</>
+	),
+	expandColumnRenderer: ({ expanded }) => (
+		<>
+			{expanded ? <MinusIcon size="sm" /> : <PlusIcon size="sm" />}
+			<ChartIcon size="lg" />
+		</>
+	),
 	renderer: (row: PairDTO) => {
 		if (!row.id) {
 			return <p>{i18next.t('stats:partial_pair')}</p>;
@@ -40,20 +41,21 @@ const expandManager = (
 		if (isLoading.state) {
 			return <p>{i18next.t(LABEL_COMMON_LOADING)}</p>;
 		}
-		return stats.get(row.id) ? <StatsPair stats={stats.get(row.id)!} /> : <div>{i18next.t('stats:not_found')}</div>;
+		return stats[row.id] ? <StatsPair stats={stats[row.id]!} /> : <div>{i18next.t('stats:not_found')}</div>;
 	},
 	onExpand: (row: PairDTO, isExpand: boolean, rowIndex: number, e: SyntheticEvent) => {
 		if (row.id) {
 			if (isExpand) {
 				// Cache results
-				if (stats.get(row.id)) {
+				if (stats[row.id]) {
 					setExpandedRows([...expandedRows, row.id]);
 				} else {
 					setIsLoading({ state: true, message: i18next.t(LABEL_COMMON_LOADING) });
 					fetchPairStats({ pairs: [row.id] }).then((result) => {
 						if (row.id && SuccessCodes.includes(result.code)) {
 							const { stats: statistics } = result as StatsPairResponse;
-							stats.set(row.id, statistics.get(row.id));
+							console.log('result :', statistics, result);
+							stats[row.id] = statistics[row.id];
 							setStats(stats);
 						}
 						setIsLoading({ state: false, message: '' });

@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import { StatsPairDTO } from '../../src/@common/dto/stats/stats.pairs.dto';
 import {
 	StatsError,
+	StatsMap,
 	StatsPairFromPlayerResponse,
 	StatsPairRequest,
 	StatsPairResponse,
@@ -45,14 +46,19 @@ router.post(
 				return missingParameters(res);
 			}
 
-			const stats = new Map<number, StatsPairDTO>();
+			const stats: StatsMap = {};
 			for (const pairId of pairs) {
-				const { player1, player2 } = await findById(pairId);
-				if (player1 && player2) {
-					const statsPair = await getStatsByPairs(player1.id, player2.id);
-					stats.set(pairId, statsPair);
+				const pair = await findById(pairId);
+				if (pair && pair.player1 && pair.player2) {
+					logger.info('player1, player2 : ', pair.player1.id, pair.player2.id);
+					const statsPair = await getStatsByPairs(pair.player1.id!, pair.player2.id!);
+					if (statsPair) {
+						logger.info('statsPair : ', statsPair);
+						stats[`${pairId}`] = statsPair;
+					}
 				}
 			}
+			logger.info('statsPair : ', { stats: JSON.stringify(stats) });
 			return success<StatsPairResponse>(res, { label: STATS_LOADED }, { stats });
 		} catch (error) {
 			return serverError('GET stats/pair error ! : ', error, res);

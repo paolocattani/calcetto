@@ -2,6 +2,10 @@ import { GenericReponse } from '.';
 import { StatsPairDTO } from '../dto/stats/stats.pairs.dto';
 import { StatsPlayerDTO } from '../dto/stats/stats.players.dto';
 
+export interface StatsMap {
+	[key: string]: StatsPairDTO;
+}
+
 export interface StatsPlayerRequest {
 	playerId: number;
 }
@@ -24,7 +28,7 @@ export interface StatsPairRequest {
 }
 
 export interface StatsPairResponse extends GenericReponse {
-	stats: Map<number, StatsPairDTO>;
+	stats: StatsMap;
 }
 
 export interface StatsError extends GenericReponse {}

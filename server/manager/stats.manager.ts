@@ -25,18 +25,19 @@ export const getStatsByPlayer = async (playerId: number) => {
 export async function getStatsByPairs(player1Id: number, player2Id: number) {
 	const methodName = className + 'getStatsByPairs';
 	logProcess(methodName, 'start');
+	let result;
 	try {
 		const entity = await StatsPairs.findOne({
 			where: {
 				[Op.or]: [{ [Op.and]: { player1Id, player2Id } }, { [Op.and]: { player1Id: player2Id, player2Id: player1Id } }],
 			},
 		});
-		return entity ? pairEntity2DTO(entity) : undefined;
+		result = entity ? pairEntity2DTO(entity) : undefined;
 	} catch (error) {
 		logProcess(methodName, 'error', error);
 	}
 	logProcess(methodName, 'end');
-	return undefined;
+	return result;
 }
 
 export const playerEntity2DTO = (stats: StatsPlayer): StatsPlayerDTO => ({
