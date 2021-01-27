@@ -16,6 +16,8 @@ import { useTranslation } from 'react-i18next';
 import { PlayerDTO } from '../../@common/dto';
 import { getEmptyPlayer } from '../../@common/models';
 import Toolsbar from './toolsbar.component';
+import { StatsPlayerMap } from 'src/@common/models/stats.model';
+import expandManager from './expand.manager';
 
 interface PlayerProps {}
 const PlayerTable: React.FC<PlayerProps> = () => {
@@ -23,12 +25,16 @@ const PlayerTable: React.FC<PlayerProps> = () => {
 	const currentHistory = useHistory();
 	const { t } = useTranslation(['common', 'player']);
 	// From Store
-	const isLoading = useSelector(PlayerSelector.isLoading);
+	const isLoadingStore = useSelector(PlayerSelector.isLoading);
+	const [isLoading, setIsLoading] = useState(false);
+
 	const isAdmin = useSelector(AuthSelector.isAdmin);
 	const playersList = useSelector(PlayerSelector.getPlayersList);
 	const isSaving = useSelector(PlayerSelector.isSaving);
 	// Component State
 	const [selectedRows, setSelectedRows] = useState<PlayerDTO[]>([]);
+	const [stats, setStats] = useState<StatsPlayerMap>({});
+	const [expandedRows, setExpandedRows] = useState<Array<number>>([]);
 
 	// Effetcs
 	useEffect(() => {
@@ -91,7 +97,7 @@ const PlayerTable: React.FC<PlayerProps> = () => {
 
 	return (
 		<>
-			<LoadingModal show={isLoading} message={t('common:loading')} />
+			<LoadingModal show={isLoadingStore || isLoading} message={t('common:loading')} />
 			<Col>
 				<Toolsbar selectedLength={selectedRows.length} goBack={goBack} addEdit={addEdit} deleteRow={deleteRow} />
 				<Row>
@@ -102,6 +108,7 @@ const PlayerTable: React.FC<PlayerProps> = () => {
 							data={playersList}
 							columns={columns(isAdmin, fieldLabels, addEdit) as ColumnDescription<PlayerDTO, PlayerDTO>[]}
 							selectRow={selectRow}
+							expandRow={expandManager(stats, setStats, expandedRows, setExpandedRows, isLoading, setIsLoading)}
 							caption={<TableHeader title={'common:route.player'} saved={isSaving} />}
 							filter={filterFactory}
 							headerClasses="default-background default-color-yellow"

@@ -2,22 +2,22 @@ import React from 'react';
 import { SyntheticEvent } from 'react';
 import { ExpandRowProps } from 'react-bootstrap-table-next';
 import { LABEL_COMMON_LOADING } from 'src/@common/constants/label';
-import { PairDTO } from 'src/@common/dto';
+import { PlayerDTO } from 'src/@common/dto';
 import { SuccessCodes } from 'src/@common/models/HttpStatusCode';
-import { StatsPairMap, StatsPairResponse } from 'src/@common/models/stats.model';
-import { fetchPairStats } from 'src/redux/services/stats.service';
+import { StatsPlayerMap, StatsPlayerResponse } from 'src/@common/models/stats.model';
+import { fetchPlayerStats } from 'src/redux/services/stats.service';
 import { MinusIcon, PlusIcon, ChartIcon } from '../core/icons';
-import StatsPair from './stats.component';
 import i18next from '../../i18n/i18n';
+import StatsPlayer from './stats.component';
 
 const expandManager = (
-	stats: StatsPairMap,
-	setStats: (value: React.SetStateAction<StatsPairMap>) => void,
+	stats: StatsPlayerMap,
+	setStats: (value: React.SetStateAction<StatsPlayerMap>) => void,
 	expandedRows: number[],
 	setExpandedRows: (value: React.SetStateAction<number[]>) => void,
-	isLoading: { state: boolean; message: string },
-	setIsLoading: (value: React.SetStateAction<{ state: boolean; message: string }>) => void
-): ExpandRowProps<PairDTO, number> => ({
+	isLoading: boolean,
+	setIsLoading: (value: React.SetStateAction<boolean>) => void
+): ExpandRowProps<PlayerDTO, number> => ({
 	expandByColumnOnly: true,
 	showExpandColumn: true,
 	expanded: expandedRows,
@@ -33,31 +33,30 @@ const expandManager = (
 			<ChartIcon size="lg" />
 		</>
 	),
-	renderer: (row: PairDTO) => {
+	renderer: (row: PlayerDTO) => {
 		if (!row.id) {
-			return <p>{i18next.t('stats:partial_pair')}</p>;
+			return <p>{i18next.t('stats:new_player')}</p>;
 		}
-		if (isLoading.state) {
+		if (isLoading) {
 			return <p>{i18next.t(LABEL_COMMON_LOADING)}</p>;
 		}
-		return stats[row.id] ? <StatsPair stats={stats[row.id]!} /> : <div>{i18next.t('stats:not_found')}</div>;
+		return stats[row.id] ? <StatsPlayer stats={stats[row.id]!} /> : <div>{i18next.t('stats:not_found')}</div>;
 	},
-	onExpand: (row: PairDTO, isExpand: boolean, rowIndex: number, e: SyntheticEvent) => {
+	onExpand: (row: PlayerDTO, isExpand: boolean, rowIndex: number, e: SyntheticEvent) => {
 		if (row.id) {
 			if (isExpand) {
 				// Cache results
 				if (stats[row.id]) {
 					setExpandedRows([...expandedRows, row.id]);
 				} else {
-					setIsLoading({ state: true, message: i18next.t(LABEL_COMMON_LOADING) });
-					fetchPairStats({ pairs: [row.id] }).then((result) => {
+					setIsLoading(true);
+					fetchPlayerStats({ players: [row.id] }).then((result) => {
 						if (row.id && SuccessCodes.includes(result.code)) {
-							const { stats: statistics } = result as StatsPairResponse;
-							console.log('result :', statistics, result);
+							const { stats: statistics } = result as StatsPlayerResponse;
 							stats[row.id] = statistics[row.id];
 							setStats(stats);
 						}
-						setIsLoading({ state: false, message: '' });
+						setIsLoading(false);
 						setExpandedRows([...expandedRows, row.id!]);
 					});
 				}
@@ -66,16 +65,16 @@ const expandManager = (
 			}
 		}
 	},
-	onExpandAll: (isExpandAll: boolean, rows: Array<PairDTO>, e: SyntheticEvent) => {
+	onExpandAll: (isExpandAll: boolean, rows: Array<PlayerDTO>, e: SyntheticEvent) => {
 		if (isExpandAll) {
 			const ids = rows.filter((r) => !!r.id).map((r) => r.id!);
-			setIsLoading({ state: true, message: i18next.t(LABEL_COMMON_LOADING) });
-			fetchPairStats({ pairs: ids }).then((result) => {
+			setIsLoading(true);
+			fetchPlayerStats({ players: ids }).then((result) => {
 				if (SuccessCodes.includes(result.code)) {
-					const { stats: statistics } = result as StatsPairResponse;
+					const { stats: statistics } = result as StatsPlayerResponse;
 					setStats(statistics);
 				}
-				setIsLoading({ state: false, message: '' });
+				setIsLoading(false);
 				setExpandedRows(ids);
 			});
 		} else {
