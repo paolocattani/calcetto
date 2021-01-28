@@ -1,4 +1,8 @@
 {
+    "loaded": "Stats loaded....",
+    "error": "Error loading stats...",
+    "partial_pair": "You must assign both players to the pair before you can see the statistics.",
+    "new_player": "Nothing to show here.Go out there and play !",
     "stage1": "Stage 1",
     "stage2": "Stage 2",
     "tot": "Total",

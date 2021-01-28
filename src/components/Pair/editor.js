@@ -1,6 +1,6 @@
 import React from 'react';
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
-import PlayerSelect from '../Player/select';
+import PlayerSelect from '../Player/select.component';
 import { customStyles } from './helper';
 
 import { ToggleButton, ButtonGroup } from 'react-bootstrap';

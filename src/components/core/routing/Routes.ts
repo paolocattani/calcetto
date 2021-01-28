@@ -2,10 +2,10 @@ import React, { lazy } from 'react';
 import { MaleIcon, FileMedicalIcon } from '../icons';
 
 const lazySwagger = lazy(() => import('../../Swagger/Swagger'));
-const lazyPlayer = lazy(() => import('../../Player/table'));
-const lazyPlayerEdit = lazy(() => import('../../Player/edit'));
+const lazyPlayer = lazy(() => import('../../Player/table.component'));
+const lazyPlayerEdit = lazy(() => import('../../Player/edit.component'));
 const lazyTournament = lazy(() => import('../../Tournament/select'));
-const lazyPairs = lazy(() => import('../../Pair/table'));
+const lazyPairs = lazy(() => import('../../Pair/table.component'));
 const lazyStage1 = lazy(() => import('../../Stage1/wrapper'));
 const lazyStage2 = lazy(() => import('../../Stage2/handler'));
 const lazyLogin = lazy(() => import('../../Auth/Wrapper'));

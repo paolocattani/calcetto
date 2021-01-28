@@ -3,7 +3,7 @@ import { logMigrationStart, logMigrationEnd } from '../../core/logger';
 import { Migration, UmzugContext } from '.';
 
 const viewName = 'stats_pairs';
-const migrationName = '00_stats_pairs.migration';
+const migrationName = '01_stats_pairs';
 
 export const up: Migration = async ({ context: sequelize }: UmzugContext) => {
 	// https://stackoverflow.com/questions/48407329/cant-able-to-create-views-in-mysql-using-sequelize-orm
@@ -11,6 +11,7 @@ export const up: Migration = async ({ context: sequelize }: UmzugContext) => {
 	logMigrationStart('up', migrationName);
 	const viewBody = `
 		select
+			row_number() over (order by least("player1Id" ,"player2Id" ), greatest("player1Id" ,"player2Id" )) id,
 			least("player1Id" ,"player2Id" ) "player1Id",
 			greatest("player1Id" ,"player2Id" ) "player2Id",
 			sum(s1Win) s1Win,sum(s1Def) s1Def,

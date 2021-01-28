@@ -1,6 +1,13 @@
 import { Router, Request, Response } from 'express';
-import { StatsError, StatsPairResponse, StatsPlayerResponse } from '../../src/@common/models/stats.model';
-import { logger } from '../core/logger';
+import {
+	StatsPairMap,
+	StatsPairFromPlayerResponse,
+	StatsPairRequest,
+	StatsPairResponse,
+	StatsPlayerResponse,
+	StatsPlayerMap,
+	StatsPlayerRequest,
+} from '../../src/@common/models/stats.model';
 import { withAuth, doNotCacheThis, asyncMiddleware } from '../core/middleware';
 import { findById } from '../manager/pair.manager';
 
@@ -8,21 +15,54 @@ import { getStatsByPairs, getStatsByPlayer } from '../manager/stats.manager';
 import { failure, missingParameters, serverError, success } from './common.response';
 
 const router = Router();
+const STATS_LOADED = 'stats:loaded';
 
-router.get(
-	'/player/:playerId',
+router.post(
+	'/player',
 	withAuth,
-	doNotCacheThis,
 	asyncMiddleware(async (req: Request, res: Response) => {
 		try {
-			if (!req.params.playerId) {
+			const { players }: StatsPlayerRequest = req.body;
+			if (!players || players.length === 0) {
 				return missingParameters(res);
 			}
-			const playerId = parseInt(req.params.playerId);
-			const statsPlayer = await getStatsByPlayer(playerId);
-			return success<StatsPlayerResponse>(res, { label: 'player:loaded' }, { statsPlayer });
+			const stats: StatsPlayerMap = {};
+			for (const playerId of players) {
+				const statsPplayer = await getStatsByPlayer(playerId);
+				if (statsPplayer) {
+					stats[`${playerId}`] = statsPplayer;
+				}
+			}
+			return success<StatsPlayerResponse>(res, { label: STATS_LOADED }, { stats });
 		} catch (error) {
-			return serverError('GET player/list/:tId error ! : ', error, res);
+			return serverError('POST stats/player error ! : ', error, res);
+		}
+	})
+);
+
+router.post(
+	'/pair',
+	withAuth,
+	asyncMiddleware(async (req: Request, res: Response) => {
+		try {
+			const { pairs }: StatsPairRequest = req.body;
+			if (!pairs || pairs.length === 0) {
+				return missingParameters(res);
+			}
+
+			const stats: StatsPairMap = {};
+			for (const pairId of pairs) {
+				const pair = await findById(pairId);
+				if (pair && pair.player1 && pair.player2) {
+					const statsPair = await getStatsByPairs(pair.player1.id!, pair.player2.id!);
+					if (statsPair) {
+						stats[`${pairId}`] = statsPair;
+					}
+				}
+			}
+			return success<StatsPairResponse>(res, { label: STATS_LOADED }, { stats });
+		} catch (error) {
+			return serverError('POST stats/pair error ! : ', error, res);
 		}
 	})
 );
@@ -33,31 +73,18 @@ router.get(
 	doNotCacheThis,
 	asyncMiddleware(async (req: Request, res: Response) => {
 		try {
-			const { player1Id: player1IdString, player2Id: player2IdString, pairId: pairIdString } = req.query;
-			if (!pairIdString && (!player1IdString || player2IdString)) {
+			const { player1Id: player1IdString, player2Id: player2IdString } = req.query;
+			if (!player1IdString || player2IdString) {
 				return missingParameters(res);
 			}
-			let player1Id: number | null = null;
-			let player2Id: number | null = null;
-			if (pairIdString) {
-				const pairId = parseInt(pairIdString as string);
-				const pair = await findById(pairId);
-				if (pair) {
-					player1Id = pair.player1!.id;
-					player2Id = pair.player2!.id;
-				}
-			} else {
-				player1Id = parseInt(player1IdString as string);
-				player2Id = parseInt(player2IdString as string);
-			}
-			if (player1Id && player2Id) {
-				const statsPair = await getStatsByPairs(player1Id, player2Id);
-				return success<StatsPairResponse>(res, { label: 'player:loaded' }, { statsPair });
-			} else {
-				return failure<StatsError>(res, { label: 'player:loaded' });
-			}
+			let player1Id: number = parseInt(player1IdString as string);
+			let player2Id: number = parseInt(player2IdString as string);
+			const stats = await getStatsByPairs(player1Id, player2Id);
+			return stats
+				? success<StatsPairFromPlayerResponse>(res, { label: STATS_LOADED }, { stats })
+				: failure<StatsPairFromPlayerResponse>(res, { label: 'stats:error' });
 		} catch (error) {
-			return serverError('GET player/list/:tId error ! : ', error, res);
+			return serverError('GET stats/pair error ! : ', error, res);
 		}
 	})
 );

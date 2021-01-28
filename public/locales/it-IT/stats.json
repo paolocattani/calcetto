@@ -1,7 +1,12 @@
 {
+    "loaded": "Statistiche caricate....",
+    "error": "Errore caricamento statistiche",
+    "partial_pair": "Prima di vedere le statistiche devi completare la coppia.",
+    "new_player": "Nessuna statica da mostrare. Vai a giocare !",
     "stage1": "Fase 1",
     "stage2": "Fase 2",
     "tot": "Totale",
+    "tots": "Totali",
     "not_found": "Sembra sia la prima volta che giocate insieme. Buona fortuna!",
     "winnings1": "Vittorie Fase 1",
     "winnings2": "Vittorie Fase 2",
