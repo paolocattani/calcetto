@@ -30,17 +30,12 @@ if [[ $BRANCH_NAME != "master" ]] && [[ $SEARCH_RESULT = 1 ]]; then
     source cli/search_string.sh
 
     # Update version
-    source cli/update_version.sh "--$SEARCH_RESULT"
+    cli/cli.sh update "--$SEARCH_RESULT"
 
-    # Build
-    source cli/build.sh
-
-    echo "Add files to commit..."
-    cd "$HOOKS_DIR" && cd ..
-    git add .env sonar-project.properties package.json package-lock.json
+    cli/cli.sh add_to_commit
 
     # Disable this hook
-    sed -i 's|^PRE-COMMIT=.*$|PRE-COMMIT=0|g' ./hooks/.hooks
+	cli/cli.sh hook --disable --hook pre-commit
 
     echo "End : $(date +'%Y.%m.%d - %H:%M:%S')"
 else
