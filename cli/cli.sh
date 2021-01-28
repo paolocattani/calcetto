@@ -4,7 +4,9 @@
 ROOT_DIR='/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto'
 LOG_FILE="$ROOT_DIR/cli/cli.log"
 
+##############################################################################
 #------> Show Help
+##############################################################################
 showHelp_() {
 cat << EOF
 
@@ -13,29 +15,57 @@ cat << EOF
 
     command :
         release         |   Release new version
+        update          |   Just update version ( no tag )
+        tag             |   Create new tag ( pick version from package.json )
+        add_to_commit   |   Add version files to commit ( .env sonar-project.properties package.json package-lock.json )
+        hooks           |   Edit hooks
+        build           |   Create production build
         help            |   Show this help
 
     option :
         --no-redirect   | Don't redirect output to file
         --debug         | Enable debug
 
+    Example :
+
+    cli release --minor --debug
+
 EOF
 }
 
+##############################################################################
+# Functions
+##############################################################################
+
+#------> Build
+function build {
+    echo "Build start..."
+    # Build client
+    npm run CRA:build
+
+    # TODO: Build server
+    echo "Build end !.."
+}
 
 #------> Update version
 function update {
+    echo "Update start..."
     # Update version
     . cli/update_version.sh
+    echo "Update end !.."
 }
 
+#------> Add version files to commit
 function add_to_commit {
-    echo "Add files to commit..."
+    echo "Add_to_commit start..."
+    echo "Adding files to commit..."
     git add .env sonar-project.properties package.json package-lock.json
+    echo "Add_to_commit end !"
 }
 
 #------> Release
 function release {
+    echo "Release start..."
     update_version "$@"
 
     add_to_commit
@@ -52,6 +82,7 @@ function release {
 
 #------> Create new tag
 function tag {
+    echo "Tag start..."
     NEW_VERSION=v$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]');
 
     if [ $(git tag -l "$NEW_VERSION") ]; then
@@ -74,6 +105,7 @@ function tag {
 
 #------> Enable/Disable hook
 function hooks {
+    echo "Tag start..."
     . cli/hooks.sh
     echo "Hooks done !.."
 }
