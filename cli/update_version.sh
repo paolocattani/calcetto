@@ -12,7 +12,7 @@ cat << EOF
 EOF
 }
 
-update_type=$1
+update_type=$(echo "$@" | xargs)
 if [[ $update_type == "--patch" ]] ||  [[ $update_type == "--minor" ]] || [[ $update_type == "--major" ]]; then
 
   if [ ! -f "package.json" ]; then
@@ -75,6 +75,7 @@ EOF
 
 else
   # Invalid option / show help
+    echo "Option '$update_type' is not valid."
   if [[ $update_type != "--help" ]] && [[ $update_type != "" ]]; then
     echo "Option '$update_type' is not valid."
   fi

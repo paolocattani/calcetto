@@ -1,4 +1,73 @@
-import { Type } from 'react-bootstrap-table2-editor';
+import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
+import { getOpposite } from './helper';
+import { updateCellStage1 } from '../../redux/services/stage1.service';
+import { SuccessCodes } from '../../@common/models/HttpStatusCode';
+import { comparator } from './helper';
+
+// eslint-disable-next-line sonarjs/cognitive-complexity
+export const cellEditProps = (editable, stageName,autoOrder,rows,setRows,updatePlacement,setIsSaved) => cellEditFactory({
+			mode: editable ? 'click' : 'none',
+			blurToSave: true,
+      beforeSaveCell: (oldValue, newValue, row, column) => {
+				if (column.id.startsWith('col')) {
+					// Aggiorno cella opposta
+					rows[parseInt(column.text) - 1][`col${row.rowNumber}`] = getOpposite(newValue);
+				}
+			},
+			afterSaveCell: ( oldValue, newValue, row, column) => {
+				const newRows = [...rows];
+				if (column.id.startsWith('col')) {
+					// Aggiorno dati sul Db
+          updateCellStage1({
+            tId: row.pair.tournamentId,
+            stageName,
+            score: newValue,
+            pair1Id: row.pair.id,
+            pair2Id: rows[parseInt(column.text) - 1].pair.id,
+          }).then(response => {
+            if (SuccessCodes.includes(response.code)) {
+              setIsSaved(true);
+              setTimeout(() => setIsSaved(false), 3000);
+            }
+          });
+					// Ricalcolo totali riga
+					let acc = 0;
+					for (let key in row) {
+						if (key.startsWith('col') && row[key]) {
+							acc += parseInt(row[key]);
+						}
+					}
+					const thisRowIndex = row.rowNumber - 1;
+					const thisRow = newRows[thisRowIndex];
+					thisRow.total = acc ? acc : 0;
+
+					//... e riga opposta
+					acc = 0;
+					const oppositeRowIndex = parseInt(column.text) - 1;
+					for (let key in newRows[oppositeRowIndex]) {
+						if (key.startsWith('col') && newRows[oppositeRowIndex][key]) {
+							acc += parseInt(newRows[oppositeRowIndex][key]);
+						}
+					}
+					const oppositeRow = newRows[oppositeRowIndex];
+					oppositeRow.total = acc ? acc : 0;
+
+					newRows.splice(thisRowIndex, 1, thisRow);
+					newRows.splice(oppositeRowIndex, 1, oppositeRow);
+				}
+				// Aggiorno posizione relativa
+        if (autoOrder) {
+          [...newRows]
+            .sort((e1, e2) => comparator(e1, e2))
+            .forEach((s1Row, index) => (newRows[s1Row.rowNumber - 1]['placement'] = index + 1));
+        }
+				// Aggiornamento
+        setRows(newRows);
+        updatePlacement({ rows: rows.map((e) => ({ id: e.pair.id, placement: e.placement })) });
+			},
+		});
+
+
 
 /*
   non esistono i tipi per react-bootstrap-table2-editor

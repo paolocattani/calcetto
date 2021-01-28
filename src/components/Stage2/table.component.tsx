@@ -1,12 +1,12 @@
 import React from 'react';
 import style from './style.module.css';
 import { getIndexes, getEmptyCell, onClickCallback, onSelectCallback } from './helper';
-import Cell from './cell';
+import Cell from './cell.component';
 import { getBaseLog } from '../../@common/utils/math.utils';
 import PairsSelect from '../Pair/select.component';
 import { Styles } from 'react-select';
 import { PairDTO, ICell } from '../../@common/dto';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../core/types';
 import { TournamentSelector } from '../../redux/selectors';
 // import { valueFormatter } from 'components/Pair/helper';
 

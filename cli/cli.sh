@@ -66,7 +66,7 @@ function add_to_commit {
 #------> Release
 function release {
     echo "Release start..."
-    update_version "$@"
+    update "$@"
 
     add_to_commit
 

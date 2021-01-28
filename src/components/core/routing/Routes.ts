@@ -4,10 +4,10 @@ import { MaleIcon, FileMedicalIcon } from '../icons';
 const lazySwagger = lazy(() => import('../../Swagger/Swagger'));
 const lazyPlayer = lazy(() => import('../../Player/table.component'));
 const lazyPlayerEdit = lazy(() => import('../../Player/edit.component'));
-const lazyTournament = lazy(() => import('../../Tournament/select'));
+const lazyTournament = lazy(() => import('../../Tournament/select.component'));
 const lazyPairs = lazy(() => import('../../Pair/table.component'));
-const lazyStage1 = lazy(() => import('../../Stage1/wrapper'));
-const lazyStage2 = lazy(() => import('../../Stage2/handler'));
+const lazyStage1 = lazy(() => import('../../Stage1/wrapper.component'));
+const lazyStage2 = lazy(() => import('../../Stage2/handler.component'));
 const lazyLogin = lazy(() => import('../../Auth/Wrapper'));
 const lazyUser = lazy(() => import('../../Auth/Edit'));
 const lazyRedirectionControl = lazy(() =>

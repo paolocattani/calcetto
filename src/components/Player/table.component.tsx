@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter, useHistory } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from '../core/types';
+import { useDispatch } from 'react-redux';
 import BootstrapTable, { ColumnDescription, SelectRowProps } from 'react-bootstrap-table-next';
 // style
 import { Button, Row, Col } from 'react-bootstrap';
