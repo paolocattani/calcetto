@@ -7,7 +7,7 @@ import { SuccessCodes } from 'src/@common/models/HttpStatusCode';
 import { StatsPairMap, StatsPairResponse } from 'src/@common/models/stats.model';
 import { fetchPairStats } from 'src/redux/services/stats.service';
 import { MinusIcon, PlusIcon, ChartIcon } from '../core/icons';
-import StatsPair from './stats.component';
+import Stats from '../Stats/table.component';
 import i18next from '../../i18n/i18n';
 
 const expandManager = (
@@ -40,7 +40,7 @@ const expandManager = (
 		if (isLoading.state) {
 			return <p>{i18next.t(LABEL_COMMON_LOADING)}</p>;
 		}
-		return stats[row.id] ? <StatsPair stats={stats[row.id]!} /> : <div>{i18next.t('stats:not_found')}</div>;
+		return stats[row.id] ? <Stats stats={stats[row.id]!} /> : <div>{i18next.t('stats:not_found')}</div>;
 	},
 	onExpand: (row: PairDTO, isExpand: boolean, rowIndex: number, e: SyntheticEvent) => {
 		if (row.id) {

@@ -8,7 +8,7 @@ import { StatsPlayerMap, StatsPlayerResponse } from 'src/@common/models/stats.mo
 import { fetchPlayerStats } from 'src/redux/services/stats.service';
 import { MinusIcon, PlusIcon, ChartIcon } from '../core/icons';
 import i18next from '../../i18n/i18n';
-import StatsPlayer from './stats.component';
+import Stats from '../Stats/table.component';
 
 const expandManager = (
 	stats: StatsPlayerMap,
@@ -40,7 +40,7 @@ const expandManager = (
 		if (isLoading) {
 			return <p>{i18next.t(LABEL_COMMON_LOADING)}</p>;
 		}
-		return stats[row.id] ? <StatsPlayer stats={stats[row.id]!} /> : <div>{i18next.t('stats:not_found')}</div>;
+		return stats[row.id] ? <Stats stats={stats[row.id]!} /> : <div>{i18next.t('stats:not_found')}</div>;
 	},
 	onExpand: (row: PlayerDTO, isExpand: boolean, rowIndex: number, e: SyntheticEvent) => {
 		if (row.id) {
