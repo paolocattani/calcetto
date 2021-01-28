@@ -23,8 +23,8 @@ cat << EOF
         help            |   Show this help
 
     option :
-        --no-redirect   | Don't redirect output to file
-        --debug         | Enable debug
+        --no-redirect   |   Don't redirect output to file
+        --debug         |   Enable debug
 
     Example :
 
@@ -120,9 +120,6 @@ function log_args {
 ##############################################################################
 # Main
 ##############################################################################
-# Move to root
-cd $ROOT_DIR
-
 command=$1
 # Just show help
 if [[ $command == "help" ]]; then
@@ -133,7 +130,11 @@ fi
 # Test if the first param is a valid command, else show help
 if  [[ $command == "release" ]] || [[ $command == "tag" ]]  ||
     [[ $command == "hooks" ]]   || [[ $command == "update" ]] ||
-    [[ $command == "add_to_commit" ]]; then
+    [[ $command == "add_to_commit" ]] || [[ $command == "build" ]]; then
+
+    # Move to root
+    echo ""
+    cd $ROOT_DIR
 
     # general options
     noredirect=0
@@ -174,7 +175,7 @@ if  [[ $command == "release" ]] || [[ $command == "tag" ]]  ||
 
     # Exec the command
     $command "${args[@]}"
-
+    exit 0
 else
     # Show help if not a valid command
     showHelp_
