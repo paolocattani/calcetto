@@ -71,17 +71,21 @@ router.put(
 	withAuth,
 	withAdminRights,
 	asyncMiddleware(async (req: Request, res: Response) => {
-		const { stage1Rows, stage1Name, tournamentId, selected }: SelectPairsRequest = req.body;
+		const { stage1Rows, stage1Name, tournamentId }: SelectPairsRequest = req.body;
 		const connection = await getDbConnection();
 		const transaction = await connection.transaction();
 		if (!stage1Rows) {
 			return missingParameters(res);
 		}
 		try {
-			await Pair.update(
-				{ stage2Selected: selected },
-				{ where: { tournamentId, stage1Name, id: stage1Rows.map((e) => e.pair.id!) }, transaction }
-			);
+			// Reset selection
+			await Pair.update({ stage2Selected: false }, { where: { tournamentId, stage1Name }, transaction });
+			if (stage1Rows.length > 0) {
+				await Pair.update(
+					{ stage2Selected: true },
+					{ where: { tournamentId, stage1Name, id: stage1Rows.map((e) => e.pair.id!) }, transaction }
+				);
+			}
 			await transaction.commit();
 		} catch (err) {
 			logger.error('PUT pair/selected error : ', err);

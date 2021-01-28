@@ -70,13 +70,23 @@ const Stage1Table: React.FC<Stage1TableProps> = ({ pairsList, autoOrder, stageNa
 			} else {
 				selected = found ? selectedRows.filter((e) => e.rowNumber !== row.rowNumber) : selectedRows;
 			}
-			dispatch(Stage1Action.updateSelectedPairs.request({ stage1Name: stageName, stage1Rows: selected }));
+			dispatch(
+				Stage1Action.updateSelectedPairs.request({
+					stage1Name: stageName,
+					stage1Rows: selected,
+					tournamentId: tournament.id,
+				})
+			);
 			return true;
 		},
 		onSelectAll: (isSelected, s1Rows) => {
 			// console.log( 'handleOnSelectAll : ', isSelected, s1Rows );
 			dispatch(
-				Stage1Action.updateSelectedPairs.request({ stage1Name: stageName, stage1Rows: isSelected ? s1Rows : [] })
+				Stage1Action.updateSelectedPairs.request({
+					stage1Name: stageName,
+					stage1Rows: isSelected ? s1Rows : [],
+					tournamentId: tournament.id,
+				})
 			);
 		},
 		style: { backgroundColor: '#c8e6c9' },
