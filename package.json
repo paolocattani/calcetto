@@ -100,8 +100,8 @@
     "lint:report": "./node_modules/.bin/eslint -f json -o ./analysis/eslint-report.json .",
     "analyze": "source-map-explorer build/static/js/*.js --html analysis/build-analysis.html",
     "-----CLI----": "---------------------------",
-    "cli_release": "bash ./cli/release.sh",
-    "cli_build": "bash ./cli/build.sh"
+    "cli_release": "bash ./cli/cli release",
+    "cli_build": "bash ./cli/cli build"
   },
   "browserslist": {
     "production": [
