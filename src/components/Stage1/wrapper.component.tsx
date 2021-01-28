@@ -1,7 +1,7 @@
 // React, Router, Redux
 import { useHistory } from 'react-router';
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 // Style
 import commonStyle from '../../common.module.css';
 import { RightArrowIcon, TrashIcon, LeftArrowIcon } from '../core/icons';
@@ -10,9 +10,10 @@ import { Button, Col, Row, ButtonGroup, ToggleButton } from 'react-bootstrap';
 import { Stage1Action, Stage2Action, TournamentAction } from '../../redux/actions';
 import { AuthSelector, TournamentSelector, Stage1Selector, PairSelector } from '../../redux/selectors';
 import Stage1Table from './table.component';
-import TournamentBadge from '../Tournament/badge';
+import TournamentBadge from '../Tournament/badge.component';
 // Models
 import { PairDTO, TournamentProgress } from '../../@common/dto';
+import { useSelector } from '../core/types';
 
 /**
  * Wraps multiple table components

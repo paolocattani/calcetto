@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../core/types';
 import { AuthSelector } from '../../redux/selectors';
 import commonStyle from '../../common.module.css';
 import { HomeIcon, PlusIcon, BroomIcon, TrashIcon } from '../core/icons';

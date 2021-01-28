@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col, Button, FormControl, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../core/types';
 import { TournamentProgress } from 'src/@common/dto';
 import { AuthSelector } from 'src/redux/selectors';
 import { tournament } from 'src/test/commons';

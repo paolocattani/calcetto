@@ -5,7 +5,8 @@ import BootstrapTable, { ColumnDescription, SelectRowProps } from 'react-bootstr
 import TableHeader from './header.component';
 import { columns } from './editor';
 //
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from '../core/types';
+import { useDispatch } from 'react-redux';
 import { AuthSelector } from '../../redux/selectors/auth.selector';
 // style
 import { Stage1Action } from '../../redux/actions';
@@ -31,8 +32,8 @@ const Stage1Table: React.FC<Stage1TableProps> = ({ pairsList, autoOrder, stageNa
 	// From store
 	const isAdmin = useSelector(AuthSelector.isAdmin);
 	const tournament = useSelector(TournamentSelector.getTournament)!;
+	const selectedRows = useSelector((state) => Stage1Selector.getSelectedRows(stageName, state));
 	// State
-	const [selectedRows, setSelectedRows] = useState<Array<Stage1Row>>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [saved, setIsSaved] = useState(false);
 	const [rows, setRows] = useState<Array<Stage1Row>>([]);
@@ -60,31 +61,22 @@ const Stage1Table: React.FC<Stage1TableProps> = ({ pairsList, autoOrder, stageNa
 
 	const selectRow: SelectRowProps<Stage1Row> = {
 		mode: 'checkbox',
+		selected: selectedRows.map((r) => r.id),
 		onSelect: (row, isSelected) => {
 			const found = selectedRows.find((e) => e.rowNumber === row.rowNumber) ? true : false;
-			let selected;
+			let selected: Array<Stage1Row>;
 			if (isSelected) {
 				selected = found ? selectedRows : [...selectedRows, row];
 			} else {
 				selected = found ? selectedRows.filter((e) => e.rowNumber !== row.rowNumber) : selectedRows;
 			}
-			setSelectedRows(selected);
-			dispatch(
-				Stage1Action.updateSelectedPairs.request({
-					stage1Name: stageName,
-					stage1Rows: selected,
-				})
-			);
+			dispatch(Stage1Action.updateSelectedPairs.request({ stage1Name: stageName, stage1Rows: selected }));
 			return true;
 		},
 		onSelectAll: (isSelected, s1Rows) => {
 			// console.log( 'handleOnSelectAll : ', isSelected, s1Rows );
-			setSelectedRows(isSelected ? s1Rows : []);
 			dispatch(
-				Stage1Action.updateSelectedPairs.request({
-					stage1Name: stageName,
-					stage1Rows: isSelected ? s1Rows : [],
-				})
+				Stage1Action.updateSelectedPairs.request({ stage1Name: stageName, stage1Rows: isSelected ? s1Rows : [] })
 			);
 		},
 		style: { backgroundColor: '#c8e6c9' },

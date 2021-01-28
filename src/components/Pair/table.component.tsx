@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import BootstrapTable, { SelectRowProps, ColumnDescription } from 'react-bootstrap-table-next';
 import { useHistory } from 'react-router';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from '../core/types';
+import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { toast } from 'react-toastify';
 // Components
@@ -19,7 +20,7 @@ import { AuthSelector } from '../../redux/selectors/auth.selector';
 import { TournamentSelector } from '../../redux/selectors/tournament.selector';
 // Action
 import { TournamentAction, PairAction } from '../../redux/actions';
-import TournamentBadge from '../Tournament/badge';
+import TournamentBadge from '../Tournament/badge.component';
 import { useTranslation } from 'react-i18next';
 // Models
 import { PairDTO, PlayerDTO, TournamentProgress } from 'src/@common/dto';
