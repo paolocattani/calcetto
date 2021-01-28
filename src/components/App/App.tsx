@@ -10,7 +10,8 @@ import ErrorBoundary from '../core/errorBoundary';
 // Style
 import './App.css';
 import { Container } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from '../core/types';
+import { useDispatch } from 'react-redux';
 import { AuthAction } from '../../redux/actions';
 import { loadIcons } from '../core/icons';
 // Toasts
@@ -25,54 +26,53 @@ import '../../i18n/i18n';
 import CookieConsent from 'react-cookie-consent';
 import { useTranslation } from 'react-i18next';
 
-
 loadIcons();
 const App: React.FC = (_) => {
-  const dispatch = useDispatch();
-  const currentHistory = useHistory();
-  const { t } = useTranslation(['auth']);
-  const isLoading = useSelector(AuthSelector.isLoading);
+	const dispatch = useDispatch();
+	const currentHistory = useHistory();
+	const { t } = useTranslation(['auth']);
+	const isLoading = useSelector(AuthSelector.isLoading);
 
-  // Check if user is already logged
-  useEffect(() => {
-    dispatch(AuthAction.checkAuthentication.request({ history: currentHistory }));
-  }, [currentHistory, dispatch]);
+	// Check if user is already logged
+	useEffect(() => {
+		dispatch(AuthAction.checkAuthentication.request({ history: currentHistory }));
+	}, [currentHistory, dispatch]);
 
-  return (
-    <div className="App">
-      <ErrorBoundary>
-        {/* Loading translations */}
-          <Header />
-        <Container fluid style={{ marginBottom: '20vh' }}>
-          {/*<RedirectionControl />*/}
-           <ToastContainer autoClose={3000} data-cy="toast-container"/>
-          {isLoading ? (
-            // Loading store
-            <LoadingModal />
-          ) : (
-            // Loading lazy components
-              <Switch>
-                {routes.map((route) => (
-                  <ProtectedRoute {...route} key={route.index} />
-                ))}
-              </Switch>
-          )}
-          <AppBadge />
-          <CookieConsent
-            location="bottom"
-            buttonText={t('auth:cookies.accept')}
-            cookieName="session_id"
-            style={{ background: '#2B373B' }}
-            buttonStyle={{ color: '#4e503b', fontSize: '13px' }}
-            expires={150}
-            overlay
-          >
-            {t('auth:cookies.info')}
-          </CookieConsent>
-        </Container>
-      </ErrorBoundary>
-    </div>
-  );
+	return (
+		<div className="App">
+			<ErrorBoundary>
+				{/* Loading translations */}
+				<Header />
+				<Container fluid style={{ marginBottom: '20vh' }}>
+					{/*<RedirectionControl />*/}
+					<ToastContainer autoClose={3000} data-cy="toast-container" />
+					{isLoading ? (
+						// Loading store
+						<LoadingModal />
+					) : (
+						// Loading lazy components
+						<Switch>
+							{routes.map((route) => (
+								<ProtectedRoute {...route} key={route.index} />
+							))}
+						</Switch>
+					)}
+					<AppBadge />
+					<CookieConsent
+						location="bottom"
+						buttonText={t('auth:cookies.accept')}
+						cookieName="session_id"
+						style={{ background: '#2B373B' }}
+						buttonStyle={{ color: '#4e503b', fontSize: '13px' }}
+						expires={150}
+						overlay
+					>
+						{t('auth:cookies.info')}
+					</CookieConsent>
+				</Container>
+			</ErrorBoundary>
+		</div>
+	);
 };
 
 export default App;

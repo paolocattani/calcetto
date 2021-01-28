@@ -1,99 +1,63 @@
 ## Show Help
-show_help() {
+showHelp_release() {
 cat << EOF
-	Usage: ${0##*/} [option]
+    Usage: cli.sh release [option]
 
-	Option :
-		# Update version
-		  --major			Major
-		  --minor			Minor
-		  --patch			Patch
+    command :
+        --major     |   Major
+        --minor     |   Minor
+        --patch     |   Patch
+        --help      |   Show this help
 
 EOF
 }
 
-if [ ! -f "package.json" ]; then
-		echo package.json not found in $( pwd )
-    exit 0;
-fi
+update_type=$(echo "$@" | xargs)
+if [[ $update_type == "--patch" ]] ||  [[ $update_type == "--minor" ]] || [[ $update_type == "--major" ]]; then
 
-# Pick current version from package.json
-CURRENT_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]');
-NEW_VERSION=$CURRENT_VERSION
+  if [ ! -f "package.json" ]; then
+      echo package.json not found in $( pwd )
+      exit 0;
+  fi
 
-if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]]; then
-  ## Defaults
-  major=0
-  minor=0
-  path=0
+  # Get current version
+  CURRENT_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]');
+  NEW_VERSION=$CURRENT_VERSION
 
-  i=1
-  j=$# ## Number of inputs
-  while [ $i -le $j ]
-    #TODO: Convert to lower case
-    do
-        case $1 in
-        --major) major=1;;
-        --minor) minor=1;;
-        --patch) patch=1;;
-        *)
-            show_help >&2
-            exit 1
-            ;;
-        esac;
-        i=$((i + 1));
-        ## Move to next input
-        shift 1;
-    done
-
+  # Spilt $CURRENT_VERSION
   mapfile -td \. versions < <(printf "%s\0" "$CURRENT_VERSION")
-  if [[ $major -eq 1 ]] ; then
+  if [[ $update_type == "--major" ]]; then
     MESSAGE=' ----> NEW MAJOR RELEASE --->'
-    echo '    '$MESSAGE$'\n'
     NEW_VERSION=$((${versions[0]}+1)).0.0
-  fi
-  if [[ $minor -eq 1 ]] ; then
+  elif [[ $update_type == "--minor" ]]; then
     MESSAGE=' ----> NEW MINOR RELEASE --->'
-    echo '    '$MESSAGE$'\n'
     NEW_VERSION=${versions[0]}.$((${versions[1]}+1)).0
-  fi
-  if [[ $patch -eq 1 ]] ; then
+  elif [[ $update_type == "--patch" ]]; then
     MESSAGE=$' ----> NEW PATCH --->'
-    echo '    '$MESSAGE$'\n'
     NEW_VERSION=${versions[0]}.${versions[1]}.$((${versions[2]}+1))
+  else
+     echo $'    No updates found...\n'
   fi
 
-  if [[ $major -eq 0 ]] && [[ $minor -eq 0 ]] && [[ $patch -eq 0 ]] ; then
-    echo $'    No updates found...\n'
-  fi
-fi
+  if [[ $CURRENT_VERSION != $NEW_VERSION ]] ; then
+    # Print message about new version
+    echo '    '$MESSAGE$'\n'
+    echo '--> Gathering informations'
+    export REACT_APP_CLIENT_COMMIT_HASH=$(git rev-parse --short HEAD)
+    today=$(date +'%Y.%m.%d')
+    export REACT_APP_CLIENT_VERSION=$NEW_VERSION'_v'$today
+    VERSION_MESSAGE='Version   |   '$CURRENT_VERSION' '$MESSAGE' '$NEW_VERSION
+    cat << EOF
 
-if [[ $CURRENT_VERSION != $NEW_VERSION ]] ; then
-  VERSION_MESSAGE='Version   |   '$CURRENT_VERSION' '$MESSAGE' '$NEW_VERSION
-else
-  VERSION_MESSAGE='Version   |   '$CURRENT_VERSION
-fi
-
-echo '--> Gathering informations'
-export REACT_APP_CLIENT_COMMIT_HASH=$(git rev-parse --short HEAD)
-today=$(date +'%Y.%m.%d')
-export REACT_APP_CLIENT_VERSION=$NEW_VERSION'_v'$today
-
-echo $VERSION_MESSAGE >> hooks/pre-commit.log
-
-cat << EOF
-
-  ------------------------------------------------------------
-  |
-  |  $VERSION_MESSAGE
-  |
-  |  Commit    | '$REACT_APP_CLIENT_COMMIT_HASH
-  |
-  ------------------------------------------------------------
+      ------------------------------------------------------------
+      |
+      |  $VERSION_MESSAGE
+      |
+      |  Commit    | '$REACT_APP_CLIENT_COMMIT_HASH'
+      |
+      ------------------------------------------------------------
 
 EOF
-
-if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]]; then
   echo '--> Updating versions...'
 
   # https://zhu45.org/posts/2016/Dec/21/environment-variable-substitution-using-sed/
@@ -105,18 +69,16 @@ if [[ $NODE_ENV == "" ]] ||  [[ $NODE_ENV == "development" ]]; then
   # Package.json
   sed -i 's|\"version\": \".*\..*\..*\"|\"version\": \"'$NEW_VERSION'\"|g' package.json
 
-	if [[ $CURRENT_VERSION != $NEW_VERSION ]] ; then
-		# Enable post commit hook to tag this commit with the new version
-    sed -i 's|^POST-COMMIT=.*$|POST-COMMIT=1|g' ./hooks/.hooks
-	fi
-
   echo '  Done...'
-  echo '--> Updating heroku...'
-  export HEROKU_API_KEY='5156b758-3383-4d74-a0cf-69371949b4ab'
-  heroku config:set REACT_APP_CLIENT_VERSION=$NEW_VERSION -a calcetto2020stage
-  heroku config:set REACT_APP_CLIENT_COMMIT_HASH=$NEW_VERSION -a calcetto2020stage
-  heroku config:set REACT_APP_CLIENT_VERSION=$NEW_VERSION -a calcetto2020production
-  heroku config:set REACT_APP_CLIENT_COMMIT_HASH=$NEW_VERSION -a calcetto2020production
 
-  echo '  Done...'
+  fi
+
+else
+  # Invalid option / show help
+    echo "Option '$update_type' is not valid."
+  if [[ $update_type != "--help" ]] && [[ $update_type != "" ]]; then
+    echo "Option '$update_type' is not valid."
+  fi
+  showHelp_release
+  exit 1
 fi

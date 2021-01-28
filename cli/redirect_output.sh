@@ -1,3 +1,4 @@
+echo "! Redirecting output to : $LOG_FILE. Use --no-redirect to disable this option."
 # Close STDOUT and STDERR file descriptor
 exec 1<&-
 exec 2<&-

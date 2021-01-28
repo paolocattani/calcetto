@@ -45,7 +45,7 @@ export const fetchWrapper = async <B, T extends GenericReponse>(
 	body?: OmitHistory<B>,
 	afterResponse?: IFetchCallback<T>
 ): Promise<T | GenericReponse> => {
-	console.log('fetchWrapper : ', method, url, body);
+	console.log('fetchWrapper.request : ', method, url, body);
 	let response = null;
 	try {
 		response = await fetch(url, {
@@ -54,6 +54,7 @@ export const fetchWrapper = async <B, T extends GenericReponse>(
 			headers: default_headers,
 		});
 		const result: T = await response.json();
+		console.log('fetchWrapper.response : ', result);
 		return afterResponse ? afterResponse(result) : result;
 	} catch (error) {
 		console.group('An error occur : ');

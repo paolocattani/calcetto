@@ -24,24 +24,18 @@ if [[ $BRANCH_NAME != "master" ]] && [[ $SEARCH_RESULT = 1 ]]; then
 
     echo "Start : $(date +'%Y.%m.%d - %H:%M:%S')"
 
-    # TODO:
-    # SEARCH_STRING='TYPE'
-    # SEARCH_FILE="$HOOKS_DIR/.hooks"
-    # SEARCH_LENGTH='*'
-    # source cli/search_string.sh
+    SEARCH_STRING='TYPE'
+    SEARCH_FILE="$HOOKS_DIR/.hooks"
+    SEARCH_LENGTH='*'
+    source cli/search_string.sh
 
     # Update version
-    source cli/update_version.sh --patch
+    cli/cli.sh update "--$SEARCH_RESULT"
 
-    # Build
-    source cli/build.sh
-
-    echo "Add files to commit..."
-    cd "$HOOKS_DIR" && cd ..
-    git add .env sonar-project.properties package.json package-lock.json
+    cli/cli.sh add_to_commit
 
     # Disable this hook
-    sed -i 's|^PRE-COMMIT=.*$|PRE-COMMIT=0|g' ./hooks/.hooks
+	cli/cli.sh hook --disable --hook pre-commit
 
     echo "End : $(date +'%Y.%m.%d - %H:%M:%S')"
 else

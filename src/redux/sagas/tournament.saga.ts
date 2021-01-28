@@ -14,6 +14,7 @@ import {
 } from '../../@common/models/tournament.model';
 import { TournamentAction } from '../actions/tournament.action';
 import { entityLifeCycle } from './utils';
+import { PairAction, Stage1Action, Stage2Action } from '../actions';
 
 // FIXME: unused
 const onSuccessRedirect = async (redirect?: Redirect) => {
@@ -47,6 +48,10 @@ function* saveTournamentSaga({ payload }: ReturnType<typeof TournamentAction.sav
 	const onSuccess = function* (response: SaveTournamentResponse) {
 		// Reload tournament List
 		yield put(TournamentAction.fetch.request({}));
+		// Reset next steps
+		yield put(PairAction.reset({}));
+		yield put(Stage1Action.reset({}));
+		yield put(Stage2Action.reset({}));
 		// Send user to pair page
 		payload.history.push('/tournament');
 	};

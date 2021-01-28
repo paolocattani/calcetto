@@ -27,6 +27,7 @@ export interface SavePairRequest {
 	pair: PairDTO;
 }
 export interface SelectPairsRequest {
+	tournamentId: number;
 	stage1Name: string;
 	stage1Rows: Array<Stage1Row>;
 }
