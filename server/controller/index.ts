@@ -32,7 +32,7 @@ export default (application: ExpressApplication): void => {
 		{ name: 'Auth', api: '/api/v2/auth', router: authRouter },
 		{ name: 'Stats', api: '/api/v2/stats', router: statsRouter },
 		{ name: 'Player', api: '/api/v2/player', router: playerRouter },
-		{ name: 'Stage1', api: '/api/v1/stage1', router: stage1Router },
+		{ name: 'Stage1', api: '/api/v2/stage1', router: stage1Router },
 		{ name: 'Stage2', api: '/api/v2/stage2', router: stage2Router },
 		{ name: 'Tournament', api: '/api/v2/tournament', router: tournamentRouter },
 	];

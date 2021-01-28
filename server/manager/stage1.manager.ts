@@ -1,6 +1,6 @@
 // Models
 import { Stage1, Tournament } from '../database/models';
-import { Stage1Row, UserDTO } from '../../src/@common/dto';
+import { PairDTO, Stage1Row, UserDTO } from '../../src/@common/dto';
 // Core
 import { logProcess, logger } from '../core/logger';
 import { asyncForEach } from '../core/utils';
@@ -85,8 +85,35 @@ export const updateCell = async (
 	logProcess(className + 'updateCell', 'end');
 };
 
-export const generateStage1Rows = async (rows: Stage1Row[], stageName: string, user: UserDTO): Promise<Stage1Row[]> => {
+export const generateStage1Rows = async (
+	pairsList: Array<PairDTO>,
+	stageName: string,
+	user: UserDTO
+	// eslint-disable-next-line sonarjs/cognitive-complexity
+): Promise<Stage1Row[]> => {
 	logProcess(className + 'generateStage1Rows', 'start');
+	/**
+	 * Questo metodo riceve una lista di coppie PairdDTO e la trasforma in Stage1Row.
+	 * Viene utilizzato da Stage1.handler per costruire la struttura da passare alla tabella
+	 * Inoltre viene passata al BE per salvare i dati sul DB.
+	 *
+	 * @param pairsList Array<PairDTO> Lista di coppie
+	 *
+	 */
+	const rows = pairsList.map((e, ii) => {
+		const row: Stage1Row = {
+			id: `row-${e.tournamentId}-${ii}`,
+			rowNumber: ii + 1,
+			pair: e,
+			total: 0,
+			placement: e.placement || 0,
+		};
+		for (let jj = 1; jj <= pairsList.length; jj++) {
+			row[`col${jj}`] = null;
+		}
+		return row;
+	});
+
 	try {
 		const connection = await getDbConnection();
 		const transaction = await connection.transaction();

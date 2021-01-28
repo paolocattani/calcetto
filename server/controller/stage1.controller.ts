@@ -8,6 +8,8 @@ import { AppRequest } from './index';
 import { updatePlacement } from '../manager/pair.manager';
 import { deleteStage1, generateStage1Rows, updateCell } from '../manager/stage1.manager';
 import {
+	FetchStage1Request,
+	FetchStage1Response,
 	SessionStatus,
 	Stage1Error,
 	UpdateCellRequest,
@@ -70,16 +72,16 @@ router.post(
 	'/',
 	withAuth,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
-		const { rows, stageName } = req.body;
+		const { stageName, pairsList }: FetchStage1Request = req.body;
 		const { user, uuid } = req;
 		try {
-			const result = await generateStage1Rows(rows, stageName, user!);
+			const result = await generateStage1Rows(pairsList, stageName, user!);
 			// logger.info('STAGE1 RESULT : ', result);
 			subscribe(user!, uuid!, result[0].pair.tournamentId, TournamentProgress.Stage1);
-			return res.status(200).json(result);
+			return success<FetchStage1Response>(res, { label: 'stage1:loaded' }, { rows: result, stageName, pairsList });
 		} catch (error) {
 			logger.error('Error while update matrix  : ', error);
-			return failure<Stage1Error>(res, { label: 'stage1:cell_not_done' });
+			return failure<Stage1Error>(res, { label: 'stage1:error' });
 		}
 	})
 );
@@ -93,10 +95,10 @@ router.delete(
 		try {
 			const { tId } = req.body;
 			await deleteStage1(tId);
-			return res.status(200).json({ saved: true });
+			return success<UpdateCellResponse>(res, { label: 'stage1:deleted' }, { saved: true });
 		} catch (error) {
 			logger.error('Error while update matrix  : ', error);
-			return failure<Stage1Error>(res, { label: 'stage1:deleted' });
+			return failure<Stage1Error>(res, { label: 'stage1:error' });
 		}
 	})
 );
