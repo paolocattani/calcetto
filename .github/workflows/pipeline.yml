@@ -4,6 +4,7 @@ on:
     branches:
       - e2e
       - develop
+      - auto-pr
   pull_request:
     branches:
       - develop

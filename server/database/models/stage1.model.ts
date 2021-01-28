@@ -1,4 +1,4 @@
-import { Column, Model, Comment, Table, ForeignKey, DataType, BelongsTo } from 'sequelize-typescript';
+import { Column, Model, Comment, Table, ForeignKey, DataType, BelongsTo, DefaultScope } from 'sequelize-typescript';
 import { Tournament, Pair } from '.';
 
 /**
