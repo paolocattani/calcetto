@@ -14,7 +14,7 @@ import NewTournament from './new.component';
 import { useSelector } from '../core/types';
 import { useDispatch } from 'react-redux';
 import { TournamentSelector } from '../../redux/selectors/tournament.selector';
-import { TournamentAction, PairAction } from '../../redux/actions';
+import { TournamentAction, PairAction, Stage1Action, Stage2Action } from '../../redux/actions';
 import { AuthSelector } from '../../redux/selectors/auth.selector';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -49,6 +49,11 @@ const FTournament = () => {
 		event.preventDefault();
 		if (tournament) {
 			if (isAdmin) {
+				// Reset all
+				dispatch(PairAction.reset({}));
+				dispatch(Stage1Action.reset({}));
+				dispatch(Stage2Action.reset({}));
+				dispatch(PairAction.reset({}));
 				currentHistory.push('/tournament');
 			} else {
 				console.log('Fetching pairs for tournament : ', tournament.id);
