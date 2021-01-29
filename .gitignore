@@ -18,6 +18,8 @@
 # production
 /build
 
+.heroku.secret
+
 # misc
 .DS_Store
 .env
