@@ -1,12 +1,11 @@
-# See :
-# https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
-#
-# Redis : https://elements.heroku.com/addons/heroku-redis
-#
-# https://www.docker.com/blog/speed-up-your-development-flow-with-these-dockerfile-best-practices/
-#
 
-# docker build -t paolocattani/calcetto_v1 -f docker/Dockerfile .
+# Github container registry : https://docs.github.com/en/packages/guides/configuring-docker-for-use-with-github-packages
+#
+#   $ docker build -t docker.pkg.github.com/paolocattani/calcetto/calcetto:v2.13.4  -f docker/Dockerfile .
+#   $ docker push docker.pkg.github.com/paolocattani/calcetto/calcetto:v2.13.4
+#   $ docker pull docker.pkg.github.com/paolocattani/calcetto/calcetto:v2.13.4
+
+# From project root : docker build -t paolocattani/calcetto:v2.13.4  -f docker/Dockerfile .
 
 #!! Path are relative to the build context ( project root )
 # Latest node LTS
@@ -15,18 +14,20 @@ FROM node:14-alpine
 WORKDIR /usr/src/ap
 # cit."This allows us to take advantage of cached Docker layers."
 COPY package*.json  ./
+COPY server/package*.json  server/
 
-# Don't want to update package-lock.json
-
-RUN npm ci
+# Don't want to update package-lock.jso
+RUN npm ci && \
+    cd server && npm ci
 
 # Copy app source
 # Use .dockerignore to handle exclusions
 COPY . .
 
-RUN ls -l
-
 # Build client
 RUN npm run CRA:build
 
-CMD [ "node", "./node_modules/.bin/ts-node --project ./server/tsconfig.json ./server/server.ts  server.js --optimize_for_size --max_old_space_size=460 --gc_interval=100"]
+EXPOSE 5001
+
+# CMD
+CMD npm run start
