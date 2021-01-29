@@ -19,6 +19,7 @@
 /build
 
 .heroku.secret
+.pm2.secret
 
 # misc
 .DS_Store
