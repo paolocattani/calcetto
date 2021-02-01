@@ -44,7 +44,7 @@ jobs:
           npm ci
       # Build client
       - name: Build client
-        run: bash ./cli/build.sh
+        run: npm run cli_build
       # Build server
       - name: Build server
         run: npm run prod:build:server
