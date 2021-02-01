@@ -53,13 +53,13 @@ jobs:
         run: npm run prod:build:server
       # Save build for later
       - name: Upload build
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v2.2.2
         with:
           name: build-${{ matrix.node-version }}
           path: build
       # Save build for later
       - name: Upload analysis
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v2.2.2
         with:
           name: analysis-${{ matrix.node-version }}
           path: analysis
