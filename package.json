@@ -100,8 +100,8 @@
     "lint:report": "./node_modules/.bin/eslint -f json -o ./analysis/eslint-report.json .",
     "analyze": "source-map-explorer build/static/js/*.js --html analysis/build-analysis.html",
     "-----CLI----": "---------------------------",
-    "cli_release": "bash ./cli/cli release",
-    "cli_build": "bash ./cli/cli build"
+    "cli_release": "sh cli/cli release",
+    "cli_build": "sh cli/cli build"
   },
   "browserslist": {
     "production": [
@@ -125,7 +125,7 @@
     "@testing-library/dom": "^7.29.4",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",
-    "@testing-library/user-event": "^12.6.0",
+    "@testing-library/user-event": "^12.6.2",
     "@types/bcryptjs": "^2.4.2",
     "@types/bluebird": "^3.5.33",
     "@types/body-parser": "^1.19.0",
