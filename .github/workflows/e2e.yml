@@ -75,14 +75,14 @@ jobs:
           IS_DOCKER: true
       # if tests fails save screenshots
       - name: Save screenshots on failure
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2.2.2
         if: failure()
         with:
           name: cypress-screenshots
           path: cypress/screenshots
       # if tests success save videos and coverage
       - name: Save videos
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2.2.2
         if: always()
         with:
           name: cypress-videos
@@ -90,7 +90,7 @@ jobs:
       # TODO: e2e coverage
       - name: Save Coverage
         if: ${{ success() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v2.2.2
         with:
           name: coverage-cypress
           path: |
