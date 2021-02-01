@@ -5,7 +5,9 @@
 #   $ docker push docker.pkg.github.com/paolocattani/calcetto/calcetto:v2.13.4
 #   $ docker pull docker.pkg.github.com/paolocattani/calcetto/calcetto:v2.13.4
 
-# From project root : docker build -t paolocattani/calcetto:v2.13.4 -f docker/Dockerfile --build-arg=prod .
+# From project root :
+#   docker build -t paolocattani/calcetto:v2.13.4 -f docker/Dockerfile --build-arg=prod .
+#   docker run -d -p 5001:5001 paolocattani/calcetto:v2.13.4
 
 #!! Path are relative to the build context ( project root )
 # Latest node LTS
