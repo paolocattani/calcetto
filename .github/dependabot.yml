@@ -1,8 +1,38 @@
 version: 2
 updates:
-- package-ecosystem: npm
-  directory: "/"
-  schedule:
-    interval: daily
-    time: "04:00"
-  open-pull-requests-limit: 10
+  - package-ecosystem: npm
+    directory: "/"
+    milestone: 6
+    assignees:
+      - "paolocattani"
+    labels:
+      - "npm server"
+      - "dependencies"
+    schedule:
+      interval: daily
+      time: "04:00"
+    open-pull-requests-limit: 20
+
+  - package-ecosystem: npm
+    directory: "/server/"
+    milestone: 6
+    assignees:
+      - "paolocattani"
+    labels:
+      - "npm"
+      - "dependencies"
+    schedule:
+      interval: daily
+      time: "04:00"
+    open-pull-requests-limit: 20
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    milestone: 6
+    assignees:
+      - "paolocattani"
+    labels:
+      - "github actions"
+      - "dependencies"
+    schedule:
+      interval: "daily"
