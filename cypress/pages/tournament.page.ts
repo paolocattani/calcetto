@@ -48,7 +48,7 @@ export class Tournament extends AbstractPage {
 			url: 'http://localhost:5001/api/v2/tournament/new',
 			body
 		}).then((resp) => {
-			cy.visit('/')
+			cy.visit('/');
 		});
 	}
 

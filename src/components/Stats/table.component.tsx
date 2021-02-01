@@ -7,7 +7,7 @@ interface StatsProps<T> {
 	stats: T;
 }
 
-export default function Stats<T extends Stats>({ stats }: StatsProps<T>) {
+export default function StatsComponent<T extends Stats>({ stats }: StatsProps<T>) {
 	const { t } = useTranslation(['stats']);
 	const stage1 = t('stats:stage1');
 	const stage2 = t('stats:stage2');
