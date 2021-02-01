@@ -48,9 +48,11 @@ jobs:
       # Build client
       - name: Build client
         run: chmod +x cli/cli.sh
+      - name: Test
+        run: ls -l && cd cli && ls -l
       # Build client
       - name: Build client
-        run: ls -l && sh /cli/cli.sh build
+        run: cli/cli.sh build
       # Build server
       - name: Build server
         run: npm run prod:build:server
