@@ -1,32 +1,67 @@
-# See :
-# https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
-#
-# Redis : https://elements.heroku.com/addons/heroku-redis
-#
-# https://www.docker.com/blog/speed-up-your-development-flow-with-these-dockerfile-best-practices/
-#
 
-# docker build -t paolocattani/calcetto_v1 -f docker/Dockerfile .
+# Github container registry : https://docs.github.com/en/packages/guides/configuring-docker-for-use-with-github-packages
+#
+#   $ docker build -t docker.pkg.github.com/paolocattani/calcetto/calcetto:v2.13.4 -f docker/Dockerfile --build-arg=dev .
+#   $ docker push docker.pkg.github.com/paolocattani/calcetto/calcetto:v2.13.4
+#   $ docker pull docker.pkg.github.com/paolocattani/calcetto/calcetto:v2.13.4
+
+# From project root :
+#   docker build -t paolocattani/calcetto:v2.13.4 -f docker/Dockerfile --build-arg=prod .
+#   docker run -d -p 5001:5001 paolocattani/calcetto:v2.13.4
 
 #!! Path are relative to the build context ( project root )
 # Latest node LTS
 FROM node:14-alpine
-# Create app directory
+
+# Author
+LABEL maintainer="Paolo Cattani <paolocattani0501@gmail.com>"
+# Env
+ARG ENV="${ENV:-dev}"
+# Working dir
 WORKDIR /usr/src/ap
 # cit."This allows us to take advantage of cached Docker layers."
 COPY package*.json  ./
+COPY server/package*.json  server/
+# Cleanup package.json ( to reduce image size as much as possibile )
+RUN npm uninstall \
+    cypress @cypress/code-coverage @cypress/instrument-cra @cypress/webpack-preprocessor \
+    @testing-library/dom @testing-library/jest-dom @testing-library/react @testing-library/user-event \
+    cypress-intellij-reporter cypress-plugin-snapshots cypress-skip-and-only-ui cypress-watch-and-reload
 
-# Don't want to update package-lock.json
+# RUN sed -i '/cypress/d' ./package.json
 
-RUN npm ci
+# Copy the correct env
+COPY docker/.env.${ENV} ./.env
+
+# Install pm2
+RUN npm install -g pm2
+# FIXME:
+# RUN pm2 install pm2-intercom
+
+# Install dependecies
+# Don't want to update package-lock.jso
+RUN npm ci && cd server && npm ci
 
 # Copy app source
 # Use .dockerignore to handle exclusions
 COPY . .
 
-RUN ls -l
-
 # Build client
 RUN npm run CRA:build
+# TODO: build server
 
-CMD [ "node", "./node_modules/.bin/ts-node --project ./server/tsconfig.json ./server/server.ts  server.js --optimize_for_size --max_old_space_size=460 --gc_interval=100"]
+# Reduce image size
+RUN rm -f node_modules
+
+# App
+EXPOSE 5001
+# PM2 : Expose ports needed to use Keymetrics.io
+EXPOSE 80 443 43554
+
+# CMD
+CMD pm2-runtime --public $(cat secret/.pm2.public) --secret $(cat secret/.pm2.secret) start ecosystem.config.js --env production
+
+
+
+
+

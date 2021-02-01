@@ -16,7 +16,7 @@ describe('Tournament Test', () => {
 			tournamentPage.forceDeleteTournament();
 		});
 		beforeEach(()=>{
-			tournamentPage.visit()
+			tournamentPage.visit();
 			Cypress.Cookies.preserveOnce('session_id');
 		});
 
@@ -28,7 +28,7 @@ describe('Tournament Test', () => {
 
 		function newTournament(name:string,date:string,visibility:string){
 			tournamentPage.getForm().should(BE_VISIBLE);
-			tournamentPage.getSelectSubmit().should(BE_VISIBLE).should(BE_DISABLED)
+			tournamentPage.getSelectSubmit().should(BE_VISIBLE).should(BE_DISABLED);
 			tournamentPage.getNewTournamentButton().should(BE_VISIBLE).click();
 			tournamentPage.getNewName().type(name);
 			// tournamentPage.getNewDate().type(date);
@@ -68,7 +68,7 @@ describe('Tournament Test', () => {
 			tournamentPage.getSelect()
 				.find(`input`)
 				.first()
-				.click({ force: true })
+				.click({ force: true });
 		});
 
 	});
