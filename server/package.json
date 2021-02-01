@@ -79,7 +79,7 @@
     "node-schedule": "^2.0.0",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
-    "pm2": "^4.5.3",
+    "pm2": "^4.5.4",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.3.5",
     "sequelize-cli": "^6.2.0",
