@@ -2,7 +2,7 @@ version: 2
 updates:
   - package-ecosystem: npm
     directory: "/"
-    milestone: "stay-up-to-date"
+    milestone: 6
     assignees:
       - "paolocattani"
     labels:
@@ -15,7 +15,7 @@ updates:
 
   - package-ecosystem: npm
     directory: "/server/"
-    milestone: "stay-up-to-date"
+    milestone: 6
     assignees:
       - "paolocattani"
     labels:
@@ -28,7 +28,7 @@ updates:
 
   - package-ecosystem: "github-actions"
     directory: "/"
-    milestone: "stay-up-to-date"
+    milestone: 6
     assignees:
       - "paolocattani"
     labels:
