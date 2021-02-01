@@ -100,8 +100,8 @@
     "lint:report": "./node_modules/.bin/eslint -f json -o ./analysis/eslint-report.json .",
     "analyze": "source-map-explorer build/static/js/*.js --html analysis/build-analysis.html",
     "-----CLI----": "---------------------------",
-    "cli_release": "bash ./cli/cli release",
-    "cli_build": "bash ./cli/cli build"
+    "cli_release": "sh cli/cli release",
+    "cli_build": "sh cli/cli build"
   },
   "browserslist": {
     "production": [
@@ -152,7 +152,7 @@
     "@types/redux-mock-store": "^1.0.2",
     "@types/swagger-ui-react": "^3.35.0",
     "@types/umzug": "^2.3.0",
-    "@typescript-eslint/eslint-plugin": "^4.13.0",
+    "@typescript-eslint/eslint-plugin": "^4.14.1",
     "@typescript-eslint/parser": "^4.13.0",
     "babel-node": "0.0.1-security",
     "concurrently": "^5.3.0",
