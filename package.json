@@ -37,7 +37,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "@fortawesome/react-fontawesome": "^0.1.14",
     "bootstrap": "^4.5.3",
-    "i18next": "^19.8.4",
+    "i18next": "^19.8.5",
     "i18next-browser-languagedetector": "^6.0.1",
     "i18next-http-backend": "^1.0.21",
     "jquery": "^3.5.1",
@@ -100,8 +100,8 @@
     "lint:report": "./node_modules/.bin/eslint -f json -o ./analysis/eslint-report.json .",
     "analyze": "source-map-explorer build/static/js/*.js --html analysis/build-analysis.html",
     "-----CLI----": "---------------------------",
-    "cli_release": "bash ./cli/cli release",
-    "cli_build": "bash ./cli/cli build"
+    "cli_release": "sh cli/cli release",
+    "cli_build": "sh cli/cli build"
   },
   "browserslist": {
     "production": [
