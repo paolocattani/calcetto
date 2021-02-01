@@ -42,14 +42,9 @@ jobs:
       - name: Install dependencies
         run: |
           npm ci
-      # Build client
-      - name: Test
-        run: ls -l && cd cli && ls -l
-      # Build client
+      # Add exec
       - name: Build client
         run: chmod +x cli/cli.sh
-      - name: Test
-        run: ls -l && cd cli && ls -l
       # Build client
       - name: Build client
         run: cli/cli.sh build

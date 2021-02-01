@@ -26,14 +26,14 @@ import '@cypress/code-coverage/support';
 
 
 export const fixCypressSpec = (filename:string) => () => {
-	const path = require('path')
-	const relative = filename.substr(1) // removes leading "/"
+	const path = require('path');
+	const relative = filename.substr(1); // removes leading "/"
 	// @ts-ignore
-	const projectRoot = Cypress.config('projectRoot')
-	const absolute = path.join(projectRoot, relative)
+	const projectRoot = Cypress.config('projectRoot');
+	const absolute = path.join(projectRoot, relative);
 	Cypress.spec = {
 		absolute,
 		name: path.basename(filename),
 		relative
-	}
-}
+	};
+};

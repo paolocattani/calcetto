@@ -39,9 +39,13 @@ EOF
 
 #------> Build
 function build {
+
     echo "Build start..."
     # Build client
     npm run CRA:build
+    echo '--> Run Analysis...'
+    # npm run lint:report
+    npm run analyze
 
     # TODO: Build server
     echo "Build end !.."
