@@ -11,4 +11,4 @@ export const imageSnapshotConfig = (name:string,percentage?:number) => ({
 
 
 
-const dispatch = (action:any) => cy.window().its('store').invoke('dispatch', action)
+const dispatch = (action:any) => cy.window().its('store').invoke('dispatch', action);

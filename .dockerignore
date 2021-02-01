@@ -1,27 +1,38 @@
 # node modules
 node_modules
 **/node_modules
-npm-debug.log
+
+# git
 **/.git
-**/.DS_Store
-**/node_modules
+
+# enviroment
+.env*
 
 # ws configuration
 .github
 .vscode
+.idea
 
 # Folder
-../analysis
-../build
-../coverage
-../hooks
+cypress
+hooks
+cypress
+sql
+analysis
+build
+coverage*
 
+# Config file
 .editorconfig
+.eslintignore
+.eslintrc.js
+.nycrc
+.prettier.js
+cypress.json
 LICENSE
 README.md
-settings.json
-temp.txt
-
 sonar-project.properties
 swagger-config.yaml
+temp.txt
+
 *.gz
