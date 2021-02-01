@@ -18,11 +18,8 @@
 # production
 /build
 
-<<<<<<< Updated upstream
-=======
 /secrets
 
->>>>>>> Stashed changes
 # misc
 .DS_Store
 .env
