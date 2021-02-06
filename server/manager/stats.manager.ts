@@ -1,5 +1,5 @@
 import { logProcess } from '../core/logger';
-import { Op } from 'sequelize';
+import { Op, QueryTypes } from 'sequelize';
 import { StatsPairs, StatsPlayer } from '../database/models';
 import { StatsPlayerDTO } from '../../src/@common/dto/stats/stats.players.dto';
 import { StatsPairDTO } from '../../src/@common/dto/stats/stats.pairs.dto';
@@ -8,6 +8,25 @@ import { logEntity } from '../core/utils';
 
 // Const
 const className = 'Stats Manager : ';
+
+export const getBestPlayers = async (from?: Date) => {
+	const methodName = className + 'getStatsByPlayer';
+	logProcess(methodName, 'start');
+	let result: StatsPlayerDTO[] = [];
+	try {
+		const list: Array<StatsPlayer> = await StatsPlayer.sequelize!.query(
+			`SELECT * FROM getPlayerStats${from ? `(${from})` : '()'}`,
+			{ type: QueryTypes.SELECT }
+		);
+		if (list) {
+			result = list.map(playerEntity2DTO);
+		}
+	} catch (error) {
+		logProcess(methodName, 'error', error);
+	}
+	logProcess(methodName, 'end');
+	return result;
+};
 
 export const getStatsByPlayer = async (playerid: number) => {
 	const methodName = className + 'getStatsByPlayer';

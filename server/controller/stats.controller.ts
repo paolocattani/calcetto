@@ -7,15 +7,34 @@ import {
 	StatsPlayerResponse,
 	StatsPlayerMap,
 	StatsPlayerRequest,
+	StatsBestPlayersResponse,
+	StatsBestPlayersRequest,
 } from '../../src/@common/models/stats.model';
 import { withAuth, doNotCacheThis, asyncMiddleware } from '../core/middleware';
 import { findById } from '../manager/pair.manager';
 
-import { getStatsByPairs, getStatsByPlayer } from '../manager/stats.manager';
+import { getBestPlayers, getStatsByPairs, getStatsByPlayer } from '../manager/stats.manager';
 import { failure, missingParameters, serverError, success } from './common.response';
 
 const router = Router();
 const STATS_LOADED = 'stats:loaded';
+
+router.get(
+	'/player/bests',
+	withAuth,
+	doNotCacheThis,
+	asyncMiddleware(async (req: Request, res: Response) => {
+		try {
+			const { from }: StatsBestPlayersRequest = req.query;
+			const stats = await getBestPlayers(from);
+			return stats
+				? success<StatsBestPlayersResponse>(res, { label: STATS_LOADED }, { stats })
+				: failure<StatsBestPlayersResponse>(res, { label: 'stats:error' });
+		} catch (error) {
+			return serverError('GET stats/pair error ! : ', error, res);
+		}
+	})
+);
 
 router.post(
 	'/player',
