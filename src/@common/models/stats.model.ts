@@ -2,6 +2,13 @@ import { GenericReponse } from '.';
 import { StatsPairDTO } from '../dto/stats/stats.pairs.dto';
 import { StatsPlayerDTO } from '../dto/stats/stats.players.dto';
 
+//## STATE
+export interface StatsState {
+	players?: Array<StatsPlayerDTO>;
+	pairs?: Array<StatsPairDTO>;
+	isLoading: boolean;
+}
+
 export interface StatsPairMap {
 	[key: string]: StatsPairDTO;
 }
