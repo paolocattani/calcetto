@@ -1,5 +1,5 @@
 import React from 'react';
-import Tournament from './select.component';
+import Tournament from './wrapper.component';
 import { render, RenderResult, fireEvent, screen } from '../../test/test-utils';
 import userEvent from '@testing-library/user-event';
 import { performAdminLogin, performUserLogin } from 'src/test/commons';

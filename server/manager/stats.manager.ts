@@ -20,7 +20,7 @@ export const getBestPlayers = async (from?: Date) => {
 				from getPlayerStats${from ? `(${from})` : '()'}
 				join player player on player.id=sp.playerid
 				order by totwin desc
-				fetch first ${rowsLimit} only`,
+				fetch first ${rowsLimit} rows only`,
 			{ type: QueryTypes.SELECT }
 		);
 		if (list) {
@@ -44,7 +44,7 @@ export const getBestPairs = async (from?: Date) => {
 				join player player1 on player1.id=sp.player1id
 				join player player2 on player2.id=sp.player2id
 				order by totwin desc
-				fetch first ${rowsLimit} only`,
+				fetch first ${rowsLimit} rows only`,
 			{ type: QueryTypes.SELECT }
 		);
 		if (list) {

@@ -85,6 +85,9 @@ export const Unauthorized: AuthenticationResponse = {
 };
 
 export const initialState: RootState = {
+	statsState: {
+		isLoading: false,
+	},
 	tournamentState: {
 		tournament: null,
 		tournamentsList: [],
