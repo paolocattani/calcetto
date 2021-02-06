@@ -10,16 +10,45 @@ import { logEntity } from '../core/utils';
 const className = 'Stats Manager : ';
 
 export const getBestPlayers = async (from?: Date) => {
-	const methodName = className + 'getStatsByPlayer';
+	const methodName = className + 'getBestPlayers';
 	logProcess(methodName, 'start');
 	let result: StatsPlayerDTO[] = [];
 	try {
+		const rowsLimit = 10;
 		const list: Array<StatsPlayer> = await StatsPlayer.sequelize!.query(
-			`SELECT * FROM getPlayerStats${from ? `(${from})` : '()'}`,
+			`	select *
+				from getPlayerStats${from ? `(${from})` : '()'}
+				join player player on player.id=sp.playerid
+				order by totwin desc
+				fetch first ${rowsLimit} only`,
 			{ type: QueryTypes.SELECT }
 		);
 		if (list) {
 			result = list.map(playerEntity2DTO);
+		}
+	} catch (error) {
+		logProcess(methodName, 'error', error);
+	}
+	logProcess(methodName, 'end');
+	return result;
+};
+export const getBestPairs = async (from?: Date) => {
+	const methodName = className + 'getBestPairs';
+	logProcess(methodName, 'start');
+	let result: StatsPairDTO[] = [];
+	try {
+		const rowsLimit = 10;
+		const list: Array<StatsPairs> = await StatsPairs.sequelize!.query(
+			`	select *
+				from getPairStats${from ? `(${from})` : '()'}
+				join player player1 on player1.id=sp.player1id
+				join player player2 on player2.id=sp.player2id
+				order by totwin desc
+				fetch first ${rowsLimit} only`,
+			{ type: QueryTypes.SELECT }
+		);
+		if (list) {
+			result = list.map(pairEntity2DTO);
 		}
 	} catch (error) {
 		logProcess(methodName, 'error', error);

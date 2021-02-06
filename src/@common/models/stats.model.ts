@@ -14,6 +14,9 @@ export interface StatsPlayerMap {
 export interface StatsBestPlayersRequest {
 	from?: Date;
 }
+export interface StatsBestPairsRequest {
+	from?: Date;
+}
 export interface StatsPlayerRequest {
 	players: Array<number>;
 }
@@ -28,6 +31,9 @@ export interface StatsPairFromPlayerRequest {
 // Response
 export interface StatsBestPlayersResponse extends GenericReponse {
 	stats: Array<StatsPlayerDTO>;
+}
+export interface StatsBestPairsResponse extends GenericReponse {
+	stats: Array<StatsPairDTO>;
 }
 export interface StatsPlayerResponse extends GenericReponse {
 	stats: StatsPlayerMap;
