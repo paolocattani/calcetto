@@ -5,6 +5,7 @@ import { StatsPairDTO } from 'src/@common/dto';
 import { StatsBestPairsResponse } from 'src/@common/models';
 import { formatDate, roundNumber } from 'src/@common/utils';
 import { fetchBestPairs } from 'src/redux/services/stats.service';
+import { LeftAngleIcon, LeftArrowIcon, RightAngleIcon, RightArrowIcon } from '../core/icons';
 import { getLabel } from './helper';
 
 type StatsType = {
@@ -20,7 +21,7 @@ aMonthAgo.setMonth(aMonthAgo.getMonth() - 1);
 interface TheBestsProps {}
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const TheBests: React.FC<TheBestsProps> = () => {
-	const MAX_RESULT = 3;
+	const MAX_RESULT = 4;
 	const { t } = useTranslation(['stats']);
 	const [loaded, setLoaded] = useState<boolean>(false);
 	const [stats, setStats] = useState<StatsType>();
@@ -35,7 +36,7 @@ const TheBests: React.FC<TheBestsProps> = () => {
 					const { stats: ever } = (await fetchBestPairs({})) as StatsBestPairsResponse;
 					const { stats: week } = (await fetchBestPairs({ from: formatDate(aWeekAgo, '-') })) as StatsBestPairsResponse;
 					const { stats: month } = (await fetchBestPairs({
-						from: formatDate(aWeekAgo, '-'),
+						from: formatDate(aMonthAgo, '-'),
 					})) as StatsBestPairsResponse;
 					setStats({ ever, week, month });
 				} catch (error) {
@@ -61,6 +62,10 @@ const TheBests: React.FC<TheBestsProps> = () => {
 				</Row>
 				{pairStats
 					.filter((v, i) => (pairStats.length >= MAX_RESULT ? i < MAX_RESULT : i > -1))
+					.sort(
+						(p1, p2) =>
+							roundNumber((p2.totwin / p2.totMatch) * 100, 1) - roundNumber((p1.totwin / p1.totMatch) * 100, 1)
+					)
 					.map((p, ii) => (
 						<Row>
 							<Col
@@ -96,10 +101,18 @@ const TheBests: React.FC<TheBestsProps> = () => {
 		) : null;
 
 	return stats && Object.keys(stats).length > 0 ? (
-		<Carousel activeIndex={index} onSelect={handleSelect} className="mt-3" fade={true}>
+		<Carousel
+			activeIndex={index}
+			onSelect={handleSelect}
+			className="mt-3"
+			prevIcon={<LeftAngleIcon size="3x" color="#343a40" />}
+			nextIcon={<RightAngleIcon size="3x" color="#343a40" />}
+		>
 			{Object.keys(stats).map((key, ii) =>
 				stats[key as keyof StatsType].length > 0 ? (
-					<Carousel.Item key={`${key}-${ii * 18}`}>{getPairs(stats[key as keyof StatsType], key)}</Carousel.Item>
+					<Carousel.Item className="mb-5" key={`${key}-${ii * 18}`} interval={3000}>
+						{getPairs(stats[key as keyof StatsType], key)}
+					</Carousel.Item>
 				) : null
 			)}
 		</Carousel>
