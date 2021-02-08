@@ -54,10 +54,10 @@ const TheBests: React.FC<TheBestsProps> = () => {
 			<>
 				<Row>
 					<Col md={{ span: 2, offset: 2 }} style={{ textAlign: 'right' }}>
-						Coppia
+						{t('stats:pair')}
 					</Col>
 					<Col md="4" style={{ textAlign: 'left' }}>
-						Percentuali Vittorie ( {t(`stats:${key}`)} )
+						{t('stats:win_percentage')} ( {t(`stats:${key}`)} )
 					</Col>
 				</Row>
 				{pairStats
@@ -102,6 +102,7 @@ const TheBests: React.FC<TheBestsProps> = () => {
 
 	return stats && Object.keys(stats).length > 0 ? (
 		<Carousel
+			touch
 			activeIndex={index}
 			onSelect={handleSelect}
 			className="mt-3"
@@ -110,7 +111,7 @@ const TheBests: React.FC<TheBestsProps> = () => {
 		>
 			{Object.keys(stats).map((key, ii) =>
 				stats[key as keyof StatsType].length > 0 ? (
-					<Carousel.Item className="mb-5" key={`${key}-${ii * 18}`} interval={3000}>
+					<Carousel.Item style={{ opacity: 1 }} className="mb-5" key={`${key}-${ii * 18}`} interval={5000}>
 						{getPairs(stats[key as keyof StatsType], key)}
 					</Carousel.Item>
 				) : null
