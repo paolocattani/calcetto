@@ -4,3 +4,4 @@ export * from './tournament.selector';
 export * from './stage1.selector';
 export * from './stage2.selector';
 export * from './auth.selector';
+export * from './stats.selector';

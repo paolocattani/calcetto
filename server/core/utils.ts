@@ -8,8 +8,6 @@ export const getRandomIntInclusive = (min: number, max: number): number =>
 export function getBaseLog(x: number, y: number) {
 	return Math.log(y) / Math.log(x);
 }
-export const roundNumber = (num: number, decimal: number) =>
-	Math.round((num + Number.EPSILON) * 10 ** decimal) / 10 ** decimal;
 
 //-----------------------------
 // Async utils
