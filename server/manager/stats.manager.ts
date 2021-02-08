@@ -1,10 +1,11 @@
-import { logProcess } from '../core/logger';
+import { logger, logProcess } from '../core/logger';
 import { Op, QueryTypes } from 'sequelize';
-import { StatsPairs, StatsPlayer } from '../database/models';
+import { Player, StatsPairs, StatsPlayer } from '../database/models';
 import { StatsPlayerDTO } from '../../src/@common/dto/stats/stats.players.dto';
 import { StatsPairDTO } from '../../src/@common/dto/stats/stats.pairs.dto';
 import { convertEntityToDTO as convertPlayerEntityToDTO } from './player.manager';
-import { logEntity } from '../core/utils';
+import { asyncForEach, logEntity } from '../core/utils';
+import { formatDate } from '../../src/@common/utils/date.utils';
 
 // Const
 const className = 'Stats Manager : ';
@@ -16,15 +17,25 @@ export const getBestPlayers = async (from?: Date) => {
 	try {
 		const rowsLimit = 10;
 		const list: Array<StatsPlayer> = await StatsPlayer.sequelize!.query(
-			`	select *
-				from getPlayerStats${from ? `(${from})` : '()'}
-				join player player on player.id=sp.playerid
+			// eslint-disable-next-line quotes
+			`select * from getPlayerStats${from ? `('${formatDate(from, '-')}')` : '()'}
 				order by totwin desc
 				fetch first ${rowsLimit} rows only`,
-			{ type: QueryTypes.SELECT }
+			{
+				type: QueryTypes.SELECT,
+				raw: false,
+				logging: console.log,
+				model: StatsPlayer,
+				mapToModel: true,
+			}
 		);
 		if (list) {
-			result = list.map(playerEntity2DTO);
+			await asyncForEach(list, async (p) => {
+				const player = await Player.findByPk(p.playerid);
+				p.player = player!;
+				const dto = playerEntity2DTO(p);
+				result.push(dto);
+			});
 		}
 	} catch (error) {
 		logProcess(methodName, 'error', error);
@@ -39,15 +50,27 @@ export const getBestPairs = async (from?: Date) => {
 	try {
 		const rowsLimit = 10;
 		const list: Array<StatsPairs> = await StatsPairs.sequelize!.query(
-			`	select *
-				from getPairStats${from ? `(${from})` : '()'}
-				join player player1 on player1.id=sp.player1id
-				join player player2 on player2.id=sp.player2id
-				order by totwin desc
-				fetch first ${rowsLimit} rows only`,
-			{ type: QueryTypes.SELECT }
+			// eslint-disable-next-line quotes
+			`select * from getPairStats${from ? `('${formatDate(from, '-')}')` : '()'}
+			order by totwin desc
+			fetch first ${rowsLimit} rows only`,
+			{
+				type: QueryTypes.SELECT,
+				raw: false,
+				logging: console.log,
+				model: StatsPairs,
+				mapToModel: true,
+			}
 		);
 		if (list) {
+			await asyncForEach(list, async (p) => {
+				const player1 = await Player.findByPk(p.player1id);
+				p.player1 = player1!;
+				const player2 = await Player.findByPk(p.player2id);
+				p.player2 = player2!;
+				const dto = pairEntity2DTO(p);
+				result.push(dto);
+			});
 			result = list.map(pairEntity2DTO);
 		}
 	} catch (error) {

@@ -12,7 +12,7 @@ import StatsGeneric from './stats.super';
 export default class StatsPlayers extends StatsGeneric {
 	@ForeignKey(() => Player)
 	@Column(DataType.INTEGER)
-	public readonly playerid!: number;
+	public playerid!: number;
 	@BelongsTo(() => Player, 'playerid')
-	public readonly player!: Player;
+	public player!: Player;
 }

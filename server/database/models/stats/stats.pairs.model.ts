@@ -12,13 +12,13 @@ import StatsGeneric from './stats.super';
 export default class StatsPairs extends StatsGeneric {
 	@ForeignKey(() => Player)
 	@Column(DataType.INTEGER)
-	public player1Id!: number;
-	@BelongsTo(() => Player, 'player1Id')
+	public player1id!: number;
+	@BelongsTo(() => Player, 'player1id')
 	public player1!: Player;
 
 	@ForeignKey(() => Player)
 	@Column(DataType.INTEGER)
-	public player2Id!: number;
-	@BelongsTo(() => Player, 'player2Id')
+	public player2id!: number;
+	@BelongsTo(() => Player, 'player2id')
 	public player2!: Player;
 }

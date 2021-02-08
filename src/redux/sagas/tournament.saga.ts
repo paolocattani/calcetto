@@ -25,8 +25,8 @@ const onSuccessRedirect = (redirect?: Redirect) => {
 // https://medium.com/swlh/asynchronous-with-redux-sagas-b43c9630f218
 function* fetchTournamentsSaga({ payload }: ReturnType<typeof TournamentAction.fetch.request>) {
 	const onSuccess = function* (response: FetchTournamentsResponse) {
-		yield put(StatsAction.fetchBestPairs.request({}));
-		yield put(StatsAction.fetchBestPlayers.request({}));
+		//yield put(StatsAction.fetchBestPairs.request({}));
+		//yield put(StatsAction.fetchBestPlayers.request({}));
 		onSuccessRedirect(payload.redirect);
 	};
 	yield* entityLifeCycle<FetchTournamentsRequest, FetchTournamentsResponse, TournamentError>(

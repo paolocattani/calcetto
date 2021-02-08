@@ -1,4 +1,5 @@
 import {
+	StatsBestPairsResponse,
 	StatsBestPlayersRequest,
 	StatsBestPlayersResponse,
 	StatsPairFromPlayerRequest,
@@ -19,6 +20,6 @@ export const fetchPairStats = (request: StatsPairRequest) =>
 	postWrapper<StatsPairRequest, StatsPairResponse>('/api/v2/stats/pair', request);
 
 export const fetchBestPlayers = ({ from }: StatsBestPlayersRequest) =>
-	getWrapper<StatsBestPlayersResponse>(`/api/v2/stats/player/bests?from=${from}`);
+	getWrapper<StatsBestPlayersResponse>(`/api/v2/stats/player/bests${from ? `?from=${from}` : ''}`);
 export const fetchBestPairs = ({ from }: StatsBestPlayersRequest) =>
-	getWrapper<StatsBestPlayersResponse>(`/api/v2/stats/pair/bests?from=${from}`);
+	getWrapper<StatsBestPairsResponse>(`/api/v2/stats/pair/bests${from ? `?from=${from}` : ''}`);
