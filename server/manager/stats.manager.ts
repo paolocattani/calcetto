@@ -24,7 +24,7 @@ export const getBestPlayers = async (from?: Date) => {
 			{
 				type: QueryTypes.SELECT,
 				raw: false,
-				logging: console.log,
+				// logging: console.log,
 				model: StatsPlayer,
 				mapToModel: true,
 			}
@@ -57,7 +57,7 @@ export const getBestPairs = async (from?: Date) => {
 			{
 				type: QueryTypes.SELECT,
 				raw: false,
-				logging: console.log,
+				// logging: console.log,
 				model: StatsPairs,
 				mapToModel: true,
 			}

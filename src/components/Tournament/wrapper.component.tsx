@@ -70,7 +70,7 @@ const FTournament: React.FC = () => {
 				</Col>
 			</Row>
 			<Row className="mt-2">
-				<Col md={{ span: '6', offset: '3' }} sm="12">
+				<Col>
 					<TheBests />
 				</Col>
 			</Row>

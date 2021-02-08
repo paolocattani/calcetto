@@ -43,7 +43,7 @@ const App: React.FC = (_) => {
 			<ErrorBoundary>
 				{/* Loading translations */}
 				<Header />
-				<Container fluid style={{ marginBottom: '20vh' }}>
+				<Container fluid>
 					{/*<RedirectionControl />*/}
 					<ToastContainer autoClose={3000} data-cy="toast-container" />
 					{isLoading ? (
