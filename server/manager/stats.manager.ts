@@ -10,7 +10,7 @@ import { formatDate } from '../../src/@common/utils/date.utils';
 // Const
 const className = 'Stats Manager : ';
 
-export const getBestPlayers = async (from?: Date) => {
+export const getBestPlayers = async (from?: string) => {
 	const methodName = className + 'getBestPlayers';
 	logProcess(methodName, 'start');
 	let result: StatsPlayerDTO[] = [];
@@ -18,7 +18,7 @@ export const getBestPlayers = async (from?: Date) => {
 		const rowsLimit = 10;
 		const list: Array<StatsPlayer> = await StatsPlayer.sequelize!.query(
 			// eslint-disable-next-line quotes
-			`select * from getPlayerStats${from ? `('${formatDate(from, '-')}')` : '()'}
+			`select * from getPlayerStats${from ? `('${from}')` : '()'}
 				order by totwin desc
 				fetch first ${rowsLimit} rows only`,
 			{
@@ -43,7 +43,7 @@ export const getBestPlayers = async (from?: Date) => {
 	logProcess(methodName, 'end');
 	return result;
 };
-export const getBestPairs = async (from?: Date) => {
+export const getBestPairs = async (from?: string) => {
 	const methodName = className + 'getBestPairs';
 	logProcess(methodName, 'start');
 	let result: StatsPairDTO[] = [];
@@ -51,7 +51,7 @@ export const getBestPairs = async (from?: Date) => {
 		const rowsLimit = 10;
 		const list: Array<StatsPairs> = await StatsPairs.sequelize!.query(
 			// eslint-disable-next-line quotes
-			`select * from getPairStats${from ? `('${formatDate(from, '-')}')` : '()'}
+			`select * from getPairStats${from ? `('${from}')` : '()'}
 			order by totwin desc
 			fetch first ${rowsLimit} rows only`,
 			{

@@ -3,7 +3,7 @@ import { Badge, Carousel, Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { StatsPairDTO } from 'src/@common/dto';
 import { StatsBestPairsResponse } from 'src/@common/models';
-import { roundNumber } from 'src/@common/utils';
+import { formatDate, roundNumber } from 'src/@common/utils';
 import { fetchBestPairs } from 'src/redux/services/stats.service';
 import { getLabel } from './helper';
 
@@ -33,8 +33,10 @@ const TheBests: React.FC<TheBestsProps> = () => {
 			(async () => {
 				try {
 					const { stats: ever } = (await fetchBestPairs({})) as StatsBestPairsResponse;
-					const { stats: week } = (await fetchBestPairs({ from: aWeekAgo })) as StatsBestPairsResponse;
-					const { stats: month } = (await fetchBestPairs({ from: aWeekAgo })) as StatsBestPairsResponse;
+					const { stats: week } = (await fetchBestPairs({ from: formatDate(aWeekAgo, '-') })) as StatsBestPairsResponse;
+					const { stats: month } = (await fetchBestPairs({
+						from: formatDate(aWeekAgo, '-'),
+					})) as StatsBestPairsResponse;
 					setStats({ ever, week, month });
 				} catch (error) {
 					console.log('Error');
@@ -105,11 +107,3 @@ const TheBests: React.FC<TheBestsProps> = () => {
 };
 
 export default TheBests;
-
-/*
-	<article>
-		<h3>{t(`stats:${key}`)}</h3>
-		<hr />
-		{getPairs(stats[key as keyof StatsType], key)}
-	</article>
-*/

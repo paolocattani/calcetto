@@ -19,10 +19,10 @@ export interface StatsPlayerMap {
 
 // Request
 export interface StatsBestPlayersRequest {
-	from?: Date;
+	from?: string;
 }
 export interface StatsBestPairsRequest {
-	from?: Date;
+	from?: string;
 }
 export interface StatsPlayerRequest {
 	players: Array<number>;
