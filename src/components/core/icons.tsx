@@ -4,6 +4,8 @@ import { findIconDefinition, SizeProp, IconPrefix, IconName } from '@fortawesome
 // FontAwesome 5
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
+	faAngleLeft,
+	faAngleRight,
 	faSignOutAlt,
 	faChartBar,
 	faUser,
@@ -32,6 +34,8 @@ export const loadIcons = () => {
 		faTrashAlt,
 		faSave,
 		// Solid
+		faAngleLeft,
+		faAngleRight,
 		faChartBar,
 		faSignOutAlt,
 		faUser,
@@ -110,6 +114,12 @@ export const BroomIcon: React.FC<IconProps> = ({ size, color }) => (
 );
 export const RightArrowIcon: React.FC<IconProps> = ({ size, color }) => (
 	<Icon size={size} color={color} prefix={SOLID} iconName="arrow-alt-circle-right" />
+);
+export const LeftAngleIcon: React.FC<IconProps> = ({ size, color }) => (
+	<Icon size={size} color={color} prefix={SOLID} iconName="angle-left" />
+);
+export const RightAngleIcon: React.FC<IconProps> = ({ size, color }) => (
+	<Icon size={size} color={color} prefix={SOLID} iconName="angle-right" />
 );
 export const LeftArrowIcon: React.FC<IconProps> = ({ size, color }) => (
 	<Icon size={size} color={color} prefix={SOLID} iconName="arrow-alt-circle-left" />

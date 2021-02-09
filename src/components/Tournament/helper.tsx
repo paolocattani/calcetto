@@ -1,17 +1,19 @@
-import { TournamentDTO, TournamentProgress } from '../../@common/dto';
+import { PlayerDTO, TournamentDTO, TournamentProgress } from '../../@common/dto';
 import React, { CSSProperties } from 'react';
 
+export const getLabel = (player: PlayerDTO) => (player.alias ? player.alias : `${player.name} ${player.surname}`);
+
 export function getEmptyTournament(name: string): TournamentDTO {
-  return {
-    id: 0,
-    name: name || '',
-    ownerId: 0,
-    date: new Date(),
-    progress: TournamentProgress.New,
-    public: true,
-    autoOrder: true,
-    label: name || '',
-  };
+	return {
+		id: 0,
+		name: name || '',
+		ownerId: 0,
+		date: new Date(),
+		progress: TournamentProgress.New,
+		public: true,
+		autoOrder: true,
+		label: name || '',
+	};
 }
 
 // -------------------------------------------------
@@ -20,20 +22,20 @@ export function getEmptyTournament(name: string): TournamentDTO {
 
 export const IndicatorSeparator = ({ innerProps }: any) => <span style={indicatorSeparatorStyle} {...innerProps} />;
 export const indicatorSeparatorStyle: CSSProperties = {
-  alignSelf: 'stretch',
-  backgroundColor: 'green',
-  marginBottom: 8,
-  marginTop: 8,
-  marginRight: 10,
-  width: 1,
+	alignSelf: 'stretch',
+	backgroundColor: 'green',
+	marginBottom: 8,
+	marginTop: 8,
+	marginRight: 10,
+	width: 1,
 };
 export const cardStyle: CSSProperties = {
-  width: '100%',
-  margin: 'auto',
-  backgroundColor: 'inherit',
-  borderColor: '#ffc107',
-  borderWidth: '3px',
-  textAlign: 'left',
+	width: '100%',
+	margin: 'auto',
+	backgroundColor: 'inherit',
+	borderColor: '#ffc107',
+	borderWidth: '3px',
+	textAlign: 'left',
 };
 /*
 const formatNewLabel = inputString => (

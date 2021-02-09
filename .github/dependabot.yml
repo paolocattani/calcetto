@@ -6,7 +6,7 @@ updates:
     assignees:
       - "paolocattani"
     labels:
-      - "npm server"
+      - "npm"
       - "dependencies"
     schedule:
       interval: daily
@@ -19,7 +19,7 @@ updates:
     assignees:
       - "paolocattani"
     labels:
-      - "npm"
+      - "npm server"
       - "dependencies"
     schedule:
       interval: daily

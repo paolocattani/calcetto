@@ -178,7 +178,7 @@ function* registrationSaga({
 }: ReturnType<typeof AuthAction.registration.request>): Generator<StrictEffect, void, any> {
 	const onSuccess = function* () {
 		yield put(AuthAction.sessionControl.request({ history }));
-		yield put(TournamentAction.fetch.request({}));
+		// yield put(TournamentAction.fetch.request({}));
 	};
 	yield* entityLifeCycle<RegistrationRequest, RegistrationResponse, AuthenticationError>(
 		AuthAction.registration,

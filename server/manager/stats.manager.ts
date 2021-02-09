@@ -1,13 +1,84 @@
-import { logProcess } from '../core/logger';
-import { Op } from 'sequelize';
-import { StatsPairs, StatsPlayer } from '../database/models';
+import { logger, logProcess } from '../core/logger';
+import { Op, QueryTypes } from 'sequelize';
+import { Player, StatsPairs, StatsPlayer } from '../database/models';
 import { StatsPlayerDTO } from '../../src/@common/dto/stats/stats.players.dto';
 import { StatsPairDTO } from '../../src/@common/dto/stats/stats.pairs.dto';
 import { convertEntityToDTO as convertPlayerEntityToDTO } from './player.manager';
-import { logEntity } from '../core/utils';
+import { asyncForEach, logEntity } from '../core/utils';
+import { formatDate } from '../../src/@common/utils/date.utils';
 
 // Const
 const className = 'Stats Manager : ';
+
+export const getBestPlayers = async (from?: string) => {
+	const methodName = className + 'getBestPlayers';
+	logProcess(methodName, 'start');
+	let result: StatsPlayerDTO[] = [];
+	try {
+		const rowsLimit = 10;
+		const list: Array<StatsPlayer> = await StatsPlayer.sequelize!.query(
+			// eslint-disable-next-line quotes
+			`select * from getPlayerStats${from ? `('${from}')` : '()'}
+				order by totwin desc
+				fetch first ${rowsLimit} rows only`,
+			{
+				type: QueryTypes.SELECT,
+				raw: false,
+				// logging: console.log,
+				model: StatsPlayer,
+				mapToModel: true,
+			}
+		);
+		if (list) {
+			await asyncForEach(list, async (p) => {
+				const player = await Player.findByPk(p.playerid);
+				p.player = player!;
+				const dto = playerEntity2DTO(p);
+				result.push(dto);
+			});
+		}
+	} catch (error) {
+		logProcess(methodName, 'error', error);
+	}
+	logProcess(methodName, 'end');
+	return result;
+};
+export const getBestPairs = async (from?: string) => {
+	const methodName = className + 'getBestPairs';
+	logProcess(methodName, 'start');
+	let result: StatsPairDTO[] = [];
+	try {
+		const rowsLimit = 10;
+		const list: Array<StatsPairs> = await StatsPairs.sequelize!.query(
+			// eslint-disable-next-line quotes
+			`select * from getPairStats${from ? `('${from}')` : '()'}
+			order by totwin desc
+			fetch first ${rowsLimit} rows only`,
+			{
+				type: QueryTypes.SELECT,
+				raw: false,
+				// logging: console.log,
+				model: StatsPairs,
+				mapToModel: true,
+			}
+		);
+		if (list) {
+			await asyncForEach(list, async (p) => {
+				const player1 = await Player.findByPk(p.player1id);
+				p.player1 = player1!;
+				const player2 = await Player.findByPk(p.player2id);
+				p.player2 = player2!;
+				const dto = pairEntity2DTO(p);
+				result.push(dto);
+			});
+			result = list.map(pairEntity2DTO);
+		}
+	} catch (error) {
+		logProcess(methodName, 'error', error);
+	}
+	logProcess(methodName, 'end');
+	return result;
+};
 
 export const getStatsByPlayer = async (playerid: number) => {
 	const methodName = className + 'getStatsByPlayer';

@@ -14,7 +14,7 @@
   },
   "scripts": {
     "prod:build": "tsc --pretty",
-    "prod:heroku:server": "pm2 link $(cat ../secrets/.pm2.secret) && pm2-runtime start ecosystem.config.js --env production",
+    "prod:heroku:server": "pm2-runtime start ecosystem.config.js --env production",
     "prod:heroku:server_opt": "./node_modules/.bin/ts-node server.ts --optimize_for_size --max_old_space_size=460 --gc_interval=100",
     "prod": " ../node_modules/.bin/ts-node server.ts ",
     "dev": "./node_modules/.bin/nodemon --config \"./nodemon.json\"",
@@ -85,7 +85,7 @@
     "sequelize-cli": "^6.2.0",
     "sequelize-typescript": "^2.0.0",
     "ts-node": "^9.1.1",
-    "umzug": "^3.0.0-beta.14",
+    "umzug": "^3.0.0-beta.15",
     "uuid": "^8.3.2"
   }
 }

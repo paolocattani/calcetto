@@ -34,13 +34,14 @@ const expandManager = (
 		</>
 	),
 	renderer: (row: PlayerDTO) => {
+		// This scenario doesn't exists
 		if (!row.id) {
 			return <p>{i18next.t('stats:new_player')}</p>;
 		}
 		if (isLoading) {
 			return <p>{i18next.t(LABEL_COMMON_LOADING)}</p>;
 		}
-		return stats[row.id] ? <Stats stats={stats[row.id]!} /> : <div>{i18next.t('stats:not_found')}</div>;
+		return stats[row.id] ? <Stats stats={stats[row.id]!} /> : <div>{i18next.t('stats:new_player')}</div>;
 	},
 	onExpand: (row: PlayerDTO, isExpand: boolean, rowIndex: number, e: SyntheticEvent) => {
 		if (row.id) {

@@ -14,10 +14,9 @@ import {
 } from '../../@common/models/tournament.model';
 import { TournamentAction } from '../actions/tournament.action';
 import { entityLifeCycle } from './utils';
-import { PairAction, Stage1Action, Stage2Action } from '../actions';
+import { PairAction, Stage1Action, Stage2Action, StatsAction } from '../actions';
 
-// FIXME: unused
-const onSuccessRedirect = async (redirect?: Redirect) => {
+const onSuccessRedirect = (redirect?: Redirect) => {
 	if (redirect) {
 		redirect.history.push(redirect.path);
 	}
@@ -25,11 +24,14 @@ const onSuccessRedirect = async (redirect?: Redirect) => {
 
 // https://medium.com/swlh/asynchronous-with-redux-sagas-b43c9630f218
 function* fetchTournamentsSaga({ payload }: ReturnType<typeof TournamentAction.fetch.request>) {
+	const onSuccess = (response: FetchTournamentsResponse) => {
+		onSuccessRedirect(payload.redirect);
+	};
 	yield* entityLifeCycle<FetchTournamentsRequest, FetchTournamentsResponse, TournamentError>(
 		TournamentAction.fetch,
 		fetchTournaments,
 		payload,
-		() => onSuccessRedirect(payload.redirect)
+		onSuccess
 	);
 }
 
