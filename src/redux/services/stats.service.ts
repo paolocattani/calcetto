@@ -7,6 +7,8 @@ import {
 	StatsPairResponse,
 	StatsPlayerRequest,
 	StatsPlayerResponse,
+	StatsSummaryRequest,
+	StatsSummaryResponse,
 } from 'src/@common/models/stats.model';
 import { getWrapper, postWrapper } from '../../@common/utils/fetch.utils';
 
@@ -23,3 +25,5 @@ export const fetchBestPlayers = ({ from }: StatsBestPlayersRequest) =>
 	getWrapper<StatsBestPlayersResponse>(`/api/v2/stats/player/bests${from ? `?from=${from}` : ''}`);
 export const fetchBestPairs = ({ from }: StatsBestPlayersRequest) =>
 	getWrapper<StatsBestPairsResponse>(`/api/v2/stats/pair/bests${from ? `?from=${from}` : ''}`);
+export const fetchStatsSummary = (request: StatsSummaryRequest) =>
+	getWrapper<StatsSummaryResponse>('/api/v2/stats/summary');

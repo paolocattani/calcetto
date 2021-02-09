@@ -11,7 +11,9 @@ import {
 	StatsBestPlayersRequest,
 	StatsBestPairsRequest,
 	StatsBestPairsResponse,
+	StatsSummaryResponse,
 } from '../../src/@common/models/stats.model';
+import { formatDate } from '../../src/@common/utils/date.utils';
 import { withAuth, doNotCacheThis, asyncMiddleware } from '../core/middleware';
 import { findById } from '../manager/pair.manager';
 
@@ -21,6 +23,41 @@ import { failure, missingParameters, serverError, success } from './common.respo
 const router = Router();
 const STATS_LOADED = 'stats:loaded';
 const STATS_ERROR = 'stats:error';
+
+router.get(
+	'/summary',
+	withAuth,
+	doNotCacheThis,
+	asyncMiddleware(async (req: Request, res: Response) => {
+		try {
+			const aWeekAgo = new Date();
+			aWeekAgo.setDate(aWeekAgo.getDate() - 7);
+			const aWeekAgoString = formatDate(aWeekAgo, '-');
+			const aMonthAgo = new Date();
+			aMonthAgo.setMonth(aMonthAgo.getMonth() - 1);
+			const aMonthAgoString = formatDate(aMonthAgo, '-');
+
+			const pairEver = await getBestPairs();
+			const pairWeek = await getBestPairs(aWeekAgoString);
+			const pairMonth = await getBestPairs(aMonthAgoString);
+			const playerEver = await getBestPlayers();
+			const playerWeek = await getBestPlayers(aWeekAgoString);
+			const playerMonth = await getBestPlayers(aMonthAgoString);
+			return pairEver && playerEver
+				? success<StatsSummaryResponse>(
+						res,
+						{ label: STATS_LOADED },
+						{
+							pairs: { ever: pairEver, month: pairMonth, week: pairWeek },
+							players: { ever: playerEver, month: playerMonth, week: playerWeek },
+						}
+				  )
+				: failure<StatsSummaryResponse>(res, { label: STATS_ERROR });
+		} catch (error) {
+			return serverError('GET stats/pair/best error ! : ', error, res);
+		}
+	})
+);
 
 router.get(
 	'/player/bests',

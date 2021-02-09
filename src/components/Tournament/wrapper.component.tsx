@@ -13,7 +13,7 @@ import { TournamentAction } from '../../redux/actions';
 import { AuthSelector } from '../../redux/selectors/auth.selector';
 import { useTranslation } from 'react-i18next';
 import { LABEL_TOURNAMENT_SELECT } from '../../@common/constants/label';
-import TheBests from './bests.pairs.component';
+import StatsSummary from './stats.component';
 
 const FTournament: React.FC = () => {
 	// Redux
@@ -71,7 +71,7 @@ const FTournament: React.FC = () => {
 			</Row>
 			<Row className="mt-2">
 				<Col>
-					<TheBests />
+					<StatsSummary />
 				</Col>
 			</Row>
 		</>

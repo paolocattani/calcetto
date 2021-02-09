@@ -18,6 +18,7 @@ export interface StatsPlayerMap {
 }
 
 // Request
+export interface StatsSummaryRequest {}
 export interface StatsBestPlayersRequest {
 	from?: string;
 }
@@ -36,6 +37,18 @@ export interface StatsPairFromPlayerRequest {
 }
 
 // Response
+export interface StatsSummaryResponse extends GenericReponse {
+	pairs: {
+		ever: Array<StatsPairDTO>;
+		month: Array<StatsPairDTO>;
+		week: Array<StatsPairDTO>;
+	};
+	players: {
+		ever: Array<StatsPlayerDTO>;
+		month: Array<StatsPlayerDTO>;
+		week: Array<StatsPlayerDTO>;
+	};
+}
 export interface StatsBestPlayersResponse extends GenericReponse {
 	stats: Array<StatsPlayerDTO>;
 }
