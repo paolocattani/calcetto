@@ -120,7 +120,7 @@
     "@cypress/instrument-cra": "^1.4.0",
     "@cypress/webpack-preprocessor": "^5.5.0",
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
-    "@ljharb/eslint-config": "^17.3.0",
+    "@ljharb/eslint-config": "^17.5.1",
     "@shinnn/eslint-config": "^7.0.0",
     "@testing-library/dom": "^7.29.4",
     "@testing-library/jest-dom": "^5.11.9",
