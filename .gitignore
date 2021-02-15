@@ -39,3 +39,6 @@ dev.log*
 .env*
 /server/dist
 /.metadata
+
+
+.firebase

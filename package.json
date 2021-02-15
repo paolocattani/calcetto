@@ -101,7 +101,10 @@
     "analyze": "source-map-explorer build/static/js/*.js --html analysis/build-analysis.html",
     "-----CLI----": "---------------------------",
     "cli_release": "sh cli/cli release",
-    "cli_build": "sh cli/cli build"
+    "cli_build": "sh cli/cli build",
+    "-----FIREBASE----": "---------------------------",
+    "firebase:emulator": "firebase emulators:start",
+    "firebase:deploy:stage": "firebase deploy --only hosting:calcetto-stage"
   },
   "browserslist": {
     "production": [
