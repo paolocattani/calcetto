@@ -19,7 +19,7 @@ import { PlayerRole } from '../../../src/@common/dto';
 		include: [Player.associations.pair1, Player.associations.pair2],
 	},
 }))
-@Table({ tableName: 'player', freezeTableName: true, version: false })
+@Table({ tableName: 'player', modelName: 'Player', freezeTableName: true, version: false })
 export default class Player extends Model {
 	@Column(DataType.STRING)
 	public name!: string;

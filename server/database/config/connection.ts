@@ -31,12 +31,13 @@ async function loadModels(schema?: string): Promise<Sequelize> {
 	// FIXME: should import types from @commmon/typings
 	const envConfig: SequelizeConfiguration = getSequelizeEnv();
 	const uri: string = process.env[envConfig.useEnvVar]!;
-	if (!isProductionMode()) logger.info(`URI : ${chalk.red.bold(util.inspect(uri))}`);
+	if (!isProductionMode()) {
+		logger.info(`URI : ${chalk.red.bold(util.inspect(uri))}`);
+		logger.info(`Models : ${__dirname}/../models/**/*.model.${!process.env.SERVER_TRANSPILED ? 'ts' : 'js'}`);
+	}
 	const connectionOptions: SequelizeOptions = {
 		...envConfig,
-		models: [__dirname + '/../models/**/*.model.ts'],
-		modelMatch: (filename: string, member: string) =>
-			filename.substring(0, filename.indexOf('.model')) === member.toLowerCase(),
+		models: [`${__dirname}/../models/**/*.model.${!process.env.SERVER_TRANSPILED ? 'ts' : 'js'}`],
 		define: { schema },
 	};
 

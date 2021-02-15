@@ -17,6 +17,7 @@
 /cypress-coverage
 # production
 /build
+/server/build_server
 
 /secrets
 
