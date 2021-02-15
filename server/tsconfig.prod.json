@@ -7,14 +7,17 @@
 		"experimentalDecorators": true,
 		"forceConsistentCasingInFileNames": true,
 		"isolatedModules": true,
-		"listFiles": true,
-		"listEmittedFiles": true,
+		//"listFiles": true,
+		//"listEmittedFiles": true,
 		"noErrorTruncation": true,
 		"outDir": "./build_server",
 		"removeComments": true,
 		"skipLibCheck": true,
 		"downlevelIteration": true,
-		"rootDir": "." ,
-		"target":"ES6"
-	}
+		"target":"ES6",
+		"moduleResolution": "node",
+		"lib": [ "esnext" ],
+		"module": "commonjs"
+	},
+	"exclude": ["./test","**/*.test.ts"]
 }
