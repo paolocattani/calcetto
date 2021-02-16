@@ -39,6 +39,9 @@ export interface UpdatePlacementRequest {
 	rows: Array<{ id: number; placement: number }>;
 }
 
+export interface DeleteStage1Request {
+	tId: number;
+}
 // Response
 export interface FetchStage1Response extends GenericReponse {
 	stageName: string;
@@ -47,5 +50,6 @@ export interface FetchStage1Response extends GenericReponse {
 }
 export interface UpdateCellResponse extends GenericReponse {}
 export interface UpdatePlacementResponse extends GenericReponse {}
+export interface DeleteStage1Response extends GenericReponse {}
 
 export interface Stage1Error extends GenericReponse {}

@@ -1,6 +1,7 @@
 import React from 'react';
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import PlayerSelect from '../Player/select.component';
+import { updatePair } from '../../redux/services/pair.service';
 import { customStyles } from './helper';
 
 import { ToggleButton, ButtonGroup } from 'react-bootstrap';
@@ -93,12 +94,7 @@ export const cellEditProps = (editable) =>
       // Aggiornamento per queste due colonne viene eseguito dalla funzione onSelect
       if (column.dataField === 'player1.alias' || column.dataField === 'player2.alias') return;
       (async () => {
-        const response = await fetch('/api/v1/pair', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(row),
-        });
-        await response.json();
+        await updatePair({ pair: row });
       })();
     },
   });
