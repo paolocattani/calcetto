@@ -10,7 +10,7 @@
 		//"listFiles": true,
 		//"listEmittedFiles": true,
 		"noErrorTruncation": true,
-		"outDir": "./build_server",
+		"outDir": "../production_build",
 		"removeComments": true,
 		"skipLibCheck": true,
 		"downlevelIteration": true,

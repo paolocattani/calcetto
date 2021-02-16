@@ -19,6 +19,8 @@ cat << EOF
         tag             |   Create new tag ( pick version from package.json )
         add_to_commit   |   Add version files to commit ( .env sonar-project.properties package.json package-lock.json )
         hooks           |   Edit hooks
+        build_client    |   Create client production build
+        build_server    |   Create server production build
         build           |   Create production build
         help            |   Show this help
 
@@ -38,24 +40,13 @@ EOF
 ##############################################################################
 
 #------> Build
-function build {
-
-    echo "Build start..."
-    # Build client
-    npm run CRA:build
-    echo '--> Run Analysis...'
-    # npm run lint:report
-    npm run analyze
-
-    # TODO: Build server
-    echo "Build end !.."
-}
+. cli/functions/build.sh
 
 #------> Update version
 function update {
     echo "Update start..."
     # Update version
-    . cli/update_version.sh
+    . cli/functions/update_version.sh
     echo "Update end !.."
 }
 
@@ -68,49 +59,15 @@ function add_to_commit {
 }
 
 #------> Release
-function release {
-    echo "Release start..."
-    update "$@"
-
-    add_to_commit
-
-    # Commit
-    echo "Commit release : $NEW_VERSION"
-    git commit -m "Release $NEW_VERSION"
-
-    # Create tag
-    tag
-
-    echo "Release done !.."
-}
+. cli/functions/release.sh
 
 #------> Create new tag
-function tag {
-    echo "Tag start..."
-    NEW_VERSION=v$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]');
-
-    if [ $(git tag -l "$NEW_VERSION") ]; then
-        echo "Tag $NEW_VERSION already exists.."
-    else
-        echo "Create tag $NEW_VERSION"
-        git tag -a "$NEW_VERSION" HEAD -m "Release $NEW_VERSION"
-
-        echo "Update Heroku env vars"
-        HEROKU_API_KEY=$(cat secrets/.heroku)
-        COMMIT_HASH=$(git rev-parse --short HEAD);
-        heroku config:set REACT_APP_CLIENT_VERSION=$NEW_VERSION -a calcetto2020stage
-        heroku config:set REACT_APP_CLIENT_COMMIT_HASH=$COMMIT_HASH -a calcetto2020stage
-        heroku config:set REACT_APP_CLIENT_VERSION=$NEW_VERSION -a calcetto2020production
-        heroku config:set REACT_APP_CLIENT_COMMIT_HASH=$COMMIT_HASH -a calcetto2020production
-    fi
-
-    echo "Tag done !.."
-}
+. cli/functions/tag.sh
 
 #------> Enable/Disable hook
 function hooks {
     echo "Tag start..."
-    . cli/hooks.sh
+    . cli/functions/hooks.sh
     echo "Hooks done !.."
 }
 
@@ -169,7 +126,7 @@ if  [[ $command == "release" ]] || [[ $command == "tag" ]]  ||
 
     # Redirect output
     if [[ $noredirect -eq 0 ]]; then
-        source cli/redirect_output.sh
+        . cli/functions/redirect_output.sh
     fi
 
     # Debug
