@@ -44,7 +44,7 @@ const cookiesOption: CookieOptions = {
 		For example, cookies that persist server-side sessions don't need to be available to JavaScript,
 		and should have the HttpOnly attribute. This precaution helps mitigate cross-site scripting (XSS) attacks.
 	*/
-	httpOnly: false,
+	httpOnly: true,
 	/*
 		source : https://github.com/expressjs/cookie-parser#readme
 		Set this cookie as signed so cookie-parser will try to decode it.
@@ -55,7 +55,7 @@ const cookiesOption: CookieOptions = {
 		A cookie with the Secure attribute is sent to the server only with an encrypted request over the HTTPS protocol,
 		never with unsecured HTTP (except on localhost)
 	*/
-	secure: false,
+	secure: isProductionMode(),
 	/*
 		source : https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite
 		The SameSite attribute lets servers specify whether/when cookies are sent with cross-origin requests

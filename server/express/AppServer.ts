@@ -23,7 +23,7 @@ const defaultCPUs: number = Number(process.env.SERVER_WORKERS);
 const applicationCorsOption: CorsOptions = {
 	// Access-Control-Allow-Credentials
 	credentials: true,
-	preflightContinue: true,
+	preflightContinue: false,
 	optionsSuccessStatus: 200,
 	// Access-Control-All,ow-Methods
 	methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],

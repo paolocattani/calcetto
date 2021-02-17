@@ -6,7 +6,7 @@
 import '../core/env';
 import { logger } from '../core/logger';
 import { isProductionMode } from '../core/debug';
-import { routeLogger, CORSControl, auditControl, cacheControl } from '../core/middleware';
+import { routeLogger, auditControl, cacheControl } from '../core/middleware';
 import * as http from 'http';
 // Express
 import helmet from 'helmet';
@@ -83,7 +83,6 @@ export abstract class AbstractServer implements IServer {
 			.use(cookieParser(process.env.SERVER_SECRET))
 			.all('*', auditControl)
 			.all('*', cacheControl)
-			.all('*', CORSControl)
 			.all('*', routeLogger);
 
 		this.routes(this.application);
