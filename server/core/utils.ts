@@ -1,5 +1,19 @@
 import { WhereOptions, Sequelize, Op, Model } from 'sequelize';
 //-----------------------------
+// Env
+//
+export const isTsEnv = () => {
+	let detectTSNode = false;
+	try {
+		if (process[(Symbol.for('ts-node.register.instance') as unknown) as keyof NodeJS.Process]) {
+			detectTSNode = true;
+		}
+	} finally {
+		module.exports = detectTSNode;
+	}
+	return detectTSNode;
+};
+//-----------------------------
 // Math
 //
 export const getRandomIntInclusive = (min: number, max: number): number =>

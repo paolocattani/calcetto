@@ -4,12 +4,6 @@
 import { GenericReponse, OmitHistory, UnexpectedServerError } from '../models/common.models';
 import { toast } from 'react-toastify';
 
-//
-export const default_headers: HeadersInit = {
-	'Content-Type': 'application/json',
-	// credentials: 'same-origin',
-};
-
 interface IFetchCallback<T> {
 	(response: T): T | Promise<T>;
 }
@@ -45,13 +39,21 @@ export const fetchWrapper = async <B, T extends GenericReponse>(
 	body?: OmitHistory<B>,
 	afterResponse?: IFetchCallback<T>
 ): Promise<T | GenericReponse> => {
-	console.log('fetchWrapper.request : ', method, url, body);
+	const completeUrl =
+		(process.env.REACT_APP_SERVER_HOST ? process.env.REACT_APP_SERVER_HOST : 'http://localhost:5001') + url;
+	console.log('fetchWrapper.request : ', method, completeUrl, body);
 	let response = null;
 	try {
-		response = await fetch(url, {
+		response = await fetch(completeUrl, {
 			method,
-			body: method === 'PUT' || method === 'POST' || method === 'DELETE' ? JSON.stringify(body) : undefined,
-			headers: default_headers,
+			body: ['PUT', 'POST', 'DELETE'].includes(method) ? JSON.stringify(body) : undefined,
+			credentials: 'include',
+			mode: 'cors',
+			cache: 'default',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			},
 		});
 		const result: T = await response.json();
 		console.log('fetchWrapper.response : ', result);

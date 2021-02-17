@@ -6,7 +6,7 @@
 import '../core/env';
 import { logger } from '../core/logger';
 import { isProductionMode } from '../core/debug';
-import { routeLogger, auditControl, cacheControl } from '../core/middleware';
+import { routeLogger, CORSControl, auditControl, cacheControl } from '../core/middleware';
 import * as http from 'http';
 // Express
 import helmet from 'helmet';
@@ -44,7 +44,7 @@ export abstract class AbstractServer implements IServer {
 		this.serverPort = port;
 		this.maxCPUs = maxCPUs ? maxCPUs : Number.parseInt('1');
 		this.application = express();
-		this.corsOptions = corsOptions ? corsOptions : { origin: 'http://localhost:3000' };
+		this.corsOptions = corsOptions ? corsOptions : {};
 	}
 
 	public start(): http.Server {
@@ -64,8 +64,9 @@ export abstract class AbstractServer implements IServer {
       });
     } else {
     */
+		logger.info('CORS options : ', this.corsOptions);
 		this.application
-			.options('*', cors<Request>(this.corsOptions)) // Preflight Request
+			.use(cors<Request>(this.corsOptions))
 			.use(morgan(isProductionMode() ? 'combined' : 'common'))
 			// Exclude compression per 'text/event-stream'
 			.use(
@@ -82,6 +83,7 @@ export abstract class AbstractServer implements IServer {
 			.use(cookieParser(process.env.SERVER_SECRET))
 			.all('*', auditControl)
 			.all('*', cacheControl)
+			.all('*', CORSControl)
 			.all('*', routeLogger);
 
 		this.routes(this.application);

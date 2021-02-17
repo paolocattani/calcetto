@@ -81,7 +81,7 @@
     "heroku-cleanup": "echo This runs after Heroku prunes and caches dependencies.",
     "start": "cd server && npm run prod:heroku:server",
     "-----CRA----": "---------------------------",
-    "CRA:start": "react-scripts --require @cypress/instrument-cra start",
+    "CRA:start": "react-scripts start",
     "CRA:build": "react-scripts build ",
     "CRA:eject": "react-scripts eject",
     "CRA:test": "react-scripts test",
@@ -89,7 +89,7 @@
     "test:app": "concurrently -p \"[{name}]\" -n server,client -c \"bgGreen.bold,bgBlue.bold\"  --kill-others-on-fail \"npm run test:app:server\" \"npm run test:app:client\"",
     "test:app:server": "cross-env NODE_ENV=test npm run prod:heroku:server",
     "test:app:server:coverage": "cross-env NODE_ENV=test nyc --silent npm run dev:server",
-    "test:app:client": "cross-env NODE_ENV=test CI=true BROWSER=NONE npm run CRA:start",
+    "test:app:client": "cross-env NODE_ENV=test CI=true BROWSER=NONE react-scripts --require @cypress/instrument-cra start",
     "test:client:coverage": "react-scripts test --coverage --watchAll=false --silent --testResultsProcessor ./node_modules/jest-sonar-reporter ",
     "test:client:debug": "react-scripts --inspect-brk test --runInBand --no-cache --env=jest-environment-jsdom-sixteen",
     "test:e2e": "cross-env NODE_ENV=test start-server-and-test test:app 5000 cypress:run",
@@ -104,6 +104,8 @@
     "cli_build": "sh cli/cli build",
     "-----FIREBASE----": "---------------------------",
     "firebase:emulator": "firebase emulators:start",
+    "firebase:emulator:hosting": "firebase emulators:start --only hosting",
+    "firebase:emulator:functions": "firebase emulators:start --only functions",
     "firebase:deploy:stage": "firebase deploy --only hosting:calcetto-stage"
   },
   "browserslist": {

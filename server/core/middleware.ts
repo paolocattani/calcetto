@@ -23,6 +23,14 @@ export const controllerLogger = (req: Request, next: NextFunction, controller: s
 	if (isDevMode()) logger.info(`${controller} Controller : ${req.method} ${req.originalUrl.replace(path, '')} `);
 	next();
 };
+export const CORSControl = (req: Request, res: Response, next: NextFunction) => {
+	/*
+	res.set('Access-Control-Allow-Origin', `http://${process.env.CLIENT_HOST}:${process.env.CLIENT_PORT}`);
+	res.set('Access-Control-Allow-Headers', 'Origin, Content-Type, Accept, mode, credentials');
+	res.set('Access-Control-Allow-Credentials', 'true');
+	*/
+	next();
+};
 
 export const cacheControl = (req: Request, res: Response, next: NextFunction) => {
 	// Period in second, this one is 5 minutes
@@ -51,7 +59,7 @@ export const asyncMiddleware = (fn: any) => (req: Request, res: Response, next: 
 export const withAuth = async (req: AppRequest, res: Response, next: NextFunction) => {
 	const [token, uuid] = getCookies(req);
 	if (!token || typeof token != 'string' || !uuid) {
-		logger.error(chalk.redBright('Come back with more cookies...'));
+		logger.error(chalk.redBright('Come back with more cookies... -> '), token, uuid);
 		return unauthorized(res, { label: 'common:server.unauthorized' });
 	}
 	const [user, isTokenValid] = safeVerifyToken(token);
