@@ -87,11 +87,12 @@ export abstract class AbstractServer implements IServer {
 
 		this.routes(this.application);
 
-		// public folder path
+		/*
+			Statically serve frontend build ( Heroku deploy )
+		*/
 		const buildPath = path.join(__dirname, '..', '..', 'build');
 		logger.info(`Serving build folder from ${chalk.green(buildPath)}`);
 		this.application.use(
-			//
 			express.static(buildPath, {
 				maxAge: process.env.STATIC_CONTENTS_CACHE ? process.env.STATIC_CONTENTS_CACHE : '0',
 				lastModified: true,
@@ -99,6 +100,7 @@ export abstract class AbstractServer implements IServer {
 			})
 		);
 
+		// Listen on port `this.serverPort`
 		const httpServer = this.application.listen(this.serverPort, () => {
 			logger.info(
 				`Process ${chalk.blue(process.pid.toString())} for server ${chalk.yellow(
@@ -107,6 +109,7 @@ export abstract class AbstractServer implements IServer {
 			);
 		});
 
+		// Shows servers stats every 30 minutes
 		const interval = setInterval(() => {
 			logger.info(chalk.bold.redBright(`--- Process@${process.pid} status ---------------- `));
 			logger.info(chalk.greenBright('   Uptime        : '), process.uptime());
@@ -125,12 +128,6 @@ export abstract class AbstractServer implements IServer {
 			logger.info(chalk.bold.redBright('--------------------------------------- '));
 		}, 30 * 60 * 1000);
 
-		httpServer.on('close', function () {
-			logger.info('Stopping server...');
-			clearInterval(interval);
-			logger.info('Shutdown...');
-		});
-
 		// Graceful Shutdown
 		const closeServer = (signal: string) => {
 			logger.info(`Detect event ${signal}.`);
@@ -146,6 +143,11 @@ export abstract class AbstractServer implements IServer {
 
 		process.on('SIGINT', () => closeServer('SIGINT'));
 		process.on('SIGTERM', () => closeServer('SIGINT'));
+		httpServer.on('close', function () {
+			logger.info('Stopping server...');
+			clearInterval(interval);
+			logger.info('Shutdown...');
+		});
 
 		return httpServer;
 	}

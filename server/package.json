@@ -24,7 +24,7 @@
     "test:e2e": "cross-env NODE_ENV=test start-server-and-test prod 5001 test:coverage",
     "prod:trans": "node build_server/server/server.js",
     "build2": "./node_modules/.bin/tsc --project tsconfig.prod.json ",
-    "build": "./node_modules/.bin/tsc --pretty --emitDecoratorMetadata --esModuleInterop --experimentalDecorators  --forceConsistentCasingInFileNames --isolatedModules --listFiles --listEmittedFiles --noErrorTruncation --outDir ./build_server --removeComments --skipLibCheck --downlevelIteration server.ts > server_compilation.txt"
+    "build": "./node_modules/.bin/tsc --pretty --emitDecoratorMetadata --esModuleInterop --experimentalDecorators  --forceConsistentCasingInFileNames --isolatedModules --listFiles --listEmittedFiles --noErrorTruncation --outDir ./build_server --removeComments --skipLibCheck --downlevelIteration server.ts"
   },
   "jest": {
     "testTimeout": 10000,

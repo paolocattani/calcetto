@@ -1,4 +1,6 @@
 function build {
+    echo "Clean up destination folder..."
+    rm -r production_build/*
 
     echo "Build start..."
     # Build client
@@ -10,9 +12,5 @@ function build {
     # Build server
     cd server
     npm run build
-
-    cd ..
-    cp -r build .env production_build/
-    cp -r production_build/* functions/
     echo "Build end !.."
 }

@@ -38,7 +38,20 @@ EOF
 ##############################################################################
 # Functions
 ##############################################################################
-
+#------> Firebase
+#------> Emulators
+function firebase_start {
+    # Run build
+    build
+    #
+    firebase emulators:start
+}
+function firebase_deploy {
+    # Run build
+    build
+    #
+    firebase emulators:start
+}
 #------> Build
 . cli/functions/build.sh
 
