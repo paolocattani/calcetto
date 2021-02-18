@@ -15,27 +15,35 @@ import { logger } from '../core/logger';
 import { isDevMode, isProductionMode, isTestMode } from '../core/debug';
 import { migrationUp } from '../database/migrations';
 
-// white list for CORS
 const defaultName: string = 'ApplicationServer Calcetto';
 const defaultPort: number = isProductionMode() ? Number(process.env.PORT) : Number(process.env.SERVER_PORT);
 const defaultCPUs: number = Number(process.env.SERVER_WORKERS);
 
-/* FIXME:
+// https://expressjs.com/en/resources/middleware/cors.html
 const applicationCorsOption: CorsOptions = {
-  origin: (origin, callback) =>
-    [
-      `http://${process.env.CLIENT_HOST}:${process.env.CLIENT_PORT}`,
-      `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`,
-    ].indexOf(origin!) !== -1 || !origin
-      ? callback(null, true)
-      : callback(new Error(`Not allowed by CORS : ${origin}`)),
-  credentials: true,
+	// Access-Control-Allow-Credentials
+	credentials: true,
+	preflightContinue: false,
+	optionsSuccessStatus: 200,
+	// Access-Control-All,ow-Methods
+	methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
+	// Access-Control-Allow-Headers
+	allowedHeaders: ['Origin', 'Content-Type', 'Accept', 'mode', 'credentials'],
+	// Access-Control-Expose-Headers
+	exposedHeaders: [],
+	// Access-Control-Max-Age ( Do not repeat PRE-FLIGHT request for 60 seconds )
+	maxAge: 60,
+	// Access-Control-Allow-Origin
+	origin: (origin, callback) =>
+		[process.env.CLIENT_HOST, 'http://127.0.0.1:5000'].indexOf(origin!) !== -1 || !origin
+			? callback(null, true)
+			: callback(new Error(`Not allowed by CORS : ${origin}`)),
 };
-*/
+
 export default class AppServer extends AbstractServer {
 	connection: Sequelize | null;
 	constructor(applicationName = defaultName, applicationPort = defaultPort, applicationCPUs = defaultCPUs) {
-		super(applicationName, applicationPort, applicationCPUs);
+		super(applicationName, applicationPort, applicationCPUs, applicationCorsOption);
 		this.connection = null;
 	}
 

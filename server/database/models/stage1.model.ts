@@ -11,7 +11,7 @@ import { Tournament, Pair } from '.';
  *      where idTorneo=? order by idTorneo, score desc
  *
  */
-@Table({ tableName: 'stage1', freezeTableName: true, version: false })
+@Table({ tableName: 'stage1', modelName: 'Stage1', freezeTableName: true, version: false })
 export default class Stage1 extends Model {
 	@Column(DataType.STRING)
 	name!: string;

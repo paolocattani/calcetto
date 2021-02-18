@@ -3,7 +3,7 @@ import { Tournament, Pair } from '.';
 /**
  *
  */
-@Table({ tableName: 'stage2', comment: 'Stage2', freezeTableName: true, version: false })
+@Table({ tableName: 'stage2', comment: 'Stage2', modelName: 'Stage2', freezeTableName: true, version: false })
 export default class Stage2 extends Model {
 	@Comment('Id Torneo')
 	@ForeignKey(() => Tournament)

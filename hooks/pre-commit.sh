@@ -12,7 +12,7 @@ source cli/redirect_output.sh
 
 SEARCH_STRING='PRE-COMMIT'
 SEARCH_FILE="$HOOKS_DIR/.hooks"
-source cli/search_string.sh
+source cli/functions/search_string.sh
 
 BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
 
@@ -27,7 +27,7 @@ if [[ $BRANCH_NAME != "master" ]] && [[ $SEARCH_RESULT = 1 ]]; then
     SEARCH_STRING='TYPE'
     SEARCH_FILE="$HOOKS_DIR/.hooks"
     SEARCH_LENGTH='*'
-    source cli/search_string.sh
+    source cli/functions/search_string.sh
 
     # Update version
     cli/cli.sh update "--$SEARCH_RESULT"

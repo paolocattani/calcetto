@@ -1,5 +1,4 @@
 {
-	"extends": "../tsconfig.json",
 	"compileOnSave": true,
 	"compilerOptions": {
 		"types": ["..src/@common/typings/*.d.ts","jest","node"],

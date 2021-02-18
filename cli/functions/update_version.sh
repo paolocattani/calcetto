@@ -3,7 +3,7 @@ showHelp_release() {
 cat << EOF
     Usage: cli.sh release [option]
 
-    command :
+    options :
         --major     |   Major
         --minor     |   Minor
         --patch     |   Patch
@@ -75,10 +75,9 @@ EOF
 
 else
   # Invalid option / show help
-    echo "Option '$update_type' is not valid."
-  if [[ $update_type != "--help" ]] && [[ $update_type != "" ]]; then
-    echo "Option '$update_type' is not valid."
-  fi
+  #if [[ $update_type != "--help" ]] && [[ $update_type != "" ]]; then
+  #  echo "Option is not valid : "$update_type
+  #fi
   showHelp_release
   exit 1
 fi

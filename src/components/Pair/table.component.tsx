@@ -15,6 +15,8 @@ import { cellEditProps, columns } from './editor';
 import './style.css';
 // Service
 import { fetchPlayers } from '../../redux/services/player.service';
+import { deleteStage1 as deleteStage1Api } from '../../redux/services/stage1.service';
+import { deletePairs, fetchPairs, findAlias, postPair, updatePair } from 'src/redux/services/pair.service';
 // Selector
 import { AuthSelector } from '../../redux/selectors/auth.selector';
 import { TournamentSelector } from '../../redux/selectors/tournament.selector';
@@ -24,7 +26,6 @@ import TournamentBadge from '../Tournament/badge.component';
 import { useTranslation } from 'react-i18next';
 // Models
 import { PairDTO, PlayerDTO, TournamentProgress } from 'src/@common/dto';
-import { deletePairs, fetchPairs, findAlias, postPair, updatePair } from 'src/redux/services/pair.service';
 import { HTTPStatusCode } from '../../@common/models/HttpStatusCode';
 import { LABEL_COMMON_LOADING } from '../../@common/constants/label';
 import {
@@ -151,12 +152,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 	const processDeleteStage1 = async () => {
 		try {
 			setIsLoading({ state: true, message: t(LABEL_COMMON_LOADING) });
-			const response = await fetch('/api/v1/stage1', {
-				method: 'DELETE',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ tId: tournament.id }),
-			});
-			await response.json();
+			await deleteStage1Api({ tId: tournament.id });
 			// Update tournament progress
 			if (isAdmin) {
 				dispatch(

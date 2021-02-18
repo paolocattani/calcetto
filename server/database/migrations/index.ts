@@ -3,6 +3,7 @@ import { Umzug, SequelizeStorage } from 'umzug';
 import { Sequelize } from 'sequelize';
 import { SequelizeConfiguration } from '../config/config';
 import { getSequelizeEnv } from '../config/connection';
+import { isTsEnv } from '../../core/utils';
 
 // https://github.com/sequelize/umzug/blob/master/examples/1.sequelize-typescript/umzug.ts
 // https://github.com/sequelize/umzug
@@ -16,7 +17,7 @@ export const sequelize = new Sequelize(uri, envConfig);
 
 export const umzug = new Umzug({
 	migrations: {
-		glob: ['./*migration.ts', { cwd: __dirname }],
+		glob: [`./*migration.${isTsEnv() ? 'ts' : 'js'}`, { cwd: __dirname }],
 	},
 	context: sequelize,
 	storage: new SequelizeStorage({ sequelize }),
