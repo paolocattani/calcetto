@@ -48,13 +48,16 @@ const StatsSummary: React.FC<StatsSummaryProps> = () => {
 					</Col>
 				</Row>
 				{pairStats
+					// just pick the first MAX_RESULT stats
 					.filter((v, i) => (pairStats.length >= MAX_RESULT ? i < MAX_RESULT : i > -1))
+					// Sort by winnnings percentage
 					.sort(
 						(p1, p2) =>
 							roundNumber((p2.totwin / p2.totMatch) * 100, 1) - roundNumber((p1.totwin / p1.totMatch) * 100, 1)
 					)
 					.map((p, ii) => (
 						<Row>
+							{/* 1st col : Pair/Player name */}
 							<Col
 								md={{ span: 2, offset: 2 }}
 								style={{ textAlign: 'right', float: 'left', width: '15%', marginTop: '10px', fontSize: 'large' }}
@@ -67,6 +70,7 @@ const StatsSummary: React.FC<StatsSummaryProps> = () => {
 									</strong>
 								</i>
 							</Col>
+							{/* 2nd col : winnings percentage ( rappresentation ) */}
 							<Col md="4" style={{ marginTop: '10px', float: 'left', width: '70%' }}>
 								<div style={{ width: '100%', backgroundColor: '#f1f1f1', textAlign: 'center', color: 'white' }}>
 									<div
@@ -78,6 +82,7 @@ const StatsSummary: React.FC<StatsSummaryProps> = () => {
 									></div>
 								</div>
 							</Col>
+							{/* 3rd col : winnings percentage ( number ) */}
 							<Col
 								md={{ span: 2 }}
 								style={{ textAlign: 'left', float: 'left', width: '15%', marginTop: '10px', fontSize: 'large' }}

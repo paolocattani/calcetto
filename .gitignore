@@ -17,7 +17,8 @@
 /cypress-coverage
 # production
 /build
-
+/server/build_server
+/production_build
 /secrets
 
 # misc
@@ -39,3 +40,6 @@ dev.log*
 .env*
 /server/dist
 /.metadata
+
+
+.firebase

@@ -36,20 +36,6 @@ const getUuid = (req: AppRequest) => req.signedCookies[USER_UUID];
  * Source : https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
  * cookiesOption
  */
-const cookiesOption_old: CookieOptions = {
-	maxAge: 8 * 60 * 60 * 1000,
-	httpOnly: true,
-	signed: true,
-	...(isProductionMode()
-		? {
-				// FIXME:
-				secure: true,
-				sameSite: 'none',
-		  }
-		: {
-				httpOnly: true,
-		  }),
-};
 const cookiesOption: CookieOptions = {
 	// 8h : Allineare a process.env.SERVER_TOKEN_EXPIRES_IN
 	maxAge: 8 * 60 * 60 * 1000,
@@ -75,7 +61,7 @@ const cookiesOption: CookieOptions = {
 		The SameSite attribute lets servers specify whether/when cookies are sent with cross-origin requests
 		(where Site is defined by the registrable domain), which provides some protection against cross-site request forgery attacks (CSRF).
 	*/
-	sameSite: isProductionMode() ? 'strict' : 'lax',
+	sameSite: 'strict',
 };
 // http://expressjs.com/en/api.html#res.cookie
 export const addUserCookies = (user: UserDTO, res: Response) => {

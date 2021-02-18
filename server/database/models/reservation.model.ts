@@ -4,7 +4,7 @@ import { Player, User } from '.';
 /**
  * Gestione prenotazione
  */
-@Table({ tableName: 'reservation', freezeTableName: true, version: false })
+@Table({ tableName: 'reservation', modelName: 'Reservation', freezeTableName: true, version: false })
 export default class Reservation extends Model {
 	// Data prenotazione
 	@Column(DataType.DATE)

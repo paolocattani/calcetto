@@ -24,7 +24,7 @@ import { TournamentProgress } from '../../../src/@common/dto';
  * @Stage1 Stage1[] stage1
  *
  */
-@Table({ tableName: 'tournament', freezeTableName: true, version: false })
+@Table({ tableName: 'tournament', modelName: 'Tournament', freezeTableName: true, version: false })
 export default class Tournament extends Model {
 	@Comment('Nome')
 	@Column(DataType.STRING)

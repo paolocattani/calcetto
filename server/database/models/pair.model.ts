@@ -1,7 +1,7 @@
 import { Column, Comment, Model, DataType, Table, ForeignKey, BelongsTo, Default, HasMany } from 'sequelize-typescript';
 import { Tournament, Player, Stage2 } from '.';
 
-@Table({ tableName: 'pairs', freezeTableName: true, version: false })
+@Table({ tableName: 'pairs', modelName: 'Pair', freezeTableName: true, version: false })
 export default class Pair extends Model {
 	//Model<Pair> {
 	@Comment('Pair alias')

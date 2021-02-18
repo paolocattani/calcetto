@@ -16,7 +16,7 @@ import { UserRole } from '../../../src/@common/dto';
 /**
  *
  */
-@Table({ tableName: 'user', freezeTableName: true, version: false })
+@Table({ tableName: 'user', modelName: 'User', freezeTableName: true, version: false })
 export default class User extends Model {
 	@AllowNull
 	@Column(DataType.STRING)

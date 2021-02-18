@@ -13,7 +13,7 @@ source cli/redirect_output.sh
 # Check activation
 SEARCH_STRING='POST-COMMIT'
 SEARCH_FILE="$SCRIPT_DIR/.hooks"
-source cli/search_string.sh
+source cli/functions/search_string.sh
 BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
 
 echo "On branch : $BRANCH_NAME"
