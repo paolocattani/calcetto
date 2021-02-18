@@ -75,15 +75,35 @@ export abstract class AbstractServer implements IServer {
 					filter: (req, res) => res.getHeader('Content-Type') != 'text/event-stream',
 				})
 			)
-			//.use(helmet({ dnsPrefetchControl: { allow: true } }))
-			.use(helmet())
+			.use(
+				helmet({
+					dnsPrefetchControl: { allow: true },
+					// https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
+					// https://csp-evaluator.withgoogle.com/
+					contentSecurityPolicy: {
+						directives: {
+							// eslint-disable-next-line quotes
+							defaultSrc: ["'self'"],
+							// eslint-disable-next-line quotes
+							connectSrc: ["'localhost:5001'"],
+							// eslint-disable-next-line quotes
+							objectSrc: ["'none'"],
+							// eslint-disable-next-line quotes
+							imageSrc: ["'self'", 'data:'],
+							// eslint-disable-next-line quotes
+							styleSrc: ["'self'", 'https:', "'unsafe-inline'"],
+						},
+					},
+				})
+			)
 			//this.application.set('trust proxy', 1);
 			.use(json())
 			.use(urlencoded({ extended: false }))
 			.use(cookieParser(process.env.SERVER_SECRET))
 			.all('*', auditControl)
 			.all('*', cacheControl)
-			.all('*', routeLogger);
+			.all('*', routeLogger)
+			.disable('x-powered-by');
 
 		this.routes(this.application);
 
