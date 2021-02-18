@@ -66,7 +66,7 @@ export abstract class AbstractServer implements IServer {
     */
 		logger.info('CORS options : ', this.corsOptions);
 		// eslint-disable-next-line quotes
-		const CSPCommon = ["'self'", "'localhost:5001"];
+		const CSPCommon = ["'self'", "'localhost:5001'"];
 		this.application
 			.use(cors<Request>(this.corsOptions))
 			.use(morgan(isProductionMode() ? 'combined' : 'common'))
@@ -89,7 +89,7 @@ export abstract class AbstractServer implements IServer {
 							// eslint-disable-next-line quotes
 							styleSrc: [...CSPCommon, "'unsafe-inline'", 'https:'],
 							// eslint-disable-next-line quotes
-							fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+							fontSrc: ["'self'", "'https://fonts.gstatic.com'"],
 							// eslint-disable-next-line quotes
 							imgSrc: ["'self'", 'data:'],
 							// eslint-disable-next-line quotes
