@@ -51,7 +51,7 @@ export const asyncMiddleware = (fn: any) => (req: Request, res: Response, next: 
 export const withAuth = async (req: AppRequest, res: Response, next: NextFunction) => {
 	const [token, uuid] = getCookies(req);
 	if (!token || typeof token != 'string' || !uuid) {
-		logger.error(chalk.redBright('Come back with more cookies... -> '), token, uuid);
+		logger.error(chalk.redBright('Come back with more cookies... -> '));
 		return unauthorized(res, { label: 'common:server.unauthorized' });
 	}
 	const [user, isTokenValid] = safeVerifyToken(token);
