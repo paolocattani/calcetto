@@ -156,7 +156,7 @@
   sh ./build.sh
 
   # Build server
-  npm run prod:build:server
+  npm run prod:build
 
   ```
 

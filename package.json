@@ -75,7 +75,7 @@
     "-----PRODUCTION----": "---------------------------",
     "prod:server:js": "cd server && npm run prod",
     "prod:server": "cd server && npm run prod:ts",
-    "prod:build:server": "tsc --pretty --allowJs --outDir ./build_server -p ./server/tsconfig.json",
+    "prod:build": "cd server && npm run build",
     "-----HEROKU----": "---------------------------",
     "heroku-prebuild": "cd server && npm ci && ./node_modules/.bin/pm2 install pm2-intercom",
     "heroku-postbuild": "npm run CRA:build ",
