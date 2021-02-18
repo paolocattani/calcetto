@@ -11,7 +11,7 @@ showHelp_() {
 cat << EOF
 
     Usage: ${0##*/} [command] [option]
-    Type '${0##*/} [command] --help' to get help about the command
+    Type '${0##*/} [command] --help' to get specific help about the command
 
     command :
         release         |   Release new version
@@ -19,8 +19,6 @@ cat << EOF
         tag             |   Create new tag ( pick version from package.json )
         add_to_commit   |   Add version files to commit ( .env sonar-project.properties package.json package-lock.json )
         hooks           |   Edit hooks
-        build_client    |   Create client production build
-        build_server    |   Create server production build
         build           |   Create production build
         help            |   Show this help
 
@@ -38,20 +36,6 @@ EOF
 ##############################################################################
 # Functions
 ##############################################################################
-#------> Firebase
-#------> Emulators
-function firebase_start {
-    # Run build
-    build
-    #
-    firebase emulators:start
-}
-function firebase_deploy {
-    # Run build
-    build
-    #
-    firebase emulators:start
-}
 #------> Build
 . cli/functions/build.sh
 
@@ -67,7 +51,7 @@ function update {
 function add_to_commit {
     echo "Add_to_commit start..."
     echo "Adding files to commit..."
-    git add .env sonar-project.properties package.json package-lock.json
+    git add sonar-project.properties package.json package-lock.json
     echo "Add_to_commit end !"
 }
 
