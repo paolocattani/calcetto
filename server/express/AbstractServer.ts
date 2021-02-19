@@ -65,7 +65,7 @@ export abstract class AbstractServer implements IServer {
 		logger.info('CORS options : ', this.corsOptions);
 		const CSPCommon = [
 			"'self'",
-			'localhost:5001',
+			'http://localhost:5001',
 			'https://calcetto2020stage.herokuapp.com',
 			'https://calcetto2020production.herokuapp.com',
 		];
