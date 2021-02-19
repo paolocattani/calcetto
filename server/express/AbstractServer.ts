@@ -114,7 +114,6 @@ export abstract class AbstractServer implements IServer {
 		const buildPath = path.join(__dirname, '..', '..', 'build');
 		logger.info(`Serving build folder from ${chalk.green(buildPath)}`);
 		this.application.use(
-			'*',
 			express.static(buildPath, {
 				maxAge: process.env.STATIC_CONTENTS_CACHE ? process.env.STATIC_CONTENTS_CACHE : '0',
 				lastModified: true,
