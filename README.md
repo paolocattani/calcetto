@@ -103,7 +103,7 @@
   ```bash
 
   # Together
-  npm run dev:server
+  npm run dev
 
   # Detached
   npm run dev:server
@@ -121,18 +121,23 @@
   Cli utilities for development
 
   ```bash
-  # Update app version
-  sh ./cli/update_version.sh [option]
-  # Option : --major, --minor, --patch
+  # Show help
+  sh ./cli/cli.sh help
 
-  # Build app. Steps :
-  # - Build Fe
-  # - Create eslint report and analyze bundle size
-  # - Run test coverage ( Fe + Be )
-  sh ./cli/build.sh
+  # Examples.
 
-  # Release : Update version and build
-  sh ./cli/build.sh
+    # Build
+    sh ./cli/cli.sh build --all
+
+    # Tag current commit with version from package.json ( also update heroku env vars )
+    sh ./cli/cli.sh tag
+
+    # Deploy current branch to heroku
+    sh ./cli/cli.sh heroku --deploy
+
+    # Enable git hooks and set type ( for update version ) as minor
+    sh ./cli/cli.sh hooks --enable --hook pre-commit --type minor
+
   ```
 
 ## Test
@@ -149,14 +154,11 @@
 ## Production
   ```bash
 
-  # Build client
-  # - Update app version
-  # - Build
-  # - Analyze
-  sh ./build.sh
+  # Build all ( see cli )
+  sh ./cli/cli.sh build --all
 
-  # Build server
-  npm run prod:build
+  # Run server in production mode
+  npm run prod
 
   ```
 
@@ -172,9 +174,6 @@
   ```bash
   # Login
   heroku login
-
-  # Add Redis
-  # TODO: https://elements.heroku.com/addons/redistogo
 
   # List builds
   heroku builds -a $APP_NAME

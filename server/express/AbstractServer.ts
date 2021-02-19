@@ -65,9 +65,9 @@ export abstract class AbstractServer implements IServer {
 		logger.info('CORS options : ', this.corsOptions);
 		const CSPCommon = [
 			"'self'",
-			"'localhost:5001'",
-			"'https://calcetto2020stage.herokuapp.com'",
-			"'https://calcetto2020production.herokuapp.com'",
+			'localhost:5001',
+			'https://calcetto2020stage.herokuapp.com',
+			'https://calcetto2020production.herokuapp.com',
 		];
 		this.application
 			.use(cors<Request>(this.corsOptions))
@@ -88,8 +88,8 @@ export abstract class AbstractServer implements IServer {
 						directives: {
 							defaultSrc: [...CSPCommon],
 							connectSrc: [...CSPCommon],
-							styleSrc: [...CSPCommon, "'unsafe-inline'", 'https:'],
-							fontSrc: ["'self'", "'https://fonts.gstatic.com'"],
+							styleSrc: [...CSPCommon, "'unsafe-inline'", 'https:', 'https://fonts.googleapis.com'],
+							fontSrc: ["'self'", 'https://fonts.gstatic.com'],
 							imgSrc: ["'self'", 'data:'],
 							objectSrc: ["'none'"],
 							baseUri: ["'self'"],
