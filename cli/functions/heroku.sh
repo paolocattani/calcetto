@@ -10,7 +10,7 @@ cat << EOF
 EOF
 }
 
-function build {
+function heroku_cli {
 
     deploy=0;
     destination='heroku-staging';
@@ -42,11 +42,21 @@ function build {
         exit 0
     fi
 
+    echo "Start deploy on Heroku"
     # Get current branch name
     branchName=$(git rev-parse --abbrev-ref HEAD)
 
-    # Deploy
-    heroku push $destination $branchName:master
-
+    # https://stackoverflow.com/questions/1885525/how-do-i-prompt-a-user-for-confirmation-in-bash-script
+    echo "You're going to push branch $(text_color $branchName $blue) to $(text_color $destination $red)"
+    read -p "Continue ? ( y/n ) : " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        # Deploy
+        echo "Deploy $branchName to $destination..."
+        git push $destination $branchName:master
+    else
+        echo "Aborted.."
+    fi
+    exit 0
 }
 

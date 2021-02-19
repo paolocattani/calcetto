@@ -1,4 +1,6 @@
 #!/bin/bash
+# color utils
+. cli/utils/colors.sh
 
 #------> Const
 ROOT_DIR='/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto'
@@ -27,9 +29,13 @@ cat << EOF
         --no-redirect   |   Don't redirect output to file
         --debug         |   Enable debug
 
-    Example :
+    Examples :
 
-    cli release --minor --debug
+        $cli release --minor --debug
+
+        $cli build --all
+
+        $cli heroku --deploy --no-redirect
 
 EOF
 }
@@ -84,18 +90,16 @@ function log_args {
 ##############################################################################
 command=$1
 # Just show help
-if [[ $command == "help" ]]; then
+if [[ $command == "--help" ]] || [[ $command == "--h" ]]  || [[ $command == "help" ]] ; then
     showHelp_
     exit 0
 fi
 
-# Test if the first param is a valid command, else show help
-if  [[ $command == "release" ]] || [[ $command == "tag" ]]  ||
-    [[ $command == "hooks" ]]   || [[ $command == "update" ]] ||
-    [[ $command == "add_to_commit" ]] || [[ $command == "build" ]]; then
 
+valid_commands=("release" "tag" "hooks" "add_to_commit" "build" "update" "heroku")
+# Test if the first param is a valid command, else show help
+if [[ " ${valid_commands[@]} " =~ " ${command} " ]]; then
     # Move to root
-    echo ""
     cd $ROOT_DIR
 
     # general options
@@ -133,6 +137,11 @@ if  [[ $command == "release" ]] || [[ $command == "tag" ]]  ||
     # Debug
     if [[ $debug -eq 1 ]]; then
         log_args "$@"
+    fi
+
+    # Remap functions name
+    if [[ $command == "heroku" ]]; then
+        command="heroku_cli"
     fi
 
     # Exec the command
