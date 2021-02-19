@@ -39,7 +39,7 @@ const applicationCorsOption: CorsOptions = {
 			'http://localhost:5000',
 			'http://127.0.0.1:5000',
 			'https://calcetto2020stage.herokuapp.com',
-			'https://calcetto2020production.herokuapp.com/',
+			'https://calcetto2020production.herokuapp.com',
 		].indexOf(origin!) !== -1 || !origin
 			? callback(null, true)
 			: callback(new Error(`Not allowed by CORS : ${origin}`)),

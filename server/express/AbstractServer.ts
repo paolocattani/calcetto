@@ -1,6 +1,4 @@
-/**
- * https://auth0.com/blog/create-a-simple-and-secure-node-express-app/
- */
+/* eslint-disable quotes */
 
 // Core
 import '../core/env';
@@ -65,8 +63,12 @@ export abstract class AbstractServer implements IServer {
     } else {
     */
 		logger.info('CORS options : ', this.corsOptions);
-		// eslint-disable-next-line quotes
-		const CSPCommon = ["'self'", "'localhost:5001'"];
+		const CSPCommon = [
+			"'self'",
+			"'localhost:5001'",
+			"'https://calcetto2020stage.herokuapp.com'",
+			"'https://calcetto2020production.herokuapp.com'",
+		];
 		this.application
 			.use(cors<Request>(this.corsOptions))
 			.use(morgan(isProductionMode() ? 'combined' : 'common'))
@@ -86,15 +88,10 @@ export abstract class AbstractServer implements IServer {
 						directives: {
 							defaultSrc: [...CSPCommon],
 							connectSrc: [...CSPCommon],
-							// eslint-disable-next-line quotes
 							styleSrc: [...CSPCommon, "'unsafe-inline'", 'https:'],
-							// eslint-disable-next-line quotes
 							fontSrc: ["'self'", "'https://fonts.gstatic.com'"],
-							// eslint-disable-next-line quotes
 							imgSrc: ["'self'", 'data:'],
-							// eslint-disable-next-line quotes
 							objectSrc: ["'none'"],
-							// eslint-disable-next-line quotes
 							baseUri: ["'self'"],
 						},
 					},
@@ -117,6 +114,7 @@ export abstract class AbstractServer implements IServer {
 		const buildPath = path.join(__dirname, '..', '..', 'build');
 		logger.info(`Serving build folder from ${chalk.green(buildPath)}`);
 		this.application.use(
+			'*',
 			express.static(buildPath, {
 				maxAge: process.env.STATIC_CONTENTS_CACHE ? process.env.STATIC_CONTENTS_CACHE : '0',
 				lastModified: true,

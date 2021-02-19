@@ -20,6 +20,7 @@ cat << EOF
         add_to_commit   |   Add version files to commit ( .env sonar-project.properties package.json package-lock.json )
         hooks           |   Edit hooks
         build           |   Create production build
+        heroku          |   Heroku utils
         help            |   Show this help
 
     option :
@@ -38,6 +39,9 @@ EOF
 ##############################################################################
 #------> Build
 . cli/functions/build.sh
+
+#------> Heroku
+. cli/functions/heroku.sh
 
 #------> Update version
 function update {
