@@ -1,7 +1,7 @@
 {
   "name": "calcetto",
   "private": false,
-  "version": "2.14.0",
+  "version": "2.14.1",
   "description": "Table Soccer Manager",
   "engines": {
     "node": "14.x",
@@ -79,7 +79,7 @@
     "-----HEROKU----": "---------------------------",
     "heroku-prebuild": "cd server && npm ci && ./node_modules/.bin/pm2 install pm2-intercom",
     "heroku-postbuild": "npm run CRA:build ",
-    "heroku-cleanup": "echo This runs after Heroku prunes and caches dependencies.",
+    "heroku-cleanup": "rm -rf node_modules",
     "start": "cd server && npm run prod:heroku:server",
     "-----CRA----": "---------------------------",
     "CRA:start": "react-scripts start",
