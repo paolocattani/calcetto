@@ -62,7 +62,6 @@ export abstract class AbstractServer implements IServer {
       });
     } else {
     */
-		logger.info('CORS options : ', this.corsOptions);
 		const CSPCommon = [
 			"'self'",
 			'http://localhost:5001',

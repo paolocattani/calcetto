@@ -33,14 +33,15 @@ export const postWrapper = <B, T extends GenericReponse>(
 ) => fetchWrapper<B, T>(url, 'POST', body, afterResponse);
 
 // wrapper
+const rawHost = process.env.REACT_APP_SERVER_HOST ? process.env.REACT_APP_SERVER_HOST : 'http://localhost:5001';
+const host = rawHost.slice(-1) === '/' ? rawHost.substring(0, rawHost.length - 1) : rawHost;
 export const fetchWrapper = async <B, T extends GenericReponse>(
 	url: string,
 	method: string,
 	body?: OmitHistory<B>,
 	afterResponse?: IFetchCallback<T>
 ): Promise<T | GenericReponse> => {
-	const completeUrl =
-		(process.env.REACT_APP_SERVER_HOST ? process.env.REACT_APP_SERVER_HOST : 'http://localhost:5001') + url;
+	const completeUrl = host + url;
 	console.log('fetchWrapper.request : ', method, completeUrl, body);
 	let response = null;
 	try {
