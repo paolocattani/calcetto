@@ -17,18 +17,25 @@ FROM node:14-alpine
 LABEL maintainer="Paolo Cattani <paolocattani0501@gmail.com>"
 # Env
 ARG ENV="${ENV:-dev}"
+ARG BUILD_FOLDER="/usr/app/build"
+ARG WORK_FOLDER="/usr/app/src"
+
 # Working dir
-WORKDIR /usr/src/ap
+WORKDIR ${WORK_FOLDER}
+
+# Final Build
+RUN mkdir ${BUILD_FOLDER}
+
 # cit."This allows us to take advantage of cached Docker layers."
 COPY package*.json  ./
 COPY server/package*.json  server/
-# Cleanup package.json ( to reduce image size as much as possibile )
+
+# Cleanup package.json
+# Prune test dependencies to speedup build process
 RUN npm uninstall \
     cypress @cypress/code-coverage @cypress/instrument-cra @cypress/webpack-preprocessor \
     @testing-library/dom @testing-library/jest-dom @testing-library/react @testing-library/user-event \
     cypress-intellij-reporter cypress-plugin-snapshots cypress-skip-and-only-ui cypress-watch-and-reload
-
-# RUN sed -i '/cypress/d' ./package.json
 
 # Copy the correct env
 COPY docker/.env.${ENV} ./.env
@@ -36,7 +43,7 @@ COPY docker/.env.${ENV} ./.env
 # Install pm2
 RUN npm install -g pm2
 # FIXME:
-# RUN pm2 install pm2-intercom
+RUN pm2 install pm2-intercom
 
 # Install dependecies
 # Don't want to update package-lock.jso
@@ -45,13 +52,25 @@ RUN npm ci && cd server && npm ci
 # Copy app source
 # Use .dockerignore to handle exclusions
 COPY . .
+RUN ls -l
+COPY secrets .
 
+RUN pwd && ls -l
 # Build client
-RUN npm run CRA:build
-# TODO: build server
+RUN npm run CRA:build && \
+    # Build server
+    cd server && npm run build && cd .. && \
+    # Copy build result to BUILD_FOLDER
+    cp build ${BUILD_FOLDER} && \
+    cp server/build_server ${BUILD_FOLDER} && \
+    # Install required lib into BUILD_FOLDER
+    cd ${BUILD_FOLDER} && ls -l && \
+    npm install --only=prod && cd ${WORK_FOLDER}
 
 # Reduce image size
-RUN rm -f node_modules
+RUN rm -f ${WORK_FOLDER}
+
+RUN pwd && ls -l
 
 # App
 EXPOSE 5001
