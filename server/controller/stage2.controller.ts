@@ -1,4 +1,4 @@
-import { Router, Response } from 'express';
+import { Response } from 'express';
 // Utils
 import chalk from 'chalk';
 // Core
@@ -27,7 +27,8 @@ import { sendNotifications, subscribe } from '../events/events';
 import { TournamentProgress } from '../../src/@common/dto';
 
 // all API path must be relative to /api/v2/stage2
-const router = Router();
+import { AppRouter } from './router';
+const router = AppRouter.getInstance();
 
 // Generazione struttura / reperimento dati
 router.post(

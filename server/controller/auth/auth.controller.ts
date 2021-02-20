@@ -4,7 +4,7 @@ import { logger } from '../../core/logger';
 import { withAuth, asyncMiddleware, controllerLogger, withTestAuth } from '../../core/middleware';
 // Types
 import { AppRequest } from '../index';
-import { Router, Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 // Auth Manager
 import {
 	convertEntityToDTO,
@@ -35,8 +35,9 @@ import { HTTPStatusCode } from '../../../src/@common/models/HttpStatusCode';
 import { addUserCookies, removeUserCookies } from './cookies.utils';
 import { comparePasswords } from './auth.utils';
 import { unsubscribe } from '../../events/events';
+import { AppRouter } from '../router';
+const router = AppRouter.getInstance();
 
-const router = Router();
 const registrationController = asyncMiddleware(async (req: Request, res: Response) => {
 	logger.info('/register start ');
 	const registrationInfo = req.body as OmitHistory<RegistrationRequest>;

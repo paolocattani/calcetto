@@ -1,4 +1,4 @@
-import { Router, Response, Request } from 'express';
+import { Response, Request } from 'express';
 // Core
 import { logger } from '../core/logger';
 import { asyncMiddleware, withAuth, withAdminRights, withTestAuth, doNotCacheThis } from '../core/middleware';
@@ -29,9 +29,8 @@ import {
 	UpdateTournamentRequest,
 	UpdateTournamentResponse,
 } from '../../src/@common/models/tournament.model';
-
-// all API path must be relative to /api/v2/tournament
-const router = Router();
+import { AppRouter } from './router';
+const router = AppRouter.getInstance();
 
 // GET
 router.get(
