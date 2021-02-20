@@ -49,6 +49,7 @@ export const asyncMiddleware = (fn: any) => (req: Request, res: Response, next: 
 
 // Controllo autenticazione. Da utilizzare per tutte le API che richiedono autenticazione
 export const withAuth = async (req: AppRequest, res: Response, next: NextFunction) => {
+	logger.info('withAuth :', req.session);
 	const [token, uuid] = getCookies(req);
 	if (!token || typeof token != 'string' || !uuid) {
 		logger.error(chalk.redBright('Come back with more cookies... -> '));

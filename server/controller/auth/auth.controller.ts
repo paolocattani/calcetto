@@ -32,7 +32,7 @@ import {
 	UnsubscribeResponse,
 } from '../../../src/@common/models';
 import { HTTPStatusCode } from '../../../src/@common/models/HttpStatusCode';
-import { addUserCookies, removeUserCookies, setSession } from './cookies.utils';
+import { addUserCookies, removeUserCookies } from './cookies.utils';
 import { comparePasswords } from './auth.utils';
 import { unsubscribe } from '../../events/events';
 
@@ -234,7 +234,6 @@ const loginUserController = async (req: Request, res: Response, username: string
 		}
 		const userDTO = convertEntityToDTO(user);
 		addUserCookies(userDTO, req, res);
-		setSession(userDTO, req);
 		return success<AuthenticationResponse>(
 			res,
 			{ label: 'auth:welcome', options: { username: userDTO.name } },

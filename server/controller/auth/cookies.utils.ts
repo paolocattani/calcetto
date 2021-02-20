@@ -77,6 +77,7 @@ export const removeUserCookies = (res: Response) => {
 	res.clearCookie(SESSION_TOKEN, cookiesOption);
 };
 
+/*
 export const setSession = (user: UserDTO, req: Request) => {
 	req.session.user = user;
 	req.session.uuid = generateUuid(user);
@@ -84,5 +85,6 @@ export const setSession = (user: UserDTO, req: Request) => {
 
 export const destroySession = (user: UserDTO, req: Request) => {
 	req.session.user = user;
-	req.session.uuid = generateUuid(user);
+	req.session.uuid! = generateUuid(user);
 };
+*/

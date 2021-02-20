@@ -105,16 +105,19 @@ export abstract class AbstractServer implements IServer {
 					},
 				})
 			)
+			// http://expressjs.com/en/advanced/best-practice-security.html
 			.use(json())
 			.use(urlencoded({ extended: false }))
 			.use(cookieParser(process.env.SERVER_SECRET))
 			// https://medium.com/dataseries/prevent-cross-site-request-forgery-in-express-apps-with-csurf-16025a980457
 			.use(csrf({ cookie: true }))
-			.set('trust proxy', 1)
+			.set('trust proxy', isProductionMode())
+			// https://www.appliz.fr/blog/express-typescript
 			.use(
 				session({
 					store: new RedisStore({ client: redisClient }),
-					secret: process.env.SERVER_SECRET,
+					// FIXME:
+					secret: process.env.SERVER_SECRET!,
 					resave: false,
 					saveUninitialized: true,
 					cookie: cookiesOption,

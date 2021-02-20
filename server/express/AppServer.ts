@@ -3,7 +3,7 @@ import { CorsOptions } from 'cors';
 import { AbstractServer } from './AbstractServer';
 import { Application as ExpressApplication } from 'express';
 // Db
-import { sync, authenticate, createSchemaAndSync } from '../database/config/connection';
+import { sync, authenticate, createSchemaAndSync } from '../database/config/sequelize/connection';
 import { Sequelize } from 'sequelize-typescript';
 import generator from '../generator/generator';
 // Routes

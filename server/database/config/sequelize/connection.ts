@@ -24,7 +24,8 @@ interface SequelizeSyncOptions extends SyncOptions {
 	restartIdentity?: boolean;
 }
 
-export const getSequelizeEnv = () => config[process.env.NODE_ENV ? process.env.NODE_ENV : Environment.development];
+export const getSequelizeEnv = () =>
+	config[process.env.NODE_ENV ? (process.env.NODE_ENV as Environment) : Environment.development];
 
 async function loadModels(schema?: string): Promise<Sequelize> {
 	const envConfig = getSequelizeEnv();
