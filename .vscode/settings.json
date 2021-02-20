@@ -9,5 +9,6 @@
   "eslint.workingDirectories": ["./src", "./server"],
   "eslint.lintTask.enable": true,
   "eslint.validate": ["html", "javascript", "typescript"],
-  "files.encoding": "utf8"
+  "files.encoding": "utf8",
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }

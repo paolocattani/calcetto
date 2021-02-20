@@ -19,6 +19,11 @@ export interface AppRequest extends Request {
 	uuid?: string;
 }
 
+export interface AppRequest extends Request {
+	user?: UserDTO;
+	uuid?: string;
+}
+
 type Controller = {
 	api: string;
 	name: string;

@@ -13,8 +13,9 @@ import compression from 'compression';
 import { json, urlencoded } from 'body-parser';
 import cookieParser from 'cookie-parser';
 import express, { Request, Application as ExpressApplication } from 'express';
-let session = require('express-session');
-let RedisStore = require('connect-redis')(session);
+import session from 'express-session';
+import csrf from 'csurf';
+const RedisStore = require('connect-redis')(session);
 
 // Auth
 import cors from 'cors';
@@ -107,10 +108,12 @@ export abstract class AbstractServer implements IServer {
 			.use(json())
 			.use(urlencoded({ extended: false }))
 			.use(cookieParser(process.env.SERVER_SECRET))
+			// https://medium.com/dataseries/prevent-cross-site-request-forgery-in-express-apps-with-csurf-16025a980457
+			.use(csrf({ cookie: true }))
 			.set('trust proxy', 1)
 			.use(
 				session({
-					tore: new RedisStore({ client: redisClient }),
+					store: new RedisStore({ client: redisClient }),
 					secret: process.env.SERVER_SECRET,
 					resave: false,
 					saveUninitialized: true,

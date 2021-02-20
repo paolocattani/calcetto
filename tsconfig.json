@@ -32,7 +32,7 @@
     },
     "include": [
 			"src",
-			"src/@common/typings/*.d.ts"
+			"src/@common/types/*.d.ts"
     ],
     "exclude": [
 			"*.css",

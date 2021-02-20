@@ -3,12 +3,13 @@ import { UserDTO } from '../../../src/@common/dto';
 import { v5 as uuidv5 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import { AppRequest } from '../index';
-import { CookieOptions, Response } from 'express';
+import { CookieOptions, Response, Request } from 'express';
 import { isProductionMode } from '../../core/debug';
 import { TOKEN_SECRET } from './auth.utils';
 
 const SESSION_TOKEN = 'session_id';
 const USER_UUID = 'user_id';
+const CSRF_TOKEN = 'csrfToken';
 
 // Generate JWT Token
 const DEFAULT_TOKEN_EXPIRATION = '8h';
@@ -64,9 +65,10 @@ export const cookiesOption: CookieOptions = {
 	sameSite: 'strict',
 };
 // http://expressjs.com/en/api.html#res.cookie
-export const addUserCookies = (user: UserDTO, res: Response) => {
+export const addUserCookies = (user: UserDTO, req: Request, res: Response) => {
 	res.cookie(USER_UUID, generateUuid(user), cookiesOption);
 	res.cookie(SESSION_TOKEN, generateToken(user), cookiesOption);
+	res.cookie(CSRF_TOKEN, generateToken(user), cookiesOption);
 };
 
 // http://expressjs.com/en/api.html#res.clearCookie
@@ -76,6 +78,11 @@ export const removeUserCookies = (res: Response) => {
 };
 
 export const setSession = (user: UserDTO, req: Request) => {
-	req.session.user_id = generateUuid(user);
-	req.session.session_id = generateToken(user);
+	req.session.user = user;
+	req.session.uuid = generateUuid(user);
+};
+
+export const destroySession = (user: UserDTO, req: Request) => {
+	req.session.user = user;
+	req.session.uuid = generateUuid(user);
 };

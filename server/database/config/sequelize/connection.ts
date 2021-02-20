@@ -11,7 +11,7 @@ import { isProductionMode } from '../../../core/debug';
 // Sequelize
 import { SyncOptions } from 'sequelize';
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
-import config, { SequelizeConfiguration } from './config';
+import config from './config';
 // Other
 import util from 'util';
 import chalk from 'chalk';
@@ -24,13 +24,11 @@ interface SequelizeSyncOptions extends SyncOptions {
 	restartIdentity?: boolean;
 }
 
-export const getSequelizeEnv = () =>
-	config[process.env.NODE_ENV ? (process.env.NODE_ENV as Environment) : Environment.development];
+export const getSequelizeEnv = () => config[process.env.NODE_ENV ? process.env.NODE_ENV : Environment.development];
 
 async function loadModels(schema?: string): Promise<Sequelize> {
-	// FIXME: should import types from @commmon/typings
-	const envConfig: SequelizeConfiguration = getSequelizeEnv();
-	const uri: string = process.env[envConfig.useEnvVar]!;
+	const envConfig = getSequelizeEnv();
+	const uri = process.env[envConfig.useEnvVar]!;
 	if (!isProductionMode()) {
 		logger.info(`URI : ${chalk.red.bold(util.inspect(uri))}`);
 	}

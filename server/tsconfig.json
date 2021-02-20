@@ -1,9 +1,9 @@
 {
 	"compileOnSave": true,
 	"compilerOptions": {
-		"types": ["..src/@common/typings/*.d.ts","jest","node"],
+		"types": ["../src/@common/typings/*.d.ts","jest","node","./core/types/*.d.ts"],
 		/* Basic Options */
-		// Must be "es6" due to sequelize bug. Ref https://github.com/sequelize/sequelize/issues/7840
+		// Must be "es6" due to sequelize . Ref https://github.com/sequelize/sequelize/issues/7840
 		"target": "es6",                            /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */
 		// Must be "commonjs" due to ts-node bug
 		"module": "commonjs",                       /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */

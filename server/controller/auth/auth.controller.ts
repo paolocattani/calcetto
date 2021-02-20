@@ -32,7 +32,7 @@ import {
 	UnsubscribeResponse,
 } from '../../../src/@common/models';
 import { HTTPStatusCode } from '../../../src/@common/models/HttpStatusCode';
-import { addUserCookies, removeUserCookies } from './cookies.utils';
+import { addUserCookies, removeUserCookies, setSession } from './cookies.utils';
 import { comparePasswords } from './auth.utils';
 import { unsubscribe } from '../../events/events';
 
@@ -68,7 +68,7 @@ const registrationController = asyncMiddleware(async (req: Request, res: Respons
 		}
 		const record = await registerUser(model, registrationInfo.playerRole);
 		if (record) {
-			addUserCookies(record, res);
+			addUserCookies(record, req, res);
 
 			logger.info('/register end ');
 			return success<AuthenticationResponse>(
@@ -163,7 +163,7 @@ router.post(
 	'/login',
 	asyncMiddleware(async (req: Request, res: Response) => {
 		const { username, password } = req.body as OmitHistory<LoginRequest>;
-		return await loginUserController(res, username, password);
+		return await loginUserController(req, res, username, password);
 	})
 );
 
@@ -194,7 +194,7 @@ router.post(
 	withTestAuth,
 	asyncMiddleware(async (req: Request, res: Response) => {
 		const { username, password } = req.body as OmitHistory<LoginRequest>;
-		return await loginUserController(res, username, password);
+		return await loginUserController(req, res, username, password);
 	})
 );
 
@@ -217,7 +217,7 @@ router.get(
 	})
 );
 
-const loginUserController = async (res: Response, username: string, password: string) => {
+const loginUserController = async (req: Request, res: Response, username: string, password: string) => {
 	try {
 		logger.info('/login start ');
 		if (!username || !password) {
@@ -233,7 +233,8 @@ const loginUserController = async (res: Response, username: string, password: st
 			return wrongCredentials(res);
 		}
 		const userDTO = convertEntityToDTO(user);
-		addUserCookies(userDTO, res);
+		addUserCookies(userDTO, req, res);
+		setSession(userDTO, req);
 		return success<AuthenticationResponse>(
 			res,
 			{ label: 'auth:welcome', options: { username: userDTO.name } },
