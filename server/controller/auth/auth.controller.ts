@@ -69,6 +69,7 @@ const registrationController = asyncMiddleware(async (req: Request, res: Respons
 		const record = await registerUser(model, registrationInfo.playerRole);
 		if (record) {
 			addUserCookies(record, res);
+
 			logger.info('/register end ');
 			return success<AuthenticationResponse>(
 				res,

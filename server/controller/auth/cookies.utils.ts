@@ -36,7 +36,7 @@ const getUuid = (req: AppRequest) => req.signedCookies[USER_UUID];
  * Source : https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
  * cookiesOption
  */
-const cookiesOption: CookieOptions = {
+export const cookiesOption: CookieOptions = {
 	// 8h : Allineare a process.env.SERVER_TOKEN_EXPIRES_IN
 	maxAge: 8 * 60 * 60 * 1000,
 	/*
@@ -68,8 +68,14 @@ export const addUserCookies = (user: UserDTO, res: Response) => {
 	res.cookie(USER_UUID, generateUuid(user), cookiesOption);
 	res.cookie(SESSION_TOKEN, generateToken(user), cookiesOption);
 };
+
 // http://expressjs.com/en/api.html#res.clearCookie
 export const removeUserCookies = (res: Response) => {
 	res.clearCookie(USER_UUID, cookiesOption);
 	res.clearCookie(SESSION_TOKEN, cookiesOption);
+};
+
+export const setSession = (user: UserDTO, req: Request) => {
+	req.session.user_id = generateUuid(user);
+	req.session.session_id = generateToken(user);
 };

@@ -13,11 +13,16 @@ import compression from 'compression';
 import { json, urlencoded } from 'body-parser';
 import cookieParser from 'cookie-parser';
 import express, { Request, Application as ExpressApplication } from 'express';
+let session = require('express-session');
+let RedisStore = require('connect-redis')(session);
+
 // Auth
 import cors from 'cors';
 // Other
 import chalk from 'chalk';
 import path from 'path';
+import { cookiesOption } from '../controller/auth/cookies.utils';
+import { getRedisClient } from '../database/config/redis/connection';
 //import cluster from 'cluster';
 //import { cpus as osCpus } from 'os';
 
@@ -62,6 +67,9 @@ export abstract class AbstractServer implements IServer {
       });
     } else {
     */
+		const redisClient = getRedisClient();
+		redisClient.on('error', logger.error);
+
 		const CSPCommon = [
 			"'self'",
 			'http://localhost:5001',
@@ -96,10 +104,19 @@ export abstract class AbstractServer implements IServer {
 					},
 				})
 			)
-			//this.application.set('trust proxy', 1);
 			.use(json())
 			.use(urlencoded({ extended: false }))
 			.use(cookieParser(process.env.SERVER_SECRET))
+			.set('trust proxy', 1)
+			.use(
+				session({
+					tore: new RedisStore({ client: redisClient }),
+					secret: process.env.SERVER_SECRET,
+					resave: false,
+					saveUninitialized: true,
+					cookie: cookiesOption,
+				})
+			)
 			.all('*', auditControl)
 			.all('*', cacheControl)
 			.all('*', routeLogger)

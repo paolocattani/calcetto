@@ -5,9 +5,9 @@
 //
 
 // Core
-import '../../core/env';
-import { logger } from '../../core/logger';
-import { isProductionMode } from '../../core/debug';
+import '../../../core/env';
+import { logger } from '../../../core/logger';
+import { isProductionMode } from '../../../core/debug';
 // Sequelize
 import { SyncOptions } from 'sequelize';
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
@@ -15,9 +15,8 @@ import config, { SequelizeConfiguration } from './config';
 // Other
 import util from 'util';
 import chalk from 'chalk';
-import { Environment } from '../../../src/@common/models';
-import { Tournament, Player, Pair, Stage1, Stage2, User, StatsPlayer, StatsPairs } from '../models';
-import { isTsEnv } from '../../core/utils';
+import { Environment } from '../../../../src/@common/models';
+import { isTsEnv } from '../../../core/utils';
 
 let connection: Sequelize;
 
