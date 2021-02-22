@@ -1,4 +1,4 @@
-import { Response, Request } from 'express';
+import { Router, Response, Request } from 'express';
 // Core
 import { logger } from '../core/logger';
 import { asyncMiddleware, withAuth, withAdminRights, withTestAuth, doNotCacheThis } from '../core/middleware';
@@ -29,8 +29,8 @@ import {
 	UpdateTournamentRequest,
 	UpdateTournamentResponse,
 } from '../../src/@common/models/tournament.model';
-import { AppRouter } from './router';
-const router = AppRouter.getInstance();
+
+const router = Router();
 
 // GET
 router.get(

@@ -17,6 +17,7 @@ import util from 'util';
 import chalk from 'chalk';
 import { Environment } from '../../../../src/@common/models';
 import { isTsEnv } from '../../../core/utils';
+import path from 'path';
 
 let connection: Sequelize;
 
@@ -30,12 +31,14 @@ export const getSequelizeEnv = () =>
 async function loadModels(schema?: string): Promise<Sequelize> {
 	const envConfig = getSequelizeEnv();
 	const uri = process.env[envConfig.useEnvVar]!;
+	const modelsPath = `${__dirname}/../../models/**/*.model.${isTsEnv() ? 'ts' : 'js'}`;
 	if (!isProductionMode()) {
-		logger.info(`URI : ${chalk.red.bold(util.inspect(uri))}`);
+		logger.info(`Database URI : ${chalk.red.bold(util.inspect(uri))}`);
+		logger.info(`Models from : '${chalk.green(path.resolve(modelsPath))}'`);
 	}
 	const connectionOptions: SequelizeOptions = {
 		...envConfig,
-		models: [`${__dirname}/../models/**/*.model.${isTsEnv() ? 'ts' : 'js'}`],
+		models: [modelsPath],
 		define: { schema },
 	};
 

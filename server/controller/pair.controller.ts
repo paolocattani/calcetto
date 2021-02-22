@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Router, Request, Response } from 'express';
 import chalk from 'chalk';
 import { logger } from '../core/logger';
 import { getDbConnection } from '../database/config/sequelize/connection';
@@ -18,8 +18,7 @@ import {
 	SelectPairsResponse,
 } from '../../src/@common/models';
 
-import { AppRouter } from './router';
-const router = AppRouter.getInstance();
+const router = Router();
 
 // GET
 router.get(

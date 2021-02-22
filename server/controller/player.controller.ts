@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Router, Request, Response } from 'express';
 import {
 	DeletePlayersRequest,
 	DeletePlayersResponse,
@@ -19,8 +19,7 @@ import {
 } from '../manager/player.manager';
 import { entityNotFound, failure, missingParameters, serverError, success } from './common.response';
 
-import { AppRouter } from './router';
-const router = AppRouter.getInstance();
+const router = Router();
 
 router.get(
 	'/list/:tId',

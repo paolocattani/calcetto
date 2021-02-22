@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { Router, Response } from 'express';
 
 // Core
 import { logger } from '../core/logger';
@@ -21,8 +21,7 @@ import { failure, success } from './common.response';
 import { sendNotifications, subscribe } from '../events/events';
 import { TournamentProgress } from '../../src/@common/dto';
 
-import { AppRouter } from './router';
-const router = AppRouter.getInstance();
+const router = Router();
 
 // GET
 

@@ -3,9 +3,11 @@ import { UserDTO } from '../../../src/@common/dto';
 import { v5 as uuidv5 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import { AppRequest } from '../index';
+import 'express-session';
 import { CookieOptions, Response, Request } from 'express';
 import { isProductionMode } from '../../core/debug';
 import { TOKEN_SECRET } from './auth.utils';
+import { logger } from '../../core/logger';
 
 const SESSION_TOKEN = 'session_id';
 const USER_UUID = 'user_id';
@@ -65,26 +67,27 @@ export const cookiesOption: CookieOptions = {
 	sameSite: 'strict',
 };
 // http://expressjs.com/en/api.html#res.cookie
-export const addUserCookies = (user: UserDTO, req: Request, res: Response) => {
+export const addUserCookies = (user: UserDTO, { session }: Request, res: Response) => {
+	/*
 	res.cookie(USER_UUID, generateUuid(user), cookiesOption);
 	res.cookie(SESSION_TOKEN, generateToken(user), cookiesOption);
 	res.cookie(CSRF_TOKEN, generateToken(user), cookiesOption);
+	*/
+	session.user = user;
+	session.uuid! = generateUuid(user);
 };
 
 // http://expressjs.com/en/api.html#res.clearCookie
-export const removeUserCookies = (res: Response) => {
+export const removeUserCookies = (res: Response, { session }: Request) => {
 	res.clearCookie(USER_UUID, cookiesOption);
 	res.clearCookie(SESSION_TOKEN, cookiesOption);
+	session.destroy((err) => logger.info('Session destroyed'));
 };
 
-/*
-export const setSession = (user: UserDTO, req: Request) => {
-	req.session.user = user;
-	req.session.uuid = generateUuid(user);
-};
-
-export const destroySession = (user: UserDTO, req: Request) => {
-	req.session.user = user;
-	req.session.uuid! = generateUuid(user);
-};
-*/
+declare module 'express-session' {
+	interface SessionData {
+		user: UserDTO;
+		csfr: string;
+		uuid: string;
+	}
+}

@@ -12,10 +12,10 @@ const config: RedisEnvList = {
 		url: process.env.REDIS_DEV_URL,
 	},
 	test: {
-		url: process.env.REDIS_DEV_URL,
+		url: process.env.REDIS_TEST_URL,
 	},
 	production: {
-		url: process.env.REDIS_DEV_URL,
+		url: process.env.REDIS_PROD_URL,
 	},
 };
 

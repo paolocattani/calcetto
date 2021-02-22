@@ -4,7 +4,7 @@
 import '../core/env';
 import { logger } from '../core/logger';
 import { isProductionMode } from '../core/debug';
-import { routeLogger, auditControl, cacheControl } from '../core/middleware';
+import { routeLogger, auditControl, cacheControl, apiQuota } from '../core/middleware';
 import * as http from 'http';
 // Express
 import helmet from 'helmet';
@@ -77,6 +77,8 @@ export abstract class AbstractServer implements IServer {
 			'https://calcetto2020stage.herokuapp.com',
 			'https://calcetto2020production.herokuapp.com',
 		];
+
+		// https://blog.risingstack.com/node-js-security-checklist/
 		this.application
 			.use(cors<Request>(this.corsOptions))
 			.use(morgan(isProductionMode() ? 'combined' : 'common'))
@@ -110,21 +112,22 @@ export abstract class AbstractServer implements IServer {
 			.use(urlencoded({ extended: false }))
 			.use(cookieParser(process.env.SERVER_SECRET))
 			// https://medium.com/dataseries/prevent-cross-site-request-forgery-in-express-apps-with-csurf-16025a980457
-			.use(csrf({ cookie: true }))
+			// TODO: .use(csrf({ cookie: true }))
 			.set('trust proxy', isProductionMode())
 			// https://www.appliz.fr/blog/express-typescript
 			.use(
 				session({
 					store: new RedisStore({ client: redisClient }),
-					// FIXME:
-					secret: process.env.SERVER_SECRET!,
+					secret: process.env.SERVER_SECRET || 'Apf342x$/)wpk,',
 					resave: false,
 					saveUninitialized: true,
 					cookie: cookiesOption,
 				})
 			)
+			// custom middleware
 			.all('*', auditControl)
 			.all('*', cacheControl)
+			// .all('*', apiQuota)
 			.all('*', routeLogger)
 			.disable('x-powered-by');
 
