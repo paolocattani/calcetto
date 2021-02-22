@@ -55,38 +55,36 @@ export const asyncMiddleware = (fn: any) => (req: Request, res: Response, next: 
 };
 
 //--------- Check authorization :
+const notify = (res: Response) => {
+	logger.error(chalk.redBright('Unauthorized: Token Expired '));
+	const message: Message = {
+		status: SessionStatus.SESSION_EXPIRED,
+		label: 'auth:expired_alert',
+	};
+	sendNotification(res, message, true);
+	return unauthorized(res, { label: 'auth:expired' });
+};
 export const withAuth = async (req: AppRequest, res: Response, next: NextFunction) => {
-	logger.info('withAuth :', req.session);
 	try {
-		const { user, uuid } = req.session;
-		if (!user || !uuid) {
+		const { jwt, uuid } = req.session;
+		if (!jwt || !uuid) {
 			logger.error(chalk.redBright('Come back with more cookies... -> '));
 			return unauthorized(res, { label: UNAUTHORIZED });
 		}
-		// Controllo se l'utente esiste ancora a db
-		const userDb = await User.findByPk(user.id);
-		if (userDb) {
-			req.user = user;
-			req.uuid = uuid;
-			next();
-		} else {
-			logger.error(chalk.redBright('Unauthorized: Token Expired '));
-			const message: Message = {
-				status: SessionStatus.SESSION_EXPIRED,
-				label: 'auth:expired_alert',
-			};
-			sendNotification(res, message, true);
-			return unauthorized(res, { label: 'auth:expired' });
+		const [user, isTokenValid] = safeVerifyToken(jwt);
+		if (isTokenValid && user) {
+			// Controllo se l'utente esiste ancora a db
+			const userDb = await User.findByPk(user.id);
+			if (userDb) {
+				req.user = user;
+				req.uuid = uuid;
+				next();
+			}
 		}
 	} catch (error) {
-		logger.error(chalk.redBright('Unauthorized: Token Expired '));
-		const message: Message = {
-			status: SessionStatus.SESSION_EXPIRED,
-			label: 'auth:expired_alert',
-		};
-		sendNotification(res, message, true);
-		return unauthorized(res, { label: 'auth:expired' });
+		return notify(res);
 	}
+	return notify(res);
 };
 
 //--------- Check if user has admin rights

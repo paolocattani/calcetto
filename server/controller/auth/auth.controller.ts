@@ -32,7 +32,7 @@ import {
 	UnsubscribeResponse,
 } from '../../../src/@common/models';
 import { HTTPStatusCode } from '../../../src/@common/models/HttpStatusCode';
-import { addUserCookies, removeUserCookies } from './cookies.utils';
+import { setSession, removeSession } from './cookies.utils';
 import { comparePasswords } from './auth.utils';
 import { unsubscribe } from '../../events/events';
 
@@ -70,7 +70,7 @@ const registrationController = asyncMiddleware(async (req: Request, res: Respons
 		}
 		const record = await registerUser(model, registrationInfo.playerRole);
 		if (record) {
-			addUserCookies(record, req, res);
+			setSession(record, req, res);
 			logger.info('/register end ');
 			return success<AuthenticationResponse>(
 				res,
@@ -115,7 +115,7 @@ router.get(
 	'/logout',
 	withAuth,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
-		removeUserCookies(res, req);
+		removeSession(res, req);
 		return success(res, { label: 'auth:logout' });
 	})
 );
@@ -234,7 +234,7 @@ const loginUserController = async (req: Request, res: Response, username: string
 			return wrongCredentials(res);
 		}
 		const userDTO = convertEntityToDTO(user);
-		addUserCookies(userDTO, req, res);
+		setSession(userDTO, req, res);
 		return success<AuthenticationResponse>(
 			res,
 			{ label: AUTH_WELCOME, options: { username: userDTO.name } },
@@ -257,7 +257,7 @@ const deleteUserController = async (req: Request, res: Response, username: strin
 		}
 		await deleteUser(user);
 		logger.info('/delete end ');
-		removeUserCookies(res, req);
+		removeSession(res, req);
 		return success<DeleteUserResponse>(res, { label: 'auth:server.deleted', options: { username: user.name } });
 	} catch (error) {
 		return serverError('DELETE auth/delete error ! : ', error, res);

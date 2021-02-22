@@ -67,26 +67,24 @@ export const cookiesOption: CookieOptions = {
 	sameSite: 'strict',
 };
 // http://expressjs.com/en/api.html#res.cookie
-export const addUserCookies = (user: UserDTO, { session }: Request, res: Response) => {
+export const setSession = (user: UserDTO, { session }: Request, res: Response) => {
 	/*
 	res.cookie(USER_UUID, generateUuid(user), cookiesOption);
 	res.cookie(SESSION_TOKEN, generateToken(user), cookiesOption);
 	res.cookie(CSRF_TOKEN, generateToken(user), cookiesOption);
 	*/
-	session.user = user;
-	session.uuid! = generateUuid(user);
+	session.jwt = generateToken(user);
+	session.uuid = generateUuid(user);
 };
 
 // http://expressjs.com/en/api.html#res.clearCookie
-export const removeUserCookies = (res: Response, { session }: Request) => {
-	res.clearCookie(USER_UUID, cookiesOption);
-	res.clearCookie(SESSION_TOKEN, cookiesOption);
+export const removeSession = (res: Response, { session }: Request) => {
 	session.destroy((err) => logger.info('Session destroyed'));
 };
 
 declare module 'express-session' {
 	interface SessionData {
-		user: UserDTO;
+		jwt: string;
 		csfr: string;
 		uuid: string;
 	}
