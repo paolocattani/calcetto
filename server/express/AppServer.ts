@@ -3,7 +3,7 @@ import { CorsOptions } from 'cors';
 import { AbstractServer } from './AbstractServer';
 import { Application as ExpressApplication } from 'express';
 // Db
-import { sync, authenticate, createSchemaAndSync } from '../database/config/connection';
+import { sync, authenticate, createSchemaAndSync } from '../database/config/sequelize/connection';
 import { Sequelize } from 'sequelize-typescript';
 import generator from '../generator/generator';
 // Routes
@@ -28,7 +28,7 @@ const applicationCorsOption: CorsOptions = {
 	// Access-Control-All,ow-Methods
 	methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
 	// Access-Control-Allow-Headers
-	allowedHeaders: ['Origin', 'Content-Type', 'Accept', 'mode', 'credentials'],
+	allowedHeaders: ['Origin', 'Content-Type', 'Accept', 'mode', 'credentials', 'X-Rate-Limit'],
 	// Access-Control-Expose-Headers
 	exposedHeaders: [],
 	// Access-Control-Max-Age ( Do not repeat PRE-FLIGHT request for 60 seconds )

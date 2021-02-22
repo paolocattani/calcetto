@@ -17,6 +17,7 @@ server/node_modules
 # Folder
 cypress
 hooks
+cli
 cypress
 sql
 analysis

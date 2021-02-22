@@ -40,6 +40,7 @@
         "generic": "An error occur.Try again later..."
     },
     "server": {
+        "too_many_requests": "Superato limite di richieste. Riprova tra {{interval}}",
         "missing": "Missing parameters",
         "unexpected": "Unexpected server error!..",
         "not_found": "Item not found",

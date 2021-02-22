@@ -4,7 +4,7 @@ import { logger } from '../../core/logger';
 import { withAuth, asyncMiddleware, controllerLogger, withTestAuth } from '../../core/middleware';
 // Types
 import { AppRequest } from '../index';
-import { Router, Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction, Router } from 'express';
 // Auth Manager
 import {
 	convertEntityToDTO,
@@ -32,11 +32,13 @@ import {
 	UnsubscribeResponse,
 } from '../../../src/@common/models';
 import { HTTPStatusCode } from '../../../src/@common/models/HttpStatusCode';
-import { addUserCookies, removeUserCookies } from './cookies.utils';
+import { setSession, removeSession } from './cookies.utils';
 import { comparePasswords } from './auth.utils';
 import { unsubscribe } from '../../events/events';
 
+const AUTH_WELCOME = 'auth:welcome';
 const router = Router();
+
 const registrationController = asyncMiddleware(async (req: Request, res: Response) => {
 	logger.info('/register start ');
 	const registrationInfo = req.body as OmitHistory<RegistrationRequest>;
@@ -68,11 +70,11 @@ const registrationController = asyncMiddleware(async (req: Request, res: Respons
 		}
 		const record = await registerUser(model, registrationInfo.playerRole);
 		if (record) {
-			addUserCookies(record, res);
+			setSession(record, req, res);
 			logger.info('/register end ');
 			return success<AuthenticationResponse>(
 				res,
-				{ label: 'auth:welcome', options: { username: record.name } },
+				{ label: AUTH_WELCOME, options: { username: record.name } },
 				{ user: record }
 			);
 		} else {
@@ -113,7 +115,7 @@ router.get(
 	'/logout',
 	withAuth,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
-		removeUserCookies(res);
+		removeSession(res, req);
 		return success(res, { label: 'auth:logout' });
 	})
 );
@@ -162,7 +164,7 @@ router.post(
 	'/login',
 	asyncMiddleware(async (req: Request, res: Response) => {
 		const { username, password } = req.body as OmitHistory<LoginRequest>;
-		return await loginUserController(res, username, password);
+		return await loginUserController(req, res, username, password);
 	})
 );
 
@@ -172,7 +174,7 @@ router.delete(
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		const { password } = req.body as OmitHistory<DeleteUserRequest>;
 		const { email, username } = req.user!;
-		return await deleteUserController(res, username, email, password);
+		return await deleteUserController(req, res, username, email, password);
 	})
 );
 
@@ -184,7 +186,7 @@ router.delete(
 	withTestAuth,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		const { password, email, username } = req.body;
-		return await deleteUserController(res, username, email, password);
+		return await deleteUserController(req, res, username, email, password);
 	})
 );
 
@@ -193,7 +195,7 @@ router.post(
 	withTestAuth,
 	asyncMiddleware(async (req: Request, res: Response) => {
 		const { username, password } = req.body as OmitHistory<LoginRequest>;
-		return await loginUserController(res, username, password);
+		return await loginUserController(req, res, username, password);
 	})
 );
 
@@ -207,7 +209,7 @@ router.get(
 			const userDTO = convertEntityToDTO(user);
 			return success<AuthenticationResponse>(
 				res,
-				{ label: 'auth:welcome', options: { username: userDTO.name } },
+				{ label: AUTH_WELCOME, options: { username: userDTO.name } },
 				{ user: userDTO }
 			);
 		} else {
@@ -216,7 +218,7 @@ router.get(
 	})
 );
 
-const loginUserController = async (res: Response, username: string, password: string) => {
+const loginUserController = async (req: Request, res: Response, username: string, password: string) => {
 	try {
 		logger.info('/login start ');
 		if (!username || !password) {
@@ -232,10 +234,10 @@ const loginUserController = async (res: Response, username: string, password: st
 			return wrongCredentials(res);
 		}
 		const userDTO = convertEntityToDTO(user);
-		addUserCookies(userDTO, res);
+		setSession(userDTO, req, res);
 		return success<AuthenticationResponse>(
 			res,
-			{ label: 'auth:welcome', options: { username: userDTO.name } },
+			{ label: AUTH_WELCOME, options: { username: userDTO.name } },
 			{ user: userDTO }
 		);
 	} catch (error) {
@@ -243,7 +245,7 @@ const loginUserController = async (res: Response, username: string, password: st
 	}
 };
 
-const deleteUserController = async (res: Response, username: string, email: string, password: string) => {
+const deleteUserController = async (req: Request, res: Response, username: string, email: string, password: string) => {
 	try {
 		logger.info('/delete start ');
 		const user = await findUserByEmailAndUsername(email, username);
@@ -255,7 +257,7 @@ const deleteUserController = async (res: Response, username: string, email: stri
 		}
 		await deleteUser(user);
 		logger.info('/delete end ');
-		removeUserCookies(res);
+		removeSession(res, req);
 		return success<DeleteUserResponse>(res, { label: 'auth:server.deleted', options: { username: user.name } });
 	} catch (error) {
 		return serverError('DELETE auth/delete error ! : ', error, res);

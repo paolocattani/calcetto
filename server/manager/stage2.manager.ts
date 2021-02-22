@@ -1,6 +1,6 @@
 import { logProcess, logger } from '../core/logger';
 // Db
-import { getDbConnection } from '../database/config/connection';
+import { getDbConnection } from '../database/config/sequelize/connection';
 // Models
 import { Stage2, Pair } from '../database/models';
 import { IStage2FE, ICell, PairDTO, UserDTO, TournamentProgress } from '../../src/@common/dto';

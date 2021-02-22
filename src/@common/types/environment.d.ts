@@ -1,6 +1,6 @@
 // Target the module containing the `ProcessEnv` interface
 // https://www.typescriptlang.org/docs/handbook/declaration-merging.html#module-augmentation
-import { Environment } from '../../../src/@common/models/common.models';
+import { Environment } from '../models/common.models';
 
 declare namespace NodeJS {
 	export interface ProcessEnv {

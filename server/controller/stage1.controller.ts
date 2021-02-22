@@ -22,6 +22,7 @@ import { sendNotifications, subscribe } from '../events/events';
 import { TournamentProgress } from '../../src/@common/dto';
 
 const router = Router();
+
 // GET
 
 // PUT

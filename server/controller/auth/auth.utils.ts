@@ -4,7 +4,7 @@ import { UserDTO } from '../../../src/@common/dto';
 import jwt from 'jsonwebtoken';
 
 // Password
-const DEFAULT_HASH = 'dummy$Hash';
+const DEFAULT_HASH = 'dummy120$(Hash';
 export const TOKEN_SECRET = process.env.SERVER_HASH || DEFAULT_HASH;
 const generateHashSecret = (email: string, password: string) => email + TOKEN_SECRET + password;
 

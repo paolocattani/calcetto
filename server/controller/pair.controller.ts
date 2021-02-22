@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import chalk from 'chalk';
 import { logger } from '../core/logger';
-import { getDbConnection } from '../database/config/connection';
+import { getDbConnection } from '../database/config/sequelize/connection';
 // Models
 import { Pair } from '../database/models';
 import { asyncMiddleware, withAuth, withAdminRights, doNotCacheThis } from '../core/middleware';

@@ -1,5 +1,5 @@
+// Express
 import { Application as ExpressApplication, Response, Request, Router, NextFunction } from 'express';
-
 // Controllers
 import playerRouter from './player.controller';
 import pairRouter from './pair.controller';
@@ -10,8 +10,10 @@ import authRouter from './auth/auth.controller';
 import statsRouter from './stats.controller';
 // SSE
 import { sessionControl } from '../events/events';
-import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
+// mddleware
 import { controllerLogger, withAuth } from '../core/middleware';
+// DTO
+import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
 import { UserDTO } from '../../src/@common/dto';
 
 export interface AppRequest extends Request {

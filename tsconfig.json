@@ -30,14 +30,6 @@
         "experimentalDecorators": true,
         "noEmit": true
     },
-    "include": [
-			"src",
-			"src/@common/typings/*.d.ts"
-    ],
-    "exclude": [
-			"*.css",
-			"*.scss",
-			"node_modules",
-			"server"
-    ]
+    "include": ["src"],
+    "exclude": ["*.css","*.scss","node_modules","server"]
 }

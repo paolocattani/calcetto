@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express';
+import { Request, Response, Router } from 'express';
 import {
 	StatsPairMap,
 	StatsPairFromPlayerResponse,
@@ -19,8 +19,8 @@ import { findById } from '../manager/pair.manager';
 
 import { getBestPairs, getBestPlayers, getStatsByPairs, getStatsByPlayer } from '../manager/stats.manager';
 import { failure, missingParameters, serverError, success } from './common.response';
-
 const router = Router();
+
 const STATS_LOADED = 'stats:loaded';
 const STATS_ERROR = 'stats:error';
 

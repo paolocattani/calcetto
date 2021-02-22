@@ -5,19 +5,19 @@
 //
 
 // Core
-import '../../core/env';
-import { logger } from '../../core/logger';
-import { isProductionMode } from '../../core/debug';
+import '../../../core/env';
+import { logger } from '../../../core/logger';
+import { isProductionMode } from '../../../core/debug';
 // Sequelize
 import { SyncOptions } from 'sequelize';
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
-import config, { SequelizeConfiguration } from './config';
+import config from './config';
 // Other
 import util from 'util';
 import chalk from 'chalk';
-import { Environment } from '../../../src/@common/models';
-import { Tournament, Player, Pair, Stage1, Stage2, User, StatsPlayer, StatsPairs } from '../models';
-import { isTsEnv } from '../../core/utils';
+import { Environment } from '../../../../src/@common/models';
+import { isTsEnv } from '../../../core/utils';
+import path from 'path';
 
 let connection: Sequelize;
 
@@ -29,15 +29,16 @@ export const getSequelizeEnv = () =>
 	config[process.env.NODE_ENV ? (process.env.NODE_ENV as Environment) : Environment.development];
 
 async function loadModels(schema?: string): Promise<Sequelize> {
-	// FIXME: should import types from @commmon/typings
-	const envConfig: SequelizeConfiguration = getSequelizeEnv();
-	const uri: string = process.env[envConfig.useEnvVar]!;
+	const envConfig = getSequelizeEnv();
+	const uri = process.env[envConfig.useEnvVar]!;
+	const modelsPath = `${__dirname}/../../models/**/*.model.${isTsEnv() ? 'ts' : 'js'}`;
 	if (!isProductionMode()) {
-		logger.info(`URI : ${chalk.red.bold(util.inspect(uri))}`);
+		logger.info(`Database URI : ${chalk.red.bold(util.inspect(uri))}`);
+		logger.info(`Models from : '${chalk.green(path.resolve(modelsPath))}'`);
 	}
 	const connectionOptions: SequelizeOptions = {
 		...envConfig,
-		models: [`${__dirname}/../models/**/*.model.${isTsEnv() ? 'ts' : 'js'}`],
+		models: [modelsPath],
 		define: { schema },
 	};
 

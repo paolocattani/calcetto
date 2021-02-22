@@ -1,9 +1,9 @@
 import { SequelizeOptions } from 'sequelize-typescript';
-import { dbLogger as logger } from '../../core/logger';
-import { Environment } from '../../../src/@common/models/common.models';
+import { dbLogger as logger } from '../../../core/logger';
+import { Environment } from '../../../../src/@common/models/common.models';
 // https://github.com/sequelize/sequelize/issues/11371
 
-export type EnvList = {
+type SequelizeEnvList = {
 	[key in Environment]: SequelizeConfiguration;
 };
 
@@ -20,7 +20,7 @@ export interface SequelizeConfiguration extends SequelizeOptions {
 }
 
 // Sequelize configuration
-const config: EnvList = {
+const config: SequelizeEnvList = {
 	development: {
 		useEnvVar: 'DEV_URL',
 		dialect: 'postgres',

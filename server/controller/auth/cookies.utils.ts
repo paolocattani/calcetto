@@ -3,12 +3,15 @@ import { UserDTO } from '../../../src/@common/dto';
 import { v5 as uuidv5 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import { AppRequest } from '../index';
-import { CookieOptions, Response } from 'express';
+import 'express-session';
+import { CookieOptions, Response, Request } from 'express';
 import { isProductionMode } from '../../core/debug';
 import { TOKEN_SECRET } from './auth.utils';
+import { logger } from '../../core/logger';
 
 const SESSION_TOKEN = 'session_id';
 const USER_UUID = 'user_id';
+const CSRF_TOKEN = 'csrfToken';
 
 // Generate JWT Token
 const DEFAULT_TOKEN_EXPIRATION = '8h';
@@ -36,7 +39,7 @@ const getUuid = (req: AppRequest) => req.signedCookies[USER_UUID];
  * Source : https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
  * cookiesOption
  */
-const cookiesOption: CookieOptions = {
+export const cookiesOption: CookieOptions = {
 	// 8h : Allineare a process.env.SERVER_TOKEN_EXPIRES_IN
 	maxAge: 8 * 60 * 60 * 1000,
 	/*
@@ -64,12 +67,26 @@ const cookiesOption: CookieOptions = {
 	sameSite: 'strict',
 };
 // http://expressjs.com/en/api.html#res.cookie
-export const addUserCookies = (user: UserDTO, res: Response) => {
+export const setSession = (user: UserDTO, { session }: Request, res: Response) => {
+	/*
 	res.cookie(USER_UUID, generateUuid(user), cookiesOption);
 	res.cookie(SESSION_TOKEN, generateToken(user), cookiesOption);
+	res.cookie(CSRF_TOKEN, generateToken(user), cookiesOption);
+	*/
+	session.jwt = generateToken(user);
+	session.uuid = generateUuid(user);
 };
+
 // http://expressjs.com/en/api.html#res.clearCookie
-export const removeUserCookies = (res: Response) => {
-	res.clearCookie(USER_UUID, cookiesOption);
-	res.clearCookie(SESSION_TOKEN, cookiesOption);
+export const removeSession = (res: Response, { session }: Request) => {
+	session.destroy((err) => logger.info('Session destroyed'));
 };
+
+// FIXME: move this declaration in a separte d.ts file
+declare module 'express-session' {
+	interface SessionData {
+		jwt: string;
+		csfr: string;
+		uuid: string;
+	}
+}

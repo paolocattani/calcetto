@@ -30,7 +30,6 @@ import {
 	UpdateTournamentResponse,
 } from '../../src/@common/models/tournament.model';
 
-// all API path must be relative to /api/v2/tournament
 const router = Router();
 
 // GET

@@ -1,8 +1,8 @@
 import { logger, dbLogger } from '../../core/logger';
 import { Umzug, SequelizeStorage } from 'umzug';
 import { Sequelize } from 'sequelize';
-import { SequelizeConfiguration } from '../config/config';
-import { getSequelizeEnv } from '../config/connection';
+import { SequelizeConfiguration } from '../config/sequelize/config';
+import { getSequelizeEnv } from '../config/sequelize/connection';
 import { isTsEnv } from '../../core/utils';
 
 // https://github.com/sequelize/umzug/blob/master/examples/1.sequelize-typescript/umzug.ts

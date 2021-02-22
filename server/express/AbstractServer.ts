@@ -4,7 +4,7 @@
 import '../core/env';
 import { logger } from '../core/logger';
 import { isProductionMode } from '../core/debug';
-import { routeLogger, auditControl, cacheControl } from '../core/middleware';
+import { routeLogger, auditControl, cacheControl, apiQuota } from '../core/middleware';
 import * as http from 'http';
 // Express
 import helmet from 'helmet';
@@ -13,13 +13,17 @@ import compression from 'compression';
 import { json, urlencoded } from 'body-parser';
 import cookieParser from 'cookie-parser';
 import express, { Request, Application as ExpressApplication } from 'express';
+import session from 'express-session';
+import csrf from 'csurf';
+const RedisStore = require('connect-redis')(session);
+
 // Auth
 import cors from 'cors';
 // Other
 import chalk from 'chalk';
 import path from 'path';
-//import cluster from 'cluster';
-//import { cpus as osCpus } from 'os';
+import { cookiesOption } from '../controller/auth/cookies.utils';
+import { getRedisClient } from '../database/config/redis/connection';
 
 /* Interface */
 export interface IServer {
@@ -46,28 +50,17 @@ export abstract class AbstractServer implements IServer {
 	}
 
 	public start(): http.Server {
-		/*
-    if (cluster.isMaster) {
-      logger.info(`Starting server ${chalk.yellow(this.serverName)} as Cluster Mode..`);
-      logger.info(`${osCpus().length} current available CPUs but using ${this.maxCPUs}`);
-      for (let i = 0; i < this.maxCPUs! - 1; i++) cluster.fork();
-      cluster.on('exit', (worker, code, signal) => {
-        logger.error(
-          `Node cluster worker ${chalk.blue(process.pid.toString())} for server ${chalk.yellow(
-            this.serverName
-          )} died. Code ${chalk.red.bold(code.toString())}, Signal ${chalk.red.bold(signal)}`
-        );
-        logger.info('Starting a new worker....');
-        cluster.fork();
-      });
-    } else {
-    */
+		const redisClient = getRedisClient(0);
+		redisClient.on('error', logger.error);
+
 		const CSPCommon = [
 			"'self'",
 			'http://localhost:5001',
 			'https://calcetto2020stage.herokuapp.com',
 			'https://calcetto2020production.herokuapp.com',
 		];
+
+		// https://blog.risingstack.com/node-js-security-checklist/
 		this.application
 			.use(cors<Request>(this.corsOptions))
 			.use(morgan(isProductionMode() ? 'combined' : 'common'))
@@ -96,12 +89,28 @@ export abstract class AbstractServer implements IServer {
 					},
 				})
 			)
-			//this.application.set('trust proxy', 1);
 			.use(json())
 			.use(urlencoded({ extended: false }))
 			.use(cookieParser(process.env.SERVER_SECRET))
+			// http://expressjs.com/en/advanced/best-practice-security.html
+			.set('trust proxy', isProductionMode())
+			// https://www.appliz.fr/blog/express-typescript
+			.use(
+				session({
+					store: new RedisStore({ client: redisClient }),
+					secret: process.env.SERVER_SECRET || 'Apf342x$/)wpk,',
+					resave: false,
+					saveUninitialized: true,
+					cookie: cookiesOption,
+				})
+			)
+			// https://medium.com/dataseries/prevent-cross-site-request-forgery-in-express-apps-with-csurf-16025a980457
+			.use(csrf({ cookie: false }))
+			// custom middleware
 			.all('*', auditControl)
 			.all('*', cacheControl)
+			// TODO: api quote / request rate limit to prevent brute force attack
+			//.all('*', apiQuota)
 			.all('*', routeLogger)
 			.disable('x-powered-by');
 
