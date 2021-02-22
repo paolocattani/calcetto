@@ -75,7 +75,7 @@
     "snyk": "^1.458.0",
     "start-server-and-test": "^1.12.0",
     "supertest": "^6.1.3",
-    "ts-jest": "^26.5.0",
+    "ts-jest": "^26.5.1",
     "typescript": "^4.1.5"
   },
   "dependencies": {
