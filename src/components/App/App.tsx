@@ -61,7 +61,7 @@ const App: React.FC = (_) => {
 					<CookieConsent
 						location="bottom"
 						buttonText={t('auth:cookies.accept')}
-						cookieName="session_id"
+						cookieName="accept_cookies"
 						style={{ background: '#2B373B' }}
 						buttonStyle={{ color: '#4e503b', fontSize: '13px' }}
 						expires={150}

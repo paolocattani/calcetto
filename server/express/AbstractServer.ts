@@ -24,8 +24,6 @@ import chalk from 'chalk';
 import path from 'path';
 import { cookiesOption } from '../controller/auth/cookies.utils';
 import { getRedisClient } from '../database/config/redis/connection';
-//import cluster from 'cluster';
-//import { cpus as osCpus } from 'os';
 
 /* Interface */
 export interface IServer {
@@ -52,23 +50,7 @@ export abstract class AbstractServer implements IServer {
 	}
 
 	public start(): http.Server {
-		/*
-    if (cluster.isMaster) {
-      logger.info(`Starting server ${chalk.yellow(this.serverName)} as Cluster Mode..`);
-      logger.info(`${osCpus().length} current available CPUs but using ${this.maxCPUs}`);
-      for (let i = 0; i < this.maxCPUs! - 1; i++) cluster.fork();
-      cluster.on('exit', (worker, code, signal) => {
-        logger.error(
-          `Node cluster worker ${chalk.blue(process.pid.toString())} for server ${chalk.yellow(
-            this.serverName
-          )} died. Code ${chalk.red.bold(code.toString())}, Signal ${chalk.red.bold(signal)}`
-        );
-        logger.info('Starting a new worker....');
-        cluster.fork();
-      });
-    } else {
-    */
-		const redisClient = getRedisClient();
+		const redisClient = getRedisClient(0);
 		redisClient.on('error', logger.error);
 
 		const CSPCommon = [
@@ -107,12 +89,10 @@ export abstract class AbstractServer implements IServer {
 					},
 				})
 			)
-			// http://expressjs.com/en/advanced/best-practice-security.html
 			.use(json())
 			.use(urlencoded({ extended: false }))
 			.use(cookieParser(process.env.SERVER_SECRET))
-			// https://medium.com/dataseries/prevent-cross-site-request-forgery-in-express-apps-with-csurf-16025a980457
-			// TODO: .use(csrf({ cookie: true }))
+			// http://expressjs.com/en/advanced/best-practice-security.html
 			.set('trust proxy', isProductionMode())
 			// https://www.appliz.fr/blog/express-typescript
 			.use(
@@ -124,10 +104,13 @@ export abstract class AbstractServer implements IServer {
 					cookie: cookiesOption,
 				})
 			)
+			// https://medium.com/dataseries/prevent-cross-site-request-forgery-in-express-apps-with-csurf-16025a980457
+			.use(csrf({ cookie: false }))
 			// custom middleware
 			.all('*', auditControl)
 			.all('*', cacheControl)
-			// .all('*', apiQuota)
+			// TODO: api quote / request rate limit to prevent brute force attack
+			//.all('*', apiQuota)
 			.all('*', routeLogger)
 			.disable('x-powered-by');
 

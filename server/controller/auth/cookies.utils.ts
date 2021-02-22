@@ -82,6 +82,7 @@ export const removeSession = (res: Response, { session }: Request) => {
 	session.destroy((err) => logger.info('Session destroyed'));
 };
 
+// FIXME: move this declaration in a separte d.ts file
 declare module 'express-session' {
 	interface SessionData {
 		jwt: string;

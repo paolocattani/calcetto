@@ -7,16 +7,16 @@ import { User } from '../database/models';
 import { logger } from '../core/logger';
 import { isDevMode } from '../core/debug';
 import { unauthorized } from '../controller/common.response';
-import { getCookies } from '../controller/auth/cookies.utils';
 import { isAdmin } from '../manager/auth.manager';
 import { safeVerifyToken } from '../controller/auth/auth.utils';
 import { Message, SessionStatus } from '../../src/@common/models';
 import { sendNotification } from '../events/events';
-import RateLimiter from 'async-ratelimiter';
+import RateLimiter from 'ratelimiter';
 import { getClientIp } from 'request-ip';
 import { getRedisClient } from '../database/config/redis/connection';
 
 const UNAUTHORIZED = 'common:server.unauthorized';
+
 //--------- Log route
 export const routeLogger = (req: Request, res: Response, next: NextFunction) => {
 	if (isDevMode()) logger.info(`Serving route : ${chalk.greenBright.bold(req.originalUrl)}`);
@@ -91,7 +91,8 @@ export const withAuth = async (req: AppRequest, res: Response, next: NextFunctio
 export const withAdminRights = (req: AppRequest, res: Response, next: NextFunction) => {
 	if (!isAdmin(req.user)) {
 		return unauthorized(res, { label: 'auth:expired' });
-	} else next();
+	}
+	next();
 };
 
 //--------- Check authorization for test
@@ -108,27 +109,38 @@ export const auditControl = (req: Request, res: Response, next: NextFunction) =>
 	next();
 };
 
-//--------- API Quota : Prevente brute force attack
-const rateLimiter = new RateLimiter({
-	db: getRedisClient(),
-	max: 2500,
-	duration: 3600000,
-});
-
-// Prevent brute force attack
+//--------- API Quota / Slow down request : Prevente brute force attack
 // https://github.com/microlinkhq/async-ratelimiter
 export const apiQuota = async (req: Request, res: Response, next: NextFunction) => {
-	const clientIp = getClientIp(req);
+	let clientIp = getClientIp(req);
+	logger.info('clientIP : ', clientIp);
 	if (clientIp) {
-		const limit = await rateLimiter.get({ id: clientIp });
-
-		if (!res.writableEnded && !res.headersSent) {
-			res.setHeader('X-Rate-Limit-Limit', limit.total);
-			res.setHeader('X-Rate-Limit-Remaining', Math.max(0, limit.remaining - 1));
-			res.setHeader('X-Rate-Limit-Reset', limit.reset);
+		if (clientIp === '::1') {
+			clientIp = 'localhost';
 		}
+		const limit = new RateLimiter({ id: clientIp, db: getRedisClient(1), max: 2500, duration: 3600000 });
+		limit.get(function (err, limit) {
+			if (err) {
+				return next(err);
+			}
 
-		return !limit.remaining ? unauthorized(res, { label: UNAUTHORIZED }) : next();
+			res.set('X-RateLimit-Limit', limit.total.toString());
+			res.set('X-RateLimit-Remaining', (limit.remaining - 1).toString());
+			res.set('X-RateLimit-Reset', limit.reset.toString());
+
+			// all good
+			logger.info('%s Remaining %s/%s', clientIp, limit.remaining - 1, limit.total);
+			if (limit.remaining) return next();
+
+			// not good
+			var delta = (limit.reset * 1000 - Date.now()) | 0;
+			var after = (limit.reset - Date.now() / 1000) | 0;
+			res.set('Retry-After', after.toString());
+			return unauthorized(res, { label: UNAUTHORIZED, options: { interval: after } });
+		});
+	} else {
+		next();
 	}
-	next();
 };
+
+export const slowDownAPIRequest = async (req: Request, res: Response, next: NextFunction) => {};
