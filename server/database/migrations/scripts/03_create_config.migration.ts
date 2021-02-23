@@ -3,7 +3,7 @@ import { DataType } from 'sequelize-typescript';
 import { Migration, UmzugContext } from '..';
 import { logMigrationEnd, logMigrationStart } from '../../../core/logger';
 
-const migrationName = '03_config';
+const migrationName = '03_create_config';
 const tableName = 'config';
 export const up: Migration = async ({ context: sequelize }: UmzugContext) => {
 	logMigrationStart('up', migrationName);

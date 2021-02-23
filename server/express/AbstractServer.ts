@@ -24,7 +24,6 @@ import path from 'path';
 import { cookiesOption } from '../controller/auth/cookies.utils';
 import { getRedisClient } from '../database/config/redis/connection';
 import { routeLogger, clientInfo, auditControl, cacheControl } from '../middleware';
-import * as securityMiddleware from '../middleware/security';
 
 /* Interface */
 export interface IServer {
@@ -106,9 +105,9 @@ export abstract class AbstractServer implements IServer {
 				})
 			)
 			// https://medium.com/dataseries/prevent-cross-site-request-forgery-in-express-apps-with-csurf-16025a980457
-			.use(csrf({ cookie: false }))
+			//.use(csrf({ cookie: false }))
 			// custom mw
-			.use(auditControl, cacheControl, clientInfo, routeLogger, ...securityMiddleware)
+			.all('*', clientInfo, auditControl, cacheControl, routeLogger)
 			.disable('x-powered-by');
 
 		this.routes(this.application);

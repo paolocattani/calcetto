@@ -14,7 +14,7 @@ import {
 	StatsSummaryResponse,
 } from '../../src/@common/models/stats.model';
 import { formatDate } from '../../src/@common/utils/date.utils';
-import { withAuth, doNotCacheThis, asyncMiddleware } from '../core/middleware';
+import { withAuth, doNotCacheThis, asyncMiddleware } from '../middleware';
 import { findById } from '../manager/pair.manager';
 
 import { getBestPairs, getBestPlayers, getStatsByPairs, getStatsByPlayer } from '../manager/stats.manager';

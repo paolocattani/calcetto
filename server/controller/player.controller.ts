@@ -6,7 +6,7 @@ import {
 	SavePlayerRequest,
 	SavePlayerResponse,
 } from '../../src/@common/models/player.model';
-import { withAuth, asyncMiddleware, withAdminRights } from '../core/middleware';
+import { withAuth, asyncMiddleware, withAdminRights } from '../middleware';
 import {
 	create,
 	deletePlayer,

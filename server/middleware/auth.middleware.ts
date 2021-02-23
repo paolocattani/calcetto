@@ -36,11 +36,12 @@ export const withAuth = async (req: AppRequest, res: Response, next: NextFunctio
 				req.uuid = uuid;
 				next();
 			}
+		} else {
+			return notify(res);
 		}
 	} catch (error) {
 		return notify(res);
 	}
-	return notify(res);
 };
 
 //--------- Check if user has admin rights

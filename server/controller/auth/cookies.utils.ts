@@ -86,7 +86,7 @@ export const removeSession = (res: Response, { session }: Request) => {
 declare module 'express-session' {
 	interface SessionData {
 		jwt: string;
-		csfr: string;
+		csrfSecret: string;
 		uuid: string;
 	}
 }

@@ -67,6 +67,15 @@ export const failure = <T extends GenericReponse>(
 		label,
 		additionalInfo
 	);
+export const genericError = <T extends GenericReponse>(res: Response, additionalInfo?: OmitGeneric<T>) =>
+	ComposeReponse(
+		res,
+		HTTPStatusCode.BadRequest,
+		'Bad Request.',
+		UserMessageType.Danger,
+		{ label: 'auth:error.generic' },
+		additionalInfo
+	);
 
 // Success
 export const success = <T extends GenericReponse>(res: Response, label: I18nLabel, additionalInfo?: OmitGeneric<T>) =>
