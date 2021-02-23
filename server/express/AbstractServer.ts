@@ -4,7 +4,6 @@
 import '../core/env';
 import { logger } from '../core/logger';
 import { isProductionMode } from '../core/debug';
-import { routeLogger, auditControl, cacheControl, apiQuota } from '../core/middleware';
 import * as http from 'http';
 // Express
 import helmet from 'helmet';
@@ -24,6 +23,8 @@ import chalk from 'chalk';
 import path from 'path';
 import { cookiesOption } from '../controller/auth/cookies.utils';
 import { getRedisClient } from '../database/config/redis/connection';
+import { routeLogger, clientInfo, auditControl, cacheControl } from '../middleware';
+import * as securityMiddleware from '../middleware/security';
 
 /* Interface */
 export interface IServer {
@@ -106,12 +107,8 @@ export abstract class AbstractServer implements IServer {
 			)
 			// https://medium.com/dataseries/prevent-cross-site-request-forgery-in-express-apps-with-csurf-16025a980457
 			.use(csrf({ cookie: false }))
-			// custom middleware
-			.all('*', auditControl)
-			.all('*', cacheControl)
-			// TODO: api quote / request rate limit to prevent brute force attack
-			//.all('*', apiQuota)
-			.all('*', routeLogger)
+			// custom mw
+			.use(auditControl, cacheControl, clientInfo, routeLogger, ...securityMiddleware)
 			.disable('x-powered-by');
 
 		this.routes(this.application);
