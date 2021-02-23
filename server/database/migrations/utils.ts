@@ -18,7 +18,7 @@ export async function functionUp(
 	returnType: string,
 	functionBody: string
 ) {
-	// https://stackoverflow.com/questions/48407329/cant-able-to-create-views-in-mysql-using-sequelize-orm
+	// FIXME: 	await context.getQueryInterface().createFunction(functionName, params, returnType, 'sql', functionBody,[);
 	await context.query(
 		`CREATE OR REPLACE FUNCTION ${functionName}(${params}) returns ${returnType} AS $func$ ${functionBody} $func$ LANGUAGE sql`
 	);

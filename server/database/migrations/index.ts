@@ -17,7 +17,7 @@ export const sequelize = new Sequelize(uri, envConfig);
 
 export const umzug = new Umzug({
 	migrations: {
-		glob: [`./*migration.${isTsEnv() ? 'ts' : 'js'}`, { cwd: __dirname }],
+		glob: [`./scripts/*migration.${isTsEnv() ? 'ts' : 'js'}`, { cwd: __dirname }],
 	},
 	context: sequelize,
 	storage: new SequelizeStorage({ sequelize }),
