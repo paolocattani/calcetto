@@ -1,7 +1,7 @@
 //-----------------------------
 // Fetch utils
 //
-import { GenericReponse, OmitHistory, UnexpectedServerError } from '../models/common.models';
+import { GenericResponse, OmitHistory, UnexpectedServerError } from '../models/common.models';
 import { toast } from 'react-toastify';
 
 interface IFetchCallback<T> {
@@ -9,24 +9,24 @@ interface IFetchCallback<T> {
 }
 
 // Get
-export const getWrapper = <T extends GenericReponse>(url: string, afterResponse?: IFetchCallback<T>) =>
+export const getWrapper = <T extends GenericResponse>(url: string, afterResponse?: IFetchCallback<T>) =>
 	fetchWrapper<never, T>(url, 'GET', undefined, afterResponse);
 // Delete
-export const deleteWrapper = <B, T extends GenericReponse>(
+export const deleteWrapper = <B, T extends GenericResponse>(
 	url: string,
 	body?: OmitHistory<B>,
 	afterResponse?: IFetchCallback<T>
 ) => fetchWrapper<B, T>(url, 'DELETE', body, afterResponse);
 
 // Put
-export const putWrapper = <B, T extends GenericReponse>(
+export const putWrapper = <B, T extends GenericResponse>(
 	url: string,
 	body?: OmitHistory<B>,
 	afterResponse?: IFetchCallback<T>
 ) => fetchWrapper<B, T>(url, 'PUT', body, afterResponse);
 
 // Post
-export const postWrapper = <B, T extends GenericReponse>(
+export const postWrapper = <B, T extends GenericResponse>(
 	url: string,
 	body?: OmitHistory<B>,
 	afterResponse?: IFetchCallback<T>
@@ -35,12 +35,12 @@ export const postWrapper = <B, T extends GenericReponse>(
 // wrapper
 const rawHost = process.env.REACT_APP_SERVER_HOST ? process.env.REACT_APP_SERVER_HOST : 'http://localhost:5001';
 const host = rawHost.slice(-1) === '/' ? rawHost.substring(0, rawHost.length - 1) : rawHost;
-export const fetchWrapper = async <B, T extends GenericReponse>(
+export const fetchWrapper = async <B, T extends GenericResponse>(
 	url: string,
 	method: string,
 	body?: OmitHistory<B>,
 	afterResponse?: IFetchCallback<T>
-): Promise<T | GenericReponse> => {
+): Promise<T | GenericResponse> => {
 	const completeUrl = host + url;
 	console.log('fetchWrapper.request : ', method, completeUrl, body);
 	let response = null;

@@ -94,6 +94,8 @@
   - Plugins :
     - [heroku-builds](https://github.com/heroku/heroku-builds#cancel-build)
 
+## GitHub Action
+  - [Test actions locally](https://github.com/nektos/act)
 
 ## Development
 

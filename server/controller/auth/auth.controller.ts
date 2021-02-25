@@ -1,7 +1,14 @@
 // Core
 import '../../core/env';
 import { logger } from '../../core/logger';
-import { withAuth, asyncMiddleware, controllerLogger, withTestAuth } from '../../core/middleware';
+import {
+	withAuth,
+	asyncMiddleware,
+	controllerLogger,
+	withTestAuth,
+	limitRequest,
+	consumeRequest,
+} from '../../middleware';
 // Types
 import { AppRequest } from '../index';
 import { Request, Response, NextFunction, Router } from 'express';
@@ -18,7 +25,7 @@ import {
 // Models
 import { User } from '../../database/models';
 // Common Responses
-import { missingParameters, success, failure, entityNotFound, serverError } from '../common.response';
+import { success, failure, entityNotFound, serverError, genericError } from '../common.response';
 // @Commmon
 import {
 	AuthenticationResponse,
@@ -30,14 +37,26 @@ import {
 	OmitGeneric,
 	OmitHistory,
 	UnsubscribeResponse,
+	CSRFResponse,
 } from '../../../src/@common/models';
 import { HTTPStatusCode } from '../../../src/@common/models/HttpStatusCode';
 import { setSession, removeSession } from './cookies.utils';
 import { comparePasswords } from './auth.utils';
 import { unsubscribe } from '../../events/events';
+import chalk from 'chalk';
 
 const AUTH_WELCOME = 'auth:welcome';
+const GENERIC_ERROR = 'auth:error.generic';
 const router = Router();
+
+// FIXME:
+router.get('/csrf', (req: Request, res: Response, next: NextFunction) => {
+	const token = req.csrfToken();
+	req.session.csrfSecret = token;
+	res.set('xsrf-token', token);
+	logger.info(`New csrf token ( ${token} for ${chalk.redBright(req.ip)}) !`);
+	return success<CSRFResponse>(res, { label: '' }, { token });
+});
 
 const registrationController = asyncMiddleware(async (req: Request, res: Response) => {
 	logger.info('/register start ');
@@ -47,26 +66,14 @@ const registrationController = asyncMiddleware(async (req: Request, res: Respons
 		// bypassati quelli a FE.
 		const errors = isValidRegister(registrationInfo);
 		if (errors.length !== 0) {
-			return failure(
-				res,
-				{ label: 'auth:error.generic' },
-				'Registration data is not valid',
-				HTTPStatusCode.BadRequest,
-				{ errors }
-			);
+			consumeRequest(req);
+			return genericError(res, { errors });
 		}
 		const model: User = parseBody(registrationInfo);
 		const user = await findUserByEmailOrUsername(model.username, model.email);
 		if (user) {
-			return failure(
-				res,
-				{ label: 'auth:server.error.already_exists' },
-				'Email or Username alrealdy exists.',
-				HTTPStatusCode.BadRequest,
-				{
-					errors: [{ label: 'auth:server.error.already_exists' }],
-				}
-			);
+			consumeRequest(req);
+			return genericError(res, { errors: [{ label: GENERIC_ERROR }] });
 		}
 		const record = await registerUser(model, registrationInfo.playerRole);
 		if (record) {
@@ -91,15 +98,14 @@ const registrationController = asyncMiddleware(async (req: Request, res: Respons
 const wrongCredentials = (res: Response) =>
 	failure(res, { label: 'auth:server.error.wrong_credential' }, 'Wrong credentials', HTTPStatusCode.Unauthorized);
 
-router.use('/', (req: Request, res: Response, next: NextFunction) =>
-	controllerLogger(req, next, 'Auth Controller', '/api/v2/auth')
-);
-
 router.get(
 	'/check',
 	withAuth,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		const additional: OmitGeneric<AuthenticationResponse> = { user: req.user };
+		if (!req.session.csrfSecret) {
+			req.session.csrfSecret = req.csrfToken();
+		}
 		return success(
 			res,
 			{
@@ -120,7 +126,7 @@ router.get(
 	})
 );
 
-router.post('/register', registrationController);
+router.post('/register', limitRequest, registrationController);
 
 router.put(
 	'/unsubscribe',
@@ -162,6 +168,7 @@ router.put(
 
 router.post(
 	'/login',
+	limitRequest,
 	asyncMiddleware(async (req: Request, res: Response) => {
 		const { username, password } = req.body as OmitHistory<LoginRequest>;
 		return await loginUserController(req, res, username, password);
@@ -222,16 +229,21 @@ const loginUserController = async (req: Request, res: Response, username: string
 	try {
 		logger.info('/login start ');
 		if (!username || !password) {
-			return missingParameters(res);
+			consumeRequest(req);
+			return genericError(res, { errors: [{ label: GENERIC_ERROR }] });
 		}
 		const user = await findUserByEmailOrUsername(username, username);
 		// User not found
 		if (!user) {
-			return entityNotFound(res);
+			consumeRequest(req);
+			return genericError(res, { errors: [{ label: GENERIC_ERROR }] });
+			// Do not expose information return entityNotFound(res);
 		}
 		// Compare passwords
 		if (!(await comparePasswords(user.email, password, user.password))) {
-			return wrongCredentials(res);
+			consumeRequest(req);
+			return genericError(res, { errors: [{ label: GENERIC_ERROR }] });
+			// Do not expose information return wrongCredentials(res);
 		}
 		const userDTO = convertEntityToDTO(user);
 		setSession(userDTO, req, res);

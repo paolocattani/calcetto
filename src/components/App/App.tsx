@@ -27,7 +27,7 @@ import CookieConsent from 'react-cookie-consent';
 import { useTranslation } from 'react-i18next';
 
 loadIcons();
-const App: React.FC = (_) => {
+const App: React.FC = () => {
 	const dispatch = useDispatch();
 	const currentHistory = useHistory();
 	const { t } = useTranslation(['auth']);
@@ -36,7 +36,8 @@ const App: React.FC = (_) => {
 	// Check if user is already logged
 	useEffect(() => {
 		dispatch(AuthAction.checkAuthentication.request({ history: currentHistory }));
-	}, [currentHistory, dispatch]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentHistory]);
 
 	return (
 		<div className="App">

@@ -2,7 +2,7 @@ import { Router, Response } from 'express';
 
 // Core
 import { logger } from '../core/logger';
-import { asyncMiddleware, withAuth, withAdminRights } from '../core/middleware';
+import { asyncMiddleware, withAuth, withAdminRights } from '../middleware';
 
 import { AppRequest } from './index';
 import { updatePlacement } from '../manager/pair.manager';

@@ -41,7 +41,7 @@ export enum Environment {
 	production = 'production',
 }
 
-export interface GenericReponse {
+export interface GenericResponse {
 	code: HTTPStatusCode;
 	message: string;
 	userMessage: UserMessage;
@@ -60,12 +60,10 @@ export interface UserMessage {
 }
 
 export type OmitHistory<T> = Omit<T, 'history'>;
-// FIXME:
-export type OmitGeneric<T extends GenericReponse> = Omit<T, 'code' | 'message' | 'userMessage'>;
-// FIXME: UNUSED
-export type PickGeneric<T extends GenericReponse> = Pick<T, 'code' | 'message' | 'userMessage'>;
+export type OmitGeneric<T extends GenericResponse> = Omit<T, 'code' | 'message' | 'userMessage'>;
+export type PickGeneric<T extends GenericResponse> = Pick<T, 'code' | 'message' | 'userMessage'>;
 
-export const UnexpectedServerError: GenericReponse = {
+export const UnexpectedServerError: GenericResponse = {
 	code: HTTPStatusCode.InternalServerError,
 	message: 'Unexpected Server Error',
 	userMessage: {

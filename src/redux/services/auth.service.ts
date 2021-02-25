@@ -4,27 +4,37 @@ import {
 	RegistrationRequest,
 	UpdateUserRequest,
 	DeleteUserRequest,
-	LogoutRequest, SessionStatus, Message, UnsubscribeRequest, UnsubscribeResponse
+	LogoutRequest,
+	SessionStatus,
+	Message,
+	UnsubscribeRequest,
+	UnsubscribeResponse,
+	CSRFResponse,
 } from '../../@common/models';
 import { OmitHistory } from '../../@common/models/common.models';
-import {putWrapper, deleteWrapper, postWrapper, getWrapper} from '../../@common/utils';
-import {buffers, END, eventChannel} from 'redux-saga';
+import { putWrapper, deleteWrapper, postWrapper, getWrapper } from '../../@common/utils';
+import { buffers, END, eventChannel } from 'redux-saga';
 
+const authAPI = '/api/v2/auth';
 // Update
 export const updateUser = (updateUserRequest: OmitHistory<UpdateUserRequest>) =>
-	putWrapper<UpdateUserRequest, AuthenticationResponse>('/api/v2/auth/update', updateUserRequest);
+	putWrapper<UpdateUserRequest, AuthenticationResponse>(`${authAPI}/update`, updateUserRequest);
 // Delete
 export const deleteUser = (deleteUserRequest: OmitHistory<DeleteUserRequest>) =>
-	deleteWrapper<DeleteUserRequest, AuthenticationResponse>('/api/v2/auth/delete', deleteUserRequest);
+	deleteWrapper<DeleteUserRequest, AuthenticationResponse>(`${authAPI}/delete`, deleteUserRequest);
 // Login
 export const login = (loginRequest: OmitHistory<LoginRequest>) =>
-	postWrapper<LoginRequest, AuthenticationResponse>('/api/v2/auth/login', loginRequest);
+	postWrapper<LoginRequest, AuthenticationResponse>(`${authAPI}/login`, loginRequest);
 // Login
-export const logout = (logoutRequest:OmitHistory<LogoutRequest>) => getWrapper<AuthenticationResponse>('/api/v2/auth/logout');
+export const logout = (logoutRequest: OmitHistory<LogoutRequest>) =>
+	getWrapper<AuthenticationResponse>(`${authAPI}/logout`);
 // Registration
-export const registration = ( registrationRequest: OmitHistory<RegistrationRequest>) => postWrapper<RegistrationRequest, AuthenticationResponse>('/api/v2/auth/register', registrationRequest);
-export const checkAuthentication = () => getWrapper<AuthenticationResponse>('/api/v2/auth/check');
-export const unsubscribe = () => putWrapper<UnsubscribeRequest, UnsubscribeResponse>('/api/v2/auth/unsubscribe');
+export const registration = (registrationRequest: OmitHistory<RegistrationRequest>) =>
+	postWrapper<RegistrationRequest, AuthenticationResponse>(`${authAPI}/register`, registrationRequest);
+export const checkAuthentication = () => getWrapper<AuthenticationResponse>(`${authAPI}/check`);
+export const unsubscribe = () => putWrapper<UnsubscribeRequest, UnsubscribeResponse>(`${authAPI}/unsubscribe`);
+// CSRF
+export const setCSRFToken = () => getWrapper<CSRFResponse>(`${authAPI}/csrf`);
 
 export const createSessionChannel = (channel: EventSource) =>
 	eventChannel<Message>((emitter) => {

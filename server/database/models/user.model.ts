@@ -45,8 +45,8 @@ export default class User extends Model {
 	@Column(DataType.DATE)
 	public birthday?: Date;
 
-	@Default('User')
-	@Column(DataType.ENUM('User', 'Admin'))
+	@Default(UserRole.User)
+	@Column(DataType.ENUM({ values: Object.keys(UserRole) }))
 	public role!: UserRole;
 
 	// Virtuale

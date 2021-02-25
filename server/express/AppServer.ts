@@ -17,7 +17,6 @@ import { migrationUp } from '../database/migrations';
 
 const defaultName: string = 'ApplicationServer Calcetto';
 const defaultPort: number = isProductionMode() ? Number(process.env.PORT) : Number(process.env.SERVER_PORT);
-const defaultCPUs: number = Number(process.env.SERVER_WORKERS);
 
 // https://expressjs.com/en/resources/middleware/cors.html
 const applicationCorsOption: CorsOptions = {
@@ -47,8 +46,8 @@ const applicationCorsOption: CorsOptions = {
 
 export default class AppServer extends AbstractServer {
 	connection: Sequelize | null;
-	constructor(applicationName = defaultName, applicationPort = defaultPort, applicationCPUs = defaultCPUs) {
-		super(applicationName, applicationPort, applicationCPUs, applicationCorsOption);
+	constructor(applicationName = defaultName, applicationPort = defaultPort) {
+		super(applicationName, applicationPort, applicationCorsOption);
 		this.connection = null;
 	}
 

@@ -1,5 +1,5 @@
 import { PairDTO, Stage1Row } from '../dto';
-import { GenericReponse } from './common.models';
+import { GenericResponse } from './common.models';
 
 export interface Stage1State {
 	// Utilizzato per indicare se è necessario ricaricare i dati dal db
@@ -43,13 +43,13 @@ export interface DeleteStage1Request {
 	tId: number;
 }
 // Response
-export interface FetchStage1Response extends GenericReponse {
+export interface FetchStage1Response extends GenericResponse {
 	stageName: string;
 	pairsList: Array<PairDTO>;
 	rows: Array<Stage1Row>;
 }
-export interface UpdateCellResponse extends GenericReponse {}
-export interface UpdatePlacementResponse extends GenericReponse {}
-export interface DeleteStage1Response extends GenericReponse {}
+export interface UpdateCellResponse extends GenericResponse {}
+export interface UpdatePlacementResponse extends GenericResponse {}
+export interface DeleteStage1Response extends GenericResponse {}
 
-export interface Stage1Error extends GenericReponse {}
+export interface Stage1Error extends GenericResponse {}

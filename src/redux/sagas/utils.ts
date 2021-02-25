@@ -1,5 +1,5 @@
 import {
-	GenericReponse,
+	GenericResponse,
 	OmitHistory,
 	UnexpectedServerError,
 	UserMessage,
@@ -15,9 +15,15 @@ interface IActionCallback<T> {
 	(response: T): void | Promise<void> | Generator<StrictEffect, void, void>;
 }
 
-const GeneratorFunction = function* () {/* this is a template */}.constructor;
-const AsyncFunction = async function () {/* this is a template */}.constructor;
-const NormalFunction = function () {/* this is a template */}.constructor;
+const GeneratorFunction = function* () {
+	/* this is a template */
+}.constructor;
+const AsyncFunction = async function () {
+	/* this is a template */
+}.constructor;
+const NormalFunction = function () {
+	/* this is a template */
+}.constructor;
 
 function* execCallBack<TRes>(callBack: IActionCallback<TRes>, response: TRes) {
 	if (callBack instanceof GeneratorFunction) {
@@ -32,7 +38,7 @@ function* execCallBack<TRes>(callBack: IActionCallback<TRes>, response: TRes) {
 	}
 }
 
-interface ActionType<TReq, TRes extends GenericReponse, TErr> {
+interface ActionType<TReq, TRes extends GenericResponse, TErr> {
 	request: PayloadActionCreator<string, TReq>;
 	success: PayloadActionCreator<string, TRes>;
 	failure: PayloadActionCreator<string, TErr | typeof UnexpectedServerError>;
@@ -54,7 +60,8 @@ export const getToast = (type: UserMessageType) => {
 	}
 	return alert;
 };
-export function* entityLifeCycle<TReq, TRes extends GenericReponse, TErr extends GenericReponse>(
+
+export function* entityLifeCycle<TReq, TRes extends GenericResponse, TErr extends GenericResponse>(
 	action: ActionType<TReq, TRes, TErr>,
 	method: (p: OmitHistory<TReq>) => TRes | Promise<TRes | typeof UnexpectedServerError>,
 	payload: OmitHistory<TReq>,
