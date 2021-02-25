@@ -47,10 +47,10 @@ jobs:
         run: chmod +x cli/cli.sh
       # Build client
       - name: Build client
-        run: cli/cli.sh build
+        run: ./cli/cli.sh build --frontend
       # Build server
       - name: Build server
-        run: npm run prod:build:server
+        run: ./cli/cli.sh build --backend
       # Save build for later
       - name: Upload build
         uses: actions/upload-artifact@v2.2.2
