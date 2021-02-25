@@ -66,19 +66,25 @@ function build {
     fi
 
     if [[ $buildFeOnly -eq 1 ]] || [[ $buildAll -eq 1 ]]; then
-        echo "[ FrontEnd ] Run --> npm run CRA:build"
+        text_color "[ FrontEnd ] Run --> npm run build" $yellow
+        echo "Install dependecies"
+        npm ci
         npm run CRA:build
-        echo "[ FrontEnd ] Run --> npm run analyze"
+        text_color "[ FrontEnd ] Run --> npm run analyze" $yellow
         npm run analyze
+        text_color "[ FrontEnd ] Build Done !" $yellow
     fi
 
     if [[ $buildBeOnly -eq 1 ]] || [[ $buildAll -eq 1 ]]; then
         # Build server
         cd server
-        echo "[ BackEnd ] Run --> npm run build"
+        echo "Install dependecies"
+        npm ci
+        text_color "[ BackEnd ] Run --> npm run build" $yellow
         npm run build
         cd ..
-    fi
+        text_color "[ BackEnd ] Build Done !" $yellow
+   fi
 
     if [[ $buildAll -eq 1 ]]; then
         echo "[ All ] Composing folder 'production_build'..."
