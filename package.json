@@ -1,7 +1,7 @@
 {
   "name": "calcetto",
   "private": false,
-  "version": "2.15.0",
+  "version": "2.15.1",
   "description": "Table Soccer Manager",
   "engines": {
     "node": "14.x",
@@ -42,6 +42,7 @@
     "i18next-http-backend": "^1.1.0",
     "jquery": "^3.5.1",
     "localforage": "^1.9.0",
+    "rate-limiter-flexible": "^2.2.1",
     "react": "^16.14.0",
     "react-bootstrap": "^1.4.3",
     "react-bootstrap-table-next": "^4.0.3",
@@ -177,7 +178,7 @@
     "eslint-plugin-jsdoc": "^30.7.13",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.22.0",
-    "eslint-plugin-sonarjs": "^0.5.0",
+    "eslint-plugin-sonarjs": "^0.6.0",
     "eslint-plugin-testing-library": "^3.10.1",
     "install": "^0.13.0",
     "istanbul-lib-coverage": "^3.0.0",
