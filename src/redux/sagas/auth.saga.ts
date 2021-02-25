@@ -23,6 +23,7 @@ import {
 	deleteUser,
 	logout,
 	unsubscribe,
+	setCSRFToken,
 } from '../services/auth.service';
 import { toast } from 'react-toastify';
 import { Action } from 'typesafe-actions';
@@ -41,6 +42,8 @@ function* checkAuthenticationSaga({
 		yield put(AuthAction.sessionControl.request({ history }));
 		//yield put(TournamentAction.fetch.request({}));
 	};
+
+	// yield call(setCSRFToken);
 	yield* entityLifeCycle<CheckAuthenticationRequest, AuthenticationResponse, AuthenticationError>(
 		AuthAction.checkAuthentication,
 		checkAuthentication,
@@ -52,10 +55,10 @@ function* checkAuthenticationSaga({
 }
 
 /*
-FIXME:
-https://github.com/redux-saga/redux-saga/issues/868
-https://github.com/redux-saga/redux-saga/blob/master/docs/advanced/Channels.md#using-the-eventchannel-factory-to-connect-to-external-events
-https://github.com/redux-saga/redux-saga/issues/940#issuecomment-298170212
+	FIXME:
+	https://github.com/redux-saga/redux-saga/issues/868
+	https://github.com/redux-saga/redux-saga/blob/master/docs/advanced/Channels.md#using-the-eventchannel-factory-to-connect-to-external-events
+	https://github.com/redux-saga/redux-saga/issues/940#issuecomment-298170212
 */
 const showMessage = (message: Message, type: UserMessageType) => {
 	if (message.label) {

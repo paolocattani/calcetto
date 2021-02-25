@@ -37,15 +37,26 @@ import {
 	OmitGeneric,
 	OmitHistory,
 	UnsubscribeResponse,
+	CSRFResponse,
 } from '../../../src/@common/models';
 import { HTTPStatusCode } from '../../../src/@common/models/HttpStatusCode';
 import { setSession, removeSession } from './cookies.utils';
 import { comparePasswords } from './auth.utils';
 import { unsubscribe } from '../../events/events';
+import chalk from 'chalk';
 
 const AUTH_WELCOME = 'auth:welcome';
 const GENERIC_ERROR = 'auth:error.generic';
 const router = Router();
+
+// FIXME:
+router.get('/csrf', (req: Request, res: Response, next: NextFunction) => {
+	const token = req.csrfToken();
+	req.session.csrfSecret = token;
+	res.set('xsrf-token', token);
+	logger.info(`New csrf token ( ${token} for ${chalk.redBright(req.ip)}) !`);
+	return success<CSRFResponse>(res, { label: '' }, { token });
+});
 
 const registrationController = asyncMiddleware(async (req: Request, res: Response) => {
 	logger.info('/register start ');
@@ -92,6 +103,9 @@ router.get(
 	withAuth,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		const additional: OmitGeneric<AuthenticationResponse> = { user: req.user };
+		if (!req.session.csrfSecret) {
+			req.session.csrfSecret = req.csrfToken();
+		}
 		return success(
 			res,
 			{

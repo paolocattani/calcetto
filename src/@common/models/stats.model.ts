@@ -1,4 +1,4 @@
-import { GenericReponse } from '.';
+import { GenericResponse } from '.';
 import { StatsPairDTO } from '../dto/stats/stats.pairs.dto';
 import { StatsPlayerDTO } from '../dto/stats/stats.players.dto';
 
@@ -37,7 +37,7 @@ export interface StatsPairFromPlayerRequest {
 }
 
 // Response
-export interface StatsSummaryResponse extends GenericReponse {
+export interface StatsSummaryResponse extends GenericResponse {
 	pairs: {
 		ever: Array<StatsPairDTO>;
 		month: Array<StatsPairDTO>;
@@ -49,21 +49,21 @@ export interface StatsSummaryResponse extends GenericReponse {
 		week: Array<StatsPlayerDTO>;
 	};
 }
-export interface StatsBestPlayersResponse extends GenericReponse {
+export interface StatsBestPlayersResponse extends GenericResponse {
 	stats: Array<StatsPlayerDTO>;
 }
-export interface StatsBestPairsResponse extends GenericReponse {
+export interface StatsBestPairsResponse extends GenericResponse {
 	stats: Array<StatsPairDTO>;
 }
-export interface StatsPlayerResponse extends GenericReponse {
+export interface StatsPlayerResponse extends GenericResponse {
 	stats: StatsPlayerMap;
 }
-export interface StatsPairResponse extends GenericReponse {
+export interface StatsPairResponse extends GenericResponse {
 	stats: StatsPairMap;
 }
-export interface StatsPairFromPlayerResponse extends GenericReponse {
+export interface StatsPairFromPlayerResponse extends GenericResponse {
 	stats: StatsPairDTO;
 }
 
 // Error
-export interface StatsError extends GenericReponse {}
+export interface StatsError extends GenericResponse {}

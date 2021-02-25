@@ -11,7 +11,7 @@ import morgan from 'morgan';
 import compression from 'compression';
 import { json, urlencoded } from 'body-parser';
 import cookieParser from 'cookie-parser';
-import express, { Request, Application as ExpressApplication } from 'express';
+import express, { Response, Request, Application as ExpressApplication, NextFunction } from 'express';
 import session from 'express-session';
 import csrf from 'csurf';
 const RedisStore = require('connect-redis')(session);
@@ -29,22 +29,18 @@ import { routeLogger, clientInfo, auditControl, cacheControl } from '../middlewa
 export interface IServer {
 	serverName: string;
 	serverPort: number;
-	maxCPUs?: number;
 }
 
-/* Class */
-// TODO: http://expressjs.com/en/advanced/best-practice-security.html
+// http://expressjs.com/en/advanced/best-practice-security.html
 export abstract class AbstractServer implements IServer {
 	serverName: string;
 	serverPort: number;
-	maxCPUs?: number;
 	application: ExpressApplication;
 	corsOptions: cors.CorsOptions;
 
-	constructor(name: string, port: number, maxCPUs?: number, corsOptions?: cors.CorsOptions) {
+	constructor(name: string, port: number, corsOptions?: cors.CorsOptions) {
 		this.serverName = name;
 		this.serverPort = port;
-		this.maxCPUs = maxCPUs ? maxCPUs : Number.parseInt('1');
 		this.application = express();
 		this.corsOptions = corsOptions ? corsOptions : {};
 	}
@@ -99,13 +95,29 @@ export abstract class AbstractServer implements IServer {
 				session({
 					store: new RedisStore({ client: redisClient }),
 					secret: process.env.SERVER_SECRET || 'Apf342x$/)wpk,',
-					resave: false,
+					resave: true,
 					saveUninitialized: true,
 					cookie: cookiesOption,
 				})
 			)
+			// https://levelup.gitconnected.com/how-to-implement-csrf-tokens-in-express-f867c9e95af0
 			// https://medium.com/dataseries/prevent-cross-site-request-forgery-in-express-apps-with-csurf-16025a980457
-			//.use(csrf({ cookie: false }))
+			.use((req: Request, res: Response, next: NextFunction) => {
+				logger.info('SESSION : ', req.session);
+				next();
+			})
+			/* FIXME: https://github.com/expressjs/csurf/issues/204
+			.use(
+				csrf({
+					cookie: false,
+					sessionKey: 'session',
+					value: (req) => {
+						logger.info('csrf value : ', req.session, req.session.csrfSecret);
+						return req.session.csrfSecret || '';
+					},
+				})
+			)
+			*/
 			// custom mw
 			.all('*', clientInfo, auditControl, cacheControl, routeLogger)
 			.disable('x-powered-by');
@@ -182,5 +194,3 @@ export abstract class AbstractServer implements IServer {
 
 process.on('uncaughtException', (err) => logger.fatal(err));
 process.on('unhandledRejection', (err) => logger.fatal(err));
-
-// Restart workers :  https://www.sitepoint.com/how-to-create-a-node-js-cluster-for-speeding-up-your-apps/

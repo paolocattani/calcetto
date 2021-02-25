@@ -1,5 +1,5 @@
 import * as H from 'history';
-import { GenericReponse } from './common.models';
+import { GenericResponse } from './common.models';
 import { TournamentDTO } from '../dto';
 
 //## STATE
@@ -40,22 +40,22 @@ export interface DeleteTournamentRequest {
 }
 
 // Responses
-export interface FetchTournamentsResponse extends GenericReponse {
+export interface FetchTournamentsResponse extends GenericResponse {
 	tournamentsList?: Array<TournamentDTO>;
 }
-export interface SaveTournamentResponse extends GenericReponse {
+export interface SaveTournamentResponse extends GenericResponse {
 	tournament: TournamentDTO | null;
 }
-export interface ReloadTournamentResponse extends GenericReponse {
+export interface ReloadTournamentResponse extends GenericResponse {
 	tournament: TournamentDTO;
 }
-export interface UpdateTournamentResponse extends GenericReponse {
+export interface UpdateTournamentResponse extends GenericResponse {
 	tournament: TournamentDTO;
 }
-export interface DeleteTournamentResponse extends GenericReponse {
+export interface DeleteTournamentResponse extends GenericResponse {
 	tournament: TournamentDTO;
 }
 
 //
 // Error
-export interface TournamentError extends GenericReponse {}
+export interface TournamentError extends GenericResponse {}

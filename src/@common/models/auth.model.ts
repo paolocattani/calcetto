@@ -1,5 +1,5 @@
 import * as H from 'history';
-import { GenericReponse, I18nLabel } from './common.models';
+import { GenericResponse, I18nLabel } from './common.models';
 import { PlayerRole, UserDTO } from '../dto';
 
 //## STATE
@@ -15,7 +15,6 @@ export type PlayerRoleType = {
 	value: PlayerRole;
 	label: PlayerRole;
 };
-
 
 //## REQUEST - RESPONSE - ERROR
 // Request
@@ -52,16 +51,19 @@ export interface RegistrationRequest extends AuthenticationRequest {
 }
 
 // Response
-export interface AuthenticationResponse extends GenericReponse {
+export interface CSRFResponse extends GenericResponse {
+	token: string;
+}
+export interface AuthenticationResponse extends GenericResponse {
 	user?: UserDTO;
 }
 
-export interface RegistrationResponse extends GenericReponse {
+export interface RegistrationResponse extends GenericResponse {
 	errors?: Array<I18nLabel>;
 	user?: UserDTO;
 }
-export interface DeleteUserResponse extends GenericReponse {}
-export interface UnsubscribeResponse extends GenericReponse {}
+export interface DeleteUserResponse extends GenericResponse {}
+export interface UnsubscribeResponse extends GenericResponse {}
 
 // Error
-export interface AuthenticationError extends GenericReponse {}
+export interface AuthenticationError extends GenericResponse {}
