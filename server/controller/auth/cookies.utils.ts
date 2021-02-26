@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import { AppRequest } from '../index';
 import 'express-session';
 import { CookieOptions, Response, Request } from 'express';
-import { isProductionMode } from '../../core/debug';
+import { isProductionMode } from '../../../src/@common/utils/env.utils';
 import { TOKEN_SECRET } from './auth.utils';
 import { logger } from '../../core/logger';
 

@@ -39,10 +39,11 @@ import {
 import Toolsbar from './toolsbar.component';
 import expandManager from './expand.manager';
 import { StatsPairMap } from '../../@common/models/stats.model';
+import logger from '../../@common/utils/logger.utils';
 
 const hideAskUser = {
 	message: '',
-	onClick: () => console.log(''),
+	onClick: () => logger.info(''),
 	show: false,
 	title: '',
 };
@@ -389,7 +390,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 
 	const deleteDisabled = selectedRows.length <= 0 || tournament.progress > TournamentProgress.PairsSelection;
 
-	//console.log('render table : ', players, pairs);
+	//logger.info('render table : ', players, pairs);
 
 	const labels = {
 		player1: t('pair:field.player1'),

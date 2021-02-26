@@ -1,9 +1,7 @@
 /* eslint-disable quotes */
-
 // Core
-import '../core/env';
 import { logger } from '../core/logger';
-import { isProductionMode } from '../core/debug';
+import { isProductionMode } from '../../src/@common/utils/env.utils';
 import * as http from 'http';
 // Express
 import helmet from 'helmet';

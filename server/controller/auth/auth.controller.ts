@@ -1,14 +1,6 @@
 // Core
-import '../../core/env';
 import { logger } from '../../core/logger';
-import {
-	withAuth,
-	asyncMiddleware,
-	controllerLogger,
-	withTestAuth,
-	limitRequest,
-	consumeRequest,
-} from '../../middleware';
+import { withAuth, asyncMiddleware, withTestAuth, limitRequest, consumeRequest } from '../../middleware';
 // Types
 import { AppRequest } from '../index';
 import { Request, Response, NextFunction, Router } from 'express';

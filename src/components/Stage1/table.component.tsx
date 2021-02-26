@@ -17,6 +17,7 @@ import { SuccessCodes } from '../../@common/models/HttpStatusCode';
 import { FetchStage1Response, UpdatePlacementRequest } from '../../@common/models';
 import { comparator } from './helper';
 import { cellEditProps } from './editor';
+import logger from '../../@common/utils/logger.utils';
 
 interface Stage1TableProps {
 	pairsList: Array<PairDTO>;
@@ -80,7 +81,7 @@ const Stage1Table: React.FC<Stage1TableProps> = ({ pairsList, autoOrder, stageNa
 			return true;
 		},
 		onSelectAll: (isSelected, s1Rows) => {
-			// console.log( 'handleOnSelectAll : ', isSelected, s1Rows );
+			// logger.info( 'handleOnSelectAll : ', isSelected, s1Rows );
 			dispatch(
 				Stage1Action.updateSelectedPairs.request({
 					stage1Name: stageName,
@@ -93,7 +94,7 @@ const Stage1Table: React.FC<Stage1TableProps> = ({ pairsList, autoOrder, stageNa
 		hideSelectColumn: !isAdmin || tournament.progress >= TournamentProgress.Stage2,
 	};
 
-	console.log('Refreshing : ', toogleRefresh);
+	logger.info('Refreshing : ', toogleRefresh);
 	return isLoading ? (
 		<h3>
 			Caricamento girone <b>{stageName}</b> in corso....

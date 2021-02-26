@@ -147,7 +147,7 @@ export const generateStage1Rows = async (
 							 *
 							 */
 							// logger.info('model1 : ', model);
-							// console.log(`     ( p1,p2,score ) = ( ${p1},${p2}, ${score} )`);
+							// logger.info(`     ( p1,p2,score ) = ( ${p1},${p2}, ${score} )`);
 							const model = { name: stageName, tournamentId, pair1Id: pair1.id, pair2Id: pair2.id };
 							// Salvo solo uno scontro e l'altro lo calcolo.
 							const isEditable = isAdmin(user);

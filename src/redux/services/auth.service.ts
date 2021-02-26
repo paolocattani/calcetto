@@ -14,6 +14,7 @@ import {
 import { OmitHistory } from '../../@common/models/common.models';
 import { putWrapper, deleteWrapper, postWrapper, getWrapper } from '../../@common/utils';
 import { buffers, END, eventChannel } from 'redux-saga';
+import logger from '../../@common/utils/logger.utils';
 
 const authAPI = '/api/v2/auth';
 // Update
@@ -39,7 +40,7 @@ export const setCSRFToken = () => getWrapper<CSRFResponse>(`${authAPI}/csrf`);
 export const createSessionChannel = (channel: EventSource) =>
 	eventChannel<Message>((emitter) => {
 		// Listen for open channel
-		const openListener = (event: Event) => console.log('Connected...');
+		const openListener = (event: Event) => logger.info('Connected...');
 		// Listen for new message
 		const messageListener = (messageEvent: MessageEvent) => {
 			if (messageEvent) {
