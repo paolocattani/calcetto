@@ -14,7 +14,7 @@ import cookieParser from 'cookie-parser';
 import express, { Response, Request, Application as ExpressApplication, NextFunction } from 'express';
 import session from 'express-session';
 import csrf from 'csurf';
-const RedisStore = require('connect-redis')(session);
+import connectRedis from 'connect-redis';
 
 // Auth
 import cors from 'cors';
@@ -56,6 +56,7 @@ export abstract class AbstractServer implements IServer {
 			'https://calcetto2020production.herokuapp.com',
 		];
 
+		const redisStore = connectRedis(session);
 		// https://blog.risingstack.com/node-js-security-checklist/
 		this.application
 			.use(cors<Request>(this.corsOptions))
@@ -93,7 +94,7 @@ export abstract class AbstractServer implements IServer {
 			// https://www.appliz.fr/blog/express-typescript
 			.use(
 				session({
-					store: new RedisStore({ client: redisClient }),
+					store: new redisStore({ client: redisClient }),
 					secret: process.env.SERVER_SECRET || 'Apf342x$/)wpk,',
 					resave: true,
 					saveUninitialized: true,
@@ -102,11 +103,11 @@ export abstract class AbstractServer implements IServer {
 			)
 			// https://levelup.gitconnected.com/how-to-implement-csrf-tokens-in-express-f867c9e95af0
 			// https://medium.com/dataseries/prevent-cross-site-request-forgery-in-express-apps-with-csurf-16025a980457
+			/* FIXME: https://github.com/expressjs/csurf/issues/204
 			.use((req: Request, res: Response, next: NextFunction) => {
 				logger.info('SESSION : ', req.session);
 				next();
 			})
-			/* FIXME: https://github.com/expressjs/csurf/issues/204
 			.use(
 				csrf({
 					cookie: false,

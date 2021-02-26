@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Select, { Styles, ValueType, ActionMeta } from 'react-select';
 
 export interface PlayerSelectProps {
-	styles?: Partial<Styles>;
+	styles?: Partial<Styles<PlayerDTO, false>>;
 	options: PlayerDTO[];
 	columnIndex: number;
 	id: number;

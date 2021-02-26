@@ -242,7 +242,9 @@ const PairsTable: React.FC<PairTableProps> = () => {
 						row.alias = result.code === HTTPStatusCode.OK && result.alias ? result.alias : '';
 					}
 					// update Db. Non aspetto la risposta...
-					updatePair({ pair: row });
+					if (row.player1 && row.player2) {
+						updatePair({ pair: row });
+					}
 					return row;
 				} else return rowElement;
 			})
