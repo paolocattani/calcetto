@@ -34,6 +34,7 @@ import i18next from '../../i18n/i18n';
 import { formatDate } from '../../@common/utils/date.utils';
 import { TournamentSelector } from '../selectors';
 import logger from '../../@common/utils/logger.utils';
+import { getCompleteUrl } from 'src/@common/utils';
 
 function* checkAuthenticationSaga({
 	payload: { history },
@@ -77,7 +78,7 @@ function* watchSessionSaga({
 	payload: { history },
 }: ReturnType<typeof AuthAction.sessionControl.request>): Generator<StrictEffect, void, any> {
 	try {
-		const eventChannel = new EventSource('/sse/v1/session');
+		const eventChannel = new EventSource(getCompleteUrl('/sse/v1/session'), { withCredentials: true });
 		const channel = yield call(createSessionChannel, eventChannel);
 		while (true) {
 			const message: Message = yield take(channel);
