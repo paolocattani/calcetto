@@ -74,7 +74,7 @@ const SelectTournament: React.FC<SelectTournamentProps> = () => {
 	);
 };
 
-const customStyles: Partial<Styles> | undefined = {
+const customStyles: Partial<Styles<TournamentDTO, false>> | undefined = {
 	// menuList: (provided, state) => ({ ...provided, border: '1px solid #ffc107' }),
 	option: (provided) => ({
 		...provided,

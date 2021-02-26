@@ -78,7 +78,7 @@ function getTableBodyRows(
 	const index: number[] = getIndexes(rowNumber);
 
 	const renderCustomComponent = (rowIndex: number, colIndex: number, isLast: boolean, pair?: PairDTO) => {
-		const styles: Partial<Styles> = {
+		const styles: Partial<Styles<PairDTO, false>> = {
 			container: (provided) => ({
 				...provided,
 				flex: '1 1 auto',
