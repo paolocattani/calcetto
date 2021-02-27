@@ -22,14 +22,14 @@ export interface SequelizeConfiguration extends SequelizeOptions {
 // Sequelize configuration
 const config: SequelizeEnvList = {
 	development: {
-		useEnvVar: 'DEV_URL',
+		useEnvVar: 'DATABASE_URL',
 		dialect: 'postgres',
 		minifyAliases: true,
 		logging: false, //(sqlString: string) => logger.warn(sqlString),
 		pool: { max: 5, min: 0, acquire: 30000, idle: 10000 },
 	},
 	test: {
-		useEnvVar: 'TEST_URL',
+		useEnvVar: 'DATABASE_URL',
 		dialect: 'postgres',
 		minifyAliases: true,
 		logging: (sqlString: string) => logger.warn(sqlString),

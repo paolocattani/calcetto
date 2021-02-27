@@ -2,6 +2,7 @@
     "$schema": "https://json.schemastore.org/tsconfig",
     "compileOnSave": true,
     "compilerOptions": {
+        "types": ["src/@common/typings/*.d.ts"],
         "target": "es5",
         "module": "esnext",
         "lib": ["dom","dom.iterable","esnext"],

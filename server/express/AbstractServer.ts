@@ -11,9 +11,8 @@ import morgan from 'morgan';
 import compression from 'compression';
 import { json, urlencoded } from 'body-parser';
 import cookieParser from 'cookie-parser';
-import express, { Response, Request, Application as ExpressApplication, NextFunction } from 'express';
+import express, { Request, Application as ExpressApplication } from 'express';
 import session from 'express-session';
-import csrf from 'csurf';
 import connectRedis from 'connect-redis';
 
 // Auth
@@ -25,23 +24,19 @@ import { cookiesOption } from '../controller/auth/cookies.utils';
 import { getRedisClient } from '../database/config/redis/connection';
 import { routeLogger, clientInfo, auditControl, cacheControl } from '../middleware';
 
-/* Interface */
-export interface IServer {
-	serverName: string;
-	serverPort: number;
-}
-
 // http://expressjs.com/en/advanced/best-practice-security.html
-export abstract class AbstractServer implements IServer {
+export abstract class AbstractServer {
 	serverName: string;
 	serverPort: number;
 	application: ExpressApplication;
 	corsOptions: cors.CorsOptions;
+	allowedOrigin: Array<string>;
 
-	constructor(name: string, port: number, corsOptions?: cors.CorsOptions) {
+	constructor(name: string, port: number, allowedOrigin: Array<string>, corsOptions?: cors.CorsOptions) {
 		this.serverName = name;
 		this.serverPort = port;
 		this.application = express();
+		this.allowedOrigin = allowedOrigin;
 		this.corsOptions = corsOptions ? corsOptions : {};
 	}
 
@@ -49,13 +44,7 @@ export abstract class AbstractServer implements IServer {
 		const redisClient = getRedisClient(0);
 		redisClient.on('error', logger.error);
 
-		const CSPCommon = [
-			"'self'",
-			'http://localhost:5001',
-			'https://calcetto2020stage.herokuapp.com',
-			'https://calcetto2020production.herokuapp.com',
-		];
-
+		const CSPCommon = ["'self'", ...this.allowedOrigin];
 		const redisStore = connectRedis(session);
 		// https://blog.risingstack.com/node-js-security-checklist/
 		this.application

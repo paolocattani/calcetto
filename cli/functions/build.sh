@@ -98,7 +98,7 @@ function build {
         # Backend build
         cp -r server/build_server/* ./production_build
         # Config files
-        cp .env ./production_build
+        cp .env* ./production_build
         cp server/ecosystem.config.prod.js ./production_build/ecosystem.config.js
         cp server/package*.json ./production_build/server
         echo "[ All ] Install production dependecies..."

@@ -23,7 +23,6 @@ import {
 	deleteUser,
 	logout,
 	unsubscribe,
-	setCSRFToken,
 } from '../services/auth.service';
 import { toast } from 'react-toastify';
 import { Action } from 'typesafe-actions';

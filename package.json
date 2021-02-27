@@ -86,7 +86,7 @@
     "start": "cd server && npm run prod:heroku:server",
     "-----CRA----": "---------------------------",
     "CRA:start": "react-scripts start",
-    "CRA:build": "react-scripts build ",
+    "CRA:build": "NODE_ENV=production react-scripts build ",
     "CRA:eject": "react-scripts eject",
     "CRA:test": "react-scripts test",
     "-----TEST----": "---------------------------",

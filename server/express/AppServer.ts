@@ -16,7 +16,15 @@ import { isDevMode, isProductionMode, isTestMode } from '../core/debug';
 import { migrationUp } from '../database/migrations';
 
 const defaultName: string = 'ApplicationServer Calcetto';
-const defaultPort: number = isProductionMode() ? Number(process.env.PORT) : Number(process.env.SERVER_PORT);
+const defaultPort: number = Number(process.env.PORT);
+const allowedOrigin = process.env.ORIGIN_WHITE_LIST
+	? process.env.ORIGIN_WHITE_LIST.split(';')
+	: [
+			'http://localhost:5000',
+			'http://localhost:5001',
+			'https://calcetto2020stage.herokuapp.com',
+			'https://calcetto2020production.herokuapp.com',
+	  ];
 
 // https://expressjs.com/en/resources/middleware/cors.html
 const applicationCorsOption: CorsOptions = {
@@ -34,12 +42,7 @@ const applicationCorsOption: CorsOptions = {
 	maxAge: 60,
 	// Access-Control-Allow-Origin
 	origin: (origin, callback) =>
-		[
-			'http://localhost:5000',
-			'http://127.0.0.1:5000',
-			'https://calcetto2020stage.herokuapp.com',
-			'https://calcetto2020production.herokuapp.com',
-		].indexOf(origin!) !== -1 || !origin
+		allowedOrigin.indexOf(origin!) !== -1 || !origin
 			? callback(null, true)
 			: callback(new Error(`Not allowed by CORS : ${origin}`)),
 };
@@ -47,7 +50,7 @@ const applicationCorsOption: CorsOptions = {
 export default class AppServer extends AbstractServer {
 	connection: Sequelize | null;
 	constructor(applicationName = defaultName, applicationPort = defaultPort) {
-		super(applicationName, applicationPort, applicationCorsOption);
+		super(applicationName, applicationPort, allowedOrigin, applicationCorsOption);
 		this.connection = null;
 	}
 
@@ -74,8 +77,8 @@ export default class AppServer extends AbstractServer {
 				In CI multiple jobs runs at the same time so we need to use schemas.
 				( Each job use a differente schema )
 			*/
-			this.connection = process.env.TEST_SCHEMA
-				? await createSchemaAndSync(process.env.TEST_SCHEMA, { force: true, restartIdentity: true })
+			this.connection = process.env.DATABASE_SCHEMA
+				? await createSchemaAndSync(process.env.DATABASE_SCHEMA, { force: true, restartIdentity: true })
 				: await sync({ force: true });
 		} else {
 			this.connection = await authenticate();
