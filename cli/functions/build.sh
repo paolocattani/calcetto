@@ -43,7 +43,7 @@ function build {
     done
 
     # Show help if no option selected
-    if [[ $buildFeOnly -eq 0 ]] && [[ $buildBeOnly -eq 0 ]] && [[ $buildFeOnly -eq 0 ]] ; then
+    if [[ $buildFeOnly -eq 0 ]] && [[ $buildBeOnly -eq 0 ]] && [[ $buildAll -eq 0 ]] ; then
         showHelp_build
         exit 0
     fi
@@ -94,11 +94,12 @@ function build {
         fi
         echo "[ All ] Copy builds and config files..."
         # Frontend build
-        cp build ./production_build
+        cp -r build ./production_build
         # Backend build
-        cp server/build_server ./production_build
+        cp -r server/build_server/* ./production_build
         # Config files
         cp .env ./production_build
+        cp server/ecosystem.config.prod.js ./production_build/ecosystem.config.js
         cp server/package*.json ./production_build/server
         echo "[ All ] Install production dependecies..."
         cd ./production_build/server

@@ -78,6 +78,8 @@
     "prod:server": "cd server && npm run prod:ts",
     "prod:build": "cd server && npm run build",
     "-----HEROKU----": "---------------------------",
+    "heroku:log-stage": "heroku log --app calcetto2020stage",
+    "heroku:log-prod": "heroku log --app calcetto2020prod",
     "heroku-prebuild": "cd server && npm ci && ./node_modules/.bin/pm2 install pm2-intercom",
     "heroku-postbuild": "npm run CRA:build ",
     "heroku-cleanup": "rm -rf node_modules",
