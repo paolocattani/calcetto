@@ -71,8 +71,8 @@
   "scripts": {
     "-----DEVELOPMENT----": "---------------------------",
     "dev": "concurrently -p \"[{name}]\" -n server,client -c \"bgGreen.bold,bgBlue.bold\"  --kill-others-on-fail \"npm run dev:server\" \"npm run dev:client\"",
-    "dev:server": "cd server && npm run dev",
-    "dev:client": "npm run CRA:start",
+    "dev:server": "NODE_ENV=development cd server && npm run dev",
+    "dev:client": "NODE_ENV=development npm run CRA:start",
     "-----PRODUCTION----": "---------------------------",
     "prod:server:js": "cd server && npm run prod",
     "prod:server": "cd server && npm run prod:ts",

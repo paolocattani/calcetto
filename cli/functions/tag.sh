@@ -15,6 +15,9 @@ function tag {
         heroku config:set REACT_APP_CLIENT_COMMIT_HASH=$COMMIT_HASH -a calcetto2020stage
         heroku config:set REACT_APP_CLIENT_VERSION=$NEW_VERSION -a calcetto2020production
         heroku config:set REACT_APP_CLIENT_COMMIT_HASH=$COMMIT_HASH -a calcetto2020production
+
+        # Push to remote calcetto_private
+        git push calcetto_private
     fi
 
     echo "Tag done !.."

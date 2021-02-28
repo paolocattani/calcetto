@@ -7,6 +7,7 @@ cat << EOF
         -a , --all          Build all
         -f , --frontend     Build only frontend
         -b , --backend      Build only backend
+        -e , --env          NODE_ENV, default production
         -h , --help         Show this help
 
 EOF
@@ -17,6 +18,7 @@ function build {
     buildFeOnly=0;
     buildBeOnly=0;
     buildAll=0;
+    env='production'
     while [[ $# -gt 0 ]]
     do
         case "$1" in
@@ -32,6 +34,11 @@ function build {
             buildBeOnly=1
             shift
             ;;
+            -e|--env)
+            shift
+            env=$1
+            shift
+            ;;
             -h|--help)
             showHelp_build
             exit 0
@@ -43,10 +50,17 @@ function build {
     done
 
     # Show help if no option selected
-    if [[ $buildFeOnly -eq 0 ]] && [[ $buildBeOnly -eq 0 ]] && [[ $buildAll -eq 0 ]] ; then
+    if  ([[ $buildFeOnly -eq 0 ]] && [[ $buildBeOnly -eq 0 ]] && [[ $buildAll -eq 0 ]]); then
+        echo "No option selected"
         showHelp_build
         exit 0
     fi
+    if  ([[ $env != 'development' ]] && [[ $env != 'test' ]] && [[ $env != 'production' ]]) ; then
+        echo "Invalid env : $env"
+        showHelp_build
+        exit 0
+    fi
+
     # Only build Frontend
     if [[ $buildFeOnly -eq 1 ]] && [[ $buildBeOnly -eq 0 ]]; then
         echo "Start frontend build..."
@@ -55,7 +69,10 @@ function build {
     if [[ $buildFeOnly -eq 0 ]] && [[ $buildBeOnly -eq 1 ]]; then
         echo "Start backend build..."
     fi
+
     # Build All
+    NODE_ENV=$env
+    echo "Using NODE_ENV $(text_color $NODE_ENV $red)"
     if [[ $buildFeOnly -eq 1 ]] && [[ $buildBeOnly -eq 1 ]]; then
         buildAll=1;
         echo "Start build..."
