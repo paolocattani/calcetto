@@ -17,6 +17,7 @@ function tag {
         heroku config:set REACT_APP_CLIENT_COMMIT_HASH=$COMMIT_HASH -a calcetto2020production
 
         # Push to remote calcetto_private
+        echo "Updating private repo"
         git push calcetto_private
     fi
 

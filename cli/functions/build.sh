@@ -73,7 +73,7 @@ function build {
     # Build All
     NODE_ENV=$env
     echo "Using NODE_ENV $(text_color $NODE_ENV $red)"
-    if [[ $buildFeOnly -eq 1 ]] && [[ $buildBeOnly -eq 1 ]]; then
+    if ([[ $buildFeOnly -eq 1 ]] && [[ $buildBeOnly -eq 1 ]]) || [[ $buildAll -eq 1]] ; then
         buildAll=1;
         echo "Start build..."
         if [ -d "production_build" ]; then
