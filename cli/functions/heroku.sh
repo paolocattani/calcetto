@@ -42,6 +42,10 @@ function heroku_cli {
             prebuild=1;
             shift
             ;;
+            --postbuild)
+            postbuild=1;
+            shift
+            ;;
             -p|--prod)
             destination='heroku-production';
             shift
