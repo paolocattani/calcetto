@@ -11,10 +11,8 @@ function tag {
         echo "Update Heroku env vars"
         HEROKU_API_KEY=$(cat secrets/.heroku)
         COMMIT_HASH=$(git rev-parse --short HEAD);
-        heroku config:set REACT_APP_CLIENT_VERSION=$NEW_VERSION -a calcetto2020stage
-        heroku config:set REACT_APP_CLIENT_COMMIT_HASH=$COMMIT_HASH -a calcetto2020stage
-        heroku config:set REACT_APP_CLIENT_VERSION=$NEW_VERSION -a calcetto2020production
-        heroku config:set REACT_APP_CLIENT_COMMIT_HASH=$COMMIT_HASH -a calcetto2020production
+        heroku config:set REACT_APP_CLIENT_VERSION=$NEW_VERSION REACT_APP_CLIENT_COMMIT_HASH=$COMMIT_HASH -a calcetto2020stage
+        heroku config:set REACT_APP_CLIENT_VERSION=$NEW_VERSION REACT_APP_CLIENT_COMMIT_HASH=$COMMIT_HASH -a calcetto2020production
 
         # Push to remote calcetto_private
         echo "Updating private repo"

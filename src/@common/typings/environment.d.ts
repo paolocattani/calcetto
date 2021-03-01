@@ -15,6 +15,7 @@ declare namespace NodeJS {
 		REACT_APP_CLIENT_COMMIT_HASH: string;
 		// React build options
 		INLINE_RUNTIME_CHUNK: boolean;
+		GENERATE_SOURCEMAP: boolean;
 		// Server
 		// Port
 		PORT: number;
@@ -30,7 +31,9 @@ declare namespace NodeJS {
 		SERVER_HASH: string;
 		// In production env cache static contents for 1000 milliseconds
 		STATIC_CONTENTS_CACHE: number;
-		// Dbs
+		// PM2 keys
+		PM2_PUBLIC_KEY: string;
+		PM2_SECRET_KEY: string;
 		// Sql
 		DATABASE_URL: string;
 		DATABASE_SCHEMA: string;

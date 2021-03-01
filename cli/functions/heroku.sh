@@ -156,7 +156,6 @@ function heroku_cli {
         # remove directories
         rm -rf .github .idea .vscode build cypress docker hooks node_modules public server sql src
         cp -r production_build/* .
-        # cp production_build/.env* .
         rm -rf production_build
         text_color " --------------> Cleanup done" $yellow
     fi
