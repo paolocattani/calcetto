@@ -137,6 +137,20 @@ function heroku_cli {
         npm install --only=prod
         cd ..
 
+        # !!! I want to clean up before heroku caches dependencies
+        text_color " --------------> Cleanup" $yellow
+        # remove all files
+        rm ./*
+        # remove directories
+        rm -rf .github .idea .vscode build cypress docker hooks node_modules public server sql src
+        cp -r production_build/* .
+        rm -rf production_build cli
+        echo " --------------> We are we ?"
+        pwd
+        ls -ls
+        echo " --------------> Ok"
+        text_color " --------------> Cleanup done" $yellow
+
     fi
 
     # "This runs after Heroku prunes and caches dependencies."
