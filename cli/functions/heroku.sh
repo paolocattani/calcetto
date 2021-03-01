@@ -96,6 +96,17 @@ function heroku_cli {
         echo " --------------> Ok"
         cd ./production_build/server
         npm install --only=prod
+        echo " --------------> Remove everything except build folder"
+        rm -vrf !production_build;
+        cp production_build/* .
+        cp production_build/.env* .
+        cp production_build/ecosystem.config.prod.js ./ecosystem.config.js
+        cp production_build/server/package*.json ./server
+        echo " --------------> We are we ?"
+        pwd
+        ls -ls
+        echo " --------------> Ok"
+
     fi
     exit 0
 }
