@@ -100,12 +100,11 @@ function heroku_cli {
     fi
 
     # Heroku postbuild
-    # This option runs after heroku buid to start the application
     # Given that :
     #   default buildpack installs frontend dependencies
     #   heroku-prebuild installs server dependecies and pm2
     #
-    # We just have to :
+    # We have to :
     #   - build frontend
     #   - transpile server
     # "This runs after Heroku installs dependencies, but before Heroku prunes and caches dependencies."
