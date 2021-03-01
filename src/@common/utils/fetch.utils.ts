@@ -32,7 +32,7 @@ export const postWrapper = <B, T extends GenericResponse>(
 	afterResponse?: IFetchCallback<T>
 ) => fetchWrapper<B, T>(url, 'POST', body, afterResponse);
 
-// wrapper
+// FIXME: wrapper
 const rawHost = process.env.REACT_APP_SERVER_HOST ? process.env.REACT_APP_SERVER_HOST : 'http://localhost:5001';
 const host = rawHost.slice(-1) === '/' ? rawHost.substring(0, rawHost.length - 1) : rawHost;
 export const fetchWrapper = async <B, T extends GenericResponse>(
