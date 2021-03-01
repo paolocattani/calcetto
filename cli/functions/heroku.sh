@@ -140,9 +140,9 @@ function heroku_cli {
         rm -rf .github .idea .vscode build cypress docker hooks node_modules public server sql src
         cp -r production_build/* .
         rm -rf production_build
-        text_color " --------------> We are we ?" $red
-        ls -ls
-        text_color " --------------> Fine" $red
+
+        # Add execute permession to cli
+        chmod -R +x cli
         text_color " --------------> Cleanup done" $yellow
 
     fi
