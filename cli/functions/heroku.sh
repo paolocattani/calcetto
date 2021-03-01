@@ -124,7 +124,7 @@ function heroku_cli {
 
         text_color " --------------> Copy files" $yellow
         cp -r build server/build_server/* ./production_build
-        cp .env* ./production_build
+        # cp .env* ./production_build
         cp server/ecosystem.config.prod.js ./production_build/ecosystem.config.js
         cp server/package*.json ./production_build/server
 
@@ -146,8 +146,8 @@ function heroku_cli {
         rm ./*
         # remove directories
         rm -rf .github .idea .vscode build cypress docker hooks node_modules public server sql src
-        cp production_build/* .
-        cp production_build/.env* .
+        cp -r production_build/* .
+        # cp production_build/.env* .
         rm -rf production_build
         echo " --------------> We are we ?"
         pwd
