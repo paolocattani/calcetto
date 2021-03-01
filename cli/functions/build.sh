@@ -55,7 +55,7 @@ function build {
         showHelp_build
         exit 0
     fi
-    if  ([[ $env != 'development' ]] && [[ $env != 'test' ]] && [[ $env != 'production' ]]) ; then
+    if  ([[ $env != 'development' ]] && [[ $env != 'test' ]] && [[ $env != 'production' ]]); then
         echo "Invalid env : $env"
         showHelp_build
         exit 0
@@ -73,7 +73,7 @@ function build {
     # Build All
     NODE_ENV=$env
     echo "Using NODE_ENV $(text_color $NODE_ENV $red)"
-    if ([[ $buildFeOnly -eq 1 ]] && [[ $buildBeOnly -eq 1 ]]) || [[ $buildAll -eq 1]] ; then
+    if ([[ $buildFeOnly -eq 1 ]] && [[ $buildBeOnly -eq 1 ]]) || [[ $buildAll -eq 1 ]]; then
         buildAll=1;
         echo "Start build..."
         if [ -d "production_build" ]; then
