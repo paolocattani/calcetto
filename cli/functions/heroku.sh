@@ -106,6 +106,7 @@ function heroku_cli {
     #   - build frontend
     #   - transpile server
     # "This runs after Heroku installs dependencies, but before Heroku prunes and caches dependencies."
+    # "If the package.json has a build script that needs to be customized for Heroku, define a heroku-postbuild script, which will run instead of the build script."
     if [[ $postbuild -eq 1 ]]; then
         echo " --------------> Build frontend"
         npm run CRA:build
