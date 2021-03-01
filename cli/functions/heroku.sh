@@ -137,8 +137,9 @@ function heroku_cli {
         cp -r production_build/* .
         rm -rf production_build
 
+        cd server
         npm install --only=prod
-        cp ./server/ecosystem.config.js .
+        cd ..
 
         # Add execute permession to cli
         chmod -R +x cli
@@ -166,7 +167,8 @@ function heroku_cli {
     #
     if [[ $start -eq 1 ]]; then
         text_color " --------------> Bootstrap application using pm2-runtime" $yellow
-        pm2-runtime start ecosystem.config.js
+        cd server
+        ./node_modules/.bin/pm2-runtime start ecosystem.config.js
     fi
     exit 0
 }
