@@ -124,13 +124,9 @@ function heroku_cli {
 
         text_color " --------------> Copy files" $yellow
         cp -r build server/build_server/* ./production_build
-        cp server/ecosystem.config.prod.js ./production_build/ecosystem.config.js
+        cp server/ecosystem.config.prod.js ./production_build/server/ecosystem.config.js
         cp server/package*.json ./production_build/server
         cp Procfile ./production_build
-
-        cd ./production_build/server
-        npm install --only=prod
-        cd ../..
 
         # !!! I want to clean up before heroku caches dependencies
         text_color " --------------> Cleanup" $yellow
@@ -140,6 +136,9 @@ function heroku_cli {
         rm -rf .github .idea .vscode build cypress docker hooks node_modules public server sql src
         cp -r production_build/* .
         rm -rf production_build
+
+        npm install --only=prod
+        cp ./server/ecosystem.config.js .
 
         # Add execute permession to cli
         chmod -R +x cli
