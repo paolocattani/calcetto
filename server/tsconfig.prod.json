@@ -2,22 +2,29 @@
 	"$schema": "https://json.schemastore.org/tsconfig",
 	"compilerOptions": {
 		"pretty": true,
+		"target":"ES6",
+		"module": "commonjs", //*
+		"lib": [ "esnext" ], //*
+		"allowJs": true, //*
+		"checkJs": true, //*
 		"emitDecoratorMetadata": true,
 		"esModuleInterop": true,
 		"experimentalDecorators": true,
 		"forceConsistentCasingInFileNames": true,
 		"isolatedModules": true,
-		//"listFiles": true,
-		//"listEmittedFiles": true,
+		"listFiles": true,
+		"listEmittedFiles": true,
 		"noErrorTruncation": true,
-		"outDir": "../production_build",
+		"outDir": "./build_server",
 		"removeComments": true,
 		"skipLibCheck": true,
 		"downlevelIteration": true,
-		"target":"ES6",
-		"moduleResolution": "node",
-		"lib": [ "esnext" ],
-		"module": "commonjs"
+		"moduleResolution": "node", //*
+		"allowSyntheticDefaultImports": true //*
 	},
-	"exclude": ["./test","**/*.test.ts"]
+	"include": [
+		".",
+		"src/@common"
+	],
+	"exclude": ["./src/*","./test","**/*.test.ts","node_modules","build_server"]
 }

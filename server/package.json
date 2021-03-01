@@ -23,8 +23,7 @@
     "test:unit:coverage": "cross-env NODE_ENV=test --coverage --detectOpenHandles",
     "test:e2e": "cross-env NODE_ENV=test start-server-and-test prod 5001 test:coverage",
     "prod": "node build_server/server/server.js",
-    "build_tsconfig": "./node_modules/.bin/tsc --project tsconfig.prod.json ",
-    "build": "./node_modules/.bin/tsc --pretty --emitDecoratorMetadata --esModuleInterop --experimentalDecorators  --forceConsistentCasingInFileNames --isolatedModules --listFiles --listEmittedFiles --noErrorTruncation --outDir ./build_server --removeComments --skipLibCheck --downlevelIteration server.ts",
+    "build": "./node_modules/.bin/tsc --project tsconfig.prod.json",
     "test": "snyk test"
   },
   "jest": {
@@ -87,6 +86,7 @@
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "csurf": "^1.11.0",
+    "dotenv": "^8.2.0",
     "express-session": "^1.17.1",
     "helmet": "^4.4.1",
     "jsonwebtoken": "^8.5.1",

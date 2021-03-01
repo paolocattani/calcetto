@@ -1,6 +1,6 @@
-import { viewUp, viewDown } from './utils';
-import { logMigrationStart, logMigrationEnd } from '../../core/logger';
-import { Migration, UmzugContext } from '.';
+import { viewUp, viewDown } from '../utils';
+import { logMigrationStart, logMigrationEnd } from '../../../core/logger';
+import { Migration, UmzugContext } from '..';
 
 const viewName = 'stats_players';
 const migrationName = '00_stats_players';

@@ -109,23 +109,20 @@ export const limitRequest = async (req: AppRequest, res: Response, next: NextFun
 			}
 			if (retrySecs > 0) {
 				res.set('Retry-After', String(retrySecs));
-				logger.info(chalk.redBright('mw 401 : '), retrySecs);
 				return unauthorized(res, { label: TOO_MANY_REQUEST, options: { interval: String(retrySecs) } });
 			}
 
 			if (resSlowByIP) {
-				logger.info(chalk.redBright('mw set header '));
 				req.api = resSlowByIP;
 				res.set('Retry-After', (Math.round(resSlowByIP.msBeforeNext / 1000) || 1).toString());
 				res.set('X-RateLimit-Limit', maxPerMinute.toString());
 				res.set('X-RateLimit-Remaining', resSlowByIP.remainingPoints.toString());
 				// res.set('X-RateLimit-Reset', new Date(Date.now() + resSlowByIP.msBeforeNext).toString());
 			}
-			logger.info(chalk.redBright('mw next 1'));
 			next();
 		}
 	} catch (error) {
-		logger.error(chalk.redBright('mw errror'), error);
+		logger.error(chalk.redBright('security middleware error'), error);
 		return unauthorized(res, { label: TOO_MANY_REQUEST });
 	}
 };

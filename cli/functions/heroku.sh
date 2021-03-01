@@ -138,7 +138,7 @@ function heroku_cli {
         rm -rf production_build
 
         cd server
-        npm install --only=prod
+        npm ci --only=prod
         cd ..
 
         # Add execute permession to cli
