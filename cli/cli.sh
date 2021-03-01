@@ -99,8 +99,11 @@ fi
 valid_commands=("release" "tag" "hooks" "add_to_commit" "build" "update" "heroku")
 # Test if the first param is a valid command, else show help
 if [[ " ${valid_commands[@]} " =~ " ${command} " ]]; then
-    # Move to root
-    cd $ROOT_DIR
+
+    # if is not on heroku move to root
+    if [[ ! -z $IS_HEROKU ]]; then
+        cd $ROOT_DIR
+    fi
 
     # general options
     noredirect=0
