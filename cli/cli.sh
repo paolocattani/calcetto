@@ -101,7 +101,7 @@ valid_commands=("release" "tag" "hooks" "add_to_commit" "build" "update" "heroku
 if [[ " ${valid_commands[@]} " =~ " ${command} " ]]; then
 
     # if is not on heroku move to root
-    if [[ ! -z $IS_HEROKU ]]; then
+    if [[ -z $IS_HEROKU ]]; then
         cd $ROOT_DIR
     fi
 
