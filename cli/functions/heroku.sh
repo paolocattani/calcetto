@@ -143,11 +143,10 @@ function heroku_cli {
     # "This runs after Heroku prunes and caches dependencies."
     if [[ $cleanup -eq 1 ]]; then
         text_color " --------------> Cleanup" $yellow
-        rm -vrf !(production_build)
+        rm -rfv !(production_build)
         cp production_build/* .
         cp production_build/.env* .
-        cp production_build/ecosystem.config.prod.js ./ecosystem.config.js
-        cp production_build/server/package*.json ./server
+        shopt -s extglob
         rm -rf production_build
         echo " --------------> We are we ?"
         pwd
