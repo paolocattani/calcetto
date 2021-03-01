@@ -1,5 +1,5 @@
 ## Show Help
-showHelp_heroku() {
+function showHelp_heroku() {
 cat << EOF
     Usage: cli.sh build [option]
 
@@ -71,7 +71,6 @@ function heroku_cli {
         echo "Start deploy on Heroku"
         # Get current branch name
         branchName=$(git rev-parse --abbrev-ref HEAD)
-
         # https://stackoverflow.com/questions/1885525/how-do-i-prompt-a-user-for-confirmation-in-bash-script
         echo "You're going to push branch $(text_color $branchName $blue) to $(text_color $destination $red)"
         read -p "Continue ? ( y/n ) : " -n 1 -r
@@ -143,10 +142,12 @@ function heroku_cli {
     # "This runs after Heroku prunes and caches dependencies."
     if [[ $cleanup -eq 1 ]]; then
         text_color " --------------> Cleanup" $yellow
-        rm -rfv !(production_build)
+        # remove all files
+        rm ./*
+        # remove directories
+        rm -rf .github .idea .vscode build cypress docker hooks node_modules public server sql src
         cp production_build/* .
         cp production_build/.env* .
-        shopt -s extglob
         rm -rf production_build
         echo " --------------> We are we ?"
         pwd
