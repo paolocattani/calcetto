@@ -158,10 +158,6 @@ function heroku_cli {
         cp -r production_build/* .
         # cp production_build/.env* .
         rm -rf production_build
-        echo " --------------> We are we ?"
-        pwd
-        ls -ls
-        echo " --------------> Ok"
         text_color " --------------> Cleanup done" $yellow
     fi
 
