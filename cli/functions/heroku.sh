@@ -135,7 +135,7 @@ function heroku_cli {
 
         cd ./production_build/server
         npm install --only=prod
-        cd ..
+        cd ../..
 
         # !!! I want to clean up before heroku caches dependencies
         text_color " --------------> Cleanup" $yellow
