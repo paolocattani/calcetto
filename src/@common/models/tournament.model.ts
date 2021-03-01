@@ -10,7 +10,7 @@ export interface TournamentState {
 }
 
 export interface Redirect {
-	history: H.History<unknown>;
+	history: H.History;
 	path: string;
 }
 //## REQUEST - RESPONSE - ERROR
@@ -21,14 +21,14 @@ export interface ReloadTournamentRequest {
 }
 export interface FetchTournamentsRequest {
 	redirect?: {
-		history: H.History<unknown>;
+		history: H.History;
 		path: string;
 	};
 }
 
 export interface SaveTournamentRequest {
 	tournament: TournamentDTO;
-	history: H.History<unknown>;
+	history: H.History;
 }
 
 export interface UpdateTournamentRequest {

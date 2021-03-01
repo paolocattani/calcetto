@@ -19,7 +19,7 @@ export type PlayerRoleType = {
 //## REQUEST - RESPONSE - ERROR
 // Request
 export interface AuthenticationRequest {
-	history: H.History<unknown>;
+	history: H.History;
 }
 export interface UnsubscribeRequest {}
 export interface CheckAuthenticationRequest extends AuthenticationRequest {}

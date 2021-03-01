@@ -18,7 +18,7 @@ export interface FindAliasRequest {
 }
 export interface FetchPairsRequest {
 	tId: number;
-	history?: H.History<unknown>;
+	history?: H.History;
 }
 export interface DeletePairsRequest {
 	pairsList: Array<PairDTO>;
