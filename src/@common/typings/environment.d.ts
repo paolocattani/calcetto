@@ -34,6 +34,9 @@ declare namespace NodeJS {
 		// PM2 keys
 		PM2_PUBLIC_KEY: string;
 		PM2_SECRET_KEY: string;
+		//
+		IS_DOCKER?: boolean;
+		IS_HEROKU: boolean;
 		// Sql
 		DATABASE_URL: string;
 		DATABASE_SCHEMA: string;

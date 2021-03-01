@@ -12,7 +12,7 @@ import routes from '../controller/index';
 import '../core/env';
 import chalk from 'chalk';
 import { logger } from '../core/logger';
-import { isDevMode, isProductionMode, isTestMode } from '../core/debug';
+import { isDevMode, isTestMode } from '../core/debug';
 import { migrationUp } from '../database/migrations';
 
 const defaultName: string = 'ApplicationServer Calcetto';
