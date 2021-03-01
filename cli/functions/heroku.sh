@@ -89,7 +89,7 @@ function heroku_cli {
     # Heroku prebuild commands
     # "This runs before Heroku installs dependencies"
     if [[ $prebuild -eq 1 ]]; then
-        echo " --------------> Prebuild"
+        text_color " --------------> Prebuild" $yellow
         # Uninstall cypress to speed up build process
         npm uninstall cypress @cypress/code-coverage @cypress/instrument-cra @cypress/webpack-preprocessor \
             cypress-intellij-reporter cypress-plugin-snapshots cypress-skip-and-only-ui cypress-watch-and-reload
@@ -97,7 +97,7 @@ function heroku_cli {
         cd server
         npm ci
         ./node_modules/.bin/pm2 install pm2-intercom
-        echo " --------------> Prebuild Done"
+        text_color " --------------> Prebuild Done!" $yellow
     fi
 
     # Heroku postbuild
@@ -112,17 +112,18 @@ function heroku_cli {
     # "This runs after Heroku installs dependencies, but before Heroku prunes and caches dependencies."
     # "If the package.json has a build script that needs to be customized for Heroku, define a heroku-postbuild script, which will run instead of the build script."
     if [[ $postbuild -eq 1 ]]; then
-        echo " --------------> Build frontend"
+        text_color " --------------> Build frontend" $yellow
         npm run CRA:build
 
-        echo " --------------> Build server"
+        text_color " --------------> Build backend" $yellow
         cd server
         npm run build
+        cd ..
 
-        echo " --------------> Create destination folder"
+        text_color " --------------> Create destination folder" $yellow
         mkdir production_build
 
-        echo " --------------> Copy files"
+        text_color " --------------> Copy files" $yellow
         cp -r build server/build_server/* ./production_build
         cp .env* ./production_build
         cp server/ecosystem.config.prod.js ./production_build/ecosystem.config.js
@@ -141,8 +142,8 @@ function heroku_cli {
 
     # "This runs after Heroku prunes and caches dependencies."
     if [[ $cleanup -eq 1 ]]; then
-        echo " --------------> Remove everything except build folder"
-        rm -vrf !production_build
+        text_color " --------------> Cleanup" $yellow
+        rm -vrf !(production_build)
         cp production_build/* .
         cp production_build/.env* .
         cp production_build/ecosystem.config.prod.js ./ecosystem.config.js
@@ -152,10 +153,12 @@ function heroku_cli {
         pwd
         ls -ls
         echo " --------------> Ok"
+        text_color " --------------> Cleanup done" $yellow
     fi
 
     #
     if [[ $start -eq 1 ]]; then
+        text_color " --------------> Bootstrap application using pm2-runtime" $yellow
         pm2-runtime start ecosystem.config.js
     fi
     exit 0
