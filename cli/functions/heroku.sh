@@ -90,8 +90,8 @@ function heroku_cli {
     if [[ $prebuild -eq 1 ]]; then
         text_color " --------------> Prebuild" $yellow
         # Uninstall cypress to speed up build process
-        # npm uninstall cypress @cypress/code-coverage @cypress/instrument-cra @cypress/webpack-preprocessor \
-        #    cypress-intellij-reporter cypress-plugin-snapshots cypress-skip-and-only-ui cypress-watch-and-reload
+        npm uninstall cypress @cypress/code-coverage @cypress/instrument-cra @cypress/webpack-preprocessor \
+            cypress-intellij-reporter cypress-plugin-snapshots cypress-skip-and-only-ui cypress-watch-and-reload
 
         cd server
         npm ci
@@ -111,21 +111,12 @@ function heroku_cli {
     # "If the package.json has a build script that needs to be customized for Heroku, define a heroku-postbuild script, which will run instead of the build script."
     if [[ $postbuild -eq 1 ]]; then
         text_color " --------------> Build frontend" $yellow
-        text_color "[ ENV vars ]" $red
-        printenv
-        echo "--------------------"
-        node --version
-        npm --version
-        text_color "[ ENV vars end]" $red
-
-        text_color "[ Port ] : $PORT" $yellow
-        REACT_APP_SERVER_PORT=$PORT
-        text_color "[ Port ] : $REACT_APP_SERVER_PORT" $yellow
         # Stop deploy if build breaks
         npm i
         npm run CRA:build || text_color "Frontend build error ! " $red && exit 1
+        text_color " --------------> Frontend build done! " $yellow
 
-        ls -l build
+        ls -l
 
         text_color " --------------> Build backend" $yellow
         cd server
