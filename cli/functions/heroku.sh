@@ -94,7 +94,7 @@ function heroku_cli {
             cypress-intellij-reporter cypress-plugin-snapshots cypress-skip-and-only-ui cypress-watch-and-reload
 
         cd server
-        npm ci
+        npm i
         ./node_modules/.bin/pm2 install pm2-intercom
         text_color " --------------> Prebuild Done!" $yellow
     fi
@@ -113,12 +113,16 @@ function heroku_cli {
         text_color " --------------> Build frontend" $yellow
         text_color "[ ENV vars ]" $red
         printenv
+        echo "--------------------"
+        node --version
+        npm --version
         text_color "[ ENV vars end]" $red
 
         text_color "[ Port ] : $PORT" $yellow
         REACT_APP_SERVER_PORT=$PORT
         text_color "[ Port ] : $REACT_APP_SERVER_PORT" $yellow
         # Stop deploy if build breaks
+        npm i
         npm run CRA:build || text_color "Frontend build error ! " $red && exit 1
 
         ls -l build
@@ -151,7 +155,7 @@ function heroku_cli {
         pwd
         ls -l
         cd server
-        npm ci --only=prod
+        npm i --only=prod
         cd ..
 
         # Add execute permession to cli
