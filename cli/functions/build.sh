@@ -86,16 +86,9 @@ function build {
         text_color "[ FrontEnd ] Run --> npm run build" $yellow
         echo "Install dependecies"
         npm ci
-        text_color "[ ENV vars ]" $red
-        printenv
-        text_color "[ ENV vars end]" $red
+        # run build
+        npm run CRA:build
 
-        text_color "[ Port ] : $PORT" $yellow
-        REACT_APP_SERVER_PORT=$PORT
-        text_color "[ Port ] : $REACT_APP_SERVER_PORT" $yellow
-        # Stop deploy if build breaks
-        npm run CRA:build || exit 1
-        ls -l build
         text_color "[ FrontEnd ] Build Done !" $yellow
     fi
 

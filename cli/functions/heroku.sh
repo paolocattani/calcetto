@@ -111,11 +111,21 @@ function heroku_cli {
     # "If the package.json has a build script that needs to be customized for Heroku, define a heroku-postbuild script, which will run instead of the build script."
     if [[ $postbuild -eq 1 ]]; then
         text_color " --------------> Build frontend" $yellow
-        npm run CRA:build
+        text_color "[ ENV vars ]" $red
+        printenv
+        text_color "[ ENV vars end]" $red
+
+        text_color "[ Port ] : $PORT" $yellow
+        REACT_APP_SERVER_PORT=$PORT
+        text_color "[ Port ] : $REACT_APP_SERVER_PORT" $yellow
+        # Stop deploy if build breaks
+        npm run CRA:build || text_color "Frontend build error ! " $red && exit 1
+
+        ls -l build
 
         text_color " --------------> Build backend" $yellow
         cd server
-        npm run build
+        npm run build || text_color "Backend build error ! " $red && exit 1
         cd ..
 
         text_color " --------------> Create destination folder" $yellow
@@ -138,6 +148,8 @@ function heroku_cli {
         cp -r production_build/* .
         rm -rf production_build
 
+        pwd
+        ls -l
         cd server
         npm ci --only=prod
         cd ..
