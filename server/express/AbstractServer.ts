@@ -11,7 +11,7 @@ import morgan from 'morgan';
 import compression from 'compression';
 import { json, urlencoded } from 'body-parser';
 import cookieParser from 'cookie-parser';
-import express, { Request, Application as ExpressApplication } from 'express';
+import express, { Response, Request, Application as ExpressApplication } from 'express';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 
@@ -113,11 +113,14 @@ export abstract class AbstractServer {
 			.disable('x-powered-by');
 
 		this.routes(this.application);
-
 		/*
 			Statically serve frontend build ( Heroku deploy )
 		*/
 		const buildPath = path.join(__dirname, '..', '..', 'build');
+
+		/* 	TODO: Redirect everything else to index.html
+			this.application.get('/*', (req: Request, res: Response) => res.send(`${buildPath}/index.html`));
+		*/
 		logger.info(`Serving build folder from ${chalk.green(buildPath)}`);
 		this.application.use(
 			express.static(buildPath, {

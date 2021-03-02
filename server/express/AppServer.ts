@@ -12,11 +12,11 @@ import routes from '../controller/index';
 import '../core/env';
 import chalk from 'chalk';
 import { logger } from '../core/logger';
-import { isDevMode, isTestMode } from '../core/debug';
+import { isDevMode, isProductionMode, isTestMode } from '../core/debug';
 import { migrationUp } from '../database/migrations';
 
 const defaultName: string = 'ApplicationServer Calcetto';
-const defaultPort: number = Number(process.env.PORT);
+const defaultPort: number = Number(isProductionMode() ? process.env.PORT : process.env.SERVER_PORT);
 const allowedOrigin = process.env.ORIGIN_WHITE_LIST
 	? process.env.ORIGIN_WHITE_LIST.split(';')
 	: [
