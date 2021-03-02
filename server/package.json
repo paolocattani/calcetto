@@ -5,6 +5,10 @@
   "main": "server.ts",
   "author": "Paolo Cattani",
   "license": "MIT",
+  "engines": {
+    "node": "14.x",
+    "npm": "7.x"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/paolocattani/calcetto"
