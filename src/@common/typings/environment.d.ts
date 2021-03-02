@@ -6,6 +6,9 @@ declare namespace NodeJS {
 	export interface ProcessEnv {
 		// Environment
 		NODE_ENV: Environment;
+		// Cli
+		IS_HEROKU: boolean;
+		IS_DOCKER: boolean;
 		// Client
 		// API server host
 		REACT_APP_SERVER_HOST: string;
@@ -34,9 +37,6 @@ declare namespace NodeJS {
 		// PM2 keys
 		PM2_PUBLIC_KEY: string;
 		PM2_SECRET_KEY: string;
-		//
-		IS_DOCKER?: boolean;
-		IS_HEROKU: boolean;
 		// Sql
 		DATABASE_URL: string;
 		DATABASE_SCHEMA: string;
