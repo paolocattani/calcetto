@@ -90,11 +90,11 @@ function heroku_cli {
     if [[ $prebuild -eq 1 ]]; then
         text_color " --------------> Prebuild" $yellow
         # Uninstall cypress to speed up build process
-        npm uninstall cypress @cypress/code-coverage @cypress/instrument-cra @cypress/webpack-preprocessor \
-            cypress-intellij-reporter cypress-plugin-snapshots cypress-skip-and-only-ui cypress-watch-and-reload
+        # npm uninstall cypress @cypress/code-coverage @cypress/instrument-cra @cypress/webpack-preprocessor \
+        #    cypress-intellij-reporter cypress-plugin-snapshots cypress-skip-and-only-ui cypress-watch-and-reload
 
         cd server
-        npm i
+        npm ci
         ./node_modules/.bin/pm2 install pm2-intercom
         text_color " --------------> Prebuild Done!" $yellow
     fi
