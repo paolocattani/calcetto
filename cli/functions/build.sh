@@ -109,6 +109,9 @@ function build {
         fi
         echo "[ All ] Copy builds and config files..."
         # Frontend build
+        text_color "[ Port ] : $PORT" $yellow
+        REACT_APP_SERVER_PORT=$PORT
+        text_color "[ Port ] : $REACT_APP_SERVER_PORT" $yellow
         ls -l build
         cp -r build ./production_build
         # Backend build

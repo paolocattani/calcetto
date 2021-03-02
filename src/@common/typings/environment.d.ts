@@ -12,6 +12,7 @@ declare namespace NodeJS {
 		// Client
 		// API server host
 		REACT_APP_SERVER_HOST: string;
+		REACT_APP_SERVER_PORT: string;
 		// Current git Tag + Creation date
 		REACT_APP_CLIENT_VERSION: string;
 		// Current Commit Hash
