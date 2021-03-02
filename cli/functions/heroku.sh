@@ -113,14 +113,14 @@ function heroku_cli {
         text_color " --------------> Build frontend" $yellow
         # Stop deploy if build breaks
         npm i
-        npm run CRA:build || text_color "Frontend build error ! " $red && exit 1
+        npm run CRA:build || ( text_color "Frontend build error ! " $red && exit 1 )
         text_color " --------------> Frontend build done! " $yellow
 
         ls -l
 
         text_color " --------------> Build backend" $yellow
         cd server
-        npm run build || text_color "Backend build error ! " $red && exit 1
+        npm run build || ( text_color "Backend build error ! " $red && exit 1 )
         cd ..
 
         text_color " --------------> Create destination folder" $yellow
