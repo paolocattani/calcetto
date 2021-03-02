@@ -86,7 +86,16 @@ function build {
         text_color "[ FrontEnd ] Run --> npm run build" $yellow
         echo "Install dependecies"
         npm ci
-        npm run CRA:build
+        text_color "[ ENV vars ]" $red
+        printenv
+        text_color "[ ENV vars end]" $red
+
+        text_color "[ Port ] : $PORT" $yellow
+        REACT_APP_SERVER_PORT=$PORT
+        text_color "[ Port ] : $REACT_APP_SERVER_PORT" $yellow
+        # Stop deploy if build breaks
+        npm run CRA:build || exit 1
+        ls -l build
         text_color "[ FrontEnd ] Build Done !" $yellow
     fi
 
@@ -109,10 +118,6 @@ function build {
         fi
         echo "[ All ] Copy builds and config files..."
         # Frontend build
-        text_color "[ Port ] : $PORT" $yellow
-        REACT_APP_SERVER_PORT=$PORT
-        text_color "[ Port ] : $REACT_APP_SERVER_PORT" $yellow
-        ls -l build
         cp -r build ./production_build
         # Backend build
         cp -r server/build_server/* ./production_build
