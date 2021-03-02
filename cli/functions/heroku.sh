@@ -116,12 +116,11 @@ function heroku_cli {
         npm run CRA:build || ( text_color "Frontend build error ! " $red && exit 1 )
         text_color " --------------> Frontend build done! " $yellow
 
-        ls -l
-
         text_color " --------------> Build backend" $yellow
         cd server
         npm run build || ( text_color "Backend build error ! " $red && exit 1 )
         cd ..
+        text_color " --------------> Backend build done! " $yellow
 
         text_color " --------------> Create destination folder" $yellow
         mkdir production_build
@@ -142,16 +141,16 @@ function heroku_cli {
         rm -rf .github .idea .vscode build cypress docker hooks node_modules public server sql src
         cp -r production_build/* .
         rm -rf production_build
+        text_color " --------------> Cleanup done" $yellow
 
-        pwd
-        ls -l
+        text_color " --------------> Installing production dependencies" $yellow
         cd server
         npm i --only=prod
         cd ..
+        text_color " --------------> Complete.! " $yellow
 
         # Add execute permession to cli
         chmod -R +x cli
-        text_color " --------------> Cleanup done" $yellow
 
     fi
 
