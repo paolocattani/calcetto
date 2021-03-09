@@ -4,6 +4,10 @@ import {
 	CloseChannelRequest,
 	CloseChannelResponse,
 	EventError,
+	JoinTournamentRequest,
+	JoinTournamentResponse,
+	LeaveTournamentRequest,
+	LeaveTournamentResponse,
 	OpenChannelRequest,
 	OpenChannelResponse,
 } from 'src/@common/models/event.model';
@@ -19,6 +23,16 @@ export const EventAction = {
 	closeChannel: createAsyncAction(...defaultAsyncParams(actionName, 'Close Channel'))<
 		CloseChannelRequest,
 		CloseChannelResponse,
+		EventError
+	>(),
+	joinTournament: createAsyncAction(...defaultAsyncParams(actionName, 'Join Tournament'))<
+		JoinTournamentRequest,
+		JoinTournamentResponse,
+		EventError
+	>(),
+	leaveTournament: createAsyncAction(...defaultAsyncParams(actionName, 'Join Tournament'))<
+		LeaveTournamentRequest,
+		LeaveTournamentResponse,
 		EventError
 	>(),
 };

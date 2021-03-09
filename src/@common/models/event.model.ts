@@ -25,11 +25,20 @@ export interface OpenChannelRequest {
 	history: H.History;
 }
 export interface CloseChannelRequest {}
+export interface JoinTournamentRequest {
+	tournamentId: number;
+}
+export interface LeaveTournamentRequest {
+	tournamentId: number;
+}
+
 // Responses
 export interface OpenChannelResponse {
 	connected: boolean;
 }
 export interface CloseChannelResponse {}
+export interface JoinTournamentResponse {}
+export interface LeaveTournamentResponse {}
 
 // Error
 export interface EventError {}

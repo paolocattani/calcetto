@@ -1,3 +1,4 @@
+import { Events } from '../../../src/@common/models/event.model';
 import { Server as SocketIoServer, Socket } from 'socket.io';
 import { Request } from 'express';
 
@@ -14,9 +15,9 @@ export const tournamentHandler = (io: SocketIoServer, socket: Socket, request: R
 	const broadcastUpdates = (tournamentId: number) => {
 		socket.to(`tournament-${tournamentId}`).emit('new:message');
 	};
-	socket.on(TournamentEvents.JOIN, joinTournament);
-	socket.on(TournamentEvents.LEAVE, leaveTournament);
-	socket.on(TournamentEvents.NEW, broadcastUpdates);
+	socket.on(Events.TOURNAMENT_JOIN, joinTournament);
+	socket.on(Events.TOURNAMENT_LEAVE, leaveTournament);
+	socket.on(Events.TOURNAMENT_NEW, broadcastUpdates);
 };
 
 //

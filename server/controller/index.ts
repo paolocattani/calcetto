@@ -30,7 +30,7 @@ type Controller = {
 	router: Router;
 };
 
-export default (application: ExpressApplication, socket: SocketIoServer): void => {
+export default (application: ExpressApplication): void => {
 	// Endpoints
 	const controller: Array<Controller> = [
 		{ name: 'Pair', api: '/api/v2/Pair', router: pairRouter },

@@ -33,15 +33,14 @@ import { entityLifeCycle, getToast } from './utils';
 import i18next from '../../i18n/i18n';
 import { formatDate } from '../../@common/utils/date.utils';
 import { TournamentSelector } from '../selectors';
-// socket
-import { socketHost } from 'src/@common/utils';
-import io from 'socket.io-client';
+import { EventAction } from '../actions/event.action';
 
 function* checkAuthenticationSaga({
 	payload: { history },
 }: ReturnType<typeof AuthAction.checkAuthentication.request>): Generator<StrictEffect, void, any> {
 	const onSuccess = function* () {
-		yield put(AuthAction.sessionControl.request({ history }));
+		yield put(EventAction.openChannel.request({ history }));
+		//yield put(AuthAction.sessionControl.request({ history }));
 		//yield put(TournamentAction.fetch.request({}));
 	};
 
@@ -79,7 +78,6 @@ function* watchSessionSaga({
 	payload: { history },
 }: ReturnType<typeof AuthAction.sessionControl.request>): Generator<StrictEffect, void, any> {
 	try {
-		const socket = io(socketHost);
 		const eventChannel = new EventSource('/sse/v1/session');
 		const channel = yield call(createSessionChannel, eventChannel);
 		while (true) {
@@ -167,7 +165,8 @@ function* loginSaga({
 	payload: { history, ...loginRequest },
 }: ReturnType<typeof AuthAction.login.request>): Generator<StrictEffect, void, any> {
 	const onSuccess = function* () {
-		yield put(AuthAction.sessionControl.request({ history }));
+		yield put(EventAction.openChannel.request({ history }));
+		// yield put(AuthAction.sessionControl.request({ history }));
 		// yield put(TournamentAction.fetch.request({}));
 	};
 	yield* entityLifeCycle<LoginRequest, AuthenticationResponse, AuthenticationError>(

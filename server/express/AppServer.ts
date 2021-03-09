@@ -89,11 +89,11 @@ export default class AppServer extends AbstractServer {
 		return this.connection;
 	}
 
-	public routes() {
-		routes(super.application, super.socketIO);
+	public routes(application: ExpressApplication) {
+		routes(application);
 	}
 
-	public socket() {
-		handleSocket(super.socketIO);
+	public socket(socketIO: SocketIoServer) {
+		handleSocket(socketIO);
 	}
 }

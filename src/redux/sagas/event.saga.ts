@@ -10,6 +10,8 @@ import i18next from '../../i18n/i18n';
 import { getToast } from './utils';
 import { AuthAction } from '../actions';
 import { persistor } from '../store';
+import { io, Socket } from 'socket.io-client';
+import { tournament } from 'src/test/commons';
 
 const showMessage = (message: Message, type: UserMessageType) => {
 	if (message.label) {
@@ -25,7 +27,25 @@ const showMessage = (message: Message, type: UserMessageType) => {
 };
 
 //-----------------------------------------------
-let socket: SocketIOClient.Socket;
+let socket: Socket;
+// Emit Events.TOURNAMENT_JOIN
+function* joinTournament({ payload: { tournamentId } }: ReturnType<typeof EventAction.joinTournament.request>) {
+	try {
+		socket.emit(Events.TOURNAMENT_JOIN, tournamentId);
+		yield put(EventAction.joinTournament.success({}));
+	} catch (error) {
+		yield put(EventAction.joinTournament.failure({}));
+	}
+}
+// Emit Events.TOURNAMENT_LEAVE
+function* leaveTournament({ payload: { tournamentId } }: ReturnType<typeof EventAction.leaveTournament.request>) {
+	try {
+		socket.emit(Events.TOURNAMENT_LEAVE, tournamentId);
+		yield put(EventAction.leaveTournament.success({}));
+	} catch (error) {
+		yield put(EventAction.leaveTournament.failure({}));
+	}
+}
 
 // Close socket channel
 function* closeChannel({ payload }: ReturnType<typeof EventAction.closeChannel.request>) {
@@ -83,7 +103,7 @@ const reconnect = () => {
 };
 
 // Create comunication channel
-const createSocketChannel = (socket: SocketIOClient.Socket, history: H.History) =>
+const createSocketChannel = (socket: Socket, history: H.History) =>
 	eventChannel<Events>((emitter) => {
 		// Listen for open channel
 		const openListener = (event: Event) => console.log('Connected...');
@@ -94,18 +114,20 @@ const createSocketChannel = (socket: SocketIOClient.Socket, history: H.History) 
 			closeConnection();
 		};
 
-		socket.on(Events.SESSION_EXPIRED, (message: Message) => onSessionExpired(message, history));
+		// Adds a listener that will be fired when any event is emitted
+		socket.prependAny((eventName, ...args) => {
+			console.log('Socket Event! : ', eventName, ...args);
+		});
 		socket.on(Events.SESSION_EXPIRED, (message: Message) => onSessionExpired(message, history));
 
 		// Add listener
-		socket.addEventListener('open', openListener);
-		socket.addEventListener('error', errorListener);
+		socket.on('open', openListener);
+		socket.on('error', errorListener);
 		// Cleanup function
 		const closeConnection = () => {
 			// Remove listener
-			socket.removeEventListener('open', openListener);
-			socket.removeEventListener('message', messageListener);
-			socket.removeEventListener('error', errorListener);
+			socket.off('open', openListener);
+			socket.off('error', errorListener);
 			socket.close();
 		};
 		return closeConnection;
@@ -119,4 +141,8 @@ const onSessionExpired = function* (message: Message, history: H.History) {
 	persistor.purge();
 };
 
-export const EventSagas = [takeEvery(EventAction.openChannel.request, listenEvents)];
+export const EventSagas = [
+	takeEvery(EventAction.openChannel.request, listenEvents),
+	takeEvery(EventAction.joinTournament.request, joinTournament),
+	takeEvery(EventAction.leaveTournament.request, leaveTournament),
+];

@@ -13,6 +13,7 @@ import { tournamentsList } from '../../test/commons';
 import { RightArrowIcon } from '../core/icons';
 import { IndicatorSeparator } from './helper';
 import { useTranslation } from 'react-i18next';
+import { EventAction } from 'src/redux/actions/event.action';
 
 interface SelectTournamentProps {}
 
@@ -27,6 +28,7 @@ const SelectTournament: React.FC<SelectTournamentProps> = () => {
 	const handleSubmit = async (event: React.FormEvent<HTMLElement>): Promise<void> => {
 		event.preventDefault();
 		if (tournament) {
+			dispatch(EventAction.joinTournament.request({ tournamentId: tournament.id }));
 			if (isAdmin) {
 				// Reset all
 				dispatch(PairAction.reset({}));

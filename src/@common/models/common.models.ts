@@ -105,6 +105,9 @@ export const initialState: RootState = {
 		isAdmin: false,
 		isLoading: false,
 	},
+	eventState: {
+		connected: false,
+	},
 	stage1State: {
 		toogleRefresh: false,
 		selectedPairs: [

@@ -41,7 +41,7 @@ export const createSessionChannel = (channel: EventSource) =>
 		// Listen for open channel
 		const openListener = (event: Event) => console.log('Connected...');
 		// Listen for new message
-		const messageListener = (messageEvent: MessageEvent<Message>) => {
+		const messageListener = (messageEvent: MessageEvent) => {
 			if (messageEvent) {
 				const message = JSON.parse(messageEvent.data) as Message;
 				emitter(message);

@@ -8,6 +8,7 @@ import * as http from 'http';
 // Express
 import helmet from 'helmet';
 import morgan from 'morgan';
+import { createServer } from 'http';
 import compression from 'compression';
 import { json, urlencoded } from 'body-parser';
 import cookieParser from 'cookie-parser';
@@ -32,9 +33,10 @@ export abstract class AbstractServer {
 	serverName: string;
 	serverPort: number;
 	application: ExpressApplication;
+	httpServer: http.Server;
 	corsOptions: cors.CorsOptions;
 	allowedOrigin: Array<string>;
-	socketIO: SocketIoServer;
+	socketIO?: SocketIoServer;
 
 	constructor(name: string, port: number, allowedOrigin: Array<string>, corsOptions?: cors.CorsOptions) {
 		this.serverName = name;
@@ -42,6 +44,7 @@ export abstract class AbstractServer {
 		this.application = express();
 		this.allowedOrigin = allowedOrigin;
 		this.corsOptions = corsOptions ? corsOptions : {};
+		this.httpServer = createServer(this.application);
 	}
 
 	public start(): http.Server {
@@ -130,9 +133,8 @@ export abstract class AbstractServer {
 				})
 			)
 			*/
-		// custom mw
 
-		this.routes();
+		this.routes(this.application);
 		/*
 			Statically serve frontend build ( Heroku deploy )
 		*/
@@ -152,23 +154,14 @@ export abstract class AbstractServer {
 			})
 		);
 
-		// Listen on port `this.serverPort`
-		const httpServer = this.application.listen(this.serverPort, () => {
-			logger.info(
-				`Process ${chalk.blue(process.pid.toString())} for server ${chalk.yellow(
-					this.serverName
-				)} : listening on port ${chalk.green(this.serverPort.toString())}`
-			);
-		});
-
 		// https://www.npmjs.com/package/socket.io-redis#typescript
 		const pubClient = getRedisClient();
 		const subClient = pubClient.duplicate();
 
 		// https://socket.io/docs/v3/server-installation/
 		// https://socket.io/docs/v3/server-api/index.html
-		this.socketIO = new SocketIoServer(httpServer, {
-			path: '/socket',
+		this.socketIO = new SocketIoServer(this.httpServer, {
+			//path: '/socket',
 			serveClient: false,
 			cookie: cookiesOption,
 			cors: this.corsOptions,
@@ -176,7 +169,16 @@ export abstract class AbstractServer {
 			adapter: createAdapter({ pubClient, subClient }),
 		});
 		this.socketIO.use((socket, next) => sessionMw(socket.request as Request, {} as Response, next as NextFunction));
-		this.socket();
+		this.socket(this.socketIO);
+
+		// Listen on port `this.serverPort`
+		this.httpServer.listen(this.serverPort, () => {
+			logger.info(
+				`Process ${chalk.blue(process.pid.toString())} for server ${chalk.yellow(
+					this.serverName
+				)} : listening on port ${chalk.green(this.serverPort.toString())}`
+			);
+		});
 
 		// Shows servers stats every 30 minutes
 		const interval = setInterval(() => {
@@ -200,8 +202,8 @@ export abstract class AbstractServer {
 		// Graceful Shutdown
 		const closeServer = (signal: string) => {
 			logger.info(`Detect event ${signal}.`);
-			if (httpServer.listening) {
-				httpServer.close(function () {
+			if (this.httpServer.listening) {
+				this.httpServer.close(function () {
 					logger.info('Stopping async processes...');
 					clearInterval(interval);
 					logger.info('Shutdown...');
@@ -212,19 +214,19 @@ export abstract class AbstractServer {
 
 		process.on('SIGINT', () => closeServer('SIGINT'));
 		process.on('SIGTERM', () => closeServer('SIGINT'));
-		httpServer.on('close', function () {
+		this.httpServer.on('close', function () {
 			logger.info('Stopping server...');
 			clearInterval(interval);
 			logger.info('Shutdown...');
 		});
 
-		return httpServer;
+		return this.httpServer;
 	}
 
 	// Implementation have to handle all other API
-	public abstract routes(): void;
+	public abstract routes(application: ExpressApplication): void;
 	// And socket
-	public abstract socket(): void;
+	public abstract socket(socketIO: SocketIoServer): void;
 }
 
 process.on('uncaughtException', (err) => logger.fatal(err));
