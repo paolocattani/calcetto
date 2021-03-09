@@ -33,6 +33,9 @@ import { entityLifeCycle, getToast } from './utils';
 import i18next from '../../i18n/i18n';
 import { formatDate } from '../../@common/utils/date.utils';
 import { TournamentSelector } from '../selectors';
+// socket
+import { socketHost } from 'src/@common/utils';
+import io from 'socket.io-client';
 
 function* checkAuthenticationSaga({
 	payload: { history },
@@ -76,6 +79,7 @@ function* watchSessionSaga({
 	payload: { history },
 }: ReturnType<typeof AuthAction.sessionControl.request>): Generator<StrictEffect, void, any> {
 	try {
+		const socket = io(socketHost);
 		const eventChannel = new EventSource('/sse/v1/session');
 		const channel = yield call(createSessionChannel, eventChannel);
 		while (true) {

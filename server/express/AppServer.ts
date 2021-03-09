@@ -14,6 +14,8 @@ import chalk from 'chalk';
 import { logger } from '../core/logger';
 import { isDevMode, isProductionMode, isTestMode } from '../core/debug';
 import { migrationUp } from '../database/migrations';
+import { Server as SocketIoServer } from 'socket.io'; // socket.io
+import { handleSocket } from '../events/new_events';
 
 const defaultName: string = 'ApplicationServer Calcetto';
 const defaultPort: number = Number(isProductionMode() ? process.env.PORT : process.env.SERVER_PORT);
@@ -87,7 +89,11 @@ export default class AppServer extends AbstractServer {
 		return this.connection;
 	}
 
-	public routes(application: ExpressApplication): void {
-		routes(application);
+	public routes() {
+		routes(super.application, super.socketIO);
+	}
+
+	public socket() {
+		handleSocket(super.socketIO);
 	}
 }

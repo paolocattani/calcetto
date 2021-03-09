@@ -11,9 +11,12 @@ import morgan from 'morgan';
 import compression from 'compression';
 import { json, urlencoded } from 'body-parser';
 import cookieParser from 'cookie-parser';
-import express, { Response, Request, Application as ExpressApplication } from 'express';
+import express, { Response, Request, Application as ExpressApplication, NextFunction } from 'express';
 import session from 'express-session';
-import connectRedis from 'connect-redis';
+// Redis
+import connectRedis from 'connect-redis'; // Redis adapter for express-session
+import { Server as SocketIoServer } from 'socket.io'; // socket.io
+import { createAdapter } from 'socket.io-redis'; // Redis adapter for socket.io
 
 // Auth
 import cors from 'cors';
@@ -31,6 +34,7 @@ export abstract class AbstractServer {
 	application: ExpressApplication;
 	corsOptions: cors.CorsOptions;
 	allowedOrigin: Array<string>;
+	socketIO: SocketIoServer;
 
 	constructor(name: string, port: number, allowedOrigin: Array<string>, corsOptions?: cors.CorsOptions) {
 		this.serverName = name;
@@ -41,58 +45,76 @@ export abstract class AbstractServer {
 	}
 
 	public start(): http.Server {
+		// CORS
+		const corsMw = cors<Request>(this.corsOptions);
+		// Morgan logger ( log http request/response )
+		const morganMw = morgan(isProductionMode() ? 'combined' : 'common');
+		//https://github.com/expressjs/compression/issues/61
+		// Exclude compression per 'text/event-stream'
+		const compressionMw = compression({
+			filter: (req, res) => res.getHeader('Content-Type') != 'text/event-stream',
+		});
+		const jsonMw = json({ strict: true });
+		const urlEncodedMw = urlencoded({ extended: false });
+		// Cookie parser
+		const cookieParserMw = cookieParser(process.env.SERVER_SECRET);
+		// Content Security Policy Common
+		const CSPCommon = ["'self'", ...this.allowedOrigin];
+		const helmetMw = helmet({
+			dnsPrefetchControl: { allow: true },
+			// https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
+			// https://csp-evaluator.withgoogle.com/
+			contentSecurityPolicy: {
+				directives: {
+					defaultSrc: [...CSPCommon],
+					connectSrc: [...CSPCommon],
+					styleSrc: [...CSPCommon, "'unsafe-inline'", 'https:', 'https://fonts.googleapis.com'],
+					fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+					imgSrc: ["'self'", 'data:'],
+					objectSrc: ["'none'"],
+					baseUri: ["'self'"],
+				},
+			},
+		});
+		// Redis
 		const redisClient = getRedisClient(0);
 		redisClient.on('error', logger.error);
-
-		const CSPCommon = ["'self'", ...this.allowedOrigin];
 		const redisStore = connectRedis(session);
+
+		// Express session
+		const sessionMw = session({
+			store: new redisStore({ client: redisClient }),
+			secret: process.env.SERVER_SECRET || 'Apf342x$/)wpk,',
+			resave: true,
+			saveUninitialized: true,
+			cookie: cookiesOption,
+		});
+
+		// Server configuration
 		// https://blog.risingstack.com/node-js-security-checklist/
+		// http://expressjs.com/en/advanced/best-practice-security.html
 		this.application
-			.use(cors<Request>(this.corsOptions))
-			.use(morgan(isProductionMode() ? 'combined' : 'common'))
-			// Exclude compression per 'text/event-stream'
-			.use(
-				//https://github.com/expressjs/compression/issues/61
-				compression({
-					filter: (req, res) => res.getHeader('Content-Type') != 'text/event-stream',
-				})
-			)
-			.use(
-				helmet({
-					dnsPrefetchControl: { allow: true },
-					// https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
-					// https://csp-evaluator.withgoogle.com/
-					contentSecurityPolicy: {
-						directives: {
-							defaultSrc: [...CSPCommon],
-							connectSrc: [...CSPCommon],
-							styleSrc: [...CSPCommon, "'unsafe-inline'", 'https:', 'https://fonts.googleapis.com'],
-							fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-							imgSrc: ["'self'", 'data:'],
-							objectSrc: ["'none'"],
-							baseUri: ["'self'"],
-						},
-					},
-				})
-			)
-			.use(json())
-			.use(urlencoded({ extended: false }))
-			.use(cookieParser(process.env.SERVER_SECRET))
-			// http://expressjs.com/en/advanced/best-practice-security.html
 			.set('trust proxy', isProductionMode())
-			// https://www.appliz.fr/blog/express-typescript
 			.use(
-				session({
-					store: new redisStore({ client: redisClient }),
-					secret: process.env.SERVER_SECRET || 'Apf342x$/)wpk,',
-					resave: true,
-					saveUninitialized: true,
-					cookie: cookiesOption,
-				})
+				corsMw,
+				morganMw,
+				compressionMw,
+				helmetMw,
+				jsonMw,
+				urlEncodedMw,
+				cookieParserMw,
+				sessionMw,
+				clientInfo,
+				auditControl,
+				cacheControl,
+				routeLogger
 			)
-			// https://levelup.gitconnected.com/how-to-implement-csrf-tokens-in-express-f867c9e95af0
-			// https://medium.com/dataseries/prevent-cross-site-request-forgery-in-express-apps-with-csurf-16025a980457
-			/* FIXME: https://github.com/expressjs/csurf/issues/204
+			.disable('x-powered-by');
+
+		// https://www.appliz.fr/blog/express-typescript
+		// https://levelup.gitconnected.com/how-to-implement-csrf-tokens-in-express-f867c9e95af0
+		// https://medium.com/dataseries/prevent-cross-site-request-forgery-in-express-apps-with-csurf-16025a980457
+		/* FIXME: https://github.com/expressjs/csurf/issues/204
 			.use((req: Request, res: Response, next: NextFunction) => {
 				logger.info('SESSION : ', req.session);
 				next();
@@ -108,17 +130,17 @@ export abstract class AbstractServer {
 				})
 			)
 			*/
-			// custom mw
-			.all('*', clientInfo, auditControl, cacheControl, routeLogger)
-			.disable('x-powered-by');
+		// custom mw
 
-		this.routes(this.application);
+		this.routes();
 		/*
 			Statically serve frontend build ( Heroku deploy )
 		*/
 		const buildPath = path.join(__dirname, '..', '..', 'build');
 
-		/* 	TODO: Redirect everything else to index.html
+		/* 	TODO:
+			https://www.valentinog.com/blog/socket-react/
+			Redirect everything else to index.html
 			this.application.get('/*', (req: Request, res: Response) => res.send(`${buildPath}/index.html`));
 		*/
 		logger.info(`Serving build folder from ${chalk.green(buildPath)}`);
@@ -138,6 +160,23 @@ export abstract class AbstractServer {
 				)} : listening on port ${chalk.green(this.serverPort.toString())}`
 			);
 		});
+
+		// https://www.npmjs.com/package/socket.io-redis#typescript
+		const pubClient = getRedisClient();
+		const subClient = pubClient.duplicate();
+
+		// https://socket.io/docs/v3/server-installation/
+		// https://socket.io/docs/v3/server-api/index.html
+		this.socketIO = new SocketIoServer(httpServer, {
+			path: '/socket',
+			serveClient: false,
+			cookie: cookiesOption,
+			cors: this.corsOptions,
+			wsEngine: 'ws', //eiows',
+			adapter: createAdapter({ pubClient, subClient }),
+		});
+		this.socketIO.use((socket, next) => sessionMw(socket.request as Request, {} as Response, next as NextFunction));
+		this.socket();
 
 		// Shows servers stats every 30 minutes
 		const interval = setInterval(() => {
@@ -181,8 +220,11 @@ export abstract class AbstractServer {
 
 		return httpServer;
 	}
+
 	// Implementation have to handle all other API
-	public abstract routes(application: ExpressApplication): void;
+	public abstract routes(): void;
+	// And socket
+	public abstract socket(): void;
 }
 
 process.on('uncaughtException', (err) => logger.fatal(err));

@@ -16,6 +16,7 @@ import { controllerLogger, withAuth } from '../middleware';
 import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
 import { UserDTO } from '../../src/@common/dto';
 import { IRateLimiterRes } from 'rate-limiter-flexible';
+import { Server as SocketIoServer } from 'socket.io'; // socket.io
 
 export interface AppRequest extends Request {
 	user?: UserDTO;
@@ -29,7 +30,7 @@ type Controller = {
 	router: Router;
 };
 
-export default (application: ExpressApplication): void => {
+export default (application: ExpressApplication, socket: SocketIoServer): void => {
 	// Endpoints
 	const controller: Array<Controller> = [
 		{ name: 'Pair', api: '/api/v2/Pair', router: pairRouter },
@@ -48,7 +49,7 @@ export default (application: ExpressApplication): void => {
 		);
 	});
 
-	// SSE
+	// SSE : now we use socket.io
 	application.get('/sse/v1/session', withAuth, sessionControl);
 
 	// Check if server is alive
