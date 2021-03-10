@@ -78,7 +78,7 @@ export const consumeRequest = async (req: AppRequest) => {
 export const limitRequest = async (req: AppRequest, res: Response, next: NextFunction) => {
 	try {
 		//const clientIp = req.clientIp;
-		const clientIp = req.connection.remoteAddress;
+		const clientIp = req.socket.remoteAddress;
 		if (!limiterDay || !limiterMinute) {
 			await limiterSlowBruteByIP();
 			await limiterFastBruteByIP();
@@ -113,7 +113,6 @@ export const limitRequest = async (req: AppRequest, res: Response, next: NextFun
 			}
 
 			if (resSlowByIP) {
-				req.api = resSlowByIP;
 				res.set('Retry-After', (Math.round(resSlowByIP.msBeforeNext / 1000) || 1).toString());
 				res.set('X-RateLimit-Limit', maxPerMinute.toString());
 				res.set('X-RateLimit-Remaining', resSlowByIP.remainingPoints.toString());

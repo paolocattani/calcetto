@@ -15,13 +15,10 @@ import { controllerLogger, withAuth } from '../middleware';
 // DTO
 import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
 import { UserDTO } from '../../src/@common/dto';
-import { IRateLimiterRes } from 'rate-limiter-flexible';
-import { Server as SocketIoServer } from 'socket.io'; // socket.io
 
 export interface AppRequest extends Request {
 	user?: UserDTO;
 	uuid?: string;
-	api?: IRateLimiterRes;
 }
 
 type Controller = {

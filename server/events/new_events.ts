@@ -6,8 +6,9 @@ import { ExtendedError } from 'socket.io/dist/namespace';
 import chalk from 'chalk';
 import { safeVerifyToken } from '../controller/auth/auth.utils';
 import { User } from '../database/models';
-import { asyncSocketMiddleware } from '../middleware';
+import { asyncSocketMiddleware, mwWrapper, withAuth } from '../middleware';
 import { tournamentHandler } from './handlers/tournament.handler';
+import { AppRequest } from '../controller';
 /// <reference types="express-socket.io-session" />
 
 interface Client {
@@ -51,7 +52,8 @@ export const handleSocket = (io: SocketIoServer) => {
 		});
 	};
 
-	io.use(auhtMiddleware);
+	// Add authorization mw
+	io.use(mwWrapper(withAuth));
 	io.on('connection', onConnection);
 };
 
@@ -62,27 +64,3 @@ const clientHandler = (io: SocketIoServer, socket: Socket, request: Request) => 
 	socket.on('client:login', onLogin);
 	socket.on('client:logout', onLogout);
 };
-
-const UNAUTHORIZED = 'common:server.unauthorized';
-const auhtMiddleware = asyncSocketMiddleware(
-	async (socket: Socket, request: Request, next: (err?: ExtendedError) => void) => {
-		try {
-			const { jwt, uuid } = request.session;
-			if (!jwt || !uuid) {
-				logger.error(chalk.redBright('Come back with more cookies... -> '));
-				return next(new Error(UNAUTHORIZED));
-			}
-			const [user, isTokenValid] = safeVerifyToken(jwt);
-			if (isTokenValid && user) {
-				// Controllo se l'utente esiste ancora a db
-				const userDb = await User.findByPk(user.id);
-				if (userDb) {
-					next();
-				}
-			}
-		} catch (error) {
-			return next(new Error(UNAUTHORIZED));
-		}
-		return next(new Error(UNAUTHORIZED));
-	}
-);

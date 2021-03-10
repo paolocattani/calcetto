@@ -8,6 +8,7 @@ import { User } from '../database/models';
 import { sendNotification } from '../events/events';
 import { isAdmin } from '../manager/auth.manager';
 import chalk from 'chalk';
+import { asyncMiddleware } from '.';
 
 const UNAUTHORIZED = 'common:server.unauthorized';
 //--------- Check authorization :
@@ -20,11 +21,12 @@ const notify = (res: Response) => {
 	sendNotification(res, message, true);
 	return unauthorized(res, { label: 'auth:expired' });
 };
-export const withAuth = async (req: AppRequest, res: Response, next: NextFunction) => {
+export const withAuth = asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
 	try {
+		logger.error(chalk.redBright('withAuth.Session '), req.session);
 		const { jwt, uuid } = req.session;
 		if (!jwt || !uuid) {
-			logger.error(chalk.redBright('Come back with more cookies... -> '));
+			logger.error(chalk.redBright('Come back with more cookies...'));
 			return unauthorized(res, { label: UNAUTHORIZED });
 		}
 		const [user, isTokenValid] = safeVerifyToken(jwt);
@@ -42,7 +44,7 @@ export const withAuth = async (req: AppRequest, res: Response, next: NextFunctio
 	} catch (error) {
 		return notify(res);
 	}
-};
+});
 
 //--------- Check if user has admin rights
 export const withAdminRights = (req: AppRequest, res: Response, next: NextFunction) => {

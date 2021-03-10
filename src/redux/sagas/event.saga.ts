@@ -62,21 +62,27 @@ function* listenEvents({
 }: ReturnType<typeof EventAction.openChannel.request>): Generator<StrictEffect, void, any> {
 	try {
 		// Try to connect with 2sec timeout
-		const { connected, timeout } = yield race({ connected: call(socketConnect), timeout: delay(2000) });
+		console.log('-----> listenEvents Saga!!!! ');
+		const { connected, timeout } = yield race({ connected: call(socketConnect), timeout: delay(20000) });
 		// If timeout won the race then
+		console.log('-----> timeout!!!! ', timeout);
 		if (timeout) {
 			yield put(EventAction.closeChannel.request({}));
 		}
 		socket = connected;
+		console.log('-----> socket!!!! ', socket);
 		const socketChannel = yield call(createSocketChannel, socket, history);
+		console.log('-----> EventAction.openChannel.success!!!! ');
 		yield put(EventAction.openChannel.success({ connected: true }));
 		while (true) {
 			const payload = yield take(socketChannel);
 		}
 	} catch (error) {
 		// On error dispatch close channel
+		console.error('-----> EventAction.closeChannel.request!!!! ', error);
 		yield put(EventAction.closeChannel.request({}));
 	} finally {
+		console.error('-----> FINALLY EventAction.closeChannel.request!!!! ');
 		if (yield cancelled()) {
 			socket.disconnect();
 			yield put(EventAction.closeChannel.request({}));
@@ -85,9 +91,12 @@ function* listenEvents({
 }
 
 const socketConnect = () => {
-	socket = io(socketHost);
+	socket = io(socketHost, {
+		withCredentials: true,
+	});
 	return new Promise((resolve) => {
 		socket.on('connect', () => {
+			console.log('SOCKET CONNECTED : ', socket.id);
 			resolve(socket);
 		});
 	});

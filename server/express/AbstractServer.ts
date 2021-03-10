@@ -26,7 +26,7 @@ import chalk from 'chalk';
 import path from 'path';
 import { cookiesOption } from '../controller/auth/cookies.utils';
 import { getRedisClient } from '../database/config/redis/connection';
-import { routeLogger, clientInfo, auditControl, cacheControl } from '../middleware';
+import { routeLogger, clientInfo, auditControl, cacheControl, mwWrapper } from '../middleware';
 
 // http://expressjs.com/en/advanced/best-practice-security.html
 export abstract class AbstractServer {
@@ -88,8 +88,8 @@ export abstract class AbstractServer {
 		const sessionMw = session({
 			store: new redisStore({ client: redisClient }),
 			secret: process.env.SERVER_SECRET || 'Apf342x$/)wpk,',
-			resave: true,
-			saveUninitialized: true,
+			resave: false,
+			saveUninitialized: false,
 			cookie: cookiesOption,
 		});
 
@@ -135,6 +135,26 @@ export abstract class AbstractServer {
 			*/
 
 		this.routes(this.application);
+
+		// https://www.npmjs.com/package/socket.io-redis#typescript
+		const subClient = redisClient.duplicate();
+
+		// https://socket.io/docs/v3/server-installation/
+		// https://socket.io/docs/v3/server-api/index.html
+		this.socketIO = new SocketIoServer(this.httpServer, {
+			//path: '/socket',
+			// PM2 prefer web socket over polling
+			transports: ['websocket', 'polling'],
+			serveClient: false,
+			cookie: cookiesOption,
+			cors: this.corsOptions,
+			wsEngine: 'ws', //eiows',
+			adapter: createAdapter({ pubClient: redisClient, subClient }),
+		});
+		// Use same session
+		this.socketIO.use(mwWrapper(sessionMw));
+		this.socket(this.socketIO);
+
 		/*
 			Statically serve frontend build ( Heroku deploy )
 		*/
@@ -153,23 +173,6 @@ export abstract class AbstractServer {
 				redirect: true,
 			})
 		);
-
-		// https://www.npmjs.com/package/socket.io-redis#typescript
-		const pubClient = getRedisClient();
-		const subClient = pubClient.duplicate();
-
-		// https://socket.io/docs/v3/server-installation/
-		// https://socket.io/docs/v3/server-api/index.html
-		this.socketIO = new SocketIoServer(this.httpServer, {
-			//path: '/socket',
-			serveClient: false,
-			cookie: cookiesOption,
-			cors: this.corsOptions,
-			wsEngine: 'ws', //eiows',
-			adapter: createAdapter({ pubClient, subClient }),
-		});
-		this.socketIO.use((socket, next) => sessionMw(socket.request as Request, {} as Response, next as NextFunction));
-		this.socket(this.socketIO);
 
 		// Listen on port `this.serverPort`
 		this.httpServer.listen(this.serverPort, () => {
