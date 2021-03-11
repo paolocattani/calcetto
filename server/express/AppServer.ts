@@ -59,11 +59,8 @@ export default class AppServer extends AbstractServer {
 	public async connect(): Promise<Sequelize> {
 		const force = process.env.SERVER_FORCE && process.env.SERVER_FORCE.toLowerCase() === 'true';
 
-		// If it's a fresh new installation mark all migrations as applied
-		if (force) {
-			await markAllAsApplied();
-		} else {
-			// Else run migrations
+		// If it's not a fresh new installation then run migrations
+		if (!force) {
 			await migrationUp();
 		}
 
@@ -76,7 +73,11 @@ export default class AppServer extends AbstractServer {
 		// Dev and Test can use THE FORCE :
 		// “Don’t underestimate the Force.” – Darth Vader
 		if ((isDevMode() || isTestMode()) && force) {
+			// Drop and create all tables
 			this.connection = await sync({ force });
+			// Mark all migrations as applied
+			await markAllAsApplied();
+			// Generate dummies data
 			await generator(false);
 			// Always start from clean db on test
 		} else if (isTestMode()) {
