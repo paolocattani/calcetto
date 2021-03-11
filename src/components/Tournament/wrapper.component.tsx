@@ -24,7 +24,7 @@ const FTournament: React.FC = () => {
 	const tournamentsList = useSelector(TournamentSelector.getTournamentsList);
 
 	// State definition
-	const [newTournament, setNewTournament] = useState(false);
+	const [newTournament, setNewTournament] = useState(tournamentsList == null || tournamentsList.length === 0);
 
 	const onNewTournament = (value: React.SetStateAction<boolean>) => {
 		dispatch(TournamentAction.setTournament(null));
@@ -40,9 +40,10 @@ const FTournament: React.FC = () => {
 				</p>
 			);
 		}
-		return isAdmin && newTournament ? <NewTournament /> : <SelectTournament />;
+		return isAdmin && newTournament ? <NewTournament /> : <SelectTournament tournamentsList={tournamentsList} />;
 	};
 
+	console.log('Tournament List ', tournamentsList);
 	return (
 		<>
 			<Row>

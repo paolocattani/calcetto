@@ -9,15 +9,16 @@ import { TournamentDTO } from '../../@common/dto';
 import { formatDate } from '../../@common/utils';
 import { PairAction, Stage1Action, Stage2Action, TournamentAction } from 'src/redux/actions';
 import { AuthSelector, TournamentSelector } from '../../redux/selectors';
-import { tournamentsList } from '../../test/commons';
 import { RightArrowIcon } from '../core/icons';
 import { IndicatorSeparator } from './helper';
 import { useTranslation } from 'react-i18next';
 import { EventAction } from 'src/redux/actions/event.action';
 
-interface SelectTournamentProps {}
+interface SelectTournamentProps {
+	tournamentsList: Array<TournamentDTO>;
+}
 
-const SelectTournament: React.FC<SelectTournamentProps> = () => {
+const SelectTournament: React.FC<SelectTournamentProps> = ({ tournamentsList }) => {
 	const dispatch = useDispatch();
 	const currentHistory = useHistory();
 	const { t } = useTranslation(['common', 'tournament']);

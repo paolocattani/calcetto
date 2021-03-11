@@ -169,6 +169,7 @@ function* loginSaga({
 		// yield put(AuthAction.sessionControl.request({ history }));
 		// yield put(TournamentAction.fetch.request({}));
 	};
+	persistor.purge();
 	yield* entityLifeCycle<LoginRequest, AuthenticationResponse, AuthenticationError>(
 		AuthAction.login,
 		login,
@@ -185,6 +186,7 @@ function* registrationSaga({
 		yield put(AuthAction.sessionControl.request({ history }));
 		// yield put(TournamentAction.fetch.request({}));
 	};
+	persistor.purge();
 	yield* entityLifeCycle<RegistrationRequest, RegistrationResponse, AuthenticationError>(
 		AuthAction.registration,
 		registration,
