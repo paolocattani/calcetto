@@ -8,26 +8,33 @@ import { TournamentProgress } from '../../src/@common/dto';
 const TOURNAMENT_RECORDS = 10;
 
 const players = [
-	{ name: 'Andrea', surname: 'Messi', alias: 'Messi', email: '', phone: '', role: 'Master' },
-	{ name: 'Paolo', surname: 'Cattani', alias: 'Pool', email: '', phone: '', role: 'Master' },
-	{ name: 'Gilberto', surname: 'Turato', alias: 'Gilbe', email: '', phone: '', role: 'Master' },
-	{ name: 'Enrico', surname: 'Bevilacqua', alias: 'Tocio', email: '', phone: '', role: 'Master' },
-	{ name: 'Dante', surname: 'Riello', alias: 'The Wall ', email: '', phone: '', role: 'Master' },
-	{ name: 'Michele', surname: 'Maschio', alias: 'Tope', email: '', phone: '', role: 'Master' },
-	{ name: 'Fede', surname: 'Beggiato', alias: 'Fede', email: '', phone: '', role: 'Attaccante' },
-	{ name: 'Salvatore', surname: 'Bonanno', alias: 'Salvo', email: '', phone: '', role: 'Attaccante' },
-	{ name: 'Gianni', surname: 'Guion', alias: 'Gianni', email: '', phone: '', role: 'Portiere' },
-	{ name: 'Lorenzo', surname: '', alias: 'Lorenzo', email: '', phone: '', role: 'Portiere' },
-	{ name: 'Niero', surname: '', alias: 'Niero', email: '', phone: '', role: 'Attaccante' },
-	{ name: 'Renzo', surname: 'Pinton', alias: 'Renzo', email: '', phone: '', role: 'Portiere' },
-	{ name: 'Fabio', surname: 'Zambello', alias: 'Fabio', email: '', phone: '', role: 'Attaccante' },
-	{ name: 'Amante', surname: '', alias: 'Amante', email: '', phone: '', role: 'Attaccante' },
-	{ name: 'Vanni', surname: '', alias: 'Vanni', email: '', phone: '', role: 'Portiere' },
-	{ name: 'Mirco', surname: 'Dalan', alias: 'Mirco', email: '', phone: '', role: 'Portiere' },
-	{ name: 'Jacopo', surname: '', alias: 'Jacopo', email: '', phone: '', role: 'Attaccante' },
-	{ name: 'Melanie', surname: '', alias: 'Melanie', email: '', phone: '', role: 'Attaccante' },
-	{ name: 'Luca', surname: '', alias: 'Luca', email: '', phone: '', role: 'Portiere' },
-	{ name: 'Daniel', surname: '', alias: 'Daniel', email: '', phone: '', role: 'Attaccante' },
+	{ name: 'Andrea', surname: 'Messi', alias: 'Messi', email: 'messi@mailinator.com', phone: '', role: 'Master' },
+	{ name: 'Paolo', surname: 'Cattani', alias: 'Pool', email: 'pool@mailinator.com', phone: '', role: 'Master' },
+	{ name: 'Gilberto', surname: 'Turato', alias: 'Gilbe', email: 'gilbe@mailinator.com', phone: '', role: 'Master' },
+	{ name: 'Enrico', surname: 'Bevilacqua', alias: 'Tocio', email: 'tocio@mailinator.com', phone: '', role: 'Master' },
+	{ name: 'Dante', surname: 'Riello', alias: 'The Wall ', email: 'thewall@mailinator.com', phone: '', role: 'Master' },
+	{ name: 'Michele', surname: 'Maschio', alias: 'Tope', email: 'tope@mailinator.com', phone: '', role: 'Master' },
+	{ name: 'Fede', surname: 'Beggiato', alias: 'Fede', email: 'fede@mailinator.com', phone: '', role: 'Attaccante' },
+	{
+		name: 'Salvatore',
+		surname: 'Bonanno',
+		alias: 'Salvo',
+		email: 'salvo@mailinator.com',
+		phone: '',
+		role: 'Attaccante',
+	},
+	{ name: 'Gianni', surname: 'Guion', alias: 'Gianni', email: 'gianni@mailinator.com', phone: '', role: 'Portiere' },
+	{ name: 'Lorenzo', surname: '', alias: 'Lorenzo', email: 'lorenzo@mailinator.com', phone: '', role: 'Portiere' },
+	{ name: 'Niero', surname: '', alias: 'Niero', email: 'niero@mailinator.com', phone: '', role: 'Attaccante' },
+	{ name: 'Renzo', surname: 'Pinton', alias: 'Renzo', email: 'renzo@mailinator.com', phone: '', role: 'Portiere' },
+	{ name: 'Fabio', surname: 'Zambello', alias: 'Fabio', email: 'fabio@mailinator.com', phone: '', role: 'Attaccante' },
+	{ name: 'Amante', surname: '', alias: 'Amante', email: 'amante@mailinator.com', phone: '', role: 'Attaccante' },
+	{ name: 'Vanni', surname: '', alias: 'Vanni', email: 'vanni@mailinator.com', phone: '', role: 'Portiere' },
+	{ name: 'Mirco', surname: 'Dalan', alias: 'Mirco', email: 'mirco@mailinator.com', phone: '', role: 'Portiere' },
+	{ name: 'Jacopo', surname: '', alias: 'Jacopo', email: 'jacopo@mailinator.com', phone: '', role: 'Attaccante' },
+	{ name: 'Melanie', surname: '', alias: 'Melanie', email: 'mela@mailinator.com', phone: '', role: 'Attaccante' },
+	{ name: 'Luca', surname: '', alias: 'Luca', email: 'luca@mailinator.com', phone: '', role: 'Portiere' },
+	{ name: 'Daniel', surname: '', alias: 'Daniel', email: 'daniel@mailinator.com', phone: '', role: 'Attaccante' },
 ];
 
 export default async function generator(start: boolean): Promise<void> {
@@ -46,7 +53,7 @@ async function tournamentGenerator(): Promise<void> {
 	for (let ii = 1; ii <= TOURNAMENT_RECORDS; ii++) {
 		const model: Partial<Tournament> = {
 			id: null,
-			name: 'Torneo' + ii,
+			name: 'Torneo ' + ii,
 			date: new Date(),
 			progress: TournamentProgress.New,
 			autoOrder: ii % 2 == 0,
@@ -57,13 +64,9 @@ async function tournamentGenerator(): Promise<void> {
 }
 
 async function playerGenerator(): Promise<void> {
-	for (let ii = 0; ii < players.length; ii++)
-		await Player.create({
-			name: players[ii].name,
-			surname: players[ii].surname,
-			alias: players[ii].alias,
-			role: players[ii].role,
-		});
+	for (let ii = 0; ii < players.length; ii++) {
+		await Player.create(players[ii]);
+	}
 }
 
 async function pairGenerator(): Promise<void> {

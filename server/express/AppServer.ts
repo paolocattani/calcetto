@@ -13,7 +13,7 @@ import '../core/env';
 import chalk from 'chalk';
 import { logger } from '../core/logger';
 import { isDevMode, isProductionMode, isTestMode } from '../core/debug';
-import { migrationUp } from '../database/migrations';
+import { markAllAsApplied, migrationUp } from '../database/migrations';
 import { Server as SocketIoServer } from 'socket.io'; // socket.io
 import { handleSocket } from '../events/new_events';
 
@@ -57,10 +57,16 @@ export default class AppServer extends AbstractServer {
 	}
 
 	public async connect(): Promise<Sequelize> {
-		// Always run db migrations, befor load sequelize models
-		await migrationUp();
-
 		const force = process.env.SERVER_FORCE && process.env.SERVER_FORCE.toLowerCase() === 'true';
+
+		// If it's a fresh new installation mark all migrations as applied
+		if (force) {
+			await markAllAsApplied();
+		} else {
+			// Else run migrations
+			await migrationUp();
+		}
+
 		logger.info(
 			(force ? chalk.redBright.bold(' [ FORCE ] ') : chalk.greenBright.bold(' [ NORMAL ] ')).concat(
 				chalk.cyan.bold('Starting database synchronization...')
