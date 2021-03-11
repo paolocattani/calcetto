@@ -8,7 +8,7 @@ import { User } from '../database/models';
 import { sendNotification } from '../events/events';
 import { isAdmin } from '../manager/auth.manager';
 import chalk from 'chalk';
-import { asyncMiddleware } from '.';
+import { asyncMiddleware } from './utils.middleware';
 
 const UNAUTHORIZED = 'common:server.unauthorized';
 //--------- Check authorization :
@@ -23,7 +23,6 @@ const notify = (res: Response) => {
 };
 export const withAuth = asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
 	try {
-		logger.error(chalk.redBright('withAuth.Session '), req.session);
 		const { jwt, uuid } = req.session;
 		if (!jwt || !uuid) {
 			logger.error(chalk.redBright('Come back with more cookies...'));
