@@ -47,6 +47,7 @@ import chalk from 'chalk';
 
 const AUTH_WELCOME = 'auth:welcome';
 const GENERIC_ERROR = 'auth:error.generic';
+const WRONG_CREDENTIAL = 'auth:server.error.wrong_credential';
 const router = Router();
 
 /* FIXME:
@@ -97,21 +98,14 @@ const registrationController = asyncMiddleware(async (req: Request, res: Respons
 });
 
 const wrongCredentials = (res: Response) =>
-	failure(res, { label: 'auth:server.error.wrong_credential' }, 'Wrong credentials', HTTPStatusCode.Unauthorized);
+	failure(res, { label: WRONG_CREDENTIAL }, 'Wrong credentials', HTTPStatusCode.Unauthorized);
 
 router.get(
 	'/check',
 	withAuth,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		const additional: OmitGeneric<AuthenticationResponse> = { user: req.user };
-		return success(
-			res,
-			{
-				label: 'auth:server.error.wrong_credential',
-				options: { username: req.user!.name },
-			},
-			additional
-		);
+		return success(res, { label: WRONG_CREDENTIAL, options: { username: req.user!.name } }, additional);
 	})
 );
 
@@ -228,19 +222,19 @@ const loginUserController = async (req: Request, res: Response, username: string
 		logger.info('/login start ');
 		if (!username || !password) {
 			consumeRequest(req);
-			return genericError(res, { errors: [{ label: GENERIC_ERROR }] });
+			return genericError(res, { errors: [{ label: WRONG_CREDENTIAL }] });
 		}
 		const user = await findUserByEmailOrUsername(username, username);
 		// User not found
 		if (!user) {
 			consumeRequest(req);
-			return genericError(res, { errors: [{ label: GENERIC_ERROR }] });
+			return genericError(res, { errors: [{ label: WRONG_CREDENTIAL }] });
 			// Do not expose information return entityNotFound(res);
 		}
 		// Compare passwords
 		if (!(await comparePasswords(user.email, password, user.password))) {
 			consumeRequest(req);
-			return genericError(res, { errors: [{ label: GENERIC_ERROR }] });
+			return genericError(res, { errors: [{ label: WRONG_CREDENTIAL }] });
 			// Do not expose information return wrongCredentials(res);
 		}
 		const userDTO = convertEntityToDTO(user);
