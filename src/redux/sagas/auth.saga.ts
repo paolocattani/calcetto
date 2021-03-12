@@ -81,34 +81,11 @@ function* watchSessionSaga({
 		const eventChannel = new EventSource('/sse/v1/session');
 		const channel = yield call(createSessionChannel, eventChannel);
 		while (true) {
+			// FIXME: removed this
 			const message: Message = yield take(channel);
 			const tournament = yield select(TournamentSelector.getTournament);
 			// https://fkhadra.github.io/react-toastify/render-what-you-want/
 			switch (message.status) {
-				// Session
-				case SessionStatus.SESSION_EXPIRED:
-					showMessage(message, UserMessageType.Danger);
-					yield delay(3000);
-					yield put(AuthAction.logout.success(Unauthorized));
-					history.push('/login');
-					persistor.purge();
-					break;
-				// Tournament
-				case SessionStatus.TOURNAMENT_NEW:
-					showMessage(message, UserMessageType.Success);
-					yield put(TournamentAction.fetch.request({}));
-					break;
-				case SessionStatus.TOURNAMENT_UPDATE:
-					showMessage(message, UserMessageType.Success);
-					yield put(TournamentAction.reload.request({ tId: tournament.id }));
-					break;
-				/*
-					case SessionStatus.TOURNAMENT_DELETE:
-						toast.warn(i18next.t(message.label!));
-						yield put(TournamentAction.fetch.request({}));
-						history.push('/');
-						break;
-				*/
 				// Stage 1
 				case SessionStatus.STAGE1_UPDATE:
 					if (message.label) {

@@ -8,10 +8,8 @@ import stage1Router from './stage1.controller';
 import stage2Router from './stage2.controller';
 import authRouter from './auth/auth.controller';
 import statsRouter from './stats.controller';
-// SSE
-import { sessionControl } from '../events/events_old';
 // mddleware
-import { controllerLogger, withAuth } from '../middleware';
+import { controllerLogger } from '../middleware';
 // DTO
 import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
 import { UserDTO } from '../../src/@common/dto';
@@ -45,9 +43,6 @@ export default (application: ExpressApplication): void => {
 			c.router
 		);
 	});
-
-	// SSE : now we use socket.io
-	application.get('/sse/v1/session', withAuth, sessionControl);
 
 	// Check if server is alive
 	application.get('/status', (req: Request, res: Response) =>

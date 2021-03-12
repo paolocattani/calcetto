@@ -34,8 +34,6 @@ import {
 import { HTTPStatusCode } from '../../../src/@common/models/HttpStatusCode';
 import { setSession, removeSession } from './cookies.utils';
 import { comparePasswords } from './auth.utils';
-import { unsubscribe } from '../../events/events_old';
-import chalk from 'chalk';
 
 const AUTH_WELCOME = 'auth:welcome';
 const GENERIC_ERROR = 'auth:error.generic';
@@ -111,20 +109,6 @@ router.get(
 );
 
 router.post('/register', limitRequest, registrationController);
-
-router.put(
-	'/unsubscribe',
-	withAuth,
-	asyncMiddleware(async (req: AppRequest, res: Response) => {
-		try {
-			const { user, uuid } = req;
-			unsubscribe(user!, uuid!);
-			return success<UnsubscribeResponse>(res, { key: '' });
-		} catch (err) {
-			return serverError('PUT tournament/unsubscribe error ! : ', err, res);
-		}
-	})
-);
 
 router.put(
 	'/update',
