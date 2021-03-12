@@ -1,7 +1,10 @@
 {
     "tournament": {
         "joined": "{{user}} joined the tournament",
-        "leaved": "{{user}} just leaved the tournament"
+        "leaved": "{{user}} just leaved the tournament",
+        "new": "Tournament {{tournament}} is now available",
+        "deleted": "Tournament {{tournament}} has been deleted.",
+        "updated": "Tournament {{tournament}} moved to next step."
     },
     "session_expired": "Session expired"
 }

@@ -373,12 +373,13 @@ const PairsTable: React.FC<PairTableProps> = () => {
 	/************************************************
 	 *  Table options
 	 *************************************************/
+
 	const selectRow: SelectRowProps<PairDTO> = {
 		mode: 'checkbox',
 		onSelect: handleSelect,
 		onSelectAll: (isSelected: boolean, rows: PairDTO[]) => setSelectedRows(isSelected ? rows : []),
 		style: { backgroundColor: '#c8e6c9' },
-		hideSelectColumn: !isAdmin || tournament.progress > TournamentProgress.PairsSelection,
+		hideSelectColumn: !isAdmin || (tournament && tournament.progress > TournamentProgress.PairsSelection),
 	};
 
 	const availableRows =
@@ -408,7 +409,12 @@ const PairsTable: React.FC<PairTableProps> = () => {
 		paid2: t('pair:field.paid2'),
 	};
 
-	return data.players && data.rows ? (
+	if (!tournament) {
+		currentHistory.push('/');
+		return <LoadingModal show={isLoading.state} message={isLoading.message} />;
+	}
+
+	return tournament && data.players && data.rows ? (
 		<div className={commonStyle.defaultMaginBottom}>
 			<YesNoModal message={askUser.message} title={askUser.title} onClick={askUser.onClick} show={askUser.show} />
 			<LoadingModal show={isLoading.state} message={isLoading.message} />

@@ -68,7 +68,7 @@ export const tournamentHandler = (io: SocketIoServer, socket: Socket) => {
 			client.emit(Events.TOURNAMENT_REFRESH, {
 				event: Events.TOURNAMENT_REFRESH,
 				label: {
-					key: 'event:tournament.update',
+					key: 'event:tournament.updated',
 					options: { tournament: getTournamentLabel(tournament) },
 				},
 				type: UserMessageType.Success,
@@ -78,17 +78,19 @@ export const tournamentHandler = (io: SocketIoServer, socket: Socket) => {
 
 	const deleteTournament = (tournament: TournamentDTO) => {
 		iterateConnectedClient(io, (client: Socket, user: UserDTO) => {
-			logEvent(
-				`Notify user '${getUserLabel(user!)}' that tournament '${getTournamentLabel(tournament)}' has been deleted`
-			);
-			client.broadcast.emit(Events.TOURNAMENT_REFRESH, {
-				event: Events.TOURNAMENT_REFRESH,
-				label: {
-					key: 'event:tournament.deleted',
-					options: { tournament: getTournamentLabel(tournament) },
-				},
-				type: UserMessageType.Success,
-			});
+			if (socket.id !== client.id) {
+				logEvent(
+					`Notify user '${getUserLabel(user!)}' that tournament '${getTournamentLabel(tournament)}' has been deleted`
+				);
+				client.emit(Events.TOURNAMENT_REFRESH, {
+					event: Events.TOURNAMENT_REFRESH,
+					label: {
+						key: 'event:tournament.deleted',
+						options: { tournament: getTournamentLabel(tournament) },
+					},
+					type: UserMessageType.Success,
+				});
+			}
 		});
 	};
 

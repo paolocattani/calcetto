@@ -81,7 +81,7 @@ function* updateTournamentSaga({ payload }: ReturnType<typeof TournamentAction.u
 		yield put(EventAction.updateTournament.request({ tournament: payload.tournament }));
 	}
 	// Notify tournament is no loger available
-	if (isPublic && oldProgress === TournamentProgress.PairsSelection && newProgress === TournamentProgress.Stage1) {
+	if (isPublic && oldProgress === TournamentProgress.Stage1 && newProgress === TournamentProgress.PairsSelection) {
 		yield put(EventAction.deleteTournament.request({ tournament: payload.tournament }));
 	}
 

@@ -85,6 +85,11 @@ function* listenEvents({
 	}
 }
 
+// Emit Events.TOURNAMENT_DELETED
+function* deleteTournament({ payload: { tournament } }: ReturnType<typeof EventAction.newTournament.request>) {
+	yield emitEvent(Events.TOURNAMENT_DELETED, EventAction.deleteTournament, tournament);
+}
+
 // Emit Events.TOURNAMENT_NEW
 function* newTournament({ payload: { tournament } }: ReturnType<typeof EventAction.newTournament.request>) {
 	yield emitEvent(Events.TOURNAMENT_NEW, EventAction.newTournament, tournament);
@@ -115,5 +120,6 @@ export const EventSagas = [
 	takeEvery(EventAction.closeChannel.request, closeChannel),
 	takeEvery(EventAction.joinTournament.request, joinTournament),
 	takeEvery(EventAction.leaveTournament.request, leaveTournament),
+	takeEvery(EventAction.deleteTournament.request, deleteTournament),
 	takeEvery(EventAction.newTournament.request, newTournament),
 ];

@@ -2,7 +2,9 @@
     "tournament": {
         "joined": "{{user}} si è unito al torneo",
         "leaved": "{{user}} ha lasciato il torneo",
-        "new": "E' disponibile il torneo {{tournament}}"
+        "new": "E' disponibile il torneo {{tournament}}",
+        "deleted": "Il torneo {{tournament}} è stato eliminato da un amminstratore.",
+        "updated": "Il torneo {{tournament}} è stato aggiornato alla fase successiva."
     },
     "session_expired": "Sessione scaduta"
 }
