@@ -23,7 +23,6 @@ import {
 	UpdateStage2CellRequest,
 	UpdateStage2CellResponse,
 } from '../../src/@common/models';
-import { sendNotifications, subscribe } from '../events/events_old';
 import { TournamentProgress } from '../../src/@common/dto';
 
 // all API path must be relative to /api/v2/stage2
@@ -36,12 +35,10 @@ router.post(
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		try {
 			let { tournamentId, count }: FetchStage2Request = req.body;
-			const { user, uuid } = req;
 			if (!count || count === 0) {
 				count = await countStage2(tournamentId);
 			}
 			const model = await generateStage2Rows(tournamentId, count, req.user!);
-			subscribe(user!, uuid!, tournamentId, TournamentProgress.Stage2);
 			return success<FetchStage2Response>(res, { key: 'stage2:loaded' }, { cells: model, count });
 		} catch (error) {
 			logger.error(chalk.redBright('Error while fetching Stage2 ! : ', error));
@@ -96,12 +93,6 @@ router.post(
 			const { cells }: UpdateStage2CellRequest = req.body;
 			await updateCells(cells);
 			const tournamentId = cells[0].pair!.tournamentId;
-			const message: Message = {
-				status: SessionStatus.STAGE2_UPDATE,
-				label: 'common:notification.updating',
-				data: { tournamentId },
-			};
-			sendNotifications(message, tournamentId, TournamentProgress.Stage2);
 			return success<UpdateStage2CellResponse>(res, { key: 'stage2:updated_cell' });
 		} catch (error) {
 			logger.error(chalk.redBright('Error while updating Stage2 cell ! : ', error));

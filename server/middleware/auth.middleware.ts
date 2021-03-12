@@ -5,22 +5,12 @@ import { safeVerifyToken } from '../controller/auth/auth.utils';
 import { unauthorized } from '../controller/common.response';
 import { logger } from '../core/logger';
 import { User } from '../database/models';
-import { sendNotification } from '../events/events_old';
 import { isAdmin } from '../manager/auth.manager';
 import chalk from 'chalk';
 import { asyncMiddleware } from './utils.middleware';
 
 const UNAUTHORIZED = 'common:server.unauthorized';
-//--------- Check authorization :
-const notify = (res: Response) => {
-	logger.error(chalk.redBright('Unauthorized: Token Expired '));
-	const message: Message = {
-		status: SessionStatus.SESSION_EXPIRED,
-		label: 'auth:expired_alert',
-	};
-	sendNotification(res, message, true);
-	return unauthorized(res, { key: 'auth:expired' });
-};
+
 export const withAuth = asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
 	try {
 		const { jwt, uuid } = req.session;

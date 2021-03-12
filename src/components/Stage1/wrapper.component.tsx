@@ -44,7 +44,7 @@ const Wrapper: React.FC = (): JSX.Element => {
 		// allora aggiorno lo stato del torneo
 		if (session.isAdmin && tournament.progress < TournamentProgress.Stage2) {
 			tournament.progress = TournamentProgress.Stage2;
-			dispatch(TournamentAction.update.request({ tournament }));
+			dispatch(TournamentAction.update.request({ tournament, fromProgress: TournamentProgress.Stage1 }));
 		}
 
 		let count = 8;
@@ -105,6 +105,7 @@ const Wrapper: React.FC = (): JSX.Element => {
 									dispatch(
 										TournamentAction.update.request({
 											tournament: { ...tournament, autoOrder: e.currentTarget.checked },
+											fromProgress: tournament.progress,
 										})
 									)
 								}

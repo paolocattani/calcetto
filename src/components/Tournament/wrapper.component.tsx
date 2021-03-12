@@ -14,7 +14,6 @@ import { AuthSelector } from '../../redux/selectors/auth.selector';
 import { useTranslation } from 'react-i18next';
 import { LABEL_TOURNAMENT_SELECT } from '../../@common/constants/label';
 import StatsSummary from './stats.component';
-import { TournamentDTO } from 'src/@common/dto';
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const FTournament: React.FC = () => {

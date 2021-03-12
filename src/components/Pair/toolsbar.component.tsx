@@ -3,8 +3,7 @@ import { Row, Col, Button, FormControl, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from '../core/types';
 import { TournamentProgress } from 'src/@common/dto';
-import { AuthSelector } from 'src/redux/selectors';
-import { tournament } from 'src/test/commons';
+import { AuthSelector, TournamentSelector } from 'src/redux/selectors';
 import commonStyle from '../../common.module.css';
 import { HomeIcon, PlusIcon, TrashIcon, RightArrowIcon } from '../core/icons';
 import { FormEventType } from '../core/types';
@@ -48,6 +47,7 @@ const Toolsbar: React.FC<ToolsbarProps> = ({
 	const isAdmin = useSelector(AuthSelector.isAdmin);
 
 	const { t } = useTranslation(['common', 'pair']);
+	const tournament = useSelector(TournamentSelector.getTournament)!;
 
 	const assignMatches = (
 		<InputGroup>
@@ -137,7 +137,9 @@ const Toolsbar: React.FC<ToolsbarProps> = ({
 						</Button>
 					</Col>
 				)}
-				{tournament.progress !== TournamentProgress.Stage1 ? null : (
+				{tournament.progress !== TournamentProgress.Stage1 ? (
+					tournament.progress
+				) : (
 					<Col>
 						<Button variant="danger" className="align-middle" onClick={deleteStage1} disabled={!isAdmin}>
 							{t('stage1:reset')}

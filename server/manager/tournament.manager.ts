@@ -3,8 +3,6 @@ import { TournamentDTO, TournamentProgress, UserDTO, UserRole } from '../../src/
 import { Tournament } from '../database/models';
 import { Op, WhereOptions } from 'sequelize';
 import { getWhereFromMap, lowerWrapper, dateInRageWrapper } from '../core/utils';
-import { Message, SessionStatus } from '../../src/@common/models';
-import { sendNotifications } from '../events/events_old';
 
 const className = 'Tournament Manager : ';
 const defaultFilter = (user: UserDTO) => ({ [Op.or]: [{ ownerId: user.id }, { public: true }] });

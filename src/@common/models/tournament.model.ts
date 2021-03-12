@@ -1,6 +1,6 @@
 import * as H from 'history';
 import { GenericResponse } from './common.models';
-import { TournamentDTO } from '../dto';
+import { TournamentDTO, TournamentProgress } from '../dto';
 
 //## STATE
 export interface TournamentState {
@@ -32,6 +32,7 @@ export interface SaveTournamentRequest {
 }
 
 export interface UpdateTournamentRequest {
+	fromProgress: TournamentProgress;
 	tournament: TournamentDTO;
 }
 

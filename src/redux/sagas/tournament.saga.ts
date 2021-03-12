@@ -1,4 +1,4 @@
-import { put, select, takeEvery } from 'redux-saga/effects';
+import { put, takeEvery } from 'redux-saga/effects';
 import { fetchTournaments, postTournament, reloadTournament, updateTournament } from '../services/tournament.service';
 import {
 	SaveTournamentResponse,
@@ -15,9 +15,8 @@ import {
 import { TournamentAction } from '../actions/tournament.action';
 import { entityLifeCycle } from './utils';
 import { PairAction, Stage1Action, Stage2Action } from '../actions';
-import { TournamentSelector } from '../selectors';
 import { EventAction } from '../actions/event.action';
-import { TournamentDTO, TournamentProgress } from '../../@common/dto';
+import { TournamentProgress } from '../../@common/dto';
 
 const onSuccessRedirect = (redirect?: Redirect) => {
 	if (redirect) {
@@ -69,30 +68,19 @@ function* saveTournamentSaga({ payload }: ReturnType<typeof TournamentAction.sav
 }
 
 function* updateTournamentSaga({ payload }: ReturnType<typeof TournamentAction.update.request>) {
-	const tournament: TournamentDTO = yield select(TournamentSelector.getTournament);
-
+	const oldProgress = payload.fromProgress;
+	const newProgress = payload.tournament.progress;
+	const isPublic = payload.tournament.public;
 	// Notify new tournament
-	if (
-		tournament.public &&
-		tournament.progress === TournamentProgress.PairsSelection &&
-		payload.tournament.progress === TournamentProgress.Stage1
-	) {
+	if (isPublic && oldProgress === TournamentProgress.PairsSelection && newProgress === TournamentProgress.Stage1) {
 		yield put(EventAction.newTournament.request({ tournament: payload.tournament }));
 	}
 	// Notify Tournament update
-	if (
-		tournament.public &&
-		tournament.progress === TournamentProgress.Stage1 &&
-		payload.tournament.progress === TournamentProgress.Stage2
-	) {
+	if (isPublic && oldProgress === TournamentProgress.Stage1 && newProgress === TournamentProgress.Stage2) {
 		yield put(EventAction.updateTournament.request({ tournament: payload.tournament }));
 	}
 	// Notify tournament is no loger available
-	if (
-		tournament.public &&
-		tournament.progress === TournamentProgress.PairsSelection &&
-		payload.tournament.progress === TournamentProgress.Stage1
-	) {
+	if (isPublic && oldProgress === TournamentProgress.PairsSelection && newProgress === TournamentProgress.Stage1) {
 		yield put(EventAction.deleteTournament.request({ tournament: payload.tournament }));
 	}
 

@@ -11,14 +11,14 @@ import {
 	UpdateStage2CellResponse,
 } from '../../@common/models';
 import { TournamentSelector } from '../selectors';
-import { TournamentProgress } from '../../@common/dto';
+import { TournamentDTO, TournamentProgress } from '../../@common/dto';
 import { entityLifeCycle } from './utils';
 
 function* deleteStage2Saga({ payload }: ReturnType<typeof Stage2Action.delete.request>) {
+	const tournament: TournamentDTO = yield select(TournamentSelector.getTournament);
 	const onSuccess = function* () {
-		const tournament = yield select(TournamentSelector.getTournament);
 		tournament.progress = TournamentProgress.Stage1;
-		yield put(TournamentAction.update.request({ tournament }));
+		yield put(TournamentAction.update.request({ tournament, fromProgress: TournamentProgress.Stage2 }));
 	};
 	yield* entityLifeCycle<DeleteStage2Request, DeleteStage2Response, Stage2Error>(
 		Stage2Action.delete,
