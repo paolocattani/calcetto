@@ -14,7 +14,7 @@ import {
 } from '../../@common/models/tournament.model';
 import { TournamentAction } from '../actions/tournament.action';
 import { entityLifeCycle } from './utils';
-import { PairAction, Stage1Action, Stage2Action, StatsAction } from '../actions';
+import { PairAction, Stage1Action, Stage2Action } from '../actions';
 
 const onSuccessRedirect = (redirect?: Redirect) => {
 	if (redirect) {
@@ -49,7 +49,7 @@ function* reloadTournamentSaga({ payload }: ReturnType<typeof TournamentAction.r
 function* saveTournamentSaga({ payload }: ReturnType<typeof TournamentAction.save.request>) {
 	const onSuccess = function* (response: SaveTournamentResponse) {
 		// Reload tournament List
-		yield put(TournamentAction.fetch.request({}));
+		// yield put(TournamentAction.fetch.request({}));
 		// Reset next steps
 		yield put(PairAction.reset({}));
 		yield put(Stage1Action.reset({}));

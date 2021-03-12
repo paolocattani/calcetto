@@ -14,19 +14,39 @@ import { AuthSelector } from '../../redux/selectors/auth.selector';
 import { useTranslation } from 'react-i18next';
 import { LABEL_TOURNAMENT_SELECT } from '../../@common/constants/label';
 import StatsSummary from './stats.component';
+import { TournamentDTO } from 'src/@common/dto';
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const FTournament: React.FC = () => {
 	// Redux
 	const dispatch = useDispatch();
 	const { t } = useTranslation(['common', 'tournament']);
 	const isAdmin = useSelector(AuthSelector.isAdmin);
 	// Tournament list from Db
-	const tournamentsList = useSelector(TournamentSelector.getTournamentsList);
+	const compareTournamentList = (prev: TournamentDTO[], next: TournamentDTO[]) => {
+		console.log('COMPARING LIST :::: ');
+		if ((!prev && next) || (prev && !next) || prev.length !== next.length) {
+			console.log('DIFFERENT LENGTH ');
+			return false;
+		}
+
+		for (let ii = 0; ii < prev.length; ii++) {
+			console.log('COMPARING LIST :::: ');
+			if (prev[ii].id !== next[ii].id) {
+				console.log('DIFFERENT ID');
+				return false;
+			}
+		}
+		console.log('RETURN TRUE :::');
+		return true;
+	};
+	const tournamentsList = useSelector(TournamentSelector.getTournamentsList, compareTournamentList);
 
 	// State definition
-	const [newTournament, setNewTournament] = useState(tournamentsList == null || tournamentsList.length === 0);
+	const [newTournament, setNewTournament] = useState(false);
 
 	const onNewTournament = (value: React.SetStateAction<boolean>) => {
+		console.log('ON NEW TOURNAMENT :::');
 		dispatch(TournamentAction.setTournament(null));
 		setNewTournament(value);
 	};
@@ -43,7 +63,7 @@ const FTournament: React.FC = () => {
 		return isAdmin && newTournament ? <NewTournament /> : <SelectTournament tournamentsList={tournamentsList} />;
 	};
 
-	console.log('Tournament List ', tournamentsList);
+	console.log('Tournament List ', tournamentsList, isAdmin);
 	return (
 		<>
 			<Row>

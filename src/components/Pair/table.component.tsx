@@ -40,6 +40,7 @@ import {
 import Toolsbar from './toolsbar.component';
 import expandManager from './expand.manager';
 import { StatsPairMap } from '../../@common/models/stats.model';
+import { EventAction } from 'src/redux/actions/event.action';
 
 const hideAskUser = {
 	message: '',
@@ -363,6 +364,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 	 *  Just go back
 	 *************************************************/
 	function goBack() {
+		dispatch(EventAction.leaveTournament.request({ tournamentId: tournament.id }));
 		currentHistory.push('/');
 	}
 

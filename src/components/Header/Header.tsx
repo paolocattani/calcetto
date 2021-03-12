@@ -10,6 +10,8 @@ import { HomeIcon, LanguageIcon, UserIcon, LogoutIcon } from '../core/icons';
 import { AuthAction } from '../../redux/actions';
 import i18n, { getOtherLang } from '../../i18n/i18n';
 import { useTranslation } from 'react-i18next';
+import { TournamentSelector } from 'src/redux/selectors';
+import { EventAction } from 'src/redux/actions/event.action';
 
 const applicationName = 'Calcetto C.S.M';
 
@@ -20,8 +22,11 @@ const Header: React.FC = () => {
 	const { t } = useTranslation(['common']);
 
 	const { user, isAuthenticated, isAdmin } = useSelector(AuthSelector.getSession);
+	const tournament = useSelector(TournamentSelector.getTournament);
 
-	const logout = () => dispatch(AuthAction.logout.request({ history: currentHistory }));
+	const logout = () => {
+		dispatch(AuthAction.logout.request({ history: currentHistory }));
+	};
 
 	// const yellow = '#ffc107';
 	const jumboStyle: CSSProperties = {
@@ -37,6 +42,12 @@ const Header: React.FC = () => {
 
 	const otherLang = getOtherLang();
 
+	const goHome = () => {
+		if (tournament) {
+			dispatch(EventAction.leaveTournament.request({ tournamentId: tournament.id }));
+		}
+	};
+
 	return (
 		<header>
 			<Jumbotron style={jumboStyle}>
@@ -45,7 +56,7 @@ const Header: React.FC = () => {
 				</h1>
 				{isAuthenticated ? (
 					<Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-						<Navbar.Brand as={Link} to="/">
+						<Navbar.Brand as={Link} to="/" onClick={goHome}>
 							<span>
 								<HomeIcon /> {t('route.home')}
 							</span>

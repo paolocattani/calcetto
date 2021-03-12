@@ -44,6 +44,12 @@ const SelectTournament: React.FC<SelectTournamentProps> = ({ tournamentsList }) 
 		} else toast.error(t('common:error.generic'));
 	};
 
+	const onChangeSelect = (selected: TournamentDTO | null) => {
+		console.log('onChangeSelect : ', selected);
+		dispatch(TournamentAction.setTournament(selected));
+	};
+
+	console.log('Rendering list ');
 	return (
 		<Form onSubmit={handleSubmit}>
 			<label htmlFor="tournamentSelect">{t(LABEL_TOURNAMENT_SELECT)}</label>
@@ -60,7 +66,7 @@ const SelectTournament: React.FC<SelectTournamentProps> = ({ tournamentsList }) 
 					`${name} - ${formatDate(date)} @ ${t(`tournament:progress.${progress}`)}`
 				}
 				isClearable
-				onChange={(selected) => dispatch(TournamentAction.setTournament(selected as TournamentDTO))}
+				onChange={onChangeSelect}
 			/>
 			<Button
 				data-cy="select-submit"

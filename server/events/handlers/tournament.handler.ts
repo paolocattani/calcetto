@@ -41,9 +41,8 @@ export const tournamentHandler = (io: SocketIoServer, socket: Socket) => {
 
 	// A new tournament has been created
 	const newTournament = (tournament: TournamentDTO) => {
-		iterateConnectedClient(io, (client: Socket, user?: UserDTO) => {
-			if (user && user.role === UserRole.User) {
-				const user = (<AppRequest>client.request).user;
+		iterateConnectedClient(io, (client: Socket, user: UserDTO) => {
+			if (user.role === UserRole.User) {
 				logEvent(`\
 					Notify user '${user.name} ${user.surname}' \
 					that tournament '${tournament.name}-${tournament.date}' is now available\
