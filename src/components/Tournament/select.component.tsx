@@ -29,7 +29,7 @@ const SelectTournament: React.FC<SelectTournamentProps> = ({ tournamentsList }) 
 	const handleSubmit = async (event: React.FormEvent<HTMLElement>): Promise<void> => {
 		event.preventDefault();
 		if (tournament) {
-			dispatch(EventAction.joinTournament.request({ tournamentId: tournament.id }));
+			dispatch(EventAction.joinTournament.request({ tournament }));
 			if (isAdmin) {
 				// Reset all
 				dispatch(PairAction.reset({}));
@@ -45,7 +45,6 @@ const SelectTournament: React.FC<SelectTournamentProps> = ({ tournamentsList }) 
 	};
 
 	const onChangeSelect = (selected: TournamentDTO | null) => {
-		console.log('onChangeSelect : ', selected);
 		dispatch(TournamentAction.setTournament(selected));
 	};
 

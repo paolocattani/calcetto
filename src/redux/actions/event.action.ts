@@ -3,16 +3,20 @@ import { defaultAsyncParams } from './constants';
 import {
 	CloseChannelRequest,
 	CloseChannelResponse,
+	DeleteTournamentEventRequest,
+	DeleteTournamentEventResponse,
 	EventError,
-	JoinTournamentRequest,
-	JoinTournamentResponse,
-	LeaveTournamentRequest,
-	LeaveTournamentResponse,
-	NewTournamentRequest,
-	NewTournamentResponse,
+	JoinTournamentEventRequest,
+	JoinTournamentEventResponse,
+	LeaveTournamentEventRequest,
+	LeaveTournamentEventResponse,
+	NewTournamentEventRequest,
+	NewTournamentEventResponse,
 	OpenChannelRequest,
 	OpenChannelResponse,
-} from 'src/@common/models/event.model';
+	UpdateTournamentEventRequest,
+	UpdateTournamentEventResponse,
+} from '../../@common/models/event.model';
 
 const actionName = '[Event]';
 export const EventAction = {
@@ -28,18 +32,28 @@ export const EventAction = {
 		EventError
 	>(),
 	joinTournament: createAsyncAction(...defaultAsyncParams(actionName, 'Join Tournament'))<
-		JoinTournamentRequest,
-		JoinTournamentResponse,
+		JoinTournamentEventRequest,
+		JoinTournamentEventResponse,
 		EventError
 	>(),
 	leaveTournament: createAsyncAction(...defaultAsyncParams(actionName, 'Leave Tournament'))<
-		LeaveTournamentRequest,
-		LeaveTournamentResponse,
+		LeaveTournamentEventRequest,
+		LeaveTournamentEventResponse,
 		EventError
 	>(),
 	newTournament: createAsyncAction(...defaultAsyncParams(actionName, 'New Tournament'))<
-		NewTournamentRequest,
-		NewTournamentResponse,
+		NewTournamentEventRequest,
+		NewTournamentEventResponse,
+		EventError
+	>(),
+	updateTournament: createAsyncAction(...defaultAsyncParams(actionName, 'Update Tournament'))<
+		UpdateTournamentEventRequest,
+		UpdateTournamentEventResponse,
+		EventError
+	>(),
+	deleteTournament: createAsyncAction(...defaultAsyncParams(actionName, 'Delete Tournament'))<
+		DeleteTournamentEventRequest,
+		DeleteTournamentEventResponse,
 		EventError
 	>(),
 };

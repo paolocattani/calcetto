@@ -361,10 +361,11 @@ const PairsTable: React.FC<PairTableProps> = () => {
 	};
 
 	/************************************************
-	 *  Just go back
+	 * Just go back :
+	 * - Leave tournament room
 	 *************************************************/
 	function goBack() {
-		dispatch(EventAction.leaveTournament.request({ tournamentId: tournament.id }));
+		dispatch(EventAction.leaveTournament.request({ tournament }));
 		currentHistory.push('/');
 	}
 
@@ -379,16 +380,19 @@ const PairsTable: React.FC<PairTableProps> = () => {
 		hideSelectColumn: !isAdmin || tournament.progress > TournamentProgress.PairsSelection,
 	};
 
-	const availableRows = Math.floor(
-		Math.floor((data.players.length - 1) / 2) -
-			(data.rows.length === 0
-				? 0
-				: data.rows.reduce((accumulator: number, e) => {
-						if ((!e.player1 && !e.player2) || (!e.player1?.id && !e.player2?.id)) return accumulator + 1;
-						if (!e.player1 || !e.player1.id || !e.player2 || !e.player2.id) return accumulator + 0.5;
-						return accumulator;
-				  }, 0))
-	);
+	const availableRows =
+		data.players && data.rows
+			? Math.floor(
+					Math.floor((data.players.length - 1) / 2) -
+						(data.rows.length === 0
+							? 0
+							: data.rows.reduce((accumulator: number, e) => {
+									if ((!e.player1 && !e.player2) || (!e.player1?.id && !e.player2?.id)) return accumulator + 1;
+									if (!e.player1 || !e.player1.id || !e.player2 || !e.player2.id) return accumulator + 0.5;
+									return accumulator;
+							  }, 0))
+			  )
+			: 0;
 
 	const deleteDisabled = selectedRows.length <= 0 || tournament.progress > TournamentProgress.PairsSelection;
 
@@ -403,7 +407,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 		paid2: t('pair:field.paid2'),
 	};
 
-	return (
+	return data.players && data.rows ? (
 		<div className={commonStyle.defaultMaginBottom}>
 			<YesNoModal message={askUser.message} title={askUser.title} onClick={askUser.onClick} show={askUser.show} />
 			<LoadingModal show={isLoading.state} message={isLoading.message} />
@@ -453,6 +457,8 @@ const PairsTable: React.FC<PairTableProps> = () => {
 				</Row>
 			</Col>
 		</div>
+	) : (
+		<LoadingModal show={isLoading.state} message={isLoading.message} />
 	);
 };
 

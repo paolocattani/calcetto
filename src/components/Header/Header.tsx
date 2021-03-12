@@ -44,7 +44,7 @@ const Header: React.FC = () => {
 
 	const goHome = () => {
 		if (tournament) {
-			dispatch(EventAction.leaveTournament.request({ tournamentId: tournament.id }));
+			dispatch(EventAction.leaveTournament.request({ tournament }));
 		}
 	};
 

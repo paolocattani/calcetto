@@ -22,31 +22,12 @@ const FTournament: React.FC = () => {
 	const dispatch = useDispatch();
 	const { t } = useTranslation(['common', 'tournament']);
 	const isAdmin = useSelector(AuthSelector.isAdmin);
-	// Tournament list from Db
-	const compareTournamentList = (prev: TournamentDTO[], next: TournamentDTO[]) => {
-		console.log('COMPARING LIST :::: ');
-		if ((!prev && next) || (prev && !next) || prev.length !== next.length) {
-			console.log('DIFFERENT LENGTH ');
-			return false;
-		}
-
-		for (let ii = 0; ii < prev.length; ii++) {
-			console.log('COMPARING LIST :::: ');
-			if (prev[ii].id !== next[ii].id) {
-				console.log('DIFFERENT ID');
-				return false;
-			}
-		}
-		console.log('RETURN TRUE :::');
-		return true;
-	};
-	const tournamentsList = useSelector(TournamentSelector.getTournamentsList, compareTournamentList);
+	const tournamentsList = useSelector(TournamentSelector.getTournamentsList);
 
 	// State definition
 	const [newTournament, setNewTournament] = useState(false);
 
 	const onNewTournament = (value: React.SetStateAction<boolean>) => {
-		console.log('ON NEW TOURNAMENT :::');
 		dispatch(TournamentAction.setTournament(null));
 		setNewTournament(value);
 	};
@@ -63,7 +44,6 @@ const FTournament: React.FC = () => {
 		return isAdmin && newTournament ? <NewTournament /> : <SelectTournament tournamentsList={tournamentsList} />;
 	};
 
-	console.log('Tournament List ', tournamentsList, isAdmin);
 	return (
 		<>
 			<Row>

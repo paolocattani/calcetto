@@ -41,13 +41,13 @@ function* newTournament({ payload: { tournament } }: ReturnType<typeof EventActi
 }
 
 // Emit Events.TOURNAMENT_JOIN
-function* joinTournament({ payload: { tournamentId } }: ReturnType<typeof EventAction.joinTournament.request>) {
-	yield emitEvent(Events.TOURNAMENT_JOIN, EventAction.joinTournament, tournamentId);
+function* joinTournament({ payload: { tournament } }: ReturnType<typeof EventAction.joinTournament.request>) {
+	yield emitEvent(Events.TOURNAMENT_JOIN, EventAction.joinTournament, tournament);
 }
 
 // Emit Events.TOURNAMENT_LEAVE
-function* leaveTournament({ payload: { tournamentId } }: ReturnType<typeof EventAction.leaveTournament.request>) {
-	yield emitEvent(Events.TOURNAMENT_LEAVE, EventAction.leaveTournament, tournamentId);
+function* leaveTournament({ payload: { tournament } }: ReturnType<typeof EventAction.leaveTournament.request>) {
+	yield emitEvent(Events.TOURNAMENT_LEAVE, EventAction.leaveTournament, tournament);
 }
 
 // Close socket channel

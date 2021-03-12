@@ -69,25 +69,26 @@ export enum Events {
 export interface OpenChannelRequest {
 	history: H.History;
 }
-export interface CloseChannelRequest {}
-export interface JoinTournamentRequest {
-	tournamentId: number;
-}
-export interface LeaveTournamentRequest {
-	tournamentId: number;
-}
-export interface NewTournamentRequest {
+interface TournamentEvent {
 	tournament: TournamentDTO;
 }
+export interface CloseChannelRequest {}
+export interface JoinTournamentEventRequest extends TournamentEvent {}
+export interface LeaveTournamentEventRequest extends TournamentEvent {}
+export interface NewTournamentEventRequest extends TournamentEvent {}
+export interface UpdateTournamentEventRequest extends TournamentEvent {}
+export interface DeleteTournamentEventRequest extends TournamentEvent {}
 
 // Responses
 export interface OpenChannelResponse {
 	connected: boolean;
 }
 export interface CloseChannelResponse {}
-export interface JoinTournamentResponse {}
-export interface LeaveTournamentResponse {}
-export interface NewTournamentResponse {}
+export interface JoinTournamentEventResponse {}
+export interface LeaveTournamentEventResponse {}
+export interface NewTournamentEventResponse {}
+export interface UpdateTournamentEventResponse {}
+export interface DeleteTournamentEventResponse {}
 
 // Error
 export interface EventError {}
