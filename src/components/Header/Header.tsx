@@ -21,7 +21,7 @@ const Header: React.FC = () => {
 	const currentHistory = useHistory();
 	const { t } = useTranslation(['common']);
 
-	const { user, isAuthenticated, isAdmin } = useSelector(AuthSelector.getSession);
+	const { user, isAuthenticated, isAdmin } = useSelector(AuthSelector.getAuth);
 	const tournament = useSelector(TournamentSelector.getTournament);
 
 	const logout = () => {

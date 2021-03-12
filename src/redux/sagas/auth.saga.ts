@@ -116,7 +116,7 @@ function logger(action: Action<any>) {
 	}
 }
 
-export const SessionSagas = [
+export const AuthSagas = [
 	takeEvery(AuthAction.logout.request, logoutSaga),
 	takeEvery(AuthAction.login.request, loginSaga),
 	takeEvery(AuthAction.update.request, updateUserSaga),

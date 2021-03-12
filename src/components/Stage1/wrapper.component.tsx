@@ -24,7 +24,7 @@ const Wrapper: React.FC = (): JSX.Element => {
 	const dispatch = useDispatch();
 
 	// Session
-	const session = useSelector(AuthSelector.getSession);
+	const session = useSelector(AuthSelector.getAuth);
 	// Torneo
 	const tournament = useSelector(TournamentSelector.getTournament)!;
 	// Sono presenti aggiornamenti
