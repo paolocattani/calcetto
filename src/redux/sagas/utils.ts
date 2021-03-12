@@ -46,7 +46,7 @@ interface ActionType<TReq, TRes extends GenericResponse, TErr> {
 
 export const getMessage = ({ label: { key, options } }: UserMessage) => i18n.t(key, options);
 export const getToast = (type: UserMessageType) => {
-	let alert = null;
+	let alert = toast.error;
 	switch (type) {
 		case UserMessageType.Success:
 			alert = toast.success;

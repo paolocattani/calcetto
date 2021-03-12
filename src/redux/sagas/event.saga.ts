@@ -4,6 +4,8 @@ import { EventAction } from '../actions/event.action';
 import { Events } from '../../@common/models/event.model';
 import { Socket } from 'socket.io-client';
 import { socketConnect, createSocketChannel, emitEvent } from '../services/event.service';
+import { EventMessage } from 'src/@common/models';
+import { TournamentAction } from '../actions';
 
 //-----------------------------------------------
 let socket: Socket;
@@ -17,13 +19,28 @@ function* listenEvents({
 		const { connected, timeout } = yield race({ connected: call(socketConnect), timeout: delay(20000) });
 		// If timeout won the race then
 		if (timeout) {
-			yield put(EventAction.closeChannel.request({}));
+			const message: EventMessage = yield put(EventAction.closeChannel.request({}));
+			console.log('[ Event ].listenEvents : ', message);
 		}
 		socket = connected;
 		const socketChannel = yield call(createSocketChannel, connected, history);
 		yield put(EventAction.openChannel.success({ connected: true }));
 		while (true) {
-			yield take(socketChannel);
+			const message: EventMessage = yield take(socketChannel);
+			switch (message.event) {
+				case Events.TOURNAMENT_REFRESH:
+					yield put(TournamentAction.reset({}));
+					yield put(TournamentAction.fetch.request({}));
+					break;
+				case Events.TOURNAMENT_NEW:
+					yield put(TournamentAction.reset({}));
+					break;
+				case Events.TOURNAMENT_JOIN:
+					yield put(TournamentAction.fetch.request({}));
+					break;
+				default:
+					break;
+			}
 		}
 	} catch (error) {
 		yield put(EventAction.closeChannel.request({}));

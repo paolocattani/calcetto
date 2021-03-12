@@ -41,6 +41,7 @@ export const handleSocket = (io: SocketIoServer) => {
 
 const session_expired = (socket: Socket, interval: NodeJS.Timeout) => {
 	const message: EventMessage = {
+		event: Events.SESSION_EXPIRED,
 		label: { key: 'event:session_expired' },
 		type: UserMessageType.Danger,
 	};

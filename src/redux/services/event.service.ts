@@ -5,7 +5,7 @@ import { delay, put } from 'redux-saga/effects';
 import { io, Socket } from 'socket.io-client';
 import { socketHost } from 'src/@common/utils';
 import { EventMessage, Events, Unauthorized } from '../../@common/models';
-import { AuthAction } from '../actions';
+import { AuthAction, TournamentAction } from '../actions';
 import { getToast } from '../sagas/utils';
 import { persistor } from '../store';
 
@@ -18,12 +18,6 @@ function showMessageSocket({ label, type }: EventMessage) {
 export const createSocketChannel = (thisSocket: Socket, history: H.History) =>
 	eventChannel<EventMessage>((emitter) => {
 		// Listen for error
-		const errorListener = (event: Event) => {
-			console.error('[ Event ] An Error Occur: ', event);
-			emitter(END);
-			closeConnection();
-		};
-
 		// Session Expired
 		const onSessionExpired = function* (message: EventMessage) {
 			showMessageSocket(message);
@@ -37,24 +31,29 @@ export const createSocketChannel = (thisSocket: Socket, history: H.History) =>
 			emitter(message);
 		};
 
-		// Adds a listener that will be fired when any event is emitted
-		thisSocket.prependAny((eventName, ...args) => {
-			console.log('[ Event! ] : ', eventName, ...args);
-		});
+		const onTournamentRefresh = (message: EventMessage) => {
+			emitter(message);
+		};
 
+		// Adds a listener that will be fired when any event is emitted
+		thisSocket.prependAny((eventName, message: EventMessage, ...args) => {
+			console.log('[ Event! ] : ', eventName, ...args);
+			showMessageSocket(message);
+		});
+		/*		thisSocket.onAny((message: EventMessage, ...args) => {
+			emitter(message);
+		});
+*/
 		// Handlers
 		thisSocket.on(Events.NEW_MESSAGE, onNewMessage);
 		thisSocket.on(Events.SESSION_EXPIRED, onSessionExpired);
+		thisSocket.on(Events.TOURNAMENT_REFRESH, onTournamentRefresh);
 
-		// Add listener
-		thisSocket.on('error', errorListener);
-		// Cleanup function
-		const closeConnection = () => {
+		return () => {
 			// Remove listener
-			thisSocket.off('error', errorListener);
+			thisSocket.off();
 			thisSocket.close();
 		};
-		return closeConnection;
 	});
 
 export const socketConnect = () => {

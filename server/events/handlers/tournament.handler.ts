@@ -4,8 +4,10 @@ import { broadcastUpdates, iterateConnectedClient, logEvent } from '../event.uti
 import { EventMessage, UserMessageType } from '../../../src/@common/models';
 import { AppRequest } from '../../controller';
 import { TournamentDTO, UserDTO, UserRole } from '../../../src/@common/dto';
-import { Request } from 'express';
+import { formatDate } from '../../../src/@common/utils/date.utils';
 
+export const getTournamentLabel = (tournament: TournamentDTO) => `${tournament.name}-${formatDate(tournament.date)}`;
+export const getUserLabel = (user: UserDTO) => `${user.name} ${user.surname}`;
 export const tournamentHandler = (io: SocketIoServer, socket: Socket) => {
 	const { user } = <AppRequest>socket.request;
 
@@ -15,6 +17,7 @@ export const tournamentHandler = (io: SocketIoServer, socket: Socket) => {
 		logEvent(`A user '${user!.name} ${user!.surname}' joined tournament ${tournament.id}`);
 		socket.join(room);
 		broadcastUpdates(socket, room, {
+			event: Events.TOURNAMENT_JOIN,
 			label: {
 				key: 'event:tournament.joined',
 				options: { user: `${user!.name} ${user!.surname}` },
@@ -26,12 +29,13 @@ export const tournamentHandler = (io: SocketIoServer, socket: Socket) => {
 	// Leave tournament room
 	const leaveTournament = (tournament: TournamentDTO) => {
 		const room = `tournament-${tournament.id}`;
-		logEvent(`User '${user!.name} ${user!.surname}' leaved tournament ${tournament.id}`);
+		logEvent(`User '${getUserLabel(user!)}' leaved tournament ${tournament.id}`);
 		socket.leave(room);
 		broadcastUpdates(socket, room, {
+			event: Events.TOURNAMENT_LEAVE,
 			label: {
 				key: 'event:tournament.leaved',
-				options: { user: `${user!.name} ${user!.surname}` },
+				options: { user: getUserLabel(user!) },
 			},
 			type: UserMessageType.Success,
 		});
@@ -41,14 +45,14 @@ export const tournamentHandler = (io: SocketIoServer, socket: Socket) => {
 	const newTournament = (tournament: TournamentDTO) => {
 		iterateConnectedClient(io, (client: Socket, user: UserDTO) => {
 			if (user.role === UserRole.User) {
-				logEvent(`\
-					Notify user '${user.name} ${user.surname}' \
-					that tournament '${tournament.name}-${tournament.date}' is now available\
-				`);
-				client.broadcast.emit('new_message', {
+				logEvent(
+					`Notify user '${getUserLabel(user!)}' that tournament '${getTournamentLabel(tournament)}' is now available`
+				);
+				client.emit(Events.TOURNAMENT_REFRESH, {
+					event: Events.TOURNAMENT_REFRESH,
 					label: {
 						key: 'event:tournament.new',
-						options: { tournament: `${tournament.name}-${tournament.date}` },
+						options: { tournament: getTournamentLabel(tournament) },
 					},
 					type: UserMessageType.Success,
 				});
@@ -58,14 +62,14 @@ export const tournamentHandler = (io: SocketIoServer, socket: Socket) => {
 
 	const updateTournament = (tournament: TournamentDTO) => {
 		iterateConnectedClient(io, (client: Socket, user: UserDTO) => {
-			logEvent(`\
-					Notify user '${user.name} ${user.surname}' \
-					that tournament '${tournament.name}-${tournament.date}' is now at Stage2\
-				`);
-			client.broadcast.emit('new_message', {
+			logEvent(
+				`Notify user '${getUserLabel(user!)}' that tournament '${getTournamentLabel(tournament)}' is now at Stage2`
+			);
+			client.emit(Events.TOURNAMENT_REFRESH, {
+				event: Events.TOURNAMENT_REFRESH,
 				label: {
 					key: 'event:tournament.update',
-					options: { tournament: `${tournament.name}-${tournament.date}` },
+					options: { tournament: getTournamentLabel(tournament) },
 				},
 				type: UserMessageType.Success,
 			});
@@ -74,20 +78,23 @@ export const tournamentHandler = (io: SocketIoServer, socket: Socket) => {
 
 	const deleteTournament = (tournament: TournamentDTO) => {
 		iterateConnectedClient(io, (client: Socket, user: UserDTO) => {
-			logEvent(`\
-					Notify user '${user.name} ${user.surname}' \
-					that tournament '${tournament.name}-${tournament.date}' has been deleted\
-				`);
-			client.broadcast.emit('new_message', {
+			logEvent(
+				`Notify user '${getUserLabel(user!)}' that tournament '${getTournamentLabel(tournament)}' has been deleted`
+			);
+			client.broadcast.emit(Events.TOURNAMENT_REFRESH, {
+				event: Events.TOURNAMENT_REFRESH,
 				label: {
 					key: 'event:tournament.deleted',
-					options: { tournament: `${tournament.name}-${tournament.date}` },
+					options: { tournament: getTournamentLabel(tournament) },
 				},
 				type: UserMessageType.Success,
 			});
 		});
 	};
 
+	socket.prependAny((eventName, ...args) => {
+		logEvent(eventName, ...args);
+	});
 	socket.on(Events.TOURNAMENT_JOIN, joinTournament);
 	socket.on(Events.TOURNAMENT_LEAVE, leaveTournament);
 	socket.on(Events.TOURNAMENT_NEW, newTournament);

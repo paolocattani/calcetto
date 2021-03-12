@@ -71,6 +71,7 @@ function* updateTournamentSaga({ payload }: ReturnType<typeof TournamentAction.u
 	const oldProgress = payload.fromProgress;
 	const newProgress = payload.tournament.progress;
 	const isPublic = payload.tournament.public;
+	console.log('Updating touramento : ', oldProgress, newProgress, isPublic);
 	// Notify new tournament
 	if (isPublic && oldProgress === TournamentProgress.PairsSelection && newProgress === TournamentProgress.Stage1) {
 		yield put(EventAction.newTournament.request({ tournament: payload.tournament }));

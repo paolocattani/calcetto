@@ -137,9 +137,7 @@ const Toolsbar: React.FC<ToolsbarProps> = ({
 						</Button>
 					</Col>
 				)}
-				{tournament.progress !== TournamentProgress.Stage1 ? (
-					tournament.progress
-				) : (
+				{tournament.progress !== TournamentProgress.Stage1 ? null : (
 					<Col>
 						<Button variant="danger" className="align-middle" onClick={deleteStage1} disabled={!isAdmin}>
 							{t('stage1:reset')}

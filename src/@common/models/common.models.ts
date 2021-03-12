@@ -1,5 +1,5 @@
 import { PlayerRole } from '../dto';
-import { AuthenticationResponse, RootState } from '.';
+import { AuthenticationResponse, Events, RootState } from '.';
 import { HTTPStatusCode } from './HttpStatusCode';
 import { TOptions, TFunctionKeys } from 'i18next';
 
@@ -21,6 +21,7 @@ export enum SessionStatus {
 }
 
 export interface EventMessage {
+	event: Events;
 	type: UserMessageType;
 	label: I18nLabel;
 }

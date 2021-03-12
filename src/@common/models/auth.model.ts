@@ -21,9 +21,7 @@ export type PlayerRoleType = {
 export interface AuthenticationRequest {
 	history: H.History;
 }
-export interface UnsubscribeRequest {}
 export interface CheckAuthenticationRequest extends AuthenticationRequest {}
-export interface WatchSessionRequest extends AuthenticationRequest {}
 export interface LogoutRequest extends AuthenticationRequest {}
 export interface LoginRequest extends AuthenticationRequest {
 	username: string;

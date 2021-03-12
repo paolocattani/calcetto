@@ -57,6 +57,14 @@ export enum Events {
 	 * See EventAction.updateTournament
 	 */
 	TOURNAMENT_UPDATED = 'tournament:updated',
+	/**
+	 *
+	 * This event is fired when clients have to reload tournament list
+	 * #From : Server
+	 * #To : All client ( user and admin )
+	 * See EventAction.updateTournament
+	 */
+	TOURNAMENT_REFRESH = 'tournament:refresh',
 	// Stage1
 	STAGE1_UPDATE = 'stage1:update',
 	STAGE1_DELETE = 'stage1:delete',
