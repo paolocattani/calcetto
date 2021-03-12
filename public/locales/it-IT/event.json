@@ -1,3 +1,7 @@
 {
-    "tournament:joined": "Un nuovo utente sta guardando questo torneo"
+    "tournament": {
+        "joined": "{{user}} si è unito al torneo",
+        "leaved": "{{user}} ha lasciato il torneo"
+    },
+    "session_expired": "Sessione scaduta"
 }

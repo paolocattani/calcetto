@@ -28,7 +28,7 @@ router.get(
 	asyncMiddleware(async (req: Request, res: Response) => {
 		try {
 			const playersList = await listAllInTournament(req.params.tId ? parseInt(req.params.tId) : 0);
-			return success<FetchPlayersResponse>(res, { label: 'player:loaded' }, { playersList });
+			return success<FetchPlayersResponse>(res, { key: 'player:loaded' }, { playersList });
 		} catch (error) {
 			return serverError('GET player/list/:tId error ! : ', error, res);
 		}
@@ -41,7 +41,7 @@ router.get(
 	asyncMiddleware(async (req: Request, res: Response) => {
 		try {
 			const playersList = await listAll();
-			return success<FetchPlayersResponse>(res, { label: 'player:loaded' }, { playersList });
+			return success<FetchPlayersResponse>(res, { key: 'player:loaded' }, { playersList });
 		} catch (error) {
 			return serverError('GET player/list/ error ! : ', error, res);
 		}
@@ -62,10 +62,10 @@ router.put(
 			// Aggiungere controlli
 			let playerTest = await findByNameSurname(dto.name, dto.surname);
 			if (playerTest && playerTest.id !== player.id) {
-				return failure(res, { label: 'player:duplicated' }, 'Player already exists');
+				return failure(res, { key: 'player:duplicated' }, 'Player already exists');
 			}
 			await update(dto);
-			return success<SavePlayerResponse>(res, { label: 'player:updated' }, { player: dto });
+			return success<SavePlayerResponse>(res, { key: 'player:updated' }, { player: dto });
 		} catch (error) {
 			return serverError('PUT player/update error ! : ', error, res);
 		}
@@ -84,10 +84,10 @@ router.post(
 			}
 			let player = await findByNameSurname(model.name, model.surname);
 			if (player) {
-				return failure(res, { label: 'player:duplicated' }, 'Player already exists');
+				return failure(res, { key: 'player:duplicated' }, 'Player already exists');
 			}
 			const dto = await create(model);
-			return success<SavePlayerResponse>(res, { label: 'player:saved' }, { player: dto });
+			return success<SavePlayerResponse>(res, { key: 'player:saved' }, { player: dto });
 		} catch (error) {
 			return serverError('POST player/new error ! : ', error, res);
 		}
@@ -104,7 +104,7 @@ router.delete(
 			const rowsAffected = await deletePlayer(request.players.map((e) => parseBody(e)));
 			return success<DeletePlayersResponse>(
 				res,
-				{ label: rowsAffected > 1 ? 'player:deleted_2' : 'player:deleted_1' },
+				{ key: rowsAffected > 1 ? 'player:deleted_2' : 'player:deleted_1' },
 				{ playersList: request.players }
 			);
 		} catch (error) {

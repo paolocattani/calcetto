@@ -9,7 +9,7 @@ import stage2Router from './stage2.controller';
 import authRouter from './auth/auth.controller';
 import statsRouter from './stats.controller';
 // SSE
-import { sessionControl } from '../events/events';
+import { sessionControl } from '../events/events_old';
 // mddleware
 import { controllerLogger, withAuth } from '../middleware';
 // DTO

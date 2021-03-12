@@ -10,7 +10,7 @@ import { isAdmin } from '../manager/auth.manager';
 //
 import { Op } from 'sequelize';
 import { SessionStatus } from '../../src/@common/models';
-import { sendNotifications } from '../events/events';
+import { sendNotifications } from '../events/events_old';
 
 const className = 'Stage1 Manager : ';
 

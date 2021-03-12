@@ -69,15 +69,32 @@ async function playerGenerator(): Promise<void> {
 	}
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 async function pairGenerator(): Promise<void> {
+	let players: Array<number> = [];
 	for (let ii = 1; ii <= players.length / 2; ii++) {
+		let playerId = getRandomIntInclusive(1, players.length);
+		let player1Id = 0;
+		let player2Id = 0;
+		while (player1Id === 0 && player2Id === 0) {
+			if (!players.includes(playerId)) {
+				if (!player1Id) {
+					player1Id = playerId;
+					players.push(playerId);
+				}
+				if (!player2Id) {
+					player2Id = playerId;
+					players.push(playerId);
+				}
+			}
+			playerId = getRandomIntInclusive(1, players.length);
+		}
 		const model = {
 			id: null,
 			tournamentId: 1,
-			player1Id: getRandomIntInclusive(1, players.length),
-			player2Id: getRandomIntInclusive(1, players.length),
+			player1Id,
+			player2Id,
 			alias: ii % 2 === 0 ? `PAlias${ii}` : '',
-			// stage1Name: getRandomIntInclusive(1, 3),
 		};
 		await Pair.create(model);
 	}

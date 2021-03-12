@@ -9,6 +9,7 @@ import { logger } from '../core/logger';
 import { getRedisClient } from '../database/config/redis/connection';
 import { ConfigManager } from '../manager/config.manager';
 import chalk from 'chalk';
+import { asyncMiddleware } from './utils.middleware';
 
 const TOO_MANY_REQUEST = 'common:too_many_requests';
 //--------- Gather client info
@@ -75,7 +76,7 @@ export const consumeRequest = async (req: AppRequest) => {
 	}
 };
 // eslint-disable-next-line sonarjs/cognitive-complexity
-export const limitRequest = async (req: AppRequest, res: Response, next: NextFunction) => {
+export const limitRequest = asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
 	try {
 		//const clientIp = req.clientIp;
 		const clientIp = req.socket.remoteAddress;
@@ -109,7 +110,7 @@ export const limitRequest = async (req: AppRequest, res: Response, next: NextFun
 			}
 			if (retrySecs > 0) {
 				res.set('Retry-After', String(retrySecs));
-				return unauthorized(res, { label: TOO_MANY_REQUEST, options: { interval: String(retrySecs) } });
+				return unauthorized(res, { key: TOO_MANY_REQUEST, options: { interval: String(retrySecs) } });
 			}
 
 			if (resSlowByIP) {
@@ -122,6 +123,6 @@ export const limitRequest = async (req: AppRequest, res: Response, next: NextFun
 		}
 	} catch (error) {
 		logger.error(chalk.redBright('security middleware error'), error);
-		return unauthorized(res, { label: TOO_MANY_REQUEST });
+		return unauthorized(res, { key: TOO_MANY_REQUEST });
 	}
-};
+});

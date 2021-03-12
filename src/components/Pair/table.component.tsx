@@ -13,6 +13,7 @@ import { LoadingModal, YesNoModal, YesNoModalProps } from '../core/generic/Commo
 import { cellEditProps, columns } from './editor';
 // Style
 import './style.css';
+import commonStyle from '../../common.module.css';
 // Service
 import { fetchPlayers } from '../../redux/services/player.service';
 import { deleteStage1 as deleteStage1Api } from '../../redux/services/stage1.service';
@@ -401,7 +402,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 	};
 
 	return (
-		<div>
+		<div className={commonStyle.defaultMaginBottom}>
 			<YesNoModal message={askUser.message} title={askUser.title} onClick={askUser.onClick} show={askUser.show} />
 			<LoadingModal show={isLoading.state} message={isLoading.message} />
 			<Col>

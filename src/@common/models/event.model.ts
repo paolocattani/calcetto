@@ -6,6 +6,7 @@ export interface EventState {
 
 // Events
 export enum Events {
+	NEW_MESSAGE = 'new_message',
 	// Session
 	SESSION_EXPIRED = 'session:expired',
 	// Tournament

@@ -1,33 +1,24 @@
 import * as H from 'history';
 import { call, delay, put, race, take, takeEvery } from '@redux-saga/core/effects';
 import { cancelled, StrictEffect } from 'redux-saga/effects';
-import { formatDate, socketHost } from '../../@common/utils';
+import { socketHost } from '../../@common/utils';
 import { EventAction } from '../actions/event.action';
-import { buffers, END, eventChannel } from 'redux-saga';
-import { Message, SessionStatus, Unauthorized, UserMessageType } from 'src/@common/models';
-import { Events } from 'src/@common/models/event.model';
+import { END, eventChannel } from 'redux-saga';
+import { EventMessage, Unauthorized } from '../../@common/models';
+import { Events } from '../../@common/models/event.model';
 import i18next from '../../i18n/i18n';
 import { getToast } from './utils';
 import { AuthAction } from '../actions';
 import { persistor } from '../store';
 import { io, Socket } from 'socket.io-client';
-import { tournament } from 'src/test/commons';
 
-const showMessage = (message: Message, type: UserMessageType) => {
-	if (message.label) {
-		getToast(type)(
-			i18next.t(
-				message.label,
-				message.data?.name && message.data?.date
-					? { tournament: `${message.data.name}@${formatDate(message.data.date)}` }
-					: undefined
-			)
-		);
-	}
-};
+function showMessageSocket({ label, type }: EventMessage) {
+	getToast(type)(i18next.t(label.key, label.options));
+}
 
 //-----------------------------------------------
 let socket: Socket;
+
 // Emit Events.TOURNAMENT_JOIN
 function* joinTournament({ payload: { tournamentId } }: ReturnType<typeof EventAction.joinTournament.request>) {
 	try {
@@ -40,6 +31,7 @@ function* joinTournament({ payload: { tournamentId } }: ReturnType<typeof EventA
 // Emit Events.TOURNAMENT_LEAVE
 function* leaveTournament({ payload: { tournamentId } }: ReturnType<typeof EventAction.leaveTournament.request>) {
 	try {
+		console.log('Leaving tournament');
 		socket.emit(Events.TOURNAMENT_LEAVE, tournamentId);
 		yield put(EventAction.leaveTournament.success({}));
 	} catch (error) {
@@ -62,20 +54,17 @@ function* listenEvents({
 }: ReturnType<typeof EventAction.openChannel.request>): Generator<StrictEffect, void, any> {
 	try {
 		// Try to connect with 2sec timeout
-		console.log('-----> listenEvents Saga!!!! ');
 		const { connected, timeout } = yield race({ connected: call(socketConnect), timeout: delay(20000) });
 		// If timeout won the race then
-		console.log('-----> timeout!!!! ', timeout);
 		if (timeout) {
 			yield put(EventAction.closeChannel.request({}));
 		}
 		socket = connected;
-		console.log('-----> socket!!!! ', socket);
 		const socketChannel = yield call(createSocketChannel, socket, history);
 		console.log('-----> EventAction.openChannel.success!!!! ');
 		yield put(EventAction.openChannel.success({ connected: true }));
 		while (true) {
-			const payload = yield take(socketChannel);
+			yield take(socketChannel);
 		}
 	} catch (error) {
 		// On error dispatch close channel
@@ -112,8 +101,8 @@ const reconnect = () => {
 };
 
 // Create comunication channel
-const createSocketChannel = (socket: Socket, history: H.History) =>
-	eventChannel<Events>((emitter) => {
+const createSocketChannel = (thisSocket: Socket, history: H.History) =>
+	eventChannel<EventMessage>((emitter) => {
 		// Listen for open channel
 		const openListener = (event: Event) => console.log('Connected...');
 		// Listen for error
@@ -123,32 +112,40 @@ const createSocketChannel = (socket: Socket, history: H.History) =>
 			closeConnection();
 		};
 
+		// Session Expired
+		const onSessionExpired = function* (message: EventMessage) {
+			showMessageSocket(message);
+			yield delay(3000);
+			yield put(AuthAction.logout.success(Unauthorized));
+			history.push('/login');
+			persistor.purge();
+		};
+
 		// Adds a listener that will be fired when any event is emitted
-		socket.prependAny((eventName, ...args) => {
-			console.log('Socket Event! : ', eventName, ...args);
+		thisSocket.prependAny((eventName, ...args) => {
+			console.log('[ Event! ] : ', eventName, ...args);
 		});
-		socket.on(Events.SESSION_EXPIRED, (message: Message) => onSessionExpired(message, history));
+
+		// Show messages
+		thisSocket.on('new_message', (message: EventMessage) => {
+			showMessageSocket(message);
+			emitter(message);
+		});
+		thisSocket.on(Events.SESSION_EXPIRED, (message: EventMessage) => onSessionExpired(message));
 
 		// Add listener
-		socket.on('open', openListener);
-		socket.on('error', errorListener);
+		thisSocket.on('open', openListener);
+		thisSocket.on('error', errorListener);
 		// Cleanup function
 		const closeConnection = () => {
 			// Remove listener
-			socket.off('open', openListener);
-			socket.off('error', errorListener);
-			socket.close();
+			thisSocket.off('open', openListener);
+			thisSocket.off('error', errorListener);
+			thisSocket.close();
 		};
 		return closeConnection;
-	}, buffers.expanding());
-
-const onSessionExpired = function* (message: Message, history: H.History) {
-	showMessage(message, UserMessageType.Danger);
-	yield delay(3000);
-	yield put(AuthAction.logout.success(Unauthorized));
-	history.push('/login');
-	persistor.purge();
-};
+	});
+//	}, buffers.expanding());
 
 export const EventSagas = [
 	takeEvery(EventAction.openChannel.request, listenEvents),

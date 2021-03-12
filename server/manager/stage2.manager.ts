@@ -9,7 +9,7 @@ import { isAdmin } from './auth.manager';
 import { rowToModel } from './pair.manager';
 import { WhereOptions } from 'sequelize';
 import { getEmptyPair, SessionStatus } from '../../src/@common/models';
-import { sendNotifications } from '../events/events';
+import { sendNotifications } from '../events/events_old';
 
 const className = 'Stage2 Manager : ';
 

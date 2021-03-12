@@ -1,3 +1,7 @@
 {
-    "tournament:joined": "A new user is watching this tournament"
+    "tournament": {
+        "joined": "{{user}} joined the tournament",
+        "leaved": "{{user}} just leaved the tournament"
+    },
+    "session_expired": "Session expired"
 }

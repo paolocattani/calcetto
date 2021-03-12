@@ -44,7 +44,7 @@ interface ActionType<TReq, TRes extends GenericResponse, TErr> {
 	failure: PayloadActionCreator<string, TErr | typeof UnexpectedServerError>;
 }
 
-export const getMessage = (message: UserMessage) => i18n.t(message.label, message.options);
+export const getMessage = ({ label: { key, options } }: UserMessage) => i18n.t(key, options);
 export const getToast = (type: UserMessageType) => {
 	let alert = null;
 	switch (type) {

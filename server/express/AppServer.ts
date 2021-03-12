@@ -15,7 +15,7 @@ import { logger } from '../core/logger';
 import { isDevMode, isProductionMode, isTestMode } from '../core/debug';
 import { markAllAsApplied, migrationUp } from '../database/migrations';
 import { Server as SocketIoServer } from 'socket.io'; // socket.io
-import { handleSocket } from '../events/new_events';
+import { handleSocket } from '../events/events';
 
 const defaultName: string = 'ApplicationServer Calcetto';
 const defaultPort: number = Number(isProductionMode() ? process.env.PORT : process.env.SERVER_PORT);
@@ -78,7 +78,7 @@ export default class AppServer extends AbstractServer {
 			// Mark all migrations as applied
 			await markAllAsApplied();
 			// Generate dummies data
-			await generator(false);
+			await generator(force);
 			// Always start from clean db on test
 		} else if (isTestMode()) {
 			/*

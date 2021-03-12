@@ -18,7 +18,7 @@ import {
 	UpdatePlacementResponse,
 } from '../../src/@common/models';
 import { failure, success } from './common.response';
-import { sendNotifications, subscribe } from '../events/events';
+import { sendNotifications, subscribe } from '../events/events_old';
 import { TournamentProgress } from '../../src/@common/dto';
 
 const router = Router();
@@ -34,8 +34,8 @@ router.put(
 		const { rows }: UpdatePlacementRequest = req.body;
 		const result = await updatePlacement(rows);
 		return result
-			? success<UpdatePlacementResponse>(res, { label: 'stage1:position_done' })
-			: failure<Stage1Error>(res, { label: 'stage1:position_not_done' });
+			? success<UpdatePlacementResponse>(res, { key: 'stage1:position_done' })
+			: failure<Stage1Error>(res, { key: 'stage1:position_not_done' });
 	})
 );
 
@@ -52,10 +52,10 @@ router.put(
 			await updateCell(tId, stageName, pair1Id, pair2Id, score);
 			const message = { status: SessionStatus.STAGE1_UPDATE, label: 'common:notification.updating' };
 			sendNotifications(message, tId, TournamentProgress.Stage1);
-			return success<UpdateCellResponse>(res, { label: 'stage1:cell_done' }, { saved: true });
+			return success<UpdateCellResponse>(res, { key: 'stage1:cell_done' }, { saved: true });
 		} catch (error) {
 			logger.error('/cell error', error);
-			return failure<Stage1Error>(res, { label: 'stage1:cell_done' });
+			return failure<Stage1Error>(res, { key: 'stage1:cell_done' });
 		}
 	})
 );
@@ -79,10 +79,10 @@ router.post(
 			const result = await generateStage1Rows(pairsList, stageName, user!);
 			// logger.info('STAGE1 RESULT : ', result);
 			subscribe(user!, uuid!, result[0].pair.tournamentId, TournamentProgress.Stage1);
-			return success<FetchStage1Response>(res, { label: 'stage1:loaded' }, { rows: result, stageName, pairsList });
+			return success<FetchStage1Response>(res, { key: 'stage1:loaded' }, { rows: result, stageName, pairsList });
 		} catch (error) {
 			logger.error('Error while update matrix  : ', error);
-			return failure<Stage1Error>(res, { label: 'stage1:error' });
+			return failure<Stage1Error>(res, { key: 'stage1:error' });
 		}
 	})
 );
@@ -96,10 +96,10 @@ router.delete(
 		try {
 			const { tId } = req.body;
 			await deleteStage1(tId);
-			return success<UpdateCellResponse>(res, { label: 'stage1:deleted' }, { saved: true });
+			return success<UpdateCellResponse>(res, { key: 'stage1:deleted' }, { saved: true });
 		} catch (error) {
 			logger.error('Error while update matrix  : ', error);
-			return failure<Stage1Error>(res, { label: 'stage1:error' });
+			return failure<Stage1Error>(res, { key: 'stage1:error' });
 		}
 	})
 );

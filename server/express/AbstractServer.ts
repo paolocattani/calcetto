@@ -153,6 +153,7 @@ export abstract class AbstractServer {
 		});
 		// Use same session
 		this.socketIO.use(mwWrapper(sessionMw));
+		this.socketIO.use(mwWrapper(clientInfo));
 		this.socket(this.socketIO);
 
 		/*

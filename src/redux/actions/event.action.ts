@@ -30,7 +30,7 @@ export const EventAction = {
 		JoinTournamentResponse,
 		EventError
 	>(),
-	leaveTournament: createAsyncAction(...defaultAsyncParams(actionName, 'Join Tournament'))<
+	leaveTournament: createAsyncAction(...defaultAsyncParams(actionName, 'Leave Tournament'))<
 		LeaveTournamentRequest,
 		LeaveTournamentResponse,
 		EventError

@@ -1,23 +1,44 @@
 import { Events } from '../../../src/@common/models/event.model';
 import { Server as SocketIoServer, Socket } from 'socket.io';
-import { Request } from 'express';
+import { broadcastUpdates, logEvent } from '../event.utils';
+import { EventMessage, UserMessageType } from '../../../src/@common/models';
+import { AppRequest } from '../../controller';
 
-export const tournamentHandler = (io: SocketIoServer, socket: Socket, request: Request) => {
+export const tournamentHandler = (io: SocketIoServer, socket: Socket) => {
+	const { user } = <AppRequest>socket.request;
+
 	// Join a new tournament to receive update
 	const joinTournament = (tournamentId: number) => {
-		socket.join(`tournament-${tournamentId}`);
+		const room = `tournament-${tournamentId}`;
+		logEvent(`A user '${user!.name} ${user!.surname}' joined tournament ${tournamentId}`);
+		socket.join(room);
+		const message: EventMessage = {
+			label: {
+				key: 'event:tournament.joined',
+				options: { user: `${user!.name} ${user!.surname}` },
+			},
+			type: UserMessageType.Success,
+		};
+		broadcastUpdates(socket, room, message);
 	};
+
 	// Leave tournament room
 	const leaveTournament = (tournamentId: number) => {
-		socket.leave(`tournament-${tournamentId}`);
+		const room = `tournament-${tournamentId}`;
+		logEvent(`User '${user!.name} ${user!.surname}' leaved tournament ${tournamentId}`);
+		socket.leave(room);
+		const message: EventMessage = {
+			label: {
+				key: 'event:tournament.leaved',
+				options: { user: `${user!.name} ${user!.surname}` },
+			},
+			type: UserMessageType.Success,
+		};
+		broadcastUpdates(socket, room, message);
 	};
-	// Broadcast message to all users inside the room
-	const broadcastUpdates = (tournamentId: number) => {
-		socket.to(`tournament-${tournamentId}`).emit('new:message');
-	};
+
 	socket.on(Events.TOURNAMENT_JOIN, joinTournament);
 	socket.on(Events.TOURNAMENT_LEAVE, leaveTournament);
-	socket.on(Events.TOURNAMENT_NEW, broadcastUpdates);
 };
 
 //
