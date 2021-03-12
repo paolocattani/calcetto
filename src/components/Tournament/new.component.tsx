@@ -33,7 +33,6 @@ const NewTournament: React.FC<NewTournamentProps> = () => {
 		const tournament = getEmptyTournament(name);
 		tournament.date = date;
 		tournament.public = visible;
-		dispatch(EventAction.joinTournament.request({ tournamentId: tournament.id }));
 		dispatch(TournamentAction.save.request({ tournament, history: currentHistory }));
 	};
 

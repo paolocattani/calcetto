@@ -1,8 +1,10 @@
 import { Events } from '../../../src/@common/models/event.model';
 import { Server as SocketIoServer, Socket } from 'socket.io';
-import { broadcastUpdates, logEvent } from '../event.utils';
+import { broadcastUpdates, iterateConnectedClient, logEvent } from '../event.utils';
 import { EventMessage, UserMessageType } from '../../../src/@common/models';
 import { AppRequest } from '../../controller';
+import { TournamentDTO, UserDTO, UserRole } from '../../../src/@common/dto';
+import { Request } from 'express';
 
 export const tournamentHandler = (io: SocketIoServer, socket: Socket) => {
 	const { user } = <AppRequest>socket.request;
@@ -37,8 +39,30 @@ export const tournamentHandler = (io: SocketIoServer, socket: Socket) => {
 		broadcastUpdates(socket, room, message);
 	};
 
+	// A new tournament has been created
+	const newTournament = (tournament: TournamentDTO) => {
+		iterateConnectedClient(io, (client: Socket, user?: UserDTO) => {
+			if (user && user.role === UserRole.User) {
+				const user = (<AppRequest>client.request).user;
+				logEvent(`\
+					Notify user '${user.name} ${user.surname}' \
+					that tournament '${tournament.name}-${tournament.date}' is now available\
+				`);
+				const message: EventMessage = {
+					label: {
+						key: 'event:tournament.new',
+						options: { tournament: `${tournament.name}-${tournament.date}` },
+					},
+					type: UserMessageType.Success,
+				};
+				client.emit('new_message', message);
+			}
+		});
+	};
+
 	socket.on(Events.TOURNAMENT_JOIN, joinTournament);
 	socket.on(Events.TOURNAMENT_LEAVE, leaveTournament);
+	socket.on(Events.TOURNAMENT_NEW, newTournament);
 };
 
 //

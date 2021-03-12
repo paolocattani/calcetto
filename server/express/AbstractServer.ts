@@ -26,7 +26,7 @@ import chalk from 'chalk';
 import path from 'path';
 import { cookiesOption } from '../controller/auth/cookies.utils';
 import { getRedisClient } from '../database/config/redis/connection';
-import { routeLogger, clientInfo, auditControl, cacheControl, mwWrapper } from '../middleware';
+import { routeLogger, clientInfo, auditControl, cacheControl, mwWrapper, withAuth } from '../middleware';
 
 // http://expressjs.com/en/advanced/best-practice-security.html
 export abstract class AbstractServer {
@@ -151,9 +151,10 @@ export abstract class AbstractServer {
 			wsEngine: 'ws', //eiows',
 			adapter: createAdapter({ pubClient: redisClient, subClient }),
 		});
-		// Use same session
+		// Socket middleware
 		this.socketIO.use(mwWrapper(sessionMw));
 		this.socketIO.use(mwWrapper(clientInfo));
+		this.socketIO.use(mwWrapper(withAuth));
 		this.socket(this.socketIO);
 
 		/*

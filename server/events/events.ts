@@ -1,5 +1,4 @@
 import { Server as SocketIoServer, Socket } from 'socket.io';
-import { mwWrapper, withAuth } from '../middleware';
 import { tournamentHandler } from './handlers/tournament.handler';
 import { AppRequest } from '../controller';
 import { EventMessage, Events, UserMessageType } from '../../src/@common/models';
@@ -9,10 +8,11 @@ import { logEvent } from './event.utils';
 // https://socket.io/docs/v3/server-application-structure/
 // https://socket.io/docs/v3/emit-cheatsheet/
 export const handleSocket = (io: SocketIoServer) => {
-	const onConnection = (socket: Socket) => {
+	const onConnection = async (socket: Socket) => {
+		// Handlers
 		tournamentHandler(io, socket);
-
 		const { user, clientIp, session } = <AppRequest>socket.request;
+
 		logEvent(`User '${user!.name} ${user!.surname}' from '${clientIp}' is now connected!`);
 
 		// check token every 30 sec
@@ -36,8 +36,6 @@ export const handleSocket = (io: SocketIoServer) => {
 		});
 	};
 
-	// Add authorization mw
-	io.use(mwWrapper(withAuth));
 	io.on('connection', onConnection);
 };
 

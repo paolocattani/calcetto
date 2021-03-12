@@ -8,6 +8,8 @@ import {
 	JoinTournamentResponse,
 	LeaveTournamentRequest,
 	LeaveTournamentResponse,
+	NewTournamentRequest,
+	NewTournamentResponse,
 	OpenChannelRequest,
 	OpenChannelResponse,
 } from 'src/@common/models/event.model';
@@ -33,6 +35,11 @@ export const EventAction = {
 	leaveTournament: createAsyncAction(...defaultAsyncParams(actionName, 'Leave Tournament'))<
 		LeaveTournamentRequest,
 		LeaveTournamentResponse,
+		EventError
+	>(),
+	newTournament: createAsyncAction(...defaultAsyncParams(actionName, 'New Tournament'))<
+		NewTournamentRequest,
+		NewTournamentResponse,
 		EventError
 	>(),
 };
