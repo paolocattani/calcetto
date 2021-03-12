@@ -4,8 +4,9 @@ import { EventAction } from '../actions/event.action';
 import { Events } from '../../@common/models/event.model';
 import { Socket } from 'socket.io-client';
 import { socketConnect, createSocketChannel, emitEvent } from '../services/event.service';
-import { EventMessage } from 'src/@common/models';
-import { TournamentAction } from '../actions';
+import { EventMessage, Unauthorized } from '../../@common/models';
+import { AuthAction, TournamentAction } from '../actions';
+import { persistor } from '../store';
 
 //-----------------------------------------------
 let socket: Socket;
@@ -28,16 +29,48 @@ function* listenEvents({
 		while (true) {
 			const message: EventMessage = yield take(socketChannel);
 			switch (message.event) {
+				case Events.SESSION_EXPIRED:
+					yield delay(3000);
+					yield put(AuthAction.logout.success(Unauthorized));
+					history.push('/login');
+					persistor.purge();
+					break;
 				case Events.TOURNAMENT_REFRESH:
 					yield put(TournamentAction.reset({}));
 					yield put(TournamentAction.fetch.request({}));
 					break;
-				case Events.TOURNAMENT_NEW:
-					yield put(TournamentAction.reset({}));
-					break;
 				case Events.TOURNAMENT_JOIN:
 					yield put(TournamentAction.fetch.request({}));
 					break;
+				/*
+				case SessionStatus.STAGE1_UPDATE:
+					if (message.label) {
+						toast.success(i18next.t(message.label));
+					}
+					yield put(Stage1Action.reloadFromServer({}));
+					break;
+				case SessionStatus.STAGE1_DELETE:
+					showMessage(message, UserMessageType.Warning);
+					// Reload tournament list
+					history.push('/');
+					yield put(TournamentAction.reset({}));
+					yield put(TournamentAction.fetch.request({}));
+					yield put(Stage1Action.reset({}));
+					break;
+				// Stage 2
+				case SessionStatus.STAGE2_UPDATE:
+					showMessage(message, UserMessageType.Success);
+					yield put(Stage2Action.fetchStage2.request({ tournamentId: message.data!.tournamentId! }));
+					break;
+				case SessionStatus.STAGE2_DELETE:
+					showMessage(message, UserMessageType.Warning);
+					yield delay(5000);
+					// Reload only this tournament
+					yield put(Stage2Action.reset({}));
+					yield put(TournamentAction.reload.request({ tId: tournament.id }));
+					history.push('/stage1');
+					break;
+				*/
 				default:
 					break;
 			}

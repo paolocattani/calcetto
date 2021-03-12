@@ -164,7 +164,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 					})
 				);
 			}
-			showSuccessMessage(t('pair:success.delete'));
+			showSuccessMessage(t('stage1:deleted'));
 			setAskUser(hideAskUser);
 		} catch (error) {
 			showErrorMessage(t('pair:error.8'));
