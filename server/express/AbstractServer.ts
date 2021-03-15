@@ -206,21 +206,20 @@ export abstract class AbstractServer {
 		const closeServer = (signal: string) => {
 			logger.info(`Detect event ${signal}.`);
 			if (this.httpServer.listening) {
-				this.httpServer.close(function () {
-					logger.info('Stopping async processes...');
-					clearInterval(interval);
-					logger.info('Shutdown...');
-					process.exit(0);
-				});
+				this.httpServer.close();
 			}
 		};
 
 		process.on('SIGINT', () => closeServer('SIGINT'));
-		process.on('SIGTERM', () => closeServer('SIGINT'));
+		process.on('SIGTERM', () => closeServer('SIGTERM'));
+
 		this.httpServer.on('close', function () {
+			logger.info('Closing sockets...');
+			this.socketIO.close();
 			logger.info('Stopping server...');
 			clearInterval(interval);
 			logger.info('Shutdown...');
+			process.exit(0);
 		});
 
 		return this.httpServer;
