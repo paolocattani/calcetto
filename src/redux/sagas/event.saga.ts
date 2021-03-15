@@ -5,7 +5,7 @@ import { ClientToServerEvents, Events, ServerToClientEvents } from '../../@commo
 import { Socket } from 'socket.io-client';
 import { socketConnect, createSocketChannel, emitEvent } from '../services/event.service';
 import { EventMessage, Unauthorized } from '../../@common/models';
-import { AuthAction, TournamentAction } from '../actions';
+import { AuthAction, Stage1Action, Stage2Action, TournamentAction } from '../actions';
 import { persistor } from '../store';
 
 //-----------------------------------------------
@@ -39,38 +39,13 @@ function* listenEvents({
 					yield put(TournamentAction.reset({}));
 					yield put(TournamentAction.fetch.request({}));
 					break;
-				case Events.TOURNAMENT_JOIN:
-					yield put(TournamentAction.fetch.request({}));
-					break;
-				/*
-				case SessionStatus.STAGE1_UPDATE:
-					if (message.label) {
-						toast.success(i18next.t(message.label));
-					}
+				case Events.STAGE1_REFRESH:
 					yield put(Stage1Action.reloadFromServer({}));
 					break;
-				case SessionStatus.STAGE1_DELETE:
-					showMessage(message, UserMessageType.Warning);
-					// Reload tournament list
-					history.push('/');
-					yield put(TournamentAction.reset({}));
-					yield put(TournamentAction.fetch.request({}));
-					yield put(Stage1Action.reset({}));
-					break;
 				// Stage 2
-				case SessionStatus.STAGE2_UPDATE:
-					showMessage(message, UserMessageType.Success);
-					yield put(Stage2Action.fetchStage2.request({ tournamentId: message.data!.tournamentId! }));
+				case Events.STAGE2_REFRESH:
+					yield put(Stage1Action.reloadFromServer({}));
 					break;
-				case SessionStatus.STAGE2_DELETE:
-					showMessage(message, UserMessageType.Warning);
-					yield delay(5000);
-					// Reload only this tournament
-					yield put(Stage2Action.reset({}));
-					yield put(TournamentAction.reload.request({ tId: tournament.id }));
-					history.push('/stage1');
-					break;
-				*/
 				default:
 					break;
 			}
@@ -110,6 +85,16 @@ function* leaveTournament({ payload: { tournament } }: ReturnType<typeof EventAc
 	yield emitEvent(Events.TOURNAMENT_LEAVE, EventAction.leaveTournament, tournament);
 }
 
+// Emit Events.STAGE1_REFRESH
+function* updateStage1({ payload: { tournament } }: ReturnType<typeof EventAction.updateStage1.request>) {
+	yield emitEvent(Events.STAGE1_UPDATED, EventAction.updateStage1, tournament);
+}
+
+// Emit Events.STAGE2_REFRESH
+function* updateStage2({ payload: { tournament } }: ReturnType<typeof EventAction.updateStage2.request>) {
+	yield emitEvent(Events.STAGE2_UPDATED, EventAction.updateStage2, tournament);
+}
+
 // Close socket channel
 function* closeChannel({ payload }: ReturnType<typeof EventAction.closeChannel.request>) {
 	try {
@@ -128,4 +113,6 @@ export const EventSagas = [
 	takeEvery(EventAction.deleteTournament.request, deleteTournament),
 	takeEvery(EventAction.updateTournament.request, updateTournament),
 	takeEvery(EventAction.newTournament.request, newTournament),
+	takeEvery(EventAction.updateStage1.request, updateStage1),
+	takeEvery(EventAction.updateStage2.request, updateStage2),
 ];

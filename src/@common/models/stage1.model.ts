@@ -1,4 +1,4 @@
-import { PairDTO, Stage1Row } from '../dto';
+import { PairDTO, Stage1Row, TournamentDTO } from '../dto';
 import { GenericResponse } from './common.models';
 
 export interface Stage1State {
@@ -30,6 +30,7 @@ export interface FetchStage1Request {
 }
 export interface UpdateCellRequest {
 	tId: number;
+	tournament: TournamentDTO;
 	stageName: string;
 	score: string;
 	pair1Id: number;

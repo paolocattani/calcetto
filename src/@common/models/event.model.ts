@@ -52,25 +52,32 @@ export enum Events {
 	/**
 	 *
 	 * This event is fired when a public Tournament change progress
+	 * ( Stage1 -> Stage2 || Stage2 -> Stage1 )
 	 * #From : Client
-	 * #To : All client ( user and admin )
+	 * #To : Server ( then server fires TOURNAMENT_REFRESH )
 	 * See EventAction.updateTournament
 	 */
 	TOURNAMENT_UPDATED = 'tournament:updated',
+	TOURNAMENT_REFRESH = 'tournament:refresh',
+	/**
+	 * Stage1
+	 * This event is fired when an admin client edit stage1
+	 * #From : Client
+	 * #To : Server ( then server fires STAGE1_REFRESH )
+	 *
+	 */
+	STAGE1_UPDATED = 'stage1:updated',
+	STAGE1_REFRESH = 'stage1:refresh',
 	/**
 	 *
-	 * This event is fired when clients have to reload tournament list
-	 * #From : Server
-	 * #To : All client ( user and admin )
-	 * See EventAction.updateTournament
+	 * Stage2
+	 * This event is fired when an admin client edit stage2
+	 * #From : Client
+	 * #To : Server ( then server fires STAGE2_REFRESH )
+	 *
 	 */
-	TOURNAMENT_REFRESH = 'tournament:refresh',
-	// Stage1
-	STAGE1_UPDATE = 'stage1:update',
-	STAGE1_DELETE = 'stage1:delete',
-	// Stage2
-	STAGE2_UPDATE = 'stage2:update',
-	STAGE2_DELETE = 'stage2:delete',
+	STAGE2_UPDATED = 'stage2:updated',
+	STAGE2_REFRESH = 'stage2:refresh',
 }
 
 //----- Client / Server Events
@@ -80,12 +87,16 @@ export interface ClientToServerEvents {
 	[Events.TOURNAMENT_NEW]: (tournament: TournamentDTO) => void;
 	[Events.TOURNAMENT_DELETED]: (tournament: TournamentDTO) => void;
 	[Events.TOURNAMENT_UPDATED]: (tournament: TournamentDTO) => void;
+	[Events.STAGE1_UPDATED]: (tournament: TournamentDTO) => void;
+	[Events.STAGE2_UPDATED]: (tournament: TournamentDTO) => void;
 }
 
 export interface ServerToClientEvents {
 	[Events.NEW_MESSAGE]: (message: EventMessage) => void;
 	[Events.SESSION_EXPIRED]: (message: EventMessage) => void;
 	[Events.TOURNAMENT_REFRESH]: (message: EventMessage) => void;
+	[Events.STAGE1_REFRESH]: (message: EventMessage, tournament: TournamentDTO) => void;
+	[Events.STAGE2_REFRESH]: (message: EventMessage, tournament: TournamentDTO) => void;
 }
 
 //----- Sagas
@@ -102,6 +113,8 @@ export interface LeaveTournamentEventRequest extends TournamentEvent {}
 export interface NewTournamentEventRequest extends TournamentEvent {}
 export interface UpdateTournamentEventRequest extends TournamentEvent {}
 export interface DeleteTournamentEventRequest extends TournamentEvent {}
+export interface UpdateStage1EventRequest extends TournamentEvent {}
+export interface UpdateStage2EventRequest extends TournamentEvent {}
 
 // Responses
 export interface OpenChannelResponse {
@@ -113,6 +126,8 @@ export interface LeaveTournamentEventResponse {}
 export interface NewTournamentEventResponse {}
 export interface UpdateTournamentEventResponse {}
 export interface DeleteTournamentEventResponse {}
+export interface UpdateStage1EventResponse {}
+export interface UpdateStage2EventResponse {}
 
 // Error
 export interface EventError {}

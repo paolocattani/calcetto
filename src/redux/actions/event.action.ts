@@ -14,6 +14,10 @@ import {
 	NewTournamentEventResponse,
 	OpenChannelRequest,
 	OpenChannelResponse,
+	UpdateStage1EventRequest,
+	UpdateStage1EventResponse,
+	UpdateStage2EventRequest,
+	UpdateStage2EventResponse,
 	UpdateTournamentEventRequest,
 	UpdateTournamentEventResponse,
 } from '../../@common/models/event.model';
@@ -54,6 +58,16 @@ export const EventAction = {
 	deleteTournament: createAsyncAction(...defaultAsyncParams(actionName, 'Delete Tournament'))<
 		DeleteTournamentEventRequest,
 		DeleteTournamentEventResponse,
+		EventError
+	>(),
+	updateStage1: createAsyncAction(...defaultAsyncParams(actionName, 'Update Stage1'))<
+		UpdateStage1EventRequest,
+		UpdateStage1EventResponse,
+		EventError
+	>(),
+	updateStage2: createAsyncAction(...defaultAsyncParams(actionName, 'Update Stage2'))<
+		UpdateStage2EventRequest,
+		UpdateStage2EventResponse,
 		EventError
 	>(),
 };

@@ -1,10 +1,13 @@
-import { ICell, PairDTO } from '../dto';
+import { ICell, PairDTO, TournamentDTO } from '../dto';
 import { GenericResponse } from './common.models';
 
 export interface Stage2State {
 	isLoading: boolean;
 	count?: number;
 	cells?: Array<Array<ICell>>;
+	// Utilizzato per indicare se è necessario ricaricare i dati dal db
+	// a seguito di un cambiamento causato da un'altro utente
+	toogleRefresh: boolean;
 }
 
 // Request / Response
@@ -30,6 +33,7 @@ export interface FetchStage2Response extends GenericResponse {
 }
 
 export interface UpdateStage2CellRequest {
+	tournament: TournamentDTO;
 	cells: Array<ICell>;
 }
 export interface UpdateStage2CellResponse extends GenericResponse {}

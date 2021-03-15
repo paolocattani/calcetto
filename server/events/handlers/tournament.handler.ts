@@ -42,7 +42,7 @@ export const tournamentHandler = (
 				key: 'event:tournament.leaved',
 				options: { user: getUserLabel(user!) },
 			},
-			type: UserMessageType.Success,
+			type: UserMessageType.Warning,
 		});
 	};
 
@@ -97,14 +97,11 @@ export const tournamentHandler = (
 					key: 'event:tournament.deleted',
 					options: { tournament: getTournamentLabel(tournament) },
 				},
-				type: UserMessageType.Success,
+				type: UserMessageType.Warning,
 			});
 		});
 	};
 
-	socket.prependAny((eventName, ...args) => {
-		logEvent(eventName, ...args);
-	});
 	socket.on(Events.TOURNAMENT_JOIN, joinTournament);
 	socket.on(Events.TOURNAMENT_LEAVE, leaveTournament);
 	socket.on(Events.TOURNAMENT_NEW, newTournament);

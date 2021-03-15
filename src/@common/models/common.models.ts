@@ -1,4 +1,4 @@
-import { PlayerRole } from '../dto';
+import { PlayerRole, TournamentDTO } from '../dto';
 import { AuthenticationResponse, Events, RootState } from '.';
 import { HTTPStatusCode } from './HttpStatusCode';
 import { TOptions, TFunctionKeys } from 'i18next';
@@ -24,6 +24,9 @@ export interface EventMessage {
 	event: Events;
 	type: UserMessageType;
 	label: I18nLabel;
+	data?: {
+		tournament: TournamentDTO;
+	};
 }
 
 /**
@@ -164,6 +167,7 @@ export const initialState: RootState = {
 		stages: [],
 	},
 	stage2State: {
+		toogleRefresh: true,
 		isLoading: false,
 	},
 };

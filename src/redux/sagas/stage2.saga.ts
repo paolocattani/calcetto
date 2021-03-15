@@ -13,6 +13,7 @@ import {
 import { TournamentSelector } from '../selectors';
 import { TournamentDTO, TournamentProgress } from '../../@common/dto';
 import { entityLifeCycle } from './utils';
+import { EventAction } from '../actions/event.action';
 
 function* deleteStage2Saga({ payload }: ReturnType<typeof Stage2Action.delete.request>) {
 	const tournament: TournamentDTO = yield select(TournamentSelector.getTournament);
@@ -37,10 +38,14 @@ function* fetchStage2Saga({ payload }: ReturnType<typeof Stage2Action.fetchStage
 }
 
 function* updateCellsSaga({ payload }: ReturnType<typeof Stage2Action.updateCell.request>) {
+	const onSuccess = function* (response: UpdateStage2CellResponse) {
+		yield put(EventAction.updateStage2.request({ tournament: payload.tournament }));
+	};
 	yield* entityLifeCycle<UpdateStage2CellRequest, UpdateStage2CellResponse, Stage2Error>(
 		Stage2Action.updateCell,
 		updateCells,
-		payload
+		payload,
+		onSuccess
 	);
 }
 

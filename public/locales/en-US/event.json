@@ -7,5 +7,11 @@
         "updated_stage1": "{{tournament}} tournament's Stage2 has been deleted.",
         "updated_stage2": "Tournament {{tournament}} moved to next step."
     },
+    "stage1": {
+        "updated": "Updating..."
+    },
+    "stage2": {
+        "updated": "Updating..."
+    },
     "session_expired": "Session expired"
 }

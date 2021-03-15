@@ -1,5 +1,5 @@
 import { Server as SocketIoServer, Socket } from 'socket.io';
-import { tournamentHandler } from './handlers/tournament.handler';
+import { tournamentHandler, stage1Handler, stage2Handler } from './handlers';
 import { AppRequest } from '../controller';
 import {
 	ClientToServerEvents,
@@ -17,9 +17,16 @@ export const handleSocket = (io: SocketIoServer<ClientToServerEvents, ServerToCl
 	const onConnection = async (socket: Socket<ClientToServerEvents, ServerToClientEvents>) => {
 		// Handlers
 		tournamentHandler(io, socket);
-		const { user, clientIp, session } = <AppRequest>socket.request;
+		stage1Handler(io, socket);
+		stage2Handler(io, socket);
 
+		// Common
+		const { user, clientIp, session } = <AppRequest>socket.request;
 		logEvent(`User '${user!.name} ${user!.surname}' from '${clientIp}' is now connected!`);
+		// Logger
+		socket.prependAny((eventName, ...args) => {
+			logEvent(eventName, ...args);
+		});
 
 		// check token every 30 sec
 		const interval = setInterval(() => {

@@ -1,6 +1,6 @@
 import * as H from 'history';
 import i18next from 'i18next';
-import { eventChannel } from 'redux-saga';
+import { eventChannel, END } from 'redux-saga';
 import { put } from 'redux-saga/effects';
 import { io, Socket } from 'socket.io-client';
 import { socketHost } from 'src/@common/utils';
@@ -34,8 +34,12 @@ export const createSocketChannel = (thisSocket: Socket, history: H.History) =>
 		thisSocket.on(Events.NEW_MESSAGE, onNewMessage);
 		thisSocket.on(Events.SESSION_EXPIRED, emitter);
 		thisSocket.on(Events.TOURNAMENT_REFRESH, emitter);
+		thisSocket.on(Events.STAGE1_REFRESH, emitter);
+		thisSocket.on(Events.STAGE2_REFRESH, emitter);
 
 		return () => {
+			// close channel
+			emitter(END);
 			// Remove listener
 			thisSocket.off();
 			thisSocket.close();
