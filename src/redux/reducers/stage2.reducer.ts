@@ -4,12 +4,9 @@ import { Stage2Action } from '../actions';
 
 export const initialStage2State: Stage2State = {
 	isLoading: false,
-	toogleRefresh: true,
 };
 
 export const Stage2Reducer = createReducer<Stage2State, Action>(initialStage2State)
-	//
-	.handleAction([Stage2Action.reloadFromServer], (state) => ({ ...state, toogleRefresh: !state.toogleRefresh }))
 	// Request
 	.handleAction([Stage2Action.fetchStage2.request, Stage2Action.delete.request], (state) => ({
 		...state,

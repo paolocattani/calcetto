@@ -167,7 +167,6 @@ export const initialState: RootState = {
 		stages: [],
 	},
 	stage2State: {
-		toogleRefresh: true,
 		isLoading: false,
 	},
 };

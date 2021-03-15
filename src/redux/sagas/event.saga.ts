@@ -44,7 +44,7 @@ function* listenEvents({
 					break;
 				// Stage 2
 				case Events.STAGE2_REFRESH:
-					yield put(Stage1Action.reloadFromServer({}));
+					yield put(Stage2Action.fetchStage2.request({ tournamentId: message.data!.tournament.id }));
 					break;
 				default:
 					break;

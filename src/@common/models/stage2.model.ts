@@ -5,9 +5,6 @@ export interface Stage2State {
 	isLoading: boolean;
 	count?: number;
 	cells?: Array<Array<ICell>>;
-	// Utilizzato per indicare se è necessario ricaricare i dati dal db
-	// a seguito di un cambiamento causato da un'altro utente
-	toogleRefresh: boolean;
 }
 
 // Request / Response
