@@ -53,7 +53,7 @@ module.exports = {
 		//'comma-dangle': ['error', 'always'],
 		'no-cond-assign': ['error', 'always'],
 		// disable rules from base configurations
-		'no-console': 'off',
+		// 'no-console': 'off',
 	},
 	settings: {
 		react: { version: 'detect' }, // Tells eslint-plugin-react to automatically detect the version of React to use

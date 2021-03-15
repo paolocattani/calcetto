@@ -13,6 +13,7 @@ import { RightArrowIcon } from '../core/icons';
 import { IndicatorSeparator } from './helper';
 import { useTranslation } from 'react-i18next';
 import { EventAction } from 'src/redux/actions/event.action';
+import logger from '../../@common/utils/logger.utils';
 
 interface SelectTournamentProps {
 	tournamentsList: Array<TournamentDTO>;
@@ -38,7 +39,7 @@ const SelectTournament: React.FC<SelectTournamentProps> = ({ tournamentsList }) 
 				dispatch(PairAction.reset({}));
 				currentHistory.push('/tournament');
 			} else {
-				console.log('Fetching pairs for tournament : ', tournament.id);
+				logger.info('Fetching pairs for tournament : ', tournament.id);
 				dispatch(PairAction.fetch.request({ tId: tournament.id, history: currentHistory }));
 			}
 		} else toast.error(t('common:error.generic'));

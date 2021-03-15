@@ -1,14 +1,15 @@
 import React from 'react';
 import { SyntheticEvent } from 'react';
 import { ExpandRowProps } from 'react-bootstrap-table-next';
-import { LABEL_COMMON_LOADING } from 'src/@common/constants/label';
-import { PairDTO } from 'src/@common/dto';
-import { SuccessCodes } from 'src/@common/models/HttpStatusCode';
-import { StatsPairMap, StatsPairResponse } from 'src/@common/models/stats.model';
-import { fetchPairStats } from 'src/redux/services/stats.service';
+import { LABEL_COMMON_LOADING } from '../../@common/constants/label';
+import { PairDTO } from '../../@common/dto';
+import { SuccessCodes } from '../../@common/models/HttpStatusCode';
+import { StatsPairMap, StatsPairResponse } from '../../@common/models/stats.model';
+import { fetchPairStats } from '../../redux/services/stats.service';
 import { MinusIcon, PlusIcon, ChartIcon } from '../core/icons';
 import Stats from '../Stats/table.component';
 import i18next from '../../i18n/i18n';
+import logger from '../../@common/utils/logger.utils';
 
 const expandManager = (
 	stats: StatsPairMap,
@@ -53,7 +54,7 @@ const expandManager = (
 					fetchPairStats({ pairs: [row.id] }).then((result) => {
 						if (row.id && SuccessCodes.includes(result.code)) {
 							const { stats: statistics } = result as StatsPairResponse;
-							console.log('result :', statistics, result);
+							logger.info('result :', statistics, result);
 							stats[row.id] = statistics[row.id];
 							setStats(stats);
 						}

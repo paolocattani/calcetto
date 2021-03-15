@@ -5,9 +5,8 @@
 //
 
 // Core
-import '../../../core/env';
 import { logger } from '../../../core/logger';
-import { isProductionMode } from '../../../core/debug';
+import { isProductionMode } from '../../../../src/@common/utils/env.utils';
 // Sequelize
 import { SyncOptions } from 'sequelize';
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript';

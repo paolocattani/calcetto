@@ -17,6 +17,7 @@ import { PairDTO, TournamentProgress } from '../../@common/dto';
 import { useSelector } from '../core/types';
 import { EventAction } from 'src/redux/actions/event.action';
 import { LoadingModal } from '../core/generic/Commons';
+import logger from '../../@common/utils/logger.utils';
 
 /**
  * Wraps multiple table components
@@ -170,7 +171,7 @@ function renderTables(pairsList: PairDTO[], autoOrder: boolean): JSX.Element[] {
 		stageList.push(
 			<Stage1Table key={`Stage1-${stageName}`} stageName={stageName} pairsList={stage} autoOrder={autoOrder} />
 		);
-		// console.log(`stages ${stageName} :`, stage);
+		// logger.info(`stages ${stageName} :`, stage);
 	}
 
 	return stageList;

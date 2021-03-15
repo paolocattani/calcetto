@@ -9,13 +9,14 @@ import generator from '../generator/generator';
 // Routes
 import routes from '../controller/index';
 // Utils
-import '../core/env';
+import '../../src/@common/utils/env.utils';
 import chalk from 'chalk';
 import { logger } from '../core/logger';
-import { isDevMode, isProductionMode, isTestMode } from '../core/debug';
-import { markAllAsApplied, migrationUp } from '../database/migrations';
+import { markAllAsApplied } from '../database/migrations';
 import { Server as SocketIoServer } from 'socket.io'; // socket.io
 import { handleSocket } from '../events/events';
+import { isDevMode, isProductionMode, isTestMode } from '../../src/@common/utils/env.utils';
+import { migrationUp } from '../database/migrations';
 
 const defaultName: string = 'ApplicationServer Calcetto';
 const defaultPort: number = Number(isProductionMode() ? process.env.PORT : process.env.SERVER_PORT);

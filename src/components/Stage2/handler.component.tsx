@@ -15,7 +15,7 @@ import { onClickCallback, onSelectCallback } from './helper';
 import { PairDTO, ICell } from '../../@common/dto';
 import { SuccessCodes } from '../../@common/models/HttpStatusCode';
 import { FetchStage2PairsResponse } from '../../@common/models';
-// import template from './template';
+import logger from '../../@common/utils/logger.utils';
 
 interface Stage2HandlerProps extends RouteComponentProps {}
 
@@ -67,7 +67,7 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
 			current2 = elements[colIndex - 1][rowIndex - 2];
 		}
 		next = elements[colIndex][current1.matchId - 1];
-		console.log(' onClick : ', current1, current2, next);
+		logger.info(' onClick : ', current1, current2, next);
 
 		current1.isWinner = isWinner;
 		current2.isWinner = !isWinner;
@@ -79,7 +79,7 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
 
 	// Questa funzione viene richiamata quando viene selezionata una coppia nella prima colonna
 	const onSelectPair: onSelectCallback = (value, rowIndex, actionMeta) => {
-		console.log(' onSelectPair : ', value, rowIndex);
+		logger.info(' onSelectPair : ', value, rowIndex);
 		if (!pairsList) {
 			return;
 		}
@@ -98,7 +98,7 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
 		}
 		setPairsList(pairs);
 		elements[0][rowIndex - 1].pair = newPair;
-		console.log(' onSelectPair : ', elements[0][rowIndex - 1]);
+		logger.info(' onSelectPair : ', elements[0][rowIndex - 1]);
 		dispatch(Stage2Action.setCells(elements));
 		dispatch(Stage2Action.updateCell.request({ cells: [elements[0][rowIndex - 1]], tournament }));
 	};

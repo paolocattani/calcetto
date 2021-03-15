@@ -3,6 +3,7 @@
 //
 import { GenericResponse, OmitHistory, UnexpectedServerError } from '../models/common.models';
 import { toast } from 'react-toastify';
+import logger from './logger.utils';
 
 interface IFetchCallback<T> {
 	(response: T): T | Promise<T>;
@@ -40,14 +41,15 @@ export const socketHost = process.env.REACT_APP_SOCKET_HOST
 //? `${process.env.REACT_APP_SERVER_HOST}:${process.env.REACT_APP_PORT}`
 
 const host = rawHost.slice(-1) === '/' ? rawHost.substring(0, rawHost.length - 1) : rawHost;
+export const getCompleteUrl = (url: string) => host + url;
 export const fetchWrapper = async <B, T extends GenericResponse>(
 	url: string,
 	method: string,
 	body?: OmitHistory<B>,
 	afterResponse?: IFetchCallback<T>
 ): Promise<T | GenericResponse> => {
-	const completeUrl = host + url;
-	console.log('fetchWrapper.request : ', method, completeUrl, body);
+	const completeUrl = getCompleteUrl(url);
+	logger.info('fetchWrapper.request : ', method, completeUrl, body);
 	let response = null;
 	try {
 		response = await fetch(completeUrl, {
@@ -62,7 +64,7 @@ export const fetchWrapper = async <B, T extends GenericResponse>(
 			},
 		});
 		const result: T = await response.json();
-		console.log('fetchWrapper.response : ', result);
+		logger.info('fetchWrapper.response : ', result);
 		return afterResponse ? afterResponse(result) : result;
 	} catch (error) {
 		console.group('An error occur : ');

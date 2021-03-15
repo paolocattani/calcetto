@@ -16,6 +16,7 @@ import { Action } from 'typesafe-actions';
 import { persistor } from '../store';
 import { entityLifeCycle } from './utils';
 import { EventAction } from '../actions/event.action';
+import logger from '../../@common/utils/logger.utils';
 
 function* checkAuthenticationSaga({
 	payload: { history },
@@ -110,9 +111,9 @@ function* deleteUserSaga({
 	);
 }
 
-function logger(action: Action<any>) {
+function logAction(action: Action<any>) {
 	if (process.env.NODE_ENV === 'development') {
-		console.log('Action : ', action);
+		logger.debug('Action : ', action);
 	}
 }
 
@@ -123,5 +124,5 @@ export const AuthSagas = [
 	takeEvery(AuthAction.delete.request, deleteUserSaga),
 	takeEvery(AuthAction.registration.request, registrationSaga),
 	takeEvery(AuthAction.checkAuthentication.request, checkAuthenticationSaga),
-	takeEvery('*', logger),
+	takeEvery('*', logAction),
 ];
