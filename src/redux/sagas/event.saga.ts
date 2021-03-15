@@ -95,6 +95,11 @@ function* newTournament({ payload: { tournament } }: ReturnType<typeof EventActi
 	yield emitEvent(Events.TOURNAMENT_NEW, EventAction.newTournament, tournament);
 }
 
+// Emit Events.TOURNAMENT_UPDATED
+function* updateTournament({ payload: { tournament } }: ReturnType<typeof EventAction.newTournament.request>) {
+	yield emitEvent(Events.TOURNAMENT_UPDATED, EventAction.updateTournament, tournament);
+}
+
 // Emit Events.TOURNAMENT_JOIN
 function* joinTournament({ payload: { tournament } }: ReturnType<typeof EventAction.joinTournament.request>) {
 	yield emitEvent(Events.TOURNAMENT_JOIN, EventAction.joinTournament, tournament);
@@ -121,5 +126,6 @@ export const EventSagas = [
 	takeEvery(EventAction.joinTournament.request, joinTournament),
 	takeEvery(EventAction.leaveTournament.request, leaveTournament),
 	takeEvery(EventAction.deleteTournament.request, deleteTournament),
+	takeEvery(EventAction.updateTournament.request, updateTournament),
 	takeEvery(EventAction.newTournament.request, newTournament),
 ];

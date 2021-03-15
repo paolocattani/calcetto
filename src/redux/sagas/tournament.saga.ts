@@ -71,13 +71,17 @@ function* updateTournamentSaga({ payload }: ReturnType<typeof TournamentAction.u
 	const oldProgress = payload.fromProgress;
 	const newProgress = payload.tournament.progress;
 	const isPublic = payload.tournament.public;
-	console.log('Updating touramento : ', oldProgress, newProgress, isPublic);
+	console.log('Updating tournament : ', oldProgress, newProgress, isPublic);
 	// Notify new tournament
 	if (isPublic && oldProgress === TournamentProgress.PairsSelection && newProgress === TournamentProgress.Stage1) {
 		yield put(EventAction.newTournament.request({ tournament: payload.tournament }));
 	}
 	// Notify Tournament update
-	if (isPublic && oldProgress === TournamentProgress.Stage1 && newProgress === TournamentProgress.Stage2) {
+	if (
+		isPublic &&
+		((oldProgress === TournamentProgress.Stage1 && newProgress === TournamentProgress.Stage2) ||
+			(oldProgress === TournamentProgress.Stage2 && newProgress === TournamentProgress.Stage1))
+	) {
 		yield put(EventAction.updateTournament.request({ tournament: payload.tournament }));
 	}
 	// Notify tournament is no loger available

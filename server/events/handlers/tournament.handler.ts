@@ -1,9 +1,9 @@
 import { Events } from '../../../src/@common/models/event.model';
 import { Server as SocketIoServer, Socket } from 'socket.io';
 import { broadcastUpdates, iterateConnectedClient, logEvent } from '../event.utils';
-import { ClientToServerEvents, EventMessage, ServerToClientEvents, UserMessageType } from '../../../src/@common/models';
+import { ClientToServerEvents, ServerToClientEvents, UserMessageType } from '../../../src/@common/models';
 import { AppRequest } from '../../controller';
-import { TournamentDTO, UserDTO, UserRole } from '../../../src/@common/dto';
+import { TournamentDTO, TournamentProgress, UserDTO, UserRole } from '../../../src/@common/dto';
 import { formatDate } from '../../../src/@common/utils/date.utils';
 
 export const getTournamentLabel = (tournament: TournamentDTO) => `${tournament.name}-${formatDate(tournament.date)}`;
@@ -68,12 +68,17 @@ export const tournamentHandler = (
 	const updateTournament = (tournament: TournamentDTO) => {
 		iterateConnectedClient(io, socket, (client: Socket, user: UserDTO) => {
 			logEvent(
-				`Notify user '${getUserLabel(user!)}' that tournament '${getTournamentLabel(tournament)}' is now at Stage2`
+				`Notify user '${getUserLabel(user!)}' that tournament '${getTournamentLabel(tournament)}' is now at ${
+					tournament.progress
+				}`
 			);
 			client.emit(Events.TOURNAMENT_REFRESH, {
 				event: Events.TOURNAMENT_REFRESH,
 				label: {
-					key: 'event:tournament.updated',
+					key:
+						tournament.progress === TournamentProgress.Stage1
+							? 'event:tournament.updated_stage1'
+							: 'event:tournament.updated_stage2',
 					options: { tournament: getTournamentLabel(tournament) },
 				},
 				type: UserMessageType.Success,
