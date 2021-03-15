@@ -8,19 +8,15 @@ import stage1Router from './stage1.controller';
 import stage2Router from './stage2.controller';
 import authRouter from './auth/auth.controller';
 import statsRouter from './stats.controller';
-// SSE
-import { sessionControl } from '../events/events';
 // mddleware
-import { controllerLogger, withAuth } from '../middleware';
+import { controllerLogger } from '../middleware';
 // DTO
 import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
 import { UserDTO } from '../../src/@common/dto';
-import { IRateLimiterRes } from 'rate-limiter-flexible';
 
 export interface AppRequest extends Request {
 	user?: UserDTO;
 	uuid?: string;
-	api?: IRateLimiterRes;
 }
 
 type Controller = {
@@ -47,9 +43,6 @@ export default (application: ExpressApplication): void => {
 			c.router
 		);
 	});
-
-	// SSE
-	application.get('/sse/v1/session', withAuth, sessionControl);
 
 	// Check if server is alive
 	application.get('/status', (req: Request, res: Response) =>

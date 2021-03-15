@@ -5,27 +5,18 @@ import { safeVerifyToken } from '../controller/auth/auth.utils';
 import { unauthorized } from '../controller/common.response';
 import { logger } from '../core/logger';
 import { User } from '../database/models';
-import { sendNotification } from '../events/events';
 import { isAdmin } from '../manager/auth.manager';
 import chalk from 'chalk';
+import { asyncMiddleware } from './utils.middleware';
 
 const UNAUTHORIZED = 'common:server.unauthorized';
-//--------- Check authorization :
-const notify = (res: Response) => {
-	logger.error(chalk.redBright('Unauthorized: Token Expired '));
-	const message: Message = {
-		status: SessionStatus.SESSION_EXPIRED,
-		label: 'auth:expired_alert',
-	};
-	sendNotification(res, message, true);
-	return unauthorized(res, { label: 'auth:expired' });
-};
-export const withAuth = async (req: AppRequest, res: Response, next: NextFunction) => {
+
+export const withAuth = asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
 	try {
 		const { jwt, uuid } = req.session;
 		if (!jwt || !uuid) {
-			logger.error(chalk.redBright('Come back with more cookies... -> '));
-			return unauthorized(res, { label: UNAUTHORIZED });
+			logger.error(chalk.redBright('Come back with more cookies...'));
+			return unauthorized(res, { key: UNAUTHORIZED });
 		}
 		const [user, isTokenValid] = safeVerifyToken(jwt);
 		if (isTokenValid && user) {
@@ -37,17 +28,19 @@ export const withAuth = async (req: AppRequest, res: Response, next: NextFunctio
 				next();
 			}
 		} else {
-			return notify(res);
+			logger.error(chalk.redBright('Token expired...'));
+			return unauthorized(res, { key: UNAUTHORIZED });
 		}
 	} catch (error) {
-		return notify(res);
+		logger.error(chalk.redBright('Something went wrong...'));
+		return unauthorized(res, { key: UNAUTHORIZED });
 	}
-};
+});
 
 //--------- Check if user has admin rights
 export const withAdminRights = (req: AppRequest, res: Response, next: NextFunction) => {
 	if (!isAdmin(req.user)) {
-		return unauthorized(res, { label: 'auth:expired' });
+		return unauthorized(res, { key: 'auth:expired' });
 	}
 	next();
 };
@@ -56,7 +49,7 @@ export const withAdminRights = (req: AppRequest, res: Response, next: NextFuncti
 export const withTestAuth = (req: AppRequest, res: Response, next: NextFunction) => {
 	const { secret } = req.body;
 	if (process.env.NODE_ENV !== 'test' || secret !== process.env.SERVER_SECRET) {
-		return unauthorized(res, { label: UNAUTHORIZED });
+		return unauthorized(res, { key: UNAUTHORIZED });
 	}
 	next();
 };

@@ -1,7 +1,7 @@
-import { PlayerRole } from '../dto';
-import { AuthenticationResponse, RootState } from '.';
+import { PlayerRole, TournamentDTO } from '../dto';
+import { AuthenticationResponse, Events, RootState } from '.';
 import { HTTPStatusCode } from './HttpStatusCode';
-import { TOptions } from 'i18next';
+import { TOptions, TFunctionKeys } from 'i18next';
 
 export enum SessionStatus {
 	//
@@ -20,6 +20,18 @@ export enum SessionStatus {
 	STAGE2_DELETE = 'stage2_delete',
 }
 
+export interface EventMessage {
+	event: Events;
+	type: UserMessageType;
+	label: I18nLabel;
+	data?: {
+		tournament: TournamentDTO;
+	};
+}
+
+/**
+ * @deprecated
+ */
 export interface Message {
 	status: SessionStatus;
 	data?: {
@@ -31,7 +43,7 @@ export interface Message {
 }
 
 export type I18nLabel = {
-	label: string;
+	key: TFunctionKeys | TFunctionKeys[];
 	options?: TOptions<{ [key: string]: any }> | string;
 };
 
@@ -55,8 +67,7 @@ export enum UserMessageType {
 
 export interface UserMessage {
 	type: UserMessageType;
-	label: string;
-	options?: TOptions<{ [key: string]: any }> | string;
+	label: I18nLabel;
 }
 
 export type OmitHistory<T> = Omit<T, 'history'>;
@@ -68,7 +79,7 @@ export const UnexpectedServerError: GenericResponse = {
 	message: 'Unexpected Server Error',
 	userMessage: {
 		type: UserMessageType.Danger,
-		label: 'common:server.unexpected',
+		label: { key: 'common:server.unexpected' },
 	},
 };
 
@@ -78,7 +89,7 @@ export const Unauthorized: AuthenticationResponse = {
 	message: 'Unauthorized!',
 	userMessage: {
 		type: UserMessageType.Danger,
-		label: 'auth:expired',
+		label: { key: 'auth:expired' },
 	},
 };
 
@@ -104,6 +115,9 @@ export const initialState: RootState = {
 		isAuthenticated: false,
 		isAdmin: false,
 		isLoading: false,
+	},
+	eventState: {
+		connected: false,
 	},
 	stage1State: {
 		toogleRefresh: false,

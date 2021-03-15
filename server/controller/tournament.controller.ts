@@ -42,7 +42,7 @@ router.get(
 			const tournamentsList = await listAll(req.user!);
 			return success<FetchTournamentsResponse>(
 				res,
-				{ label: tournamentsList.length > 1 ? 'tournament:loaded_2' : 'tournament:loaded_1' },
+				{ key: tournamentsList.length > 1 ? 'tournament:loaded_2' : 'tournament:loaded_1' },
 				{ tournamentsList }
 			);
 		} catch (err) {
@@ -64,7 +64,7 @@ router.get(
 			if (!tournament) {
 				return entityNotFound(res);
 			}
-			return success<ReloadTournamentResponse>(res, { label: 'tournament:loaded_1' }, { tournament: tournament! });
+			return success<ReloadTournamentResponse>(res, { key: 'tournament:loaded_1' }, { tournament: tournament! });
 		} catch (err) {
 			return serverError('GET tournament/{tId} error ! : ', err, res);
 		}
@@ -82,7 +82,7 @@ router.put(
 			logger.info(`Tournament ${request.tournament.name} updating....`);
 			const tournament = await update(req.user!, parseBody(request.tournament));
 			logger.info(`Tournament ${request.tournament.name} updated`);
-			return success<UpdateTournamentResponse>(res, { label: 'tournament:saved' }, { tournament });
+			return success<UpdateTournamentResponse>(res, { key: 'tournament:saved' }, { tournament });
 		} catch (err) {
 			return serverError('PUT tournament/update error ! : ', err, res);
 		}
@@ -102,13 +102,13 @@ router.post(
 			let t: Tournament | TournamentDTO | null = await findByNameAndDate(model.name, model.date, user);
 			if (t) {
 				logger.info(`Tournament ${model.name} already exists....`);
-				return failure(res, { label: 'tournament:duplicated', options: { name: model.name } });
+				return failure(res, { key: 'tournament:duplicated', options: { name: model.name } });
 			}
 			model.ownerId = user.id;
 			t = await Tournament.create(model);
 			const tournament = convertEntityToDTO(t);
 			logger.info(`Created Tournament => ${t}`);
-			return success<SaveTournamentResponse>(res, { label: 'tournament:saved' }, { tournament });
+			return success<SaveTournamentResponse>(res, { key: 'tournament:saved' }, { tournament });
 		} catch (err) {
 			return serverError('POST tournament/new error ! : ', err, res);
 		}
@@ -124,11 +124,7 @@ router.delete(
 		try {
 			const request: DeleteTournamentRequest = req.body;
 			await deleteTournament(parseBody(request.tournament));
-			return success<DeleteTournamentResponse>(
-				res,
-				{ label: 'tournament:deleted' },
-				{ tournament: request.tournament }
-			);
+			return success<DeleteTournamentResponse>(res, { key: 'tournament:deleted' }, { tournament: request.tournament });
 		} catch (error) {
 			return serverError('DELETE tournament/delete error ! : ', error, res);
 		}
@@ -143,7 +139,7 @@ router.delete(
 	asyncMiddleware(async (req: Request, res: Response) => {
 		try {
 			await deleteAllTournament();
-			return success(res, { label: 'tournament:deleted' });
+			return success(res, { key: 'tournament:deleted' });
 		} catch (error) {
 			return serverError('DELETE tournament/delete error ! : ', error, res);
 		}

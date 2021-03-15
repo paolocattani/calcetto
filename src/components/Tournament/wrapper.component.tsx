@@ -15,12 +15,12 @@ import { useTranslation } from 'react-i18next';
 import { LABEL_TOURNAMENT_SELECT } from '../../@common/constants/label';
 import StatsSummary from './stats.component';
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const FTournament: React.FC = () => {
 	// Redux
 	const dispatch = useDispatch();
 	const { t } = useTranslation(['common', 'tournament']);
 	const isAdmin = useSelector(AuthSelector.isAdmin);
-	// Tournament list from Db
 	const tournamentsList = useSelector(TournamentSelector.getTournamentsList);
 
 	// State definition
@@ -40,7 +40,7 @@ const FTournament: React.FC = () => {
 				</p>
 			);
 		}
-		return isAdmin && newTournament ? <NewTournament /> : <SelectTournament />;
+		return isAdmin && newTournament ? <NewTournament /> : <SelectTournament tournamentsList={tournamentsList} />;
 	};
 
 	return (

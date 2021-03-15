@@ -18,3 +18,7 @@
 .toolsBarRow{
     vertical-align: middle;
 }
+
+.defaultMaginBottom{
+    margin-bottom: 5em;
+}

@@ -15,11 +15,11 @@ export interface FetchPlayersRequest {
 	addEmpty?: boolean;
 }
 export interface SavePlayerRequest {
-	history?: H.History<unknown>;
+	history?: H.History;
 	player: PlayerDTO;
 }
 export interface DeletePlayersRequest {
-	history?: H.History<unknown>;
+	history?: H.History;
 	players: Array<PlayerDTO>;
 }
 // Responses

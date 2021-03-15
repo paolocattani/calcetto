@@ -7,3 +7,4 @@ export * from './stage1.model';
 export * from './stage2.model';
 export * from './common.models';
 export * from './stats.model';
+export * from './event.model';

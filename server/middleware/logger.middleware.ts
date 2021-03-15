@@ -1,5 +1,5 @@
 import { NextFunction, Response, Request } from 'express';
-import { isDevMode } from '../core/debug';
+import { isDevMode } from '../../src/@common/utils/env.utils';
 import { logger } from '../core/logger';
 import chalk from 'chalk';
 

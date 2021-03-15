@@ -1,0 +1,1 @@
+web: bash ./cli/cli.sh heroku --start --no-redirect

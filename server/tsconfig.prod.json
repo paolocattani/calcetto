@@ -2,6 +2,14 @@
 	"$schema": "https://json.schemastore.org/tsconfig",
 	"compilerOptions": {
 		"pretty": true,
+		/* Basic Options */
+		// Must be "es6" due to sequelize . Ref https://github.com/sequelize/sequelize/issues/7840
+		"target": "es2020",
+		"module": "commonjs", //*
+		"lib": ["es2020"], //*
+		"strict": true,
+		"allowJs": true, //*
+		"checkJs": true, //*
 		"emitDecoratorMetadata": true,
 		"esModuleInterop": true,
 		"experimentalDecorators": true,
@@ -10,14 +18,16 @@
 		//"listFiles": true,
 		//"listEmittedFiles": true,
 		"noErrorTruncation": true,
-		"outDir": "../production_build",
+		"outDir": "./build_server",
 		"removeComments": true,
 		"skipLibCheck": true,
 		"downlevelIteration": true,
-		"target":"ES6",
-		"moduleResolution": "node",
-		"lib": [ "esnext" ],
-		"module": "commonjs"
+		"moduleResolution": "node", //*
+		"allowSyntheticDefaultImports": true //*
 	},
-	"exclude": ["./test","**/*.test.ts"]
+	"include": [
+		".",
+		"src/@common"
+	],
+	"exclude": ["./src/*","./test","**/*.test.ts","node_modules","build_server"]
 }

@@ -9,6 +9,7 @@ import { logger } from '../core/logger';
 import { getRedisClient } from '../database/config/redis/connection';
 import { ConfigManager } from '../manager/config.manager';
 import chalk from 'chalk';
+import { asyncMiddleware } from './utils.middleware';
 
 const TOO_MANY_REQUEST = 'common:too_many_requests';
 //--------- Gather client info
@@ -75,10 +76,10 @@ export const consumeRequest = async (req: AppRequest) => {
 	}
 };
 // eslint-disable-next-line sonarjs/cognitive-complexity
-export const limitRequest = async (req: AppRequest, res: Response, next: NextFunction) => {
+export const limitRequest = asyncMiddleware(async (req: AppRequest, res: Response, next: NextFunction) => {
 	try {
 		//const clientIp = req.clientIp;
-		const clientIp = req.connection.remoteAddress;
+		const clientIp = req.socket.remoteAddress;
 		if (!limiterDay || !limiterMinute) {
 			await limiterSlowBruteByIP();
 			await limiterFastBruteByIP();
@@ -109,23 +110,19 @@ export const limitRequest = async (req: AppRequest, res: Response, next: NextFun
 			}
 			if (retrySecs > 0) {
 				res.set('Retry-After', String(retrySecs));
-				logger.info(chalk.redBright('mw 401 : '), retrySecs);
-				return unauthorized(res, { label: TOO_MANY_REQUEST, options: { interval: String(retrySecs) } });
+				return unauthorized(res, { key: TOO_MANY_REQUEST, options: { interval: String(retrySecs) } });
 			}
 
 			if (resSlowByIP) {
-				logger.info(chalk.redBright('mw set header '));
-				req.api = resSlowByIP;
 				res.set('Retry-After', (Math.round(resSlowByIP.msBeforeNext / 1000) || 1).toString());
 				res.set('X-RateLimit-Limit', maxPerMinute.toString());
 				res.set('X-RateLimit-Remaining', resSlowByIP.remainingPoints.toString());
 				// res.set('X-RateLimit-Reset', new Date(Date.now() + resSlowByIP.msBeforeNext).toString());
 			}
-			logger.info(chalk.redBright('mw next 1'));
 			next();
 		}
 	} catch (error) {
-		logger.error(chalk.redBright('mw errror'), error);
-		return unauthorized(res, { label: TOO_MANY_REQUEST });
+		logger.error(chalk.redBright('security middleware error'), error);
+		return unauthorized(res, { key: TOO_MANY_REQUEST });
 	}
-};
+});

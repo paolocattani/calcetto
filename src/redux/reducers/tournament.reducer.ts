@@ -34,16 +34,14 @@ export const TournamentReducer = createReducer<TournamentState, Action>(initialT
 	)
 	// SUCCESS
 	// Fetch Tournament
-	.handleAction(TournamentAction.fetch.success, (state, { payload: { tournamentsList } }) => {
-		return {
-			tournament:
-				state.tournament && tournamentsList && !tournamentsList.includes(state.tournament)
-					? tournamentsList[0]
-					: state.tournament,
-			tournamentsList: tournamentsList || [],
-			isLoading: false,
-		};
-	})
+	.handleAction(TournamentAction.fetch.success, (state, { payload: { tournamentsList } }) => ({
+		tournament:
+			state.tournament && tournamentsList && !tournamentsList.includes(state.tournament)
+				? tournamentsList[0]
+				: state.tournament,
+		tournamentsList: tournamentsList || [],
+		isLoading: false,
+	}))
 	// Set selected tournament
 	.handleAction(TournamentAction.setTournament, (state, { payload }) => ({
 		...state,
