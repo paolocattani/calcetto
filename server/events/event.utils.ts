@@ -16,13 +16,17 @@ export const logEvent = (str: string, ...args: any) =>
 	logger.info(`${chalk.blueBright('[ Event ]')} : ${str} `, ...args);
 
 // Loop through connected client and perform a callback.
-export const iterateConnectedClient = async (io: SocketIoServer, callback: (client: Socket, user: UserDTO) => void) => {
+export const iterateConnectedClient = async (
+	io: SocketIoServer,
+	socket: Socket,
+	callback: (client: Socket, user: UserDTO) => void
+) => {
 	const users: Array<UserDTO> = [];
 	const ids = await io.allSockets();
 	for (let id of ids) {
 		const client = io.sockets.sockets.get(id);
 		const user = (<AppRequest>client?.request).user;
-		if (client && user) {
+		if (client && user && socket.id !== client.id) {
 			callback(client, user);
 			users.push(user);
 		}

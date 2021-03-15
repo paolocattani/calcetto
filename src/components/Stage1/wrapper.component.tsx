@@ -14,6 +14,7 @@ import TournamentBadge from '../Tournament/badge.component';
 // Models
 import { PairDTO, TournamentProgress } from '../../@common/dto';
 import { useSelector } from '../core/types';
+import { EventAction } from 'src/redux/actions/event.action';
 
 /**
  * Wraps multiple table components
@@ -35,7 +36,12 @@ const Wrapper: React.FC = (): JSX.Element => {
 	const pairsList = useSelector(PairSelector.getPairsList);
 
 	function goBack() {
-		currentHistory.push(session.isAdmin ? '/tournament' : '/');
+		let destination = '/tournament';
+		if (!session.isAdmin) {
+			destination = '/';
+			dispatch(EventAction.leaveTournament.request({ tournament }));
+		}
+		currentHistory.push(destination);
 	}
 	function goToStage2() {
 		// TODO: eseguire controlli e eventualemente mostrare messaggi utente

@@ -43,7 +43,7 @@ export const tournamentHandler = (io: SocketIoServer, socket: Socket) => {
 
 	// A new tournament has been created
 	const newTournament = (tournament: TournamentDTO) => {
-		iterateConnectedClient(io, (client: Socket, user: UserDTO) => {
+		iterateConnectedClient(io, socket, (client: Socket, user: UserDTO) => {
 			if (user.role === UserRole.User) {
 				logEvent(
 					`Notify user '${getUserLabel(user!)}' that tournament '${getTournamentLabel(tournament)}' is now available`
@@ -61,7 +61,7 @@ export const tournamentHandler = (io: SocketIoServer, socket: Socket) => {
 	};
 
 	const updateTournament = (tournament: TournamentDTO) => {
-		iterateConnectedClient(io, (client: Socket, user: UserDTO) => {
+		iterateConnectedClient(io, socket, (client: Socket, user: UserDTO) => {
 			logEvent(
 				`Notify user '${getUserLabel(user!)}' that tournament '${getTournamentLabel(tournament)}' is now at Stage2`
 			);
@@ -77,20 +77,18 @@ export const tournamentHandler = (io: SocketIoServer, socket: Socket) => {
 	};
 
 	const deleteTournament = (tournament: TournamentDTO) => {
-		iterateConnectedClient(io, (client: Socket, user: UserDTO) => {
-			if (socket.id !== client.id) {
-				logEvent(
-					`Notify user '${getUserLabel(user!)}' that tournament '${getTournamentLabel(tournament)}' has been deleted`
-				);
-				client.emit(Events.TOURNAMENT_REFRESH, {
-					event: Events.TOURNAMENT_REFRESH,
-					label: {
-						key: 'event:tournament.deleted',
-						options: { tournament: getTournamentLabel(tournament) },
-					},
-					type: UserMessageType.Success,
-				});
-			}
+		iterateConnectedClient(io, socket, (client: Socket, user: UserDTO) => {
+			logEvent(
+				`Notify user '${getUserLabel(user!)}' that tournament '${getTournamentLabel(tournament)}' has been deleted`
+			);
+			client.emit(Events.TOURNAMENT_REFRESH, {
+				event: Events.TOURNAMENT_REFRESH,
+				label: {
+					key: 'event:tournament.deleted',
+					options: { tournament: getTournamentLabel(tournament) },
+				},
+				type: UserMessageType.Success,
+			});
 		});
 	};
 
