@@ -7,6 +7,7 @@ import { roundNumber } from 'src/@common/utils';
 import { fetchStatsSummary } from 'src/redux/services/stats.service';
 import { LeftAngleIcon, RightAngleIcon } from '../core/icons';
 import { getLabel } from './helper';
+import logger from '../../@common/utils/logger.utils';
 
 interface StatsSummaryProps {}
 // eslint-disable-next-line sonarjs/cognitive-complexity
@@ -27,7 +28,7 @@ const StatsSummary: React.FC<StatsSummaryProps> = () => {
 					const { players, pairs } = (await fetchStatsSummary({})) as StatsSummaryResponse;
 					setStats({ players, pairs });
 				} catch (error) {
-					console.log('Error');
+					logger.info('Error');
 				} finally {
 					setLoaded(true);
 				}

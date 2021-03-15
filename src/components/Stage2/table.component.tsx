@@ -8,7 +8,7 @@ import { Styles } from 'react-select';
 import { PairDTO, ICell } from '../../@common/dto';
 import { useSelector } from '../core/types';
 import { TournamentSelector } from '../../redux/selectors';
-// import { valueFormatter } from 'components/Pair/helper';
+import logger from '../../@common/utils/logger.utils';
 
 // https://www.kodbiro.com/blog/rorgchart-react-module-for-displaying-and-editing-data-in-org-chart/
 
@@ -104,7 +104,7 @@ function getTableBodyRows(
       </div>
     );
     */
-		console.log('Render stage2 select :', rowIndex, colIndex, isLast, pair);
+		logger.info('Render stage2 select :', rowIndex, colIndex, isLast, pair);
 		return (
 			<PairsSelect
 				//components={{ Option: CustomOption }}

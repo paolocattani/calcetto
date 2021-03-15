@@ -14,6 +14,7 @@ import TournamentBadge from '../Tournament/badge.component';
 // Models
 import { PairDTO, TournamentProgress } from '../../@common/dto';
 import { useSelector } from '../core/types';
+import logger from '../../@common/utils/logger.utils';
 
 /**
  * Wraps multiple table components
@@ -61,7 +62,7 @@ const Wrapper: React.FC = (): JSX.Element => {
 		dispatch(Stage1Action.resetPairs({}));
 	}
 
-	console.log('selected : ', selected);
+	logger.info('selected : ', selected);
 	const toolsBar = (
 		<div className={commonStyle.toolsBarContainer}>
 			<Row className={commonStyle.toolsBarRow}>
@@ -153,7 +154,7 @@ function renderTables(pairsList: PairDTO[], autoOrder: boolean): JSX.Element[] {
 		stageList.push(
 			<Stage1Table key={`Stage1-${stageName}`} stageName={stageName} pairsList={stage} autoOrder={autoOrder} />
 		);
-		// console.log(`stages ${stageName} :`, stage);
+		// logger.info(`stages ${stageName} :`, stage);
 	}
 
 	return stageList;

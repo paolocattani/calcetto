@@ -5,7 +5,6 @@ import { StatsPlayerDTO } from '../../src/@common/dto/stats/stats.players.dto';
 import { StatsPairDTO } from '../../src/@common/dto/stats/stats.pairs.dto';
 import { convertEntityToDTO as convertPlayerEntityToDTO } from './player.manager';
 import { asyncForEach, logEntity } from '../core/utils';
-import { formatDate } from '../../src/@common/utils/date.utils';
 
 // Const
 const className = 'Stats Manager : ';
@@ -24,7 +23,7 @@ export const getBestPlayers = async (from?: string) => {
 			{
 				type: QueryTypes.SELECT,
 				raw: false,
-				// logging: console.log,
+				// logging: logger.info,
 				model: StatsPlayer,
 				mapToModel: true,
 			}
@@ -57,7 +56,7 @@ export const getBestPairs = async (from?: string) => {
 			{
 				type: QueryTypes.SELECT,
 				raw: false,
-				// logging: console.log,
+				// logging: logger.info,
 				model: StatsPairs,
 				mapToModel: true,
 			}

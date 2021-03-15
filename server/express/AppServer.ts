@@ -9,10 +9,10 @@ import generator from '../generator/generator';
 // Routes
 import routes from '../controller/index';
 // Utils
-import '../core/env';
+import '../../src/@common/utils/env.utils';
 import chalk from 'chalk';
 import { logger } from '../core/logger';
-import { isDevMode, isProductionMode, isTestMode } from '../core/debug';
+import { isDevMode, isProductionMode, isTestMode } from '../../src/@common/utils/env.utils';
 import { migrationUp } from '../database/migrations';
 
 const defaultName: string = 'ApplicationServer Calcetto';

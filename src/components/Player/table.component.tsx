@@ -19,6 +19,7 @@ import { getEmptyPlayer } from '../../@common/models';
 import Toolsbar from './toolsbar.component';
 import { StatsPlayerMap } from 'src/@common/models/stats.model';
 import expandManager from './expand.manager';
+import logger from '../../@common/utils/logger.utils';
 
 interface PlayerProps {}
 const PlayerTable: React.FC<PlayerProps> = () => {
@@ -67,7 +68,7 @@ const PlayerTable: React.FC<PlayerProps> = () => {
 	};
 
 	const addEdit = (player: PlayerDTO = getEmptyPlayer()) => {
-		console.log('addEdit : ', player);
+		logger.info('addEdit : ', player);
 		dispatch(PlayerAction.setPlayer(player));
 		currentHistory.push('/player/edit');
 	};

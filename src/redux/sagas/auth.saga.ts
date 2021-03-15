@@ -23,7 +23,6 @@ import {
 	deleteUser,
 	logout,
 	unsubscribe,
-	setCSRFToken,
 } from '../services/auth.service';
 import { toast } from 'react-toastify';
 import { Action } from 'typesafe-actions';
@@ -34,6 +33,8 @@ import { entityLifeCycle, getToast } from './utils';
 import i18next from '../../i18n/i18n';
 import { formatDate } from '../../@common/utils/date.utils';
 import { TournamentSelector } from '../selectors';
+import logger from '../../@common/utils/logger.utils';
+import { getCompleteUrl } from 'src/@common/utils';
 
 function* checkAuthenticationSaga({
 	payload: { history },
@@ -77,7 +78,7 @@ function* watchSessionSaga({
 	payload: { history },
 }: ReturnType<typeof AuthAction.sessionControl.request>): Generator<StrictEffect, void, any> {
 	try {
-		const eventChannel = new EventSource('/sse/v1/session');
+		const eventChannel = new EventSource(getCompleteUrl('/sse/v1/session'), { withCredentials: true });
 		const channel = yield call(createSessionChannel, eventChannel);
 		while (true) {
 			const message: Message = yield take(channel);
@@ -226,9 +227,9 @@ function* deleteUserSaga({
 	);
 }
 
-function logger(action: Action<any>) {
+function logAction(action: Action<any>) {
 	if (process.env.NODE_ENV === 'development') {
-		console.log('Action : ', action);
+		logger.debug('Action : ', action);
 	}
 }
 
@@ -241,5 +242,5 @@ export const SessionSagas = [
 	takeEvery(AuthAction.registration.request, registrationSaga),
 	takeEvery(AuthAction.checkAuthentication.request, checkAuthenticationSaga),
 	takeLatest(AuthAction.sessionControl.request, watchSessionSaga),
-	takeEvery('*', logger),
+	takeEvery('*', logAction),
 ];
