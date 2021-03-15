@@ -73,7 +73,7 @@ export const genericError = <T extends GenericResponse>(res: Response, additiona
 		HTTPStatusCode.BadRequest,
 		'Bad Request.',
 		UserMessageType.Danger,
-		{ label: 'auth:error.generic' },
+		{ key: 'auth:error.generic' },
 		additionalInfo
 	);
 
@@ -83,7 +83,7 @@ export const success = <T extends GenericResponse>(res: Response, label: I18nLab
 
 // Entity Not Found
 export const entityNotFound = (res: Response) =>
-	failure(res, { label: 'common:server.not_found' }, 'Entity not found', HTTPStatusCode.NotFound);
+	failure(res, { key: 'common:server.not_found' }, 'Entity not found', HTTPStatusCode.NotFound);
 
 // Missing parameters / data
 export const missingParameters = <T extends GenericResponse>(res: Response, additionalInfo?: OmitGeneric<T>) =>
@@ -92,7 +92,7 @@ export const missingParameters = <T extends GenericResponse>(res: Response, addi
 		HTTPStatusCode.BadRequest,
 		'Missing parameters',
 		UserMessageType.Danger,
-		{ label: '' },
+		{ key: '' },
 		additionalInfo
 	);
 
@@ -103,7 +103,7 @@ export const unexpectedServerError = <T extends GenericResponse>(res: Response, 
 		HTTPStatusCode.InternalServerError,
 		'Unexpected Server Error',
 		UserMessageType.Danger,
-		{ label: 'common:server.unexpected' },
+		{ key: 'common:server.unexpected' },
 		additionalInfo
 	);
 

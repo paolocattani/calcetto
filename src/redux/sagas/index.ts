@@ -5,3 +5,4 @@ export * from './stage1.saga';
 export * from './stage2.saga';
 export * from './auth.saga';
 export * from './stats.saga';
+export * from './event.saga';

@@ -1,4 +1,4 @@
-import { ICell, PairDTO } from '../dto';
+import { ICell, PairDTO, TournamentDTO } from '../dto';
 import { GenericResponse } from './common.models';
 
 export interface Stage2State {
@@ -30,6 +30,7 @@ export interface FetchStage2Response extends GenericResponse {
 }
 
 export interface UpdateStage2CellRequest {
+	tournament: TournamentDTO;
 	cells: Array<ICell>;
 }
 export interface UpdateStage2CellResponse extends GenericResponse {}

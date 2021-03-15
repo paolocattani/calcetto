@@ -12,7 +12,7 @@ export const initialStage1State: Stage1State = {
 };
 
 export const Stage1Reducer = createReducer<Stage1State, Action>(initialStage1State)
-	// SSE
+	//
 	.handleAction([Stage1Action.reloadFromServer], (state) => ({ ...state, toogleRefresh: !state.toogleRefresh }))
 	.handleAction([Stage1Action.resetPairs], (state) => ({ ...state, selectedPairs: [emptyPair] }))
 	//

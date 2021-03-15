@@ -148,37 +148,37 @@ export async function findUserByEmailAndUsername(email: string, username: string
 export const isValidRegister = (user: Omit<RegistrationRequest, 'history'>): Array<I18nLabel> => {
 	let result: Array<I18nLabel> = [];
 	if (!user.username) {
-		result.push({ label: 'auth:error.username' });
+		result.push({ key: 'auth:error.username' });
 	}
 	if (!user.name) {
-		result.push({ label: 'auth:error.name' });
+		result.push({ key: 'auth:error.name' });
 	}
 	if (!user.surname) {
-		result.push({ label: 'auth:error.surname' });
+		result.push({ key: 'auth:error.surname' });
 	}
 	if (!user.email) {
-		result.push({ label: 'auth:error.email.address' });
+		result.push({ key: 'auth:error.email.address' });
 	}
 	if (!user.confirmEmail) {
-		result.push({ label: 'auth:error.email.confirm' });
+		result.push({ key: 'auth:error.email.confirm' });
 	}
 	if (user.email !== user.confirmEmail) {
-		result.push({ label: 'auth:error.email.match' });
+		result.push({ key: 'auth:error.email.match' });
 	}
 	if (!emailRegExp.test(user.email)) {
-		result.push({ label: 'auth:error.email.validation' });
+		result.push({ key: 'auth:error.email.validation' });
 	}
 	if (!user.password) {
-		result.push({ label: 'auth:error.password.password' });
+		result.push({ key: 'auth:error.password.password' });
 	}
 	if (!user.confirmPassword) {
-		result.push({ label: 'auth:error.password.confirm' });
+		result.push({ key: 'auth:error.password.confirm' });
 	}
 	if (user.password !== user.confirmPassword) {
-		result.push({ label: 'auth:error.password.match' });
+		result.push({ key: 'auth:error.password.match' });
 	}
 	if (!passwordRegExp.test(user.password)) {
-		result.push({ label: 'auth:error.password.validation' });
+		result.push({ key: 'auth:error.password.validation' });
 	}
 	return result;
 };

@@ -34,6 +34,9 @@ export const postWrapper = <B, T extends GenericResponse>(
 
 // wrapper
 const rawHost = process.env.REACT_APP_SERVER_HOST ? process.env.REACT_APP_SERVER_HOST : 'http://localhost:5001';
+export const socketHost = process.env.REACT_APP_SOCKET_HOST
+	? process.env.REACT_APP_SOCKET_HOST
+	: 'ws://localhost:5001/socket';
 //? `${process.env.REACT_APP_SERVER_HOST}:${process.env.REACT_APP_PORT}`
 
 const host = rawHost.slice(-1) === '/' ? rawHost.substring(0, rawHost.length - 1) : rawHost;
