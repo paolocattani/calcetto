@@ -213,9 +213,11 @@ export abstract class AbstractServer {
 		process.on('SIGINT', () => closeServer('SIGINT'));
 		process.on('SIGTERM', () => closeServer('SIGTERM'));
 
-		this.httpServer.on('close', function () {
+		this.httpServer.on('close', () => {
 			logger.info('Closing sockets...');
-			this.socketIO.close();
+			if (this.socketIO) {
+				this.socketIO.close();
+			}
 			logger.info('Stopping server...');
 			clearInterval(interval);
 			logger.info('Shutdown...');
