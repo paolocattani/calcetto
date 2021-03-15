@@ -27,6 +27,7 @@ import path from 'path';
 import { cookiesOption } from '../controller/auth/cookies.utils';
 import { getRedisClient } from '../database/config/redis/connection';
 import { routeLogger, clientInfo, auditControl, cacheControl, mwWrapper, withAuth } from '../middleware';
+import { ClientToServerEvents, ServerToClientEvents } from '../../src/@common/models/event.model';
 
 // http://expressjs.com/en/advanced/best-practice-security.html
 export abstract class AbstractServer {
@@ -141,14 +142,13 @@ export abstract class AbstractServer {
 
 		// https://socket.io/docs/v3/server-installation/
 		// https://socket.io/docs/v3/server-api/index.html
-		this.socketIO = new SocketIoServer(this.httpServer, {
+		this.socketIO = new SocketIoServer<ClientToServerEvents, ServerToClientEvents>(this.httpServer, {
 			//path: '/socket',
 			// PM2 prefer web socket over polling
 			transports: ['websocket', 'polling'],
 			serveClient: false,
 			cookie: cookiesOption,
 			cors: this.corsOptions,
-			wsEngine: 'ws', //eiows',
 			adapter: createAdapter({ pubClient: redisClient, subClient }),
 		});
 		// Socket middleware

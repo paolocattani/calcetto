@@ -1,13 +1,13 @@
-/* eslint-disable */
-
 import * as H from 'history';
+import { EventMessage } from '.';
 import { TournamentDTO } from '../dto';
-//
+
+// Client Event state
 export interface EventState {
 	connected: boolean;
 }
 
-// Events
+// Event keys
 export enum Events {
 	/**
 	 * This event is fired to broadcast message to client
@@ -73,6 +73,22 @@ export enum Events {
 	STAGE2_DELETE = 'stage2:delete',
 }
 
+//----- Client / Server Events
+export interface ClientToServerEvents {
+	[Events.TOURNAMENT_JOIN]: (tournament: TournamentDTO) => void;
+	[Events.TOURNAMENT_LEAVE]: (tournament: TournamentDTO) => void;
+	[Events.TOURNAMENT_NEW]: (tournament: TournamentDTO) => void;
+	[Events.TOURNAMENT_DELETED]: (tournament: TournamentDTO) => void;
+	[Events.TOURNAMENT_UPDATED]: (tournament: TournamentDTO) => void;
+}
+
+export interface ServerToClientEvents {
+	[Events.NEW_MESSAGE]: (message: EventMessage) => void;
+	[Events.SESSION_EXPIRED]: (message: EventMessage) => void;
+	[Events.TOURNAMENT_REFRESH]: (message: EventMessage) => void;
+}
+
+//----- Sagas
 // Requests
 export interface OpenChannelRequest {
 	history: H.History;

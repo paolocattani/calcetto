@@ -1,12 +1,16 @@
 import chalk from 'chalk';
 import { Server as SocketIoServer, Socket } from 'socket.io';
 import { UserDTO } from '../../src/@common/dto';
-import { EventMessage, Events } from '../../src/@common/models';
+import { ClientToServerEvents, EventMessage, Events, ServerToClientEvents } from '../../src/@common/models';
 import { AppRequest } from '../controller';
 import { logger } from '../core/logger';
 
 // Broadcast message to a specific room
-export const broadcastUpdates = (socket: Socket, room: string, message: EventMessage) => {
+export const broadcastUpdates = (
+	socket: Socket<ClientToServerEvents, ServerToClientEvents>,
+	room: string,
+	message: EventMessage
+) => {
 	logEvent('Broadcasting updates to rooom : ', room);
 	socket.to(room).emit(Events.NEW_MESSAGE, message);
 };

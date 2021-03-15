@@ -1,14 +1,20 @@
 import { Server as SocketIoServer, Socket } from 'socket.io';
 import { tournamentHandler } from './handlers/tournament.handler';
 import { AppRequest } from '../controller';
-import { EventMessage, Events, UserMessageType } from '../../src/@common/models';
+import {
+	ClientToServerEvents,
+	EventMessage,
+	Events,
+	ServerToClientEvents,
+	UserMessageType,
+} from '../../src/@common/models';
 import { safeVerifyToken } from '../controller/auth/auth.utils';
 import { logEvent } from './event.utils';
 
 // https://socket.io/docs/v3/server-application-structure/
 // https://socket.io/docs/v3/emit-cheatsheet/
-export const handleSocket = (io: SocketIoServer) => {
-	const onConnection = async (socket: Socket) => {
+export const handleSocket = (io: SocketIoServer<ClientToServerEvents, ServerToClientEvents>) => {
+	const onConnection = async (socket: Socket<ClientToServerEvents, ServerToClientEvents>) => {
 		// Handlers
 		tournamentHandler(io, socket);
 		const { user, clientIp, session } = <AppRequest>socket.request;
@@ -39,7 +45,7 @@ export const handleSocket = (io: SocketIoServer) => {
 	io.on('connection', onConnection);
 };
 
-const session_expired = (socket: Socket, interval: NodeJS.Timeout) => {
+const session_expired = (socket: Socket<ClientToServerEvents, ServerToClientEvents>, interval: NodeJS.Timeout) => {
 	const message: EventMessage = {
 		event: Events.SESSION_EXPIRED,
 		label: { key: 'event:session_expired' },

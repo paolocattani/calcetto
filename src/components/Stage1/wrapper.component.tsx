@@ -11,18 +11,22 @@ import { Stage1Action, Stage2Action, TournamentAction } from '../../redux/action
 import { AuthSelector, TournamentSelector, Stage1Selector, PairSelector } from '../../redux/selectors';
 import Stage1Table from './table.component';
 import TournamentBadge from '../Tournament/badge.component';
+import { useTranslation } from 'react-i18next';
 // Models
 import { PairDTO, TournamentProgress } from '../../@common/dto';
 import { useSelector } from '../core/types';
 import { EventAction } from 'src/redux/actions/event.action';
+import { LoadingModal } from '../core/generic/Commons';
 
 /**
  * Wraps multiple table components
  */
 // eslint-disable-next-line sonarjs/cognitive-complexity
-const Wrapper: React.FC = (): JSX.Element => {
+const Wrapper: React.FC = () => {
 	const currentHistory = useHistory();
 	const dispatch = useDispatch();
+
+	const { t } = useTranslation(['tournament']);
 
 	// Session
 	const session = useSelector(AuthSelector.getAuth);
@@ -43,6 +47,7 @@ const Wrapper: React.FC = (): JSX.Element => {
 		}
 		currentHistory.push(destination);
 	}
+
 	function goToStage2() {
 		// TODO: eseguire controlli e eventualemente mostrare messaggi utente
 
@@ -65,6 +70,11 @@ const Wrapper: React.FC = (): JSX.Element => {
 	function resetStage2() {
 		dispatch(Stage2Action.delete.request({ tId: tournament.id }));
 		dispatch(Stage1Action.resetPairs({}));
+	}
+
+	if (!tournament) {
+		currentHistory.push('/');
+		return <LoadingModal show={true} message={t('tournament:not_found')} />;
 	}
 
 	console.log('selected : ', selected);

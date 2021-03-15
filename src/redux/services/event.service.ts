@@ -4,10 +4,10 @@ import { eventChannel } from 'redux-saga';
 import { put } from 'redux-saga/effects';
 import { io, Socket } from 'socket.io-client';
 import { socketHost } from 'src/@common/utils';
-import { EventMessage, Events } from '../../@common/models';
+import { ClientToServerEvents, EventMessage, Events, ServerToClientEvents } from '../../@common/models';
 import { getToast } from '../sagas/utils';
 
-let socket: Socket;
+let socket: Socket<ServerToClientEvents, ClientToServerEvents>;
 function showMessageSocket({ label, type }: EventMessage) {
 	getToast(type)(i18next.t(label.key, label.options));
 }
@@ -52,17 +52,7 @@ export const socketConnect = () => {
 	});
 };
 
-export const reconnect = () => {
-	socket = io(socketHost, { withCredentials: true });
-	return new Promise((resolve) => {
-		socket.on('reconnect', () => {
-			console.log('[ Event! ] Reconnected');
-			resolve(socket);
-		});
-	});
-};
-
-export function* emitEvent(event: Events, action: any, ...args: any) {
+export function* emitEvent(event: keyof ClientToServerEvents, action: any, ...args: any) {
 	try {
 		console.log('[ Event ] Emitting event : ', event);
 		socket.emit(event, ...args);

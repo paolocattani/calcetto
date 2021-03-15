@@ -1,21 +1,25 @@
 import { Events } from '../../../src/@common/models/event.model';
 import { Server as SocketIoServer, Socket } from 'socket.io';
 import { broadcastUpdates, iterateConnectedClient, logEvent } from '../event.utils';
-import { EventMessage, UserMessageType } from '../../../src/@common/models';
+import { ClientToServerEvents, EventMessage, ServerToClientEvents, UserMessageType } from '../../../src/@common/models';
 import { AppRequest } from '../../controller';
 import { TournamentDTO, UserDTO, UserRole } from '../../../src/@common/dto';
 import { formatDate } from '../../../src/@common/utils/date.utils';
 
 export const getTournamentLabel = (tournament: TournamentDTO) => `${tournament.name}-${formatDate(tournament.date)}`;
-export const getUserLabel = (user: UserDTO) => `${user.name} ${user.surname}`;
-export const tournamentHandler = (io: SocketIoServer, socket: Socket) => {
+export const getUserLabel = (user: UserDTO) => user.username || `${user.name} ${user.surname}`;
+
+export const tournamentHandler = (
+	io: SocketIoServer<ClientToServerEvents, ServerToClientEvents>,
+	socket: Socket<ClientToServerEvents, ServerToClientEvents>
+) => {
 	const { user } = <AppRequest>socket.request;
 
 	// Join a new tournament to receive update
-	const joinTournament = (tournament: TournamentDTO) => {
+	const joinTournament = async (tournament: TournamentDTO) => {
 		const room = `tournament-${tournament.id}`;
-		logEvent(`A user '${user!.name} ${user!.surname}' joined tournament ${tournament.id}`);
-		socket.join(room);
+		logEvent(`User '${getUserLabel(user!)}' joined tournament ${tournament.id}`);
+		await socket.join(room);
 		broadcastUpdates(socket, room, {
 			event: Events.TOURNAMENT_JOIN,
 			label: {
@@ -27,10 +31,11 @@ export const tournamentHandler = (io: SocketIoServer, socket: Socket) => {
 	};
 
 	// Leave tournament room
-	const leaveTournament = (tournament: TournamentDTO) => {
+	const leaveTournament = async (tournament: TournamentDTO) => {
 		const room = `tournament-${tournament.id}`;
 		logEvent(`User '${getUserLabel(user!)}' leaved tournament ${tournament.id}`);
-		socket.leave(room);
+		await socket.leave(room);
+
 		broadcastUpdates(socket, room, {
 			event: Events.TOURNAMENT_LEAVE,
 			label: {

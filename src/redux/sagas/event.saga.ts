@@ -1,7 +1,7 @@
 import { call, delay, put, race, take, takeEvery } from '@redux-saga/core/effects';
 import { cancelled, StrictEffect } from 'redux-saga/effects';
 import { EventAction } from '../actions/event.action';
-import { Events } from '../../@common/models/event.model';
+import { ClientToServerEvents, Events, ServerToClientEvents } from '../../@common/models/event.model';
 import { Socket } from 'socket.io-client';
 import { socketConnect, createSocketChannel, emitEvent } from '../services/event.service';
 import { EventMessage, Unauthorized } from '../../@common/models';
@@ -9,7 +9,7 @@ import { AuthAction, TournamentAction } from '../actions';
 import { persistor } from '../store';
 
 //-----------------------------------------------
-let socket: Socket;
+let socket: Socket<ServerToClientEvents, ClientToServerEvents>;
 
 // Listen socket events
 function* listenEvents({
@@ -20,14 +20,14 @@ function* listenEvents({
 		const { connected, timeout } = yield race({ connected: call(socketConnect), timeout: delay(20000) });
 		// If timeout won the race then
 		if (timeout) {
-			const message: EventMessage = yield put(EventAction.closeChannel.request({}));
-			console.log('[ Event ].listenEvents : ', message);
+			yield put(EventAction.closeChannel.request({}));
 		}
 		socket = connected;
 		const socketChannel = yield call(createSocketChannel, connected, history);
 		yield put(EventAction.openChannel.success({ connected: true }));
 		while (true) {
 			const message: EventMessage = yield take(socketChannel);
+			console.log('[ Event ].received event from server : ', message);
 			switch (message.event) {
 				case Events.SESSION_EXPIRED:
 					yield delay(3000);
