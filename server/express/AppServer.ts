@@ -13,7 +13,9 @@ import '../core/env';
 import chalk from 'chalk';
 import { logger } from '../core/logger';
 import { isDevMode, isProductionMode, isTestMode } from '../core/debug';
-import { migrationUp } from '../database/migrations';
+import { markAllAsApplied, migrationUp } from '../database/migrations';
+import { Server as SocketIoServer } from 'socket.io'; // socket.io
+import { handleSocket } from '../events/events';
 
 const defaultName: string = 'ApplicationServer Calcetto';
 const defaultPort: number = Number(isProductionMode() ? process.env.PORT : process.env.SERVER_PORT);
@@ -55,10 +57,13 @@ export default class AppServer extends AbstractServer {
 	}
 
 	public async connect(): Promise<Sequelize> {
-		// Always run db migrations, befor load sequelize models
-		await migrationUp();
-
 		const force = process.env.SERVER_FORCE && process.env.SERVER_FORCE.toLowerCase() === 'true';
+
+		// If it's not a fresh new installation then run migrations
+		if (!force) {
+			await migrationUp();
+		}
+
 		logger.info(
 			(force ? chalk.redBright.bold(' [ FORCE ] ') : chalk.greenBright.bold(' [ NORMAL ] ')).concat(
 				chalk.cyan.bold('Starting database synchronization...')
@@ -68,8 +73,12 @@ export default class AppServer extends AbstractServer {
 		// Dev and Test can use THE FORCE :
 		// “Don’t underestimate the Force.” – Darth Vader
 		if ((isDevMode() || isTestMode()) && force) {
+			// Drop and create all tables
 			this.connection = await sync({ force });
-			await generator(false);
+			// Mark all migrations as applied
+			await markAllAsApplied();
+			// Generate dummies data
+			await generator(force);
 			// Always start from clean db on test
 		} else if (isTestMode()) {
 			/*
@@ -87,7 +96,11 @@ export default class AppServer extends AbstractServer {
 		return this.connection;
 	}
 
-	public routes(application: ExpressApplication): void {
+	public routes(application: ExpressApplication) {
 		routes(application);
+	}
+
+	public socket(socketIO: SocketIoServer) {
+		handleSocket(socketIO);
 	}
 }

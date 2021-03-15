@@ -5,7 +5,7 @@ import { useSelector } from '../core/types';
 import Stage2 from './table.component';
 import { Button, Col, Row } from 'react-bootstrap';
 import commonStyle from '../../common.module.css';
-import { Stage2Selector, TournamentSelector } from '../../redux/selectors';
+import { AuthSelector, Stage2Selector, TournamentSelector } from '../../redux/selectors';
 import { Stage2Action } from '../../redux/actions';
 import { LoadingModal } from '../core/generic/Commons';
 import { LeftArrowIcon } from '../core/icons';
@@ -24,28 +24,30 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
 	const currentHistory = useHistory();
 	const dispatch = useDispatch();
 
-	// Sono presenti aggiornamenti
-	const cells = useSelector(Stage2Selector.getCells);
+	const cells = useSelector(Stage2Selector.getCells, () => false);
 	const count = useSelector(Stage2Selector.getCount);
 	const isLoading = useSelector(Stage2Selector.isLoading);
+	const isAdmin = useSelector(AuthSelector.isAdmin);
 	const tournament = useSelector(TournamentSelector.getTournament)!;
 	// const pairsListFromStore = useSelector(Stage1Selector.getSelectedPairs);
-	const [pairsList, setPairsList] = useState<PairDTO[]>();
+	const [pairsList, setPairsList] = useState<PairDTO[]>([]);
 
 	function goBack() {
 		currentHistory.push('/stage1');
 	}
 
 	useEffect(() => {
-		(async () => {
-			dispatch(Stage2Action.setLoading(true));
-			const response = await fetchPairsStage2({ tournamentId: tournament.id });
-			if (SuccessCodes.includes(response.code)) {
-				const result = response as FetchStage2PairsResponse;
-				setPairsList(result.pairs);
-			}
-			dispatch(Stage2Action.setLoading(false));
-		})();
+		if (isAdmin) {
+			(async () => {
+				dispatch(Stage2Action.setLoading(true));
+				const response = await fetchPairsStage2({ tournamentId: tournament.id });
+				if (SuccessCodes.includes(response.code)) {
+					const result = response as FetchStage2PairsResponse;
+					setPairsList(result.pairs);
+				}
+				dispatch(Stage2Action.setLoading(false));
+			})();
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [tournament.id]);
 
@@ -71,7 +73,7 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
 		current2.isWinner = !isWinner;
 		if (next) next.pair = isWinner ? current1.pair : current2.pair;
 		// Update current and next steps
-		dispatch(Stage2Action.updateCell.request({ cells: [current1, current2, next] }));
+		dispatch(Stage2Action.updateCell.request({ cells: [current1, current2, next], tournament }));
 		dispatch(Stage2Action.setCells(elements));
 	};
 
@@ -98,11 +100,11 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
 		elements[0][rowIndex - 1].pair = newPair;
 		console.log(' onSelectPair : ', elements[0][rowIndex - 1]);
 		dispatch(Stage2Action.setCells(elements));
-		dispatch(Stage2Action.updateCell.request({ cells: [elements[0][rowIndex - 1]] }));
+		dispatch(Stage2Action.updateCell.request({ cells: [elements[0][rowIndex - 1]], tournament }));
 	};
 
 	//console.log('render stage2 :', cells, pairsList, rowNumber);
-	return cells && pairsList && count ? (
+	return cells && count ? (
 		<>
 			<Col className={commonStyle.toolsBarContainer}>
 				<Row className={commonStyle.toolsBarRow}>
