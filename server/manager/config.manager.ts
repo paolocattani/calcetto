@@ -5,7 +5,7 @@ type ConfigSetType = keyof typeof ConfigManager.config;
 type KeysType = keyof typeof ConfigManager.keys;
 
 export class ConfigManager {
-	private static readonly className = 'Config Manager';
+	private static readonly className = 'ConfigManager';
 	static readonly config = { BASE: 'BASE' };
 	static readonly keys = {
 		MAX_ATTEMPS_PER_MINUTE: 'MAX_ATTEMPS_PER_MINUTE',

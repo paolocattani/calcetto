@@ -3,17 +3,13 @@ import { AuthState } from '../../@common/models/auth.model';
 import { AuthAction } from '../actions/auth.action';
 import { UserRole } from '../../@common/dto';
 
-export const initialSessionState: AuthState = {
+export const initialAuthState: AuthState = {
 	isAuthenticated: false,
 	isAdmin: false,
 	isLoading: false,
 };
 
-export const SessionReducer = createReducer<AuthState, Action>(initialSessionState)
-	// Just unsubscribe user from tournament
-	.handleAction(AuthAction.unsubscribe.request, (state) => state)
-	.handleAction(AuthAction.unsubscribe.failure, (state) => state)
-	.handleAction(AuthAction.unsubscribe.success, (state) => state)
+export const AuthReducer = createReducer<AuthState, Action>(initialAuthState)
 	// Request
 	.handleAction(
 		[
@@ -58,4 +54,4 @@ export const SessionReducer = createReducer<AuthState, Action>(initialSessionSta
 			isLoading: false,
 		})
 	)
-	.handleAction(AuthAction.purge, () => initialSessionState);
+	.handleAction(AuthAction.purge, () => initialAuthState);

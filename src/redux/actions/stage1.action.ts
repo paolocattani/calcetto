@@ -38,7 +38,7 @@ export const Stage1Action = {
 		UpdatePlacementResponse,
 		Stage1Error
 	>(),
-	reloadFromServer: createAction(...defaultParam(actionName, 'Stage1 Watcher'))<{}>(),
+	reloadFromServer: createAction(...defaultParam(actionName, 'Toogle Stage1 Refresh'))<{}>(),
 	resetPairs: createAction(...defaultParam(actionName, 'Stage1 Reset Pairs'))<{}>(),
 	reset: createAction(...defaultParam(actionName, 'Stage1 Reset'))<{}>(),
 	purge: createAction(PURGE_STORE_ACTION)<PurgeResponse>(),

@@ -23,7 +23,6 @@ import {
 	UpdateStage2CellRequest,
 	UpdateStage2CellResponse,
 } from '../../src/@common/models';
-import { sendNotifications, subscribe } from '../events/events';
 import { TournamentProgress } from '../../src/@common/dto';
 
 // all API path must be relative to /api/v2/stage2
@@ -36,13 +35,11 @@ router.post(
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		try {
 			let { tournamentId, count }: FetchStage2Request = req.body;
-			const { user, uuid } = req;
 			if (!count || count === 0) {
 				count = await countStage2(tournamentId);
 			}
 			const model = await generateStage2Rows(tournamentId, count, req.user!);
-			subscribe(user!, uuid!, tournamentId, TournamentProgress.Stage2);
-			return success<FetchStage2Response>(res, { label: 'stage2:loaded' }, { cells: model, count });
+			return success<FetchStage2Response>(res, { key: 'stage2:loaded' }, { cells: model, count });
 		} catch (error) {
 			logger.error(chalk.redBright('Error while fetching Stage2 ! : ', error));
 			return serverError('POST stage2/ error ! : ', error, res);
@@ -61,7 +58,7 @@ router.get(
 			}
 			const tournamentId = parseInt(req.params.tournamentId);
 			const pairs = await fetchPairsStage2(tournamentId);
-			return success<FetchStage2PairsResponse>(res, { label: 'stage2:pairs' }, { pairs });
+			return success<FetchStage2PairsResponse>(res, { key: 'stage2:pairs' }, { pairs });
 		} catch (error) {
 			logger.error(chalk.redBright('Error while fetching pairs Stage2 ! : ', error));
 			return serverError('GET stage2/pairs/:tournamentId error ! : ', error, res);
@@ -78,7 +75,7 @@ router.post(
 		try {
 			const { tournamentId }: CountStage2PairsRequest = req.body;
 			const count = await countStage2(tournamentId);
-			return success<CountStage2PairsResponse>(res, { label: 'stage2:count' }, { count });
+			return success<CountStage2PairsResponse>(res, { key: 'stage2:count' }, { count });
 		} catch (error) {
 			logger.error(chalk.redBright('Error while counting Stage2 ! : ', error));
 			return serverError('POST stage2/count error ! : ', error, res);
@@ -96,13 +93,7 @@ router.post(
 			const { cells }: UpdateStage2CellRequest = req.body;
 			await updateCells(cells);
 			const tournamentId = cells[0].pair!.tournamentId;
-			const message: Message = {
-				status: SessionStatus.STAGE2_UPDATE,
-				label: 'common:notification.updating',
-				data: { tournamentId },
-			};
-			sendNotifications(message, tournamentId, TournamentProgress.Stage2);
-			return success<UpdateStage2CellResponse>(res, { label: 'stage2:updated_cell' });
+			return success<UpdateStage2CellResponse>(res, { key: 'stage2:updated_cell' });
 		} catch (error) {
 			logger.error(chalk.redBright('Error while updating Stage2 cell ! : ', error));
 			return serverError('POST stage2/cells error ! : ', error, res);
@@ -119,7 +110,7 @@ router.delete(
 		try {
 			const { tId }: DeleteStage2Request = req.body;
 			await deleteStage2(tId);
-			return success<DeleteStage2Response>(res, { label: 'stage2:loaded' });
+			return success<DeleteStage2Response>(res, { key: 'stage2:loaded' });
 		} catch (error) {
 			logger.error(chalk.redBright('Error while deleting Stage2 ! : ', error));
 			return serverError('DELETE stage2/ error ! : ', error, res);

@@ -1,4 +1,3 @@
-import './env';
 import util from 'util';
 
 export function getEnv(): string {

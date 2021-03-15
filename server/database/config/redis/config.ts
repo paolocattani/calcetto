@@ -9,13 +9,13 @@ type RedisEnvList = {
 // Redis configuration
 const config: RedisEnvList = {
 	development: {
-		url: process.env.REDIS_DEV_URL,
+		url: process.env.REDISCLOUD_URL,
 	},
 	test: {
-		url: process.env.REDIS_TEST_URL,
+		url: process.env.REDISCLOUD_URL,
 	},
 	production: {
-		url: process.env.REDIS_PROD_URL,
+		url: process.env.REDISCLOUD_URL,
 	},
 };
 

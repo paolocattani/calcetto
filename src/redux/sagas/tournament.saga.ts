@@ -11,10 +11,12 @@ import {
 	ReloadTournamentRequest,
 	ReloadTournamentResponse,
 	Redirect,
-} from '../../@common/models/tournament.model';
+} from '../../@common/models';
 import { TournamentAction } from '../actions/tournament.action';
 import { entityLifeCycle } from './utils';
-import { PairAction, Stage1Action, Stage2Action, StatsAction } from '../actions';
+import { PairAction, Stage1Action, Stage2Action } from '../actions';
+import { EventAction } from '../actions/event.action';
+import { TournamentProgress } from '../../@common/dto';
 
 const onSuccessRedirect = (redirect?: Redirect) => {
 	if (redirect) {
@@ -49,7 +51,7 @@ function* reloadTournamentSaga({ payload }: ReturnType<typeof TournamentAction.r
 function* saveTournamentSaga({ payload }: ReturnType<typeof TournamentAction.save.request>) {
 	const onSuccess = function* (response: SaveTournamentResponse) {
 		// Reload tournament List
-		yield put(TournamentAction.fetch.request({}));
+		// yield put(TournamentAction.fetch.request({}));
 		// Reset next steps
 		yield put(PairAction.reset({}));
 		yield put(Stage1Action.reset({}));
@@ -66,6 +68,27 @@ function* saveTournamentSaga({ payload }: ReturnType<typeof TournamentAction.sav
 }
 
 function* updateTournamentSaga({ payload }: ReturnType<typeof TournamentAction.update.request>) {
+	const oldProgress = payload.fromProgress;
+	const newProgress = payload.tournament.progress;
+	const isPublic = payload.tournament.public;
+	console.log('Updating tournament : ', oldProgress, newProgress, isPublic);
+	// Notify new tournament
+	if (isPublic && oldProgress === TournamentProgress.PairsSelection && newProgress === TournamentProgress.Stage1) {
+		yield put(EventAction.newTournament.request({ tournament: payload.tournament }));
+	}
+	// Notify Tournament update
+	if (
+		isPublic &&
+		((oldProgress === TournamentProgress.Stage1 && newProgress === TournamentProgress.Stage2) ||
+			(oldProgress === TournamentProgress.Stage2 && newProgress === TournamentProgress.Stage1))
+	) {
+		yield put(EventAction.updateTournament.request({ tournament: payload.tournament }));
+	}
+	// Notify tournament is no loger available
+	if (isPublic && oldProgress === TournamentProgress.Stage1 && newProgress === TournamentProgress.PairsSelection) {
+		yield put(EventAction.deleteTournament.request({ tournament: payload.tournament }));
+	}
+
 	yield* entityLifeCycle<UpdateTournamentRequest, UpdateTournamentResponse, TournamentError>(
 		TournamentAction.update,
 		updateTournament,

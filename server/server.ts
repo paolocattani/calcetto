@@ -1,3 +1,4 @@
+import '../src/@common/utils/env';
 import AppServer from './express/AppServer';
 
 const applicationServer = new AppServer();

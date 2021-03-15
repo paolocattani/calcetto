@@ -3,7 +3,7 @@ import { logger } from '../../core/logger';
 import { withAuth, asyncMiddleware, withTestAuth, limitRequest, consumeRequest } from '../../middleware';
 // Types
 import { AppRequest } from '../index';
-import { Request, Response, NextFunction, Router } from 'express';
+import { Request, Response, Router } from 'express';
 // Auth Manager
 import {
 	convertEntityToDTO,
@@ -29,16 +29,14 @@ import {
 	OmitGeneric,
 	OmitHistory,
 	UnsubscribeResponse,
-	CSRFResponse,
 } from '../../../src/@common/models';
 import { HTTPStatusCode } from '../../../src/@common/models/HttpStatusCode';
 import { setSession, removeSession } from './cookies.utils';
 import { comparePasswords } from './auth.utils';
-import { unsubscribe } from '../../events/events';
-import chalk from 'chalk';
 
 const AUTH_WELCOME = 'auth:welcome';
 const GENERIC_ERROR = 'auth:error.generic';
+const WRONG_CREDENTIAL = 'auth:server.error.wrong_credential';
 const router = Router();
 
 /* FIXME:
@@ -47,7 +45,7 @@ router.get('/csrf', (req: Request, res: Response, next: NextFunction) => {
 	req.session.csrfSecret = token;
 	res.set('xsrf-token', token);
 	logger.info(`New csrf token ( ${token} for ${chalk.redBright(req.ip)}) !`);
-	return success<CSRFResponse>(res, { label: '' }, { token });
+	return success<CSRFResponse>(res, { key: '' }, { token });
 });
 */
 
@@ -66,7 +64,7 @@ const registrationController = asyncMiddleware(async (req: Request, res: Respons
 		const user = await findUserByEmailOrUsername(model.username, model.email);
 		if (user) {
 			consumeRequest(req);
-			return genericError(res, { errors: [{ label: GENERIC_ERROR }] });
+			return genericError(res, { errors: [{ key: GENERIC_ERROR }] });
 		}
 		const record = await registerUser(model, registrationInfo.playerRole);
 		if (record) {
@@ -74,7 +72,7 @@ const registrationController = asyncMiddleware(async (req: Request, res: Respons
 			logger.info('/register end ');
 			return success<AuthenticationResponse>(
 				res,
-				{ label: AUTH_WELCOME, options: { username: record.name } },
+				{ key: AUTH_WELCOME, options: { username: record.name } },
 				{ user: record }
 			);
 		} else {
@@ -89,21 +87,14 @@ const registrationController = asyncMiddleware(async (req: Request, res: Respons
 });
 
 const wrongCredentials = (res: Response) =>
-	failure(res, { label: 'auth:server.error.wrong_credential' }, 'Wrong credentials', HTTPStatusCode.Unauthorized);
+	failure(res, { key: WRONG_CREDENTIAL }, 'Wrong credentials', HTTPStatusCode.Unauthorized);
 
 router.get(
 	'/check',
 	withAuth,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		const additional: OmitGeneric<AuthenticationResponse> = { user: req.user };
-		return success(
-			res,
-			{
-				label: 'auth:server.error.wrong_credential',
-				options: { username: req.user!.name },
-			},
-			additional
-		);
+		return success(res, { key: WRONG_CREDENTIAL, options: { username: req.user!.name } }, additional);
 	})
 );
 
@@ -112,25 +103,11 @@ router.get(
 	withAuth,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		removeSession(res, req);
-		return success(res, { label: 'auth:logout' });
+		return success(res, { key: 'auth:logout' });
 	})
 );
 
 router.post('/register', limitRequest, registrationController);
-
-router.put(
-	'/unsubscribe',
-	withAuth,
-	asyncMiddleware(async (req: AppRequest, res: Response) => {
-		try {
-			const { user, uuid } = req;
-			unsubscribe(user!, uuid!);
-			return success<UnsubscribeResponse>(res, { label: '' });
-		} catch (err) {
-			return serverError('PUT tournament/unsubscribe error ! : ', err, res);
-		}
-	})
-);
 
 router.put(
 	'/update',
@@ -145,11 +122,7 @@ router.put(
 			}
 			await user.update(model);
 			// TODO: aggiornare anche il giocare associato con i dati comuni
-			return success<AuthenticationResponse>(
-				res,
-				{ label: 'common:server.updated' },
-				{ user: convertEntityToDTO(user) }
-			);
+			return success<AuthenticationResponse>(res, { key: 'common:server.updated' }, { user: convertEntityToDTO(user) });
 		} catch (error) {
 			return serverError('PUT auth/update error ! : ', error, res);
 		}
@@ -206,7 +179,7 @@ router.get(
 			const userDTO = convertEntityToDTO(user);
 			return success<AuthenticationResponse>(
 				res,
-				{ label: AUTH_WELCOME, options: { username: userDTO.name } },
+				{ key: AUTH_WELCOME, options: { username: userDTO.name } },
 				{ user: userDTO }
 			);
 		} else {
@@ -220,26 +193,26 @@ const loginUserController = async (req: Request, res: Response, username: string
 		logger.info('/login start ');
 		if (!username || !password) {
 			consumeRequest(req);
-			return genericError(res, { errors: [{ label: GENERIC_ERROR }] });
+			return genericError(res, { errors: [{ key: WRONG_CREDENTIAL }] });
 		}
 		const user = await findUserByEmailOrUsername(username, username);
 		// User not found
 		if (!user) {
 			consumeRequest(req);
-			return genericError(res, { errors: [{ label: GENERIC_ERROR }] });
+			return genericError(res, { errors: [{ key: WRONG_CREDENTIAL }] });
 			// Do not expose information return entityNotFound(res);
 		}
 		// Compare passwords
 		if (!(await comparePasswords(user.email, password, user.password))) {
 			consumeRequest(req);
-			return genericError(res, { errors: [{ label: GENERIC_ERROR }] });
+			return genericError(res, { errors: [{ key: WRONG_CREDENTIAL }] });
 			// Do not expose information return wrongCredentials(res);
 		}
 		const userDTO = convertEntityToDTO(user);
 		setSession(userDTO, req, res);
 		return success<AuthenticationResponse>(
 			res,
-			{ label: AUTH_WELCOME, options: { username: userDTO.name } },
+			{ key: AUTH_WELCOME, options: { username: userDTO.name } },
 			{ user: userDTO }
 		);
 	} catch (error) {
@@ -260,7 +233,7 @@ const deleteUserController = async (req: Request, res: Response, username: strin
 		await deleteUser(user);
 		logger.info('/delete end ');
 		removeSession(res, req);
-		return success<DeleteUserResponse>(res, { label: 'auth:server.deleted', options: { username: user.name } });
+		return success<DeleteUserResponse>(res, { key: 'auth:server.deleted', options: { username: user.name } });
 	} catch (error) {
 		return serverError('DELETE auth/delete error ! : ', error, res);
 	}

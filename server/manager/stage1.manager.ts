@@ -10,7 +10,6 @@ import { isAdmin } from '../manager/auth.manager';
 //
 import { Op } from 'sequelize';
 import { SessionStatus } from '../../src/@common/models';
-import { sendNotifications } from '../events/events';
 
 const className = 'Stage1 Manager : ';
 
@@ -22,12 +21,6 @@ export const deleteStage1 = async (tournamentId: number) => {
 			return;
 		}
 		await Stage1.destroy({ where: { tournamentId } });
-		const message = {
-			status: SessionStatus.STAGE1_DELETE,
-			label: 'common:notification.stage1_delete',
-			data: { name: tournament.name, date: tournament.date },
-		};
-		sendNotifications(message);
 	} catch (error) {
 		logProcess(className + 'deleteStage1', 'error');
 		logger.error('deleteStage1 : ', error);

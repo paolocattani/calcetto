@@ -3,8 +3,6 @@ import { TournamentDTO, TournamentProgress, UserDTO, UserRole } from '../../src/
 import { Tournament } from '../database/models';
 import { Op, WhereOptions } from 'sequelize';
 import { getWhereFromMap, lowerWrapper, dateInRageWrapper } from '../core/utils';
-import { Message, SessionStatus } from '../../src/@common/models';
-import { sendNotifications } from '../events/events';
 
 const className = 'Tournament Manager : ';
 const defaultFilter = (user: UserDTO) => ({ [Op.or]: [{ ownerId: user.id }, { public: true }] });
@@ -53,43 +51,6 @@ export const update = async (user: UserDTO, model: TournamentDTO): Promise<Tourn
 		if (!t) {
 			logProcess(className + 'update', 'end : Tournament not found');
 			return model;
-		}
-		/*
-			Se sto passando da TournamentProgress.PairsSelection a TournamentProgress.Stage1
-			aggiorno i client collegati che c'è un nuovo torneo disponibile
-		*/
-		if (t.public && t.progress === TournamentProgress.PairsSelection && model.progress === TournamentProgress.Stage1) {
-			const message: Message = {
-				status: SessionStatus.TOURNAMENT_NEW,
-				label: 'common:notification.tournament_new',
-				data: { name: model.name, date: model.date },
-			};
-			sendNotifications(message);
-		}
-		/*
-			Se sto passando da TournamentProgress.Stage1 a TournamentProgress.Stage2
-			aggiorno i client collegati che è disponibile una nuova fase
-		*/
-		if (t.public && t.progress === TournamentProgress.Stage1 && model.progress === TournamentProgress.Stage2) {
-			const message: Message = {
-				status: SessionStatus.TOURNAMENT_UPDATE,
-				label: 'common:notification.tournament_update',
-				data: { name: model.name, date: model.date },
-			};
-			sendNotifications(message);
-		}
-		/*
-			Se sto passando da TournamentProgress.Stage1 a TournamentProgress.PairsSelection
-			aggiorno i client collegati che il torneo non è piu disponibile
-			FIXME: Questa casistica è gia coperta da STAGE1_DELETE
-		*/
-		if (t.public && t.progress === TournamentProgress.Stage1 && model.progress === TournamentProgress.PairsSelection) {
-			const message: Message = {
-				status: SessionStatus.TOURNAMENT_DELETE,
-				label: 'common:notification.tournament_delete',
-				data: { name: model.name, date: model.date },
-			};
-			sendNotifications(message);
 		}
 		const result = await t.update({
 			progress: model.progress,
