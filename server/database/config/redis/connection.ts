@@ -1,7 +1,7 @@
 import { Environment } from '../../../../src/@common/models';
 import config from './config';
 import redis from 'redis';
-import { isProductionMode } from '../../../core/debug';
+import { isProductionMode } from '../../../../src/@common/utils/env.utils';
 
 export const getRedisEnv = () =>
 	config[process.env.NODE_ENV ? (process.env.NODE_ENV as Environment) : Environment.development];
