@@ -24,7 +24,7 @@
 
 ## **Application diagram**
 
-![workflow](.\docs\workflow.svg)
+![workflow](./docs/workflow.svg)
 
 ### Frontend
   - [Reactjs](https://reactjs.org/)
