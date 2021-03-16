@@ -2,16 +2,13 @@
 import { UserDTO } from '../../../src/@common/dto';
 import { v5 as uuidv5 } from 'uuid';
 import jwt from 'jsonwebtoken';
-import { AppRequest } from '../index';
 import 'express-session';
 import { CookieOptions, Response, Request } from 'express';
 import { isProductionMode } from '../../../src/@common/utils/env.utils';
 import { TOKEN_SECRET } from './auth.utils';
 import { logger } from '../../core/logger';
 
-const SESSION_TOKEN = 'session_id';
-const USER_UUID = 'user_id';
-const CSRF_TOKEN = 'csrfToken';
+export const SESSION_ID = 'session_id';
 
 // Generate JWT Token
 const DEFAULT_TOKEN_EXPIRATION = '8h';
@@ -23,25 +20,13 @@ const generateToken = (value: UserDTO) =>
 		algorithm: 'HS256',
 	});
 
-export const getCookies = (req: AppRequest) => [getToken(req), getUuid(req)];
-/**
- * Extract token from cookies
- * @param req AppRequest : request
- */
-const getToken = (req: AppRequest) => req.signedCookies[SESSION_TOKEN];
-/**
- * Extract uuid from cookies
- * @param req AppRequest : request
- */
-const getUuid = (req: AppRequest) => req.signedCookies[USER_UUID];
-
 /**
  * Source : https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
  * cookiesOption
  */
 export const cookiesOption: CookieOptions = {
-	// 8h : Allineare a process.env.SERVER_TOKEN_EXPIRES_IN
-	maxAge: 8 * 60 * 60 * 1000,
+	// 2h : Allineare a process.env.SERVER_TOKEN_EXPIRES_IN
+	maxAge: 2 * 60 * 60 * 1000,
 	/*
 		A cookie with the HttpOnly attribute is inaccessible to the JavaScript Document.cookie API; it is sent only to the server.
 		For example, cookies that persist server-side sessions don't need to be available to JavaScript,
@@ -78,11 +63,17 @@ export const setSession = (user: UserDTO, { session }: Request, res: Response) =
 };
 
 // http://expressjs.com/en/api.html#res.clearCookie
-export const removeSession = (res: Response, { session }: Request) => {
-	session.destroy((err) => logger.info('Session destroyed'));
+export const removeSession = async (res: Response, { session }: Request) => {
+	return new Promise((resolve) => {
+		session.destroy((err) => {
+			res.clearCookie(SESSION_ID, cookiesOption);
+			logger.info('Session destroyed');
+			resolve(true);
+		});
+	});
 };
 
-// FIXME: move this declaration in a separte d.ts file
+// FIXME: move this declaration in a dedicated d.ts file
 declare module 'express-session' {
 	interface SessionData {
 		jwt: string;

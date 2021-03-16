@@ -22,7 +22,7 @@ import cors from 'cors';
 // Other
 import chalk from 'chalk';
 import path from 'path';
-import { cookiesOption } from '../controller/auth/cookies.utils';
+import { cookiesOption, SESSION_ID } from '../controller/auth/session.utils';
 import { getRedisClient } from '../database/config/redis/connection';
 import { routeLogger, clientInfo, auditControl, cacheControl, mwWrapper, withAuth } from '../middleware';
 import { ClientToServerEvents, ServerToClientEvents } from '../../src/@common/models/event.model';
@@ -90,6 +90,9 @@ export abstract class AbstractServer {
 			resave: false,
 			saveUninitialized: false,
 			cookie: cookiesOption,
+			name: SESSION_ID,
+			rolling: true,
+			unset: 'destroy',
 		});
 
 		// Server configuration
