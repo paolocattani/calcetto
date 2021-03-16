@@ -135,7 +135,7 @@ function heroku_cli {
         rm ./production_build/server/ecosystem.*.js
         rm -r ./production_build/server/test
         cp server/ecosystem.config.prod.js ./production_build/server/ecosystem.config.js
-        cp server/package*.json ./production_build/server
+        cp server/package*.json ./production_build
         cp Procfile ./production_build
 
         # !!! I want to clean up before heroku caches dependencies
@@ -149,9 +149,7 @@ function heroku_cli {
         text_color " --------------> Cleanup done" $yellow
 
         text_color " --------------> Installing production dependencies" $yellow
-        cd server
         npm i --only=prod
-        cd ..
         text_color " --------------> Complete.! " $yellow
 
         # Add execute permession to cli
