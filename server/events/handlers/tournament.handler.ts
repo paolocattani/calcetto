@@ -1,6 +1,7 @@
 import { Events } from '../../../src/@common/models/event.model';
 import { Server as SocketIoServer, Socket } from 'socket.io';
-import { broadcastUpdates, iterateConnectedClient, logEvent } from '../event.utils';
+import { broadcastUpdates, iterateConnectedClient } from '../event.utils';
+import { logEvent } from '../../core/logger';
 import { ClientToServerEvents, ServerToClientEvents, UserMessageType } from '../../../src/@common/models';
 import { AppRequest } from '../../controller';
 import { TournamentDTO, TournamentProgress, UserDTO, UserRole } from '../../../src/@common/dto';

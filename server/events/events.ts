@@ -9,7 +9,7 @@ import {
 	UserMessageType,
 } from '../../src/@common/models';
 import { safeVerifyToken } from '../controller/auth/auth.utils';
-import { logEvent } from './event.utils';
+import { logEvent } from '../core/logger';
 
 // https://socket.io/docs/v3/server-application-structure/
 // https://socket.io/docs/v3/emit-cheatsheet/

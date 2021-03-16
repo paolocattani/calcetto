@@ -53,10 +53,17 @@ if (isProductionMode()) {
 	dbLogger.level = 'debug';
 }
 
+// Controller/Manager
 export const logProcess = (method: string, value: string, ...rest: any) =>
 	logger.info(`[${chalk.yellow(method)}].${value}`, ...rest);
 
+// Start/End migration
 export const logMigrationStart = (method: string, name: string) =>
 	logger.info(`Running migration ${chalk.red.bold(method)} : ${chalk.yellow(name)}`);
+
 export const logMigrationEnd = (method: string, name: string) =>
 	logger.info(`Migration ${chalk.red.bold(method)} ${chalk.yellow(name)} done!`);
+
+// A standard form to log events
+export const logEvent = (str: string, ...args: any) =>
+	logger.info(`${chalk.blueBright('[ Event ]')} : ${str} `, ...args);
