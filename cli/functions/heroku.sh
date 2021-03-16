@@ -173,7 +173,6 @@ function heroku_cli {
     #
     if [[ $start -eq 1 ]]; then
         text_color " --------------> Bootstrap application using pm2-runtime" $yellow
-        cd server 
         ./node_modules/.bin/pm2-runtime start ./server/ecosystem.config.js
     fi
     exit 0
