@@ -155,6 +155,7 @@ function heroku_cli {
     fi
 
     # "This runs after Heroku prunes and caches dependencies."
+    # @unused
     if [[ $cleanup -eq 1 ]]; then
         text_color " --------------> Cleanup" $yellow
         # remove all files
@@ -169,7 +170,6 @@ function heroku_cli {
     #
     if [[ $start -eq 1 ]]; then
         text_color " --------------> Bootstrap application using pm2-runtime" $yellow
-        cd server
         ./node_modules/.bin/pm2-runtime start ecosystem.config.js
     fi
     exit 0
