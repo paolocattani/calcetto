@@ -17,7 +17,7 @@ export const ComposeReponse = <T extends GenericResponse>(
 		...additionalInfo,
 		code: status,
 		message: internalMessage,
-		userMessage: { type, ...label },
+		userMessage: { type, label },
 	});
 };
 

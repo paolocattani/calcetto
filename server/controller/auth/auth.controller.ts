@@ -28,7 +28,6 @@ import {
 	UpdateUserRequest,
 	OmitGeneric,
 	OmitHistory,
-	UnsubscribeResponse,
 } from '../../../src/@common/models';
 import { HTTPStatusCode } from '../../../src/@common/models/HttpStatusCode';
 import { setSession, removeSession } from './session.utils';
