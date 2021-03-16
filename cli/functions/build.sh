@@ -18,7 +18,8 @@ function build {
     buildFeOnly=0;
     buildBeOnly=0;
     buildAll=0;
-    env='production'
+    env='production';
+    analyze=0;
     while [[ $# -gt 0 ]]
     do
         case "$1" in
@@ -37,6 +38,10 @@ function build {
             -e|--env)
             shift
             env=$1
+            shift
+            ;;
+            --analyze)
+            analyze=1;
             shift
             ;;
             -h|--help)
@@ -59,6 +64,11 @@ function build {
         echo "Invalid env : $env"
         showHelp_build
         exit 0
+    fi
+    
+    # Ignoring option
+    if ([[ $buildFeOnly -eq 0 ]] && [[ $buildAll -eq 0 ]]) && [[ $analyze -eq 1 ]]; then
+        echo "Ignoring `analyze` option ..."
     fi
 
     # Only build Frontend
@@ -90,6 +100,9 @@ function build {
         npm run CRA:build
 
         text_color "[ FrontEnd ] Build Done !" $yellow
+        if [[ $analyze -eq 1 ]] ; then
+            npm run analyze
+        fi
     fi
 
     if [[ $buildBeOnly -eq 1 ]] || [[ $buildAll -eq 1 ]]; then

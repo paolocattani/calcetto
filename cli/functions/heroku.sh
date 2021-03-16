@@ -17,7 +17,7 @@ EOF
 function heroku_cli {
 
     deploy=0;
-    destination='heroku-staging';
+    destination='calcetto2020stage';
     start=0;
     prebuild=0;
     postbuild=0;
@@ -47,7 +47,7 @@ function heroku_cli {
             shift
             ;;
             -p|--prod)
-            destination='heroku-production';
+            destination='calcetto2020production';
             shift
             ;;
             -h|--help)
@@ -67,6 +67,11 @@ function heroku_cli {
     fi
 
     # Deploy to Heroku
+    # Add remotes : 
+    # heroku git:remote -a calcetto2020production
+    # git remote rename heroku calcetto2020production
+    # heroku git:remote -a calcetto2020stage
+    # git remote rename heroku calcetto2020stage
     if [[ $deploy -eq 1 ]]; then
         echo "Start deploy on Heroku"
         # Get current branch name
@@ -155,6 +160,7 @@ function heroku_cli {
     fi
 
     # "This runs after Heroku prunes and caches dependencies."
+    # @unused
     if [[ $cleanup -eq 1 ]]; then
         text_color " --------------> Cleanup" $yellow
         # remove all files
@@ -169,7 +175,6 @@ function heroku_cli {
     #
     if [[ $start -eq 1 ]]; then
         text_color " --------------> Bootstrap application using pm2-runtime" $yellow
-        cd server
         ./node_modules/.bin/pm2-runtime start ecosystem.config.js
     fi
     exit 0

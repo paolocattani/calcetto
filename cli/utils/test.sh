@@ -9,7 +9,7 @@
     PORT=8080 \
     ORIGIN_WHITE_LIST='http://localhost:8080;https://calcetto2020stage.herokuapp.com;https://calcetto2020production.herokuapp.com' \
     SERVER_FORCE=false \
-    SERVER_TOKEN_EXPIRES_IN=8h \
+    SERVER_TOKEN_EXPIRES_IN=2h \
     SERVER_SECRET='O<o@cZqCJ-Qmu1-<C<e@R4m0n(nR&Sk' \
     SERVER_HASH='dummy$Hash' \
     STATIC_CONTENTS_CACHE=10000 --app calcetto2020stage

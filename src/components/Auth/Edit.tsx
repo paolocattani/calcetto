@@ -130,7 +130,12 @@ const EditUser: React.FC<{}> = () => {
 													selected={new Date(birthday)}
 													locale="it-IT"
 													dateFormat="dd/MM/yyyy"
-													onChange={(newValue) => setBirthday(newValue ? newValue : new Date())}
+													withPortal
+													showMonthYearDropdown
+													scrollableMonthYearDropdown
+													yearDropdownItemNumber={100}
+													selectsRange={false}
+													onChange={(newValue: Date) => setBirthday(newValue ? newValue : new Date())}
 												/>
 											)}
 										></Form.Control>

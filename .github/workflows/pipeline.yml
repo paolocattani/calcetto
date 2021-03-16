@@ -43,7 +43,7 @@ jobs:
         run: chmod +x cli/cli.sh
       # Build client
       - name: Build client
-        run: ./cli/cli.sh build --frontend
+        run: ./cli/cli.sh build --frontend --analyze
       # Build server
       - name: Build server
         run: ./cli/cli.sh build --backend
