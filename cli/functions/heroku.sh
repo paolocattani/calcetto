@@ -17,7 +17,7 @@ EOF
 function heroku_cli {
 
     deploy=0;
-    destination='heroku-staging';
+    destination='calcetto2020stage';
     start=0;
     prebuild=0;
     postbuild=0;
@@ -47,7 +47,7 @@ function heroku_cli {
             shift
             ;;
             -p|--prod)
-            destination='heroku-production';
+            destination='calcetto2020production';
             shift
             ;;
             -h|--help)
@@ -67,6 +67,11 @@ function heroku_cli {
     fi
 
     # Deploy to Heroku
+    # Add remotes : 
+    # heroku git:remote -a calcetto2020production
+    # git remote rename heroku calcetto2020production
+    # heroku git:remote -a calcetto2020stage
+    # git remote rename heroku calcetto2020stage
     if [[ $deploy -eq 1 ]]; then
         echo "Start deploy on Heroku"
         # Get current branch name
