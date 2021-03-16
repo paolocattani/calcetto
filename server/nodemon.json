@@ -6,5 +6,5 @@
         "./test/**.test.ts"
     ],
     "ext": "ts",
-    "exec": "node -r ts-node/register ./server.ts dev --expose-gc --inspect --trace-warnings"
+    "exec": "node -r ts-node/register ./server.ts dev --expose-gc --inspect --trace-warnings --project tsconfig.json"
 }

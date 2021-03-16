@@ -5,11 +5,11 @@
 		/* Basic Options */
 		// Must be "es6" due to sequelize . Ref https://github.com/sequelize/sequelize/issues/7840
 		"target": "es2020",
-		"module": "commonjs", //*
-		"lib": ["es2020"], //*
+		"module": "commonjs", 
+		"lib": ["es2020"], 
 		"strict": true,
-		"allowJs": true, //*
-		"checkJs": true, //*
+		"allowJs": true, 
+		"checkJs": true, 
 		"emitDecoratorMetadata": true,
 		"esModuleInterop": true,
 		"experimentalDecorators": true,
@@ -22,8 +22,11 @@
 		"removeComments": true,
 		"skipLibCheck": true,
 		"downlevelIteration": true,
-		"moduleResolution": "node", //*
-		"allowSyntheticDefaultImports": true //*
+		"moduleResolution": "node", 
+		"allowSyntheticDefaultImports": true,
+		"paths": {
+			"@common": ["src/@common"]
+		}	  
 	},
 	"include": [
 		".",
