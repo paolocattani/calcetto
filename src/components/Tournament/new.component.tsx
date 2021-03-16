@@ -10,7 +10,6 @@ import { TournamentAction } from '../../redux/actions/tournament.action';
 import { toast } from 'react-toastify';
 import { FormEventType } from '../core/types';
 import { useTranslation } from 'react-i18next';
-import { EventAction } from 'src/redux/actions/event.action';
 
 interface NewTournamentProps {}
 
@@ -65,7 +64,7 @@ const NewTournament: React.FC<NewTournamentProps> = () => {
 									locale="it"
 									selected={date}
 									dateFormat="dd/MM/yyyy"
-									onChange={(newValue) => setDate(newValue ? newValue : new Date())}
+									onChange={(newValue: Date) => setDate(newValue)}
 								/>
 							)}
 						></Form.Control>

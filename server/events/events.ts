@@ -25,7 +25,7 @@ export const handleSocket = (io: SocketIoServer<ClientToServerEvents, ServerToCl
 		logEvent(`User '${user!.name} ${user!.surname}' from '${clientIp}' is now connected!`);
 		// Logger
 		socket.prependAny((eventName, ...args) => {
-			logEvent(eventName, ...args);
+			logEvent(`Received event : ${eventName}`);
 		});
 
 		// check token every 30 sec
