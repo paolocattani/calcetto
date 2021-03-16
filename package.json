@@ -158,7 +158,7 @@
     "babel-node": "0.0.1-security",
     "concurrently": "^6.0.0",
     "cross-env": "^7.0.3",
-    "cypress": "^6.5.0",
+    "cypress": "^6.7.1",
     "cypress-intellij-reporter": "0.0.6",
     "cypress-plugin-snapshots": "^1.4.4",
     "cypress-skip-and-only-ui": "^1.2.10",
