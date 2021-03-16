@@ -59,7 +59,7 @@ export default class AppServer extends AbstractServer {
 
 	public async connect(): Promise<Sequelize> {
 		const force = process.env.SERVER_FORCE && process.env.SERVER_FORCE.toLowerCase() === 'true';
-
+		logger.info('Allowed origin : ', allowedOrigin);
 		// If it's not a fresh new installation then run migrations
 		if (!force) {
 			await migrationUp();
