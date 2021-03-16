@@ -134,7 +134,7 @@ function heroku_cli {
         cp -r build server/build_server/* ./production_build
         rm ./production_build/server/ecosystem.*.js
         rm -r ./production_build/server/test
-        cp server/ecosystem.config.prod.js ./production_build/server/ecosystem.config.js
+        cp server/ecosystem.config.prod.js ./production_build/ecosystem.config.js
         cp server/package*.json ./production_build
         cp Procfile ./production_build
 
@@ -173,7 +173,7 @@ function heroku_cli {
     #
     if [[ $start -eq 1 ]]; then
         text_color " --------------> Bootstrap application using pm2-runtime" $yellow
-        ./node_modules/.bin/pm2-runtime start ./server/ecosystem.config.js
+        ./node_modules/.bin/pm2-runtime start ./ecosystem.config.js
     fi
     exit 0
 }
