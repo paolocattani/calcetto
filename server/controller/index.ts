@@ -11,8 +11,8 @@ import statsRouter from './stats.controller';
 // mddleware
 import { controllerLogger } from '../middleware';
 // DTO
-import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
-import { UserDTO } from '../../src/@common/dto';
+import { HTTPStatusCode } from '@common/models/HttpStatusCode';
+import { UserDTO } from '@common/dto';
 
 export interface AppRequest extends Request {
 	user?: UserDTO;

@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
 // Core
 import { logger } from '../core/logger';
-import { isProductionMode } from '../../src/@common/utils/env.utils';
+import { isProductionMode } from '@common/utils/env.utils';
 import * as http from 'http';
 // Express
 import helmet from 'helmet';
@@ -25,7 +25,7 @@ import path from 'path';
 import { cookiesOption, SESSION_ID } from '../controller/auth/session.utils';
 import { getRedisClient } from '../database/config/redis/connection';
 import { routeLogger, clientInfo, auditControl, cacheControl, mwWrapper, withAuth } from '../middleware';
-import { ClientToServerEvents, ServerToClientEvents } from '../../src/@common/models/event.model';
+import { ClientToServerEvents, ServerToClientEvents } from '@common/models/event.model';
 
 // http://expressjs.com/en/advanced/best-practice-security.html
 export abstract class AbstractServer {

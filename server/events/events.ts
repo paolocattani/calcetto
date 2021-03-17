@@ -1,7 +1,7 @@
 import { Server as SocketIoServer, Socket } from 'socket.io';
 import { tournamentHandler, stage1Handler, stage2Handler, authHandler } from './handlers';
 
-import { ClientToServerEvents, ServerToClientEvents } from '../../src/@common/models';
+import { ClientToServerEvents, ServerToClientEvents } from '@common/models';
 
 // https://socket.io/docs/v3/server-application-structure/
 // https://socket.io/docs/v3/emit-cheatsheet/

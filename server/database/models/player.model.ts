@@ -12,7 +12,7 @@ import {
 	Scopes,
 } from 'sequelize-typescript';
 import { Pair, User } from '.';
-import { PlayerRole } from '../../../src/@common/dto';
+import { PlayerRole } from '@common/dto';
 
 @Scopes(() => ({
 	withPairs: {

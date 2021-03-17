@@ -16,9 +16,9 @@ import {
 	UpdateCellResponse,
 	UpdatePlacementRequest,
 	UpdatePlacementResponse,
-} from '../../src/@common/models';
+} from '@common/models';
 import { failure, success } from './common.response';
-import { TournamentProgress } from '../../src/@common/dto';
+import { TournamentProgress } from '@common/dto';
 
 const router = Router();
 

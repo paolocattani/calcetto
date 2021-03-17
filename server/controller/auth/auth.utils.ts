@@ -1,6 +1,6 @@
 // Password utils
 import bcrypt from 'bcryptjs';
-import { UserDTO } from '../../../src/@common/dto';
+import { UserDTO } from '@common/dto';
 import jwt from 'jsonwebtoken';
 
 // Password

@@ -5,7 +5,7 @@ import {
 	FetchPlayersResponse,
 	SavePlayerRequest,
 	SavePlayerResponse,
-} from '../../src/@common/models/player.model';
+} from '@common/models/player.model';
 import { withAuth, asyncMiddleware, withAdminRights } from '../middleware';
 import {
 	create,

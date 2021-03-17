@@ -1,6 +1,6 @@
 import { SequelizeOptions } from 'sequelize-typescript';
 import { dbLogger as logger } from '../../../core/logger';
-import { Environment } from '../../../../src/@common/models/common.models';
+import { Environment } from '@common/models/common.models';
 // https://github.com/sequelize/sequelize/issues/11371
 
 type SequelizeEnvList = {

@@ -22,8 +22,8 @@ import {
 	SessionStatus,
 	UpdateStage2CellRequest,
 	UpdateStage2CellResponse,
-} from '../../src/@common/models';
-import { TournamentProgress } from '../../src/@common/dto';
+} from '@common/models';
+import { TournamentProgress } from '@common/dto';
 
 // all API path must be relative to /api/v2/stage2
 const router = Router();

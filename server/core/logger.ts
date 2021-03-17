@@ -3,7 +3,7 @@
  */
 import log4js from 'log4js';
 import chalk from 'chalk';
-import { isProductionMode } from '../../src/@common/utils/env.utils';
+import { isProductionMode } from '@common/utils/env.utils';
 
 log4js.configure({
 	pm2: isProductionMode(),

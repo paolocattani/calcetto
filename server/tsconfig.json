@@ -4,8 +4,7 @@
 		"baseUrl": "./",
 		"pretty": true,
 		/* Basic Options */
-		// Must be "es6" due to sequelize . Ref https://github.com/sequelize/sequelize/issues/7840
-		"target": "es2020",
+		"target": "es2019",
 		"module": "commonjs",
 		"lib": [
 			"es2020"

@@ -28,8 +28,8 @@ import {
 	UpdateUserRequest,
 	OmitGeneric,
 	OmitHistory,
-} from '../../../src/@common/models';
-import { HTTPStatusCode } from '../../../src/@common/models/HttpStatusCode';
+} from '@common/models';
+import { HTTPStatusCode } from '@common/models/HttpStatusCode';
 import { setSession, removeSession } from './session.utils';
 import { comparePasswords } from './auth.utils';
 
