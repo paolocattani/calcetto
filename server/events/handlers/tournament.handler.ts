@@ -1,11 +1,11 @@
-import { Events } from '../../../src/@common/models/event.model';
+import { Events } from '@common/models/event.model';
 import { Server as SocketIoServer, Socket } from 'socket.io';
 import { broadcastUpdates, iterateConnectedClient } from '../event.utils';
 import { logEvent } from '../../core/logger';
-import { ClientToServerEvents, ServerToClientEvents, UserMessageType } from '../../../src/@common/models';
+import { ClientToServerEvents, ServerToClientEvents, UserMessageType } from '@common/models';
 import { AppRequest } from '../../controller';
-import { TournamentDTO, TournamentProgress, UserDTO, UserRole } from '../../../src/@common/dto';
-import { formatDate } from '../../../src/@common/utils/date.utils';
+import { TournamentDTO, TournamentProgress, UserDTO, UserRole } from '@common/dto';
+import { formatDate } from '@common/utils/date.utils';
 
 export const getTournamentLabel = (tournament: TournamentDTO) => `${tournament.name}-${formatDate(tournament.date)}`;
 export const getUserLabel = (user: UserDTO) => user.username || `${user.name} ${user.surname}`;

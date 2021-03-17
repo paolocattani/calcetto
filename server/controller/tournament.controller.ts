@@ -15,10 +15,10 @@ import {
 } from '../manager/tournament.manager';
 // Models
 import { Tournament } from '../database/models';
-import { TournamentDTO } from '../../src/@common/dto';
+import { TournamentDTO } from '@common/dto';
 import { AppRequest } from './index';
 import { entityNotFound, failure, missingParameters, serverError, success } from './common.response';
-import { OmitHistory } from '../../src/@common/models/common.models';
+import { OmitHistory } from '@common/models/common.models';
 import {
 	DeleteTournamentRequest,
 	DeleteTournamentResponse,
@@ -28,7 +28,7 @@ import {
 	SaveTournamentResponse,
 	UpdateTournamentRequest,
 	UpdateTournamentResponse,
-} from '../../src/@common/models/tournament.model';
+} from '@common/models/tournament.model';
 
 const router = Router();
 

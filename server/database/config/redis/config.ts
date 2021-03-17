@@ -1,4 +1,4 @@
-import { Environment } from '../../../../src/@common/models/common.models';
+import { Environment } from '@common/models/common.models';
 import { ClientOpts } from 'redis';
 // https://github.com/sequelize/sequelize/issues/11371
 

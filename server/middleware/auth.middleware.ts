@@ -1,5 +1,4 @@
 import { NextFunction, Response, Request } from 'express';
-import { Message, SessionStatus } from '../../src/@common/models';
 import { AppRequest } from '../controller';
 import { safeVerifyToken } from '../controller/auth/auth.utils';
 import { unauthorized } from '../controller/common.response';

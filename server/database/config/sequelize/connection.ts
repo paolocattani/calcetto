@@ -6,7 +6,7 @@
 
 // Core
 import { logger } from '../../../core/logger';
-import { isProductionMode } from '../../../../src/@common/utils/env.utils';
+import { isProductionMode } from '@common/utils/env.utils';
 // Sequelize
 import { SyncOptions } from 'sequelize';
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
@@ -14,7 +14,7 @@ import config from './config';
 // Other
 import util from 'util';
 import chalk from 'chalk';
-import { Environment } from '../../../../src/@common/models';
+import { Environment } from '@common/models';
 import { isTsEnv } from '../../../core/utils';
 import path from 'path';
 

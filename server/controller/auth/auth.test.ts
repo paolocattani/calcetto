@@ -1,11 +1,11 @@
 import supertest from 'supertest';
-import { HTTPStatusCode } from '../../../src/@common/models/HttpStatusCode';
-import { AuthenticationResponse, RegistrationRequest } from '../../../src/@common/models/auth.model';
+import { HTTPStatusCode } from '@common/models/HttpStatusCode';
+import { AuthenticationResponse, RegistrationRequest } from '@common/models/auth.model';
 import AppServer from '../../express/AppServer';
 import { TEST_USER_1 } from './__mocks__/auth.mocks';
 //
 import { httpServer } from '../../server';
-import { OmitHistory } from '../../../src/@common/models/common.models';
+import { OmitHistory } from '@common/models/common.models';
 import { APPLICATION_JSON } from '../../core/constats';
 
 describe('Authentication Endpoints', () => {

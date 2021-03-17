@@ -1,10 +1,10 @@
 // Cookies
-import { UserDTO } from '../../../src/@common/dto';
+import { UserDTO } from '@common/dto';
 import { v5 as uuidv5 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import 'express-session';
 import { CookieOptions, Response, Request } from 'express';
-import { isProductionMode } from '../../../src/@common/utils/env.utils';
+import { isProductionMode } from '@common/utils/env.utils';
 import { TOKEN_SECRET } from './auth.utils';
 import { logger } from '../../core/logger';
 

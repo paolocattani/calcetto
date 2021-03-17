@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import { Server as SocketIoServer, Socket } from 'socket.io';
-import { UserDTO } from '../../src/@common/dto';
-import { ClientToServerEvents, EventMessage, Events, ServerToClientEvents } from '../../src/@common/models';
+import { UserDTO } from '@common/dto';
+import { ClientToServerEvents, EventMessage, Events, ServerToClientEvents } from '@common/models';
 import { AppRequest } from '../controller';
 import { logEvent } from '../core/logger';
 
