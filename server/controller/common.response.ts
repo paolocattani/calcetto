@@ -4,6 +4,7 @@ import { GenericResponse, I18nLabel, OmitGeneric, UserMessageType } from '@commo
 import { logger } from '@core/logger';
 import chalk from 'chalk';
 
+const pm2InstanceId = process.env.PM2_INSTANCE_ID || 'NOT_AVAILABLE';
 export const ComposeReponse = <T extends GenericResponse>(
 	res: Response,
 	status: HTTPStatusCode,
@@ -17,6 +18,7 @@ export const ComposeReponse = <T extends GenericResponse>(
 		...additionalInfo,
 		code: status,
 		message: internalMessage,
+		instance: pm2InstanceId,
 		userMessage: { type, label },
 	});
 };
