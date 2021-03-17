@@ -27,9 +27,8 @@
 		"moduleResolution": "node",
 		"allowSyntheticDefaultImports": true,
 		"paths": {
-			"@common/*": [
-				"../src/@common/*"
-			]
+			"@common/*": [ "../src/@common/*"] ,
+			"@core/*": [ "./core/*"] 
 		},
 		"plugins": [
 			{ "transform": "typescript-transform-paths" },

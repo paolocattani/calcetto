@@ -9,6 +9,8 @@ module.exports = {
 			exec_mode: 'fork',
 			instances: '1',
 			interpreter: 'node',
+			kill_timeout: 3000,
+			wait_ready: true,
 			interpreter_args: '-r ts-node/register/transpile-only -r tsconfig-paths/register',
 			env: {
 				NODE_ENV: 'development',

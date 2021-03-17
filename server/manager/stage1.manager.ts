@@ -2,8 +2,8 @@
 import { Stage1, Tournament } from '../database/models';
 import { PairDTO, Stage1Row, UserDTO } from '@common/dto';
 // Core
-import { logProcess, logger } from '../core/logger';
-import { asyncForEach } from '../core/utils';
+import { logProcess, logger } from '@core/logger';
+import { asyncForEach } from '@core/utils';
 //
 import { getDbConnection } from '../database/config/sequelize/connection';
 import { isAdmin } from '../manager/auth.manager';

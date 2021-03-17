@@ -6,6 +6,8 @@ module.exports = {
 			exec_mode: 'cluster',
 			instances: '3',
 			interpreter: 'node',
+			kill_timeout: 5000,
+			wait_ready: true,
 			env: {
 				NODE_ENV: 'production',
 				ORIGIN_WHITE_LIST: 'https://calcetto2020stage.herokuapp.com;https://calcetto2020production.herokuapp.com',

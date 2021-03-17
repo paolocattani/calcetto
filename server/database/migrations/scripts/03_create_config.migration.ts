@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
 import { DataType } from 'sequelize-typescript';
 import { Migration, UmzugContext } from '..';
-import { logMigrationEnd, logMigrationStart } from '../../../core/logger';
+import { logMigrationEnd, logMigrationStart } from '@core/logger';
 
 const migrationName = '03_create_config';
 const tableName = 'config';

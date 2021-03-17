@@ -1,5 +1,5 @@
 // Core
-import { logger } from '../../core/logger';
+import { logger } from '@core/logger';
 import { withAuth, asyncMiddleware, withTestAuth, limitRequest, consumeRequest } from '../../middleware';
 // Types
 import { AppRequest } from '../index';

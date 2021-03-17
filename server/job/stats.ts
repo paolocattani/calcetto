@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import { logger } from '../core/logger';
+import { logger } from '@core/logger';
 
 export default async (active: boolean) => {
 	if (!active) {

@@ -1,8 +1,8 @@
 import { PairDTO, UserDTO } from '@common/dto';
-import { logProcess, logger } from '../core/logger';
+import { logProcess, logger } from '@core/logger';
 import { Op } from 'sequelize';
 import { Stage2, Pair, Player } from '../database/models';
-import { asyncForEach } from '../core/utils';
+import { asyncForEach } from '@core/utils';
 import { convertEntityToDTO } from './player.manager';
 
 const className = 'Pairs Manager';

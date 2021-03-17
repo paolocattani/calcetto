@@ -1,9 +1,8 @@
-import chalk from 'chalk';
 import { Server as SocketIoServer, Socket } from 'socket.io';
 import { UserDTO } from '@common/dto';
 import { ClientToServerEvents, EventMessage, Events, ServerToClientEvents } from '@common/models';
 import { AppRequest } from '../controller';
-import { logEvent } from '../core/logger';
+import { logEvent } from '@core/logger';
 
 // Broadcast message to a specific room
 export const broadcastUpdates = (

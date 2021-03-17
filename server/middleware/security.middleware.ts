@@ -5,7 +5,7 @@ import { RateLimiterRedis } from 'rate-limiter-flexible';
 import { getClientIp } from 'request-ip';
 import { AppRequest } from '../controller';
 import { unauthorized } from '../controller/common.response';
-import { logger } from '../core/logger';
+import { logger } from '@core/logger';
 import { getRedisClient } from '../database/config/redis/connection';
 import { ConfigManager } from '../manager/config.manager';
 import chalk from 'chalk';

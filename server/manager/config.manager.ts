@@ -1,4 +1,4 @@
-import { logProcess } from '../core/logger';
+import { logProcess } from '@core/logger';
 import Config from '../database/models/config.model';
 
 type ConfigSetType = keyof typeof ConfigManager.config;

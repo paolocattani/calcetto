@@ -5,7 +5,7 @@
 //
 
 // Core
-import { logger } from '../../../core/logger';
+import { logger } from '@core/logger';
 import { isProductionMode } from '@common/utils/env.utils';
 // Sequelize
 import { SyncOptions } from 'sequelize';
@@ -15,7 +15,7 @@ import config from './config';
 import util from 'util';
 import chalk from 'chalk';
 import { Environment } from '@common/models';
-import { isTsEnv } from '../../../core/utils';
+import { isTsEnv } from '@core/utils';
 import path from 'path';
 
 let connection: Sequelize;

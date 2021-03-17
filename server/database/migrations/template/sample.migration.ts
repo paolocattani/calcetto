@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 import { Migration, UmzugContext } from '..';
-import { logMigrationEnd, logMigrationStart } from '../../../core/logger';
+import { logMigrationEnd, logMigrationStart } from '@core/logger';
 
 const migrationName = 'migrationName';
 export const up: Migration = async ({ context: sequelize }: UmzugContext) => {

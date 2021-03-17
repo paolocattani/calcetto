@@ -2,7 +2,7 @@ import { Router, Response } from 'express';
 // Utils
 import chalk from 'chalk';
 // Core
-import { logger } from '../core/logger';
+import { logger } from '@core/logger';
 import { asyncMiddleware, withAuth, withAdminRights, doNotCacheThis } from '../middleware';
 // Managers
 import { generateStage2Rows, countStage2, updateCells, deleteStage2 } from '../manager/stage2.manager';

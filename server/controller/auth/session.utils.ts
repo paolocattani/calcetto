@@ -6,7 +6,7 @@ import 'express-session';
 import { CookieOptions, Response, Request } from 'express';
 import { isProductionMode } from '@common/utils/env.utils';
 import { TOKEN_SECRET } from './auth.utils';
-import { logger } from '../../core/logger';
+import { logger } from '@core/logger';
 
 export const SESSION_ID = 'session_id';
 

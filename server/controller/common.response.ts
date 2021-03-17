@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { HTTPStatusCode } from '@common/models/HttpStatusCode';
 import { GenericResponse, I18nLabel, OmitGeneric, UserMessageType } from '@common/models/common.models';
-import { logger } from '../core/logger';
+import { logger } from '@core/logger';
 import chalk from 'chalk';
 
 export const ComposeReponse = <T extends GenericResponse>(

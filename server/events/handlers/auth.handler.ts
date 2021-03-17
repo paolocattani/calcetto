@@ -1,5 +1,5 @@
 import { Server as SocketIoServer, Socket } from 'socket.io';
-import { logEvent } from '../../core/logger';
+import { logEvent } from '@core/logger';
 import { ClientToServerEvents, EventMessage, Events, ServerToClientEvents, UserMessageType } from '@common/models';
 import { AppRequest } from '../../controller';
 import { safeVerifyToken } from '../../controller/auth/auth.utils';
