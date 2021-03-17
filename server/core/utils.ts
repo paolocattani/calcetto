@@ -1,4 +1,8 @@
 import { WhereOptions, Sequelize, Op, Model } from 'sequelize';
+//----------------------------
+// PM2
+export const PM2InstanceId = process.env.PM2_INSTANCE_ID || 'NOT_AVAILABLE';
+
 //-----------------------------
 // Env
 //

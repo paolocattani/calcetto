@@ -7,6 +7,7 @@ module.exports = {
 			name: 'calcetto_server',
 			script: './server.ts',
 			exec_mode: 'fork',
+			// instances: 'max',
 			instances: '1',
 			interpreter: 'node',
 			kill_timeout: 3000,

@@ -3,8 +3,8 @@ import { HTTPStatusCode } from '@common/models/HttpStatusCode';
 import { GenericResponse, I18nLabel, OmitGeneric, UserMessageType } from '@common/models/common.models';
 import { logger } from '@core/logger';
 import chalk from 'chalk';
+import { PM2InstanceId } from '@core/utils';
 
-const pm2InstanceId = process.env.PM2_INSTANCE_ID || 'NOT_AVAILABLE';
 export const ComposeReponse = <T extends GenericResponse>(
 	res: Response,
 	status: HTTPStatusCode,
@@ -18,7 +18,7 @@ export const ComposeReponse = <T extends GenericResponse>(
 		...additionalInfo,
 		code: status,
 		message: internalMessage,
-		instance: pm2InstanceId,
+		instance: PM2InstanceId,
 		userMessage: { type, label },
 	});
 };

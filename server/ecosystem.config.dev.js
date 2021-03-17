@@ -6,7 +6,8 @@ module.exports = {
 			script: './server/server.js',
 			// Exec mode
 			exec_mode: 'cluster',
-			instances: 'max',
+			// instances: 'max',
+			instances: '1',
 			instance_var: 'PM2_INSTANCE_ID',
 			interpreter: 'node',
 			// Timeout
