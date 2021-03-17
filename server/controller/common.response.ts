@@ -1,6 +1,6 @@
 import { Response } from 'express';
-import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
-import { GenericResponse, I18nLabel, OmitGeneric, UserMessageType } from '../../src/@common/models/common.models';
+import { HTTPStatusCode } from '@common/models/HttpStatusCode';
+import { GenericResponse, I18nLabel, OmitGeneric, UserMessageType } from '@common/models/common.models';
 import { logger } from '../core/logger';
 import chalk from 'chalk';
 
@@ -17,7 +17,7 @@ export const ComposeReponse = <T extends GenericResponse>(
 		...additionalInfo,
 		code: status,
 		message: internalMessage,
-		userMessage: { type, ...label },
+		userMessage: { type, label },
 	});
 };
 

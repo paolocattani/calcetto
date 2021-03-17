@@ -1,6 +1,6 @@
-import {AbstractPage, headers} from './abstract.page';
-import {AuthAction} from "../../src/redux/actions";
-import {OmitHistory, SaveTournamentRequest} from "../../src/@common/models";
+import { AbstractPage, headers } from './abstract.page';
+import { AuthAction } from '../../src/redux/actions';
+import { OmitHistory, SaveTournamentRequest } from '@common/models';
 
 export class Pairs extends AbstractPage {
 	// Override
@@ -15,6 +15,4 @@ export class Pairs extends AbstractPage {
 	getTable() {
 		return cy.get('[data-cy=pair-table]');
 	}
-
-
 }

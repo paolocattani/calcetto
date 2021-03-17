@@ -9,13 +9,13 @@ import generator from '../generator/generator';
 // Routes
 import routes from '../controller/index';
 // Utils
-import '../../src/@common/utils/env.utils';
+import '@common/utils/env.utils';
 import chalk from 'chalk';
 import { logger } from '../core/logger';
 import { markAllAsApplied } from '../database/migrations';
 import { Server as SocketIoServer } from 'socket.io'; // socket.io
 import { handleSocket } from '../events/events';
-import { isDevMode, isProductionMode, isTestMode } from '../../src/@common/utils/env.utils';
+import { isDevMode, isProductionMode, isTestMode } from '@common/utils/env.utils';
 import { migrationUp } from '../database/migrations';
 
 const defaultName: string = 'ApplicationServer Calcetto';
@@ -59,7 +59,7 @@ export default class AppServer extends AbstractServer {
 
 	public async connect(): Promise<Sequelize> {
 		const force = process.env.SERVER_FORCE && process.env.SERVER_FORCE.toLowerCase() === 'true';
-
+		logger.info('Allowed origin : ', allowedOrigin);
 		// If it's not a fresh new installation then run migrations
 		if (!force) {
 			await migrationUp();

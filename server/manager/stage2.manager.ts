@@ -3,12 +3,12 @@ import { logProcess, logger } from '../core/logger';
 import { getDbConnection } from '../database/config/sequelize/connection';
 // Models
 import { Stage2, Pair } from '../database/models';
-import { IStage2FE, ICell, PairDTO, UserDTO, TournamentProgress } from '../../src/@common/dto';
+import { IStage2FE, ICell, PairDTO, UserDTO, TournamentProgress } from '@common/dto';
 
 import { isAdmin } from './auth.manager';
 import { rowToModel } from './pair.manager';
 import { WhereOptions } from 'sequelize';
-import { getEmptyPair, SessionStatus } from '../../src/@common/models';
+import { getEmptyPair, SessionStatus } from '@common/models';
 
 const className = 'Stage2 Manager : ';
 

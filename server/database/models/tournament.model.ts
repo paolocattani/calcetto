@@ -11,7 +11,7 @@ import {
 	BelongsTo,
 } from 'sequelize-typescript';
 import { Pair, Stage1, Stage2, User } from '.';
-import { TournamentProgress } from '../../../src/@common/dto';
+import { TournamentProgress } from '@common/dto';
 
 /**
  * Rapprenta un Torneo :

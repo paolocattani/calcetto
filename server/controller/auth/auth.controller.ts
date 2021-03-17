@@ -28,10 +28,9 @@ import {
 	UpdateUserRequest,
 	OmitGeneric,
 	OmitHistory,
-	UnsubscribeResponse,
-} from '../../../src/@common/models';
-import { HTTPStatusCode } from '../../../src/@common/models/HttpStatusCode';
-import { setSession, removeSession } from './cookies.utils';
+} from '@common/models';
+import { HTTPStatusCode } from '@common/models/HttpStatusCode';
+import { setSession, removeSession } from './session.utils';
 import { comparePasswords } from './auth.utils';
 
 const AUTH_WELCOME = 'auth:welcome';
@@ -102,7 +101,7 @@ router.get(
 	'/logout',
 	withAuth,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
-		removeSession(res, req);
+		await removeSession(res, req);
 		return success(res, { key: 'auth:logout' });
 	})
 );

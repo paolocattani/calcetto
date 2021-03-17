@@ -16,7 +16,7 @@ import {
 	SavePairResponse,
 	SelectPairsRequest,
 	SelectPairsResponse,
-} from '../../src/@common/models';
+} from '@common/models';
 
 const router = Router();
 

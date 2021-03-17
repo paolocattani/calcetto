@@ -1,4 +1,5 @@
 import * as H from 'history';
+import { Socket } from 'socket.io-client';
 import { EventMessage } from '.';
 import { TournamentDTO } from '../dto';
 
@@ -15,11 +16,18 @@ export enum Events {
 	 */
 	NEW_MESSAGE = 'new_message',
 	/**
-	 * This event is fired from client when the user session expired
+	 * This event is fired from server when the user session expired
 	 * #From : Server
 	 * The user is forced to logout.
 	 */
 	SESSION_EXPIRED = 'session:expired',
+	/**
+	 * This event is fired from client when the user logout
+	 * #From : Server
+	 */
+	LOGOUT = 'session:logout',
+	DISCONNECT = 'disconnect',
+	CONNECTION = 'connection',
 	/**
 	 * This event is fired when a user join tournament room.
 	 * #From : Client
@@ -89,6 +97,7 @@ export interface ClientToServerEvents {
 	[Events.TOURNAMENT_UPDATED]: (tournament: TournamentDTO) => void;
 	[Events.STAGE1_UPDATED]: (tournament: TournamentDTO) => void;
 	[Events.STAGE2_UPDATED]: (tournament: TournamentDTO) => void;
+	[Events.LOGOUT]: () => void;
 }
 
 export interface ServerToClientEvents {

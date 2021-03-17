@@ -98,7 +98,7 @@ function* updateStage2({ payload: { tournament } }: ReturnType<typeof EventActio
 // Close socket channel
 function* closeChannel({ payload }: ReturnType<typeof EventAction.closeChannel.request>) {
 	try {
-		socket.close();
+		socket.disconnect();
 		yield put(EventAction.closeChannel.success({}));
 	} catch (error) {
 		yield put(EventAction.closeChannel.failure({}));

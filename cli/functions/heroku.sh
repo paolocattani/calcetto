@@ -17,7 +17,7 @@ EOF
 function heroku_cli {
 
     deploy=0;
-    destination='heroku-staging';
+    destination='calcetto2020stage';
     start=0;
     prebuild=0;
     postbuild=0;
@@ -47,7 +47,7 @@ function heroku_cli {
             shift
             ;;
             -p|--prod)
-            destination='heroku-production';
+            destination='calcetto2020production';
             shift
             ;;
             -h|--help)
@@ -67,6 +67,11 @@ function heroku_cli {
     fi
 
     # Deploy to Heroku
+    # Add remotes : 
+    # heroku git:remote -a calcetto2020production
+    # git remote rename heroku calcetto2020production
+    # heroku git:remote -a calcetto2020stage
+    # git remote rename heroku calcetto2020stage
     if [[ $deploy -eq 1 ]]; then
         echo "Start deploy on Heroku"
         # Get current branch name
@@ -129,8 +134,8 @@ function heroku_cli {
         cp -r build server/build_server/* ./production_build
         rm ./production_build/server/ecosystem.*.js
         rm -r ./production_build/server/test
-        cp server/ecosystem.config.prod.js ./production_build/server/ecosystem.config.js
-        cp server/package*.json ./production_build/server
+        cp server/ecosystem.config.prod.js ./production_build/ecosystem.config.js
+        cp server/package*.json ./production_build
         cp Procfile ./production_build
 
         # !!! I want to clean up before heroku caches dependencies
@@ -144,9 +149,7 @@ function heroku_cli {
         text_color " --------------> Cleanup done" $yellow
 
         text_color " --------------> Installing production dependencies" $yellow
-        cd server
         npm i --only=prod
-        cd ..
         text_color " --------------> Complete.! " $yellow
 
         # Add execute permession to cli
@@ -155,6 +158,7 @@ function heroku_cli {
     fi
 
     # "This runs after Heroku prunes and caches dependencies."
+    # @unused
     if [[ $cleanup -eq 1 ]]; then
         text_color " --------------> Cleanup" $yellow
         # remove all files
@@ -169,8 +173,7 @@ function heroku_cli {
     #
     if [[ $start -eq 1 ]]; then
         text_color " --------------> Bootstrap application using pm2-runtime" $yellow
-        cd server
-        ./node_modules/.bin/pm2-runtime start ecosystem.config.js
+        ./node_modules/.bin/pm2-runtime start ./ecosystem.config.js
     fi
     exit 0
 }

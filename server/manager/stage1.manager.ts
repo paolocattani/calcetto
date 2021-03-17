@@ -1,6 +1,6 @@
 // Models
 import { Stage1, Tournament } from '../database/models';
-import { PairDTO, Stage1Row, UserDTO } from '../../src/@common/dto';
+import { PairDTO, Stage1Row, UserDTO } from '@common/dto';
 // Core
 import { logProcess, logger } from '../core/logger';
 import { asyncForEach } from '../core/utils';
@@ -9,7 +9,7 @@ import { getDbConnection } from '../database/config/sequelize/connection';
 import { isAdmin } from '../manager/auth.manager';
 //
 import { Op } from 'sequelize';
-import { SessionStatus } from '../../src/@common/models';
+import { SessionStatus } from '@common/models';
 
 const className = 'Stage1 Manager : ';
 

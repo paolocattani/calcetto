@@ -1,9 +1,9 @@
 import { Tournament, Player, Pair } from '../database/models';
 import { getRandomIntInclusive } from '../core/utils';
 import { logger } from '../core/logger';
-import { isProductionMode } from '../../src/@common/utils/env.utils';
+import { isProductionMode } from '@common/utils/env.utils';
 import chalk from 'chalk';
-import { TournamentProgress } from '../../src/@common/dto';
+import { TournamentProgress } from '@common/dto';
 
 const TOURNAMENT_RECORDS = 10;
 

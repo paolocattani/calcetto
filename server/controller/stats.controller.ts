@@ -12,8 +12,8 @@ import {
 	StatsBestPairsRequest,
 	StatsBestPairsResponse,
 	StatsSummaryResponse,
-} from '../../src/@common/models/stats.model';
-import { formatDate } from '../../src/@common/utils/date.utils';
+} from '@common/models/stats.model';
+import { formatDate } from '@common/utils/date.utils';
 import { withAuth, doNotCacheThis, asyncMiddleware } from '../middleware';
 import { findById } from '../manager/pair.manager';
 

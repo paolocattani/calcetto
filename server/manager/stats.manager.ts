@@ -1,8 +1,8 @@
 import { logger, logProcess } from '../core/logger';
 import { Op, QueryTypes } from 'sequelize';
 import { Player, StatsPairs, StatsPlayer } from '../database/models';
-import { StatsPlayerDTO } from '../../src/@common/dto/stats/stats.players.dto';
-import { StatsPairDTO } from '../../src/@common/dto/stats/stats.pairs.dto';
+import { StatsPlayerDTO } from '@common/dto/stats/stats.players.dto';
+import { StatsPairDTO } from '@common/dto/stats/stats.pairs.dto';
 import { convertEntityToDTO as convertPlayerEntityToDTO } from './player.manager';
 import { asyncForEach, logEntity } from '../core/utils';
 

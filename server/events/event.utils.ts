@@ -1,9 +1,9 @@
 import chalk from 'chalk';
 import { Server as SocketIoServer, Socket } from 'socket.io';
-import { UserDTO } from '../../src/@common/dto';
-import { ClientToServerEvents, EventMessage, Events, ServerToClientEvents } from '../../src/@common/models';
+import { UserDTO } from '@common/dto';
+import { ClientToServerEvents, EventMessage, Events, ServerToClientEvents } from '@common/models';
 import { AppRequest } from '../controller';
-import { logger } from '../core/logger';
+import { logEvent } from '../core/logger';
 
 // Broadcast message to a specific room
 export const broadcastUpdates = (
@@ -14,10 +14,6 @@ export const broadcastUpdates = (
 	logEvent('Broadcasting updates to rooom : ', room);
 	socket.to(room).emit(Events.NEW_MESSAGE, message);
 };
-
-// A standard form to log events
-export const logEvent = (str: string, ...args: any) =>
-	logger.info(`${chalk.blueBright('[ Event ]')} : ${str} `, ...args);
 
 // Loop through connected client and perform a callback.
 export const iterateConnectedClient = async (

@@ -1,9 +1,9 @@
-import { Events } from '../../../src/@common/models/event.model';
+import { Events } from '@common/models/event.model';
 import { Server as SocketIoServer, Socket } from 'socket.io';
-import { logEvent } from '../event.utils';
-import { ClientToServerEvents, EventMessage, ServerToClientEvents, UserMessageType } from '../../../src/@common/models';
+import { logEvent } from '../../core/logger';
+import { ClientToServerEvents, EventMessage, ServerToClientEvents, UserMessageType } from '@common/models';
 import { AppRequest } from '../../controller';
-import { TournamentDTO } from '../../../src/@common/dto';
+import { TournamentDTO } from '@common/dto';
 
 export const stage2Handler = (
 	io: SocketIoServer<ClientToServerEvents, ServerToClientEvents>,

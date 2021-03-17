@@ -1,7 +1,7 @@
-import {AuthenticationResponse, RootState} from '../../src/@common/models';
+import { AuthenticationResponse, RootState } from '@common/models';
 import { RegistrationProps } from './landing.page';
 import { AuthAction } from '../../src/redux/actions';
-import {UserDTO} from "../../src/@common/dto";
+import { UserDTO } from '@common/dto';
 const { users } = require('../fixtures/auth.fixture.json');
 const user: RegistrationProps = users.user;
 const admin: RegistrationProps = users.admin;
@@ -12,11 +12,11 @@ export const HAVE_LENGTH = 'have.length';
 export const headers = { headers: { 'Content-Type': 'application/json' } };
 
 export abstract class AbstractPage {
-	user?:UserDTO;
+	user?: UserDTO;
 
 	abstract visit(username?: string, password?: string): Cypress.Chainable<Cypress.AUTWindow>;
 
-	getUser(){
+	getUser() {
 		return this.user;
 	}
 
@@ -74,7 +74,7 @@ export abstract class AbstractPage {
 
 	forceRegisterAdmin() {
 		this.forceDeleteUser(admin.email, admin.username, admin.password);
-		this.forceRegistration({...admin,name:`[A]${admin.name}`});
+		this.forceRegistration({ ...admin, name: `[A]${admin.name}` });
 	}
 
 	forceRegistration(registrationOptions: RegistrationProps) {

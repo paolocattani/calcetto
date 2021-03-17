@@ -209,10 +209,16 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
 						<Form.Label onClick={(e: any) => e.preventDefault()}>{t('auth:birthday')}</Form.Label>
 						<DatePicker
 							id="birthday"
+							selected={birthday}
+							locale="it"
 							className="datepicker"
 							dateFormat="dd/MM/yyyy"
-							selected={birthday}
-							onChange={(val) => setBirthday(val)}
+							withPortal
+							showYearDropdown
+							scrollableYearDropdown
+							yearDropdownItemNumber={100}
+							selectsRange={false}
+							onChange={(newValue: Date) => setBirthday(newValue)}
 						/>
 					</Form.Group>
 				</Col>

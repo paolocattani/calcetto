@@ -1,6 +1,6 @@
 import { Model, Column, DataType } from 'sequelize-typescript';
 import { StatsPairs, StatsPlayer } from '..';
-import { roundNumber } from '../../../../src/@common/utils/math.utils';
+import { roundNumber } from '@common/utils/math.utils';
 
 export default class StatsGeneric extends Model {
 	@Column(DataType.INTEGER)

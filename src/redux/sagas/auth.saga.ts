@@ -44,6 +44,7 @@ function* logoutSaga({
 		await persistor.purge();
 		history.push('/');
 	};
+	yield put(EventAction.closeChannel.request({}));
 	yield* entityLifeCycle<LogoutRequest, AuthenticationResponse, AuthenticationError>(
 		AuthAction.logout,
 		logout,
