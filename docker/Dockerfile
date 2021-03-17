@@ -62,7 +62,7 @@ RUN npm run CRA:build && \
     cd server && npm run build && cd .. && \
     # Copy build result to BUILD_FOLDER
     cp build ${BUILD_FOLDER} && \
-    cp server/build_server ${BUILD_FOLDER} && \
+    cp server/build/* ${BUILD_FOLDER} && \
     # Install required lib into BUILD_FOLDER
     cd ${BUILD_FOLDER} && ls -l && \
     npm install --only=prod && cd ${WORK_FOLDER}

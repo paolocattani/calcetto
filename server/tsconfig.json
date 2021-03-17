@@ -20,7 +20,7 @@
 		//"listFiles": true,
 		//"listEmittedFiles": true,
 		"noErrorTruncation": true,
-		"outDir": "./build_server",
+		"outDir": "./build",
 		"removeComments": true,
 		"skipLibCheck": true,
 		"downlevelIteration": true,
@@ -30,7 +30,11 @@
 			"@common/*": [
 				"../src/@common/*"
 			]
-		}
+		},
+		"plugins": [
+			{ "transform": "typescript-transform-paths" },
+			{ "transform": "typescript-transform-paths",  "afterDeclarations": true }
+	  ]
 	},
 	"include": [
 		".",
@@ -41,6 +45,6 @@
 		"./test",
 		"**/*.test.ts",
 		"node_modules",
-		"build_server"
+		"build"
 	]
 }

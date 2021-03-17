@@ -131,7 +131,7 @@ function heroku_cli {
         mkdir production_build
 
         text_color " --------------> Copy files" $yellow
-        cp -r build server/build_server/* ./production_build
+        cp -r build server/build/* ./production_build
         rm ./production_build/server/ecosystem.*.js
         rm -r ./production_build/server/test
         cp server/ecosystem.config.prod.js ./production_build/ecosystem.config.js

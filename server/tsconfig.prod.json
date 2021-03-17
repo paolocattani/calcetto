@@ -1,15 +1,17 @@
 {
 	"$schema": "https://json.schemastore.org/tsconfig",
 	"compilerOptions": {
+		"baseUrl": "./",
 		"pretty": true,
 		/* Basic Options */
-		// Must be "es6" due to sequelize . Ref https://github.com/sequelize/sequelize/issues/7840
-		"target": "es2020",
-		"module": "commonjs", 
-		"lib": ["es2020"], 
+		"target": "es2019",
+		"module": "commonjs",
+		"lib": [
+			"es2020"
+		],
 		"strict": true,
-		"allowJs": true, 
-		"checkJs": true, 
+		"allowJs": true,
+		"checkJs": true,
 		"emitDecoratorMetadata": true,
 		"esModuleInterop": true,
 		"experimentalDecorators": true,
@@ -18,19 +20,31 @@
 		//"listFiles": true,
 		//"listEmittedFiles": true,
 		"noErrorTruncation": true,
-		"outDir": "./build_server",
+		"outDir": "./build",
 		"removeComments": true,
 		"skipLibCheck": true,
 		"downlevelIteration": true,
-		"moduleResolution": "node", 
+		"moduleResolution": "node",
 		"allowSyntheticDefaultImports": true,
 		"paths": {
-			"@common": ["src/@common"]
-		}	  
+			"@common/*": [
+				"../src/@common/*"
+			]
+		},
+		"plugins": [
+			{ "transform": "typescript-transform-paths", "useRootDirs": true },
+			{ "transform": "typescript-transform-paths", "useRootDirs": true, "afterDeclarations": true }
+	  ]
 	},
 	"include": [
 		".",
 		"src/@common"
 	],
-	"exclude": ["./src/*","./test","**/*.test.ts","node_modules","build_server"]
+	"exclude": [
+		"./src/*",
+		"./test",
+		"**/*.test.ts",
+		"node_modules",
+		"build"
+	]
 }

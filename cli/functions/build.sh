@@ -113,7 +113,7 @@ function build {
         text_color "[ BackEnd ] Run --> npm run build" $yellow
         npm run build
         text_color "[ BackEnd ] Delete ecosystem files..." $yellow
-        rm build_server/server/ecosystem.config.*js
+        rm build/server/ecosystem.config.*js
         cd ..
         text_color "[ BackEnd ] Build Done !" $yellow
    fi
@@ -128,7 +128,7 @@ function build {
         # Frontend build
         cp -r build ./production_build
         # Backend build
-        cp -r server/build_server/* ./production_build
+        cp -r server/build/* ./production_build
         # Config files
         # cp .env* ./production_build
         cp server/ecosystem.config.prod.js ./production_build/server/ecosystem.config.js
