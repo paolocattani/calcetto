@@ -1,6 +1,6 @@
 import { Tournament, Player, Pair } from '../database/models';
-import { getRandomIntInclusive } from '../core/utils';
-import { logger } from '../core/logger';
+import { getRandomIntInclusive } from '@core/utils';
+import { logger } from '@core/logger';
 import { isProductionMode } from '@common/utils/env.utils';
 import chalk from 'chalk';
 import { TournamentProgress } from '@common/dto';

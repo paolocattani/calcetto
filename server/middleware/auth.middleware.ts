@@ -2,7 +2,7 @@ import { NextFunction, Response, Request } from 'express';
 import { AppRequest } from '../controller';
 import { safeVerifyToken } from '../controller/auth/auth.utils';
 import { unauthorized } from '../controller/common.response';
-import { logger } from '../core/logger';
+import { logger } from '@core/logger';
 import { User } from '../database/models';
 import { isAdmin } from '../manager/auth.manager';
 import chalk from 'chalk';

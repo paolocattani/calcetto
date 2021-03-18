@@ -1,8 +1,8 @@
-import { logProcess } from '../core/logger';
+import { logProcess } from '@core/logger';
 import { TournamentDTO, TournamentProgress, UserDTO, UserRole } from '@common/dto';
 import { Tournament } from '../database/models';
 import { Op, WhereOptions } from 'sequelize';
-import { getWhereFromMap, lowerWrapper, dateInRageWrapper } from '../core/utils';
+import { getWhereFromMap, lowerWrapper, dateInRageWrapper } from '@core/utils';
 
 const className = 'Tournament Manager : ';
 const defaultFilter = (user: UserDTO) => ({ [Op.or]: [{ ownerId: user.id }, { public: true }] });

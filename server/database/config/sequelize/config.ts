@@ -1,5 +1,5 @@
 import { SequelizeOptions } from 'sequelize-typescript';
-import { dbLogger as logger } from '../../../core/logger';
+import { dbLogger as logger } from '@core/logger';
 import { Environment } from '@common/models/common.models';
 // https://github.com/sequelize/sequelize/issues/11371
 

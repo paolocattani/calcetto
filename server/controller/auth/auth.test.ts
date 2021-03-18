@@ -6,7 +6,7 @@ import { TEST_USER_1 } from './__mocks__/auth.mocks';
 //
 import { httpServer } from '../../server';
 import { OmitHistory } from '@common/models/common.models';
-import { APPLICATION_JSON } from '../../core/constats';
+import { APPLICATION_JSON } from '@core/constats';
 
 describe('Authentication Endpoints', () => {
 	let serverTest: supertest.SuperTest<supertest.Test>;

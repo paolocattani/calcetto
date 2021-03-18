@@ -1,4 +1,4 @@
-import { logProcess, logger } from '../core/logger';
+import { logProcess, logger } from '@core/logger';
 // Db
 import { getDbConnection } from '../database/config/sequelize/connection';
 // Models

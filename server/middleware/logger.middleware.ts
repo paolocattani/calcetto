@@ -1,6 +1,6 @@
 import { NextFunction, Response, Request } from 'express';
 import { isDevMode } from '@common/utils/env.utils';
-import { logger } from '../core/logger';
+import { logger } from '@core/logger';
 import chalk from 'chalk';
 
 //--------- Log route

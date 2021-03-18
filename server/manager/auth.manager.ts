@@ -2,11 +2,11 @@
 import { User } from '../database/models';
 import { UserDTO, UserRole, PlayerRole, PlayerDTO } from '@common/dto';
 // Logger utils
-import { logProcess, logger } from '../core/logger';
+import { logProcess, logger } from '@core/logger';
 // managers
 import * as playerManager from './player.manager';
 import { Op } from 'sequelize';
-import { lowerWrapper } from '../core/utils';
+import { lowerWrapper } from '@core/utils';
 import { RegistrationRequest } from '@common/models/auth.model';
 import { I18nLabel } from '@common/models';
 import { generatePassword } from '../controller/auth/auth.utils';

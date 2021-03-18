@@ -1,5 +1,5 @@
 import { viewUp, viewDown, functionUp, functionDown } from '../utils';
-import { logMigrationStart, logMigrationEnd } from '../../../core/logger';
+import { logMigrationStart, logMigrationEnd } from '@core/logger';
 import { Migration, UmzugContext } from '../';
 
 const viewPairName = 'stats_pairs';

@@ -7,6 +7,7 @@ import { isProductionMode } from '@common/utils/env.utils';
 
 log4js.configure({
 	pm2: isProductionMode(),
+	pm2InstanceVar: 'PM2_INSTANCE_ID',
 	appenders: {
 		console: { type: 'stdout' },
 		'dev-logger': {

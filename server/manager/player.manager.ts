@@ -2,9 +2,9 @@
 import { PlayerDTO, PlayerRole } from '@common/dto';
 import { Player } from '../database/models';
 // Logger utils
-import { logProcess } from '../core/logger';
+import { logProcess } from '@core/logger';
 import { WhereOptions } from 'sequelize';
-import { getWhereFromMap } from '../core/utils';
+import { getWhereFromMap } from '@core/utils';
 
 // Const
 const className = 'Player Manager : ';

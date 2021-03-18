@@ -1,8 +1,9 @@
 import { Response } from 'express';
 import { HTTPStatusCode } from '@common/models/HttpStatusCode';
 import { GenericResponse, I18nLabel, OmitGeneric, UserMessageType } from '@common/models/common.models';
-import { logger } from '../core/logger';
+import { logger } from '@core/logger';
 import chalk from 'chalk';
+import { PM2InstanceId } from '@core/utils';
 
 export const ComposeReponse = <T extends GenericResponse>(
 	res: Response,
@@ -17,6 +18,7 @@ export const ComposeReponse = <T extends GenericResponse>(
 		...additionalInfo,
 		code: status,
 		message: internalMessage,
+		instance: PM2InstanceId,
 		userMessage: { type, label },
 	});
 };

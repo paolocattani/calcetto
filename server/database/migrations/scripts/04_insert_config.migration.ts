@@ -1,5 +1,5 @@
 import { Migration, UmzugContext } from '..';
-import { logMigrationEnd, logMigrationStart } from '../../../core/logger';
+import { logMigrationEnd, logMigrationStart } from '@core/logger';
 import Config from '../../models/config.model';
 
 const migrationName = '04_insert_config';
