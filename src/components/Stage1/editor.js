@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 
 export const cellEditProps = (callback) => cellEditFactory({ ...callback });
@@ -15,7 +16,7 @@ const newColumn = (index, rowNumber) => {
 		dataField: `col${index}`,
 		text: index.toString(),
 		//type: 'number',
-		headerStyle: (column, colIndex) => ({ width: `${75 / rowNumber}%` }),
+		headerStyle: (/* column, colIndex */) => ({ width: `${75 / rowNumber}%` }),
 		...headerAlign,
 		editable: (content, row, rowIndex, columnIndex) => rowIndex !== columnIndex - 2,
 		...align,
@@ -51,7 +52,7 @@ export const columns = (pairsList) => {
 			dataField: 'pair.label',
 			text: 'Nome Coppia',
 			editable: false,
-			headerStyle: (column, colIndex) => ({ width: '15%' }),
+			headerStyle: (/* column, colIndex */) => ({ width: '15%' }),
 			...align,
 			...headerAlign,
 		},
@@ -62,9 +63,9 @@ export const columns = (pairsList) => {
 			text: 'ID',
 			editable: false,
 			type: 'number',
-			headerStyle: (column, colIndex) => ({ width: '5%' }),
+			headerStyle: (/* column, colIndex */) => ({ width: '5%' }),
 			...headerAlign,
-			style: (content, row, rowIndex, columnIndex) => {
+			style: (/*content, row, rowIndex, columnIndex*/) => {
 				return { backgroundColor: '#343a40', color: '#ffc107' };
 			},
 		},
@@ -83,7 +84,7 @@ export const columns = (pairsList) => {
 			text: 'Totale',
 			editable: false,
 			type: 'number',
-			headerStyle: (column, colIndex) => ({ width: '5%' }),
+			headerStyle: (/* column, colIndex */) => ({ width: '5%' }),
 			...headerAlign,
 		},
 		{
@@ -93,7 +94,7 @@ export const columns = (pairsList) => {
 			text: 'Posizione',
 			editable: true,
 			type: 'number',
-			headerStyle: (column, colIndex) => ({ width: '5%' }),
+			headerStyle: (/* column, colIndex */) => ({ width: '5%' }),
 			...headerAlign,
 		}
 	);

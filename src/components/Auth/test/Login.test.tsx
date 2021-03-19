@@ -2,9 +2,6 @@ import React from 'react';
 import Login from '../Login';
 import { render, RenderResult, fireEvent, screen } from '../../../test/test-utils';
 import userEvent from '@testing-library/user-event';
-import loginResponse from './_mocks_/login_response.json';
-import { HTTPStatusCode } from 'src/@common/models/HttpStatusCode';
-import fetchMock from 'jest-fetch-mock';
 
 describe('<Login />.render', () => {
 	let component: RenderResult;

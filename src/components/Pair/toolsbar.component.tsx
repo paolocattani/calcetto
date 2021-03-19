@@ -97,7 +97,7 @@ const Toolsbar: React.FC<ToolsbarProps> = ({
 			<InputGroup.Append>
 				<Button
 					variant="primary"
-					onClick={(e: any) => setNewRowsNumber(availableRows)}
+					onClick={() => setNewRowsNumber(availableRows)}
 					disabled={newRowsNumber > availableRows}
 				>
 					{t('common:max')}

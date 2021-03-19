@@ -1,14 +1,12 @@
 import React, { CSSProperties } from 'react';
 import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { Stats } from '../../@common/dto/stats/stats.dto';
-import logger from '../../@common/utils/logger.utils';
 
 interface StatsProps<T> {
 	stats: T;
 }
 
-export default function StatsComponent<T extends Stats>({ stats }: StatsProps<T>) {
+const StatsComponent: React.FC<StatsProps> = (stats) => {
 	const { t } = useTranslation(['stats']);
 	const stage1 = t('stats:stage1');
 	const stage2 = t('stats:stage2');
@@ -67,4 +65,5 @@ export default function StatsComponent<T extends Stats>({ stats }: StatsProps<T>
 			</tbody>
 		</Table>
 	);
-}
+};
+export default StatsComponent;

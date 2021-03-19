@@ -1,10 +1,10 @@
 import { StylesConfig } from 'react-select';
 import { PairDTO, PlayerDTO } from '../../@common/dto';
 
-export const valueFormatter = (selectedOption: PairDTO) =>
+export const valueFormatter = (selectedOption: PairDTO): string =>
 	selectedOption.alias ? `${selectedOption.alias}` : createAlias(selectedOption);
 
-export function createAlias(selectedOption: PairDTO) {
+export function createAlias(selectedOption: PairDTO): string {
 	let value = `${selectedOption.rowNumber} : `;
 	const { player1, player2 } = selectedOption;
 	value += player1!.alias ? player1!.alias : player1!.name;
@@ -15,7 +15,7 @@ export function createAlias(selectedOption: PairDTO) {
 
 export const customStyles: Partial<StylesConfig<PlayerDTO, false>> | undefined = {
 	// menuList: (provided, state) => ({ ...provided, border: '1px solid #ffc107' }),
-	option: (provided, state) => ({
+	option: (provided /*, state*/) => ({
 		...provided,
 		backgroundColor: 'white',
 		color: 'black',

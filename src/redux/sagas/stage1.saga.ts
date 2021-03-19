@@ -29,7 +29,7 @@ function* fetchSaga({
 function* updateCellSaga({
 	payload,
 }: ReturnType<typeof Stage1Action.updateCellStage1.request>): Generator<StrictEffect, void, any> {
-	const onSuccess = function* (response: UpdateCellResponse) {
+	const onSuccess = function* (/*response: UpdateCellResponse*/) {
 		yield put(EventAction.updateStage1.request({ tournament: payload.tournament }));
 	};
 	yield* entityLifeCycle<UpdateCellRequest, UpdateCellResponse, Stage1Error>(

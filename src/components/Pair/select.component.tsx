@@ -22,33 +22,33 @@ interface PairSelectProps {
 
 // Probabilmente il componente Select usa Ref.... Lascio cosi..
 // TODO: Si potrebbe generalizzare questo componente tramite i generics
-const PairsSelect: React.FC<PairSelectProps> = React.forwardRef(
-	({ getOptionLabel, styles, rowIndex, options, onChange, defaultValue, tournamentId }, ref) => {
-		const [selectedOption, setSelectedOption] = useState<PairDTO>();
+const PairsSelect: React.FC<PairSelectProps> = React.forwardRef((
+	{ getOptionLabel, styles, rowIndex, options, onChange, defaultValue, tournamentId } /*, ref*/
+) => {
+	const [selectedOption, setSelectedOption] = useState<PairDTO>();
 
-		const handleChange = (value: PairDTO | OptionsType<PairDTO> | null, actionMeta: ActionMeta<PairDTO>) => {
-			const newValue = value ? (value as PairDTO) : getEmptyPair('-', tournamentId);
-			setSelectedOption(newValue);
-			if (onChange) {
-				onChange(newValue, rowIndex, actionMeta);
-			}
-		};
+	const handleChange = (value: PairDTO | OptionsType<PairDTO> | null, actionMeta: ActionMeta<PairDTO>) => {
+		const newValue = value ? (value as PairDTO) : getEmptyPair('-', tournamentId);
+		setSelectedOption(newValue);
+		if (onChange) {
+			onChange(newValue, rowIndex, actionMeta);
+		}
+	};
 
-		return (
-			<Select
-				defaultValue={defaultValue}
-				components={components}
-				styles={styles}
-				options={options}
-				onChange={handleChange}
-				getOptionLabel={getOptionLabel}
-				value={selectedOption}
-				placeholder="Cerca..."
-				isSearchable
-				isClearable
-			/>
-		);
-	}
-);
+	return (
+		<Select
+			defaultValue={defaultValue}
+			components={components}
+			styles={styles}
+			options={options}
+			onChange={handleChange}
+			getOptionLabel={getOptionLabel}
+			value={selectedOption}
+			placeholder="Cerca..."
+			isSearchable
+			isClearable
+		/>
+	);
+});
 
 export default PairsSelect;

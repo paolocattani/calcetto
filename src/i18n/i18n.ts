@@ -47,4 +47,4 @@ i18n
 
 export default i18n;
 
-export const getOtherLang = () => (i18n.language === 'it-IT' ? 'en-US' : 'it-IT');
+export const getOtherLang = (): string => (i18n.language === 'it-IT' ? 'en-US' : 'it-IT');

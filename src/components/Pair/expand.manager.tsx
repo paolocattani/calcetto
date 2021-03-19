@@ -1,5 +1,4 @@
 import React from 'react';
-import { SyntheticEvent } from 'react';
 import { ExpandRowProps } from 'react-bootstrap-table-next';
 import { LABEL_COMMON_LOADING } from '../../@common/constants/label';
 import { PairDTO } from '../../@common/dto';
@@ -43,7 +42,7 @@ const expandManager = (
 		}
 		return stats[row.id] ? <Stats stats={stats[row.id]!} /> : <div>{i18next.t('stats:not_found')}</div>;
 	},
-	onExpand: (row: PairDTO, isExpand: boolean, rowIndex: number, e: SyntheticEvent) => {
+	onExpand: (row: PairDTO, isExpand: boolean /*, rowIndex: number, e: SyntheticEvent*/) => {
 		if (row.id) {
 			if (isExpand) {
 				// Cache results
@@ -67,7 +66,7 @@ const expandManager = (
 			}
 		}
 	},
-	onExpandAll: (isExpandAll: boolean, rows: Array<PairDTO>, e: SyntheticEvent) => {
+	onExpandAll: (isExpandAll: boolean, rows: Array<PairDTO> /*, e: SyntheticEvent*/) => {
 		if (isExpandAll) {
 			const ids = rows.filter((r) => !!r.id).map((r) => r.id!);
 			setIsLoading({ state: true, message: i18next.t(LABEL_COMMON_LOADING) });

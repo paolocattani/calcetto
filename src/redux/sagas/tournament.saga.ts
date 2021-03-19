@@ -26,7 +26,7 @@ const onSuccessRedirect = (redirect?: Redirect) => {
 
 // https://medium.com/swlh/asynchronous-with-redux-sagas-b43c9630f218
 function* fetchTournamentsSaga({ payload }: ReturnType<typeof TournamentAction.fetch.request>) {
-	const onSuccess = (response: FetchTournamentsResponse) => {
+	const onSuccess = (/*response: FetchTournamentsResponse*/) => {
 		onSuccessRedirect(payload.redirect);
 	};
 	yield* entityLifeCycle<FetchTournamentsRequest, FetchTournamentsResponse, TournamentError>(
@@ -49,7 +49,7 @@ function* reloadTournamentSaga({ payload }: ReturnType<typeof TournamentAction.r
 }
 
 function* saveTournamentSaga({ payload }: ReturnType<typeof TournamentAction.save.request>) {
-	const onSuccess = function* (response: SaveTournamentResponse) {
+	const onSuccess = function* (/*response: SaveTournamentResponse*/) {
 		// Reload tournament List
 		// yield put(TournamentAction.fetch.request({}));
 		// Reset next steps

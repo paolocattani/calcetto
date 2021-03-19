@@ -1,4 +1,3 @@
-import { Stage1Row } from '../../@common/dto';
 import { createAsyncAction, createAction } from 'typesafe-actions';
 import {
 	FetchStage1Response,

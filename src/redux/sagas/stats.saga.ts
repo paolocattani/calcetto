@@ -1,7 +1,4 @@
 import {
-	FetchPlayersRequest,
-	FetchPlayersResponse,
-	PlayerError,
 	StatsBestPairsRequest,
 	StatsBestPairsResponse,
 	StatsBestPlayersRequest,
