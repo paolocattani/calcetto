@@ -3,12 +3,12 @@ import { logProcess, logger } from '@core/logger';
 import { getDbConnection } from '../database/config/sequelize/connection';
 // Models
 import { Stage2, Pair } from '../database/models';
-import { IStage2FE, ICell, PairDTO, UserDTO, TournamentProgress } from '@common/dto';
+import { IStage2FE, ICell, PairDTO, UserDTO } from '@common/dto';
 
 import { isAdmin } from './auth.manager';
 import { rowToModel } from './pair.manager';
 import { WhereOptions } from 'sequelize';
-import { getEmptyPair, SessionStatus } from '@common/models';
+import { getEmptyPair } from '@common/models';
 
 const className = 'Stage2 Manager : ';
 
@@ -25,8 +25,8 @@ export const updateCells = async (cells: Array<ICell>): Promise<boolean> => {
 						cell.cellColIndex,
 						cell.cellRowIndex,
 						cell.matchId,
-						cell.pair!,
-						cell.isWinner
+						cell.pair!
+						// cell.isWinner
 					)
 			);
 		logProcess(className + 'updateCells', 'end');
@@ -43,8 +43,8 @@ export const updateSingleCell = async (
 	step: number,
 	rowIndex: number,
 	matchId: number,
-	pair: PairDTO,
-	isWinner: boolean
+	pair: PairDTO
+	// isWinner: boolean
 ): Promise<boolean> => {
 	logProcess(className + 'updateSingleCell', 'start');
 	try {
@@ -137,7 +137,8 @@ export const deleteStage2 = async (tournamentId: number) => {
 	logProcess(className + 'deleteStage2', 'end');
 };
 
-export const parseBody = ({ tournamentId, pairId, step, order, rank }: any): IStage2FE => ({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const parseBody = ({ tournamentId, pairId, step, order, rank }: Record<string, any>): IStage2FE => ({
 	tournamentId,
 	pairId,
 	step,
@@ -200,7 +201,7 @@ export const generateStructure = (rowNumber: number): ICell[][] => {
 		counter /= 2;
 		let bounce = true;
 		let index = 0;
-		let temp: ICell[] = [];
+		const temp: ICell[] = [];
 		for (let jj = 0; jj < counter; jj++) {
 			if (bounce) index++;
 			bounce = !bounce;

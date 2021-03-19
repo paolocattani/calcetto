@@ -146,7 +146,7 @@ export async function findUserByEmailAndUsername(email: string, username: string
 }
 
 export const isValidRegister = (user: Omit<RegistrationRequest, 'history'>): Array<I18nLabel> => {
-	let result: Array<I18nLabel> = [];
+	const result: Array<I18nLabel> = [];
 	if (!user.username) {
 		result.push({ key: 'auth:error.username' });
 	}
@@ -205,7 +205,7 @@ export const convertEntityToDTO = (user: User): UserDTO => ({
  *
  * @param body : Request body
  */
-export const parseBody = (body: any) =>
+export const parseBody = (body: Record<string, unknown>) =>
 	({
 		id: body.id || null,
 		username: body.username,

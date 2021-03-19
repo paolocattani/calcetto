@@ -22,7 +22,7 @@ export const iterateConnectedClient = async (
 ) => {
 	const users: Array<UserDTO> = [];
 	const ids = await io.allSockets();
-	for (let id of ids) {
+	for (const id of ids) {
 		const client = io.sockets.sockets.get(id);
 		const user = (<AppRequest>client?.request).user;
 		if (client && user && socket.id !== client.id) {

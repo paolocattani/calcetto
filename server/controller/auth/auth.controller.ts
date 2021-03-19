@@ -113,7 +113,7 @@ router.put(
 	withAuth,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		try {
-			let model = parseBody(req.body as OmitHistory<UpdateUserRequest>);
+			const model = parseBody(req.body as OmitHistory<UpdateUserRequest>);
 			logger.info('/update : ', model);
 			const user = await findUserByEmailAndUsername(model.email, model.username);
 			if (!user) {

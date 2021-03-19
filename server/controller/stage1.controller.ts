@@ -10,7 +10,6 @@ import { deleteStage1, generateStage1Rows, updateCell } from '../manager/stage1.
 import {
 	FetchStage1Request,
 	FetchStage1Response,
-	SessionStatus,
 	Stage1Error,
 	UpdateCellRequest,
 	UpdateCellResponse,
@@ -18,7 +17,6 @@ import {
 	UpdatePlacementResponse,
 } from '@common/models';
 import { failure, success } from './common.response';
-import { TournamentProgress } from '@common/dto';
 
 const router = Router();
 
@@ -71,7 +69,7 @@ router.post(
 	withAuth,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		const { stageName, pairsList }: FetchStage1Request = req.body;
-		const { user, uuid } = req;
+		const { user } = req;
 		try {
 			const result = await generateStage1Rows(pairsList, stageName, user!);
 			return success<FetchStage1Response>(res, { key: 'stage1:loaded' }, { rows: result, stageName, pairsList });

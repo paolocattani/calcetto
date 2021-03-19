@@ -112,7 +112,7 @@ export const unexpectedServerError = <T extends GenericResponse>(res: Response, 
 // Handle server error
 export const serverError = <T extends GenericResponse>(
 	message: string,
-	err: any,
+	err: Error,
 	res: Response,
 	additionalInfo?: OmitGeneric<T>
 ) => {

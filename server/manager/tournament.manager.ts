@@ -45,8 +45,9 @@ export const deleteAllTournament = async (): Promise<void> => await Tournament.t
 export const update = async (user: UserDTO, model: TournamentDTO): Promise<TournamentDTO> => {
 	logProcess(className + 'update', 'start');
 	try {
-		const params = new Map<string, WhereOptions | Object | number>();
-		params.set('id', model.id!);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const params = new Map<string, any>();
+		params.set('id', model.id);
 		const t = await findByParams(params, user);
 		if (!t) {
 			logProcess(className + 'update', 'end : Tournament not found');
@@ -67,7 +68,8 @@ export const update = async (user: UserDTO, model: TournamentDTO): Promise<Tourn
 // Cerca un torneo tramite ID
 export const findById = async (user: UserDTO, tId: number): Promise<TournamentDTO | null> => {
 	logProcess(className + 'findById', 'start');
-	const params = new Map<string, WhereOptions | Object>();
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const params = new Map<string, any>();
 	params.set('id', tId);
 	const result = await findByParams(params, user);
 	logProcess(className + 'findById', 'end');
@@ -92,7 +94,7 @@ export const findByNameAndDate = async (name: string, date: Date, user: UserDTO)
 };
 
 export const findByParams = async (
-	parameters: Map<string, WhereOptions | Object>,
+	parameters: Map<string, WhereOptions | Record<string, unknown>>,
 	user: UserDTO
 ): Promise<Tournament | null> => {
 	try {
@@ -127,7 +129,7 @@ export const convertEntityToDTO = (t: Tournament): TournamentDTO => ({
 	ownerId: t?.ownerId ?? 0,
 });
 
-export const parseBody = (body: any) =>
+export const parseBody = (body: Record<string, unknown>) =>
 	({
 		id: body.id ?? null,
 		name: body.name ?? null,

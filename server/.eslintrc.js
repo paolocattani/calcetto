@@ -10,12 +10,10 @@ module.exports = {
 	parser: '@typescript-eslint/parser',
 	extends: [
 		'prettier',
-		'plugin:testing-library/react',
 		'plugin:sonarjs/recommended',
 		'plugin:@typescript-eslint/eslint-recommended',
 		'plugin:@typescript-eslint/recommended',
 	],
-	plugins: ['react', 'react-hooks', 'testing-library'],
 	parserOptions: {
 		//
 		// ecmaVersion :
@@ -30,38 +28,30 @@ module.exports = {
 			templateStrings: true,
 			destructuring: true,
 			defaultParams: true,
-			jsx: true, // Allows for the parsing of JSX
 			impliedStrict: true,
 			arrowFunctions: true,
 		},
 	},
 	rules: {
-		'react/no-array-index-key': 'warn',
-		'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
-		'react-hooks/rules-of-hooks': 'error',
-		'react-hooks/exhaustive-deps': 'warn',
-		'react/destructuring-assignment': ['warn', 'always', { ignoreClassFields: true }],
-		'react/prop-types': 0,
-
+		'@typescript-eslint/explicit-module-boundary-types': 'off',
+		'@typescript-eslint/no-non-null-assertion': 'off',
 		// enable additional rules
 		//indent: ['error', 2],
 		'linebreak-style': ['error', 'unix'],
 		quotes: ['warn', 'single'],
 		semi: ['error', 'always'],
-		// override default options for rules from base configurations
-		//'comma-dangle': ['error', 'always'],
 		'no-cond-assign': ['error', 'always'],
 		// disable rules from base configurations
-		// 'no-console': 'off',
+		'no-console': 2,
 	},
 	settings: {
-		react: { version: 'detect' }, // Tells eslint-plugin-react to automatically detect the version of React to use
 		'import/resolver': {
-			node: { extensions: ['.js', '.jsx', '.ts', '.tsx', 'html'] },
+			node: { extensions: ['.js', '.ts'] },
 		},
 	},
+	ignorePatterns: ['build', '*.test.ts'],
 	env: {
-		browser: true,
+		browser: false,
 		commonjs: true,
 		es6: true,
 		node: true,

@@ -9,7 +9,6 @@ import { getDbConnection } from '../database/config/sequelize/connection';
 import { isAdmin } from '../manager/auth.manager';
 //
 import { Op } from 'sequelize';
-import { SessionStatus } from '@common/models';
 
 const className = 'Stage1 Manager : ';
 
@@ -112,14 +111,14 @@ export const generateStage1Rows = async (
 		const transaction = await connection.transaction();
 		await asyncForEach<Stage1Row>(rows, async (currentRow, index, rowsRef) => {
 			rowsRef[index]['total'] = 0;
-			for (let currentRowKey in currentRow) {
+			for (const currentRowKey in currentRow) {
 				if (currentRowKey.startsWith('col')) {
 					// Numero riga/colonna corrente
-					let currentRowRef = rowsRef[index]; // Riga attuale da a rowRef
+					const currentRowRef = rowsRef[index]; // Riga attuale da a rowRef
 					const rowIndex = currentRowRef.rowNumber;
 					const colIndex = parseInt(currentRowKey.substring(3));
 					// Valore attuale della cella e della sua opposta
-					let oppositeRow = rowsRef[colIndex - 1];
+					const oppositeRow = rowsRef[colIndex - 1];
 					// Coppie e punteggi
 					const pair1 = currentRowRef.pair;
 					const pair2 = oppositeRow.pair;
@@ -155,7 +154,7 @@ export const generateStage1Rows = async (
 							};
 							const include = [Stage1.associations.pair1, Stage1.associations.pair2];
 							let record: Stage1 | null = null;
-							let created: boolean = false;
+							let created = false;
 							if (isEditable) {
 								[record, created] = await Stage1.findOrCreate({
 									where,
@@ -185,7 +184,6 @@ export const generateStage1Rows = async (
 		});
 		await transaction.commit();
 		logProcess(className + 'generateStage1Rows', 'end');
-		return rows;
 	} catch (error) {
 		logProcess(className + 'generateStage1Rows', error);
 		logger.error('generateStage1Rows : ', error);

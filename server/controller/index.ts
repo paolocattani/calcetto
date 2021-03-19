@@ -54,6 +54,7 @@ export default (application: ExpressApplication): void => {
 
 	// FIXME: Coverage
 	application.get('/__coverage__', (req: Request, res: Response) =>
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		res.json({ coverage: global.__coverage__ || null })
 	);

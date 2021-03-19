@@ -55,12 +55,12 @@ router.put(
 	asyncMiddleware(async (req: Request, res: Response) => {
 		const { player: dto } = req.body as SavePlayerRequest;
 		try {
-			let player = await findById(dto.id!);
+			const player = await findById(dto.id!);
 			if (!player) {
 				return entityNotFound(res);
 			}
 			// Aggiungere controlli
-			let playerTest = await findByNameSurname(dto.name, dto.surname);
+			const playerTest = await findByNameSurname(dto.name, dto.surname);
 			if (playerTest && playerTest.id !== player.id) {
 				return failure(res, { key: 'player:duplicated' }, 'Player already exists');
 			}
@@ -82,7 +82,7 @@ router.post(
 			if (!model.name || !model.surname) {
 				return missingParameters(res);
 			}
-			let player = await findByNameSurname(model.name, model.surname);
+			const player = await findByNameSurname(model.name, model.surname);
 			if (player) {
 				return failure(res, { key: 'player:duplicated' }, 'Player already exists');
 			}

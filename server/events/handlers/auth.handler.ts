@@ -12,7 +12,7 @@ export const authHandler = (
 	logEvent(`User '${user!.name} ${user!.surname}' from '${clientIp}' is now connected!`);
 
 	// Logger
-	socket.prependAny((eventName, ...args) => {
+	socket.prependAny((eventName /*, ...args*/) => {
 		logEvent(`Received event : ${eventName}`);
 	});
 
@@ -22,8 +22,8 @@ export const authHandler = (
 		if (!jwt || !uuid) {
 			session_expired(socket, interval);
 		}
-		const [user, isTokenValid] = safeVerifyToken(jwt);
-		if (!user || !isTokenValid) {
+		const [thisUser, isTokenValid] = safeVerifyToken(jwt!);
+		if (!thisUser || !isTokenValid) {
 			session_expired(socket, interval);
 		}
 	}, 30000);

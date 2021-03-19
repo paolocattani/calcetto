@@ -1,4 +1,4 @@
-import { logger, logProcess } from '@core/logger';
+import { logProcess } from '@core/logger';
 import { Op, QueryTypes } from 'sequelize';
 import { Player, StatsPairs, StatsPlayer } from '../database/models';
 import { StatsPlayerDTO } from '@common/dto/stats/stats.players.dto';
@@ -12,7 +12,7 @@ const className = 'Stats Manager : ';
 export const getBestPlayers = async (from?: string) => {
 	const methodName = className + 'getBestPlayers';
 	logProcess(methodName, 'start');
-	let result: StatsPlayerDTO[] = [];
+	const result: StatsPlayerDTO[] = [];
 	try {
 		const rowsLimit = 10;
 		const list: Array<StatsPlayer> = await StatsPlayer.sequelize!.query(
