@@ -29,7 +29,7 @@ if [[ "$STAGED_FILES" != "" ]]; then
     echo "\nValidating Files:\n"
     for FILE in $STAGED_FILES
     do
-        "$ESLINT" "$FILE" --fix
+        "$ESLINT" "$FILE" --fix --max-warnings=0
 
         if [[ "$?" == 0 ]]; then
             echo "\t\033[32mESLint Passed: $FILE\033[0m"
