@@ -8,7 +8,7 @@
 HOOKS_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )
 LOG_FILE="$HOOKS_DIR/pre-commit.log"
 
-source cli/redirect_output.sh
+source cli/functions/redirect_output.sh 
 
 SEARCH_STRING='PRE-COMMIT'
 SEARCH_FILE="$HOOKS_DIR/.hooks"
@@ -21,8 +21,9 @@ echo "Enabled : $SEARCH_RESULT"
 
 # Always exec lint
 # See : https://gist.github.com/linhmtran168/2286aeafe747e78f53bf
-STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR)
-PASS=1
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -E "{.jsx|.js|.ts|.tsx}$")
+echo "Analyzing files : $STAGED_FILES"
+PASS=true
 if [[ "$STAGED_FILES" != "" ]]; then
     ESLINT="$(git rev-parse --show-toplevel)/node_modules/.bin/eslint"
     echo "\nValidating Files:\n"
