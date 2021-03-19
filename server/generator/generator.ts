@@ -71,7 +71,7 @@ async function playerGenerator(): Promise<void> {
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 async function pairGenerator(): Promise<void> {
-	let players: Array<number> = [];
+	const players: Array<number> = [];
 	for (let ii = 1; ii <= players.length / 2; ii++) {
 		let playerId = getRandomIntInclusive(1, players.length);
 		let player1Id = 0;
