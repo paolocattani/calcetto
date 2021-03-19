@@ -33,7 +33,7 @@ export interface DeletePlayersResponse extends GenericResponse {
 	playersList: Array<PlayerDTO>;
 }
 
-export interface PlayerError extends GenericResponse {}
+export type PlayerError = GenericResponse
 
 export const getEmptyPlayer = (label?: string): PlayerDTO => ({
 	id: null,

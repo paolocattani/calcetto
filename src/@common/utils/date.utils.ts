@@ -1,7 +1,7 @@
 export const getTodayDate = () => formatDate(new Date());
 
-export function formatDate(date: Date, delimiter: string = '/') {
-	var d = new Date(date),
+export function formatDate(date: Date, delimiter = '/') {
+	let d = new Date(date),
 		month = '' + (d.getMonth() + 1),
 		day = '' + d.getDate(),
 		year = d.getFullYear();

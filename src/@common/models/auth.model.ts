@@ -21,8 +21,8 @@ export type PlayerRoleType = {
 export interface AuthenticationRequest {
 	history: H.History;
 }
-export interface CheckAuthenticationRequest extends AuthenticationRequest {}
-export interface LogoutRequest extends AuthenticationRequest {}
+export type CheckAuthenticationRequest = AuthenticationRequest
+export type LogoutRequest = AuthenticationRequest
 export interface LoginRequest extends AuthenticationRequest {
 	username: string;
 	password: string;
@@ -60,8 +60,8 @@ export interface RegistrationResponse extends GenericResponse {
 	errors?: Array<I18nLabel>;
 	user?: UserDTO;
 }
-export interface DeleteUserResponse extends GenericResponse {}
-export interface UnsubscribeResponse extends GenericResponse {}
+export type DeleteUserResponse = GenericResponse
+export type UnsubscribeResponse = GenericResponse
 
 // Error
-export interface AuthenticationError extends GenericResponse {}
+export type AuthenticationError = GenericResponse

@@ -39,6 +39,7 @@ module.exports = {
 		},
 	},
 	rules: {
+		'@typescript-eslint/no-non-null-assertion': 'off',
 		'react/no-array-index-key': 'warn',
 		'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
 		'react-hooks/rules-of-hooks': 'error',
@@ -63,6 +64,7 @@ module.exports = {
 			node: { extensions: ['.js', '.jsx', '.ts', '.tsx', 'html'] },
 		},
 	},
+	ignorePatterns: ['build', '*.test.ts', 'production_build', 'cypress'],
 	env: {
 		browser: true,
 		commonjs: true,

@@ -1,9 +1,9 @@
-import { TournamentDTO } from 'src/@common/dto';
+import { TournamentDTO } from '../../@common/dto';
 import { RootState } from '../../@common/models';
 
 // Get state from store
 export const TournamentSelector = {
-	isLoading: ({ tournamentState: { isLoading } }: RootState) => isLoading,
-	getTournament: ({ tournamentState: { tournament } }: RootState) => tournament,
-	getTournamentsList: ({ tournamentState: { tournamentsList } }: RootState) => tournamentsList,
+	isLoading: ({ tournamentState: { isLoading } }: RootState): boolean => isLoading,
+	getTournament: ({ tournamentState: { tournament } }: RootState): TournamentDTO | null => tournament,
+	getTournamentsList: ({ tournamentState: { tournamentsList } }: RootState): TournamentDTO[] => tournamentsList,
 };

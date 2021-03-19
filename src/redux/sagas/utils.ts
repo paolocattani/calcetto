@@ -67,7 +67,7 @@ export function* entityLifeCycle<TReq, TRes extends GenericResponse, TErr extend
 	payload: OmitHistory<TReq>,
 	onSuccess?: IActionCallback<TRes>,
 	onFailure?: IActionCallback<TErr>,
-	showMessage: boolean = true
+	showMessage = true
 ): Generator<StrictEffect, void, any> {
 	try {
 		// Call method with payload

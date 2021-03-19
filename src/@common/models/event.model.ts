@@ -117,13 +117,13 @@ interface TournamentEvent {
 	tournament: TournamentDTO;
 }
 export interface CloseChannelRequest {}
-export interface JoinTournamentEventRequest extends TournamentEvent {}
-export interface LeaveTournamentEventRequest extends TournamentEvent {}
-export interface NewTournamentEventRequest extends TournamentEvent {}
-export interface UpdateTournamentEventRequest extends TournamentEvent {}
-export interface DeleteTournamentEventRequest extends TournamentEvent {}
-export interface UpdateStage1EventRequest extends TournamentEvent {}
-export interface UpdateStage2EventRequest extends TournamentEvent {}
+export type JoinTournamentEventRequest = TournamentEvent
+export type LeaveTournamentEventRequest = TournamentEvent
+export type NewTournamentEventRequest = TournamentEvent
+export type UpdateTournamentEventRequest = TournamentEvent
+export type DeleteTournamentEventRequest = TournamentEvent
+export type UpdateStage1EventRequest = TournamentEvent
+export type UpdateStage2EventRequest = TournamentEvent
 
 // Responses
 export interface OpenChannelResponse {

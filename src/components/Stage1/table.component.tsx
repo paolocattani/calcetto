@@ -132,7 +132,7 @@ const Stage1Table: React.FC<Stage1TableProps> = ({ pairsList, autoOrder, stageNa
 				);
 				// Ricalcolo totali riga
 				let acc = 0;
-				for (let key in row) {
+				for (const key in row) {
 					if (key.startsWith('col') && row[key]) {
 						acc += parseInt(row[key] as string);
 					}
@@ -144,7 +144,7 @@ const Stage1Table: React.FC<Stage1TableProps> = ({ pairsList, autoOrder, stageNa
 				//... e riga opposta
 				acc = 0;
 				const oppositeRowIndex = parseInt(column.text) - 1;
-				for (let key in newRows[oppositeRowIndex]) {
+				for (const key in newRows[oppositeRowIndex]) {
 					if (key.startsWith('col') && newRows[oppositeRowIndex][key]) {
 						acc += parseInt(newRows[oppositeRowIndex][key] as string);
 					}

@@ -10,7 +10,7 @@ import {
 } from '../../@common/models';
 import { deleteWrapper, postWrapper, putWrapper } from '../../@common/utils/fetch.utils';
 
-export const fetchStage1 = ({ pairsList, stageName }: FetchStage1Request) =>
+export const fetchStage1 = ({ pairsList, stageName }: FetchStage1Request): Promise<FetchStage1Response> =>
 	postWrapper<FetchStage1Request, FetchStage1Response>('/api/v2/stage1', {
 		stageName,
 		pairsList,

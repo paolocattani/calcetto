@@ -150,7 +150,7 @@ export default Wrapper;
 function renderTables(pairsList: PairDTO[], autoOrder: boolean): JSX.Element[] {
 	let stageName = '';
 	let stage: Array<PairDTO> = [];
-	let stageList: Array<JSX.Element> = [];
+	const stageList: Array<JSX.Element> = [];
 	// sort pairs by stage1Name
 	[...pairsList]
 		.sort((obj1, obj2) => obj1.stage1Name.localeCompare(obj2.stage1Name))

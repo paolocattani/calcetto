@@ -59,4 +59,4 @@ export interface DeleteTournamentResponse extends GenericResponse {
 
 //
 // Error
-export interface TournamentError extends GenericResponse {}
+export type TournamentError = GenericResponse
