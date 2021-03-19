@@ -129,7 +129,7 @@ export const convertEntityToDTO = (t: Tournament): TournamentDTO => ({
 	ownerId: t?.ownerId ?? 0,
 });
 
-export const parseBody = (body: Record<string, unknown>) =>
+export const parseBody = (body: TournamentDTO) =>
 	({
 		id: body.id ?? null,
 		name: body.name ?? null,

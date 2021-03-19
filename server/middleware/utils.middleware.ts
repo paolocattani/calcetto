@@ -4,7 +4,7 @@ import { Socket } from 'socket.io';
 import { ExtendedError } from 'socket.io/dist/namespace';
 import { AppRequest } from '../controller';
 
-type mw = (req: Request | AppRequest, res: Response, next?: NextFunction) => void;
+type mw = (req: Request | AppRequest, res: Response, next: NextFunction) => void;
 type mwSocket = (
 	socket: Socket<ClientToServerEvents, ServerToClientEvents>,
 	request: Request,

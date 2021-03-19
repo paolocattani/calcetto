@@ -57,6 +57,8 @@ module.exports = {
 		'no-cond-assign': ['error', 'always'],
 		// disable rules from base configurations
 		// 'no-console': 'off',
+		'@typescript-eslint/no-empty-interface': 'off',
+		'@typescript-eslint/no-explicit-any': 'off',
 	},
 	settings: {
 		react: { version: 'detect' }, // Tells eslint-plugin-react to automatically detect the version of React to use
@@ -64,7 +66,7 @@ module.exports = {
 			node: { extensions: ['.js', '.jsx', '.ts', '.tsx', 'html'] },
 		},
 	},
-	ignorePatterns: ['build', '*.test.ts', 'production_build', 'cypress'],
+	ignorePatterns: ['build', '*.test.ts', 'production_build', 'cypress', 'typings'],
 	env: {
 		browser: true,
 		commonjs: true,

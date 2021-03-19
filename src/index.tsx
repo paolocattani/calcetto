@@ -4,7 +4,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 import 'typeface-roboto';
 
 import * as serviceWorker from './serviceWorker';
-import * as pushwooshSW from './pushwoosh-service-worker.js';
 
 import it from 'date-fns/locale/it';
 import { setDefaultLocale, registerLocale } from 'react-datepicker';
@@ -23,5 +22,5 @@ serviceWorker.unregister();
 // Redefine console so it does not in production env
 if (process.env.NODE_ENV === 'production') {
 	if (!window.console) (window as any).console = {};
-	['log', 'debug', 'warn', 'info'].forEach((e) => ((window as any).console[e] = () => {}));
+	['log', 'debug', 'warn', 'info'].forEach((e) => ((window as any).console[e] = () => ({})));
 }

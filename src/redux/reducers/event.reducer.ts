@@ -9,8 +9,8 @@ export const initialEventState: EventState = {
 
 export const EventReducer = createReducer<EventState, Action>(initialEventState)
 	// Request
-	.handleAction([EventAction.openChannel.request], (state) => ({ connected: false }))
+	.handleAction([EventAction.openChannel.request], () => ({ connected: false }))
 	// Failure
-	.handleAction([EventAction.openChannel.failure], (state) => ({ connected: false }))
+	.handleAction([EventAction.openChannel.failure], () => ({ connected: false }))
 	// Success
-	.handleAction([EventAction.openChannel.failure], (state) => ({ connected: true }));
+	.handleAction([EventAction.openChannel.failure], () => ({ connected: true }));

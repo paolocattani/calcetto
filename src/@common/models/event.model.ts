@@ -1,5 +1,4 @@
 import * as H from 'history';
-import { Socket } from 'socket.io-client';
 import { EventMessage } from '.';
 import { TournamentDTO } from '../dto';
 
@@ -117,13 +116,13 @@ interface TournamentEvent {
 	tournament: TournamentDTO;
 }
 export interface CloseChannelRequest {}
-export type JoinTournamentEventRequest = TournamentEvent
-export type LeaveTournamentEventRequest = TournamentEvent
-export type NewTournamentEventRequest = TournamentEvent
-export type UpdateTournamentEventRequest = TournamentEvent
-export type DeleteTournamentEventRequest = TournamentEvent
-export type UpdateStage1EventRequest = TournamentEvent
-export type UpdateStage2EventRequest = TournamentEvent
+export type JoinTournamentEventRequest = TournamentEvent;
+export type LeaveTournamentEventRequest = TournamentEvent;
+export type NewTournamentEventRequest = TournamentEvent;
+export type UpdateTournamentEventRequest = TournamentEvent;
+export type DeleteTournamentEventRequest = TournamentEvent;
+export type UpdateStage1EventRequest = TournamentEvent;
+export type UpdateStage2EventRequest = TournamentEvent;
 
 // Responses
 export interface OpenChannelResponse {

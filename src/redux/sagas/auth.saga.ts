@@ -20,7 +20,7 @@ import logger from '../../@common/utils/logger.utils';
 
 function* checkAuthenticationSaga({
 	payload: { history },
-}: ReturnType<typeof AuthAction.checkAuthentication.request>): Generator<StrictEffect, void, any> {
+}: ReturnType<typeof AuthAction.checkAuthentication.request>): Generator<StrictEffect, void, unknown> {
 	const onSuccess = function* () {
 		yield put(EventAction.openChannel.request({ history }));
 	};
@@ -39,7 +39,7 @@ function* checkAuthenticationSaga({
 // Logout
 function* logoutSaga({
 	payload: { history },
-}: ReturnType<typeof AuthAction.logout.request>): Generator<StrictEffect, void, any> {
+}: ReturnType<typeof AuthAction.logout.request>): Generator<StrictEffect, void, unknown> {
 	const onSuccess = async () => {
 		await persistor.purge();
 		history.push('/');
@@ -56,7 +56,7 @@ function* logoutSaga({
 // Login
 function* loginSaga({
 	payload: { history, ...loginRequest },
-}: ReturnType<typeof AuthAction.login.request>): Generator<StrictEffect, void, any> {
+}: ReturnType<typeof AuthAction.login.request>): Generator<StrictEffect, void, unknown> {
 	const onSuccess = function* () {
 		yield put(EventAction.openChannel.request({ history }));
 	};
@@ -72,7 +72,7 @@ function* loginSaga({
 // Registration
 function* registrationSaga({
 	payload: { history, ...registrationRequest },
-}: ReturnType<typeof AuthAction.registration.request>): Generator<StrictEffect, void, any> {
+}: ReturnType<typeof AuthAction.registration.request>): Generator<StrictEffect, void, unknown> {
 	const onSuccess = function* () {
 		yield put(EventAction.openChannel.request({ history }));
 	};
@@ -88,7 +88,7 @@ function* registrationSaga({
 // Update user
 function* updateUserSaga({
 	payload: { history, ...updateUserRequest },
-}: ReturnType<typeof AuthAction.update.request>): Generator<StrictEffect, void, any> {
+}: ReturnType<typeof AuthAction.update.request>): Generator<StrictEffect, void, unknown> {
 	yield* entityLifeCycle<UpdateUserRequest, AuthenticationResponse, AuthenticationError>(
 		AuthAction.update,
 		updateUser,
@@ -100,7 +100,7 @@ function* updateUserSaga({
 // Delete user
 function* deleteUserSaga({
 	payload: { history, ...deleteUserRequest },
-}: ReturnType<typeof AuthAction.delete.request>): Generator<StrictEffect, void, any> {
+}: ReturnType<typeof AuthAction.delete.request>): Generator<StrictEffect, void, unknown> {
 	const onSuccess = function* () {
 		yield put(AuthAction.logout.request({ history }));
 	};
@@ -112,7 +112,7 @@ function* deleteUserSaga({
 	);
 }
 
-function logAction(action: Action<any>) {
+function logAction(action: Action) {
 	if (process.env.NODE_ENV === 'development') {
 		logger.debug('Action : ', action);
 	}
