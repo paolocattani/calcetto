@@ -3,21 +3,31 @@ import { CorsOptions } from 'cors';
 import { AbstractServer } from './AbstractServer';
 import { Application as ExpressApplication } from 'express';
 // Db
-import { sync, authenticate, createSchemaAndSync } from '../database/config/connection';
+import { sync, authenticate, createSchemaAndSync } from '../database/config/sequelize/connection';
 import { Sequelize } from 'sequelize-typescript';
 import generator from '../generator/generator';
 // Routes
 import routes from '../controller/index';
 // Utils
-import '../core/env';
+import '@common/utils/env.utils';
 import chalk from 'chalk';
-import { logger } from '../core/logger';
-import { isDevMode, isProductionMode, isTestMode } from '../core/debug';
+import { logger } from '@core/logger';
+import { markAllAsApplied } from '../database/migrations';
+import { Server as SocketIoServer } from 'socket.io'; // socket.io
+import { handleSocket } from '../events/events';
+import { isDevMode, isProductionMode, isTestMode } from '@common/utils/env.utils';
 import { migrationUp } from '../database/migrations';
 
-const defaultName: string = 'ApplicationServer Calcetto';
-const defaultPort: number = isProductionMode() ? Number(process.env.PORT) : Number(process.env.SERVER_PORT);
-const defaultCPUs: number = Number(process.env.SERVER_WORKERS);
+const defaultName = 'ApplicationServer Calcetto';
+const defaultPort = Number(isProductionMode() ? process.env.PORT : process.env.SERVER_PORT);
+const allowedOrigin = process.env.ORIGIN_WHITE_LIST
+	? process.env.ORIGIN_WHITE_LIST.split(';')
+	: [
+			'http://localhost:5000',
+			'http://localhost:5001',
+			'https://calcetto2020stage.herokuapp.com',
+			'https://calcetto2020production.herokuapp.com',
+	  ];
 
 // https://expressjs.com/en/resources/middleware/cors.html
 const applicationCorsOption: CorsOptions = {
@@ -28,30 +38,33 @@ const applicationCorsOption: CorsOptions = {
 	// Access-Control-All,ow-Methods
 	methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
 	// Access-Control-Allow-Headers
-	allowedHeaders: ['Origin', 'Content-Type', 'Accept', 'mode', 'credentials'],
+	allowedHeaders: ['Origin', 'Content-Type', 'Accept', 'mode', 'credentials', 'X-Rate-Limit'],
 	// Access-Control-Expose-Headers
 	exposedHeaders: [],
 	// Access-Control-Max-Age ( Do not repeat PRE-FLIGHT request for 60 seconds )
 	maxAge: 60,
 	// Access-Control-Allow-Origin
 	origin: (origin, callback) =>
-		[process.env.CLIENT_HOST, 'http://127.0.0.1:5000'].indexOf(origin!) !== -1 || !origin
+		allowedOrigin.indexOf(origin!) !== -1 || !origin
 			? callback(null, true)
 			: callback(new Error(`Not allowed by CORS : ${origin}`)),
 };
 
 export default class AppServer extends AbstractServer {
 	connection: Sequelize | null;
-	constructor(applicationName = defaultName, applicationPort = defaultPort, applicationCPUs = defaultCPUs) {
-		super(applicationName, applicationPort, applicationCPUs, applicationCorsOption);
+	constructor(applicationName = defaultName, applicationPort = defaultPort) {
+		super(applicationName, applicationPort, allowedOrigin, applicationCorsOption);
 		this.connection = null;
 	}
 
 	public async connect(): Promise<Sequelize> {
-		// Always run db migrations, befor load sequelize models
-		await migrationUp();
-
 		const force = process.env.SERVER_FORCE && process.env.SERVER_FORCE.toLowerCase() === 'true';
+		logger.info('Allowed origin : ', allowedOrigin);
+		// If it's not a fresh new installation then run migrations
+		if (!force) {
+			await migrationUp();
+		}
+
 		logger.info(
 			(force ? chalk.redBright.bold(' [ FORCE ] ') : chalk.greenBright.bold(' [ NORMAL ] ')).concat(
 				chalk.cyan.bold('Starting database synchronization...')
@@ -61,8 +74,12 @@ export default class AppServer extends AbstractServer {
 		// Dev and Test can use THE FORCE :
 		// “Don’t underestimate the Force.” – Darth Vader
 		if ((isDevMode() || isTestMode()) && force) {
+			// Drop and create all tables
 			this.connection = await sync({ force });
-			await generator(false);
+			// Mark all migrations as applied
+			await markAllAsApplied();
+			// Generate dummies data
+			await generator(force);
 			// Always start from clean db on test
 		} else if (isTestMode()) {
 			/*
@@ -70,8 +87,8 @@ export default class AppServer extends AbstractServer {
 				In CI multiple jobs runs at the same time so we need to use schemas.
 				( Each job use a differente schema )
 			*/
-			this.connection = process.env.TEST_SCHEMA
-				? await createSchemaAndSync(process.env.TEST_SCHEMA, { force: true, restartIdentity: true })
+			this.connection = process.env.DATABASE_SCHEMA
+				? await createSchemaAndSync(process.env.DATABASE_SCHEMA, { force: true, restartIdentity: true })
 				: await sync({ force: true });
 		} else {
 			this.connection = await authenticate();
@@ -80,7 +97,11 @@ export default class AppServer extends AbstractServer {
 		return this.connection;
 	}
 
-	public routes(application: ExpressApplication): void {
+	public routes(application: ExpressApplication) {
 		routes(application);
+	}
+
+	public socket(socketIO: SocketIoServer) {
+		handleSocket(socketIO);
 	}
 }

@@ -1,7 +1,5 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# FIXME:
-/docs
 /node_modules
 /server/node_modules
 /.pnp
@@ -17,7 +15,7 @@
 /cypress-coverage
 # production
 /build
-/server/build_server
+/server/build
 /production_build
 /secrets
 

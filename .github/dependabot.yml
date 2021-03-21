@@ -1,6 +1,7 @@
 version: 2
 updates:
   - package-ecosystem: npm
+    target-branch: "keep-updated"
     directory: "/"
     milestone: 6
     assignees:
@@ -14,6 +15,7 @@ updates:
     open-pull-requests-limit: 20
 
   - package-ecosystem: npm
+    target-branch: "keep-updated"
     directory: "/server/"
     milestone: 6
     assignees:
@@ -27,6 +29,7 @@ updates:
     open-pull-requests-limit: 20
 
   - package-ecosystem: "github-actions"
+    target-branch: "keep-updated"
     directory: "/"
     milestone: 6
     assignees:

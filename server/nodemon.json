@@ -2,7 +2,9 @@
     "watch": [
         "./"
     ],
-    "ignore":["./test/**.test.ts"],
+    "ignore": [
+        "./test/**.test.ts"
+    ],
     "ext": "ts",
-    "exec": "node -r ts-node/register ./server.ts dev --expose-gc --inspect"
+    "exec": "node -r ts-node/register -r tsconfig-paths/register ./server.ts dev --expose-gc --inspect --trace-warnings --project tsconfig.json"
 }

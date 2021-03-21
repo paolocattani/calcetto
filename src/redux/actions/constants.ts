@@ -6,9 +6,9 @@ export const Failure = 'Failure';
 export const PURGE_STORE_ACTION = 'persist/PURGE';
 
 export const defaultAsyncParams = (actionName: string, name: string): [TypeConstant, TypeConstant, TypeConstant] => [
-  `${actionName} ${name} ${Request}`,
-  `${actionName} ${name} ${Success}`,
-  `${actionName} ${name} ${Failure}`,
+	`${actionName} ${name} ${Request}`,
+	`${actionName} ${name} ${Success}`,
+	`${actionName} ${name} ${Failure}`,
 ];
 
 export const defaultParam = (actionName: string, name: string): [TypeConstant] => [`${actionName} ${name}`];

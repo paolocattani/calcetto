@@ -3,10 +3,11 @@
  */
 import log4js from 'log4js';
 import chalk from 'chalk';
-import { isProductionMode } from './debug';
+import { isProductionMode } from '@common/utils/env.utils';
 
 log4js.configure({
 	pm2: isProductionMode(),
+	pm2InstanceVar: 'PM2_INSTANCE_ID',
 	appenders: {
 		console: { type: 'stdout' },
 		'dev-logger': {
@@ -53,10 +54,19 @@ if (isProductionMode()) {
 	dbLogger.level = 'debug';
 }
 
+// Controller/Manager
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const logProcess = (method: string, value: string, ...rest: any) =>
 	logger.info(`[${chalk.yellow(method)}].${value}`, ...rest);
 
+// Start/End migration
 export const logMigrationStart = (method: string, name: string) =>
 	logger.info(`Running migration ${chalk.red.bold(method)} : ${chalk.yellow(name)}`);
+
 export const logMigrationEnd = (method: string, name: string) =>
 	logger.info(`Migration ${chalk.red.bold(method)} ${chalk.yellow(name)} done!`);
+
+// A standard form to log events
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const logEvent = (str: string, ...args: any) =>
+	logger.info(`${chalk.blueBright('[ Event ]')} : ${str} `, ...args);

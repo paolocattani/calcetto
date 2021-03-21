@@ -1,10 +1,11 @@
 import { Response } from 'express';
-import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
-import { GenericReponse, I18nLabel, OmitGeneric, UserMessageType } from '../../src/@common/models/common.models';
-import { logger } from '../core/logger';
+import { HTTPStatusCode } from '@common/models/HttpStatusCode';
+import { GenericResponse, I18nLabel, OmitGeneric, UserMessageType } from '@common/models/common.models';
+import { logger } from '@core/logger';
 import chalk from 'chalk';
+import { PM2InstanceId } from '@core/utils';
 
-export const ComposeReponse = <T extends GenericReponse>(
+export const ComposeReponse = <T extends GenericResponse>(
 	res: Response,
 	status: HTTPStatusCode,
 	internalMessage: string,
@@ -17,12 +18,13 @@ export const ComposeReponse = <T extends GenericReponse>(
 		...additionalInfo,
 		code: status,
 		message: internalMessage,
-		userMessage: { type, ...label },
+		instance: PM2InstanceId,
+		userMessage: { type, label },
 	});
 };
 
 // Unauthorized
-export const unauthorized = <T extends GenericReponse>(
+export const unauthorized = <T extends GenericResponse>(
 	res: Response,
 	label: I18nLabel,
 	internalMessage?: string,
@@ -36,7 +38,7 @@ export const unauthorized = <T extends GenericReponse>(
 		label,
 		additionalInfo
 	);
-export const forbidden = <T extends GenericReponse>(
+export const forbidden = <T extends GenericResponse>(
 	res: Response,
 	label: I18nLabel,
 	internalMessage?: string,
@@ -52,7 +54,7 @@ export const forbidden = <T extends GenericReponse>(
 	);
 
 // Generic error
-export const failure = <T extends GenericReponse>(
+export const failure = <T extends GenericResponse>(
 	res: Response,
 	label: I18nLabel,
 	internalMessage?: string,
@@ -67,41 +69,50 @@ export const failure = <T extends GenericReponse>(
 		label,
 		additionalInfo
 	);
+export const genericError = <T extends GenericResponse>(res: Response, additionalInfo?: OmitGeneric<T>) =>
+	ComposeReponse(
+		res,
+		HTTPStatusCode.BadRequest,
+		'Bad Request.',
+		UserMessageType.Danger,
+		{ key: 'auth:error.generic' },
+		additionalInfo
+	);
 
 // Success
-export const success = <T extends GenericReponse>(res: Response, label: I18nLabel, additionalInfo?: OmitGeneric<T>) =>
+export const success = <T extends GenericResponse>(res: Response, label: I18nLabel, additionalInfo?: OmitGeneric<T>) =>
 	ComposeReponse(res, HTTPStatusCode.OK, 'Success', UserMessageType.Success, label, additionalInfo);
 
 // Entity Not Found
 export const entityNotFound = (res: Response) =>
-	failure(res, { label: 'common:server.not_found' }, 'Entity not found', HTTPStatusCode.NotFound);
+	failure(res, { key: 'common:server.not_found' }, 'Entity not found', HTTPStatusCode.NotFound);
 
 // Missing parameters / data
-export const missingParameters = <T extends GenericReponse>(res: Response, additionalInfo?: OmitGeneric<T>) =>
+export const missingParameters = <T extends GenericResponse>(res: Response, additionalInfo?: OmitGeneric<T>) =>
 	ComposeReponse(
 		res,
 		HTTPStatusCode.BadRequest,
 		'Missing parameters',
 		UserMessageType.Danger,
-		{ label: '' },
+		{ key: '' },
 		additionalInfo
 	);
 
 // Server error
-export const unexpectedServerError = <T extends GenericReponse>(res: Response, additionalInfo?: OmitGeneric<T>) =>
+export const unexpectedServerError = <T extends GenericResponse>(res: Response, additionalInfo?: OmitGeneric<T>) =>
 	ComposeReponse(
 		res,
 		HTTPStatusCode.InternalServerError,
 		'Unexpected Server Error',
 		UserMessageType.Danger,
-		{ label: 'common:server.unexpected' },
+		{ key: 'common:server.unexpected' },
 		additionalInfo
 	);
 
 // Handle server error
-export const serverError = <T extends GenericReponse>(
+export const serverError = <T extends GenericResponse>(
 	message: string,
-	err: any,
+	err: Error,
 	res: Response,
 	additionalInfo?: OmitGeneric<T>
 ) => {

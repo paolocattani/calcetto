@@ -2,10 +2,10 @@
 // https://on.cypress.io/intelligent-code-completion
 
 import { AUTH_FORM, LandingPage, LOGIN_BUTTON, RegistrationProps, SWAP_BUTTON } from '../pages/landing.page';
-import { UserRole } from '../../src/@common/dto';
+import { UserRole } from '@common/dto';
 import { Tournament } from '../pages/tournament.page';
 import { fixCypressSpec } from '../support';
-import { AuthState } from '../../src/@common/models';
+import { AuthState } from '@common/models';
 import { BE_DISABLED, BE_VISIBLE, HAVE_LENGTH } from '../pages/abstract.page';
 
 const { users } = require('../fixtures/auth.fixture.json');

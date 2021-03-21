@@ -1,16 +1,14 @@
 // Models
 import { Stage1, Tournament } from '../database/models';
-import { PairDTO, Stage1Row, UserDTO } from '../../src/@common/dto';
+import { PairDTO, Stage1Row, UserDTO } from '@common/dto';
 // Core
-import { logProcess, logger } from '../core/logger';
-import { asyncForEach } from '../core/utils';
+import { logProcess, logger } from '@core/logger';
+import { asyncForEach } from '@core/utils';
 //
-import { getDbConnection } from '../database/config/connection';
+import { getDbConnection } from '../database/config/sequelize/connection';
 import { isAdmin } from '../manager/auth.manager';
 //
 import { Op } from 'sequelize';
-import { SessionStatus } from '../../src/@common/models';
-import { sendNotifications } from '../events/events';
 
 const className = 'Stage1 Manager : ';
 
@@ -22,12 +20,6 @@ export const deleteStage1 = async (tournamentId: number) => {
 			return;
 		}
 		await Stage1.destroy({ where: { tournamentId } });
-		const message = {
-			status: SessionStatus.STAGE1_DELETE,
-			label: 'common:notification.stage1_delete',
-			data: { name: tournament.name, date: tournament.date },
-		};
-		sendNotifications(message);
 	} catch (error) {
 		logProcess(className + 'deleteStage1', 'error');
 		logger.error('deleteStage1 : ', error);
@@ -119,14 +111,14 @@ export const generateStage1Rows = async (
 		const transaction = await connection.transaction();
 		await asyncForEach<Stage1Row>(rows, async (currentRow, index, rowsRef) => {
 			rowsRef[index]['total'] = 0;
-			for (let currentRowKey in currentRow) {
+			for (const currentRowKey in currentRow) {
 				if (currentRowKey.startsWith('col')) {
 					// Numero riga/colonna corrente
-					let currentRowRef = rowsRef[index]; // Riga attuale da a rowRef
+					const currentRowRef = rowsRef[index]; // Riga attuale da a rowRef
 					const rowIndex = currentRowRef.rowNumber;
 					const colIndex = parseInt(currentRowKey.substring(3));
 					// Valore attuale della cella e della sua opposta
-					let oppositeRow = rowsRef[colIndex - 1];
+					const oppositeRow = rowsRef[colIndex - 1];
 					// Coppie e punteggi
 					const pair1 = currentRowRef.pair;
 					const pair2 = oppositeRow.pair;
@@ -147,7 +139,7 @@ export const generateStage1Rows = async (
 							 *
 							 */
 							// logger.info('model1 : ', model);
-							// console.log(`     ( p1,p2,score ) = ( ${p1},${p2}, ${score} )`);
+							// logger.info(`     ( p1,p2,score ) = ( ${p1},${p2}, ${score} )`);
 							const model = { name: stageName, tournamentId, pair1Id: pair1.id, pair2Id: pair2.id };
 							// Salvo solo uno scontro e l'altro lo calcolo.
 							const isEditable = isAdmin(user);
@@ -162,7 +154,7 @@ export const generateStage1Rows = async (
 							};
 							const include = [Stage1.associations.pair1, Stage1.associations.pair2];
 							let record: Stage1 | null = null;
-							let created: boolean = false;
+							let created = false;
 							if (isEditable) {
 								[record, created] = await Stage1.findOrCreate({
 									where,
@@ -192,7 +184,6 @@ export const generateStage1Rows = async (
 		});
 		await transaction.commit();
 		logProcess(className + 'generateStage1Rows', 'end');
-		return rows;
 	} catch (error) {
 		logProcess(className + 'generateStage1Rows', error);
 		logger.error('generateStage1Rows : ', error);

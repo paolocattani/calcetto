@@ -11,7 +11,7 @@ import { AuthAction } from '../../redux/actions';
 import { useTranslation } from 'react-i18next';
 const Delete = lazy(() => import('./Delete'));
 
-const EditUser: React.FC<{}> = () => {
+const EditUser: React.FC<Record<string, never>> = () => {
 	const dispatch = useDispatch();
 	const currentHistory = useHistory();
 	const { t } = useTranslation(['common', 'auth', 'player']);
@@ -130,7 +130,12 @@ const EditUser: React.FC<{}> = () => {
 													selected={new Date(birthday)}
 													locale="it-IT"
 													dateFormat="dd/MM/yyyy"
-													onChange={(newValue) => setBirthday(newValue ? newValue : new Date())}
+													withPortal
+													showMonthYearDropdown
+													scrollableMonthYearDropdown
+													yearDropdownItemNumber={100}
+													selectsRange={false}
+													onChange={(newValue: Date) => setBirthday(newValue ? newValue : new Date())}
 												/>
 											)}
 										></Form.Control>

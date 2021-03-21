@@ -1,10 +1,10 @@
-export const getTodayDate = () => formatDate(new Date());
+export const getTodayDate = (): string => formatDate(new Date());
 
-export function formatDate(date: Date, delimiter: string = '/') {
-	var d = new Date(date),
-		month = '' + (d.getMonth() + 1),
-		day = '' + d.getDate(),
-		year = d.getFullYear();
+export function formatDate(date: Date, delimiter = '/'): string {
+	const d = new Date(date);
+	let month = '' + (d.getMonth() + 1);
+	let day = '' + d.getDate();
+	const year = d.getFullYear();
 
 	if (month.length < 2) month = '0' + month;
 	if (day.length < 2) day = '0' + day;
@@ -13,7 +13,8 @@ export function formatDate(date: Date, delimiter: string = '/') {
 }
 
 // https://stackoverflow.com/questions/2698725/comparing-date-part-only-without-comparing-time-in-javascript
-export const justADate = (initDate?: Date | string) => {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export const justADate = (initDate?: Date | string): Record<string, Function> => {
 	let utcMidnightDateObj: Date;
 	// if no date supplied, use Now.
 	if (!initDate) initDate = new Date();

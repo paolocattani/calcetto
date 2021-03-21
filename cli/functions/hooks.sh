@@ -45,7 +45,7 @@ if [[ $hook != "pre-commit" ]] && [[ $hook != "post-commit" ]] && [[ $hook != "a
     exit 0;
 fi
 
-if [[ $type != "major" ]] && [[ $type != "minor"  ]] && [[ $type != "patch"  ]] && [ ! -z "$type" ]; then
+if [[ $type != "major" ]] && [[ $type != "minor"  ]] && [[ $type != "patch"  ]] && [[ ! -z "$type" ];] then
     echo "Unknown type '$type'"
     exit 0;
 fi

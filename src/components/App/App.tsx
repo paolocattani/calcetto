@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { useEffect } from 'react';
 // Components
 import Header from '../Header/Header';
 import { LoadingModal } from '../core/generic/Commons';
@@ -27,7 +27,7 @@ import CookieConsent from 'react-cookie-consent';
 import { useTranslation } from 'react-i18next';
 
 loadIcons();
-const App: React.FC = (_) => {
+const App: React.FC = () => {
 	const dispatch = useDispatch();
 	const currentHistory = useHistory();
 	const { t } = useTranslation(['auth']);
@@ -36,7 +36,8 @@ const App: React.FC = (_) => {
 	// Check if user is already logged
 	useEffect(() => {
 		dispatch(AuthAction.checkAuthentication.request({ history: currentHistory }));
-	}, [currentHistory, dispatch]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentHistory]);
 
 	return (
 		<div className="App">
@@ -61,7 +62,7 @@ const App: React.FC = (_) => {
 					<CookieConsent
 						location="bottom"
 						buttonText={t('auth:cookies.accept')}
-						cookieName="session_id"
+						cookieName="accept_cookies"
 						style={{ background: '#2B373B' }}
 						buttonStyle={{ color: '#4e503b', fontSize: '13px' }}
 						expires={150}

@@ -105,7 +105,7 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 +++ cypress/pages/landing.page.ts	(date 1605894323405)
 @@ -0,0 +1,61 @@
 +import json = Mocha.reporters.json;
-+import {DeleteUserRequest, OmitHistory} from "../../src/@common/models";
++import {DeleteUserRequest, OmitHistory} from "@common/models";
 +
 +type LoginProps = { username: string, password: string };
 +type RegistrationProps = {

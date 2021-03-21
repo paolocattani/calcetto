@@ -1,5 +1,5 @@
 import {
-	GenericReponse,
+	GenericResponse,
 	OmitHistory,
 	UnexpectedServerError,
 	UserMessage,
@@ -8,16 +8,23 @@ import {
 import { SuccessCodes } from '../../@common/models/HttpStatusCode';
 import { put, call, StrictEffect } from 'redux-saga/effects';
 import { PayloadActionCreator } from 'typesafe-actions';
-import { toast } from 'react-toastify';
+import { toast, ToastContent, ToastOptions } from 'react-toastify';
 import i18n from '../../i18n/i18n';
+import { ReactText } from 'react';
 
 interface IActionCallback<T> {
 	(response: T): void | Promise<void> | Generator<StrictEffect, void, void>;
 }
 
-const GeneratorFunction = function* () {/* this is a template */}.constructor;
-const AsyncFunction = async function () {/* this is a template */}.constructor;
-const NormalFunction = function () {/* this is a template */}.constructor;
+const GeneratorFunction = function* () {
+	/* this is a template */
+}.constructor;
+const AsyncFunction = async function () {
+	/* this is a template */
+}.constructor;
+const NormalFunction = function () {
+	/* this is a template */
+}.constructor;
 
 function* execCallBack<TRes>(callBack: IActionCallback<TRes>, response: TRes) {
 	if (callBack instanceof GeneratorFunction) {
@@ -32,15 +39,17 @@ function* execCallBack<TRes>(callBack: IActionCallback<TRes>, response: TRes) {
 	}
 }
 
-interface ActionType<TReq, TRes extends GenericReponse, TErr> {
+interface ActionType<TReq, TRes extends GenericResponse, TErr> {
 	request: PayloadActionCreator<string, TReq>;
 	success: PayloadActionCreator<string, TRes>;
 	failure: PayloadActionCreator<string, TErr | typeof UnexpectedServerError>;
 }
 
-export const getMessage = (message: UserMessage) => i18n.t(message.label, message.options);
-export const getToast = (type: UserMessageType) => {
-	let alert = null;
+export const getMessage = ({ label: { key, options } }: UserMessage): string => i18n.t(key, options);
+export const getToast = (
+	type: UserMessageType
+): ((content: ToastContent, options?: ToastOptions | undefined) => ReactText) => {
+	let alert = toast.error;
 	switch (type) {
 		case UserMessageType.Success:
 			alert = toast.success;
@@ -54,13 +63,14 @@ export const getToast = (type: UserMessageType) => {
 	}
 	return alert;
 };
-export function* entityLifeCycle<TReq, TRes extends GenericReponse, TErr extends GenericReponse>(
+
+export function* entityLifeCycle<TReq, TRes extends GenericResponse, TErr extends GenericResponse>(
 	action: ActionType<TReq, TRes, TErr>,
 	method: (p: OmitHistory<TReq>) => TRes | Promise<TRes | typeof UnexpectedServerError>,
 	payload: OmitHistory<TReq>,
 	onSuccess?: IActionCallback<TRes>,
 	onFailure?: IActionCallback<TErr>,
-	showMessage: boolean = true
+	showMessage = true
 ): Generator<StrictEffect, void, any> {
 	try {
 		// Call method with payload

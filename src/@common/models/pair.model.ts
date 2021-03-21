@@ -1,6 +1,6 @@
 import * as H from 'history';
 import { PairDTO, Stage1Row } from '../dto';
-import { GenericReponse } from './common.models';
+import { GenericResponse } from './common.models';
 import { getEmptyPlayer } from './player.model';
 
 export interface PairState {
@@ -18,7 +18,7 @@ export interface FindAliasRequest {
 }
 export interface FetchPairsRequest {
 	tId: number;
-	history?: H.History<unknown>;
+	history?: H.History;
 }
 export interface DeletePairsRequest {
 	pairsList: Array<PairDTO>;
@@ -32,24 +32,24 @@ export interface SelectPairsRequest {
 	stage1Rows: Array<Stage1Row>;
 }
 // Response
-export interface FindAliasResponse extends GenericReponse {
+export interface FindAliasResponse extends GenericResponse {
 	alias: string;
 }
-export interface FetchPairsResponse extends GenericReponse {
+export interface FetchPairsResponse extends GenericResponse {
 	pairsList: Array<PairDTO>;
 }
-export interface DeletePairsResponse extends GenericReponse {
+export interface DeletePairsResponse extends GenericResponse {
 	pairsList: Array<PairDTO>;
 }
-export interface SavePairResponse extends GenericReponse {
+export interface SavePairResponse extends GenericResponse {
 	pair: PairDTO;
 }
-export interface SelectPairsResponse extends GenericReponse {
+export interface SelectPairsResponse extends GenericResponse {
 	stage1Name: string;
 	stage1Rows: Array<Stage1Row>;
 }
 
-export interface PairError extends GenericReponse {}
+export type PairError = GenericResponse
 
 export const getEmptyPair = (label?: string, tournamentId = 0): PairDTO => ({
 	id: null,

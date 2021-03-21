@@ -11,20 +11,25 @@ import { Stage1Action, Stage2Action, TournamentAction } from '../../redux/action
 import { AuthSelector, TournamentSelector, Stage1Selector, PairSelector } from '../../redux/selectors';
 import Stage1Table from './table.component';
 import TournamentBadge from '../Tournament/badge.component';
+import { useTranslation } from 'react-i18next';
 // Models
 import { PairDTO, TournamentProgress } from '../../@common/dto';
 import { useSelector } from '../core/types';
+import { EventAction } from 'src/redux/actions/event.action';
+import { LoadingModal } from '../core/generic/Commons';
 
 /**
  * Wraps multiple table components
  */
 // eslint-disable-next-line sonarjs/cognitive-complexity
-const Wrapper: React.FC = (): JSX.Element => {
+const Wrapper: React.FC = () => {
 	const currentHistory = useHistory();
 	const dispatch = useDispatch();
 
+	const { t } = useTranslation(['tournament']);
+
 	// Session
-	const session = useSelector(AuthSelector.getSession);
+	const session = useSelector(AuthSelector.getAuth);
 	// Torneo
 	const tournament = useSelector(TournamentSelector.getTournament)!;
 	// Sono presenti aggiornamenti
@@ -35,8 +40,14 @@ const Wrapper: React.FC = (): JSX.Element => {
 	const pairsList = useSelector(PairSelector.getPairsList);
 
 	function goBack() {
-		currentHistory.push(session.isAdmin ? '/tournament' : '/');
+		let destination = '/tournament';
+		if (!session.isAdmin) {
+			destination = '/';
+			dispatch(EventAction.leaveTournament.request({ tournament }));
+		}
+		currentHistory.push(destination);
 	}
+
 	function goToStage2() {
 		// TODO: eseguire controlli e eventualemente mostrare messaggi utente
 
@@ -44,7 +55,7 @@ const Wrapper: React.FC = (): JSX.Element => {
 		// allora aggiorno lo stato del torneo
 		if (session.isAdmin && tournament.progress < TournamentProgress.Stage2) {
 			tournament.progress = TournamentProgress.Stage2;
-			dispatch(TournamentAction.update.request({ tournament }));
+			dispatch(TournamentAction.update.request({ tournament, fromProgress: TournamentProgress.Stage1 }));
 		}
 
 		let count = 8;
@@ -59,6 +70,11 @@ const Wrapper: React.FC = (): JSX.Element => {
 	function resetStage2() {
 		dispatch(Stage2Action.delete.request({ tId: tournament.id }));
 		dispatch(Stage1Action.resetPairs({}));
+	}
+
+	if (!tournament) {
+		currentHistory.push('/');
+		return <LoadingModal show={true} message={t('tournament:not_found')} />;
 	}
 
 	console.log('selected : ', selected);
@@ -105,6 +121,7 @@ const Wrapper: React.FC = (): JSX.Element => {
 									dispatch(
 										TournamentAction.update.request({
 											tournament: { ...tournament, autoOrder: e.currentTarget.checked },
+											fromProgress: tournament.progress,
 										})
 									)
 								}
@@ -132,12 +149,12 @@ export default Wrapper;
 function renderTables(pairsList: PairDTO[], autoOrder: boolean): JSX.Element[] {
 	let stageName = '';
 	let stage: Array<PairDTO> = [];
-	let stageList: Array<JSX.Element> = [];
+	const stageList: Array<JSX.Element> = [];
 	// sort pairs by stage1Name
 	[...pairsList]
 		.sort((obj1, obj2) => obj1.stage1Name.localeCompare(obj2.stage1Name))
 		// FIXME: use .reduce  ?
-		.forEach((element, index) => {
+		.forEach((element) => {
 			// A rottura di stage1Name
 			if (stageName === '') stageName = element.stage1Name;
 			if (stageName !== element.stage1Name) {
@@ -153,7 +170,7 @@ function renderTables(pairsList: PairDTO[], autoOrder: boolean): JSX.Element[] {
 		stageList.push(
 			<Stage1Table key={`Stage1-${stageName}`} stageName={stageName} pairsList={stage} autoOrder={autoOrder} />
 		);
-		// console.log(`stages ${stageName} :`, stage);
+		// logger.info(`stages ${stageName} :`, stage);
 	}
 
 	return stageList;

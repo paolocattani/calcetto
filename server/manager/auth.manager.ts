@@ -1,14 +1,14 @@
 // Models/Types
 import { User } from '../database/models';
-import { UserDTO, UserRole, PlayerRole, PlayerDTO } from '../../src/@common/dto';
+import { UserDTO, UserRole, PlayerRole, PlayerDTO } from '@common/dto';
 // Logger utils
-import { logProcess, logger } from '../core/logger';
+import { logProcess, logger } from '@core/logger';
 // managers
 import * as playerManager from './player.manager';
 import { Op } from 'sequelize';
-import { lowerWrapper } from '../core/utils';
-import { RegistrationRequest } from '../../src/@common/models/auth.model';
-import { I18nLabel } from '../../src/@common/models';
+import { lowerWrapper } from '@core/utils';
+import { RegistrationRequest } from '@common/models/auth.model';
+import { I18nLabel } from '@common/models';
 import { generatePassword } from '../controller/auth/auth.utils';
 
 // Const
@@ -146,39 +146,39 @@ export async function findUserByEmailAndUsername(email: string, username: string
 }
 
 export const isValidRegister = (user: Omit<RegistrationRequest, 'history'>): Array<I18nLabel> => {
-	let result: Array<I18nLabel> = [];
+	const result: Array<I18nLabel> = [];
 	if (!user.username) {
-		result.push({ label: 'auth:error.username' });
+		result.push({ key: 'auth:error.username' });
 	}
 	if (!user.name) {
-		result.push({ label: 'auth:error.name' });
+		result.push({ key: 'auth:error.name' });
 	}
 	if (!user.surname) {
-		result.push({ label: 'auth:error.surname' });
+		result.push({ key: 'auth:error.surname' });
 	}
 	if (!user.email) {
-		result.push({ label: 'auth:error.email.address' });
+		result.push({ key: 'auth:error.email.address' });
 	}
 	if (!user.confirmEmail) {
-		result.push({ label: 'auth:error.email.confirm' });
+		result.push({ key: 'auth:error.email.confirm' });
 	}
 	if (user.email !== user.confirmEmail) {
-		result.push({ label: 'auth:error.email.match' });
+		result.push({ key: 'auth:error.email.match' });
 	}
 	if (!emailRegExp.test(user.email)) {
-		result.push({ label: 'auth:error.email.validation' });
+		result.push({ key: 'auth:error.email.validation' });
 	}
 	if (!user.password) {
-		result.push({ label: 'auth:error.password.password' });
+		result.push({ key: 'auth:error.password.password' });
 	}
 	if (!user.confirmPassword) {
-		result.push({ label: 'auth:error.password.confirm' });
+		result.push({ key: 'auth:error.password.confirm' });
 	}
 	if (user.password !== user.confirmPassword) {
-		result.push({ label: 'auth:error.password.match' });
+		result.push({ key: 'auth:error.password.match' });
 	}
 	if (!passwordRegExp.test(user.password)) {
-		result.push({ label: 'auth:error.password.validation' });
+		result.push({ key: 'auth:error.password.validation' });
 	}
 	return result;
 };
@@ -205,7 +205,7 @@ export const convertEntityToDTO = (user: User): UserDTO => ({
  *
  * @param body : Request body
  */
-export const parseBody = (body: any) =>
+export const parseBody = (body: Record<string, unknown>) =>
 	({
 		id: body.id || null,
 		username: body.username,

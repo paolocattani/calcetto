@@ -14,8 +14,8 @@ import { TournamentSelector, Stage1Selector } from '../../redux/selectors';
 import { PairDTO, Stage1Row, TournamentProgress } from '../../@common/dto';
 import { fetchStage1 } from '../../redux/services/stage1.service';
 import { SuccessCodes } from '../../@common/models/HttpStatusCode';
-import { FetchStage1Response, UpdatePlacementRequest } from '../../@common/models';
-import { comparator } from './helper';
+import { FetchStage1Response } from '../../@common/models';
+import { comparator, getOpposite } from './helper';
 import { cellEditProps } from './editor';
 
 interface Stage1TableProps {
@@ -35,7 +35,8 @@ const Stage1Table: React.FC<Stage1TableProps> = ({ pairsList, autoOrder, stageNa
 	const selectedRows = useSelector((state) => Stage1Selector.getSelectedRows(stageName, state));
 	// State
 	const [isLoading, setIsLoading] = useState(false);
-	const [saved, setIsSaved] = useState(false);
+	// FIXME:
+	const [saved /*, setIsSaved*/] = useState(false);
 	const [rows, setRows] = useState<Array<Stage1Row>>([]);
 
 	// Effects
@@ -80,7 +81,7 @@ const Stage1Table: React.FC<Stage1TableProps> = ({ pairsList, autoOrder, stageNa
 			return true;
 		},
 		onSelectAll: (isSelected, s1Rows) => {
-			// console.log( 'handleOnSelectAll : ', isSelected, s1Rows );
+			// logger.info( 'handleOnSelectAll : ', isSelected, s1Rows );
 			dispatch(
 				Stage1Action.updateSelectedPairs.request({
 					stage1Name: stageName,
@@ -91,6 +92,81 @@ const Stage1Table: React.FC<Stage1TableProps> = ({ pairsList, autoOrder, stageNa
 		},
 		style: { backgroundColor: '#c8e6c9' },
 		hideSelectColumn: !isAdmin || tournament.progress >= TournamentProgress.Stage2,
+	};
+
+	const isEditable = isAdmin && tournament.progress < TournamentProgress.Stage2;
+	const cellEditPropsCallbacks = {
+		mode: isEditable ? 'click' : 'none',
+		blurToSave: true,
+		beforeSaveCell: (
+			oldValue: string,
+			newValue: string,
+			row: Stage1Row,
+			column: ColumnDescription<Stage1Row, Stage1Row>
+		) => {
+			// FIXME:
+			if ((column as any).id.startsWith('col')) {
+				// Aggiorno cella opposta
+				rows[parseInt(column.text) - 1][`col${row.rowNumber}`] = getOpposite(newValue);
+			}
+		},
+		afterSaveCell: (
+			oldValue: string,
+			newValue: string,
+			row: Stage1Row,
+			column: ColumnDescription<Stage1Row, Stage1Row>
+		) => {
+			const newRows = [...rows];
+			// FIXME:
+			if ((column as any).id.startsWith('col')) {
+				// Aggiorno dati sul Db
+				dispatch(
+					Stage1Action.updateCellStage1.request({
+						tId: row.pair.tournamentId,
+						tournament,
+						stageName,
+						score: newValue,
+						pair1Id: row.pair.id!,
+						pair2Id: rows[parseInt(column.text) - 1].pair.id!,
+					})
+				);
+				// Ricalcolo totali riga
+				let acc = 0;
+				for (const key in row) {
+					if (key.startsWith('col') && row[key]) {
+						acc += parseInt(row[key] as string);
+					}
+				}
+				const thisRowIndex = row.rowNumber - 1;
+				const thisRow = newRows[thisRowIndex];
+				thisRow.total = acc ? acc : 0;
+
+				//... e riga opposta
+				acc = 0;
+				const oppositeRowIndex = parseInt(column.text) - 1;
+				for (const key in newRows[oppositeRowIndex]) {
+					if (key.startsWith('col') && newRows[oppositeRowIndex][key]) {
+						acc += parseInt(newRows[oppositeRowIndex][key] as string);
+					}
+				}
+				const oppositeRow = newRows[oppositeRowIndex];
+				oppositeRow.total = acc ? acc : 0;
+
+				newRows.splice(thisRowIndex, 1, thisRow);
+				newRows.splice(oppositeRowIndex, 1, oppositeRow);
+			}
+			// Aggiorno posizione relativa
+			if (autoOrder) {
+				[...newRows]
+					.sort((e1, e2) => comparator(e1, e2))
+					.forEach((s1Row, index) => (newRows[s1Row.rowNumber - 1]['placement'] = index + 1));
+			}
+			// Aggiornamento
+			setRows(newRows);
+			dispatch(
+				Stage1Action.updatePlacement.request({ rows: rows.map((e) => ({ id: e.pair.id!, placement: e.placement })) })
+			);
+		},
 	};
 
 	console.log('Refreshing : ', toogleRefresh);
@@ -106,15 +182,7 @@ const Stage1Table: React.FC<Stage1TableProps> = ({ pairsList, autoOrder, stageNa
 			data={rows}
 			columns={columns(pairsList) as ColumnDescription<Stage1Row, Stage1Row>[]}
 			selectRow={selectRow}
-			cellEdit={cellEditProps(
-				isAdmin && tournament.progress < TournamentProgress.Stage2,
-				stageName,
-				autoOrder,
-				rows,
-				setRows,
-				(request: UpdatePlacementRequest) => dispatch(Stage1Action.updatePlacement.request(request)),
-				setIsSaved
-			)}
+			cellEdit={cellEditProps(cellEditPropsCallbacks)}
 			noDataIndication="Nessun dato reperito"
 			headerClasses="default-background default-color-yellow"
 			caption={<TableHeader title={stageName} saved={saved} />}

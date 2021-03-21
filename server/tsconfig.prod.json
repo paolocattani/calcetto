@@ -1,7 +1,17 @@
 {
 	"$schema": "https://json.schemastore.org/tsconfig",
 	"compilerOptions": {
+		"baseUrl": "./",
 		"pretty": true,
+		/* Basic Options */
+		"target": "es2019",
+		"module": "commonjs",
+		"lib": [
+			"es2020"
+		],
+		"strict": true,
+		"allowJs": true,
+		"checkJs": true,
 		"emitDecoratorMetadata": true,
 		"esModuleInterop": true,
 		"experimentalDecorators": true,
@@ -10,14 +20,30 @@
 		//"listFiles": true,
 		//"listEmittedFiles": true,
 		"noErrorTruncation": true,
-		"outDir": "../production_build",
+		"outDir": "./build",
 		"removeComments": true,
 		"skipLibCheck": true,
 		"downlevelIteration": true,
-		"target":"ES6",
 		"moduleResolution": "node",
-		"lib": [ "esnext" ],
-		"module": "commonjs"
+		"allowSyntheticDefaultImports": true,
+		"paths": {
+			"@common/*": [ "../src/@common/*"] ,
+			"@core/*": [ "./core/*"] 
+		},
+		"plugins": [
+			{ "transform": "typescript-transform-paths", "useRootDirs": true },
+			{ "transform": "typescript-transform-paths", "useRootDirs": true, "afterDeclarations": true }
+	  ]
 	},
-	"exclude": ["./test","**/*.test.ts"]
+	"include": [
+		".",
+		"src/@common"
+	],
+	"exclude": [
+		"./src/*",
+		"./test",
+		"**/*.test.ts",
+		"node_modules",
+		"build"
+	]
 }

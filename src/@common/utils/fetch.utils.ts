@@ -1,47 +1,55 @@
 //-----------------------------
 // Fetch utils
 //
-import { GenericReponse, OmitHistory, UnexpectedServerError } from '../models/common.models';
+import { GenericResponse, OmitHistory, UnexpectedServerError } from '../models/common.models';
 import { toast } from 'react-toastify';
+import logger from './logger.utils';
 
 interface IFetchCallback<T> {
 	(response: T): T | Promise<T>;
 }
 
 // Get
-export const getWrapper = <T extends GenericReponse>(url: string, afterResponse?: IFetchCallback<T>) =>
-	fetchWrapper<never, T>(url, 'GET', undefined, afterResponse);
+export const getWrapper = <T extends GenericResponse>(url: string, afterResponse?: IFetchCallback<T>): Promise<T> =>
+	<Promise<T>>fetchWrapper<never, T>(url, 'GET', undefined, afterResponse);
 // Delete
-export const deleteWrapper = <B, T extends GenericReponse>(
+export const deleteWrapper = <B, T extends GenericResponse>(
 	url: string,
 	body?: OmitHistory<B>,
 	afterResponse?: IFetchCallback<T>
-) => fetchWrapper<B, T>(url, 'DELETE', body, afterResponse);
+): Promise<T> => <Promise<T>>fetchWrapper<B, T>(url, 'DELETE', body, afterResponse);
 
 // Put
-export const putWrapper = <B, T extends GenericReponse>(
+export const putWrapper = <B, T extends GenericResponse>(
 	url: string,
 	body?: OmitHistory<B>,
 	afterResponse?: IFetchCallback<T>
-) => fetchWrapper<B, T>(url, 'PUT', body, afterResponse);
+): Promise<T> => <Promise<T>>fetchWrapper<B, T>(url, 'PUT', body, afterResponse);
 
 // Post
-export const postWrapper = <B, T extends GenericReponse>(
+export const postWrapper = <B, T extends GenericResponse>(
 	url: string,
 	body?: OmitHistory<B>,
 	afterResponse?: IFetchCallback<T>
-) => fetchWrapper<B, T>(url, 'POST', body, afterResponse);
+): Promise<T> => <Promise<T>>fetchWrapper<B, T>(url, 'POST', body, afterResponse);
 
 // wrapper
-export const fetchWrapper = async <B, T extends GenericReponse>(
+const rawHost = process.env.REACT_APP_SERVER_HOST ? process.env.REACT_APP_SERVER_HOST : 'http://localhost:5001';
+export const socketHost = process.env.REACT_APP_SOCKET_HOST
+	? process.env.REACT_APP_SOCKET_HOST
+	: 'ws://localhost:5001/socket';
+//? `${process.env.REACT_APP_SERVER_HOST}:${process.env.REACT_APP_PORT}`
+
+const host = rawHost.slice(-1) === '/' ? rawHost.substring(0, rawHost.length - 1) : rawHost;
+export const getCompleteUrl = (url: string): string => host + url;
+export const fetchWrapper = async <B, T extends GenericResponse>(
 	url: string,
 	method: string,
 	body?: OmitHistory<B>,
 	afterResponse?: IFetchCallback<T>
-): Promise<T | GenericReponse> => {
-	const completeUrl =
-		(process.env.REACT_APP_SERVER_HOST ? process.env.REACT_APP_SERVER_HOST : 'http://localhost:5001') + url;
-	console.log('fetchWrapper.request : ', method, completeUrl, body);
+): Promise<T | GenericResponse> => {
+	const completeUrl = getCompleteUrl(url);
+	logger.info('fetchWrapper.request : ', method, completeUrl, body);
 	let response = null;
 	try {
 		response = await fetch(completeUrl, {
@@ -56,7 +64,7 @@ export const fetchWrapper = async <B, T extends GenericReponse>(
 			},
 		});
 		const result: T = await response.json();
-		console.log('fetchWrapper.response : ', result);
+		logger.info('fetchWrapper.response : ', result);
 		return afterResponse ? afterResponse(result) : result;
 	} catch (error) {
 		console.group('An error occur : ');

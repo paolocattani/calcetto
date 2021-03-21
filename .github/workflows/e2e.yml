@@ -70,10 +70,10 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: test
-          TEST_URL: 'postgresql://postgres:password@postgres-service:5432/postgres'
-          TEST_SCHEMA: test_${{ matrix.browser }}_${{ matrix.containers }}
+       	  DATABASE_URL: 'postgresql://postgres:password@postgres-service:5432/postgres'
+          DATABASE_SCHEMA: test_${{ matrix.browser }}_${{ matrix.containers }}
           IS_DOCKER: true
-      # if tests fails save screenshots
+        # if tests fails save screenshots
       - name: Save screenshots on failure
         uses: actions/upload-artifact@v2.2.2
         if: failure()

@@ -9,14 +9,17 @@ import { TournamentDTO } from '../../@common/dto';
 import { formatDate } from '../../@common/utils';
 import { PairAction, Stage1Action, Stage2Action, TournamentAction } from 'src/redux/actions';
 import { AuthSelector, TournamentSelector } from '../../redux/selectors';
-import { tournamentsList } from '../../test/commons';
 import { RightArrowIcon } from '../core/icons';
 import { IndicatorSeparator } from './helper';
 import { useTranslation } from 'react-i18next';
+import { EventAction } from 'src/redux/actions/event.action';
+import logger from '../../@common/utils/logger.utils';
 
-interface SelectTournamentProps {}
+interface SelectTournamentProps {
+	tournamentsList: Array<TournamentDTO>;
+}
 
-const SelectTournament: React.FC<SelectTournamentProps> = () => {
+const SelectTournament: React.FC<SelectTournamentProps> = ({ tournamentsList }) => {
 	const dispatch = useDispatch();
 	const currentHistory = useHistory();
 	const { t } = useTranslation(['common', 'tournament']);
@@ -27,6 +30,7 @@ const SelectTournament: React.FC<SelectTournamentProps> = () => {
 	const handleSubmit = async (event: React.FormEvent<HTMLElement>): Promise<void> => {
 		event.preventDefault();
 		if (tournament) {
+			dispatch(EventAction.joinTournament.request({ tournament }));
 			if (isAdmin) {
 				// Reset all
 				dispatch(PairAction.reset({}));
@@ -35,12 +39,17 @@ const SelectTournament: React.FC<SelectTournamentProps> = () => {
 				dispatch(PairAction.reset({}));
 				currentHistory.push('/tournament');
 			} else {
-				console.log('Fetching pairs for tournament : ', tournament.id);
+				logger.info('Fetching pairs for tournament : ', tournament.id);
 				dispatch(PairAction.fetch.request({ tId: tournament.id, history: currentHistory }));
 			}
 		} else toast.error(t('common:error.generic'));
 	};
 
+	const onChangeSelect = (selected: TournamentDTO | null) => {
+		dispatch(TournamentAction.setTournament(selected));
+	};
+
+	console.log('Rendering list ');
 	return (
 		<Form onSubmit={handleSubmit}>
 			<label htmlFor="tournamentSelect">{t(LABEL_TOURNAMENT_SELECT)}</label>
@@ -57,7 +66,7 @@ const SelectTournament: React.FC<SelectTournamentProps> = () => {
 					`${name} - ${formatDate(date)} @ ${t(`tournament:progress.${progress}`)}`
 				}
 				isClearable
-				onChange={(selected) => dispatch(TournamentAction.setTournament(selected as TournamentDTO))}
+				onChange={onChangeSelect}
 			/>
 			<Button
 				data-cy="select-submit"
@@ -74,7 +83,7 @@ const SelectTournament: React.FC<SelectTournamentProps> = () => {
 	);
 };
 
-const customStyles: Partial<Styles> | undefined = {
+const customStyles: Partial<Styles<TournamentDTO, false>> | undefined = {
 	// menuList: (provided, state) => ({ ...provided, border: '1px solid #ffc107' }),
 	option: (provided) => ({
 		...provided,

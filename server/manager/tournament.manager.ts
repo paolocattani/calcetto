@@ -1,10 +1,8 @@
-import { logProcess } from '../core/logger';
-import { TournamentDTO, TournamentProgress, UserDTO, UserRole } from '../../src/@common/dto';
+import { logProcess } from '@core/logger';
+import { TournamentDTO, TournamentProgress, UserDTO, UserRole } from '@common/dto';
 import { Tournament } from '../database/models';
 import { Op, WhereOptions } from 'sequelize';
-import { getWhereFromMap, lowerWrapper, dateInRageWrapper } from '../core/utils';
-import { Message, SessionStatus } from '../../src/@common/models';
-import { sendNotifications } from '../events/events';
+import { getWhereFromMap, lowerWrapper, dateInRageWrapper } from '@core/utils';
 
 const className = 'Tournament Manager : ';
 const defaultFilter = (user: UserDTO) => ({ [Op.or]: [{ ownerId: user.id }, { public: true }] });
@@ -47,49 +45,13 @@ export const deleteAllTournament = async (): Promise<void> => await Tournament.t
 export const update = async (user: UserDTO, model: TournamentDTO): Promise<TournamentDTO> => {
 	logProcess(className + 'update', 'start');
 	try {
-		const params = new Map<string, WhereOptions | Object | number>();
-		params.set('id', model.id!);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const params = new Map<string, any>();
+		params.set('id', model.id);
 		const t = await findByParams(params, user);
 		if (!t) {
 			logProcess(className + 'update', 'end : Tournament not found');
 			return model;
-		}
-		/*
-			Se sto passando da TournamentProgress.PairsSelection a TournamentProgress.Stage1
-			aggiorno i client collegati che c'è un nuovo torneo disponibile
-		*/
-		if (t.public && t.progress === TournamentProgress.PairsSelection && model.progress === TournamentProgress.Stage1) {
-			const message: Message = {
-				status: SessionStatus.TOURNAMENT_NEW,
-				label: 'common:notification.tournament_new',
-				data: { name: model.name, date: model.date },
-			};
-			sendNotifications(message);
-		}
-		/*
-			Se sto passando da TournamentProgress.Stage1 a TournamentProgress.Stage2
-			aggiorno i client collegati che è disponibile una nuova fase
-		*/
-		if (t.public && t.progress === TournamentProgress.Stage1 && model.progress === TournamentProgress.Stage2) {
-			const message: Message = {
-				status: SessionStatus.TOURNAMENT_UPDATE,
-				label: 'common:notification.tournament_update',
-				data: { name: model.name, date: model.date },
-			};
-			sendNotifications(message);
-		}
-		/*
-			Se sto passando da TournamentProgress.Stage1 a TournamentProgress.PairsSelection
-			aggiorno i client collegati che il torneo non è piu disponibile
-			FIXME: Questa casistica è gia coperta da STAGE1_DELETE
-		*/
-		if (t.public && t.progress === TournamentProgress.Stage1 && model.progress === TournamentProgress.PairsSelection) {
-			const message: Message = {
-				status: SessionStatus.TOURNAMENT_DELETE,
-				label: 'common:notification.tournament_delete',
-				data: { name: model.name, date: model.date },
-			};
-			sendNotifications(message);
 		}
 		const result = await t.update({
 			progress: model.progress,
@@ -106,7 +68,8 @@ export const update = async (user: UserDTO, model: TournamentDTO): Promise<Tourn
 // Cerca un torneo tramite ID
 export const findById = async (user: UserDTO, tId: number): Promise<TournamentDTO | null> => {
 	logProcess(className + 'findById', 'start');
-	const params = new Map<string, WhereOptions | Object>();
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const params = new Map<string, any>();
 	params.set('id', tId);
 	const result = await findByParams(params, user);
 	logProcess(className + 'findById', 'end');
@@ -131,7 +94,7 @@ export const findByNameAndDate = async (name: string, date: Date, user: UserDTO)
 };
 
 export const findByParams = async (
-	parameters: Map<string, WhereOptions | Object>,
+	parameters: Map<string, WhereOptions | Record<string, unknown>>,
 	user: UserDTO
 ): Promise<Tournament | null> => {
 	try {
@@ -166,7 +129,7 @@ export const convertEntityToDTO = (t: Tournament): TournamentDTO => ({
 	ownerId: t?.ownerId ?? 0,
 });
 
-export const parseBody = (body: any) =>
+export const parseBody = (body: TournamentDTO) =>
 	({
 		id: body.id ?? null,
 		name: body.name ?? null,

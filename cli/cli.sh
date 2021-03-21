@@ -1,4 +1,6 @@
 #!/bin/bash
+# color utils
+. cli/utils/colors.sh
 
 #------> Const
 ROOT_DIR='/c/Users/PaoloCattani/Workspaces/Workspaces_private/calcetto'
@@ -7,7 +9,7 @@ LOG_FILE="$ROOT_DIR/cli/cli.log"
 ##############################################################################
 #------> Show Help
 ##############################################################################
-showHelp_() {
+function showHelp_() {
 cat << EOF
 
     Usage: ${0##*/} [command] [option]
@@ -20,15 +22,20 @@ cat << EOF
         add_to_commit   |   Add version files to commit ( .env sonar-project.properties package.json package-lock.json )
         hooks           |   Edit hooks
         build           |   Create production build
+        heroku          |   Heroku utils
         help            |   Show this help
 
     option :
         --no-redirect   |   Don't redirect output to file
         --debug         |   Enable debug
 
-    Example :
+    Examples :
 
-    cli release --minor --debug
+        $cli release --minor --debug
+
+        $cli build --all
+
+        $cli heroku --deploy --no-redirect
 
 EOF
 }
@@ -38,6 +45,9 @@ EOF
 ##############################################################################
 #------> Build
 . cli/functions/build.sh
+
+#------> Heroku
+. cli/functions/heroku.sh
 
 #------> Update version
 function update {
@@ -80,19 +90,20 @@ function log_args {
 ##############################################################################
 command=$1
 # Just show help
-if [[ $command == "help" ]]; then
+if [[ $command == "--help" ]] || [[ $command == "--h" ]]  || [[ $command == "help" ]] ; then
     showHelp_
     exit 0
 fi
 
-# Test if the first param is a valid command, else show help
-if  [[ $command == "release" ]] || [[ $command == "tag" ]]  ||
-    [[ $command == "hooks" ]]   || [[ $command == "update" ]] ||
-    [[ $command == "add_to_commit" ]] || [[ $command == "build" ]]; then
 
-    # Move to root
-    echo ""
-    cd $ROOT_DIR
+valid_commands=("release" "tag" "hooks" "add_to_commit" "build" "update" "heroku")
+# Test if the first param is a valid command, else show help
+if [[ " ${valid_commands[@]} " =~ " ${command} " ]]; then
+
+    # if is not on heroku move to root
+    if [[ -z $IS_HEROKU ]]; then
+        cd $ROOT_DIR
+    fi
 
     # general options
     noredirect=0
@@ -129,6 +140,11 @@ if  [[ $command == "release" ]] || [[ $command == "tag" ]]  ||
     # Debug
     if [[ $debug -eq 1 ]]; then
         log_args "$@"
+    fi
+
+    # Remap functions name
+    if [[ $command == "heroku" ]]; then
+        command="heroku_cli"
     fi
 
     # Exec the command

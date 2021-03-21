@@ -1,11 +1,10 @@
-import { logger, logProcess } from '../core/logger';
+import { logProcess } from '@core/logger';
 import { Op, QueryTypes } from 'sequelize';
 import { Player, StatsPairs, StatsPlayer } from '../database/models';
-import { StatsPlayerDTO } from '../../src/@common/dto/stats/stats.players.dto';
-import { StatsPairDTO } from '../../src/@common/dto/stats/stats.pairs.dto';
+import { StatsPlayerDTO } from '@common/dto/stats/stats.players.dto';
+import { StatsPairDTO } from '@common/dto/stats/stats.pairs.dto';
 import { convertEntityToDTO as convertPlayerEntityToDTO } from './player.manager';
-import { asyncForEach, logEntity } from '../core/utils';
-import { formatDate } from '../../src/@common/utils/date.utils';
+import { asyncForEach, logEntity } from '@core/utils';
 
 // Const
 const className = 'Stats Manager : ';
@@ -13,18 +12,22 @@ const className = 'Stats Manager : ';
 export const getBestPlayers = async (from?: string) => {
 	const methodName = className + 'getBestPlayers';
 	logProcess(methodName, 'start');
-	let result: StatsPlayerDTO[] = [];
+	const result: StatsPlayerDTO[] = [];
 	try {
 		const rowsLimit = 10;
 		const list: Array<StatsPlayer> = await StatsPlayer.sequelize!.query(
 			// eslint-disable-next-line quotes
-			`select * from getPlayerStats${from ? `('${from}')` : '()'}
+			`select * from :from
 				order by totwin desc
-				fetch first ${rowsLimit} rows only`,
+				fetch first :rowsLimit rows only`,
 			{
+				replacements: {
+					from: `getPlayerStats${from ? `('${from}')` : '()'}`,
+					rowsLimit,
+				},
 				type: QueryTypes.SELECT,
 				raw: false,
-				// logging: console.log,
+				// logging: logger.info,
 				model: StatsPlayer,
 				mapToModel: true,
 			}
@@ -51,13 +54,17 @@ export const getBestPairs = async (from?: string) => {
 		const rowsLimit = 10;
 		const list: Array<StatsPairs> = await StatsPairs.sequelize!.query(
 			// eslint-disable-next-line quotes
-			`select * from getPairStats${from ? `('${from}')` : '()'}
+			`select * from :from
 			order by totwin desc
-			fetch first ${rowsLimit} rows only`,
+			fetch first :rowsLimit rows only`,
 			{
+				replacements: {
+					from: `getPairStats${from ? `('${from}')` : '()'}`,
+					rowsLimit,
+				},
 				type: QueryTypes.SELECT,
 				raw: false,
-				// logging: console.log,
+				// logging: logger.info,
 				model: StatsPairs,
 				mapToModel: true,
 			}

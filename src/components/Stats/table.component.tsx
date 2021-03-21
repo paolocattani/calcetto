@@ -1,19 +1,18 @@
 import React, { CSSProperties } from 'react';
 import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { Stats } from '../../@common/dto/stats/stats.dto';
 
 interface StatsProps<T> {
 	stats: T;
 }
 
-export default function StatsComponent<T extends Stats>({ stats }: StatsProps<T>) {
+const StatsComponent: React.FC<StatsProps> = (stats) => {
 	const { t } = useTranslation(['stats']);
 	const stage1 = t('stats:stage1');
 	const stage2 = t('stats:stage2');
 	const tot = t('stats:tot');
 
-	//console.log('StatsPair : ', stats);
+	//logger.info('StatsPair : ', stats);
 	const darkBackGround: CSSProperties = {
 		backgroundColor: 'var(--default-black)',
 		color: 'whitesmoke',
@@ -66,4 +65,5 @@ export default function StatsComponent<T extends Stats>({ stats }: StatsProps<T>
 			</tbody>
 		</Table>
 	);
-}
+};
+export default StatsComponent;

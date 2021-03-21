@@ -1,6 +1,6 @@
-import {AbstractPage, headers} from './abstract.page';
-import {AuthAction} from "../../src/redux/actions";
-import {DeleteTournamentRequest, OmitHistory, SaveTournamentRequest} from "../../src/@common/models";
+import { AbstractPage, headers } from './abstract.page';
+import { AuthAction } from '../../src/redux/actions';
+import { DeleteTournamentRequest, OmitHistory, SaveTournamentRequest } from '@common/models';
 
 export class Tournament extends AbstractPage {
 	// Override
@@ -14,16 +14,16 @@ export class Tournament extends AbstractPage {
 	}
 
 	// New Tournament
-	getNewName(){
+	getNewName() {
 		return cy.get('[data-cy=new-name]');
 	}
-	getNewDate(){
+	getNewDate() {
 		return cy.get('[data-cy=new-date]');
 	}
-	getNewVisibility(){
+	getNewVisibility() {
 		return cy.get('[data-cy=new-visibility]');
 	}
-	getNewSubmit(){
+	getNewSubmit() {
 		return cy.get('[data-cy=new-submit]');
 	}
 	getNewTournamentButton() {
@@ -31,34 +31,34 @@ export class Tournament extends AbstractPage {
 	}
 
 	// Selection
-	getSelect(){
-		return cy.get("#tournamentSelect");
+	getSelect() {
+		return cy.get('#tournamentSelect');
 	}
-	getSelectSubmit(){
+	getSelectSubmit() {
 		return cy.get('[data-cy=select-submit]');
-	}	getSelectTournamentButton() {
+	}
+	getSelectTournamentButton() {
 		return cy.get('[data-cy=select-tournament]');
 	}
 
 	// Force
-	forceNewTournament(body: OmitHistory<SaveTournamentRequest> ){
+	forceNewTournament(body: OmitHistory<SaveTournamentRequest>) {
 		cy.request({
 			...headers,
 			method: 'POST',
 			url: 'http://localhost:5001/api/v2/tournament/new',
-			body
+			body,
 		}).then((resp) => {
 			cy.visit('/');
 		});
 	}
 
-	forceDeleteTournament(){
+	forceDeleteTournament() {
 		cy.request({
 			...headers,
 			method: 'DELETE',
 			url: 'http://localhost:5001/api/v2/tournament/test/delete',
-			body:{secret: Cypress.env('secret')}
+			body: { secret: Cypress.env('secret') },
 		});
 	}
-
 }

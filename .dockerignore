@@ -1,5 +1,6 @@
 # node modules
 node_modules
+server/node_modules
 **/node_modules
 
 # git
@@ -16,10 +17,13 @@ node_modules
 # Folder
 cypress
 hooks
+cli
 cypress
 sql
 analysis
 build
+server/build
+server/test
 coverage*
 
 # Config file
@@ -36,3 +40,4 @@ swagger-config.yaml
 temp.txt
 
 *.gz
+*.log

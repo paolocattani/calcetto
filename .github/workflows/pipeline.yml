@@ -38,19 +38,15 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      # Install dependencies
-      - name: Install dependencies
-        run: |
-          npm ci
-      # Add exec
-      - name: Build client
+      # Add exect
+      - name: Add exec to cli
         run: chmod +x cli/cli.sh
       # Build client
       - name: Build client
-        run: cli/cli.sh build
+        run: ./cli/cli.sh build --frontend --analyze
       # Build server
       - name: Build server
-        run: npm run prod:build:server
+        run: ./cli/cli.sh build --backend
       # Save build for later
       - name: Upload build
         uses: actions/upload-artifact@v2.2.2

@@ -1,7 +1,7 @@
-import { PlayerRole } from '../dto';
-import { AuthenticationResponse, RootState } from '.';
+import { PlayerRole, TournamentDTO } from '../dto';
+import { AuthenticationResponse, Events, RootState } from '.';
 import { HTTPStatusCode } from './HttpStatusCode';
-import { TOptions } from 'i18next';
+import { TOptions, TFunctionKeys } from 'i18next';
 
 export enum SessionStatus {
 	//
@@ -20,6 +20,18 @@ export enum SessionStatus {
 	STAGE2_DELETE = 'stage2_delete',
 }
 
+export interface EventMessage {
+	event: Events;
+	type: UserMessageType;
+	label: I18nLabel;
+	data?: {
+		tournament: TournamentDTO;
+	};
+}
+
+/**
+ * @deprecated
+ */
 export interface Message {
 	status: SessionStatus;
 	data?: {
@@ -31,7 +43,7 @@ export interface Message {
 }
 
 export type I18nLabel = {
-	label: string;
+	key: TFunctionKeys | TFunctionKeys[];
 	options?: TOptions<{ [key: string]: any }> | string;
 };
 
@@ -41,7 +53,7 @@ export enum Environment {
 	production = 'production',
 }
 
-export interface GenericReponse {
+export interface GenericResponse {
 	code: HTTPStatusCode;
 	message: string;
 	userMessage: UserMessage;
@@ -55,22 +67,19 @@ export enum UserMessageType {
 
 export interface UserMessage {
 	type: UserMessageType;
-	label: string;
-	options?: TOptions<{ [key: string]: any }> | string;
+	label: I18nLabel;
 }
 
 export type OmitHistory<T> = Omit<T, 'history'>;
-// FIXME:
-export type OmitGeneric<T extends GenericReponse> = Omit<T, 'code' | 'message' | 'userMessage'>;
-// FIXME: UNUSED
-export type PickGeneric<T extends GenericReponse> = Pick<T, 'code' | 'message' | 'userMessage'>;
+export type OmitGeneric<T extends GenericResponse> = Omit<T, 'code' | 'message' | 'userMessage'>;
+export type PickGeneric<T extends GenericResponse> = Pick<T, 'code' | 'message' | 'userMessage'>;
 
-export const UnexpectedServerError: GenericReponse = {
+export const UnexpectedServerError: GenericResponse = {
 	code: HTTPStatusCode.InternalServerError,
 	message: 'Unexpected Server Error',
 	userMessage: {
 		type: UserMessageType.Danger,
-		label: 'common:server.unexpected',
+		label: { key: 'common:server.unexpected' },
 	},
 };
 
@@ -80,7 +89,7 @@ export const Unauthorized: AuthenticationResponse = {
 	message: 'Unauthorized!',
 	userMessage: {
 		type: UserMessageType.Danger,
-		label: 'auth:expired',
+		label: { key: 'auth:expired' },
 	},
 };
 
@@ -106,6 +115,9 @@ export const initialState: RootState = {
 		isAuthenticated: false,
 		isAdmin: false,
 		isLoading: false,
+	},
+	eventState: {
+		connected: false,
 	},
 	stage1State: {
 		toogleRefresh: false,

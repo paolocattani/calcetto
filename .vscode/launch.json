@@ -5,17 +5,24 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "node",
+            "name": "Debug Server",
             "request": "launch",
-            "name": "Launch Program",
-            "skipFiles": [
-                "<node_internals>/**"
+            "type": "node",
+            "runtimeArgs": [
+              "-r",
+              "${workspaceFolder}/server/node_modules/ts-node/register",
+              "-r",
+              "${workspaceFolder}/server/node_modules/tsconfig-paths/register"
             ],
-            "program": "${workspaceFolder}/scripts/start.js",
-            "outFiles": [
-                "${workspaceFolder}/**/*.js"
-            ]
-        },
+            "args": ["${workspaceFolder}/server/server.ts"],
+            "cwd": "${workspaceFolder}",
+            "protocol": "inspector",
+            "env": {
+              "NODE_ENV": "development",
+              "TS_NODE_PROJECT": "${workspaceFolder}/server/tsconfig.json"
+            },
+            "outFiles": ["${workspaceFolder}/server/lib/**/*.js"]
+          },
         {
             "name": "Chrome",
             "type": "chrome",

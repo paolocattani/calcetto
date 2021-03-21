@@ -19,6 +19,7 @@ import { getEmptyPlayer } from '../../@common/models';
 import Toolsbar from './toolsbar.component';
 import { StatsPlayerMap } from 'src/@common/models/stats.model';
 import expandManager from './expand.manager';
+import logger from '../../@common/utils/logger.utils';
 
 interface PlayerProps {}
 const PlayerTable: React.FC<PlayerProps> = () => {
@@ -62,12 +63,12 @@ const PlayerTable: React.FC<PlayerProps> = () => {
 		style: { backgroundColor: '#c8e6c9' },
 		hideSelectAll: !playersList.find((e) => e.editable),
 		hideSelectColumn: !playersList.find((e) => e.editable) || !isAdmin,
-		selectColumnStyle: ({ checked, disabled, rowIndex, rowKey }) =>
+		selectColumnStyle: ({ /*checked, disabled,*/ rowIndex /*rowKey*/ }) =>
 			playersList[rowIndex].editable ? {} : { backgroundColor: '#dc3545' },
 	};
 
 	const addEdit = (player: PlayerDTO = getEmptyPlayer()) => {
-		console.log('addEdit : ', player);
+		logger.info('addEdit : ', player);
 		dispatch(PlayerAction.setPlayer(player));
 		currentHistory.push('/player/edit');
 	};

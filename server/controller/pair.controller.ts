@@ -1,10 +1,10 @@
 import { Router, Request, Response } from 'express';
 import chalk from 'chalk';
-import { logger } from '../core/logger';
-import { getDbConnection } from '../database/config/connection';
+import { logger } from '@core/logger';
+import { getDbConnection } from '../database/config/sequelize/connection';
 // Models
 import { Pair } from '../database/models';
-import { asyncMiddleware, withAuth, withAdminRights, doNotCacheThis } from '../core/middleware';
+import { asyncMiddleware, withAuth, withAdminRights, doNotCacheThis } from '../middleware';
 import { AppRequest } from './index';
 import { listInTournament, findAlias, rowToModel, parseBodyToPair } from '../manager/pair.manager';
 import { missingParameters, serverError, success } from './common.response';
@@ -16,7 +16,7 @@ import {
 	SavePairResponse,
 	SelectPairsRequest,
 	SelectPairsResponse,
-} from '../../src/@common/models';
+} from '@common/models';
 
 const router = Router();
 
@@ -34,7 +34,7 @@ router.get(
 			const tId = parseInt(query.tId as string);
 			logger.info(`Looking for pairs in tournament ${chalk.greenBright(tId.toString())}`);
 			const pairsList = await listInTournament(tId, user!);
-			return success<FetchPairsResponse>(res, { label: 'pair:loaded' }, { pairsList });
+			return success<FetchPairsResponse>(res, { key: 'pair:loaded' }, { pairsList });
 		} catch (err) {
 			return serverError('GET pair/list error : ', err, res);
 		}
@@ -57,7 +57,7 @@ router.get(
 				parseInt((player1Id as unknown) as string),
 				parseInt((player2Id as unknown) as string)
 			);
-			return success<FindAliasResponse>(res, { label: 'pair:loaded' }, { alias });
+			return success<FindAliasResponse>(res, { key: 'pair:loaded' }, { alias });
 		} catch (err) {
 			return serverError('GET pair/alias error : ', err, res);
 		}
@@ -95,7 +95,7 @@ router.put(
 		// FIXME:
 		return success<SelectPairsResponse>(
 			res,
-			{ label: stage1Rows.length > 1 ? 'pair:selected_2' : 'pair:selected_1' },
+			{ key: stage1Rows.length > 1 ? 'pair:selected_2' : 'pair:selected_1' },
 			{ stage1Rows, stage1Name }
 		);
 	})
@@ -119,7 +119,7 @@ router.post(
 				pair = await Pair.create(dto);
 				logger.info(`created => ${pair.toString()}`);
 			}
-			return success<SavePairResponse>(res, { label: 'pair:saved' }, { pair: rowToModel(pair, pair.id) });
+			return success<SavePairResponse>(res, { key: 'pair:saved' }, { pair: rowToModel(pair, pair.id) });
 		} catch (err) {
 			return serverError('POST pair/ error : ', err, res);
 		}
@@ -140,7 +140,7 @@ router.delete(
 			await Pair.destroy({ where: { id: request.pairsList.map((e) => e.id!) } });
 			return success(
 				res,
-				{ label: request.pairsList.length > 1 ? 'pair:deleted_2' : 'pair:deleted_1' },
+				{ key: request.pairsList.length > 1 ? 'pair:deleted_2' : 'pair:deleted_1' },
 				{
 					pairsList: request.pairsList,
 				}

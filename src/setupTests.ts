@@ -3,6 +3,6 @@ import '@testing-library/user-event';
 
 import { enableFetchMocks } from 'jest-fetch-mock';
 
-export default () => {
-  enableFetchMocks();
+export default (): void => {
+	enableFetchMocks();
 };

@@ -13,6 +13,7 @@ import { LoadingModal, YesNoModal, YesNoModalProps } from '../core/generic/Commo
 import { cellEditProps, columns } from './editor';
 // Style
 import './style.css';
+import commonStyle from '../../common.module.css';
 // Service
 import { fetchPlayers } from '../../redux/services/player.service';
 import { deleteStage1 as deleteStage1Api } from '../../redux/services/stage1.service';
@@ -39,10 +40,12 @@ import {
 import Toolsbar from './toolsbar.component';
 import expandManager from './expand.manager';
 import { StatsPairMap } from '../../@common/models/stats.model';
+import { EventAction } from 'src/redux/actions/event.action';
+import logger from '../../@common/utils/logger.utils';
 
 const hideAskUser = {
 	message: '',
-	onClick: () => console.log(''),
+	onClick: () => logger.info(''),
 	show: false,
 	title: '',
 };
@@ -158,10 +161,11 @@ const PairsTable: React.FC<PairTableProps> = () => {
 				dispatch(
 					TournamentAction.update.request({
 						tournament: { ...tournament, progress: TournamentProgress.PairsSelection },
+						fromProgress: tournament.progress,
 					})
 				);
 			}
-			showSuccessMessage(t('pair:success.delete'));
+			showSuccessMessage(t('stage1:deleted'));
 			setAskUser(hideAskUser);
 		} catch (error) {
 			showErrorMessage(t('pair:error.8'));
@@ -213,7 +217,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 		const newRowsElement = await Promise.all(
 			data.rows.map<Promise<PairDTO>>(async (rowElement) => {
 				if (rowElement.id === rowIndex) {
-					let row = rowElement;
+					const row = rowElement;
 					if (columnIndex === 1) {
 						if (selectedElement.id && row.player2 && row.player2.id === selectedElement.id) {
 							// Devo salvare l'elemnto che sto per sostituire
@@ -242,7 +246,9 @@ const PairsTable: React.FC<PairTableProps> = () => {
 						row.alias = result.code === HTTPStatusCode.OK && result.alias ? result.alias : '';
 					}
 					// update Db. Non aspetto la risposta...
-					updatePair({ pair: row });
+					if (row.player1 && row.player2) {
+						updatePair({ pair: row });
+					}
 					return row;
 				} else return rowElement;
 			})
@@ -282,7 +288,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 		setIsLoading({ state: true, message: t(LABEL_COMMON_LOADING) });
 		const names = 'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('');
 		let current = 0;
-		let newRows: PairDTO[] = data.rows.map((row) => {
+		const newRows: PairDTO[] = data.rows.map((row) => {
 			if (current === stage1Number) current = 0;
 			row.stage1Name = names[current];
 			current++;
@@ -330,13 +336,13 @@ const PairsTable: React.FC<PairTableProps> = () => {
 
 		// Controllo che non ci siano gironi con meno di 1 coppia ( meglio spostare 3 )
 		const MIN_PAIR_PER_STAGE = 3;
-		let invalidStage = [];
+		const invalidStage = [];
 		const pairsInStage = data.rows.reduce((allNames: { [x: string]: number }, row: { stage1Name: string }) => {
 			if (row.stage1Name in allNames) allNames[row.stage1Name]++;
 			else allNames[row.stage1Name] = 1;
 			return allNames;
 		}, {});
-		for (let stageName in pairsInStage) {
+		for (const stageName in pairsInStage) {
 			if (pairsInStage[stageName] <= MIN_PAIR_PER_STAGE) invalidStage.push(stageName);
 		}
 		if (invalidStage.length > 0) {
@@ -350,44 +356,50 @@ const PairsTable: React.FC<PairTableProps> = () => {
 		// allora aggiorno lo stato del torneo
 		if (isAdmin && tournament.progress < TournamentProgress.Stage1) {
 			tournament.progress = TournamentProgress.Stage1;
-			dispatch(TournamentAction.update.request({ tournament }));
+			dispatch(TournamentAction.update.request({ tournament, fromProgress: TournamentProgress.PairsSelection }));
 		}
 		// Go to Stage1
 		dispatch(PairAction.fetch.request({ tId: tournament.id, history: currentHistory }));
 	};
 
 	/************************************************
-	 *  Just go back
+	 * Just go back :
+	 * - Leave tournament room
 	 *************************************************/
 	function goBack() {
+		dispatch(EventAction.leaveTournament.request({ tournament }));
 		currentHistory.push('/');
 	}
 
 	/************************************************
 	 *  Table options
 	 *************************************************/
+
 	const selectRow: SelectRowProps<PairDTO> = {
 		mode: 'checkbox',
 		onSelect: handleSelect,
 		onSelectAll: (isSelected: boolean, rows: PairDTO[]) => setSelectedRows(isSelected ? rows : []),
 		style: { backgroundColor: '#c8e6c9' },
-		hideSelectColumn: !isAdmin || tournament.progress > TournamentProgress.PairsSelection,
+		hideSelectColumn: !isAdmin || (tournament && tournament.progress > TournamentProgress.PairsSelection),
 	};
 
-	const availableRows = Math.floor(
-		Math.floor((data.players.length - 1) / 2) -
-			(data.rows.length === 0
-				? 0
-				: data.rows.reduce((accumulator: number, e) => {
-						if ((!e.player1 && !e.player2) || (!e.player1?.id && !e.player2?.id)) return accumulator + 1;
-						if (!e.player1 || !e.player1.id || !e.player2 || !e.player2.id) return accumulator + 0.5;
-						return accumulator;
-				  }, 0))
-	);
+	const availableRows =
+		data.players && data.rows
+			? Math.floor(
+					Math.floor((data.players.length - 1) / 2) -
+						(data.rows.length === 0
+							? 0
+							: data.rows.reduce((accumulator: number, e) => {
+									if ((!e.player1 && !e.player2) || (!e.player1?.id && !e.player2?.id)) return accumulator + 1;
+									if (!e.player1 || !e.player1.id || !e.player2 || !e.player2.id) return accumulator + 0.5;
+									return accumulator;
+							  }, 0))
+			  )
+			: 0;
 
 	const deleteDisabled = selectedRows.length <= 0 || tournament.progress > TournamentProgress.PairsSelection;
 
-	//console.log('render table : ', players, pairs);
+	//logger.info('render table : ', players, pairs);
 
 	const labels = {
 		player1: t('pair:field.player1'),
@@ -398,8 +410,13 @@ const PairsTable: React.FC<PairTableProps> = () => {
 		paid2: t('pair:field.paid2'),
 	};
 
-	return (
-		<div>
+	if (!tournament) {
+		currentHistory.push('/');
+		return <LoadingModal show={isLoading.state} message={isLoading.message} />;
+	}
+
+	return tournament && data.players && data.rows ? (
+		<div className={commonStyle.defaultMaginBottom}>
 			<YesNoModal message={askUser.message} title={askUser.title} onClick={askUser.onClick} show={askUser.show} />
 			<LoadingModal show={isLoading.state} message={isLoading.message} />
 			<Col>
@@ -448,6 +465,8 @@ const PairsTable: React.FC<PairTableProps> = () => {
 				</Row>
 			</Col>
 		</div>
+	) : (
+		<LoadingModal show={isLoading.state} message={isLoading.message} />
 	);
 };
 

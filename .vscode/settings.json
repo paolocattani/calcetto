@@ -1,13 +1,14 @@
 {
   //"files.autoSave": "onFocusChange",
   "editor.formatOnSave": true,
-  "editor.formatOnType": true,
+  // "editor.formatOnType": true,
   "editor.codeActionsOnSave": { "source.fixAll.eslint": true },
-  "eslint.debug": true,
-  "files.trimTrailingWhitespace": true,
+  // "eslint.debug": true,
+  // "files.trimTrailingWhitespace": true,
   //"eslint.workingDirectories": [{ "mode": "auto" }]
   "eslint.workingDirectories": ["./src", "./server"],
   "eslint.lintTask.enable": true,
   "eslint.validate": ["html", "javascript", "typescript"],
-  "files.encoding": "utf8"
+  "files.encoding": "utf8",
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }

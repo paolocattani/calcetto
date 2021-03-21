@@ -6,4 +6,4 @@ import './style.css';
 import 'swagger-ui-react/swagger-ui.css';
 
 // test : url="https://petstore.swagger.io/v2/swagger.json"
-export default () => <SwaggerUI spec={definitions} />;
+export default (): JSX.Element => <SwaggerUI spec={definitions} />;

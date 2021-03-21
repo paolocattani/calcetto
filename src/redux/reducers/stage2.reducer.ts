@@ -13,7 +13,7 @@ export const Stage2Reducer = createReducer<Stage2State, Action>(initialStage2Sta
 		isLoading: true,
 	}))
 	// Failure
-	.handleAction([Stage2Action.fetchStage2.failure], state => ({
+	.handleAction([Stage2Action.fetchStage2.failure], (state) => ({
 		...state,
 		isLoading: false,
 	}))

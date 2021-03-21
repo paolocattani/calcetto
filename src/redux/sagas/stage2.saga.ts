@@ -11,14 +11,15 @@ import {
 	UpdateStage2CellResponse,
 } from '../../@common/models';
 import { TournamentSelector } from '../selectors';
-import { TournamentProgress } from '../../@common/dto';
+import { TournamentDTO, TournamentProgress } from '../../@common/dto';
 import { entityLifeCycle } from './utils';
+import { EventAction } from '../actions/event.action';
 
 function* deleteStage2Saga({ payload }: ReturnType<typeof Stage2Action.delete.request>) {
+	const tournament: TournamentDTO = yield select(TournamentSelector.getTournament);
 	const onSuccess = function* () {
-		const tournament = yield select(TournamentSelector.getTournament);
 		tournament.progress = TournamentProgress.Stage1;
-		yield put(TournamentAction.update.request({ tournament }));
+		yield put(TournamentAction.update.request({ tournament, fromProgress: TournamentProgress.Stage2 }));
 	};
 	yield* entityLifeCycle<DeleteStage2Request, DeleteStage2Response, Stage2Error>(
 		Stage2Action.delete,
@@ -37,10 +38,14 @@ function* fetchStage2Saga({ payload }: ReturnType<typeof Stage2Action.fetchStage
 }
 
 function* updateCellsSaga({ payload }: ReturnType<typeof Stage2Action.updateCell.request>) {
+	const onSuccess = function* (/*response: UpdateStage2CellResponse*/) {
+		yield put(EventAction.updateStage2.request({ tournament: payload.tournament }));
+	};
 	yield* entityLifeCycle<UpdateStage2CellRequest, UpdateStage2CellResponse, Stage2Error>(
 		Stage2Action.updateCell,
 		updateCells,
-		payload
+		payload,
+		onSuccess
 	);
 }
 

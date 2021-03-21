@@ -1,7 +1,8 @@
 import { PlayerDTO, TournamentDTO, TournamentProgress } from '../../@common/dto';
 import React, { CSSProperties } from 'react';
 
-export const getLabel = (player: PlayerDTO) => (player.alias ? player.alias : `${player.name} ${player.surname}`);
+export const getLabel = (player: PlayerDTO): string =>
+	player.alias ? player.alias : `${player.name} ${player.surname}`;
 
 export function getEmptyTournament(name: string): TournamentDTO {
 	return {
@@ -20,7 +21,10 @@ export function getEmptyTournament(name: string): TournamentDTO {
 // https://react-select.com/components#components
 // Indicator Separator
 
-export const IndicatorSeparator = ({ innerProps }: any) => <span style={indicatorSeparatorStyle} {...innerProps} />;
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const IndicatorSeparator = ({ innerProps }: any): JSX.Element => (
+	<span style={indicatorSeparatorStyle} {...innerProps} />
+);
 export const indicatorSeparatorStyle: CSSProperties = {
 	alignSelf: 'stretch',
 	backgroundColor: 'green',

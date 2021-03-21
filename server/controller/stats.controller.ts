@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express';
+import { Request, Response, Router } from 'express';
 import {
 	StatsPairMap,
 	StatsPairFromPlayerResponse,
@@ -12,15 +12,15 @@ import {
 	StatsBestPairsRequest,
 	StatsBestPairsResponse,
 	StatsSummaryResponse,
-} from '../../src/@common/models/stats.model';
-import { formatDate } from '../../src/@common/utils/date.utils';
-import { withAuth, doNotCacheThis, asyncMiddleware } from '../core/middleware';
+} from '@common/models/stats.model';
+import { formatDate } from '@common/utils/date.utils';
+import { withAuth, doNotCacheThis, asyncMiddleware } from '../middleware';
 import { findById } from '../manager/pair.manager';
 
 import { getBestPairs, getBestPlayers, getStatsByPairs, getStatsByPlayer } from '../manager/stats.manager';
 import { failure, missingParameters, serverError, success } from './common.response';
-
 const router = Router();
+
 const STATS_LOADED = 'stats:loaded';
 const STATS_ERROR = 'stats:error';
 
@@ -46,13 +46,13 @@ router.get(
 			return pairEver && playerEver
 				? success<StatsSummaryResponse>(
 						res,
-						{ label: STATS_LOADED },
+						{ key: STATS_LOADED },
 						{
 							pairs: { ever: pairEver, month: pairMonth, week: pairWeek },
 							players: { ever: playerEver, month: playerMonth, week: playerWeek },
 						}
 				  )
-				: failure<StatsSummaryResponse>(res, { label: STATS_ERROR });
+				: failure<StatsSummaryResponse>(res, { key: STATS_ERROR });
 		} catch (error) {
 			return serverError('GET stats/pair/best error ! : ', error, res);
 		}
@@ -68,8 +68,8 @@ router.get(
 			const { from }: StatsBestPlayersRequest = req.query;
 			const stats = await getBestPlayers(from);
 			return stats
-				? success<StatsBestPlayersResponse>(res, { label: STATS_LOADED }, { stats })
-				: failure<StatsBestPlayersResponse>(res, { label: STATS_ERROR });
+				? success<StatsBestPlayersResponse>(res, { key: STATS_LOADED }, { stats })
+				: failure<StatsBestPlayersResponse>(res, { key: STATS_ERROR });
 		} catch (error) {
 			return serverError('GET stats/player/best error ! : ', error, res);
 		}
@@ -84,8 +84,8 @@ router.get(
 			const { from }: StatsBestPairsRequest = req.query;
 			const stats = await getBestPairs(from);
 			return stats
-				? success<StatsBestPairsResponse>(res, { label: STATS_LOADED }, { stats })
-				: failure<StatsBestPairsResponse>(res, { label: STATS_ERROR });
+				? success<StatsBestPairsResponse>(res, { key: STATS_LOADED }, { stats })
+				: failure<StatsBestPairsResponse>(res, { key: STATS_ERROR });
 		} catch (error) {
 			return serverError('GET stats/pair/best error ! : ', error, res);
 		}
@@ -108,7 +108,7 @@ router.post(
 					stats[`${playerId}`] = statsPplayer;
 				}
 			}
-			return success<StatsPlayerResponse>(res, { label: STATS_LOADED }, { stats });
+			return success<StatsPlayerResponse>(res, { key: STATS_LOADED }, { stats });
 		} catch (error) {
 			return serverError('POST stats/player error ! : ', error, res);
 		}
@@ -135,7 +135,7 @@ router.post(
 					}
 				}
 			}
-			return success<StatsPairResponse>(res, { label: STATS_LOADED }, { stats });
+			return success<StatsPairResponse>(res, { key: STATS_LOADED }, { stats });
 		} catch (error) {
 			return serverError('POST stats/pair error ! : ', error, res);
 		}
@@ -152,12 +152,12 @@ router.get(
 			if (!player1IdString || player2IdString) {
 				return missingParameters(res);
 			}
-			let player1Id: number = parseInt(player1IdString as string);
-			let player2Id: number = parseInt(player2IdString as string);
+			const player1Id: number = parseInt(player1IdString as string);
+			const player2Id: number = parseInt(player2IdString as string);
 			const stats = await getStatsByPairs(player1Id, player2Id);
 			return stats
-				? success<StatsPairFromPlayerResponse>(res, { label: STATS_LOADED }, { stats })
-				: failure<StatsPairFromPlayerResponse>(res, { label: STATS_ERROR });
+				? success<StatsPairFromPlayerResponse>(res, { key: STATS_LOADED }, { stats })
+				: failure<StatsPairFromPlayerResponse>(res, { key: STATS_ERROR });
 		} catch (error) {
 			return serverError('GET stats/pair error ! : ', error, res);
 		}

@@ -1,5 +1,5 @@
+// Express
 import { Application as ExpressApplication, Response, Request, Router, NextFunction } from 'express';
-
 // Controllers
 import playerRouter from './player.controller';
 import pairRouter from './pair.controller';
@@ -8,11 +8,11 @@ import stage1Router from './stage1.controller';
 import stage2Router from './stage2.controller';
 import authRouter from './auth/auth.controller';
 import statsRouter from './stats.controller';
-// SSE
-import { sessionControl } from '../events/events';
-import { HTTPStatusCode } from '../../src/@common/models/HttpStatusCode';
-import { controllerLogger, withAuth } from '../core/middleware';
-import { UserDTO } from '../../src/@common/dto';
+// mddleware
+import { controllerLogger } from '../middleware';
+// DTO
+import { HTTPStatusCode } from '@common/models/HttpStatusCode';
+import { UserDTO } from '@common/dto';
 
 export interface AppRequest extends Request {
 	user?: UserDTO;
@@ -44,9 +44,6 @@ export default (application: ExpressApplication): void => {
 		);
 	});
 
-	// SSE
-	application.get('/sse/v1/session', withAuth, sessionControl);
-
 	// Check if server is alive
 	application.get('/status', (req: Request, res: Response) =>
 		res
@@ -57,6 +54,7 @@ export default (application: ExpressApplication): void => {
 
 	// FIXME: Coverage
 	application.get('/__coverage__', (req: Request, res: Response) =>
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		res.json({ coverage: global.__coverage__ || null })
 	);

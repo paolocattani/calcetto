@@ -1,4 +1,3 @@
-import { Stage1Row } from '../../@common/dto';
 import { createAsyncAction, createAction } from 'typesafe-actions';
 import {
 	FetchStage1Response,
@@ -38,8 +37,8 @@ export const Stage1Action = {
 		UpdatePlacementResponse,
 		Stage1Error
 	>(),
-	reloadFromServer: createAction(...defaultParam(actionName, 'Stage1 Watcher'))<{}>(),
-	resetPairs: createAction(...defaultParam(actionName, 'Stage1 Reset Pairs'))<{}>(),
-	reset: createAction(...defaultParam(actionName, 'Stage1 Reset'))<{}>(),
+	reloadFromServer: createAction(...defaultParam(actionName, 'Toogle Stage1 Refresh'))<Record<string, never>>(),
+	resetPairs: createAction(...defaultParam(actionName, 'Stage1 Reset Pairs'))<Record<string, never>>(),
+	reset: createAction(...defaultParam(actionName, 'Stage1 Reset'))<Record<string, never>>(),
 	purge: createAction(PURGE_STORE_ACTION)<PurgeResponse>(),
 };

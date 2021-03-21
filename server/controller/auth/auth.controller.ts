@@ -1,10 +1,9 @@
 // Core
-import '../../core/env';
-import { logger } from '../../core/logger';
-import { withAuth, asyncMiddleware, controllerLogger, withTestAuth } from '../../core/middleware';
+import { logger } from '@core/logger';
+import { withAuth, asyncMiddleware, withTestAuth, limitRequest, consumeRequest } from '../../middleware';
 // Types
 import { AppRequest } from '../index';
-import { Router, Request, Response, NextFunction } from 'express';
+import { Request, Response, Router } from 'express';
 // Auth Manager
 import {
 	convertEntityToDTO,
@@ -18,7 +17,7 @@ import {
 // Models
 import { User } from '../../database/models';
 // Common Responses
-import { missingParameters, success, failure, entityNotFound, serverError } from '../common.response';
+import { success, failure, entityNotFound, serverError, genericError } from '../common.response';
 // @Commmon
 import {
 	AuthenticationResponse,
@@ -29,14 +28,26 @@ import {
 	UpdateUserRequest,
 	OmitGeneric,
 	OmitHistory,
-	UnsubscribeResponse,
-} from '../../../src/@common/models';
-import { HTTPStatusCode } from '../../../src/@common/models/HttpStatusCode';
-import { addUserCookies, removeUserCookies } from './cookies.utils';
+} from '@common/models';
+import { HTTPStatusCode } from '@common/models/HttpStatusCode';
+import { setSession, removeSession } from './session.utils';
 import { comparePasswords } from './auth.utils';
-import { unsubscribe } from '../../events/events';
 
+const AUTH_WELCOME = 'auth:welcome';
+const GENERIC_ERROR = 'auth:error.generic';
+const WRONG_CREDENTIAL = 'auth:server.error.wrong_credential';
 const router = Router();
+
+/* FIXME:
+router.get('/csrf', (req: Request, res: Response, next: NextFunction) => {
+	const token = req.csrfToken();
+	req.session.csrfSecret = token;
+	res.set('xsrf-token', token);
+	logger.info(`New csrf token ( ${token} for ${chalk.redBright(req.ip)}) !`);
+	return success<CSRFResponse>(res, { key: '' }, { token });
+});
+*/
+
 const registrationController = asyncMiddleware(async (req: Request, res: Response) => {
 	logger.info('/register start ');
 	const registrationInfo = req.body as OmitHistory<RegistrationRequest>;
@@ -45,34 +56,22 @@ const registrationController = asyncMiddleware(async (req: Request, res: Respons
 		// bypassati quelli a FE.
 		const errors = isValidRegister(registrationInfo);
 		if (errors.length !== 0) {
-			return failure(
-				res,
-				{ label: 'auth:error.generic' },
-				'Registration data is not valid',
-				HTTPStatusCode.BadRequest,
-				{ errors }
-			);
+			consumeRequest(req);
+			return genericError(res, { errors });
 		}
 		const model: User = parseBody(registrationInfo);
 		const user = await findUserByEmailOrUsername(model.username, model.email);
 		if (user) {
-			return failure(
-				res,
-				{ label: 'auth:server.error.already_exists' },
-				'Email or Username alrealdy exists.',
-				HTTPStatusCode.BadRequest,
-				{
-					errors: [{ label: 'auth:server.error.already_exists' }],
-				}
-			);
+			consumeRequest(req);
+			return genericError(res, { errors: [{ key: GENERIC_ERROR }] });
 		}
 		const record = await registerUser(model, registrationInfo.playerRole);
 		if (record) {
-			addUserCookies(record, res);
+			setSession(record, req);
 			logger.info('/register end ');
 			return success<AuthenticationResponse>(
 				res,
-				{ label: 'auth:welcome', options: { username: record.name } },
+				{ key: AUTH_WELCOME, options: { username: record.name } },
 				{ user: record }
 			);
 		} else {
@@ -87,25 +86,14 @@ const registrationController = asyncMiddleware(async (req: Request, res: Respons
 });
 
 const wrongCredentials = (res: Response) =>
-	failure(res, { label: 'auth:server.error.wrong_credential' }, 'Wrong credentials', HTTPStatusCode.Unauthorized);
-
-router.use('/', (req: Request, res: Response, next: NextFunction) =>
-	controllerLogger(req, next, 'Auth Controller', '/api/v2/auth')
-);
+	failure(res, { key: WRONG_CREDENTIAL }, 'Wrong credentials', HTTPStatusCode.Unauthorized);
 
 router.get(
 	'/check',
 	withAuth,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		const additional: OmitGeneric<AuthenticationResponse> = { user: req.user };
-		return success(
-			res,
-			{
-				label: 'auth:server.error.wrong_credential',
-				options: { username: req.user!.name },
-			},
-			additional
-		);
+		return success(res, { key: WRONG_CREDENTIAL, options: { username: req.user!.name } }, additional);
 	})
 );
 
@@ -113,33 +101,19 @@ router.get(
 	'/logout',
 	withAuth,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
-		removeUserCookies(res);
-		return success(res, { label: 'auth:logout' });
+		await removeSession(res, req);
+		return success(res, { key: 'auth:logout' });
 	})
 );
 
-router.post('/register', registrationController);
-
-router.put(
-	'/unsubscribe',
-	withAuth,
-	asyncMiddleware(async (req: AppRequest, res: Response) => {
-		try {
-			const { user, uuid } = req;
-			unsubscribe(user!, uuid!);
-			return success<UnsubscribeResponse>(res, { label: '' });
-		} catch (err) {
-			return serverError('PUT tournament/unsubscribe error ! : ', err, res);
-		}
-	})
-);
+router.post('/register', limitRequest, registrationController);
 
 router.put(
 	'/update',
 	withAuth,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		try {
-			let model = parseBody(req.body as OmitHistory<UpdateUserRequest>);
+			const model = parseBody(req.body as OmitHistory<UpdateUserRequest>);
 			logger.info('/update : ', model);
 			const user = await findUserByEmailAndUsername(model.email, model.username);
 			if (!user) {
@@ -147,11 +121,7 @@ router.put(
 			}
 			await user.update(model);
 			// TODO: aggiornare anche il giocare associato con i dati comuni
-			return success<AuthenticationResponse>(
-				res,
-				{ label: 'common:server.updated' },
-				{ user: convertEntityToDTO(user) }
-			);
+			return success<AuthenticationResponse>(res, { key: 'common:server.updated' }, { user: convertEntityToDTO(user) });
 		} catch (error) {
 			return serverError('PUT auth/update error ! : ', error, res);
 		}
@@ -160,9 +130,10 @@ router.put(
 
 router.post(
 	'/login',
+	limitRequest,
 	asyncMiddleware(async (req: Request, res: Response) => {
 		const { username, password } = req.body as OmitHistory<LoginRequest>;
-		return await loginUserController(res, username, password);
+		return await loginUserController(req, res, username, password);
 	})
 );
 
@@ -172,7 +143,7 @@ router.delete(
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		const { password } = req.body as OmitHistory<DeleteUserRequest>;
 		const { email, username } = req.user!;
-		return await deleteUserController(res, username, email, password);
+		return await deleteUserController(req, res, username, email, password);
 	})
 );
 
@@ -184,7 +155,7 @@ router.delete(
 	withTestAuth,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		const { password, email, username } = req.body;
-		return await deleteUserController(res, username, email, password);
+		return await deleteUserController(req, res, username, email, password);
 	})
 );
 
@@ -193,7 +164,7 @@ router.post(
 	withTestAuth,
 	asyncMiddleware(async (req: Request, res: Response) => {
 		const { username, password } = req.body as OmitHistory<LoginRequest>;
-		return await loginUserController(res, username, password);
+		return await loginUserController(req, res, username, password);
 	})
 );
 
@@ -207,7 +178,7 @@ router.get(
 			const userDTO = convertEntityToDTO(user);
 			return success<AuthenticationResponse>(
 				res,
-				{ label: 'auth:welcome', options: { username: userDTO.name } },
+				{ key: AUTH_WELCOME, options: { username: userDTO.name } },
 				{ user: userDTO }
 			);
 		} else {
@@ -216,26 +187,31 @@ router.get(
 	})
 );
 
-const loginUserController = async (res: Response, username: string, password: string) => {
+const loginUserController = async (req: Request, res: Response, username: string, password: string) => {
 	try {
 		logger.info('/login start ');
 		if (!username || !password) {
-			return missingParameters(res);
+			consumeRequest(req);
+			return genericError(res, { errors: [{ key: WRONG_CREDENTIAL }] });
 		}
 		const user = await findUserByEmailOrUsername(username, username);
 		// User not found
 		if (!user) {
-			return entityNotFound(res);
+			consumeRequest(req);
+			return genericError(res, { errors: [{ key: WRONG_CREDENTIAL }] });
+			// Do not expose information return entityNotFound(res);
 		}
 		// Compare passwords
 		if (!(await comparePasswords(user.email, password, user.password))) {
-			return wrongCredentials(res);
+			consumeRequest(req);
+			return genericError(res, { errors: [{ key: WRONG_CREDENTIAL }] });
+			// Do not expose information return wrongCredentials(res);
 		}
 		const userDTO = convertEntityToDTO(user);
-		addUserCookies(userDTO, res);
+		setSession(userDTO, req);
 		return success<AuthenticationResponse>(
 			res,
-			{ label: 'auth:welcome', options: { username: userDTO.name } },
+			{ key: AUTH_WELCOME, options: { username: userDTO.name } },
 			{ user: userDTO }
 		);
 	} catch (error) {
@@ -243,7 +219,7 @@ const loginUserController = async (res: Response, username: string, password: st
 	}
 };
 
-const deleteUserController = async (res: Response, username: string, email: string, password: string) => {
+const deleteUserController = async (req: Request, res: Response, username: string, email: string, password: string) => {
 	try {
 		logger.info('/delete start ');
 		const user = await findUserByEmailAndUsername(email, username);
@@ -255,8 +231,8 @@ const deleteUserController = async (res: Response, username: string, email: stri
 		}
 		await deleteUser(user);
 		logger.info('/delete end ');
-		removeUserCookies(res);
-		return success<DeleteUserResponse>(res, { label: 'auth:server.deleted', options: { username: user.name } });
+		removeSession(res, req);
+		return success<DeleteUserResponse>(res, { key: 'auth:server.deleted', options: { username: user.name } });
 	} catch (error) {
 		return serverError('DELETE auth/delete error ! : ', error, res);
 	}

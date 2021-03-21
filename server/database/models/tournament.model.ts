@@ -11,7 +11,7 @@ import {
 	BelongsTo,
 } from 'sequelize-typescript';
 import { Pair, Stage1, Stage2, User } from '.';
-import { TournamentProgress } from '../../../src/@common/dto';
+import { TournamentProgress } from '@common/dto';
 
 /**
  * Rapprenta un Torneo :
@@ -34,16 +34,9 @@ export default class Tournament extends Model {
 	@Column(DataType.DATE)
 	public date!: Date;
 
-	@Comment('Stato')
+	@Comment('State')
 	@Default(TournamentProgress.New)
-	@Column(
-		DataType.ENUM<TournamentProgress>(
-			TournamentProgress.New,
-			TournamentProgress.PairsSelection,
-			TournamentProgress.Stage1,
-			TournamentProgress.Stage2
-		)
-	)
+	@Column(DataType.ENUM({ values: Object.keys(TournamentProgress) }))
 	public progress!: TournamentProgress;
 
 	@Comment('Visibile ad utenti non loggati')

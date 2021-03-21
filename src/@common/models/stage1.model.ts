@@ -1,5 +1,5 @@
-import { PairDTO, Stage1Row } from '../dto';
-import { GenericReponse } from './common.models';
+import { PairDTO, Stage1Row, TournamentDTO } from '../dto';
+import { GenericResponse } from './common.models';
 
 export interface Stage1State {
 	// Utilizzato per indicare se è necessario ricaricare i dati dal db
@@ -30,6 +30,7 @@ export interface FetchStage1Request {
 }
 export interface UpdateCellRequest {
 	tId: number;
+	tournament: TournamentDTO;
 	stageName: string;
 	score: string;
 	pair1Id: number;
@@ -43,13 +44,13 @@ export interface DeleteStage1Request {
 	tId: number;
 }
 // Response
-export interface FetchStage1Response extends GenericReponse {
+export interface FetchStage1Response extends GenericResponse {
 	stageName: string;
 	pairsList: Array<PairDTO>;
 	rows: Array<Stage1Row>;
 }
-export interface UpdateCellResponse extends GenericReponse {}
-export interface UpdatePlacementResponse extends GenericReponse {}
-export interface DeleteStage1Response extends GenericReponse {}
+export type UpdateCellResponse = GenericResponse
+export type UpdatePlacementResponse = GenericResponse
+export type DeleteStage1Response = GenericResponse
 
-export interface Stage1Error extends GenericReponse {}
+export type Stage1Error = GenericResponse

@@ -12,7 +12,7 @@ import {
 	Scopes,
 } from 'sequelize-typescript';
 import { Pair, User } from '.';
-import { PlayerRole } from '../../../src/@common/dto';
+import { PlayerRole } from '@common/dto';
 
 @Scopes(() => ({
 	withPairs: {
@@ -31,7 +31,7 @@ export default class Player extends Model {
 	public alias!: string;
 
 	@Default(PlayerRole.GoalKeeper)
-	@Column(DataType.ENUM(PlayerRole.GoalKeeper, PlayerRole.Striker, PlayerRole.Master))
+	@Column(DataType.ENUM({ values: Object.keys(PlayerRole) }))
 	public role!: PlayerRole;
 
 	@Column(DataType.STRING)
