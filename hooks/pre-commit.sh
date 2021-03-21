@@ -42,6 +42,7 @@ if [[ "$STAGED_FILES" != "" ]]; then
     if ! $PASS; then
         echo "\033[41mCOMMIT FAILED:\033[0m Your commit contains files that should pass ESLint but do not. Please fix the ESLint errors and try again.\n"
         echo "./node_modules/.bin/eslint . "
+        code $LOG_FILE
         exit 1
     else
         echo "\033[42mCOMMIT SUCCEEDED\033[0m\n"
