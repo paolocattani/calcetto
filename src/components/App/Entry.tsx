@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { LoadingModal } from '../core/generic/Commons';
 
-const Application = () => (
+const Application: React.FC = () => (
 	<Provider store={store}>
 		<PersistGate loading={<LoadingModal show={true} />} persistor={persistor}>
 			<BrowserRouter>
