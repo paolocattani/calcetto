@@ -52,7 +52,7 @@ export const cookiesOption: CookieOptions = {
 	sameSite: 'strict',
 };
 // http://expressjs.com/en/api.html#res.cookie
-export const setSession = (user: UserDTO, { session }: Request, res: Response) => {
+export const setSession = (user: UserDTO, { session }: Request): void => {
 	/*
 	res.cookie(USER_UUID, generateUuid(user), cookiesOption);
 	res.cookie(SESSION_TOKEN, generateToken(user), cookiesOption);
@@ -63,9 +63,9 @@ export const setSession = (user: UserDTO, { session }: Request, res: Response) =
 };
 
 // http://expressjs.com/en/api.html#res.clearCookie
-export const removeSession = async (res: Response, { session }: Request) => {
+export const removeSession = async (res: Response, { session }: Request): Promise<boolean> => {
 	return new Promise((resolve) => {
-		session.destroy((err) => {
+		session.destroy((/*err*/) => {
 			res.clearCookie(SESSION_ID, cookiesOption);
 			logger.info('Session destroyed');
 			resolve(true);

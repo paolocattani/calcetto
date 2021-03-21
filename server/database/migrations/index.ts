@@ -32,7 +32,7 @@ export const markAllAsApplied = async () => {
 	logger.info('Marking all migrations as applied...');
 	try {
 		const pending = await umzug.pending();
-		for (let migration of pending) {
+		for (const migration of pending) {
 			logger.info('Marking : ', migration.name);
 			sequelize.query(`INSERT INTO "SequelizeMeta" ("name") VALUES('${migration.name}')`, {
 				type: QueryTypes.INSERT,

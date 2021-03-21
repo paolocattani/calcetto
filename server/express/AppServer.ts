@@ -18,8 +18,8 @@ import { handleSocket } from '../events/events';
 import { isDevMode, isProductionMode, isTestMode } from '@common/utils/env.utils';
 import { migrationUp } from '../database/migrations';
 
-const defaultName: string = 'ApplicationServer Calcetto';
-const defaultPort: number = Number(isProductionMode() ? process.env.PORT : process.env.SERVER_PORT);
+const defaultName = 'ApplicationServer Calcetto';
+const defaultPort = Number(isProductionMode() ? process.env.PORT : process.env.SERVER_PORT);
 const allowedOrigin = process.env.ORIGIN_WHITE_LIST
 	? process.env.ORIGIN_WHITE_LIST.split(';')
 	: [

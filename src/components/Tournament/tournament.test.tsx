@@ -1,7 +1,6 @@
 import React from 'react';
 import Tournament from './wrapper.component';
-import { render, RenderResult, fireEvent, screen } from '../../test/test-utils';
-import userEvent from '@testing-library/user-event';
+import { render, RenderResult, screen } from '../../test/test-utils';
 import { performAdminLogin, performUserLogin } from 'src/test/commons';
 // import loginResponse from './_mocks_/login_response.json';
 

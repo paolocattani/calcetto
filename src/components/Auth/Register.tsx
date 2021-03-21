@@ -256,9 +256,9 @@ export default withRouter(Register);
 const selectStyles: StylesConfig<PlayerRoleType, false> = {
 	control: (styles) => ({ ...styles, height: '38px' }),
 	input: (styles) => ({ ...styles, height: '38px' }),
-	option: (styles, { data, isDisabled, isFocused, isSelected }) => ({ ...styles, color: 'black' }),
+	option: (styles /*, { data, isDisabled, isFocused, isSelected }*/) => ({ ...styles, color: 'black' }),
 	placeholder: (styles) => ({ ...styles, height: '38px' }),
-	singleValue: (styles, { data }: any) => ({ ...styles, height: '38px' }),
+	singleValue: (styles /*, { data }: any*/) => ({ ...styles, height: '38px' }),
 	clearIndicator: (styles) => ({ ...styles, height: '38px' }),
 	indicatorSeparator: (styles) => ({ ...styles }),
 };

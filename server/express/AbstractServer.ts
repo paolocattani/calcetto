@@ -1,6 +1,7 @@
 /* eslint-disable quotes */
 // Core
-import { logger } from '@core/logger';
+
+import { logger, dbLogger } from '@core/logger';
 import { isProductionMode } from '@common/utils/env.utils';
 import * as http from 'http';
 // Express
@@ -10,7 +11,7 @@ import { createServer } from 'http';
 import compression from 'compression';
 import { json, urlencoded } from 'body-parser';
 import cookieParser from 'cookie-parser';
-import express, { Response, Request, Application as ExpressApplication, NextFunction } from 'express';
+import express, { Request, Application as ExpressApplication } from 'express';
 import session from 'express-session';
 // Redis
 import connectRedis from 'connect-redis'; // Redis adapter for express-session
@@ -192,12 +193,12 @@ export abstract class AbstractServer {
 			logger.info(chalk.greenBright('   Uptime        : '), process.uptime());
 			logger.info(chalk.greenBright('   CPU usage'));
 			const cpu = process.cpuUsage();
-			for (let key in cpu) {
+			for (const key in cpu) {
 				logger.info(`     ${key}    : ${cpu[key as keyof NodeJS.CpuUsage]} `);
 			}
 			logger.info(chalk.greenBright('   Memory usage'));
 			const memory = process.memoryUsage();
-			for (let key in memory) {
+			for (const key in memory) {
 				logger.info(
 					`     ${key}    : ${Math.round((memory[key as keyof NodeJS.MemoryUsage] / 1024 / 1024) * 100) / 100} MB`
 				);

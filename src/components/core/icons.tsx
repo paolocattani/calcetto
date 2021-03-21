@@ -28,7 +28,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt, faSave } from '@fortawesome/free-regular-svg-icons';
 
-export const loadIcons = () => {
+export const loadIcons = (): void => {
 	library.add(
 		// Regular
 		faTrashAlt,

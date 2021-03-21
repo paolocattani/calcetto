@@ -49,8 +49,8 @@ export interface FetchStage1Response extends GenericResponse {
 	pairsList: Array<PairDTO>;
 	rows: Array<Stage1Row>;
 }
-export interface UpdateCellResponse extends GenericResponse {}
-export interface UpdatePlacementResponse extends GenericResponse {}
-export interface DeleteStage1Response extends GenericResponse {}
+export type UpdateCellResponse = GenericResponse
+export type UpdatePlacementResponse = GenericResponse
+export type DeleteStage1Response = GenericResponse
 
-export interface Stage1Error extends GenericResponse {}
+export type Stage1Error = GenericResponse

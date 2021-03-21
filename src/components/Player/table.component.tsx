@@ -63,7 +63,7 @@ const PlayerTable: React.FC<PlayerProps> = () => {
 		style: { backgroundColor: '#c8e6c9' },
 		hideSelectAll: !playersList.find((e) => e.editable),
 		hideSelectColumn: !playersList.find((e) => e.editable) || !isAdmin,
-		selectColumnStyle: ({ checked, disabled, rowIndex, rowKey }) =>
+		selectColumnStyle: ({ /*checked, disabled,*/ rowIndex /*rowKey*/ }) =>
 			playersList[rowIndex].editable ? {} : { backgroundColor: '#dc3545' },
 	};
 

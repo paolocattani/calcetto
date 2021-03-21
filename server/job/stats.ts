@@ -1,4 +1,3 @@
-import { Op } from 'sequelize';
 import { logger } from '@core/logger';
 
 export default async (active: boolean) => {

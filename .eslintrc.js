@@ -1,6 +1,7 @@
 // https://eslint.org/docs/user-guide/configuring
 
 module.exports = {
+	root: true,
 	//
 	// parser :
 	//      Specifies the ESLint parser.
@@ -15,6 +16,7 @@ module.exports = {
 		'plugin:testing-library/react',
 		//'prettier/react'
 		'plugin:sonarjs/recommended',
+		'plugin:@typescript-eslint/recommended',
 	],
 	plugins: ['react', 'react-hooks', 'testing-library'],
 	parserOptions: {
@@ -37,6 +39,7 @@ module.exports = {
 		},
 	},
 	rules: {
+		'@typescript-eslint/no-non-null-assertion': 'off',
 		'react/no-array-index-key': 'warn',
 		'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
 		'react-hooks/rules-of-hooks': 'error',
@@ -54,6 +57,8 @@ module.exports = {
 		'no-cond-assign': ['error', 'always'],
 		// disable rules from base configurations
 		// 'no-console': 'off',
+		'@typescript-eslint/no-empty-interface': 'off',
+		'@typescript-eslint/no-explicit-any': 'off',
 	},
 	settings: {
 		react: { version: 'detect' }, // Tells eslint-plugin-react to automatically detect the version of React to use
@@ -61,6 +66,7 @@ module.exports = {
 			node: { extensions: ['.js', '.jsx', '.ts', '.tsx', 'html'] },
 		},
 	},
+	ignorePatterns: ['build', '*.test.ts', 'production_build', 'cypress', 'typings', '*.json'],
 	env: {
 		browser: true,
 		commonjs: true,

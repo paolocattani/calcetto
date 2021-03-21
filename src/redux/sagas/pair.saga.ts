@@ -4,16 +4,18 @@ import { fetchPairs } from '../services/pair.service';
 import { FetchPairsResponse, FetchPairsRequest, PairError } from '../../@common/models';
 import { entityLifeCycle } from './utils';
 
-function* getPairsSaga({ payload }: ReturnType<typeof PairAction.fetch.request>): Generator<StrictEffect, void, any> {
+function* getPairsSaga({
+	payload,
+}: ReturnType<typeof PairAction.fetch.request>): Generator<StrictEffect, void, unknown> {
 	yield* entityLifeCycle<FetchPairsRequest, FetchPairsResponse, PairError>(
 		PairAction.fetch,
 		fetchPairs,
 		payload,
 		() => {
-      if (payload.history) {
-        payload.history.push('/stage1');
-      }
-    }
+			if (payload.history) {
+				payload.history.push('/stage1');
+			}
+		}
 	);
 }
 

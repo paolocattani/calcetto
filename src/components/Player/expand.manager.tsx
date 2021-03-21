@@ -1,5 +1,4 @@
 import React from 'react';
-import { SyntheticEvent } from 'react';
 import { ExpandRowProps } from 'react-bootstrap-table-next';
 import { LABEL_COMMON_LOADING } from 'src/@common/constants/label';
 import { PlayerDTO } from 'src/@common/dto';
@@ -43,7 +42,7 @@ const expandManager = (
 		}
 		return stats[row.id] ? <Stats stats={stats[row.id]!} /> : <div>{i18next.t('stats:new_player')}</div>;
 	},
-	onExpand: (row: PlayerDTO, isExpand: boolean, rowIndex: number, e: SyntheticEvent) => {
+	onExpand: (row: PlayerDTO, isExpand: boolean /*, rowIndex: number, e: SyntheticEvent*/) => {
 		if (row.id) {
 			if (isExpand) {
 				// Cache results
@@ -66,7 +65,7 @@ const expandManager = (
 			}
 		}
 	},
-	onExpandAll: (isExpandAll: boolean, rows: Array<PlayerDTO>, e: SyntheticEvent) => {
+	onExpandAll: (isExpandAll: boolean, rows: Array<PlayerDTO> /*, e: SyntheticEvent*/) => {
 		if (isExpandAll) {
 			const ids = rows.filter((r) => !!r.id).map((r) => r.id!);
 			setIsLoading(true);

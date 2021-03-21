@@ -49,7 +49,7 @@ export interface SelectPairsResponse extends GenericResponse {
 	stage1Rows: Array<Stage1Row>;
 }
 
-export interface PairError extends GenericResponse {}
+export type PairError = GenericResponse
 
 export const getEmptyPair = (label?: string, tournamentId = 0): PairDTO => ({
 	id: null,

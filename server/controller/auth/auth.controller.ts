@@ -67,7 +67,7 @@ const registrationController = asyncMiddleware(async (req: Request, res: Respons
 		}
 		const record = await registerUser(model, registrationInfo.playerRole);
 		if (record) {
-			setSession(record, req, res);
+			setSession(record, req);
 			logger.info('/register end ');
 			return success<AuthenticationResponse>(
 				res,
@@ -113,7 +113,7 @@ router.put(
 	withAuth,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		try {
-			let model = parseBody(req.body as OmitHistory<UpdateUserRequest>);
+			const model = parseBody(req.body as OmitHistory<UpdateUserRequest>);
 			logger.info('/update : ', model);
 			const user = await findUserByEmailAndUsername(model.email, model.username);
 			if (!user) {
@@ -208,7 +208,7 @@ const loginUserController = async (req: Request, res: Response, username: string
 			// Do not expose information return wrongCredentials(res);
 		}
 		const userDTO = convertEntityToDTO(user);
-		setSession(userDTO, req, res);
+		setSession(userDTO, req);
 		return success<AuthenticationResponse>(
 			res,
 			{ key: AUTH_WELCOME, options: { username: userDTO.name } },

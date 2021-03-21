@@ -103,7 +103,8 @@ export const findByNameSurname = async (name: string, surname: string): Promise<
 	let player: Player | null = null;
 	try {
 		logProcess(className + 'findById', 'start');
-		const params = new Map<string, WhereOptions | Object>();
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const params = new Map<string, any>();
 		params.set('name', name);
 		params.set('surname', surname);
 		player = await findByParams(params);
@@ -130,7 +131,9 @@ export const deletePlayer = (models: Player[]): Promise<number> =>
 	Player.destroy({ where: { id: models.map((e) => e.id) } });
 
 // Utils
-export const findByParams = async (parameters: Map<string, WhereOptions | Object>): Promise<Player | null> => {
+export const findByParams = async (
+	parameters: Map<string, WhereOptions | Record<string, unknown>>
+): Promise<Player | null> => {
 	try {
 		logProcess(className + 'findByParams', 'start');
 		const result: Player | null = await Player.findOne({
@@ -145,7 +148,8 @@ export const findByParams = async (parameters: Map<string, WhereOptions | Object
 	}
 };
 
-export const parseBody = (body: any): Player =>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const parseBody = (body: Record<string, any>): Player =>
 	({
 		id: body.id,
 		name: body.name || '',

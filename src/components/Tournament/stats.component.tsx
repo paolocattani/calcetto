@@ -17,7 +17,7 @@ const StatsSummary: React.FC<StatsSummaryProps> = () => {
 	const [loaded, setLoaded] = useState<boolean>(false);
 	const [stats, setStats] = useState<OmitGeneric<StatsSummaryResponse>>();
 	const [index, setIndex] = useState(0);
-	const handleSelect = (selectedIndex: number, event: Record<string, unknown> | null) => {
+	const handleSelect = (selectedIndex: number) => {
 		setIndex(selectedIndex);
 	};
 
@@ -25,7 +25,7 @@ const StatsSummary: React.FC<StatsSummaryProps> = () => {
 		if (!loaded) {
 			(async () => {
 				try {
-					const { players, pairs } = (await fetchStatsSummary({})) as StatsSummaryResponse;
+					const { players, pairs } = (await fetchStatsSummary()) as StatsSummaryResponse;
 					setStats({ players, pairs });
 				} catch (error) {
 					logger.info('Error');
@@ -56,7 +56,7 @@ const StatsSummary: React.FC<StatsSummaryProps> = () => {
 						(p1, p2) =>
 							roundNumber((p2.totwin / p2.totMatch) * 100, 1) - roundNumber((p1.totwin / p1.totMatch) * 100, 1)
 					)
-					.map((p, ii) => (
+					.map((p) => (
 						<Row>
 							{/* 1st col : Pair/Player name */}
 							<Col

@@ -38,7 +38,7 @@ function* fetchStage2Saga({ payload }: ReturnType<typeof Stage2Action.fetchStage
 }
 
 function* updateCellsSaga({ payload }: ReturnType<typeof Stage2Action.updateCell.request>) {
-	const onSuccess = function* (response: UpdateStage2CellResponse) {
+	const onSuccess = function* (/*response: UpdateStage2CellResponse*/) {
 		yield put(EventAction.updateStage2.request({ tournament: payload.tournament }));
 	};
 	yield* entityLifeCycle<UpdateStage2CellRequest, UpdateStage2CellResponse, Stage2Error>(

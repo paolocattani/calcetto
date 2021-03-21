@@ -217,7 +217,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 		const newRowsElement = await Promise.all(
 			data.rows.map<Promise<PairDTO>>(async (rowElement) => {
 				if (rowElement.id === rowIndex) {
-					let row = rowElement;
+					const row = rowElement;
 					if (columnIndex === 1) {
 						if (selectedElement.id && row.player2 && row.player2.id === selectedElement.id) {
 							// Devo salvare l'elemnto che sto per sostituire
@@ -288,7 +288,7 @@ const PairsTable: React.FC<PairTableProps> = () => {
 		setIsLoading({ state: true, message: t(LABEL_COMMON_LOADING) });
 		const names = 'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('');
 		let current = 0;
-		let newRows: PairDTO[] = data.rows.map((row) => {
+		const newRows: PairDTO[] = data.rows.map((row) => {
 			if (current === stage1Number) current = 0;
 			row.stage1Name = names[current];
 			current++;
@@ -336,13 +336,13 @@ const PairsTable: React.FC<PairTableProps> = () => {
 
 		// Controllo che non ci siano gironi con meno di 1 coppia ( meglio spostare 3 )
 		const MIN_PAIR_PER_STAGE = 3;
-		let invalidStage = [];
+		const invalidStage = [];
 		const pairsInStage = data.rows.reduce((allNames: { [x: string]: number }, row: { stage1Name: string }) => {
 			if (row.stage1Name in allNames) allNames[row.stage1Name]++;
 			else allNames[row.stage1Name] = 1;
 			return allNames;
 		}, {});
-		for (let stageName in pairsInStage) {
+		for (const stageName in pairsInStage) {
 			if (pairsInStage[stageName] <= MIN_PAIR_PER_STAGE) invalidStage.push(stageName);
 		}
 		if (invalidStage.length > 0) {

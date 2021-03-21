@@ -66,4 +66,4 @@ export interface StatsPairFromPlayerResponse extends GenericResponse {
 }
 
 // Error
-export interface StatsError extends GenericResponse {}
+export type StatsError = GenericResponse;

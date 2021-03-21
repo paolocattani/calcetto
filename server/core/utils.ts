@@ -42,14 +42,14 @@ export async function asyncForEach<T>(
 //-----------------------------
 // Sequelize utils
 //
-export const logEntity = <T extends Model<any, any>>(entity: T) => JSON.stringify(entity, null, 2);
+export const logEntity = <T extends Model>(entity: T) => JSON.stringify(entity, null, 2);
 
 export const isNotNull = () => ({
 	[Op.not]: '',
 	[Op.ne]: null,
 });
 
-export const getWhereFromMap = (parameters: Map<string, WhereOptions | Object>): WhereOptions =>
+export const getWhereFromMap = (parameters: Map<string, WhereOptions | Record<string, unknown>>): WhereOptions =>
 	[...parameters.entries()].reduce<WhereOptions>(
 		(acc, [key, value]) => (key === 'fn' ? { ...acc, value } : { ...acc, ...{ [key]: value } }),
 		{}

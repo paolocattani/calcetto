@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { useEffect } from 'react';
 // Components
 import Header from '../Header/Header';
 import { LoadingModal } from '../core/generic/Commons';

@@ -11,7 +11,7 @@ import { AuthAction } from '../../redux/actions';
 import { useTranslation } from 'react-i18next';
 const Delete = lazy(() => import('./Delete'));
 
-const EditUser: React.FC<{}> = () => {
+const EditUser: React.FC<Record<string, never>> = () => {
 	const dispatch = useDispatch();
 	const currentHistory = useHistory();
 	const { t } = useTranslation(['common', 'auth', 'player']);

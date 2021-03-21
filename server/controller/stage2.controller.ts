@@ -18,12 +18,9 @@ import {
 	FetchStage2PairsResponse,
 	FetchStage2Request,
 	FetchStage2Response,
-	Message,
-	SessionStatus,
 	UpdateStage2CellRequest,
 	UpdateStage2CellResponse,
 } from '@common/models';
-import { TournamentProgress } from '@common/dto';
 
 // all API path must be relative to /api/v2/stage2
 const router = Router();
@@ -34,6 +31,7 @@ router.post(
 	withAuth,
 	asyncMiddleware(async (req: AppRequest, res: Response) => {
 		try {
+			// eslint-disable-next-line prefer-const
 			let { tournamentId, count }: FetchStage2Request = req.body;
 			if (!count || count === 0) {
 				count = await countStage2(tournamentId);
@@ -92,7 +90,6 @@ router.post(
 		try {
 			const { cells }: UpdateStage2CellRequest = req.body;
 			await updateCells(cells);
-			const tournamentId = cells[0].pair!.tournamentId;
 			return success<UpdateStage2CellResponse>(res, { key: 'stage2:updated_cell' });
 		} catch (error) {
 			logger.error(chalk.redBright('Error while updating Stage2 cell ! : ', error));

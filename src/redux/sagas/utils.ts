@@ -8,8 +8,9 @@ import {
 import { SuccessCodes } from '../../@common/models/HttpStatusCode';
 import { put, call, StrictEffect } from 'redux-saga/effects';
 import { PayloadActionCreator } from 'typesafe-actions';
-import { toast } from 'react-toastify';
+import { toast, ToastContent, ToastOptions } from 'react-toastify';
 import i18n from '../../i18n/i18n';
+import { ReactText } from 'react';
 
 interface IActionCallback<T> {
 	(response: T): void | Promise<void> | Generator<StrictEffect, void, void>;
@@ -44,8 +45,10 @@ interface ActionType<TReq, TRes extends GenericResponse, TErr> {
 	failure: PayloadActionCreator<string, TErr | typeof UnexpectedServerError>;
 }
 
-export const getMessage = ({ label: { key, options } }: UserMessage) => i18n.t(key, options);
-export const getToast = (type: UserMessageType) => {
+export const getMessage = ({ label: { key, options } }: UserMessage): string => i18n.t(key, options);
+export const getToast = (
+	type: UserMessageType
+): ((content: ToastContent, options?: ToastOptions | undefined) => ReactText) => {
 	let alert = toast.error;
 	switch (type) {
 		case UserMessageType.Success:
@@ -67,7 +70,7 @@ export function* entityLifeCycle<TReq, TRes extends GenericResponse, TErr extend
 	payload: OmitHistory<TReq>,
 	onSuccess?: IActionCallback<TRes>,
 	onFailure?: IActionCallback<TErr>,
-	showMessage: boolean = true
+	showMessage = true
 ): Generator<StrictEffect, void, any> {
 	try {
 		// Call method with payload

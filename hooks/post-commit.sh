@@ -8,7 +8,8 @@
 # Redirect output
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )
 LOG_FILE="$SCRIPT_DIR/post-commit.log"
-source cli/redirect_output.sh
+
+source cli/functions/redirect_output.sh 
 
 # Check activation
 SEARCH_STRING='POST-COMMIT'

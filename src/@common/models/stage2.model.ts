@@ -33,10 +33,10 @@ export interface UpdateStage2CellRequest {
 	tournament: TournamentDTO;
 	cells: Array<ICell>;
 }
-export interface UpdateStage2CellResponse extends GenericResponse {}
+export type UpdateStage2CellResponse = GenericResponse
 
 export interface DeleteStage2Request {
 	tId: number;
 }
-export interface DeleteStage2Response extends GenericResponse {}
-export interface Stage2Error extends GenericResponse {}
+export type DeleteStage2Response = GenericResponse
+export type Stage2Error = GenericResponse

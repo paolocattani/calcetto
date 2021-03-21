@@ -43,6 +43,7 @@ async function loadModels(schema?: string): Promise<Sequelize> {
 
 	// If NODE_ENV == 'test' and IS_DOCKER test are running in CI and I'm trying to connect to a container without SSL
 	if (process.env.NODE_ENV === 'test' && process.env.IS_DOCKER && connectionOptions.dialectOptions) {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		delete connectionOptions.dialectOptions.ssl;
 	}

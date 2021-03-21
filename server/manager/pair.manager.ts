@@ -1,7 +1,7 @@
 import { PairDTO, UserDTO } from '@common/dto';
 import { logProcess, logger } from '@core/logger';
 import { Op } from 'sequelize';
-import { Stage2, Pair, Player } from '../database/models';
+import { Stage2, Pair } from '../database/models';
 import { asyncForEach } from '@core/utils';
 import { convertEntityToDTO } from './player.manager';
 
@@ -28,7 +28,7 @@ export const updatePlacement = async (mapper: { id: number; placement: number }[
 	const methodName = className + '.updatePlacement';
 	logProcess(methodName, 'start');
 	try {
-		await asyncForEach(mapper, async (current, index, ref) => {
+		await asyncForEach(mapper, async (current) => {
 			await Pair.update({ placement: current.placement }, { where: { id: current.id } });
 		});
 	} catch (error) {
@@ -118,7 +118,8 @@ export const fetchPairsStage2 = async (tournamentId: number): Promise<Array<Pair
 	return result;
 };
 
-export const parseBodyToPair = (body: any): Partial<Pair> => ({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const parseBodyToPair = (body: Record<string, any>): Partial<Pair> => ({
 	id: body.id,
 	alias: body.alias,
 	stage1Name: body.stage1Name,
@@ -149,7 +150,7 @@ export function rowToModel(row: Pair, index: number): PairDTO {
 }
 
 export function valueFormatter(row: PairDTO | Pair) {
-	const { alias, id, player1, player2 } = row;
+	const { alias, player1, player2 } = row;
 	if (alias && alias !== '') {
 		return alias;
 	}

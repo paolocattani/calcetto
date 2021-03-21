@@ -32,6 +32,6 @@ export const Stage2Action = {
 	>(),
 	setCells: createAction(...defaultParam(actionName, 'Set Cells'))<ICell[][]>(),
 	setLoading: createAction(...defaultParam(actionName, 'Stage2 is Loading'))<boolean>(),
-	reset: createAction(...defaultParam(actionName, 'Stage2 Reset'))<{}>(),
+	reset: createAction(...defaultParam(actionName, 'Stage2 Reset'))<Record<string, never>>(),
 	purge: createAction(PURGE_STORE_ACTION)<PurgeResponse>(),
 };

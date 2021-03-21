@@ -152,8 +152,8 @@ router.get(
 			if (!player1IdString || player2IdString) {
 				return missingParameters(res);
 			}
-			let player1Id: number = parseInt(player1IdString as string);
-			let player2Id: number = parseInt(player2IdString as string);
+			const player1Id: number = parseInt(player1IdString as string);
+			const player2Id: number = parseInt(player2IdString as string);
 			const stats = await getStatsByPairs(player1Id, player2Id);
 			return stats
 				? success<StatsPairFromPlayerResponse>(res, { key: STATS_LOADED }, { stats })

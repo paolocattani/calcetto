@@ -17,7 +17,7 @@ import { SuccessCodes } from '../../@common/models/HttpStatusCode';
 import { FetchStage2PairsResponse } from '../../@common/models';
 import logger from '../../@common/utils/logger.utils';
 
-interface Stage2HandlerProps extends RouteComponentProps {}
+type Stage2HandlerProps = RouteComponentProps;
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
@@ -78,7 +78,7 @@ const Stage2Handler: React.FC<Stage2HandlerProps> = () => {
 	};
 
 	// Questa funzione viene richiamata quando viene selezionata una coppia nella prima colonna
-	const onSelectPair: onSelectCallback = (value, rowIndex, actionMeta) => {
+	const onSelectPair: onSelectCallback = (value, rowIndex) => {
 		logger.info(' onSelectPair : ', value, rowIndex);
 		if (!pairsList) {
 			return;

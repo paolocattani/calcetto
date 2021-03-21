@@ -1,4 +1,6 @@
-///<reference path="../../typings/loglevel.d.ts" />
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+/// <reference path="../../typings/loglevel.d.ts" />
 
 import log from 'loglevel';
 import chalk from 'chalk';
@@ -34,9 +36,9 @@ if (isProductionMode()) {
 }
 
 export default {
-	warn: (...msg: Array<any>) => log.warn(...msg),
-	info: (...msg: Array<any>) => log.info(...msg),
-	debug: (...msg: Array<any>) => log.debug(...msg),
-	error: (...msg: Array<any>) => log.error(...msg),
-	trace: (...msg: Array<any>) => log.trace(...msg),
+	warn: (...msg: Array<any>): void => log.warn(...msg),
+	info: (...msg: Array<any>): void => log.info(...msg),
+	debug: (...msg: Array<any>): void => log.debug(...msg),
+	error: (...msg: Array<any>): void => log.error(...msg),
+	trace: (...msg: Array<any>): void => log.trace(...msg),
 };

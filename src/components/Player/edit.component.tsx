@@ -20,7 +20,7 @@ const modalStyle: CSSProperties = {
 	color: 'white',
 };
 
-const EditPlayer: React.FC<{}> = () => {
+const EditPlayer: React.FC<Record<string, never>> = () => {
 	const dispatch = useDispatch();
 	const currentHistory = useHistory();
 	const { t } = useTranslation(['common', 'player']);

@@ -14,7 +14,7 @@ import { asyncMiddleware } from './utils.middleware';
 const TOO_MANY_REQUEST = 'common:too_many_requests';
 //--------- Gather client info
 export const clientInfo = (req: Request, res: Response, next: NextFunction) => {
-	let clientIp = getClientIp(req);
+	const clientIp = getClientIp(req);
 	req.clientIp = clientIp || undefined;
 	if (clientIp) {
 		logger.info(chalk.yellowBright(`Incoming request from ${clientIp}`));

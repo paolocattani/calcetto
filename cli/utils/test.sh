@@ -13,3 +13,7 @@
     SERVER_SECRET='O<o@cZqCJ-Qmu1-<C<e@R4m0n(nR&Sk' \
     SERVER_HASH='dummy$Hash' \
     STATIC_CONTENTS_CACHE=10000 --app calcetto2020stage
+
+
+
+    $(git diff --cached --name-only --diff-filter=ACMR )

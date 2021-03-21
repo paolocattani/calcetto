@@ -14,7 +14,8 @@ let socket: Socket<ServerToClientEvents, ClientToServerEvents>;
 // Listen socket events
 function* listenEvents({
 	payload: { history },
-}: ReturnType<typeof EventAction.openChannel.request>): Generator<StrictEffect, void, any> {
+}: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+ReturnType<typeof EventAction.openChannel.request>): Generator<StrictEffect, void, any> {
 	try {
 		// Try to connect with 2sec timeout
 		const { connected, timeout } = yield race({ connected: call(socketConnect), timeout: delay(20000) });
@@ -23,7 +24,7 @@ function* listenEvents({
 			yield put(EventAction.closeChannel.request({}));
 		}
 		socket = connected;
-		const socketChannel = yield call(createSocketChannel, connected, history);
+		const socketChannel = yield call(createSocketChannel, connected);
 		yield put(EventAction.openChannel.success({ connected: true }));
 		while (true) {
 			const message: EventMessage = yield take(socketChannel);
@@ -96,7 +97,7 @@ function* updateStage2({ payload: { tournament } }: ReturnType<typeof EventActio
 }
 
 // Close socket channel
-function* closeChannel({ payload }: ReturnType<typeof EventAction.closeChannel.request>) {
+function* closeChannel(/*{ payload }: ReturnType<typeof EventAction.closeChannel.request>*/) {
 	try {
 		socket.disconnect();
 		yield put(EventAction.closeChannel.success({}));

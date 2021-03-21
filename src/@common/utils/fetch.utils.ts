@@ -10,28 +10,28 @@ interface IFetchCallback<T> {
 }
 
 // Get
-export const getWrapper = <T extends GenericResponse>(url: string, afterResponse?: IFetchCallback<T>) =>
-	fetchWrapper<never, T>(url, 'GET', undefined, afterResponse);
+export const getWrapper = <T extends GenericResponse>(url: string, afterResponse?: IFetchCallback<T>): Promise<T> =>
+	<Promise<T>>fetchWrapper<never, T>(url, 'GET', undefined, afterResponse);
 // Delete
 export const deleteWrapper = <B, T extends GenericResponse>(
 	url: string,
 	body?: OmitHistory<B>,
 	afterResponse?: IFetchCallback<T>
-) => fetchWrapper<B, T>(url, 'DELETE', body, afterResponse);
+): Promise<T> => <Promise<T>>fetchWrapper<B, T>(url, 'DELETE', body, afterResponse);
 
 // Put
 export const putWrapper = <B, T extends GenericResponse>(
 	url: string,
 	body?: OmitHistory<B>,
 	afterResponse?: IFetchCallback<T>
-) => fetchWrapper<B, T>(url, 'PUT', body, afterResponse);
+): Promise<T> => <Promise<T>>fetchWrapper<B, T>(url, 'PUT', body, afterResponse);
 
 // Post
 export const postWrapper = <B, T extends GenericResponse>(
 	url: string,
 	body?: OmitHistory<B>,
 	afterResponse?: IFetchCallback<T>
-) => fetchWrapper<B, T>(url, 'POST', body, afterResponse);
+): Promise<T> => <Promise<T>>fetchWrapper<B, T>(url, 'POST', body, afterResponse);
 
 // wrapper
 const rawHost = process.env.REACT_APP_SERVER_HOST ? process.env.REACT_APP_SERVER_HOST : 'http://localhost:5001';
@@ -41,7 +41,7 @@ export const socketHost = process.env.REACT_APP_SOCKET_HOST
 //? `${process.env.REACT_APP_SERVER_HOST}:${process.env.REACT_APP_PORT}`
 
 const host = rawHost.slice(-1) === '/' ? rawHost.substring(0, rawHost.length - 1) : rawHost;
-export const getCompleteUrl = (url: string) => host + url;
+export const getCompleteUrl = (url: string): string => host + url;
 export const fetchWrapper = async <B, T extends GenericResponse>(
 	url: string,
 	method: string,

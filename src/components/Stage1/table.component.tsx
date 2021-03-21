@@ -12,12 +12,11 @@ import { AuthSelector } from '../../redux/selectors/auth.selector';
 import { Stage1Action } from '../../redux/actions';
 import { TournamentSelector, Stage1Selector } from '../../redux/selectors';
 import { PairDTO, Stage1Row, TournamentProgress } from '../../@common/dto';
-import { fetchStage1, updateCellStage1 } from '../../redux/services/stage1.service';
+import { fetchStage1 } from '../../redux/services/stage1.service';
 import { SuccessCodes } from '../../@common/models/HttpStatusCode';
-import { FetchStage1Response, UpdatePlacementRequest } from '../../@common/models';
+import { FetchStage1Response } from '../../@common/models';
 import { comparator, getOpposite } from './helper';
 import { cellEditProps } from './editor';
-import logger from '../../@common/utils/logger.utils';
 
 interface Stage1TableProps {
 	pairsList: Array<PairDTO>;
@@ -36,7 +35,8 @@ const Stage1Table: React.FC<Stage1TableProps> = ({ pairsList, autoOrder, stageNa
 	const selectedRows = useSelector((state) => Stage1Selector.getSelectedRows(stageName, state));
 	// State
 	const [isLoading, setIsLoading] = useState(false);
-	const [saved, setIsSaved] = useState(false);
+	// FIXME:
+	const [saved /*, setIsSaved*/] = useState(false);
 	const [rows, setRows] = useState<Array<Stage1Row>>([]);
 
 	// Effects
@@ -132,7 +132,7 @@ const Stage1Table: React.FC<Stage1TableProps> = ({ pairsList, autoOrder, stageNa
 				);
 				// Ricalcolo totali riga
 				let acc = 0;
-				for (let key in row) {
+				for (const key in row) {
 					if (key.startsWith('col') && row[key]) {
 						acc += parseInt(row[key] as string);
 					}
@@ -144,7 +144,7 @@ const Stage1Table: React.FC<Stage1TableProps> = ({ pairsList, autoOrder, stageNa
 				//... e riga opposta
 				acc = 0;
 				const oppositeRowIndex = parseInt(column.text) - 1;
-				for (let key in newRows[oppositeRowIndex]) {
+				for (const key in newRows[oppositeRowIndex]) {
 					if (key.startsWith('col') && newRows[oppositeRowIndex][key]) {
 						acc += parseInt(newRows[oppositeRowIndex][key] as string);
 					}

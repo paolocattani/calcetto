@@ -1,9 +1,9 @@
-import * as H from 'history';
 import i18next from 'i18next';
-import { eventChannel, END } from 'redux-saga';
-import { put } from 'redux-saga/effects';
+import { eventChannel, END, EventChannel } from 'redux-saga';
+import { put, StrictEffect } from 'redux-saga/effects';
 import { io, Socket } from 'socket.io-client';
 import { socketHost } from 'src/@common/utils';
+import { ActionType } from 'typesafe-actions';
 import { ClientToServerEvents, EventMessage, Events, ServerToClientEvents } from '../../@common/models';
 import { getToast } from '../sagas/utils';
 
@@ -13,7 +13,7 @@ function showMessageSocket({ label, type }: EventMessage) {
 }
 
 // Create comunication channel
-export const createSocketChannel = (thisSocket: Socket, history: H.History) =>
+export const createSocketChannel = (thisSocket: Socket): EventChannel<EventMessage> =>
 	eventChannel<EventMessage>((emitter) => {
 		// Listen for error
 		// Session Expired
@@ -46,7 +46,7 @@ export const createSocketChannel = (thisSocket: Socket, history: H.History) =>
 		};
 	});
 
-export const socketConnect = () => {
+export const socketConnect = (): Promise<Socket<ServerToClientEvents, ClientToServerEvents>> => {
 	socket = io(socketHost, { withCredentials: true });
 	return new Promise((resolve) => {
 		socket.on('connect', () => {
@@ -56,7 +56,14 @@ export const socketConnect = () => {
 	});
 };
 
-export function* emitEvent(event: keyof ClientToServerEvents, action: any, ...args: any) {
+export function* emitEvent(
+	event: keyof ClientToServerEvents,
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	action: ActionType<any>,
+	// eslint-disable-next-line
+	...args: any
+): // eslint-disable-next-line @typescript-eslint/no-explicit-any
+Generator<StrictEffect, void, any> {
 	try {
 		console.log('[ Event ] Emitting event : ', event);
 		socket.emit(event, ...args);

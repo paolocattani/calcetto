@@ -17,7 +17,6 @@ import { PairDTO, TournamentProgress } from '../../@common/dto';
 import { useSelector } from '../core/types';
 import { EventAction } from 'src/redux/actions/event.action';
 import { LoadingModal } from '../core/generic/Commons';
-import logger from '../../@common/utils/logger.utils';
 
 /**
  * Wraps multiple table components
@@ -150,12 +149,12 @@ export default Wrapper;
 function renderTables(pairsList: PairDTO[], autoOrder: boolean): JSX.Element[] {
 	let stageName = '';
 	let stage: Array<PairDTO> = [];
-	let stageList: Array<JSX.Element> = [];
+	const stageList: Array<JSX.Element> = [];
 	// sort pairs by stage1Name
 	[...pairsList]
 		.sort((obj1, obj2) => obj1.stage1Name.localeCompare(obj2.stage1Name))
 		// FIXME: use .reduce  ?
-		.forEach((element, index) => {
+		.forEach((element) => {
 			// A rottura di stage1Name
 			if (stageName === '') stageName = element.stage1Name;
 			if (stageName !== element.stage1Name) {

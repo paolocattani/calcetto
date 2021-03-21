@@ -25,13 +25,13 @@ const playerSelection = (editorProps, value, row, rowIndex, columnIndex, onSelec
 const isEditable = (row) => !!(row.player1 && row.player1.id && row.player2 && row.player2.id);
 const checkBoxProps = {
 	align: () => ALIGN_CENTER,
-	headerStyle: (column, colIndex) => ({ width: '7,5%' }),
-	editable: (cell, row, rowIndex, index) => isEditable(row),
+	headerStyle: () => ({ width: '7,5%' }),
+	editable: (cell, row) => isEditable(row),
 	editor: {
 		type: Type.CHECKBOX,
 		value: 'true:false',
 	},
-	formatter: (cell, row, rowIndex, formatExtraData) => (
+	formatter: (cell /*, row, rowIndex, formatExtraData*/) => (
 		<ButtonGroup toggle className="mb-2">
 			<ToggleButton variant={!!cell ? 'success' : 'danger'} checked={cell} value="1" type="checkbox">
 				{!!cell ? 'Pagato' : 'Non Pagato'}
@@ -41,6 +41,7 @@ const checkBoxProps = {
 	//style: (content, row, rowIndex, columnIndex) => (content !== NO ? { backgroundColor: '#ffbf47' } : null),
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const columns = (onSelect, options, labels) => [
 	{ dataField: 'id', text: 'ID', editable: false, hidden: true, align: () => ALIGN_CENTER },
 	{ dataField: 'rowNumber', text: 'ID', editable: false, align: () => ALIGN_CENTER },
@@ -50,7 +51,7 @@ export const columns = (onSelect, options, labels) => [
 		align: () => ALIGN_CENTER,
 		editorRenderer: (editorProps, value, row, column, rowIndex, columnIndex) =>
 			playerSelection(editorProps, value, row, rowIndex, columnIndex, onSelect, options),
-		headerStyle: (column, colIndex) => ({ width: '20%' }),
+		headerStyle: () => ({ width: '20%' }),
 	},
 	{
 		dataField: 'player2.alias',
@@ -58,20 +59,20 @@ export const columns = (onSelect, options, labels) => [
 		align: () => ALIGN_CENTER,
 		editorRenderer: (editorProps, value, row, column, rowIndex, columnIndex) =>
 			playerSelection(editorProps, value, row, rowIndex, columnIndex, onSelect, options),
-		headerStyle: (column, colIndex) => ({ width: '20%' }),
+		headerStyle: () => ({ width: '20%' }),
 	},
 	{
 		dataField: 'alias',
-		editable: (cell, row, rowIndex, index) => isEditable(row),
+		editable: (cell, row /*, rowIndex, index*/) => isEditable(row),
 		text: labels.alias,
-		headerStyle: (column, colIndex) => ({ width: '25%' }),
+		headerStyle: () => ({ width: '25%' }),
 	},
 	{
 		dataField: 'stage1Name',
 		text: labels.stage1,
 		align: () => ALIGN_CENTER,
-		headerStyle: (column, colIndex) => ({ width: '10%' }),
-		editable: (cell, row, rowIndex, index) => isEditable(row),
+		headerStyle: () => ({ width: '10%' }),
+		editable: (cell, row) => isEditable(row),
 		editor: {
 			type: Type.SELECT,
 			options: 'abcdefghijklmnopqrstuvwxyz'
@@ -92,6 +93,7 @@ export const columns = (onSelect, options, labels) => [
 	},
 ];
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const cellEditProps = (editable) =>
 	cellEditFactory({
 		mode: editable ? 'click' : 'none',

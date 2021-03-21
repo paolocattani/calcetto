@@ -1,4 +1,4 @@
-import { PairDTO, Stage1Row } from '../../@common/dto';
+import { Stage1Row } from '../../@common/dto';
 
 /**
  *
@@ -7,7 +7,7 @@ import { PairDTO, Stage1Row } from '../../@common/dto';
  *
  *  3->0 , 2->1 , 1->2 , 0->3
  */
-export function getOpposite(value: string | null) {
+export function getOpposite(value: string | null): number | null {
 	/*
 	 * Attenzione :
 	 *  !0 = true
@@ -34,7 +34,7 @@ export function getOpposite(value: string | null) {
  * @param {*} obj1
  * @param {*} obj2
  */
-export function comparator(obj1: Stage1Row, obj2: Stage1Row) {
+export function comparator(obj1: Stage1Row, obj2: Stage1Row): number {
 	// in caso di parità valuto scontro diretto
 	if (obj1.total === obj2.total) {
 		if (obj1[`col${obj2.rowNumber}`] === 3 || obj1[`col${obj2.rowNumber}`] === 2) {

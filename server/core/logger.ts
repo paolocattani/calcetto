@@ -55,6 +55,7 @@ if (isProductionMode()) {
 }
 
 // Controller/Manager
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const logProcess = (method: string, value: string, ...rest: any) =>
 	logger.info(`[${chalk.yellow(method)}].${value}`, ...rest);
 
@@ -66,5 +67,6 @@ export const logMigrationEnd = (method: string, name: string) =>
 	logger.info(`Migration ${chalk.red.bold(method)} ${chalk.yellow(name)} done!`);
 
 // A standard form to log events
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const logEvent = (str: string, ...args: any) =>
 	logger.info(`${chalk.blueBright('[ Event ]')} : ${str} `, ...args);
