@@ -46,7 +46,6 @@ export function register(config?: Config): void {
 				// service worker/PWA documentation.
 				navigator.serviceWorker.ready.then(() => {
 					toast.warn('This web app is being served cache-first by a service worker.');
-					// TODO: show this message to user
 					console.log(
 						'This web app is being served cache-first by a service ' +
 							'worker. To learn more, visit https://bit.ly/CRA-PWA'

@@ -3,7 +3,7 @@ import './index.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'typeface-roboto';
 
-import * as serviceWorker from './serviceWorker';
+import * as serviceWorker from './services/serviceWorker';
 
 import it from 'date-fns/locale/it';
 import { setDefaultLocale, registerLocale } from 'react-datepicker';

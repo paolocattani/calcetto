@@ -66,7 +66,7 @@ module.exports = {
 			node: { extensions: ['.js', '.jsx', '.ts', '.tsx', 'html'] },
 		},
 	},
-	ignorePatterns: ['build', '*.test.ts', 'production_build', 'cypress', 'typings'],
+	ignorePatterns: ['build', '*.test.ts', 'production_build', 'cypress', 'typings', '*.json'],
 	env: {
 		browser: true,
 		commonjs: true,
