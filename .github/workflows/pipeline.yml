@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - develop
+      - pipeline
   pull_request:
     branches:
       - develop
