@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Tournament />.render <Tournament />.render when user is type Admin should render correctly should match snapshot: Admin_tournament.tsx.snap 1`] = `
+exports['<Tournament />.render <Tournament />.render when user is type Admin should render correctly should match snapshot: Admin_tournament.tsx.snap 1'] = `
 Object {
   "asFragment": [Function],
   "baseElement": <body
@@ -148,7 +148,7 @@ Object {
 }
 `;
 
-exports[`<Tournament />.render <Tournament />.render when user is type User should render correctly should match snapshot: User_tournament.tsx.snap 1`] = `
+exports['<Tournament />.render <Tournament />.render when user is type User should render correctly should match snapshot: User_tournament.tsx.snap 1'] = `
 Object {
   "asFragment": [Function],
   "baseElement": <body
