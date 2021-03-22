@@ -29,7 +29,10 @@ WORKDIR ${WORK_FOLDER}
 
 # Setup s.o. enviroment
 # Add git, pm2, npm@7 and python : https://github.com/nodejs/docker-node/issues/384
-RUN apk add --no-cache git && \
+RUN apk --no-cache add --virtual native-deps \
+    g++ gcc libgcc libstdc++ linux-headers make python2 && \
+    npm install --quiet node-gyp -g && \
+    apk add --no-cache git && \
     # Update npm to version 7 because is the one I use on my pc 
     npm install -g npm@7 pm2 && \
     # This module allow log4js to comunicate with PM2
@@ -39,7 +42,7 @@ RUN apk add --no-cache git && \
 COPY ${SRC_FOLDER}/package*.json  ./
 
 # Install dependecies
-RUN npm install --only=prod
+RUN npm install --only=prod && apk del native-deps
 
 # Copy the correct env
 COPY docker/.env.${ENV} ./.env
