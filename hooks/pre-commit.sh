@@ -21,7 +21,7 @@ echo "Enabled : $SEARCH_RESULT"
 
 # Always exec lint
 # See : https://gist.github.com/linhmtran168/2286aeafe747e78f53bf
-STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -E "{.jsx|.js|.ts|.tsx}$")
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -E "*.(jsx|js|ts|tsx)$")
 echo "Analyzing files : $STAGED_FILES"
 PASS=true
 if [[ "$STAGED_FILES" != "" ]]; then
