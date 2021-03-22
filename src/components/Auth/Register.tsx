@@ -139,16 +139,23 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
 				<Col>
 					<InputField
 						controlId="username"
+						required
 						label={t('auth:username')}
 						placeholder={t('auth:username')}
 						{...bindUsername}
 					/>
 				</Col>
 				<Col>
-					<InputField controlId="name" label={t('auth:name')} placeholder={t('auth:name')} {...bindName} />
+					<InputField controlId="name" required label={t('auth:name')} placeholder={t('auth:name')} {...bindName} />
 				</Col>
 				<Col>
-					<InputField controlId="surname" label={t('auth:surname')} placeholder={t('auth:surname')} {...bindSurname} />
+					<InputField
+						controlId="surname"
+						required
+						label={t('auth:surname')}
+						placeholder={t('auth:surname')}
+						{...bindSurname}
+					/>
 				</Col>
 			</Form.Row>
 			{/* Email - Conferma Email */}
@@ -157,6 +164,7 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
 					<InputField
 						controlId="email"
 						label={t('auth:email.email')}
+						required
 						type="email"
 						placeholder={t('auth:email.email')}
 						{...bindEmail}
@@ -165,6 +173,7 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
 				<Col>
 					<InputField
 						controlId="cemail"
+						required
 						label={t('auth:email.confirm')}
 						type="email"
 						placeholder={t('auth:email.confirm')}
@@ -177,6 +186,7 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
 				<Col>
 					<InputField
 						controlId="password"
+						required
 						label={t(LABEL_AUTH_PASSWORD)}
 						type="password"
 						placeholder={t(LABEL_AUTH_PASSWORD)}
@@ -184,6 +194,7 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
 					/>
 					<InputField
 						controlId="cpassword"
+						required
 						label={t('auth:password.confirm')}
 						type="password"
 						placeholder={t(LABEL_AUTH_PASSWORD)}
@@ -210,10 +221,11 @@ const Register: React.FC<RegisterProps> = (): JSX.Element => {
 						<DatePicker
 							id="birthday"
 							selected={birthday}
-							locale="it"
+							locale="it-IT"
 							className="datepicker"
 							dateFormat="dd/MM/yyyy"
 							withPortal
+							required
 							showYearDropdown
 							scrollableYearDropdown
 							yearDropdownItemNumber={100}

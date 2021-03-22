@@ -58,6 +58,7 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
 				type="text"
 				autoComplete="current-password"
 				placeholder={t('auth:usernameEmail')}
+				required
 				{...bindUsername}
 			/>
 
@@ -66,6 +67,7 @@ const Login: React.FC<LoginProps> = (): JSX.Element => {
 				label={t('auth:password.password')}
 				type="password"
 				placeholder={t('auth:password.password')}
+				required
 				{...bindPassword}
 			/>
 			<Row>

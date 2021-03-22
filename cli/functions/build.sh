@@ -20,6 +20,7 @@ function build {
     buildAll=0;
     env='production';
     analyze=0;
+    install=0;
     while [[ $# -gt 0 ]]
     do
         case "$1" in
@@ -33,6 +34,10 @@ function build {
             ;;
             -b|--backend)
             buildBeOnly=1
+            shift
+            ;;
+            -i|--install)
+            install=1;
             shift
             ;;
             -e|--env)
@@ -85,19 +90,22 @@ function build {
     echo "Using NODE_ENV $(text_color $NODE_ENV $red)"
     if ([[ $buildFeOnly -eq 1 ]] && [[ $buildBeOnly -eq 1 ]]) || [[ $buildAll -eq 1 ]]; then
         buildAll=1;
-        echo "Start build..."
+        echo "[ All ] Start build..."
         if [ -d "production_build" ]; then
-            echo "Clean up destination folder..."
+            echo "[ All ] Clean up destination folder..."
             rm -r production_build/*
+        else 
+            echo "[ All ] Creating folder 'production_build'..."
+            mkdir production_build
         fi
     fi
 
     if [[ $buildFeOnly -eq 1 ]] || [[ $buildAll -eq 1 ]]; then
         text_color "[ FrontEnd ] Run --> npm run build" $yellow
         echo "Install dependecies"
-        npm ci
+        npm i
         # run build
-        npm run CRA:build
+        npm run CRA:build || ( text_color "Frontend build error ! " $red && exit 1 )
 
         text_color "[ FrontEnd ] Build Done !" $yellow
         if [[ $analyze -eq 1 ]] ; then
@@ -111,32 +119,30 @@ function build {
         echo "Install dependecies"
         npm ci
         text_color "[ BackEnd ] Run --> npm run build" $yellow
-        npm run build
+        npm run build || ( text_color "Backend build error ! " $red && exit 1 )
         text_color "[ BackEnd ] Delete ecosystem files..." $yellow
-        rm build/server/ecosystem.config.*js
+        rm -r build/server/ecosystem.config.*js build/server/test
+        cp ecosystem.config.prod.js build/ecosystem.config.js
+        cp package*.json ./build
+        cp ../Procfile ./build
         cd ..
         text_color "[ BackEnd ] Build Done !" $yellow
    fi
 
     if [[ $buildAll -eq 1 ]]; then
         echo "[ All ] Composing folder 'production_build'..."
-        if [ ! -d "production_build" ]; then
-            echo "[ All ] Creating folder 'production_build'..."
-            mkdir production_build
-        fi
         echo "[ All ] Copy builds and config files..."
-        # Frontend build
-        cp -r build ./production_build
-        # Backend build
-        cp -r server/build/* ./production_build
+        # Frontend and Backend build
+        cp -r build server/build/* ./production_build
         # Config files
-        # cp .env* ./production_build
-        cp server/ecosystem.config.prod.js ./production_build/server/ecosystem.config.js
-        cp server/package*.json ./production_build/server
-        echo "[ All ] Install production dependecies..."
-        cd ./production_build/server
-        npm install --only=prod
-        cd ../..
+        cp .env* ./production_build
+        
+        if [[ $install -eq 1 ]]; then
+            echo "[ All ] Install production dependecies..."
+            cd ./production_build/server
+            npm install --only=prod
+            cd ../..
+        fi
 
         echo '[ All ] Done!..'
     fi

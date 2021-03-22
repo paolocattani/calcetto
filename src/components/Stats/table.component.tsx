@@ -1,12 +1,13 @@
 import React, { CSSProperties } from 'react';
 import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { Stats } from 'src/@common/dto/stats/stats.dto';
 
-interface StatsProps<T> {
+interface StatsProps<T extends Stats = Stats> {
 	stats: T;
 }
 
-const StatsComponent: React.FC<StatsProps> = (stats) => {
+const StatsComponent: React.FC<StatsProps> = <T extends Stats>({ stats }: StatsProps<T>) => {
 	const { t } = useTranslation(['stats']);
 	const stage1 = t('stats:stage1');
 	const stage2 = t('stats:stage2');

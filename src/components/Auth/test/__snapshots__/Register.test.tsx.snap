@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Register />.render should render correctly and match snapshot 1`] = `
+exports['<Register />.render should render correctly and match snapshot 1'] = `
 Object {
   "asFragment": [Function],
   "baseElement": <body
@@ -22,7 +22,7 @@ Object {
     >
       <div
         class="modal-dialog modal-lg modal-dialog-centered"
-        role="document"
+        data-cy="loader"
       >
         <div
           class="modal-content"

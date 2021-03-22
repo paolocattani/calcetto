@@ -21,7 +21,7 @@ echo "Enabled : $SEARCH_RESULT"
 
 # Always exec lint
 # See : https://gist.github.com/linhmtran168/2286aeafe747e78f53bf
-STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -E "{.jsx|.js|.ts|.tsx}$")
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -E "*.(jsx|js|ts|tsx)$")
 echo "Analyzing files : $STAGED_FILES"
 PASS=true
 if [[ "$STAGED_FILES" != "" ]]; then
@@ -44,10 +44,10 @@ if [[ "$STAGED_FILES" != "" ]]; then
         echo "./node_modules/.bin/eslint . "
         code $LOG_FILE
         exit 1
-    else
-        echo "\033[42mCOMMIT SUCCEEDED\033[0m\n"
     fi
 fi
+
+echo "\033[42mLint process done!\033[0m\n"
 
 # Only on dev environment, and branch develop , and if PRE-COMMIT flag is enabled
 if [[ $BRANCH_NAME != "master" ]] && [[ $SEARCH_RESULT = 1 ]]; then

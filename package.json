@@ -5,7 +5,7 @@
   "description": "Table Soccer Manager",
   "engines": {
     "node": "14.x.x",
-    "npm": "6.x"
+    "npm": "7.x"
   },
   "keywords": [
     "react",
@@ -91,7 +91,7 @@
     "CRA:start": "react-scripts start",
     "CRA:build": "cross-env NODE_ENV=production react-scripts build ",
     "CRA:eject": "react-scripts eject",
-    "CRA:test": "react-scripts test",
+    "CRA:test": "react-scripts test --env=jsdom --testResultsProcessor ./node_modules/jest-sonar-reporter",
     "-----TEST----": "---------------------------",
     "test:app": "concurrently -p \"[{name}]\" -n server,client -c \"bgGreen.bold,bgBlue.bold\"  --kill-others-on-fail \"npm run test:app:server\" \"npm run test:app:client\"",
     "test:app:server": "cross-env NODE_ENV=test npm run prod:heroku:server",
