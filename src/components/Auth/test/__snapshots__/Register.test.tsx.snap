@@ -22,7 +22,7 @@ Object {
     >
       <div
         class="modal-dialog modal-lg modal-dialog-centered"
-        role="document"
+        data-cy="loader"
       >
         <div
           class="modal-content"

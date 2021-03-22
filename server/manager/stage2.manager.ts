@@ -9,6 +9,7 @@ import { isAdmin } from './auth.manager';
 import { rowToModel } from './pair.manager';
 import { WhereOptions } from 'sequelize';
 import { getEmptyPair } from '@common/models';
+import { getBaseLog } from '@common/utils/math.utils';
 
 const className = 'Stage2 Manager : ';
 
@@ -189,9 +190,6 @@ Il rowSpan da assegnare al singolo elemento è calcolato come 2^jj. ( 0<=jj<= N+
 
 
 */
-export function getBaseLog(x: number, y: number) {
-	return Math.log(y) / Math.log(x);
-}
 
 // Genera la struttura per Stage2
 export const generateStructure = (rowNumber: number): ICell[][] => {

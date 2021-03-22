@@ -2,9 +2,7 @@ name: Build/Test/Analyze
 on:
   push:
     branches:
-      - e2e
       - develop
-      - auto-pr
   pull_request:
     branches:
       - develop
@@ -67,9 +65,20 @@ jobs:
     needs: build
     name: unit tests
     # For now disable this step, only run e2e
-    if: ${{ 1==2 }}
     steps:
       - uses: actions/checkout@v2
+      # Restore cache
+      - name: Restore cache Node.js modules
+        uses: actions/cache@v2.1.4
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
       # Install dependencies
       - name: Install dependencies
         run: |
@@ -77,9 +86,10 @@ jobs:
           cd server && npm ci
       # unit test FE
       - name: Unit Tests Frontend
-        run: npm run test:client
+        run: npm run CRA:test
       # unit test BE
       - name: Unit Tests Backend
+        if: ${{ 1==2 }}
         run: |
           cd server
           npm run test:unit

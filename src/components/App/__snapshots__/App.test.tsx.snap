@@ -9,48 +9,11 @@ Object {
   >
     <div
       aria-hidden="true"
-    >
-      <div
-        class="App"
-      >
-        <div
-          class="container-fluid"
-          style="margin-bottom: 20vh;"
-        >
-          <div
-            class="Toastify"
-          />
-          <h4
-            style="position: absolute; top: 0.1em; right: 0.1em;"
-          >
-            <span
-              class="badge badge-info"
-            >
-              <span>
-                v.
-              </span>
-              <strong>
-                2.10.2_v2020.11.20
-              </strong>
-              <span>
-                <i>
-                  <small>
-                     @ 
-                    51242cb
-                  </small>
-                </i>
-              </span>
-            </span>
-          </h4>
-        </div>
-      </div>
-    </div>
+    />
     <div
-      aria-hidden="true"
       class="fade modal-backdrop show"
     />
     <div
-      aria-hidden="true"
       aria-modal="true"
       class="fade modal show"
       role="dialog"
@@ -59,89 +22,7 @@ Object {
     >
       <div
         class="modal-dialog modal-lg modal-dialog-centered"
-        role="document"
-      >
-        <div
-          class="modal-content"
-        >
-          <div
-            class="modal-header"
-            style="color: whitesmoke; background-color: rgb(52, 58, 64); border-color: #ffc107;"
-          >
-            <div
-              class="modal-title h4"
-            >
-              Caricamento....
-            </div>
-            <button
-              class="close"
-              type="button"
-            >
-              <span
-                aria-hidden="true"
-              >
-                ×
-              </span>
-              <span
-                class="sr-only"
-              >
-                Close
-              </span>
-            </button>
-          </div>
-          <div
-            class="text-center font-weight-bold modal-body"
-            style="color: whitesmoke; background-color: rgb(52, 58, 64); border-color: #ffc107;"
-          >
-            Caricamento....
-          </div>
-          <div
-            class="modal-footer"
-            style="color: whitesmoke; background-color: rgb(52, 58, 64); border-color: #ffc107;"
-          >
-            <div
-              class="spinner-border text-light"
-            />
-            <div
-              class="spinner-border text-primary"
-            />
-            <div
-              class="spinner-border text-secondary"
-            />
-            <div
-              class="spinner-border text-success"
-            />
-            <div
-              class="spinner-border text-danger"
-            />
-            <div
-              class="spinner-border text-warning"
-            />
-            <div
-              class="spinner-border text-info"
-            />
-            <div
-              class="spinner-border text-dark"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      aria-hidden="true"
-      class="fade modal-backdrop show"
-    />
-    <div
-      aria-hidden="true"
-      aria-modal="true"
-      class="fade modal show"
-      role="dialog"
-      style="border-color: #ffc107; border-width: 3px; display: block;"
-      tabindex="-1"
-    >
-      <div
-        class="modal-dialog modal-lg modal-dialog-centered"
-        role="document"
+        data-cy="loader"
       >
         <div
           class="modal-content"
@@ -212,42 +93,7 @@ Object {
   </body>,
   "container": <div
     aria-hidden="true"
-  >
-    <div
-      class="App"
-    >
-      <div
-        class="container-fluid"
-        style="margin-bottom: 20vh;"
-      >
-        <div
-          class="Toastify"
-        />
-        <h4
-          style="position: absolute; top: 0.1em; right: 0.1em;"
-        >
-          <span
-            class="badge badge-info"
-          >
-            <span>
-              v.
-            </span>
-            <strong>
-              2.10.2_v2020.11.20
-            </strong>
-            <span>
-              <i>
-                <small>
-                   @ 
-                  51242cb
-                </small>
-              </i>
-            </span>
-          </span>
-        </h4>
-      </div>
-    </div>
-  </div>,
+  />,
   "debug": [Function],
   "findAllByAltText": [Function],
   "findAllByDisplayValue": [Function],
