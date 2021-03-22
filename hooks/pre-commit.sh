@@ -44,10 +44,10 @@ if [[ "$STAGED_FILES" != "" ]]; then
         echo "./node_modules/.bin/eslint . "
         code $LOG_FILE
         exit 1
-    else
-        echo "\033[42mCOMMIT SUCCEEDED\033[0m\n"
     fi
 fi
+
+echo "\033[42mLint process done!\033[0m\n"
 
 # Only on dev environment, and branch develop , and if PRE-COMMIT flag is enabled
 if [[ $BRANCH_NAME != "master" ]] && [[ $SEARCH_RESULT = 1 ]]; then
