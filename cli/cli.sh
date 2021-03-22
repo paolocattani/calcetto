@@ -23,6 +23,7 @@ cat << EOF
         hooks           |   Edit hooks
         build           |   Create production build
         heroku          |   Heroku utils
+        docker          |   Docker utils
         help            |   Show this help
 
     option :
@@ -43,6 +44,9 @@ EOF
 ##############################################################################
 # Functions
 ##############################################################################
+#------> Docker
+. cli/functions/docker.sh
+
 #------> Build
 . cli/functions/build.sh
 
@@ -96,7 +100,7 @@ if [[ $command == "--help" ]] || [[ $command == "--h" ]]  || [[ $command == "hel
 fi
 
 
-valid_commands=("release" "tag" "hooks" "add_to_commit" "build" "update" "heroku")
+valid_commands=("release" "tag" "hooks" "add_to_commit" "build" "update" "heroku" "docker")
 # Test if the first param is a valid command, else show help
 if [[ " ${valid_commands[@]} " =~ " ${command} " ]]; then
 
@@ -145,6 +149,9 @@ if [[ " ${valid_commands[@]} " =~ " ${command} " ]]; then
     # Remap functions name
     if [[ $command == "heroku" ]]; then
         command="heroku_cli"
+    fi
+    if [[ $command == "docker" ]]; then
+        command="docker_cli"
     fi
 
     # Exec the command

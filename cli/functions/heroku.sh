@@ -1,7 +1,7 @@
 ## Show Help
 function showHelp_heroku() {
 cat << EOF
-    Usage: cli.sh build [option]
+    Usage: cli.sh heroku [option]
 
     options :
         --postbuild         Heroku postbuild command
@@ -115,38 +115,9 @@ function heroku_cli {
     # "This runs after Heroku installs dependencies, but before Heroku prunes and caches dependencies."
     # "If the package.json has a build script that needs to be customized for Heroku, define a heroku-postbuild script, which will run instead of the build script."
     if [[ $postbuild -eq 1 ]]; then
-        text_color " --------------> Build frontend" $yellow
-        # Stop deploy if build breaks
-        npm i
-        npm run CRA:build || ( text_color "Frontend build error ! " $red && exit 1 )
-        text_color " --------------> Frontend build done! " $yellow
-
-        text_color " --------------> Build backend" $yellow
-        cd server
-        npm run build || ( text_color "Backend build error ! " $red && exit 1 )
-        cd ..
-        text_color " --------------> Backend build done! " $yellow
-
-        text_color " --------------> Create destination folder" $yellow
-        mkdir production_build
-
-        text_color " --------------> Copy files" $yellow
-        cp -r build server/build/* ./production_build
-        rm ./production_build/server/ecosystem.*.js
-        rm -r ./production_build/server/test
-        cp server/ecosystem.config.prod.js ./production_build/ecosystem.config.js
-        cp server/package*.json ./production_build
-        cp Procfile ./production_build
-
-        # !!! I want to clean up before heroku caches dependencies
-        text_color " --------------> Cleanup" $yellow
-        # remove all files
-        rm ./*
-        # remove directories
-        rm -rf .github .idea .vscode build cypress docker hooks node_modules public server sql src
-        cp -r production_build/* .
-        rm -rf production_build
-        text_color " --------------> Cleanup done" $yellow
+        build --all 
+       
+        heroku --cleanup
 
         text_color " --------------> Installing production dependencies" $yellow
         npm i --only=prod
@@ -158,7 +129,6 @@ function heroku_cli {
     fi
 
     # "This runs after Heroku prunes and caches dependencies."
-    # @unused
     if [[ $cleanup -eq 1 ]]; then
         text_color " --------------> Cleanup" $yellow
         # remove all files
