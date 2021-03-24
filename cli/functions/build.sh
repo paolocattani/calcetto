@@ -7,6 +7,8 @@ cat << EOF
         -a , --all          Build all
         -f , --frontend     Build only frontend
         -b , --backend      Build only backend
+        -i , --install      Install dependencies in production_build
+        --analyze           Run `npm run analyze` after frontend build
         -e , --env          NODE_ENV, default production
         -h , --help         Show this help
 

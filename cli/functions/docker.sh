@@ -7,8 +7,8 @@ cat << EOF
     Options :
         --build             Docker build
         --push              Push image to github container registry
-
-
+        --env               Choose enviroment
+        --force             Don't ask before push
 EOF
 }
 
@@ -76,12 +76,12 @@ function docker_cli {
         text_color " --------------> Docker image created !" $green
     fi
 
-    if [[ $build -eq 1 ]]; then
-        text_color " --------------> Create docker image" $green
+    if [[ $push -eq 1 ]]; then
+        text_color " --------------> Push docker image" $green
         cat ./secrets/.github | docker login https://docker.pkg.github.com -u paolocattani --password-stdin
         image_name="docker.pkg.github.com/paolocattani/calcetto/calcetto:$tag"
 
-        if [[ force -eq 0]]; then
+        if [[ $force -eq 0 ]]; then
             echo "You're going to push image $(text_color $image_name $blue)"
             read -p "Continue ? ( y/n ) : " -n 1 -r
             echo
@@ -94,7 +94,7 @@ function docker_cli {
             fi
         fi
 
-        if [[ forcd -eq 1]]; then
+        if [[ $force -eq 1 ]]; then
             echo "Pushing $image_name..."
             docker push $image_name
             text_color " --------------> Docker push done !" $green

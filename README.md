@@ -132,29 +132,35 @@
 
   ```bash
   # Show help
-  sh ./cli/cli.sh help
+  ./cli/cli.sh help
 
   # Examples.
 
-    # Build
-    sh ./cli/cli.sh build --all
+    # Build all and install production dependencies
+    ./cli/cli.sh build --all --install
 
+    # Update app version
+    ./cli/cli.sh release --patch
+    
     # Tag current commit with version from package.json ( also update heroku env vars )
-    sh ./cli/cli.sh tag
+    ./cli/cli.sh tag
 
     # Deploy current branch to heroku
-    sh ./cli/cli.sh heroku --deploy
+    ./cli/cli.sh heroku --deploy
+
+    # Create docker image and push it to Github container registry
+    ./cli/cli.sh docker --build --push
 
     # Enable git hooks and set type ( for update version ) as minor
-    sh ./cli/cli.sh hooks --enable --hook pre-commit --type minor
+    ./cli/cli.sh hooks --enable --hook pre-commit --type minor
 
   ```
 
 ## Test
   ```bash
 
-  # Test
-  npm run test
+  # Frontend unit test
+  npm run CRA:test
 
   # Coverage
   npm run test:coverage
@@ -165,18 +171,10 @@
   ```bash
 
   # Build all ( see cli )
-  sh ./cli/cli.sh build --all
+  ./cli/cli.sh build --all
 
   # Run server in production mode
   npm run prod
-
-  ```
-
-## Docker
-  ```bash
-
-  # Build image example
-  docker build -t paolocattani/calcetto_v1 -f ./docker/Dockerfile --no-cache .
 
   ```
 

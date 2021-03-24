@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
 // Core
 
-import { logger, dbLogger } from '@core/logger';
+import { logger } from '@core/logger';
 import { isProductionMode } from '@common/utils/env.utils';
 import * as http from 'http';
 // Express
@@ -27,7 +27,7 @@ import { cookiesOption, SESSION_ID } from '../controller/auth/session.utils';
 import { getRedisClient } from '../database/config/redis/connection';
 import { routeLogger, clientInfo, auditControl, cacheControl, mwWrapper, withAuth } from '../middleware';
 import { ClientToServerEvents, ServerToClientEvents } from '@common/models/event.model';
-
+import strongErrorHandler from 'strong-error-handler';
 // http://expressjs.com/en/advanced/best-practice-security.html
 export abstract class AbstractServer {
 	serverName: string;
@@ -78,6 +78,10 @@ export abstract class AbstractServer {
 					baseUri: ["'self'"],
 				},
 			},
+		});
+		// Strong error handler
+		const errorHandlerMw = strongErrorHandler({
+			debug: !isProductionMode(),
 		});
 		// Redis
 		const redisClient = getRedisClient(0);
@@ -159,6 +163,8 @@ export abstract class AbstractServer {
 		this.socketIO.use(mwWrapper(withAuth));
 		this.socket(this.socketIO);
 
+		// Error handler
+		this.application.use(errorHandlerMw);
 		/*
 			Statically serve frontend build ( Heroku deploy )
 		*/
