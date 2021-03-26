@@ -43,7 +43,8 @@ declare namespace NodeJS {
 		DATABASE_SCHEMA: string;
 		// Redis
 		REDISCLOUD_URL: string;
-
+		// Mongo
+		MONGODB_URL: string;
 		// Development
 		REACT_EDITOR?: string;
 	}
