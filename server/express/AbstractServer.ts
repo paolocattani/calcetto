@@ -6,7 +6,7 @@ import { logger } from '@core/logger';
 import { isProductionMode } from '@common/utils/env.utils';
 import { createServer } from 'http';
 // Express
-import express, { Application as ExpressApplication } from 'express';
+import express, { Request, Response, Application as ExpressApplication } from 'express';
 // socket.io
 import { Server as SocketIoServer } from 'socket.io';
 
@@ -27,7 +27,6 @@ export abstract class AbstractServer {
 	httpServer: http.Server;
 	corsOptions: cors.CorsOptions;
 	allowedOrigin: Array<string>;
-	socketIO?: SocketIoServer;
 
 	constructor(name: string, port: number, allowedOrigin: Array<string>, corsOptions: cors.CorsOptions) {
 		this.serverName = name;
@@ -60,21 +59,11 @@ export abstract class AbstractServer {
 		createApolloServer(this.application, this.corsOptions);
 
 		// Error handler
-		this.application.use(
-			strongErrorHandler({
-				debug: !isProductionMode(),
-			})
-		);
+		this.application.use(strongErrorHandler({ debug: !isProductionMode() }));
 		/*
 			Statically serve frontend build ( Heroku deploy )
 		*/
 		const buildPath = path.join(__dirname, '..', '..', 'build');
-
-		/* 	TODO:
-			https://www.valentinog.com/blog/socket-react/
-			Redirect everything else to index.html
-			this.application.get('/*', (req: Request, res: Response) => res.send(`${buildPath}/index.html`));
-		*/
 		logger.info(`Serving build folder from ${chalk.green(buildPath)}`);
 		this.application.use(
 			express.static(buildPath, {
@@ -83,6 +72,16 @@ export abstract class AbstractServer {
 				redirect: true,
 			})
 		);
+		/* 	
+			Redirect everything else to index.html
+		*/
+		this.application.get('/*', (request: Request, res: Response /*, next: NextFunction*/) => {
+			if (!request.originalUrl.startsWith('/static') && !request.originalUrl.startsWith('/api')) {
+				logger.info('Request : ', request.originalUrl);
+				return res.redirect('/');
+				// return res.sendFile(`${buildPath}/index.html`,{});
+			}
+		});
 
 		// Listen on port `this.serverPort`
 		this.httpServer.listen(this.serverPort, () => {
@@ -95,7 +94,6 @@ export abstract class AbstractServer {
 
 		// Shows servers stats every 30 minutes
 		const interval = serverStatus(process);
-
 		// Graceful Shutdown
 		const closeServer = (signal: string) => {
 			logger.info(`Detect event ${signal}.`);
@@ -109,8 +107,8 @@ export abstract class AbstractServer {
 
 		this.httpServer.on('close', () => {
 			logger.info('Closing sockets...');
-			if (this.socketIO) {
-				this.socketIO.close();
+			if (socketIO) {
+				socketIO.close();
 			}
 			logger.info('Stopping server...');
 			clearInterval(interval);
