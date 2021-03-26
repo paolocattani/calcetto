@@ -40,7 +40,6 @@ export abstract class AbstractServer {
 	public async start(): Promise<http.Server> {
 		// Redis
 		const redisClient = getRedisClient(0);
-		redisClient.on('error', logger.error);
 
 		// Server configuration
 		// https://blog.risingstack.com/node-js-security-checklist/
