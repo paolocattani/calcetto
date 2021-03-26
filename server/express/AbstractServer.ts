@@ -13,6 +13,7 @@ import { json, urlencoded } from 'body-parser';
 import cookieParser from 'cookie-parser';
 import express, { Request, Application as ExpressApplication } from 'express';
 import session from 'express-session';
+// import { randomBytes } from 'crypto';
 // Redis
 import connectRedis from 'connect-redis'; // Redis adapter for express-session
 import { Server as SocketIoServer } from 'socket.io'; // socket.io
@@ -27,7 +28,13 @@ import { cookiesOption, SESSION_ID } from '../controller/auth/session.utils';
 import { getRedisClient } from '../database/config/redis/connection';
 import { routeLogger, clientInfo, auditControl, cacheControl, mwWrapper, withAuth } from '../middleware';
 import { ClientToServerEvents, ServerToClientEvents } from '@common/models/event.model';
+// Error handler
 import strongErrorHandler from 'strong-error-handler';
+// GraphQL
+import { ApolloServer } from 'apollo-server-express';
+import { resolvers } from '../database/graphql/resolvers';
+import { typeDefs } from '../database/graphql/typeDef';
+
 // http://expressjs.com/en/advanced/best-practice-security.html
 export abstract class AbstractServer {
 	serverName: string;
@@ -38,16 +45,16 @@ export abstract class AbstractServer {
 	allowedOrigin: Array<string>;
 	socketIO?: SocketIoServer;
 
-	constructor(name: string, port: number, allowedOrigin: Array<string>, corsOptions?: cors.CorsOptions) {
+	constructor(name: string, port: number, allowedOrigin: Array<string>, corsOptions: cors.CorsOptions) {
 		this.serverName = name;
 		this.serverPort = port;
 		this.application = express();
 		this.allowedOrigin = allowedOrigin;
-		this.corsOptions = corsOptions ? corsOptions : {};
+		this.corsOptions = corsOptions;
 		this.httpServer = createServer(this.application);
 	}
 
-	public start(): http.Server {
+	public async start(): Promise<http.Server> {
 		// CORS
 		const corsMw = cors<Request>(this.corsOptions);
 		// Morgan logger ( log http request/response )
@@ -67,17 +74,19 @@ export abstract class AbstractServer {
 			dnsPrefetchControl: { allow: true },
 			// https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
 			// https://csp-evaluator.withgoogle.com/
-			contentSecurityPolicy: {
-				directives: {
-					defaultSrc: [...CSPCommon],
-					connectSrc: [...CSPCommon],
-					styleSrc: [...CSPCommon, "'unsafe-inline'", 'https:', 'https://fonts.googleapis.com'],
-					fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-					imgSrc: ["'self'", 'data:'],
-					objectSrc: ["'none'"],
-					baseUri: ["'self'"],
-				},
-			},
+			contentSecurityPolicy: isProductionMode()
+				? {
+						directives: {
+							defaultSrc: [...CSPCommon],
+							connectSrc: [...CSPCommon],
+							styleSrc: [...CSPCommon, "'unsafe-inline'", 'https:', 'https://fonts.googleapis.com'],
+							fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+							imgSrc: ["'self'", 'data:'],
+							objectSrc: ["'none'"],
+							baseUri: ["'self'"],
+						},
+				  }
+				: false,
 		});
 		// Strong error handler
 		const errorHandlerMw = strongErrorHandler({
@@ -99,7 +108,13 @@ export abstract class AbstractServer {
 			rolling: true,
 			unset: 'destroy',
 		});
-
+		/*
+		// https://github.com/contrawork/graphql-helix/issues/4
+		const nonce = (req: Request, res: Response, next: NextFunction) => {
+			res.locals.cspNonce = randomBytes(16).toString('hex');
+			next();
+		};
+		*/
 		// Server configuration
 		// https://blog.risingstack.com/node-js-security-checklist/
 		// http://expressjs.com/en/advanced/best-practice-security.html
@@ -183,6 +198,20 @@ export abstract class AbstractServer {
 				redirect: true,
 			})
 		);
+
+		const server = new ApolloServer({ typeDefs, resolvers });
+		await server.start();
+		server.applyMiddleware({
+			app: this.application,
+			path: '/graphql',
+			cors: {
+				// FIXME:
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				origin: <any>this.corsOptions.origin,
+				...this.corsOptions,
+			},
+			bodyParserConfig: { strict: true },
+		});
 
 		// Listen on port `this.serverPort`
 		this.httpServer.listen(this.serverPort, () => {
