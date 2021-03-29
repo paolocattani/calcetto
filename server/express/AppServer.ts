@@ -4,7 +4,6 @@ import { AbstractServer } from './AbstractServer';
 import { Application as ExpressApplication } from 'express';
 // Db
 import { sync, authenticate, createSchemaAndSync } from '../database/config/sequelize/connection';
-import { Sequelize } from 'sequelize-typescript';
 import generator from '../generator/generator';
 // Routes
 import routes from '../controller/index';
@@ -17,17 +16,15 @@ import { Server as SocketIoServer } from 'socket.io'; // socket.io
 import { handleSocket } from '../events/events';
 import { isDevMode, isProductionMode, isTestMode } from '@common/utils/env.utils';
 import { migrationUp } from '../database/migrations';
+import { buildSchema } from '../graphql/schema';
+import { getRedisClient } from '../database/config/redis/connection';
+import { getConnection } from 'database/config/mongo/connection';
 
 const defaultName = 'ApplicationServer Calcetto';
 const defaultPort = Number(isProductionMode() ? process.env.PORT : process.env.SERVER_PORT);
 const allowedOrigin = process.env.ORIGIN_WHITE_LIST
 	? process.env.ORIGIN_WHITE_LIST.split(';')
-	: [
-			'http://localhost:5000',
-			'http://localhost:5001',
-			'https://calcetto2020stage.herokuapp.com',
-			'https://calcetto2020production.herokuapp.com',
-	  ];
+	: ['http://localhost:5000', 'http://localhost:5001'];
 
 // https://expressjs.com/en/resources/middleware/cors.html
 const applicationCorsOption: CorsOptions = {
@@ -47,35 +44,29 @@ const applicationCorsOption: CorsOptions = {
 	origin: (origin, callback) =>
 		allowedOrigin.indexOf(origin!) !== -1 || !origin
 			? callback(null, true)
-			: callback(new Error(`Not allowed by CORS : ${origin}`)),
+			: callback(new Error(`Not allowed by CORS : ${origin}`), origin),
 };
 
 export default class AppServer extends AbstractServer {
-	connection: Sequelize | null;
 	constructor(applicationName = defaultName, applicationPort = defaultPort) {
 		super(applicationName, applicationPort, allowedOrigin, applicationCorsOption);
-		this.connection = null;
 	}
 
-	public async connect(): Promise<Sequelize> {
+	public async connect(): Promise<void> {
+		logger.info('Connecting to datasources...');
 		const force = process.env.SERVER_FORCE && process.env.SERVER_FORCE.toLowerCase() === 'true';
-		logger.info('Allowed origin : ', allowedOrigin);
 		// If it's not a fresh new installation then run migrations
 		if (!force) {
 			await migrationUp();
 		}
 
-		logger.info(
-			(force ? chalk.redBright.bold(' [ FORCE ] ') : chalk.greenBright.bold(' [ NORMAL ] ')).concat(
-				chalk.cyan.bold('Starting database synchronization...')
-			)
-		);
+		logger.info('Mode :'.concat(force ? chalk.redBright.bold(' [ FORCE ] ') : chalk.greenBright.bold(' [ NORMAL ] ')));
 
 		// Dev and Test can use THE FORCE :
 		// “Don’t underestimate the Force.” – Darth Vader
 		if ((isDevMode() || isTestMode()) && force) {
 			// Drop and create all tables
-			this.connection = await sync({ force });
+			this.sequelize = await sync({ force });
 			// Mark all migrations as applied
 			await markAllAsApplied();
 			// Generate dummies data
@@ -87,21 +78,26 @@ export default class AppServer extends AbstractServer {
 				In CI multiple jobs runs at the same time so we need to use schemas.
 				( Each job use a differente schema )
 			*/
-			this.connection = process.env.DATABASE_SCHEMA
+			this.sequelize = process.env.DATABASE_SCHEMA
 				? await createSchemaAndSync(process.env.DATABASE_SCHEMA, { force: true, restartIdentity: true })
 				: await sync({ force: true });
 		} else {
-			this.connection = await authenticate();
+			this.sequelize = await authenticate();
 		}
 
-		return this.connection;
+		// build GraphQL schema from mongoDB collection
+		this.mongo = await getConnection();
+		await buildSchema();
+
+		// Redis
+		this.redis = getRedisClient(0);
 	}
 
-	public routes(application: ExpressApplication) {
+	public restRoutes(application: ExpressApplication) {
 		routes(application);
 	}
 
-	public socket(socketIO: SocketIoServer) {
+	public socketRoutes(socketIO: SocketIoServer) {
 		handleSocket(socketIO);
 	}
 }

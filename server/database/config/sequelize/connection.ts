@@ -32,8 +32,8 @@ async function loadModels(schema?: string): Promise<Sequelize> {
 	const uri = process.env[envConfig.useEnvVar]!;
 	const modelsPath = `${__dirname}/../../models/**/*.model.${isTsEnv() ? 'ts' : 'js'}`;
 	if (!isProductionMode()) {
-		logger.info(`Database URI : ${chalk.red.bold(util.inspect(uri))}`);
-		logger.info(`Models from : '${chalk.green(path.resolve(modelsPath))}'`);
+		logger.info(`Sequelize URI : ${chalk.red.bold(util.inspect(uri))}`);
+		logger.info(`Sequelize Models : '${chalk.green(path.resolve(modelsPath))}'`);
 	}
 	const connectionOptions: SequelizeOptions = {
 		...envConfig,
@@ -56,14 +56,14 @@ export async function authenticate(options?: SequelizeSyncOptions): Promise<Sequ
 	}
 	connection = await loadModels();
 	await connection.authenticate(options);
-	logger.info(chalk.cyan.bold('Database connected!'));
+	logger.info(chalk.cyan.bold('Sequelize connected!'));
 	return connection;
 }
 
 export async function sync(options?: SequelizeSyncOptions): Promise<Sequelize> {
 	connection = await loadModels();
 	await connection.sync(options);
-	logger.info(chalk.cyan.bold('Database synchronization complete!'));
+	logger.info(chalk.cyan.bold('Sequelize synchronization complete!'));
 	return connection;
 }
 
@@ -72,7 +72,7 @@ export async function createSchemaAndSync(schema: string, options?: SequelizeSyn
 	await connection.dropSchema(schema, {});
 	await connection.createSchema(schema, {});
 	await connection.sync({ ...options, schema, searchPath: schema });
-	logger.info(chalk.cyan.bold(`Database synchronizatio1n complete on schema ${schema}!`));
+	logger.info(chalk.cyan.bold(`Sequelize synchronizatio1n complete on schema ${schema}!`));
 	return connection;
 }
 

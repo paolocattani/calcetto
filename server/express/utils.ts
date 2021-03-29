@@ -42,7 +42,10 @@ export const getMiddlewares = (
 	redisClient: RedisClient
 ) => {
 	// CORS
-	const corsMw = cors<Request>(corsOptions);
+	if (!isProductionMode()) {
+		logger.warn('These origins are considered safe : ', allowedOrigin);
+	}
+	const corsMw = cors<Request>(isProductionMode() ? corsOptions : undefined);
 	// Morgan logger ( log http request/response )
 	const morganMw = morgan(isProductionMode() ? 'combined' : 'common');
 	//https://github.com/expressjs/compression/issues/61

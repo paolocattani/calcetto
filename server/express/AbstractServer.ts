@@ -14,10 +14,12 @@ import cors from 'cors';
 // Servers and middleware
 import { createApolloServer } from './ApolloServer';
 import { createSocketServer } from './SocketServer';
-import { getRedisClient } from '../database/config/redis/connection';
 import { getMiddlewares, serverStatus } from './utils';
 // Error handler
 import strongErrorHandler from 'strong-error-handler';
+import { Sequelize } from 'sequelize-typescript';
+import { Mongoose } from 'mongoose';
+import { RedisClient } from 'redis';
 
 // http://expressjs.com/en/advanced/best-practice-security.html
 export abstract class AbstractServer {
@@ -27,6 +29,10 @@ export abstract class AbstractServer {
 	httpServer: http.Server;
 	corsOptions: cors.CorsOptions;
 	allowedOrigin: Array<string>;
+	sequelize?: Sequelize;
+	socket?: SocketIoServer;
+	mongo?: Mongoose;
+	redis?: RedisClient;
 
 	constructor(name: string, port: number, allowedOrigin: Array<string>, corsOptions: cors.CorsOptions) {
 		this.serverName = name;
@@ -38,21 +44,18 @@ export abstract class AbstractServer {
 	}
 
 	public async start(): Promise<http.Server> {
-		// Redis
-		const redisClient = getRedisClient(0);
-
 		// Server configuration
 		// https://blog.risingstack.com/node-js-security-checklist/
 		// http://expressjs.com/en/advanced/best-practice-security.html
-		const middlewares = getMiddlewares(this.corsOptions, this.allowedOrigin, redisClient);
+		const middlewares = getMiddlewares(this.corsOptions, this.allowedOrigin, this.redis!);
 		this.application.set('trust proxy', isProductionMode()).use(Object.values(middlewares)).disable('x-powered-by');
 
 		// REST Api
-		this.routes(this.application);
+		this.restRoutes(this.application);
 
 		// Socket
-		const socketIO = createSocketServer(redisClient, this.httpServer, this.corsOptions, middlewares.sessionMw);
-		this.socket(socketIO);
+		this.socket = createSocketServer(this.redis!, this.httpServer, this.corsOptions, middlewares.sessionMw);
+		this.socketRoutes(this.socket);
 
 		// Apollo
 		createApolloServer(this.application, this.corsOptions);
@@ -71,14 +74,19 @@ export abstract class AbstractServer {
 				redirect: true,
 			})
 		);
+
 		/* 	
 			Redirect everything else to index.html
 		*/
 		this.application.get('/*', (request: Request, res: Response /*, next: NextFunction*/) => {
-			if (!request.originalUrl.startsWith('/static') && !request.originalUrl.startsWith('/api')) {
-				logger.info('Request : ', request.originalUrl);
+			if (
+				!request.originalUrl.startsWith('/static') &&
+				!request.originalUrl.startsWith('/api') &&
+				!request.originalUrl.startsWith('/graphql')
+			) {
+				logger.warn(`Redirecting request ${request.originalUrl} to index.html`);
 				return res.redirect('/');
-				// return res.sendFile(`${buildPath}/index.html`,{});
+				// return res.sendFile(`${buildPath}/index.html`, {});
 			}
 		});
 
@@ -93,35 +101,50 @@ export abstract class AbstractServer {
 
 		// Shows servers stats every 30 minutes
 		const interval = serverStatus(process);
+
 		// Graceful Shutdown
 		const closeServer = (signal: string) => {
 			logger.info(`Detect event ${signal}.`);
-			if (this.httpServer.listening) {
-				this.httpServer.close();
+			if (this.sequelize) {
+				logger.info('Closing sequelize connection...');
+				this.sequelize.close();
+				logger.info('Done!');
 			}
+			if (this.socket) {
+				logger.info('Closing socket connection...');
+				this.socket.close();
+				logger.info('Done!');
+			}
+			if (this.redis) {
+				logger.info('Closing redis connection...');
+				this.redis.quit();
+				logger.info('Done!');
+			}
+			if (this.httpServer.listening) {
+				logger.info('Closing http server...');
+				this.httpServer.close();
+				logger.info('Done!');
+			}
+			if (interval) {
+				logger.info('Clear interval...');
+				clearInterval(interval);
+				logger.info('Done!');
+			}
+			logger.info('All Done!');
+			process.exit(0);
 		};
 
 		process.on('SIGINT', () => closeServer('SIGINT'));
 		process.on('SIGTERM', () => closeServer('SIGTERM'));
-
-		this.httpServer.on('close', () => {
-			logger.info('Closing sockets...');
-			if (socketIO) {
-				socketIO.close();
-			}
-			logger.info('Stopping server...');
-			clearInterval(interval);
-			logger.info('Shutdown...');
-			process.exit(0);
-		});
+		this.httpServer.on('close', () => closeServer('close'));
 
 		return this.httpServer;
 	}
 
 	// Implementation have to handle all other API
-	public abstract routes(application: ExpressApplication): void;
+	public abstract restRoutes(application: ExpressApplication): void;
 	// And socket
-	public abstract socket(socketIO: SocketIoServer): void;
+	public abstract socketRoutes(socketIO: SocketIoServer | null): void;
 }
 
 process.on('uncaughtException', (err) => logger.fatal(err));

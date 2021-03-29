@@ -22,7 +22,7 @@ export const getBestPlayers = async (from?: string) => {
 				fetch first :rowsLimit rows only`,
 			{
 				replacements: {
-					from: `getPlayerStats${from ? `('${from}')` : '()'}`,
+					from: `getPlayerStats${from ? `(${from})` : '()'}`,
 					rowsLimit,
 				},
 				type: QueryTypes.SELECT,
@@ -59,7 +59,7 @@ export const getBestPairs = async (from?: string) => {
 			fetch first :rowsLimit rows only`,
 			{
 				replacements: {
-					from: `getPairStats${from ? `('${from}')` : '()'}`,
+					from: `getPairStats${from ? `(${from})` : '()'}`,
 					rowsLimit,
 				},
 				type: QueryTypes.SELECT,

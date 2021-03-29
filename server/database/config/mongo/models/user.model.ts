@@ -1,5 +1,11 @@
-import mongoose, { Schema } from 'mongoose';
-import { composeWithMongoose } from 'graphql-compose-mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
+import { composeMongoose } from 'graphql-compose-mongoose';
+
+// define interface for your mongoose model IUser
+interface IUser extends Document {
+	name: string;
+	email: string;
+}
 
 export const UserSchema = new Schema(
 	{
@@ -20,8 +26,7 @@ export const UserSchema = new Schema(
 		collection: 'users',
 	}
 );
-
 UserSchema.index({ createdAt: 1, updatedAt: 1 });
 
-export const User = mongoose.model('User', UserSchema);
-export const UserTC = composeWithMongoose(User);
+export const User = mongoose.model<IUser>('User', UserSchema);
+export const UserTC = composeMongoose(User);
