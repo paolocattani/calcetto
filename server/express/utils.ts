@@ -128,8 +128,8 @@ export const getMiddlewares = (
 		cookieParserMw,
 		helmetMw,
 		sessionMw,
-		routeLogger,
 		clientInfo,
+		routeLogger,
 		auditControl,
 		cacheControl,
 	};

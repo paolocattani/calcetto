@@ -4,15 +4,16 @@ import chalk from 'chalk';
 import path from 'path';
 import { logger } from '@core/logger';
 import { isProductionMode } from '@common/utils/env.utils';
+import { startWithOneOf } from '@common/utils/string.utils';
 import { createServer } from 'http';
 // Express
-import express, { Request, Response, Application as ExpressApplication } from 'express';
+import express, { Request, Response, NextFunction, Application as ExpressApplication } from 'express';
 // socket.io
 import { Server as SocketIoServer } from 'socket.io';
 
 import cors from 'cors';
 // Servers and middleware
-import { createApolloServer } from './ApolloServer';
+import { createApolloServer, GRAPHQL_ENDPOINT, PLAYGROUND_ENDPOINT } from './ApolloServer';
 import { createSocketServer } from './SocketServer';
 import { getMiddlewares, serverStatus } from './utils';
 // Error handler
@@ -20,6 +21,8 @@ import strongErrorHandler from 'strong-error-handler';
 import { Sequelize } from 'sequelize-typescript';
 import { Mongoose } from 'mongoose';
 import { RedisClient } from 'redis';
+import { API_ENDPOINT } from 'controller';
+import LogRocket from 'logrocket';
 
 // http://expressjs.com/en/advanced/best-practice-security.html
 export abstract class AbstractServer {
@@ -49,7 +52,7 @@ export abstract class AbstractServer {
 		// http://expressjs.com/en/advanced/best-practice-security.html
 		const middlewares = getMiddlewares(this.corsOptions, this.allowedOrigin, this.redis!);
 		this.application.set('trust proxy', isProductionMode()).use(Object.values(middlewares)).disable('x-powered-by');
-
+		LogRocket.init('3c36py/calcettostage');
 		// REST Api
 		this.restRoutes(this.application);
 
@@ -78,16 +81,14 @@ export abstract class AbstractServer {
 		/* 	
 			Redirect everything else to index.html
 		*/
-		this.application.get('/*', (request: Request, res: Response /*, next: NextFunction*/) => {
-			if (
-				!request.originalUrl.startsWith('/static') &&
-				!request.originalUrl.startsWith('/api') &&
-				!request.originalUrl.startsWith('/graphql')
-			) {
+		const serverRoutes = ['/static', API_ENDPOINT, PLAYGROUND_ENDPOINT, GRAPHQL_ENDPOINT];
+		this.application.get('/*', (request: Request, res: Response, next: NextFunction) => {
+			if (!startWithOneOf(request.originalUrl, serverRoutes)) {
 				logger.warn(`Redirecting request ${request.originalUrl} to index.html`);
 				return res.redirect('/');
 				// return res.sendFile(`${buildPath}/index.html`, {});
 			}
+			next();
 		});
 
 		// Listen on port `this.serverPort`
@@ -104,7 +105,7 @@ export abstract class AbstractServer {
 
 		// Graceful Shutdown
 		const closeServer = (signal: string) => {
-			logger.info(`Detect event ${signal}.`);
+			logger.info(`Detect event ${chalk.yellow(signal)}.`);
 			if (this.sequelize) {
 				logger.info('Closing sequelize connection...');
 				this.sequelize.close();
