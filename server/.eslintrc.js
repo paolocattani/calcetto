@@ -49,7 +49,7 @@ module.exports = {
 			node: { extensions: ['.js', '.ts'] },
 		},
 	},
-	ignorePatterns: ['build', '*.test.ts'],
+	ignorePatterns: ['build'],
 	env: {
 		browser: false,
 		commonjs: true,

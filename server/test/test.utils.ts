@@ -1,7 +1,34 @@
-export const getRandomUser = async (size?: number): Promise<RandomUserList | null> => {
+import { UserDTO, PlayerRole } from '@common/dto';
+
+export const APPLICATION_JSON = 'application/json';
+export const TEST_HEADERS = {
+	'Content-Type': APPLICATION_JSON,
+};
+
+export const getRandomUser = async (size?: number): Promise<RandomUserList> => {
 	try {
 		const response = await fetch('https://randomuser.me/api/' + size);
 		return await response.json();
+	} catch (error) {
+		return;
+	}
+};
+
+export const getFormattedRandomUser = async (size?: number): Promise<UserDTO> => {
+	try {
+		const users = await getRandomUser(size);
+		return users.results.map((u) => ({
+			username: u.login.username,
+			name: u.name.first,
+			surname: u.name.last,
+			email: u.email,
+			cEmail: u.email,
+			password: u.login.password,
+			cPassword: u.login.password,
+			phone: u.phone,
+			birthday: u.registered.date,
+			playerRole: PlayerRole.Master,
+		}));
 	} catch (error) {
 		return null;
 	}

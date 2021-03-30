@@ -1,5 +1,6 @@
 import { PlayerRole } from '@common/dto/player.dto';
 
+// @unused
 // https://www.fakenamegenerator.com/gen-male-us-it.php
 export const TEST_USER_1 = {
 	username: 'dummy1',
@@ -14,6 +15,7 @@ export const TEST_USER_1 = {
 	playerRole: PlayerRole.Master,
 };
 
+// @unused
 export const TEST_USER_2 = {
 	// https://www.fakenamegenerator.com/gen-male-us-it.php
 	username: 'dummy2',

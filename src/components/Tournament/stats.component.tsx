@@ -56,8 +56,9 @@ const StatsSummary: React.FC<StatsSummaryProps> = () => {
 						(p1, p2) =>
 							roundNumber((p2.totwin / p2.totMatch) * 100, 1) - roundNumber((p1.totwin / p1.totMatch) * 100, 1)
 					)
-					.map((p) => (
-						<Row>
+					.map((p, ii) => (
+						// eslint-disable-next-line react/no-array-index-key
+						<Row key={`key-${ii}`}>
 							{/* 1st col : Pair/Player name */}
 							<Col
 								md={{ span: 2, offset: 2 }}

@@ -1,2 +1,11 @@
-// https://dev.to/nedsoft/testing-nodejs-express-api-with-jest-and-supertest-1km6
-// export default () => {};
+import '@common/utils/env';
+import AppServer from '../express/AppServer';
+
+module.exports = async () => {
+	// Bootstrap application
+	const applicationServer = new AppServer();
+	await applicationServer.connect();
+	await applicationServer.start();
+
+	globalThis.__APPLICATION__ = applicationServer;
+};

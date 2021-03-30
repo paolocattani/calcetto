@@ -36,6 +36,7 @@ export abstract class AbstractServer {
 	socket?: SocketIoServer;
 	mongo?: Mongoose;
 	redis?: RedisClient;
+	interval?: NodeJS.Timeout;
 
 	constructor(name: string, port: number, allowedOrigin: Array<string>, corsOptions: cors.CorsOptions) {
 		this.serverName = name;
@@ -101,43 +102,11 @@ export abstract class AbstractServer {
 		});
 
 		// Shows servers stats every 30 minutes
-		const interval = serverStatus(process);
+		this.interval = serverStatus(process);
 
-		// Graceful Shutdown
-		const closeServer = (signal: string) => {
-			logger.info(`Detect event ${chalk.yellow(signal)}.`);
-			if (this.sequelize) {
-				logger.info('Closing sequelize connection...');
-				this.sequelize.close();
-				logger.info('Done!');
-			}
-			if (this.socket) {
-				logger.info('Closing socket connection...');
-				this.socket.close();
-				logger.info('Done!');
-			}
-			if (this.redis) {
-				logger.info('Closing redis connection...');
-				this.redis.quit();
-				logger.info('Done!');
-			}
-			if (this.httpServer.listening) {
-				logger.info('Closing http server...');
-				this.httpServer.close();
-				logger.info('Done!');
-			}
-			if (interval) {
-				logger.info('Clear interval...');
-				clearInterval(interval);
-				logger.info('Done!');
-			}
-			logger.info('All Done!');
-			process.exit(0);
-		};
-
-		process.on('SIGINT', () => closeServer('SIGINT'));
-		process.on('SIGTERM', () => closeServer('SIGTERM'));
-		this.httpServer.on('close', () => closeServer('close'));
+		process.on('SIGINT', () => this.stop('SIGINT'));
+		process.on('SIGTERM', () => this.stop('SIGTERM'));
+		this.httpServer.on('close', this.stop);
 
 		return this.httpServer;
 	}
@@ -146,6 +115,43 @@ export abstract class AbstractServer {
 	public abstract restRoutes(application: ExpressApplication): void;
 	// And socket
 	public abstract socketRoutes(socketIO: SocketIoServer | null): void;
+
+	public async stop(event = 'close') {
+		logger.info(`Detect event ${chalk.yellow(event)}.`);
+		if (this.sequelize) {
+			logger.info('Closing sequelize connection...');
+			await this.sequelize.close();
+			logger.info('Done!');
+		}
+		if (this.socket) {
+			logger.info('Closing socket connection...');
+			await new Promise((resolve) => {
+				this.socket!.close(() => resolve(true));
+			});
+			logger.info('Done!');
+		}
+		if (this.redis) {
+			logger.info('Closing redis connection...');
+			await new Promise((resolve) => {
+				this.redis!.quit(() => resolve(true));
+			});
+			logger.info('Done!');
+		}
+		if (this.httpServer.listening) {
+			logger.info('Closing http server...');
+			await new Promise((resolve) => {
+				this.httpServer.close(() => resolve(true));
+			});
+			logger.info('Done!');
+		}
+		if (this.interval) {
+			logger.info('Clear interval...');
+			clearInterval(this.interval);
+			logger.info('Done!');
+		}
+		logger.info('All Done!');
+		process.exit(0);
+	}
 }
 
 process.on('uncaughtException', (err) => logger.fatal(err));
