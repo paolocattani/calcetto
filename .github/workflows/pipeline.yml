@@ -165,11 +165,11 @@ jobs:
           with:
             name: coverage-frontend
             path: coverage
-        - name: Download coverage backend
-          uses: actions/download-artifact@v2
-          with:
-            name: coverage-backend
-            path: server/coverage
+        # - name: Download coverage backend
+        #   uses: actions/download-artifact@v2
+        #   with:
+        #     name: coverage-backend
+        #     path: server/coverage
         # https://github.com/marketplace/actions/sonarcloud-scan
         - name: SonarCloud Scan
           uses: sonarsource/sonarcloud-github-action@master
