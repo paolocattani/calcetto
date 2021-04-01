@@ -103,6 +103,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     name: Unit tests backend
+    if: ${{ 1==2 }}
     steps:
       - uses: actions/checkout@v2
       # Restore cache
@@ -149,7 +150,8 @@ jobs:
   #-----------------------------------------
   analyze:
     runs-on: ubuntu-latest
-    needs: [build, unit-test-frontend, unit-test-backend]
+    # needs: [build, unit-test-frontend, unit-test-backend]
+    needs: [build, unit-test-frontend]
     name: Code Quality
     steps:
         # Download Analysis, Coverage Frontend and Backend
