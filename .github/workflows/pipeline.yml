@@ -153,6 +153,7 @@ jobs:
     # needs: [build, unit-test-frontend, unit-test-backend]
     needs: [build, unit-test-frontend]
     name: Code Quality
+    continue-on-error: true
     steps:
         # Download Analysis, Coverage Frontend and Backend
         - name: Download analysis
