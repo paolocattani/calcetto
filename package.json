@@ -144,7 +144,7 @@
     "@types/react": "^17.0.3",
     "@types/react-bootstrap-date-picker": "^4.0.6",
     "@types/react-bootstrap-table-next": "^4.0.13",
-    "@types/react-datepicker": "^3.1.7",
+    "@types/react-datepicker": "^3.1.8",
     "@types/react-dom": "^17.0.3",
     "@types/react-redux": "^7.1.16",
     "@types/react-router": "^5.1.12",
