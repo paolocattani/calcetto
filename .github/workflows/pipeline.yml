@@ -129,6 +129,20 @@ jobs:
         with:
           name: coverage-backend
           path: server/coverage
+        env:
+          SERVER_PORT: 5001
+          ORIGIN_WHITE_LIST: 'http://localhost:5000;http://localhost:5001'
+          SERVER_FORCE: true
+          SERVER_TOKEN_EXPIRES_IN: 2h
+          SERVER_SECRET: 'This_Is_Not_The_Real_Secret'
+          SERVER_HASH: 'This_Is_Not_The_Real_Hash'
+          STATIC_CONTENTS_CACHE: 10000
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}          
+          DATABASE_SCHEMA: test          
+          REDISCLOUD_URL: ${{ secrets.REDISCLOUD_URL }}          
+          REDISCLOUD_PASSWORD: ${{ secrets.REDISCLOUD_PASSWORD }}          
+          REDISCLOUD_DB: ${{ secrets.REDISCLOUD_DB }}          
+          MONGODB_URL: ${{ secrets.MONGODB_URL }}          
 
   #-----------------------------------------
   # Code Quality ( Sonarcloud )
