@@ -123,12 +123,6 @@ jobs:
       # unit test 
       - name: Unit Tests Backend
         run: cd server && npm run test:unit:coverage
-      # Save coverage for sonar
-      - name: Upload build
-        uses: actions/upload-artifact@v2.2.2
-        with:
-          name: coverage-backend
-          path: server/coverage
         env:
           SERVER_PORT: 5001
           ORIGIN_WHITE_LIST: 'http://localhost:5000;http://localhost:5001'
@@ -143,6 +137,12 @@ jobs:
           REDISCLOUD_PASSWORD: ${{ secrets.REDISCLOUD_PASSWORD }}          
           REDISCLOUD_DB: ${{ secrets.REDISCLOUD_DB }}          
           MONGODB_URL: ${{ secrets.MONGODB_URL }}          
+      # Save coverage for sonar
+      - name: Upload build
+        uses: actions/upload-artifact@v2.2.2
+        with:
+          name: coverage-backend
+          path: server/coverage
 
   #-----------------------------------------
   # Code Quality ( Sonarcloud )
