@@ -90,7 +90,7 @@ jobs:
         run: npm ci
       # unit test
       - name: Unit Tests Frontend
-        run: CI=true npm run CRA:test:coverage
+        run: npm run CRA:test:coverage
       # Save coverage for sonar
       - name: Upload build
         uses: actions/upload-artifact@v2.2.2
@@ -119,7 +119,7 @@ jobs:
             ${{ runner.os }}-
       # Install dependencies
       - name: Install dependencies
-        run: cd server && npm ci
+        run: cd server && npm i
       # unit test 
       - name: Unit Tests Backend
         run: cd server && npm run test:unit:coverage
