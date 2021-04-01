@@ -11,14 +11,14 @@ import routes from '../controller/index';
 import '@common/utils/env.utils';
 import chalk from 'chalk';
 import { logger } from '@core/logger';
-import { markAllAsApplied } from '../database/migrations';
+import { createViews, markAllAsApplied } from '../database/migrations';
 import { Server as SocketIoServer } from 'socket.io'; // socket.io
 import { handleSocket } from '../events/events';
 import { isDevMode, isProductionMode, isTestMode } from '@common/utils/env.utils';
 import { migrationUp } from '../database/migrations';
 import { buildSchema } from '../graphql/schema';
+import { getConnection } from '../database/config/mongo/connection';
 import { getRedisClient } from '../database/config/redis/connection';
-import { getConnection } from 'database/config/mongo/connection';
 
 const defaultName = 'ApplicationServer Calcetto';
 const defaultPort = Number(isProductionMode() ? process.env.PORT : process.env.SERVER_PORT);
@@ -53,44 +53,54 @@ export default class AppServer extends AbstractServer {
 	}
 
 	public async connect(): Promise<void> {
-		logger.info('Connecting to datasources...');
-		const force = process.env.SERVER_FORCE && process.env.SERVER_FORCE.toLowerCase() === 'true';
-		// If it's not a fresh new installation then run migrations
-		if (!force) {
-			await migrationUp();
+		try {
+			logger.info('Connecting to datasources...');
+			const force = process.env.SERVER_FORCE && process.env.SERVER_FORCE.toLowerCase() === 'true';
+			// If it's not a fresh new installation then run migrations
+			if (!force) {
+				await migrationUp();
+			}
+
+			logger.info(
+				'Mode :'.concat(force ? chalk.redBright.bold(' [ FORCE ] ') : chalk.greenBright.bold(' [ NORMAL ] '))
+			);
+
+			// Dev and Test can use THE FORCE :
+			// “Don’t underestimate the Force.” – Darth Vader
+			if ((isDevMode() || isTestMode()) && force) {
+				// Mark all migrations as applied
+				await markAllAsApplied();
+				// Drop and create all tables
+				this.sequelize = await sync({ force });
+				// Create view
+				await createViews();
+				// Generate dummies data only on dev
+				if (isDevMode()) {
+					await generator(force);
+				}
+				// Always start from clean db on test
+			} else if (isTestMode()) {
+				/*
+					When test on local we just user "public" schema.
+					In CI multiple jobs runs at the same time so we need to use schemas.
+					( Each job use a differente schema )
+				*/
+				this.sequelize = process.env.DATABASE_SCHEMA
+					? await createSchemaAndSync(process.env.DATABASE_SCHEMA, { force: true, restartIdentity: true })
+					: await sync({ force: true });
+			} else {
+				this.sequelize = await authenticate();
+			}
+
+			// build GraphQL schema from mongoDB collection
+			this.mongo = await getConnection();
+			await buildSchema();
+			// Redis
+			this.redis = getRedisClient(0);
+		} catch (error) {
+			logger.error('Failed connecting datasources...', error);
+			throw new Error('Failed connecting datasources');
 		}
-
-		logger.info('Mode :'.concat(force ? chalk.redBright.bold(' [ FORCE ] ') : chalk.greenBright.bold(' [ NORMAL ] ')));
-
-		// Dev and Test can use THE FORCE :
-		// “Don’t underestimate the Force.” – Darth Vader
-		if ((isDevMode() || isTestMode()) && force) {
-			// Drop and create all tables
-			this.sequelize = await sync({ force });
-			// Mark all migrations as applied
-			await markAllAsApplied();
-			// Generate dummies data
-			await generator(force);
-			// Always start from clean db on test
-		} else if (isTestMode()) {
-			/*
-				When test on local we just user "public" schema.
-				In CI multiple jobs runs at the same time so we need to use schemas.
-				( Each job use a differente schema )
-			*/
-			this.sequelize = process.env.DATABASE_SCHEMA
-				? await createSchemaAndSync(process.env.DATABASE_SCHEMA, { force: true, restartIdentity: true })
-				: await sync({ force: true });
-		} else {
-			this.sequelize = await authenticate();
-		}
-
-		// build GraphQL schema from mongoDB collection
-		this.mongo = await getConnection();
-		await buildSchema();
-
-		// Redis
-		this.redis = getRedisClient(0);
 	}
 
 	public restRoutes(application: ExpressApplication) {

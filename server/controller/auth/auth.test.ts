@@ -5,22 +5,24 @@ import { loginTestUser, registerTestUser } from '../../test/common';
 import { UserDTO } from '@common/dto';
 import { HTTPStatusCode } from '@common/models';
 import { APPLICATION_JSON, getFormattedRandomUser, TEST_HEADERS } from '../../test/test.utils';
-import applicationServer from '../../server';
-import { Logger } from 'log4js';
+import bootstrap from '../../server';
+import AppServer from '../../express/AppServer';
 
 describe('Authentication Endpoints', () => {
 	let serverTest: supertest.SuperTest<supertest.Test>;
 	let user1: UserDTO;
 	let user2: UserDTO;
+	let application: AppServer;
 	beforeAll(async () => {
-		serverTest = supertest(applicationServer.httpServer);
+		application = await bootstrap();
+		serverTest = supertest(application.httpServer);
 		const users = await getFormattedRandomUser(2);
 		user1 = users[0];
-		user2 = users[0];
+		user2 = users[1];
 	});
 
-	afterAll(() => {
-		applicationServer.httpServer.close();
+	afterAll(async () => {
+		await application.stop();
 	});
 
 	describe('Registration process', () => {
@@ -62,8 +64,13 @@ describe('Authentication Endpoints', () => {
 
 		it('Should login', async () => {
 			const result = await loginTestUser(user2);
-			Logger.info('Response: ', result);
 			expect(result.code).toEqual(HTTPStatusCode.OK);
+		});
+
+		it('Should not login', async () => {
+			user2.password = 'wrong_password';
+			const result = await loginTestUser(user2);
+			expect(result.code).toEqual(HTTPStatusCode.BadRequest);
 		});
 	});
 });

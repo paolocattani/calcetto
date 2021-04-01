@@ -1,35 +1,42 @@
 import { UserDTO, PlayerRole } from '@common/dto';
+import { logger } from '@core/logger';
 
 export const APPLICATION_JSON = 'application/json';
 export const TEST_HEADERS = {
 	'Content-Type': APPLICATION_JSON,
 };
 
-export const getRandomUser = async (size?: number): Promise<RandomUserList> => {
+export const getRandomUser = async (size = 1): Promise<RandomUserList> => {
 	try {
-		const response = await fetch('https://randomuser.me/api/' + size);
+		const response = await fetch('https://randomuser.me/api/?password=special,upper,lower,number,8-16&results=' + size);
 		return await response.json();
 	} catch (error) {
+		logger.error('getRandomUser ', error);
 		return;
 	}
 };
 
-export const getFormattedRandomUser = async (size?: number): Promise<UserDTO> => {
+export const getFormattedRandomUser = async (size?: number): Promise<Array<UserDTO>> => {
 	try {
 		const users = await getRandomUser(size);
-		return users.results.map((u) => ({
-			username: u.login.username,
-			name: u.name.first,
-			surname: u.name.last,
-			email: u.email,
-			cEmail: u.email,
-			password: u.login.password,
-			cPassword: u.login.password,
-			phone: u.phone,
-			birthday: u.registered.date,
-			playerRole: PlayerRole.Master,
-		}));
+		if (users) {
+			return users.results.map((u) => ({
+				username: u.login.username,
+				name: u.name.first,
+				surname: u.name.last,
+				email: u.email,
+				confirmEmail: u.email,
+				password: u.login.password,
+				confirmPassword: u.login.password,
+				phone: u.phone,
+				birthday: u.registered.date,
+				playerRole: PlayerRole.Master,
+			}));
+		} else {
+			logger.error('getFormattedRandomUser ', users);
+		}
 	} catch (error) {
+		logger.error('getFormattedRandomUser ', error);
 		return null;
 	}
 };

@@ -8,3 +8,4 @@ export * from './stage2.model';
 export * from './common.models';
 export * from './stats.model';
 export * from './event.model';
+export * from './HttpStatusCode';

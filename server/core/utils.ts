@@ -19,6 +19,8 @@ export const isTsEnv = () => {
 	return detectTSNode;
 };
 
+export const fileExtension = () => (isTsEnv() ? 'ts' : 'js');
+
 //-----------------------------
 // Async utils
 //

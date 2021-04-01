@@ -31,6 +31,5 @@ export const getConnection = async () => {
 	} catch (error) {
 		logger.error(error);
 	}
-	logger.info('return ');
 	return connection;
 };

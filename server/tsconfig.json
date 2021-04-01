@@ -9,7 +9,6 @@
 		"lib": [
 			"es2020"
 		],
-		"resolveJsonModule":true,
 		"strict": true,
 		"allowJs": true,
 		"checkJs": true,
@@ -20,6 +19,7 @@
 		"isolatedModules": true,
 		//"listFiles": true,
 		//"listEmittedFiles": true,
+		"resolveJsonModule":true,
 		"noErrorTruncation": true,
 		"outDir": "./build",
 		"removeComments": true,

@@ -6,13 +6,13 @@ const viewPairName = 'stats_pairs';
 const viewPlayerName = 'stats_players';
 const functionPairName = 'getPairStats';
 const functionPlayerName = 'getPlayerStats';
-const migrationName = '03_stats';
+const migrationName = '02_stats_pairs';
 
 export const up: Migration = async ({ context: sequelize }: UmzugContext) => {
 	logMigrationStart('up', migrationName);
 	// Create Function Pairs
 	// eslint-disable-next-line quotes
-	let functionParams = "p_date varchar default '1900-01-01'";
+	const functionParams = "p_date varchar default '1900-01-01'";
 	let functionReturn =
 		'table(id bigint,player1Id integer,player2Id integer,s1win numeric,s1def numeric,s2win numeric,s2def numeric,totwin numeric,totdef numeric, ratioTot float )';
 	let functionBody = `
@@ -56,8 +56,6 @@ export const up: Migration = async ({ context: sequelize }: UmzugContext) => {
 	`;
 	await functionUp(sequelize, functionPairName, functionParams, functionReturn, functionBody);
 	// Create Function Players
-	// eslint-disable-next-line quotes
-	functionParams = "p_date varchar default '1900-01-01'";
 	functionReturn =
 		'table(id bigint,playerId integer,s1win numeric,s1def numeric,s2win numeric,s2def numeric,totwin numeric,totdef numeric, ratioTot float )';
 	functionBody = `

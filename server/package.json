@@ -18,13 +18,13 @@
   },
   "scripts": {
     "dev": "./node_modules/.bin/nodemon --config \"./nodemon.json\"",
-    "test:unit": "cross-env NODE_ENV=test ts-jest",
-    "test:unit:watch": "cross-env NODE_ENV=test jest -o --watch --detectOpenHandles",
-    "test:unit:coverage": "cross-env NODE_ENV=test --coverage --detectOpenHandles",
+    "test:unit": "cross-env NODE_ENV=test ./node_modules/.bin/jest -o --detectOpenHandles",
+    "test:unit:coverage": "cross-env NODE_ENV=test ./node_modules/.bin/jest --coverage",
+    "test:unit:watch": "cross-env NODE_ENV=test ./node_modules/.bin/jest -o --watch --detectOpenHandles",
     "test:e2e": "cross-env NODE_ENV=test start-server-and-test prod 5001 test:coverage",
     "prod": "node build/server/server.js",
     "build2": "./node_modules/.bin/ttsc --project tsconfig.prod.json",
-    "build": "./node_modules/.bin/ttsc --project tsconfig.json",
+    "build": "./node_modules/.bin/ttsc --project tsconfig.json --clean",
     "test": "snyk test"
   },
   "devDependencies": {
@@ -86,7 +86,6 @@
     "helmet": "^4.4.1",
     "jsonwebtoken": "^8.5.1",
     "log4js": "^6.3.0",
-    "logrocket": "^1.0.14",
     "mongoose": "^5.12.2",
     "mongoose-timestamp": "^0.6.0",
     "morgan": "^1.10.0",

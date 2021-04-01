@@ -16,8 +16,4 @@ const getEnv = () => {
 	return resolve(__dirname, `../../../${filename}`);
 };
 
-config({
-	path: getEnv(),
-	encoding: 'utf8',
-	// debug: false,
-});
+config({ path: getEnv(), encoding: 'utf8' /* debug: false */ });

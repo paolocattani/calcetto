@@ -15,8 +15,8 @@ const config: Config.InitialOptions = {
 	roots: ['<rootDir>'],
 	modulePaths: ['<rootDir>'],
 	// Setup / Teardown
-	globalSetup: './test/jest.setup.ts',
-	globalTeardown: './test/jest.teardown.ts',
+	// globalSetup: './test/jest.setup.ts',
+	// globalTeardown: './test/jest.teardown.ts',
 	// Ignore
 	modulePathIgnorePatterns: ['build'],
 	// Globals
@@ -30,8 +30,8 @@ const config: Config.InitialOptions = {
 	//moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),{ prefix: '<rootDir>/' }),
 	moduleNameMapper: pathsToModuleNameMapper(
 		{
-			'@common/(.*)': ['../src/@common/$1'],
-			'@core/(.*)': ['./core/$1'],
+			'@common/*': ['../src/@common/*'],
+			'@core/*': ['./core/*'],
 		},
 		{
 			prefix: '<rootDir>/',
@@ -43,7 +43,7 @@ const config: Config.InitialOptions = {
 	transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$', '^.+\\.module\\.(css|sass|scss)$'],
 	// Coverage
 	coverageReporters: ['json', 'lcov', 'text-summary', 'clover'],
-	coveragePathIgnorePatterns: ['/node_modules/'],
+	coveragePathIgnorePatterns: ['<rootDir>/build/', '<rootDir>/node_modules/'],
 	coverageThreshold: {
 		global: {
 			statements: 95,

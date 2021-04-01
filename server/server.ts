@@ -1,14 +1,18 @@
-import '@common/utils/env';
 import { logger } from '@core/logger';
-import AppServer from './express/AppServer';
+import AppServer from 'express/AppServer';
 
-logger.info('Boostrapping server...');
-const applicationServer = new AppServer();
-applicationServer.connect().then(() => {
-	logger.info('Connections enstablished...');
-	applicationServer.start().then(() => {
+export default async function bootstrap() {
+	logger.info('Boostrapping server...');
+	let applicationServer = null;
+	try {
+		applicationServer = new AppServer();
+		await applicationServer.connect();
+		logger.info('Connections enstablished...');
+		await applicationServer.start();
 		logger.info('Server started!');
-	});
-});
-
-export default applicationServer;
+	} catch (error) {
+		logger.fatal('Unable to bootstrap server ', error);
+		throw new Error('Unable to bootstrap server !');
+	}
+	return applicationServer;
+}

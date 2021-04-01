@@ -22,7 +22,6 @@ import { Sequelize } from 'sequelize-typescript';
 import { Mongoose } from 'mongoose';
 import { RedisClient } from 'redis';
 import { API_ENDPOINT } from 'controller';
-import LogRocket from 'logrocket';
 
 // http://expressjs.com/en/advanced/best-practice-security.html
 export abstract class AbstractServer {
@@ -53,7 +52,7 @@ export abstract class AbstractServer {
 		// http://expressjs.com/en/advanced/best-practice-security.html
 		const middlewares = getMiddlewares(this.corsOptions, this.allowedOrigin, this.redis!);
 		this.application.set('trust proxy', isProductionMode()).use(Object.values(middlewares)).disable('x-powered-by');
-		LogRocket.init('3c36py/calcettostage');
+
 		// REST Api
 		this.restRoutes(this.application);
 
@@ -137,7 +136,7 @@ export abstract class AbstractServer {
 			});
 			logger.info('Done!');
 		}
-		if (this.httpServer.listening) {
+		if (this.httpServer && this.httpServer.listening) {
 			logger.info('Closing http server...');
 			await new Promise((resolve) => {
 				this.httpServer.close(() => resolve(true));
