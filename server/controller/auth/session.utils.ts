@@ -72,12 +72,3 @@ export const removeSession = async (res: Response, { session }: Request): Promis
 		});
 	});
 };
-
-// FIXME: move this declaration in a dedicated d.ts file
-declare module 'express-session' {
-	interface SessionData {
-		jwt: string;
-		csrfSecret: string;
-		uuid: string;
-	}
-}

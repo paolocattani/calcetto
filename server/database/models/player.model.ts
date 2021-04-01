@@ -31,7 +31,7 @@ export default class Player extends Model {
 	public alias!: string;
 
 	@Default(PlayerRole.GoalKeeper)
-	@Column(DataType.ENUM({ values: Object.keys(PlayerRole) }))
+	@Column(DataType.ENUM({ values: Object.values(PlayerRole) }))
 	public role!: PlayerRole;
 
 	@Column(DataType.STRING)

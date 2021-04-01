@@ -1,33 +1,28 @@
-/* eslint-disable quotes */
-// Core
-
-import { logger } from '@core/logger';
-import { isProductionMode } from '@common/utils/env.utils';
+// OS / core
 import * as http from 'http';
-// Express
-import helmet from 'helmet';
-import morgan from 'morgan';
-import { createServer } from 'http';
-import compression from 'compression';
-import { json, urlencoded } from 'body-parser';
-import cookieParser from 'cookie-parser';
-import express, { Request, Application as ExpressApplication } from 'express';
-import session from 'express-session';
-// Redis
-import connectRedis from 'connect-redis'; // Redis adapter for express-session
-import { Server as SocketIoServer } from 'socket.io'; // socket.io
-import { createAdapter } from 'socket.io-redis'; // Redis adapter for socket.io
-
-// Auth
-import cors from 'cors';
-// Other
 import chalk from 'chalk';
 import path from 'path';
-import { cookiesOption, SESSION_ID } from '../controller/auth/session.utils';
-import { getRedisClient } from '../database/config/redis/connection';
-import { routeLogger, clientInfo, auditControl, cacheControl, mwWrapper, withAuth } from '../middleware';
-import { ClientToServerEvents, ServerToClientEvents } from '@common/models/event.model';
+import { logger } from '@core/logger';
+import { isProductionMode } from '@common/utils/env.utils';
+import { startWithOneOf } from '@common/utils/string.utils';
+import { createServer } from 'http';
+// Express
+import express, { Request, Response, NextFunction, Application as ExpressApplication } from 'express';
+// socket.io
+import { Server as SocketIoServer } from 'socket.io';
+
+import cors from 'cors';
+// Servers and middleware
+import { createApolloServer, GRAPHQL_ENDPOINT, PLAYGROUND_ENDPOINT } from './ApolloServer';
+import { createSocketServer } from './SocketServer';
+import { getMiddlewares, serverStatus } from './utils';
+// Error handler
 import strongErrorHandler from 'strong-error-handler';
+import { Sequelize } from 'sequelize-typescript';
+import { Mongoose } from 'mongoose';
+import { RedisClient } from 'redis';
+import { API_ENDPOINT } from 'controller';
+
 // http://expressjs.com/en/advanced/best-practice-security.html
 export abstract class AbstractServer {
 	serverName: string;
@@ -36,145 +31,44 @@ export abstract class AbstractServer {
 	httpServer: http.Server;
 	corsOptions: cors.CorsOptions;
 	allowedOrigin: Array<string>;
-	socketIO?: SocketIoServer;
+	sequelize?: Sequelize;
+	socket?: SocketIoServer;
+	mongo?: Mongoose;
+	redis?: RedisClient;
+	interval?: NodeJS.Timeout;
 
-	constructor(name: string, port: number, allowedOrigin: Array<string>, corsOptions?: cors.CorsOptions) {
+	constructor(name: string, port: number, allowedOrigin: Array<string>, corsOptions: cors.CorsOptions) {
 		this.serverName = name;
 		this.serverPort = port;
 		this.application = express();
 		this.allowedOrigin = allowedOrigin;
-		this.corsOptions = corsOptions ? corsOptions : {};
+		this.corsOptions = corsOptions;
 		this.httpServer = createServer(this.application);
 	}
 
-	public start(): http.Server {
-		// CORS
-		const corsMw = cors<Request>(this.corsOptions);
-		// Morgan logger ( log http request/response )
-		const morganMw = morgan(isProductionMode() ? 'combined' : 'common');
-		//https://github.com/expressjs/compression/issues/61
-		// Exclude compression per 'text/event-stream'
-		const compressionMw = compression({
-			filter: (req, res) => res.getHeader('Content-Type') != 'text/event-stream',
-		});
-		const jsonMw = json({ strict: true });
-		const urlEncodedMw = urlencoded({ extended: false });
-		// Cookie parser
-		const cookieParserMw = cookieParser(process.env.SERVER_SECRET);
-		// Content Security Policy Common
-		const CSPCommon = ["'self'", ...this.allowedOrigin];
-		const helmetMw = helmet({
-			dnsPrefetchControl: { allow: true },
-			// https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
-			// https://csp-evaluator.withgoogle.com/
-			contentSecurityPolicy: {
-				directives: {
-					defaultSrc: [...CSPCommon],
-					connectSrc: [...CSPCommon],
-					styleSrc: [...CSPCommon, "'unsafe-inline'", 'https:', 'https://fonts.googleapis.com'],
-					fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-					imgSrc: ["'self'", 'data:'],
-					objectSrc: ["'none'"],
-					baseUri: ["'self'"],
-				},
-			},
-		});
-		// Strong error handler
-		const errorHandlerMw = strongErrorHandler({
-			debug: !isProductionMode(),
-		});
-		// Redis
-		const redisClient = getRedisClient(0);
-		redisClient.on('error', logger.error);
-		const redisStore = connectRedis(session);
-
-		// Express session
-		const sessionMw = session({
-			store: new redisStore({ client: redisClient }),
-			secret: process.env.SERVER_SECRET || 'Apf342x$/)wpk,',
-			resave: false,
-			saveUninitialized: false,
-			cookie: cookiesOption,
-			name: SESSION_ID,
-			rolling: true,
-			unset: 'destroy',
-		});
-
+	public async start(): Promise<http.Server> {
 		// Server configuration
 		// https://blog.risingstack.com/node-js-security-checklist/
 		// http://expressjs.com/en/advanced/best-practice-security.html
-		this.application
-			.set('trust proxy', isProductionMode())
-			.use(
-				corsMw,
-				morganMw,
-				compressionMw,
-				helmetMw,
-				jsonMw,
-				urlEncodedMw,
-				cookieParserMw,
-				sessionMw,
-				clientInfo,
-				auditControl,
-				cacheControl,
-				routeLogger
-			)
-			.disable('x-powered-by');
+		const middlewares = getMiddlewares(this.corsOptions, this.allowedOrigin, this.redis!);
+		this.application.set('trust proxy', isProductionMode()).use(Object.values(middlewares)).disable('x-powered-by');
 
-		// https://www.appliz.fr/blog/express-typescript
-		// https://levelup.gitconnected.com/how-to-implement-csrf-tokens-in-express-f867c9e95af0
-		// https://medium.com/dataseries/prevent-cross-site-request-forgery-in-express-apps-with-csurf-16025a980457
-		/* FIXME: https://github.com/expressjs/csurf/issues/204
-			.use((req: Request, res: Response, next: NextFunction) => {
-				logger.info('SESSION : ', req.session);
-				next();
-			})
-			.use(
-				csrf({
-					cookie: false,
-					sessionKey: 'session',
-					value: (req) => {
-						logger.info('csrf value : ', req.session, req.session.csrfSecret);
-						return req.session.csrfSecret || '';
-					},
-				})
-			)
-			*/
+		// REST Api
+		this.restRoutes(this.application);
 
-		this.routes(this.application);
+		// Socket
+		this.socket = createSocketServer(this.redis!, this.httpServer, this.corsOptions, middlewares.sessionMw);
+		this.socketRoutes(this.socket);
 
-		// https://www.npmjs.com/package/socket.io-redis#typescript
-		const subClient = redisClient.duplicate();
-
-		// https://socket.io/docs/v3/server-installation/
-		// https://socket.io/docs/v3/server-api/index.html
-		this.socketIO = new SocketIoServer<ClientToServerEvents, ServerToClientEvents>(this.httpServer, {
-			//path: '/socket',
-			// PM2 prefer web socket over polling
-			transports: ['websocket', 'polling'],
-			serveClient: false,
-			cookie: cookiesOption,
-			cors: this.corsOptions,
-			adapter: createAdapter({ pubClient: redisClient, subClient }),
-		});
-		// Socket middleware
-		this.socketIO.use(mwWrapper(sessionMw));
-		this.socketIO.use(mwWrapper(clientInfo));
-		this.socketIO.use(mwWrapper(withAuth));
-		this.socket(this.socketIO);
+		// Apollo
+		createApolloServer(this.application, this.corsOptions);
 
 		// Error handler
-		this.application.use(errorHandlerMw);
+		this.application.use(strongErrorHandler({ debug: !isProductionMode() }));
 		/*
 			Statically serve frontend build ( Heroku deploy )
 		*/
 		const buildPath = path.join(__dirname, '..', '..', 'build');
-
-		/* 	TODO:
-			https://www.valentinog.com/blog/socket-react/
-			Redirect everything else to index.html
-			this.application.get('/*', (req: Request, res: Response) => res.send(`${buildPath}/index.html`));
-		*/
 		logger.info(`Serving build folder from ${chalk.green(buildPath)}`);
 		this.application.use(
 			express.static(buildPath, {
@@ -183,6 +77,19 @@ export abstract class AbstractServer {
 				redirect: true,
 			})
 		);
+
+		/* 	
+			Redirect everything else to index.html
+		*/
+		const serverRoutes = ['/static', API_ENDPOINT, PLAYGROUND_ENDPOINT, GRAPHQL_ENDPOINT];
+		this.application.get('/*', (request: Request, res: Response, next: NextFunction) => {
+			if (!startWithOneOf(request.originalUrl, serverRoutes)) {
+				logger.warn(`Redirecting request ${request.originalUrl} to index.html`);
+				return res.redirect('/');
+				// return res.sendFile(`${buildPath}/index.html`, {});
+			}
+			next();
+		});
 
 		// Listen on port `this.serverPort`
 		this.httpServer.listen(this.serverPort, () => {
@@ -194,53 +101,56 @@ export abstract class AbstractServer {
 		});
 
 		// Shows servers stats every 30 minutes
-		const interval = setInterval(() => {
-			logger.info(chalk.bold.redBright(`--- Process@${process.pid} status ---------------- `));
-			logger.info(chalk.greenBright('   Uptime        : '), process.uptime());
-			logger.info(chalk.greenBright('   CPU usage'));
-			const cpu = process.cpuUsage();
-			for (const key in cpu) {
-				logger.info(`     ${key}    : ${cpu[key as keyof NodeJS.CpuUsage]} `);
-			}
-			logger.info(chalk.greenBright('   Memory usage'));
-			const memory = process.memoryUsage();
-			for (const key in memory) {
-				logger.info(
-					`     ${key}    : ${Math.round((memory[key as keyof NodeJS.MemoryUsage] / 1024 / 1024) * 100) / 100} MB`
-				);
-			}
-			logger.info(chalk.bold.redBright('--------------------------------------- '));
-		}, 30 * 60 * 1000);
+		this.interval = serverStatus(process);
 
-		// Graceful Shutdown
-		const closeServer = (signal: string) => {
-			logger.info(`Detect event ${signal}.`);
-			if (this.httpServer.listening) {
-				this.httpServer.close();
-			}
-		};
-
-		process.on('SIGINT', () => closeServer('SIGINT'));
-		process.on('SIGTERM', () => closeServer('SIGTERM'));
-
-		this.httpServer.on('close', () => {
-			logger.info('Closing sockets...');
-			if (this.socketIO) {
-				this.socketIO.close();
-			}
-			logger.info('Stopping server...');
-			clearInterval(interval);
-			logger.info('Shutdown...');
-			process.exit(0);
-		});
+		process.on('SIGINT', () => this.stop('SIGINT'));
+		process.on('SIGTERM', () => this.stop('SIGTERM'));
+		this.httpServer.on('close', this.stop);
 
 		return this.httpServer;
 	}
 
 	// Implementation have to handle all other API
-	public abstract routes(application: ExpressApplication): void;
+	public abstract restRoutes(application: ExpressApplication): void;
 	// And socket
-	public abstract socket(socketIO: SocketIoServer): void;
+	public abstract socketRoutes(socketIO: SocketIoServer | null): void;
+
+	public async stop(event = 'close') {
+		logger.info(`Detect event ${chalk.yellow(event)}.`);
+		if (this.sequelize) {
+			logger.info('Closing sequelize connection...');
+			await this.sequelize.close();
+			logger.info('Done!');
+		}
+		if (this.socket) {
+			logger.info('Closing socket connection...');
+			await new Promise((resolve) => {
+				this.socket!.close(() => resolve(true));
+			});
+			logger.info('Done!');
+		}
+		if (this.redis) {
+			logger.info('Closing redis connection...');
+			await new Promise((resolve) => {
+				this.redis!.quit(() => resolve(true));
+			});
+			logger.info('Done!');
+		}
+		if (this.httpServer && this.httpServer.listening) {
+			logger.info('Closing http server...');
+			await new Promise((resolve) => {
+				this.httpServer.close(() => resolve(true));
+			});
+			logger.info('Done!');
+		}
+		if (this.interval) {
+			logger.info('Clear interval...');
+			clearInterval(this.interval);
+			logger.info('Done!');
+		}
+		logger.info('All Done!');
+		process.exit(0);
+	}
 }
 
 process.on('uncaughtException', (err) => logger.fatal(err));

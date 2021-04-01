@@ -1,5 +1,5 @@
 import { SequelizeOptions } from 'sequelize-typescript';
-import { dbLogger as logger } from '@core/logger';
+// import { dbLogger as logger } from '@core/logger';
 import { Environment } from '@common/models/common.models';
 // https://github.com/sequelize/sequelize/issues/11371
 
@@ -32,7 +32,7 @@ const config: SequelizeEnvList = {
 		useEnvVar: 'DATABASE_URL',
 		dialect: 'postgres',
 		minifyAliases: true,
-		logging: (sqlString: string) => logger.warn(sqlString),
+		logging: false, //(sqlString: string) => logger.warn(sqlString),
 		pool: { max: 5, min: 0, acquire: 30000, idle: 10000 },
 		dialectOptions: {
 			ssl: {

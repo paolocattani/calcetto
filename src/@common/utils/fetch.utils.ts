@@ -4,6 +4,7 @@
 import { GenericResponse, OmitHistory, UnexpectedServerError } from '../models/common.models';
 import { toast } from 'react-toastify';
 import logger from './logger.utils';
+import { startWithOneOf } from './string.utils';
 
 interface IFetchCallback<T> {
 	(response: T): T | Promise<T>;
@@ -41,7 +42,8 @@ export const socketHost = process.env.REACT_APP_SOCKET_HOST
 //? `${process.env.REACT_APP_SERVER_HOST}:${process.env.REACT_APP_PORT}`
 
 const host = rawHost.slice(-1) === '/' ? rawHost.substring(0, rawHost.length - 1) : rawHost;
-export const getCompleteUrl = (url: string): string => host + url;
+export const getCompleteUrl = (url: string): string =>
+	startWithOneOf(url, ['http://', 'https://']) ? url : host + url;
 export const fetchWrapper = async <B, T extends GenericResponse>(
 	url: string,
 	method: string,

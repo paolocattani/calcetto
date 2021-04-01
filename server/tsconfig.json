@@ -19,6 +19,7 @@
 		"isolatedModules": true,
 		//"listFiles": true,
 		//"listEmittedFiles": true,
+		"resolveJsonModule":true,
 		"noErrorTruncation": true,
 		"outDir": "./build",
 		"removeComments": true,

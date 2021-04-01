@@ -36,7 +36,7 @@ export default class Tournament extends Model {
 
 	@Comment('State')
 	@Default(TournamentProgress.New)
-	@Column(DataType.ENUM({ values: Object.keys(TournamentProgress) }))
+	@Column(DataType.ENUM({ values: Object.values(TournamentProgress) }))
 	public progress!: TournamentProgress;
 
 	@Comment('Visibile ad utenti non loggati')

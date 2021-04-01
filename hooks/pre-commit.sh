@@ -29,6 +29,7 @@ if [[ "$STAGED_FILES" != "" ]]; then
     echo "\nValidating Files:\n"
     for FILE in $STAGED_FILES
     do
+      if [[ $FILE != *.d.ts ]]; then
         "$ESLINT" "$FILE" --fix --max-warnings=0
 
         if [[ "$?" == 0 ]]; then
@@ -38,6 +39,7 @@ if [[ "$STAGED_FILES" != "" ]]; then
             PASS=false
         fi
         echo "\nValidation completed!\n"
+      fi
     done
     if ! $PASS; then
         echo "\033[41mCOMMIT FAILED:\033[0m Your commit contains files that should pass ESLint but do not. Please fix the ESLint errors and try again.\n"

@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+/// <reference path="../typings/express-session.d.ts" />
+
 import { NextFunction, Response, Request } from 'express';
 import { AppRequest } from '../controller';
 import { safeVerifyToken } from '../controller/auth/auth.utils';
@@ -57,3 +60,12 @@ export const withTestAuth = (req: AppRequest, res: Response, next: NextFunction)
 export const auditControl = (req: Request, res: Response, next: NextFunction) => {
 	next();
 };
+/*
+declare module 'express-session' {
+	interface SessionData {
+		jwt: string;
+		csrfSecret: string;
+		uuid: string;
+	}
+}
+*/

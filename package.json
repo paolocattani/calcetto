@@ -1,7 +1,7 @@
 {
   "name": "calcetto",
   "private": false,
-  "version": "2.16.2",
+  "version": "2.16.3",
   "description": "Table Soccer Manager",
   "engines": {
     "node": "14.x.x",
@@ -92,6 +92,7 @@
     "CRA:build": "cross-env NODE_ENV=production react-scripts build ",
     "CRA:eject": "react-scripts eject",
     "CRA:test": "react-scripts test --env=jsdom --testResultsProcessor ./node_modules/jest-sonar-reporter",
+    "CRA:test:coverage": "react-scripts test --env=jsdom --env=jest-environment-jsdom-sixteen --testResultsProcessor ./node_modules/jest-sonar-reporter --coverage",
     "-----TEST----": "---------------------------",
     "test:app": "concurrently -p \"[{name}]\" -n server,client -c \"bgGreen.bold,bgBlue.bold\"  --kill-others-on-fail \"npm run test:app:server\" \"npm run test:app:client\"",
     "test:app:server": "cross-env NODE_ENV=test npm run prod:heroku:server",
@@ -213,14 +214,6 @@
       "text-summary",
       "clover"
     ],
-    "coverageThreshold": {
-      "global": {
-        "statements": 95,
-        "branches": 95,
-        "lines": 95,
-        "functions": 95
-      }
-    },
     "transform": {
       "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/ts-jest"
     },

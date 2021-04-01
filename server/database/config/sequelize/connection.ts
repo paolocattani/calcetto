@@ -15,8 +15,9 @@ import config from './config';
 import util from 'util';
 import chalk from 'chalk';
 import { Environment } from '@common/models';
-import { isTsEnv } from '@core/utils';
 import path from 'path';
+import { fileExtension } from '@core/utils';
+import { StatsPairs, StatsPlayer } from '../../models';
 
 let connection: Sequelize;
 
@@ -30,19 +31,37 @@ export const getSequelizeEnv = () =>
 async function loadModels(schema?: string): Promise<Sequelize> {
 	const envConfig = getSequelizeEnv();
 	const uri = process.env[envConfig.useEnvVar]!;
-	const modelsPath = `${__dirname}/../../models/**/*.model.${isTsEnv() ? 'ts' : 'js'}`;
+	const modelsPath = `${__dirname}/../../models/**/*.model.${fileExtension()}`;
+	/* FIXME: this function does not get respected by sequelize
+	const modelMatch = (filename: string) => {
+		const isValid = !(force && ['stats.pairs.model', 'stats.players.model'].includes(filename.toLowerCase()));
+		if (!isValid) {
+			logger.warn(`Excluding model : ${chalk.redBright(filename)}`);
+		}
+		logger.info(`Model ${chalk.greenBright(filename)} : ${isValid} `);
+		return isValid;
+	};
+	*/
 	if (!isProductionMode()) {
-		logger.info(`Database URI : ${chalk.red.bold(util.inspect(uri))}`);
-		logger.info(`Models from : '${chalk.green(path.resolve(modelsPath))}'`);
+		logger.info(`Sequelize URI : ${chalk.red.bold(util.inspect(uri))}`);
+		logger.info(`Sequelize Models : '${chalk.green(path.resolve(modelsPath))}'`);
 	}
+
 	const connectionOptions: SequelizeOptions = {
 		...envConfig,
-		models: [modelsPath],
 		define: { schema },
+		models: [modelsPath],
+		// modelMatch,
 	};
 
 	// If NODE_ENV == 'test' and IS_DOCKER test are running in CI and I'm trying to connect to a container without SSL
-	if (process.env.NODE_ENV === 'test' && process.env.IS_DOCKER && connectionOptions.dialectOptions) {
+	if (
+		process.env.NODE_ENV === 'test' &&
+		process.env.IS_DOCKER &&
+		process.env.IS_DOCKER.toLowerCase() === 'true' &&
+		connectionOptions.dialectOptions
+	) {
+		logger.warn('Removing SSL option ! ');
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		delete connectionOptions.dialectOptions.ssl;
@@ -56,14 +75,22 @@ export async function authenticate(options?: SequelizeSyncOptions): Promise<Sequ
 	}
 	connection = await loadModels();
 	await connection.authenticate(options);
-	logger.info(chalk.cyan.bold('Database connected!'));
+	logger.info(chalk.cyan.bold('Sequelize connected!'));
 	return connection;
 }
 
 export async function sync(options?: SequelizeSyncOptions): Promise<Sequelize> {
 	connection = await loadModels();
+	const force = process.env.SERVER_FORCE && process.env.SERVER_FORCE.toLowerCase() === 'true';
+	if (force) {
+		connection.modelManager.removeModel(StatsPairs);
+		connection.modelManager.removeModel(StatsPlayer);
+	}
 	await connection.sync(options);
-	logger.info(chalk.cyan.bold('Database synchronization complete!'));
+	logger.info(chalk.cyan.bold('Sequelize synchronization complete!'));
+	if (force) {
+		connection.addModels([StatsPairs, StatsPlayer]);
+	}
 	return connection;
 }
 
@@ -72,7 +99,7 @@ export async function createSchemaAndSync(schema: string, options?: SequelizeSyn
 	await connection.dropSchema(schema, {});
 	await connection.createSchema(schema, {});
 	await connection.sync({ ...options, schema, searchPath: schema });
-	logger.info(chalk.cyan.bold(`Database synchronizatio1n complete on schema ${schema}!`));
+	logger.info(chalk.cyan.bold(`Sequelize synchronizatio1n complete on schema ${schema}!`));
 	return connection;
 }
 

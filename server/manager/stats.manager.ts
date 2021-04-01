@@ -17,14 +17,11 @@ export const getBestPlayers = async (from?: string) => {
 		const rowsLimit = 10;
 		const list: Array<StatsPlayer> = await StatsPlayer.sequelize!.query(
 			// eslint-disable-next-line quotes
-			`select * from :from
+			`select * from getPlayerStats${from ? `('${from}')` : '()'}
 				order by totwin desc
 				fetch first :rowsLimit rows only`,
 			{
-				replacements: {
-					from: `getPlayerStats${from ? `('${from}')` : '()'}`,
-					rowsLimit,
-				},
+				replacements: { rowsLimit },
 				type: QueryTypes.SELECT,
 				raw: false,
 				// logging: logger.info,
@@ -54,14 +51,11 @@ export const getBestPairs = async (from?: string) => {
 		const rowsLimit = 10;
 		const list: Array<StatsPairs> = await StatsPairs.sequelize!.query(
 			// eslint-disable-next-line quotes
-			`select * from :from
+			`select * from getPairStats${from ? `('${from}')` : '()'}
 			order by totwin desc
 			fetch first :rowsLimit rows only`,
 			{
-				replacements: {
-					from: `getPairStats${from ? `('${from}')` : '()'}`,
-					rowsLimit,
-				},
+				replacements: { rowsLimit },
 				type: QueryTypes.SELECT,
 				raw: false,
 				// logging: logger.info,

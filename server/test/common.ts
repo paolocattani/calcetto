@@ -8,6 +8,12 @@ import { OmitHistory } from '@common/models/common.models';
 import { deleteWrapper, postWrapper } from '@common/utils/fetch.utils';
 import AppServer from '../express/AppServer';
 
+import fetch from 'node-fetch';
+
+if (!globalThis.fetch) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	globalThis.fetch = <any>fetch;
+}
 export const registerTestUser = async (
 	registrationRequest: OmitHistory<RegistrationRequest>
 ): Promise<AuthenticationResponse> =>

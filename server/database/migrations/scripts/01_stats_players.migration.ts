@@ -3,7 +3,7 @@ import { logMigrationStart, logMigrationEnd } from '@core/logger';
 import { Migration, UmzugContext } from '..';
 
 const viewName = 'stats_players';
-const migrationName = '00_stats_players';
+const migrationName = '01_stats_players';
 
 export const up: Migration = async ({ context: sequelize }: UmzugContext) => {
 	logMigrationStart('up', migrationName);
@@ -25,6 +25,7 @@ export const up: Migration = async ({ context: sequelize }: UmzugContext) => {
 		group by playerId
 		order by playerId
 	`;
+	await viewDown(sequelize, viewName);
 	await viewUp(sequelize, viewName, viewBody);
 	logMigrationEnd('up', migrationName);
 };

@@ -25,6 +25,7 @@ type Controller = {
 	router: Router;
 };
 
+export const API_ENDPOINT = '/api';
 export default (application: ExpressApplication): void => {
 	// Endpoints
 	const controller: Array<Controller> = [

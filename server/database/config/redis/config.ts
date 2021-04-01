@@ -13,6 +13,8 @@ const config: RedisEnvList = {
 	},
 	test: {
 		url: process.env.REDISCLOUD_URL,
+		password: process.env.REDISCLOUD_PASSWORD,
+		db: process.env.REDISCLOUD_DB,
 	},
 	production: {
 		url: process.env.REDISCLOUD_URL,
