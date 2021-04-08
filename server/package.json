@@ -67,7 +67,7 @@
     "@types/connect-redis": "0.0.16",
     "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.10",
-    "@types/csurf": "^1.11.0",
+    "@types/csurf": "^1.11.1",
     "@types/express-session": "^1.17.3",
     "@types/history": "^4.7.8",
     "@types/jest": "^26.0.22",
