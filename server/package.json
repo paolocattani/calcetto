@@ -125,7 +125,7 @@
     "socket.io": "^4.0.1",
     "socket.io-redis": "^6.1.0",
     "umzug": "^3.0.0-beta.15",
-    "utf-8-validate": "^5.0.4",
+    "utf-8-validate": "^5.0.5",
     "uuid": "^8.3.2"
   }
 }
