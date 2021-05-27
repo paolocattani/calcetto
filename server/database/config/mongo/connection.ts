@@ -11,10 +11,10 @@ export const getConnection = async () => {
 	try {
 		if (connection == null) {
 			if (!isProductionMode()) {
-				logger.info(`Moongoose URI : ${chalk.red.bold(process.env.MONGODB_URL)}`);
+				logger.info(`Moongoose URI : ${chalk.red.bold(process.env.MONGODB_URI)}`);
 			}
 			logger.info(chalk.cyan.bold('Moongoose is connecting....'));
-			connection = await mongoose.connect(<string>process.env.MONGODB_URL, {
+			connection = await mongoose.connect(<string>process.env.MONGODB_URI, {
 				autoIndex: true,
 				poolSize: 50,
 				bufferMaxEntries: 0,

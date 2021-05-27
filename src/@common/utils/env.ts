@@ -1,7 +1,7 @@
 //https://github.com/motdotla/dotenv/blob/master/examples/typescript/src/lib/env.ts
-import { resolve } from 'path';
 import { config } from 'dotenv';
-import { isProductionMode, isTestMode, isDevMode } from './env.utils';
+import { resolve } from 'path';
+import { isDevMode, isProductionMode, isTestMode } from './env.utils';
 
 const getEnv = () => {
 	let filename = '';
@@ -16,4 +16,4 @@ const getEnv = () => {
 	return resolve(__dirname, `../../../${filename}`);
 };
 
-config({ path: getEnv(), encoding: 'utf8' /* debug: false */ });
+config({ path: getEnv(), encoding: 'utf8', debug: undefined });

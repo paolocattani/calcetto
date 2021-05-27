@@ -5,7 +5,7 @@ module.exports = {
 	apps: [
 		{
 			name: 'calcetto_server',
-			script: './server.ts',
+			script: './index.ts',
 			exec_mode: 'fork',
 			// instances: 'max',
 			instances: '1',

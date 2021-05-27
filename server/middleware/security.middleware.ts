@@ -1,14 +1,14 @@
 //--------- API Quota / Slow down request : Prevente brute force attack
 
-import { NextFunction, Response, Request } from 'express';
+import { logger } from '@core/logger';
+import chalk from 'chalk';
+import { NextFunction, Request, Response } from 'express';
 import { RateLimiterRedis } from 'rate-limiter-flexible';
 import { getClientIp } from 'request-ip';
 import { AppRequest } from '../controller';
 import { unauthorized } from '../controller/common.response';
-import { logger } from '@core/logger';
 import { getRedisClient } from '../database/config/redis/connection';
 import { ConfigManager } from '../manager/config.manager';
-import chalk from 'chalk';
 import { asyncMiddleware } from './utils.middleware';
 
 const TOO_MANY_REQUEST = 'common:too_many_requests';
@@ -24,7 +24,7 @@ export const clientInfo = (req: Request, res: Response, next: NextFunction) => {
 
 //---------> Prevent brute force attack and DDoS
 // https://medium.com/@animirr/brute-force-protection-node-js-examples-cd58e8bd9b8d#2368
-const redisClient = getRedisClient(1);
+const redisClient = getRedisClient(0);
 const maxWrongAttemptsByIPperMinute = async () => {
 	const config = await ConfigManager.findByKey('MAX_ATTEMPS_PER_MINUTE');
 	return config && config.value ? parseInt(config.value) : 5;

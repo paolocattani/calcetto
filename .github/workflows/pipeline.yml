@@ -121,7 +121,7 @@ jobs:
       # Install dependencies
       - name: Install dependencies
         run: npm ci && cd server && npm i
-      # unit test 
+      # unit test
       - name: Unit Tests Backend
         run: cd server && npm run test:unit:coverage
         env:
@@ -132,12 +132,12 @@ jobs:
           SERVER_SECRET: 'This_Is_Not_The_Real_Secret'
           SERVER_HASH: 'This_Is_Not_The_Real_Hash'
           STATIC_CONTENTS_CACHE: 10000
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}          
-          DATABASE_SCHEMA: test          
-          REDISCLOUD_URL: ${{ secrets.REDISCLOUD_URL }}          
-          REDISCLOUD_PASSWORD: ${{ secrets.REDISCLOUD_PASSWORD }}          
-          REDISCLOUD_DB: ${{ secrets.REDISCLOUD_DB }}          
-          MONGODB_URL: ${{ secrets.MONGODB_URL }}          
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_SCHEMA: test
+          REDISCLOUD_URL: ${{ secrets.REDISCLOUD_URL }}
+          REDISCLOUD_PASSWORD: ${{ secrets.REDISCLOUD_PASSWORD }}
+          REDISCLOUD_DB: ${{ secrets.REDISCLOUD_DB }}
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
       # Save coverage for sonar
       - name: Upload build
         uses: actions/upload-artifact@v2.2.2

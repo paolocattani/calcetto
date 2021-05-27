@@ -1,3 +1,4 @@
+import '@common/utils/env';
 import { logger } from '@core/logger';
 import AppServer from 'express/AppServer';
 

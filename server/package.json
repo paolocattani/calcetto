@@ -2,7 +2,7 @@
   "name": "server",
   "version": "1.0.0",
   "description": "api server",
-  "main": "server.ts",
+  "main": "index.ts",
   "author": "Paolo Cattani",
   "license": "MIT",
   "engines": {

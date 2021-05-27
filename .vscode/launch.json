@@ -14,7 +14,7 @@
               "-r",
               "${workspaceFolder}/server/node_modules/tsconfig-paths/register"
             ],
-            "args": ["${workspaceFolder}/server/server.ts"],
+            "args": ["${workspaceFolder}/server/index.ts"],
             "cwd": "${workspaceFolder}",
             "protocol": "inspector",
             "env": {

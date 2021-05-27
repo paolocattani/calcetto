@@ -3,7 +3,7 @@ module.exports = {
 		{
 			// App name
 			name: 'calcetto_server',
-			script: './server/server.js',
+			script: './server/index.js',
 			// Exec mode
 			exec_mode: 'cluster',
 			// instances: 'max',

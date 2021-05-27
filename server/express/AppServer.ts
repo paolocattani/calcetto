@@ -1,27 +1,26 @@
 // Server
-import { CorsOptions } from 'cors';
-import { AbstractServer } from './AbstractServer';
-import { Application as ExpressApplication } from 'express';
-// Db
-import { sync, authenticate, createSchemaAndSync } from '../database/config/sequelize/connection';
-import generator from '../generator/generator';
-// Routes
-import routes from '../controller/index';
 // Utils
 import '@common/utils/env.utils';
-import chalk from 'chalk';
+import { isDevMode, isTestMode } from '@common/utils/env.utils';
 import { logger } from '@core/logger';
-import { createViews, markAllAsApplied } from '../database/migrations';
+import chalk from 'chalk';
+import { CorsOptions } from 'cors';
+import { Application as ExpressApplication } from 'express';
 import { Server as SocketIoServer } from 'socket.io'; // socket.io
-import { handleSocket } from '../events/events';
-import { isDevMode, isProductionMode, isTestMode } from '@common/utils/env.utils';
-import { migrationUp } from '../database/migrations';
-import { buildSchema } from '../graphql/schema';
+// Routes
+import routes from '../controller/index';
 import { getConnection } from '../database/config/mongo/connection';
 import { getRedisClient } from '../database/config/redis/connection';
+// Db
+import { authenticate, createSchemaAndSync, sync } from '../database/config/sequelize/connection';
+import { createViews, markAllAsApplied } from '../database/migrations';
+import { handleSocket } from '../events/events';
+import generator from '../generator/generator';
+import { buildSchema } from '../graphql/schema';
+import { AbstractServer } from './AbstractServer';
 
 const defaultName = 'ApplicationServer Calcetto';
-const defaultPort = Number(isProductionMode() ? process.env.PORT : process.env.SERVER_PORT);
+const defaultPort = Number(process.env.PORT);
 const allowedOrigin = process.env.ORIGIN_WHITE_LIST
 	? process.env.ORIGIN_WHITE_LIST.split(';')
 	: ['http://localhost:5000', 'http://localhost:5001'];
@@ -58,7 +57,7 @@ export default class AppServer extends AbstractServer {
 			const force = process.env.SERVER_FORCE && process.env.SERVER_FORCE.toLowerCase() === 'true';
 			// If it's not a fresh new installation then run migrations
 			if (!force) {
-				await migrationUp();
+				//await migrationUp();
 			}
 
 			logger.info(

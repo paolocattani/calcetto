@@ -1,13 +1,13 @@
 /**
  * @returns default logger configuration
  */
-import log4js from 'log4js';
-import chalk from 'chalk';
 import { isProductionMode } from '@common/utils/env.utils';
+import chalk from 'chalk';
+import log4js from 'log4js';
 
 log4js.configure({
-	pm2: isProductionMode(),
-	pm2InstanceVar: 'PM2_INSTANCE_ID',
+	pm2: isProductionMode() || undefined,
+	pm2InstanceVar: isProductionMode() ? 'PM2_INSTANCE_ID' : undefined,
 	appenders: {
 		console: { type: 'stdout' },
 		'dev-logger': {
