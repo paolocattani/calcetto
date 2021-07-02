@@ -133,7 +133,7 @@
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@ljharb/eslint-config": "^17.5.1",
     "@shinnn/eslint-config": "^7.0.0",
-    "@testing-library/dom": "^7.30.0",
+    "@testing-library/dom": "^8.1.0",
     "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^13.1.1",
