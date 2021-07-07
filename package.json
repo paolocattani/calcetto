@@ -173,7 +173,7 @@
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-sonarjs": "^0.6.0",
-    "eslint-plugin-testing-library": "^3.10.2",
+    "eslint-plugin-testing-library": "^4.9.0",
     "istanbul-lib-coverage": "^3.0.0",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "jest-fetch-mock": "3.0.3",
