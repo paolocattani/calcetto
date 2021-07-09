@@ -186,7 +186,7 @@
     "start-server-and-test": "^1.12.1",
     "ts-jest": "^26.5.4",
     "ts-loader": "^8.1.0",
-    "webpack": "^4.44.2"
+    "webpack": "^5.44.0"
   },
   "jestSonar": {
     "useRelativePath": true,
