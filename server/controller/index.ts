@@ -1,18 +1,18 @@
 // Express
-import { Application as ExpressApplication, Response, Request, Router, NextFunction } from 'express';
-// Controllers
-import playerRouter from './player.controller';
-import pairRouter from './pair.controller';
-import tournamentRouter from './tournament.controller';
-import stage1Router from './stage1.controller';
-import stage2Router from './stage2.controller';
-import authRouter from './auth/auth.controller';
-import statsRouter from './stats.controller';
-// mddleware
-import { controllerLogger } from '../middleware';
+import { UserDTO } from '@common/dto';
 // DTO
 import { HTTPStatusCode } from '@common/models/HttpStatusCode';
-import { UserDTO } from '@common/dto';
+import { Application as ExpressApplication, NextFunction, Request, Response, Router } from 'express';
+// mddleware
+import { controllerLogger } from '../middleware';
+import authRouter from './auth/auth.controller';
+import pairRouter from './pair.controller';
+// Controllers
+import playerRouter from './player.controller';
+import stage1Router from './stage1.controller';
+import stage2Router from './stage2.controller';
+import statsRouter from './stats.controller';
+import tournamentRouter from './tournament.controller';
 
 export interface AppRequest extends Request {
 	user?: UserDTO;
@@ -29,7 +29,7 @@ export const API_ENDPOINT = '/api';
 export default (application: ExpressApplication): void => {
 	// Endpoints
 	const controller: Array<Controller> = [
-		{ name: 'Pair', api: '/api/v2/Pair', router: pairRouter },
+		{ name: 'Pair', api: '/api/v2/pair', router: pairRouter },
 		{ name: 'Auth', api: '/api/v2/auth', router: authRouter },
 		{ name: 'Stats', api: '/api/v2/stats', router: statsRouter },
 		{ name: 'Player', api: '/api/v2/player', router: playerRouter },

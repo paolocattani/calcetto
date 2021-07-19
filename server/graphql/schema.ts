@@ -1,17 +1,17 @@
-import fs from 'fs-extra';
-import path from 'path';
-import { graphql, GraphQLSchema, getIntrospectionQuery, printSchema } from 'graphql';
-import { SchemaComposer } from 'graphql-compose';
+import { logger } from '@core/logger';
+import chalk from 'chalk';
 import { Request } from 'express';
+import fs from 'fs-extra';
+import { getIntrospectionQuery, graphql, GraphQLSchema, printSchema } from 'graphql';
+import { SchemaComposer } from 'graphql-compose';
+import path from 'path';
+import { TaskMutation, TaskQuery } from './task';
+// https://medium.com/@istvanistvan/modern-api-design-with-apollo-graphql-compose-and-mongoose-f67c0df060ea
+// https://getstream.io/blog/tutorial-create-a-graphql-api-with-node-mongoose-and-express/
+import { UserMutation, UserQuery } from './user';
 
 let schema: GraphQLSchema;
 
-// https://medium.com/@istvanistvan/modern-api-design-with-apollo-graphql-compose-and-mongoose-f67c0df060ea
-// https://getstream.io/blog/tutorial-create-a-graphql-api-with-node-mongoose-and-express/
-import { UserQuery, UserMutation } from './user';
-import { TaskQuery, TaskMutation } from './task';
-import chalk from 'chalk';
-import { logger } from '@core/logger';
 
 interface TContext {
 	req: Request;
@@ -24,7 +24,7 @@ export const getschema = () => {
 		schemaComposer.Mutation.addFields({ ...UserMutation, ...TaskMutation });
 
 		schema = schemaComposer.buildSchema();
-		logger.info('Schema created : ');
+		logger.info('Schema created...');
 	}
 	return schema;
 };
