@@ -25,18 +25,24 @@ jobs:
         uses: actions/setup-node@v2.1.4
         with:
           node-version: ${{ matrix.node-version }}
-      # Cache node-modules
-      - name: Cache Node.js modules
-        uses: actions/cache@v2.1.4
-        env:
-          cache-name: cache-node-modules
+      # Restore cache
+			- name: Get yarn cache directory path
+				id: yarn-cache-dir-path
+				run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Restore cache Yarn
+				uses: actions/cache@v2
+				id: yarn-cache
+				with:
+					path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+					key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+					restore-keys: |
+						${{ runner.os }}-yarn-
+      - name: Restore cache Node.js modules
+			  id: node-cache
+				uses: actions/cache@v2
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-${{ env.cache-name }}-
-            ${{ runner.os }}-npm-
-            ${{ runner.os }}-
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       # Add exect
       - name: Add exec to cli
         run: chmod +x cli/cli.sh
@@ -74,23 +80,30 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       # Restore cache
+			- name: Get yarn cache directory path
+				id: yarn-cache-dir-path
+				run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Restore cache Yarn
+				uses: actions/cache@v2
+				id: yarn-cache
+				with:
+					path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+					key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+					restore-keys: |
+						${{ runner.os }}-yarn-
       - name: Restore cache Node.js modules
-        uses: actions/cache@v2.1.4
-        env:
-          cache-name: cache-node-modules
+			  id: node-cache
+				uses: actions/cache@v2
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-${{ env.cache-name }}-
-            ${{ runner.os }}-npm-
-            ${{ runner.os }}-
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       # Install dependencies
       - name: Install dependencies
-        run: npm ci
+			  if: steps.node-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
       # unit test
       - name: Unit Tests Frontend
-        run: npm run CRA:test:coverage
+        run: yarn run CRA:test:coverage
       # Save coverage for sonar
       - name: Upload build
         uses: actions/upload-artifact@v2.2.2
@@ -107,23 +120,23 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       # Restore cache
-      - name: Restore cache Node.js modules
-        uses: actions/cache@v2.1.4
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-${{ env.cache-name }}-
-            ${{ runner.os }}-npm-
-            ${{ runner.os }}-
+			- name: Get yarn cache directory path
+				id: yarn-cache-dir-path
+				run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Restore cache Yarn
+				uses: actions/cache@v2
+				id: yarn-cache
+				with:
+					path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+					key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+					restore-keys: |
+						${{ runner.os }}-yarn-
       # Install dependencies
       - name: Install dependencies
-        run: npm ci && cd server && npm i
+        run: yarn install --frozen-lockfile && cd server && yarn install
       # unit test
       - name: Unit Tests Backend
-        run: cd server && npm run test:unit:coverage
+        run: cd server && yarn run test:unit:coverage
         env:
           SERVER_PORT: 5001
           ORIGIN_WHITE_LIST: 'http://localhost:5000;http://localhost:5001'
