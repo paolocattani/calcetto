@@ -26,20 +26,20 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       # Restore cache
-			- name: Get yarn cache directory path
-				id: yarn-cache-dir-path
-				run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-pat
+        run: echo "::set-output name=dir::$(yarn cache dir)"
       - name: Restore cache Yarn
-				uses: actions/cache@v2
-				id: yarn-cache
-				with:
-					path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-					key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-					restore-keys: |
-						${{ runner.os }}-yarn-
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
+	  
       - name: Restore cache Node.js modules
-			  id: node-cache
-				uses: actions/cache@v2
+        id: node-cache
+        uses: actions/cache@v2
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
@@ -80,26 +80,26 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       # Restore cache
-			- name: Get yarn cache directory path
-				id: yarn-cache-dir-path
-				run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-pat
+        run: echo "::set-output name=dir::$(yarn cache dir)"
       - name: Restore cache Yarn
-				uses: actions/cache@v2
-				id: yarn-cache
-				with:
-					path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-					key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-					restore-keys: |
-						${{ runner.os }}-yarn-
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
+	  
       - name: Restore cache Node.js modules
-			  id: node-cache
-				uses: actions/cache@v2
+        id: node-cache
+        uses: actions/cache@v2
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       # Install dependencies
       - name: Install dependencies
-			  if: steps.node-cache.outputs.cache-hit != 'true'
+        if: steps.node-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       # unit test
       - name: Unit Tests Frontend
@@ -120,17 +120,23 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       # Restore cache
-			- name: Get yarn cache directory path
-				id: yarn-cache-dir-path
-				run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-pat
+        run: echo "::set-output name=dir::$(yarn cache dir)"
       - name: Restore cache Yarn
-				uses: actions/cache@v2
-				id: yarn-cache
-				with:
-					path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-					key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-					restore-keys: |
-						${{ runner.os }}-yarn-
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
+	  
+      - name: Restore cache Node.js modules
+        id: node-cache
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       # Install dependencies
       - name: Install dependencies
         run: yarn install --frozen-lockfile && cd server && yarn install
