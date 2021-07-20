@@ -1,4 +1,4 @@
-name: Build/Test/Analyze
+name: Build | Test | Analyze
 on:
   push:
     branches:
@@ -25,29 +25,21 @@ jobs:
         uses: actions/setup-node@v2.1.4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
       # Restore cache
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-pat
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Restore cache Yarn
-        uses: actions/cache@v2
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-yarn-${{ matrix.node-version }}
-      - name: Restore cache Node.js modules
-        id: node-cache
+      - name: Restore frontend cache Node.js modules
         uses: actions/cache@v2
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-${{ matrix.node-version }}-modules-${{ hashFiles('**/yarn.lock') }}
-      # Add exect
-      - name: Add exec to cli
-        run: chmod +x cli/cli.sh
+          path: 'node_modules'
+          key: ${{ runner.os }}-${{ matrix.node-version }}-fe-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Restore backend cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: 'server/node_modules'
+          key: ${{ runner.os }}-${{ matrix.node-version }}-be-modules-${{ hashFiles('**/yarn.lock') }}
       # Build client
       - name: Build client
-        run: ./cli/cli.sh build --frontend --analyze
+        run: chmod +x cli/cli.sh && ./cli/cli.sh build --frontend --analyze
       # Build server
       - name: Build server
         run: ./cli/cli.sh build --backend
@@ -78,23 +70,18 @@ jobs:
     name: Unit tests frontend
     steps:
       - uses: actions/checkout@v2
+      # Set up Node
+      - name: Use Node.js 12
+        uses: actions/setup-node@v2.1.4
+        with:
+          node-version: 12
+          cache: 'yarn'
       # Restore cache
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-pat
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Restore cache Yarn
-        uses: actions/cache@v2
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-yarn-${{ matrix.node-version }}
-      - name: Restore cache Node.js modules
-        id: node-cache
+      - name: Restore frontend cache Node.js modules
         uses: actions/cache@v2
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-${{ matrix.node-version }}-modules-${{ hashFiles('**/yarn.lock') }}
+          path: 'node_modules'
+          key: ${{ runner.os }}-12-fe-modules-${{ hashFiles('yarn.lock') }}
       # Install dependencies
       - name: Install dependencies
         if: steps.node-cache.outputs.cache-hit != 'true'
@@ -117,23 +104,18 @@ jobs:
     if: ${{ 1==2 }}
     steps:
       - uses: actions/checkout@v2
+      # Set up Node
+      - name: Use Node.js 12
+        uses: actions/setup-node@v2.1.4
+        with:
+          node-version: 12
+          cache: 'yarn'
       # Restore cache
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-pat
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Restore cache Yarn
-        uses: actions/cache@v2
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-yarn-${{ matrix.node-version }}
-      - name: Restore cache Node.js modules
-        id: node-cache
+      - name: Restore backend cache Node.js modules
         uses: actions/cache@v2
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-${{ matrix.node-version }}-modules-${{ hashFiles('**/yarn.lock') }}
+          path: 'server/node_modules'
+          key: ${{ runner.os }}-12-be-modules-${{ hashFiles('server/yarn.lock') }}
       # Install dependencies
       - name: Install dependencies
         run: yarn install --frozen-lockfile && cd server && yarn install
