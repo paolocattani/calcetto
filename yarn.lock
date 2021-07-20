@@ -15872,10 +15872,10 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   dependencies:
     minimalistic-assert "^1.0.0"
 
-web-push-notifications@^3.20.1:
-  version "3.20.1"
-  resolved "https://registry.yarnpkg.com/web-push-notifications/-/web-push-notifications-3.20.1.tgz#81125da00259139eb85d3f0353aca5a3a270d588"
-  integrity sha512-XXGf8vYWwLP/MRHGuPzka55h7U+mV7zbWRCoJ6sZ4uX3WKSpArrPzWcEditUAbXVXk93t7zYMnrH2EcsI1PuhA==
+web-push-notifications@^3.20.2:
+  version "3.20.2"
+  resolved "https://registry.yarnpkg.com/web-push-notifications/-/web-push-notifications-3.20.2.tgz#889173d5a69495ee6f19332d463870d41d7e805f"
+  integrity sha512-DAKKm6iUqGpF/XyEt/czk9qZ8AEs1vA4MhUBUprnT5OiI8gqN/wH5za89x7iQhpkWQFiq9oeUQfF4XqIS7u2tQ==
   dependencies:
     "@pushwoosh/logger" "1.0.4"
     "@pushwoosh/web-push-inbox-widget" "1.0.5"
