@@ -30,7 +30,7 @@
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
     "@types/compression": "^1.7.1",
-    "@types/connect-redis": "0.0.16",
+    "@types/connect-redis": "0.0.17",
     "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.12",
     "@types/csurf": "^1.11.2",
