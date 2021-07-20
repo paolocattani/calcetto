@@ -71,10 +71,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       # Set up Node
-      - name: Use Node.js 12
+      - name: Use Node.js 14
         uses: actions/setup-node@v2.2.0
         with:
-          node-version: 12
+          node-version: 14
           cache: 'yarn'
       # Restore cache
       - name: Restore frontend cache Node.js modules
@@ -105,10 +105,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       # Set up Node
-      - name: Use Node.js 12
+      - name: Use Node.js 14
         uses: actions/setup-node@v2.2.0
         with:
-          node-version: 12
+          node-version: 14
           cache: 'yarn'
       # Restore cache
       - name: Restore backend cache Node.js modules
