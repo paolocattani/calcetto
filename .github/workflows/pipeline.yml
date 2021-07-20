@@ -1,4 +1,4 @@
-name: Build/Test/Analyze
+name: Build | Test | Analyze
 on:
   push:
     branches:
@@ -22,27 +22,24 @@ jobs:
       - uses: actions/checkout@v2
       # Set up Node
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2.1.4
+        uses: actions/setup-node@v2.2.0
         with:
           node-version: ${{ matrix.node-version }}
-      # Cache node-modules
-      - name: Cache Node.js modules
-        uses: actions/cache@v2.1.4
-        env:
-          cache-name: cache-node-modules
+          cache: 'yarn'
+      # Restore cache
+      - name: Restore frontend cache Node.js modules
+        uses: actions/cache@v2
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-${{ env.cache-name }}-
-            ${{ runner.os }}-npm-
-            ${{ runner.os }}-
-      # Add exect
-      - name: Add exec to cli
-        run: chmod +x cli/cli.sh
+          path: 'node_modules'
+          key: ${{ runner.os }}-${{ matrix.node-version }}-fe-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Restore backend cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: 'server/node_modules'
+          key: ${{ runner.os }}-${{ matrix.node-version }}-be-modules-${{ hashFiles('**/yarn.lock') }}
       # Build client
       - name: Build client
-        run: ./cli/cli.sh build --frontend --analyze
+        run: chmod +x cli/cli.sh && ./cli/cli.sh build --frontend --analyze
       # Build server
       - name: Build server
         run: ./cli/cli.sh build --backend
@@ -73,24 +70,25 @@ jobs:
     name: Unit tests frontend
     steps:
       - uses: actions/checkout@v2
-      # Restore cache
-      - name: Restore cache Node.js modules
-        uses: actions/cache@v2.1.4
-        env:
-          cache-name: cache-node-modules
+      # Set up Node
+      - name: Use Node.js 14
+        uses: actions/setup-node@v2.2.0
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-${{ env.cache-name }}-
-            ${{ runner.os }}-npm-
-            ${{ runner.os }}-
+          node-version: 14
+          cache: 'yarn'
+      # Restore cache
+      - name: Restore frontend cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: 'node_modules'
+          key: ${{ runner.os }}-12-fe-modules-${{ hashFiles('yarn.lock') }}
       # Install dependencies
       - name: Install dependencies
-        run: npm ci
+        if: steps.node-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
       # unit test
       - name: Unit Tests Frontend
-        run: npm run CRA:test:coverage
+        run: yarn run CRA:test:coverage
       # Save coverage for sonar
       - name: Upload build
         uses: actions/upload-artifact@v2.2.2
@@ -106,24 +104,24 @@ jobs:
     if: ${{ 1==2 }}
     steps:
       - uses: actions/checkout@v2
-      # Restore cache
-      - name: Restore cache Node.js modules
-        uses: actions/cache@v2.1.4
-        env:
-          cache-name: cache-node-modules
+      # Set up Node
+      - name: Use Node.js 14
+        uses: actions/setup-node@v2.2.0
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-${{ env.cache-name }}-
-            ${{ runner.os }}-npm-
-            ${{ runner.os }}-
+          node-version: 14
+          cache: 'yarn'
+      # Restore cache
+      - name: Restore backend cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: 'server/node_modules'
+          key: ${{ runner.os }}-12-be-modules-${{ hashFiles('server/yarn.lock') }}
       # Install dependencies
       - name: Install dependencies
-        run: npm ci && cd server && npm i
+        run: yarn install --frozen-lockfile && cd server && yarn install
       # unit test
       - name: Unit Tests Backend
-        run: cd server && npm run test:unit:coverage
+        run: cd server && yarn run test:unit:coverage
         env:
           SERVER_PORT: 5001
           ORIGIN_WHITE_LIST: 'http://localhost:5000;http://localhost:5001'
