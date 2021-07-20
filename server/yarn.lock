@@ -1598,20 +1598,12 @@
     "@types/mime" "^1"
     "@types/node" "*"
 
-"@types/socket.io-redis@^1.0.27":
-  version "1.0.27"
-  resolved "https://registry.yarnpkg.com/@types/socket.io-redis/-/socket.io-redis-1.0.27.tgz#4614a74f7adc4369d5c846f808ecacadfde400cf"
-  integrity sha512-oyJPDjn5Dnci3wZD2bd1jfPsJkqvTwoNGpOIF+/+P45cOn4zrYsUO9mcGN/shoxIlCz6bcdRhSRXWwZFGQc1PA==
+"@types/socket.io-redis@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/socket.io-redis/-/socket.io-redis-3.0.0.tgz#3273953eb873345743bac0e870b2f1f46cbcfbc9"
+  integrity sha512-AFINYd5w7LwUqUDZAfmv4AEhXOJ0YsXCQf11RRDok+Zq7cCyhTMgFAbWSwUScP/JEYD4KF6+4O4SiussjrKbmQ==
   dependencies:
-    "@types/redis" "*"
-    "@types/socket.io" "*"
-
-"@types/socket.io@*":
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/@types/socket.io/-/socket.io-3.0.2.tgz#606c9639e3f93bb8454cba8f5f0a283d47917759"
-  integrity sha512-pu0sN9m5VjCxBZVK8hW37ZcMe8rjn4HHggBN5CbaRTvFwv5jOmuIRZEuddsBPa9Th0ts0SIo3Niukq+95cMBbQ==
-  dependencies:
-    socket.io "*"
+    socket.io-redis "*"
 
 "@types/stack-utils@^2.0.0":
   version "2.0.1"
@@ -8598,7 +8590,7 @@ socket.io-parser@~4.0.4:
     component-emitter "~1.3.0"
     debug "~4.3.1"
 
-socket.io-redis@^6.1.1:
+socket.io-redis@*, socket.io-redis@^6.1.1:
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/socket.io-redis/-/socket.io-redis-6.1.1.tgz#2361029a6c0b25c602d1422e1beb41907fd0e8bf"
   integrity sha512-jeaXe3TGKC20GMSlPHEdwTUIWUpay/L7m5+S9TQcOf22p9Llx44/RkpJV08+buXTZ8E+aivOotj2RdeFJJWJJQ==
@@ -8609,7 +8601,7 @@ socket.io-redis@^6.1.1:
     socket.io-adapter "~2.2.0"
     uid2 "0.0.3"
 
-socket.io@*, socket.io@^4.1.3:
+socket.io@^4.1.3:
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/socket.io/-/socket.io-4.1.3.tgz#d114328ef27ab31b889611792959c3fa6d502500"
   integrity sha512-tLkaY13RcO4nIRh1K2hT5iuotfTaIQw7cVIe0FUykN3SuQi0cm7ALxuyT5/CtDswOMWUzMGTibxYNx/gU7In+Q==
