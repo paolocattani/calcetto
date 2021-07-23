@@ -185,7 +185,7 @@
 		"redux-mock-store": "^1.5.4",
 		"source-map-explorer": "^2.5.2",
 		"source-map-support": "^0.5.19",
-		"start-server-and-test": "^1.12.6",
+		"start-server-and-test": "^1.13.0",
 		"ts-jest": "^26.5.6",
 		"ts-loader": "^8.3.0"
 	},
