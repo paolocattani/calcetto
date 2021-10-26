@@ -160,7 +160,7 @@
 		"babel-node": "0.0.1-security",
 		"concurrently": "^6.2.0",
 		"cross-env": "^7.0.3",
-		"cypress": "^6.9.1",
+		"cypress": "^8.7.0",
 		"cypress-intellij-reporter": "0.0.6",
 		"cypress-plugin-snapshots": "^1.4.4",
 		"cypress-skip-and-only-ui": "^1.2.11",
