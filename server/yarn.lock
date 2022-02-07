@@ -2953,10 +2953,10 @@ configstore@^5.0.1:
     write-file-atomic "^3.0.0"
     xdg-basedir "^4.0.0"
 
-connect-redis@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/connect-redis/-/connect-redis-5.2.0.tgz#d38e173f2e2cccecb89b8757ce7627ecdb8e3b94"
-  integrity sha512-wcv1lZWa2K7RbsdSlrvwApBQFLQx+cia+oirLIeim0axR3D/9ZJbHdeTM/j8tJYYKk34dVs2QPAuAqcIklWD+Q==
+connect-redis@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/connect-redis/-/connect-redis-6.1.0.tgz#91673c12cce754835ae1cfafbab77ee343bdb715"
+  integrity sha512-QLhd/xUkmyvK5qO7oQHiUScIBtVFXBkmvj+vuPbBhbP7OKerj6z2bbjgnP+x46DZLZlZpOzmtUdM43+jVl/U1Q==
 
 content-disposition@0.5.3:
   version "0.5.3"
