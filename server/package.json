@@ -67,7 +67,7 @@
   "dependencies": {
     "apollo-server": "^2.25.2",
     "apollo-server-core": "^2.25.2",
-    "apollo-server-express": "^2.25.2",
+    "apollo-server-express": "^3.6.6",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "bufferutil": "^4.0.3",
