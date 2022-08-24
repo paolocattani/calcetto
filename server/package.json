@@ -91,7 +91,7 @@
     "mongoose-timestamp": "^0.6.0",
     "morgan": "^1.10.0",
     "node-schedule": "^2.0.0",
-    "pg": "^8.6.0",
+    "pg": "^8.8.0",
     "pg-hstore": "^2.3.4",
     "pm2": "^5.1.0",
     "rate-limiter-flexible": "^2.2.3",
