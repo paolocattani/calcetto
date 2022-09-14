@@ -2227,23 +2227,20 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.9.2.tgz#adea7b6953cbb34651766b0548468e743c6a2353"
   integrity sha512-VZMYa7+fXHdwIq1TDhSXoVmSPEGM/aa+6Aiq3nVVJ9bXr24zScr+NlKFKC3iPljA7ho/GAZr+d2jOf5GIRC30Q==
 
-"@pushwoosh/logger@1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@pushwoosh/logger/-/logger-1.0.4.tgz#13ff3aa7d0edc9bdef4ced1548ad0976a6693508"
-  integrity sha512-d9zlOet2pmzFzIwnyQwvuKH8kybWeWD5F1r7LXDMVs0bszA8XkE5Osyznjm6Y46umko98TMpPyL13O05flK8Ig==
-  dependencies:
-    promise-polyfill "8.1.0"
-    whatwg-fetch "3.0.0"
+"@pushwoosh/logger@1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@pushwoosh/logger/-/logger-1.0.6.tgz#ceea3f263ab095fae8e88efd9596898ff4c62466"
+  integrity sha512-RxZaz5LIiPaPZ/eMf8fxkWTgeMl5K8ZvivWQeLqY9bB9kw17HN8dDMSRq72vI+TTpaPMrzqgg9gXrfSSTVM+pw==
 
-"@pushwoosh/web-push-inbox-widget@1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@pushwoosh/web-push-inbox-widget/-/web-push-inbox-widget-1.0.5.tgz#21afa24e35a299d5d1954e42c8fa6f2f49ab58dc"
-  integrity sha512-NZSe6VN0Etj4aiCRG1aq1ZG+J9reyqnD3TqCdkVA5hZrwtHiNkiKYIzTcdthdoflO9JCLz52In5qHWofKGrtxw==
+"@pushwoosh/web-push-inbox-widget@1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@pushwoosh/web-push-inbox-widget/-/web-push-inbox-widget-1.0.7.tgz#d1573c935428ffe22627050c7041a3509c690ceb"
+  integrity sha512-KFvUdKFlP3PjiATPn3wtvw+nFSfwYX9VNw2SKWRggrNqgPdza6CVjbCnLKb2NAp2s+mxeQoBfRzE6OiOrLLNXQ==
 
-"@pushwoosh/web-push-subscribe-popup@1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@pushwoosh/web-push-subscribe-popup/-/web-push-subscribe-popup-1.0.5.tgz#3d76ff9ec727e4c7f7933161db7ac9c1a6d6fa23"
-  integrity sha512-P6OR6Hn5LjAGnvlTKvjIahDbMxO32QbKTn7YPg447cEYyEgCKilRMtAurz0MmU7BE1lyJk3JoO4LaXV+tTNV7Q==
+"@pushwoosh/web-push-subscribe-popup@1.0.11":
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/@pushwoosh/web-push-subscribe-popup/-/web-push-subscribe-popup-1.0.11.tgz#91821a44878d255cd163c157448e342aad2f227a"
+  integrity sha512-5pmtNd78Fn5Mhqx5sctX0gY1oqnB8L8FZ/4z+U/YTPhTVwm2aZvEsrrMYkFIgVjtXjeFKVVqY/z/b6jO/OD81g==
 
 "@redux-saga/core@^1.1.3":
   version "1.1.3"
@@ -9889,16 +9886,6 @@ jsprim@^1.2.2:
     array-includes "^3.1.2"
     object.assign "^4.1.2"
 
-jszip@3.2.2:
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/jszip/-/jszip-3.2.2.tgz#b143816df7e106a9597a94c77493385adca5bd1d"
-  integrity sha512-NmKajvAFQpbg3taXQXr/ccS2wcucR1AZ+NtyWp2Nq7HHVsXhcJFR8p0Baf32C2yVvBylFWVeKf+WI2AnvlPhpA==
-  dependencies:
-    lie "~3.3.0"
-    pako "~1.0.2"
-    readable-stream "~2.3.6"
-    set-immediate-shim "~1.0.1"
-
 killable@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/killable/-/killable-1.0.1.tgz#4c8ce441187a061c7474fb87ca08e2a638194892"
@@ -9996,13 +9983,6 @@ lie@3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/lie/-/lie-3.1.1.tgz#9a436b2cc7746ca59de7a41fa469b3efb76bd87e"
   integrity sha1-mkNrLMd0bKWd56QfpGmz77dr2H4=
-  dependencies:
-    immediate "~3.0.5"
-
-lie@~3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/lie/-/lie-3.3.0.tgz#dcf82dee545f46074daf200c7c1c5a08e0f40f6a"
-  integrity sha512-UaiMJzeWRlEujzAuw5LokY1L5ecNQYZKfmyZ9L7wDHb/p5etKaxXhohBcrw0EYby+G/NA52vRSN4N39dxHAIwQ==
   dependencies:
     immediate "~3.0.5"
 
@@ -11400,7 +11380,7 @@ package-hash@^4.0.0:
     lodash.flattendeep "^4.4.0"
     release-zalgo "^1.0.0"
 
-pako@^1.0.5, pako@~1.0.2, pako@~1.0.5:
+pako@^1.0.5, pako@~1.0.5:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.11.tgz#6c9599d340d54dfd3946380252a35705a6b992bf"
   integrity sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==
@@ -12506,16 +12486,6 @@ promise-inflight@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/promise-inflight/-/promise-inflight-1.0.1.tgz#98472870bf228132fcbdd868129bad12c3c029e3"
   integrity sha1-mEcocL8igTL8vdhoEputEsPAKeM=
-
-promise-polyfill@8.1.0:
-  version "8.1.0"
-  resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-8.1.0.tgz#30059da54d1358ce905ac581f287e184aedf995d"
-  integrity sha512-OzSf6gcCUQ01byV4BgwyUCswlaQQ6gzXc23aLQWhicvfX9kfsUiUhgt3CCQej8jDnl8/PhGF31JdHX2/MzF3WA==
-
-promise-polyfill@8.1.3:
-  version "8.1.3"
-  resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-8.1.3.tgz#8c99b3cf53f3a91c68226ffde7bde81d7f904116"
-  integrity sha512-MG5r82wBzh7pSKDRa9y+vllNHz3e3d4CNj1PQE4BQYxLme0gKYYBm9YENq+UkEikyZ0XbiGWxYlVw3Rl9O/U8g==
 
 promise-polyfill@^8.1.3:
   version "8.2.0"
@@ -13989,11 +13959,6 @@ set-blocking@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/set-blocking/-/set-blocking-2.0.0.tgz#045f9782d011ae9a6803ddd382b24392b3d890f7"
   integrity sha1-BF+XgtARrppoA93TgrJDkrPYkPc=
-
-set-immediate-shim@~1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/set-immediate-shim/-/set-immediate-shim-1.0.1.tgz#4b2b1b27eb808a9f8dcc481a58e5e56f599f3f61"
-  integrity sha1-SysbJ+uAip+NzEgaWOXlb1mfP2E=
 
 set-value@^2.0.0, set-value@^2.0.1:
   version "2.0.1"
@@ -15872,18 +15837,15 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   dependencies:
     minimalistic-assert "^1.0.0"
 
-web-push-notifications@^3.20.1:
-  version "3.20.1"
-  resolved "https://registry.yarnpkg.com/web-push-notifications/-/web-push-notifications-3.20.1.tgz#81125da00259139eb85d3f0353aca5a3a270d588"
-  integrity sha512-XXGf8vYWwLP/MRHGuPzka55h7U+mV7zbWRCoJ6sZ4uX3WKSpArrPzWcEditUAbXVXk93t7zYMnrH2EcsI1PuhA==
+web-push-notifications@^3.33.0:
+  version "3.33.0"
+  resolved "https://registry.yarnpkg.com/web-push-notifications/-/web-push-notifications-3.33.0.tgz#0e6eb3eec2fc81924ab3bd66f2231dbc353b4196"
+  integrity sha512-9b86KArBi2INVVZQF50ed/ZkW4nUxijJBFmOPy26IEJENXytHUkesvKXGUulGqzbbkLEQRpE8NT0WS5l4RocNQ==
   dependencies:
-    "@pushwoosh/logger" "1.0.4"
-    "@pushwoosh/web-push-inbox-widget" "1.0.5"
-    "@pushwoosh/web-push-subscribe-popup" "1.0.5"
-    jszip "3.2.2"
-    promise-polyfill "8.1.3"
+    "@pushwoosh/logger" "1.0.6"
+    "@pushwoosh/web-push-inbox-widget" "1.0.7"
+    "@pushwoosh/web-push-subscribe-popup" "1.0.11"
     url-resolve-browser "1.1.0"
-    whatwg-fetch "3.0.0"
 
 webidl-conversions@^5.0.0:
   version "5.0.0"
@@ -16020,11 +15982,6 @@ whatwg-encoding@^1.0.5:
   integrity sha512-b5lim54JOPN9HtzvK9HFXvBma/rnfFeqsic0hSpjtDbVxR3dJKLc+KB4V6GgiGOvl7CY/KNh8rxSo9DKQrnUEw==
   dependencies:
     iconv-lite "0.4.24"
-
-whatwg-fetch@3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-3.0.0.tgz#fc804e458cc460009b1a2b966bc8817d2578aefb"
-  integrity sha512-9GSJUgz1D4MfyKU7KRqwOjXCXTqWdFNvEr7eUBYchQiVc744mqK/MzXPNR2WsPkmkOa4ywfg8C2n8h+13Bey1Q==
 
 whatwg-fetch@^3.0.0, whatwg-fetch@^3.4.1:
   version "3.6.2"
