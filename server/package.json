@@ -65,7 +65,7 @@
     "typescript-transform-paths": "^2.2.4"
   },
   "dependencies": {
-    "apollo-server": "^2.25.2",
+    "apollo-server": "^2.25.4",
     "apollo-server-core": "^2.25.2",
     "apollo-server-express": "^2.25.2",
     "bcryptjs": "^2.4.3",
