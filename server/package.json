@@ -81,7 +81,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "graphql": "^15.5.1",
-    "graphql-compose": "^7.25.1",
+    "graphql-compose": "^9.0.3",
     "graphql-compose-mongoose": "^9.4.3",
     "graphql-playground-middleware-express": "^1.7.22",
     "helmet": "^4.6.0",
